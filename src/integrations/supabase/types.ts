@@ -217,6 +217,75 @@ export type Database = {
           },
         ]
       }
+      company_content: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      company_info: {
+        Row: {
+          address: string
+          brand_name: string
+          email: string
+          grievance_email: string
+          hours: string
+          id: string
+          legal_name: string
+          phone: string
+          support_email: string
+          updated_at: string
+          website: string
+        }
+        Insert: {
+          address?: string
+          brand_name?: string
+          email?: string
+          grievance_email?: string
+          hours?: string
+          id?: string
+          legal_name?: string
+          phone?: string
+          support_email?: string
+          updated_at?: string
+          website?: string
+        }
+        Update: {
+          address?: string
+          brand_name?: string
+          email?: string
+          grievance_email?: string
+          hours?: string
+          id?: string
+          legal_name?: string
+          phone?: string
+          support_email?: string
+          updated_at?: string
+          website?: string
+        }
+        Relationships: []
+      }
       doctor_addresses: {
         Row: {
           address_line1: string

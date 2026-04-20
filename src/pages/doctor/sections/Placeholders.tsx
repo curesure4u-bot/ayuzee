@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Building2, Headphones } from "lucide-react";
+import { Headphones } from "lucide-react";
 
 const Placeholder = ({ title, icon: Icon, message }: { title: string; icon: React.ElementType; message: string }) => (
   <div className="mx-auto max-w-3xl">
@@ -11,9 +11,6 @@ const Placeholder = ({ title, icon: Icon, message }: { title: string; icon: Reac
   </div>
 );
 
-export const DoctorCompany = () => (
-  <Placeholder title="Company" icon={Building2} message="Manage your company / pharmacy partnership details. Coming soon." />
-);
 export const DoctorSupport = () => (
   <Placeholder title="Support" icon={Headphones} message="Need help? Email support@ayuzee.com or call +91 90000 00000." />
 );

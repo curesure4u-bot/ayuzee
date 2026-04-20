@@ -26,7 +26,8 @@ import DoctorBank from "./pages/doctor/sections/DoctorBank.tsx";
 import DoctorClinic from "./pages/doctor/sections/DoctorClinic.tsx";
 import DoctorRewards from "./pages/doctor/sections/DoctorRewards.tsx";
 import DoctorCategory from "./pages/doctor/sections/DoctorCategory.tsx";
-import { DoctorCompany, DoctorSupport } from "./pages/doctor/sections/Placeholders.tsx";
+import DoctorCompany from "./pages/doctor/sections/DoctorCompany.tsx";
+import { DoctorSupport } from "./pages/doctor/sections/Placeholders.tsx";
 
 const queryClient = new QueryClient();
 
