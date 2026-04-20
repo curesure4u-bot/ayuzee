@@ -2,13 +2,13 @@ import { Leaf, ShoppingCart } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
 
 const links = [
   { to: "/doctors", label: "Find a Doctor" },
   { to: "/shop", label: "Medicines" },
   { to: "/#therapies", label: "Therapies" },
   { to: "/#learning", label: "Learning" },
-  { to: "/#blog", label: "Blog" },
   { to: "/partner", label: "For Doctors" },
 ];
 
@@ -24,6 +24,7 @@ export const SiteNav = () => {
           <span className="font-display text-2xl font-semibold tracking-tight">Ayuzee</span>
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
+          <BulkPurchaseMenu />
           {links.map((l) => (
             <NavLink
               key={l.to}

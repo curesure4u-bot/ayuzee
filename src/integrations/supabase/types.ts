@@ -1025,15 +1025,51 @@ export type Database = {
         }
         Relationships: []
       }
+      product_bulk_tiers: {
+        Row: {
+          created_at: string
+          id: string
+          min_qty: number
+          product_id: string
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          min_qty: number
+          product_id: string
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          min_qty?: number
+          product_id?: string
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_bulk_tiers_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           brand: string
+          bulk_brand: string | null
+          bulk_classical_type: string | null
+          bulk_patented_type: string | null
           category: string
           created_at: string
           description: string | null
           discount_price: number | null
           id: string
           image_url: string | null
+          is_bulk: boolean
           name: string
           price: number
           rating: number
@@ -1043,12 +1079,16 @@ export type Database = {
         }
         Insert: {
           brand: string
+          bulk_brand?: string | null
+          bulk_classical_type?: string | null
+          bulk_patented_type?: string | null
           category: string
           created_at?: string
           description?: string | null
           discount_price?: number | null
           id?: string
           image_url?: string | null
+          is_bulk?: boolean
           name: string
           price: number
           rating?: number
@@ -1058,12 +1098,16 @@ export type Database = {
         }
         Update: {
           brand?: string
+          bulk_brand?: string | null
+          bulk_classical_type?: string | null
+          bulk_patented_type?: string | null
           category?: string
           created_at?: string
           description?: string | null
           discount_price?: number | null
           id?: string
           image_url?: string | null
+          is_bulk?: boolean
           name?: string
           price?: number
           rating?: number
