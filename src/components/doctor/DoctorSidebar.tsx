@@ -30,6 +30,7 @@ import {
   HandCoins,
   Handshake,
   Package,
+  Stethoscope,
 } from "lucide-react";
 
 const items = [
@@ -39,6 +40,7 @@ const items = [
   { title: "Patient Feedback", url: "/doctor/feedback", icon: MessageSquareHeart },
   { title: "Patient Orders", url: "/doctor/patient-orders", icon: ClipboardList },
   { title: "Bulk Purchase", url: "/bulk", icon: Package },
+  { title: "Vaidya Tool (HMS)", url: "/vaidya", icon: Stethoscope },
   { title: "My Orders", url: "/doctor/orders", icon: ShoppingCart },
   { title: "My Medicine List", url: "/doctor/medicines", icon: ListChecks },
   { title: "Saved Posts", url: "/doctor/saved", icon: Bookmark },

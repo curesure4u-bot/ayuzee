@@ -36,6 +36,18 @@ import PatientFeedback from "./pages/doctor/sections/PatientFeedback.tsx";
 import PatientOrders from "./pages/doctor/sections/PatientOrders.tsx";
 import DoctorPayouts from "./pages/doctor/sections/DoctorPayouts.tsx";
 import AboutAyuzeePartner from "./pages/doctor/sections/AboutAyuzeePartner.tsx";
+import PartnerApply from "./pages/PartnerApply.tsx";
+import VaidyaLayout from "./pages/vaidya/VaidyaLayout.tsx";
+import VaidyaHome from "./pages/vaidya/VaidyaHome.tsx";
+import AllPatients from "./pages/vaidya/sections/AllPatients.tsx";
+import Consultations from "./pages/vaidya/sections/Consultations.tsx";
+import FollowUps from "./pages/vaidya/sections/FollowUps.tsx";
+import UpcomingAppointments from "./pages/vaidya/sections/UpcomingAppointments.tsx";
+import Leads from "./pages/vaidya/sections/Leads.tsx";
+import Inventory from "./pages/vaidya/sections/Inventory.tsx";
+import BillsPage from "./pages/vaidya/sections/Bills.tsx";
+import PartnerNetwork from "./pages/vaidya/sections/PartnerNetwork.tsx";
+import TherapyPlans from "./pages/vaidya/sections/TherapyPlans.tsx";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +69,21 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/partner" element={<Partner />} />
+            <Route path="/partner/apply" element={<PartnerApply />} />
             <Route path="/bulk" element={<Bulk />} />
+            <Route path="/vaidya" element={<VaidyaLayout />}>
+              <Route index element={<VaidyaHome />} />
+              <Route path="patients" element={<AllPatients />} />
+              <Route path="consultations" element={<Consultations />} />
+              <Route path="follow-up" element={<FollowUps />} />
+              <Route path="upcoming" element={<UpcomingAppointments />} />
+              <Route path="leads" element={<Leads />} />
+              <Route path="inventory" element={<Inventory />} />
+              <Route path="bills" element={<BillsPage type="patient_bill" />} />
+              <Route path="direct-selling" element={<BillsPage type="direct_selling" />} />
+              <Route path="network" element={<PartnerNetwork />} />
+              <Route path="therapy-plans" element={<TherapyPlans />} />
+            </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
               <Route index element={<DoctorProfile />} />
