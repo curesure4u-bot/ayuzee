@@ -27,6 +27,8 @@ import {
   Users,
   MessageSquareHeart,
   ClipboardList,
+  HandCoins,
+  Handshake,
 } from "lucide-react";
 
 const items = [
@@ -45,6 +47,8 @@ const items = [
   { title: "My Clinic", url: "/doctor/clinic", icon: Home },
   { title: "Category", url: "/doctor/category", icon: LayoutGrid },
   { title: "Company", url: "/doctor/company", icon: Building2 },
+  { title: "Payouts", url: "/doctor/payouts", icon: HandCoins },
+  { title: "About Ayuzee Partner", url: "/doctor/about-partner", icon: Handshake },
   { title: "Support", url: "/doctor/support", icon: Headphones },
 ];
 
