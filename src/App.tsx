@@ -48,6 +48,7 @@ import Inventory from "./pages/vaidya/sections/Inventory.tsx";
 import BillsPage from "./pages/vaidya/sections/Bills.tsx";
 import PartnerNetwork from "./pages/vaidya/sections/PartnerNetwork.tsx";
 import TherapyPlans from "./pages/vaidya/sections/TherapyPlans.tsx";
+import TherapyCatalog from "./pages/vaidya/sections/TherapyCatalog.tsx";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +84,7 @@ const App = () => (
               <Route path="direct-selling" element={<BillsPage type="direct_selling" />} />
               <Route path="network" element={<PartnerNetwork />} />
               <Route path="therapy-plans" element={<TherapyPlans />} />
+              <Route path="therapy-catalog" element={<TherapyCatalog />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
