@@ -14,6 +14,110 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          appointment_date: string
+          created_at: string
+          doctor_id: string
+          fee: number
+          id: string
+          mode: string
+          notes: string | null
+          status: string
+          time_slot: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appointment_date: string
+          created_at?: string
+          doctor_id: string
+          fee?: number
+          id?: string
+          mode: string
+          notes?: string | null
+          status?: string
+          time_slot: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appointment_date?: string
+          created_at?: string
+          doctor_id?: string
+          fee?: number
+          id?: string
+          mode?: string
+          notes?: string | null
+          status?: string
+          time_slot?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctors: {
+        Row: {
+          bio: string | null
+          category: string
+          city: string
+          clinic_name: string | null
+          consultation_fee: number
+          created_at: string
+          experience_years: number
+          full_name: string
+          id: string
+          in_clinic_available: boolean
+          languages: string[]
+          rating: number
+          specialization: string
+          total_reviews: number
+          video_available: boolean
+        }
+        Insert: {
+          bio?: string | null
+          category: string
+          city: string
+          clinic_name?: string | null
+          consultation_fee?: number
+          created_at?: string
+          experience_years?: number
+          full_name: string
+          id?: string
+          in_clinic_available?: boolean
+          languages?: string[]
+          rating?: number
+          specialization: string
+          total_reviews?: number
+          video_available?: boolean
+        }
+        Update: {
+          bio?: string | null
+          category?: string
+          city?: string
+          clinic_name?: string | null
+          consultation_fee?: number
+          created_at?: string
+          experience_years?: number
+          full_name?: string
+          id?: string
+          in_clinic_available?: boolean
+          languages?: string[]
+          rating?: number
+          specialization?: string
+          total_reviews?: number
+          video_available?: boolean
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
