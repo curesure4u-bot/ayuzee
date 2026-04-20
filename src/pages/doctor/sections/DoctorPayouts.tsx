@@ -109,8 +109,8 @@ const DoctorPayouts = () => {
         </Card>
         <Card className="p-5">
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-amber-500/10">
-              <IndianRupee className="h-5 w-5 text-amber-600" />
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent">
+              <IndianRupee className="h-5 w-5 text-accent-foreground" />
             </span>
             <div>
               <p className="text-xs uppercase tracking-wider text-muted-foreground">
