@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { CheckCircle2 } from "lucide-react";
 import therapyImg from "@/assets/therapy-room.jpg";
 
@@ -28,8 +29,8 @@ export const Therapy = () => (
           ))}
         </ul>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button variant="hero" size="lg">Browse therapies</Button>
-          <Button variant="outline" size="lg">Become a partner</Button>
+          <Button variant="hero" size="lg" asChild><Link to="/therapies">Browse therapies</Link></Button>
+          <Button variant="outline" size="lg" asChild><Link to="/partner/apply">Become a partner</Link></Button>
         </div>
       </div>
     </div>

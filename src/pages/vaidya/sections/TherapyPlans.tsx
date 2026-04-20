@@ -26,7 +26,7 @@ const TherapyPlans = () => {
   const [showPrice, setShowPrice] = useState(true);
   const [therapySystem, setTherapySystem] = useState<string>(preTherapy?.system || "Ayurveda");
   const [form, setForm] = useState({
-    patient_name: "", patient_phone: "", partner_id: preselectPartner,
+    patient_name: "", patient_phone: "", patient_user_id: "", partner_id: preselectPartner,
     therapy_code: preTherapy?.code || "",
     therapy_name: preTherapy?.name || "",
     unit_price: preTherapy ? String(preTherapy.price) : "",
@@ -52,16 +52,19 @@ const TherapyPlans = () => {
       doctor_user_id: userId,
       patient_name: form.patient_name.trim(),
       patient_phone: form.patient_phone || null,
+      patient_user_id: form.patient_user_id.trim() || null,
       partner_id: form.partner_id || null,
       therapy_name: form.therapy_name.trim(),
+      therapy_code: form.therapy_code || null,
+      estimated_price: form.unit_price ? Number(form.unit_price) : null,
       planned_date: form.planned_date || null,
       duration_days: Number(form.duration_days || 1),
       notes: form.notes || null,
     });
     if (error) return toast.error(error.message);
-    toast.success("Therapy plan created");
+    toast.success(form.patient_user_id ? "Plan sent to patient dashboard for confirmation" : "Therapy plan created");
     setOpen(false);
-    setForm({ patient_name: "", patient_phone: "", partner_id: "", therapy_code: "", therapy_name: "", unit_price: "", planned_date: "", duration_days: "1", notes: "" });
+    setForm({ patient_name: "", patient_phone: "", patient_user_id: "", partner_id: "", therapy_code: "", therapy_name: "", unit_price: "", planned_date: "", duration_days: "1", notes: "" });
     load();
   };
 
@@ -88,6 +91,10 @@ const TherapyPlans = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div><Label>Patient name *</Label><Input value={form.patient_name} onChange={(e) => setForm({ ...form, patient_name: e.target.value })} /></div>
                   <div><Label>Phone</Label><Input value={form.patient_phone} onChange={(e) => setForm({ ...form, patient_phone: e.target.value })} /></div>
+                </div>
+                <div>
+                  <Label>Patient Ayuzee account ID (optional)</Label>
+                  <Input value={form.patient_user_id} onChange={(e) => setForm({ ...form, patient_user_id: e.target.value })} placeholder="If linked, plan appears in patient dashboard for Confirm & Pay" />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">

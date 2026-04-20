@@ -1309,6 +1309,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean
+          is_published: boolean
           name: string
           price: number
           short_description: string | null
@@ -1323,6 +1324,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          is_published?: boolean
           name: string
           price?: number
           short_description?: string | null
@@ -1337,6 +1339,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          is_published?: boolean
           name?: string
           price?: number
           short_description?: string | null
@@ -1405,47 +1408,62 @@ export type Database = {
       }
       therapy_plans: {
         Row: {
+          confirmed_at: string | null
           created_at: string
           doctor_user_id: string
           duration_days: number | null
+          estimated_price: number | null
           id: string
           notes: string | null
           partner_id: string | null
           patient_id: string | null
           patient_name: string
           patient_phone: string | null
+          patient_user_id: string | null
+          payment_status: string
           planned_date: string | null
           status: string
+          therapy_code: string | null
           therapy_name: string
           updated_at: string
         }
         Insert: {
+          confirmed_at?: string | null
           created_at?: string
           doctor_user_id: string
           duration_days?: number | null
+          estimated_price?: number | null
           id?: string
           notes?: string | null
           partner_id?: string | null
           patient_id?: string | null
           patient_name: string
           patient_phone?: string | null
+          patient_user_id?: string | null
+          payment_status?: string
           planned_date?: string | null
           status?: string
+          therapy_code?: string | null
           therapy_name: string
           updated_at?: string
         }
         Update: {
+          confirmed_at?: string | null
           created_at?: string
           doctor_user_id?: string
           duration_days?: number | null
+          estimated_price?: number | null
           id?: string
           notes?: string | null
           partner_id?: string | null
           patient_id?: string | null
           patient_name?: string
           patient_phone?: string | null
+          patient_user_id?: string | null
+          payment_status?: string
           planned_date?: string | null
           status?: string
+          therapy_code?: string | null
           therapy_name?: string
           updated_at?: string
         }

@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2 } from "lucide-react";
 import { toast } from "sonner";
+import { PatientTherapyPlans } from "@/components/dashboard/PatientTherapyPlans";
 
 interface Profile { full_name: string | null; phone: string | null; }
 interface Appointment {
@@ -19,6 +20,7 @@ interface Appointment {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,11 +30,13 @@ const Dashboard = () => {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) { navigate("/auth", { replace: true }); return; }
       setEmail(session.user.email ?? "");
+      setUserId(session.user.id);
       setTimeout(() => loadAll(session.user.id), 0);
     });
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) { navigate("/auth", { replace: true }); return; }
       setEmail(data.session.user.email ?? "");
+      setUserId(data.session.user.id);
       loadAll(data.session.user.id);
     });
     return () => sub.subscription.unsubscribe();
@@ -150,6 +154,8 @@ const Dashboard = () => {
             </div>
           )}
         </section>
+
+        {userId && <PatientTherapyPlans userId={userId} />}
 
         <div className="mt-12 rounded-2xl border border-border gradient-soft p-8">
           <h2 className="font-display text-2xl">Ready for your next step?</h2>

@@ -94,8 +94,8 @@ const VaidyaLayout = () => {
               <Stethoscope className="h-4 w-4 text-primary-foreground" />
             </span>
             <div>
-              <p className="font-display text-base font-semibold">Vaidya Tool</p>
-              <p className="text-[10px] text-muted-foreground">Ayush HMS</p>
+              <p className="font-display text-base font-semibold">Ayush HMS Tool</p>
+              <p className="text-[10px] text-muted-foreground">Hospital Mgmt System</p>
             </div>
           </Link>
         </div>
@@ -136,7 +136,7 @@ const VaidyaLayout = () => {
 
       <div className="flex-1 flex flex-col">
         <header className="h-16 flex items-center justify-between border-b border-border bg-card px-4">
-          <p className="font-display text-lg font-semibold">Vaidya Tool · Ayush HMS</p>
+          <p className="font-display text-lg font-semibold">Ayush HMS Tool</p>
           <Button variant="outline" size="sm" onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" /> Sign out
           </Button>
