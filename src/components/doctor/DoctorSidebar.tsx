@@ -23,10 +23,18 @@ import {
   LayoutGrid,
   Building2,
   Headphones,
+  CalendarDays,
+  Users,
+  MessageSquareHeart,
+  ClipboardList,
 } from "lucide-react";
 
 const items = [
   { title: "My Profile", url: "/doctor", icon: User, end: true },
+  { title: "Appointment Calendar", url: "/doctor/appointments", icon: CalendarDays },
+  { title: "My Patients", url: "/doctor/patients", icon: Users },
+  { title: "Patient Feedback", url: "/doctor/feedback", icon: MessageSquareHeart },
+  { title: "Patient Orders", url: "/doctor/patient-orders", icon: ClipboardList },
   { title: "My Orders", url: "/doctor/orders", icon: ShoppingCart },
   { title: "My Medicine List", url: "/doctor/medicines", icon: ListChecks },
   { title: "Saved Posts", url: "/doctor/saved", icon: Bookmark },

@@ -29,6 +29,10 @@ import DoctorRewards from "./pages/doctor/sections/DoctorRewards.tsx";
 import DoctorCategory from "./pages/doctor/sections/DoctorCategory.tsx";
 import DoctorCompany from "./pages/doctor/sections/DoctorCompany.tsx";
 import { DoctorSupport } from "./pages/doctor/sections/Placeholders.tsx";
+import PatientAppointments from "./pages/doctor/sections/PatientAppointments.tsx";
+import MyPatients from "./pages/doctor/sections/MyPatients.tsx";
+import PatientFeedback from "./pages/doctor/sections/PatientFeedback.tsx";
+import PatientOrders from "./pages/doctor/sections/PatientOrders.tsx";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +57,10 @@ const App = () => (
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
               <Route index element={<DoctorProfile />} />
+              <Route path="appointments" element={<PatientAppointments />} />
+              <Route path="patients" element={<MyPatients />} />
+              <Route path="feedback" element={<PatientFeedback />} />
+              <Route path="patient-orders" element={<PatientOrders />} />
               <Route path="orders" element={<DoctorOrders />} />
               <Route path="medicines" element={<DoctorMedicines />} />
               <Route path="saved" element={<DoctorSavedPosts />} />
