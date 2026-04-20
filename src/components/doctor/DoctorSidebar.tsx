@@ -29,6 +29,7 @@ import {
   ClipboardList,
   HandCoins,
   Handshake,
+  Package,
 } from "lucide-react";
 
 const items = [
@@ -37,6 +38,7 @@ const items = [
   { title: "My Patients", url: "/doctor/patients", icon: Users },
   { title: "Patient Feedback", url: "/doctor/feedback", icon: MessageSquareHeart },
   { title: "Patient Orders", url: "/doctor/patient-orders", icon: ClipboardList },
+  { title: "Bulk Purchase", url: "/bulk", icon: Package },
   { title: "My Orders", url: "/doctor/orders", icon: ShoppingCart },
   { title: "My Medicine List", url: "/doctor/medicines", icon: ListChecks },
   { title: "Saved Posts", url: "/doctor/saved", icon: Bookmark },

@@ -204,7 +204,7 @@ const Bulk = () => {
                           {p.discount_price && (
                             <>
                               <span className="text-sm text-muted-foreground line-through">₹ {p.price}</span>
-                              <span className="text-xs font-semibold text-green-600">{off}% off</span>
+                              <span className="text-xs font-semibold text-secondary-foreground">{off}% off</span>
                             </>
                           )}
                         </div>
