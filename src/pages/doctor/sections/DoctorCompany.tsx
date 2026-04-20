@@ -31,15 +31,23 @@ const DoctorCompany = () => {
   const [infoDraft, setInfoDraft] = useState<Info | null>(null);
 
   const load = async () => {
+    const sb = supabase as unknown as {
+      from: (t: string) => {
+        select: (c: string) => Promise<{ data: unknown }> & {
+          maybeSingle?: () => Promise<{ data: unknown }>;
+        };
+      };
+    };
     const [d, i] = await Promise.all([
-      supabase.from("company_content").select("*"),
-      supabase.from("company_info").select("*").maybeSingle(),
+      (supabase as any).from("company_content").select("*"),
+      (supabase as any).from("company_info").select("*").maybeSingle(),
     ]);
-    const sorted = ((d.data ?? []) as Doc[]).sort(
+    void sb;
+    const sorted = (((d.data ?? []) as Doc[])).sort(
       (a, b) => ORDER.indexOf(a.slug) - ORDER.indexOf(b.slug),
     );
     setDocs(sorted);
-    setInfo(i.data as Info | null);
+    setInfo((i.data ?? null) as Info | null);
   };
 
   useEffect(() => {
@@ -53,7 +61,7 @@ const DoctorCompany = () => {
   const startEdit = (doc: Doc) => { setEditing(doc.slug); setDraft(doc.body); };
   const cancelEdit = () => { setEditing(null); setDraft(""); };
   const saveEdit = async (doc: Doc) => {
-    const { error } = await supabase.from("company_content").update({ body: draft }).eq("id", doc.id);
+    const { error } = await (supabase as any).from("company_content").update({ body: draft }).eq("id", doc.id);
     if (error) return toast.error(error.message);
     toast.success(`${doc.title} updated`);
     setEditing(null);
@@ -64,7 +72,7 @@ const DoctorCompany = () => {
   const saveInfo = async () => {
     if (!infoDraft) return;
     const { id, ...patch } = infoDraft;
-    const { error } = await supabase.from("company_info").update(patch).eq("id", id);
+    const { error } = await (supabase as any).from("company_info").update(patch).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Company details updated");
     setEditingInfo(false);
