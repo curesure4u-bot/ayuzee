@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const links = [
   { label: "Find a Doctor", href: "#doctors" },
-  { label: "Therapies", href: "#therapies" },
+  { label: "Therapies", href: "/therapies" },
   { label: "Medicines", href: "#products" },
   { label: "Learning", href: "#learning" },
   { label: "Blog", href: "#blog" },
