@@ -23,6 +23,9 @@ export type Database = {
           id: string
           mode: string
           notes: string | null
+          payment_status: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
           status: string
           time_slot: string
           updated_at: string
@@ -36,6 +39,9 @@ export type Database = {
           id?: string
           mode: string
           notes?: string | null
+          payment_status?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
           status?: string
           time_slot: string
           updated_at?: string
@@ -49,6 +55,9 @@ export type Database = {
           id?: string
           mode?: string
           notes?: string | null
+          payment_status?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
           status?: string
           time_slot?: string
           updated_at?: string
@@ -66,6 +75,7 @@ export type Database = {
       }
       doctors: {
         Row: {
+          avatar_url: string | null
           bio: string | null
           category: string
           city: string
@@ -76,13 +86,16 @@ export type Database = {
           full_name: string
           id: string
           in_clinic_available: boolean
+          is_approved: boolean
           languages: string[]
           rating: number
           specialization: string
           total_reviews: number
+          user_id: string | null
           video_available: boolean
         }
         Insert: {
+          avatar_url?: string | null
           bio?: string | null
           category: string
           city: string
@@ -93,13 +106,16 @@ export type Database = {
           full_name: string
           id?: string
           in_clinic_available?: boolean
+          is_approved?: boolean
           languages?: string[]
           rating?: number
           specialization: string
           total_reviews?: number
+          user_id?: string | null
           video_available?: boolean
         }
         Update: {
+          avatar_url?: string | null
           bio?: string | null
           category?: string
           city?: string
@@ -110,10 +126,12 @@ export type Database = {
           full_name?: string
           id?: string
           in_clinic_available?: boolean
+          is_approved?: boolean
           languages?: string[]
           rating?: number
           specialization?: string
           total_reviews?: number
+          user_id?: string | null
           video_available?: boolean
         }
         Relationships: []
@@ -175,6 +193,8 @@ export type Database = {
           payment_status: string
           phone: string
           pincode: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
           shipping: number
           state: string
           subtotal: number
@@ -193,6 +213,8 @@ export type Database = {
           payment_status?: string
           phone: string
           pincode: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
           shipping?: number
           state: string
           subtotal: number
@@ -211,6 +233,8 @@ export type Database = {
           payment_status?: string
           phone?: string
           pincode?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
           shipping?: number
           state?: string
           subtotal?: number
@@ -301,15 +325,146 @@ export type Database = {
         }
         Relationships: []
       }
+      therapies: {
+        Row: {
+          benefits: string[]
+          category: string
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          price: number
+          short_description: string | null
+          slug: string
+        }
+        Insert: {
+          benefits?: string[]
+          category: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          price?: number
+          short_description?: string | null
+          slug: string
+        }
+        Update: {
+          benefits?: string[]
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          price?: number
+          short_description?: string | null
+          slug?: string
+        }
+        Relationships: []
+      }
+      therapy_bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          id: string
+          notes: string | null
+          payment_status: string
+          price: number
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          status: string
+          therapy_id: string
+          therapy_name: string
+          time_slot: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          price: number
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          status?: string
+          therapy_id: string
+          therapy_name: string
+          time_slot: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          price?: number
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          status?: string
+          therapy_id?: string
+          therapy_name?: string
+          time_slot?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapy_bookings_therapy_id_fkey"
+            columns: ["therapy_id"]
+            isOneToOne: false
+            referencedRelation: "therapies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "doctor" | "patient"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -436,6 +591,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "doctor", "patient"],
+    },
   },
 } as const
