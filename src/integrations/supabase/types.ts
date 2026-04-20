@@ -147,6 +147,76 @@ export type Database = {
         }
         Relationships: []
       }
+      clinic_media: {
+        Row: {
+          clinic_id: string
+          created_at: string
+          doctor_user_id: string
+          id: string
+          media_type: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          clinic_id: string
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          media_type?: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          clinic_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          media_type?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clinic_media_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_clinics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clinic_services: {
+        Row: {
+          clinic_id: string
+          created_at: string
+          doctor_user_id: string
+          id: string
+          service_name: string
+        }
+        Insert: {
+          clinic_id: string
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          service_name: string
+        }
+        Update: {
+          clinic_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          service_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clinic_services_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_clinics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctor_addresses: {
         Row: {
           address_line1: string
@@ -282,51 +352,120 @@ export type Database = {
         }
         Relationships: []
       }
+      doctor_categories: {
+        Row: {
+          created_at: string
+          current_tier: string
+          diamond_progress: number
+          doctor_user_id: string
+          id: string
+          monthly_spend: number
+          platinum_plus_progress: number
+          platinum_progress: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_tier?: string
+          diamond_progress?: number
+          doctor_user_id: string
+          id?: string
+          monthly_spend?: number
+          platinum_plus_progress?: number
+          platinum_progress?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_tier?: string
+          diamond_progress?: number
+          doctor_user_id?: string
+          id?: string
+          monthly_spend?: number
+          platinum_plus_progress?: number
+          platinum_progress?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       doctor_clinics: {
         Row: {
+          about: string | null
           address_line1: string
           city: string
           clinic_name: string
           consultation_fee: number
+          consultation_settings: Json | null
+          country: string | null
+          cover_image_url: string | null
           created_at: string
           doctor_user_id: string
+          gst_address: string | null
+          gst_number: string | null
           id: string
+          intro_video_url: string | null
           is_active: boolean
+          legal_entity_name: string | null
+          locality: string | null
+          logo_url: string | null
           phone: string | null
           pincode: string
           services: string[]
+          show_legal_entity: boolean
           state: string
           timings: string | null
           updated_at: string
         }
         Insert: {
+          about?: string | null
           address_line1: string
           city: string
           clinic_name: string
           consultation_fee?: number
+          consultation_settings?: Json | null
+          country?: string | null
+          cover_image_url?: string | null
           created_at?: string
           doctor_user_id: string
+          gst_address?: string | null
+          gst_number?: string | null
           id?: string
+          intro_video_url?: string | null
           is_active?: boolean
+          legal_entity_name?: string | null
+          locality?: string | null
+          logo_url?: string | null
           phone?: string | null
           pincode: string
           services?: string[]
+          show_legal_entity?: boolean
           state: string
           timings?: string | null
           updated_at?: string
         }
         Update: {
+          about?: string | null
           address_line1?: string
           city?: string
           clinic_name?: string
           consultation_fee?: number
+          consultation_settings?: Json | null
+          country?: string | null
+          cover_image_url?: string | null
           created_at?: string
           doctor_user_id?: string
+          gst_address?: string | null
+          gst_number?: string | null
           id?: string
+          intro_video_url?: string | null
           is_active?: boolean
+          legal_entity_name?: string | null
+          locality?: string | null
+          logo_url?: string | null
           phone?: string | null
           pincode?: string
           services?: string[]
+          show_legal_entity?: boolean
           state?: string
           timings?: string | null
           updated_at?: string
@@ -386,6 +525,88 @@ export type Database = {
           year?: number | null
         }
         Relationships: []
+      }
+      doctor_reward_history: {
+        Row: {
+          action: string
+          amount_value: number | null
+          created_at: string
+          doctor_user_id: string
+          earned_id: string | null
+          id: string
+          notes: string | null
+          reward_name: string
+        }
+        Insert: {
+          action?: string
+          amount_value?: number | null
+          created_at?: string
+          doctor_user_id: string
+          earned_id?: string | null
+          id?: string
+          notes?: string | null
+          reward_name: string
+        }
+        Update: {
+          action?: string
+          amount_value?: number | null
+          created_at?: string
+          doctor_user_id?: string
+          earned_id?: string | null
+          id?: string
+          notes?: string | null
+          reward_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_reward_history_earned_id_fkey"
+            columns: ["earned_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_rewards_earned"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_rewards_earned: {
+        Row: {
+          doctor_user_id: string
+          id: string
+          notes: string | null
+          reward_image_url: string | null
+          reward_name: string
+          scheme_id: string | null
+          status: string
+          unlocked_at: string
+        }
+        Insert: {
+          doctor_user_id: string
+          id?: string
+          notes?: string | null
+          reward_image_url?: string | null
+          reward_name: string
+          scheme_id?: string | null
+          status?: string
+          unlocked_at?: string
+        }
+        Update: {
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          reward_image_url?: string | null
+          reward_name?: string
+          scheme_id?: string | null
+          status?: string
+          unlocked_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_rewards_earned_scheme_id_fkey"
+            columns: ["scheme_id"]
+            isOneToOne: false
+            referencedRelation: "reward_schemes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       doctor_saved_medicines: {
         Row: {
@@ -774,6 +995,89 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      reward_scheme_tiers: {
+        Row: {
+          created_at: string
+          id: string
+          min_order_value: number
+          reward_image_url: string | null
+          reward_name: string
+          scheme_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          min_order_value: number
+          reward_image_url?: string | null
+          reward_name: string
+          scheme_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          min_order_value?: number
+          reward_image_url?: string | null
+          reward_name?: string
+          scheme_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_scheme_tiers_scheme_id_fkey"
+            columns: ["scheme_id"]
+            isOneToOne: false
+            referencedRelation: "reward_schemes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reward_schemes: {
+        Row: {
+          audience: string
+          banner_url: string | null
+          created_at: string
+          description: string | null
+          end_date: string
+          id: string
+          is_active: boolean
+          scheme_type: string
+          start_date: string
+          terms: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audience?: string
+          banner_url?: string | null
+          created_at?: string
+          description?: string | null
+          end_date: string
+          id?: string
+          is_active?: boolean
+          scheme_type?: string
+          start_date: string
+          terms?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          banner_url?: string | null
+          created_at?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          is_active?: boolean
+          scheme_type?: string
+          start_date?: string
+          terms?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
