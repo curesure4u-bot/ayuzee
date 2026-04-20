@@ -3,13 +3,13 @@ import { Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
+import { PartnershipMenu } from "@/components/site/PartnershipMenu";
 
 const links = [
   { to: "/doctors", label: "Find a Doctor" },
   { to: "/shop", label: "Medicines" },
   { to: "/#therapies", label: "Therapies" },
   { to: "/#learning", label: "Learning" },
-  { to: "/partner", label: "For Doctors" },
 ];
 
 export const SiteNav = () => {
@@ -25,6 +25,7 @@ export const SiteNav = () => {
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
           <BulkPurchaseMenu />
+          <PartnershipMenu />
           {links.map((l) => (
             <NavLink
               key={l.to}
