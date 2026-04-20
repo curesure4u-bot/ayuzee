@@ -30,6 +30,7 @@ import {
   HandCoins,
   Handshake,
   Package,
+  Stethoscope,
 } from "lucide-react";
 
 const items = [
