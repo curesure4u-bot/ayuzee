@@ -20,7 +20,7 @@ export const Doctors = () => (
           <h2 className="mt-2 text-3xl md:text-4xl">Verified, experienced, trusted</h2>
           <p className="mt-3 text-muted-foreground">Connect via video or visit a nearby clinic. Every doctor is verified by our medical board.</p>
         </div>
-        <Button variant="outline">View all doctors</Button>
+        <Button variant="outline" asChild><Link to="/doctors">View all doctors</Link></Button>
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {doctors.map((d) => (
@@ -39,7 +39,7 @@ export const Doctors = () => (
               <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {d.loc}</div>
               <div className="flex items-center gap-2"><Video className="h-4 w-4" /> Video consult ₹{d.fee}</div>
             </div>
-            <Button variant="hero" className="mt-6 w-full">Book appointment</Button>
+            <Button variant="hero" className="mt-6 w-full" asChild><Link to="/doctors">Book appointment</Link></Button>
           </article>
         ))}
       </div>
