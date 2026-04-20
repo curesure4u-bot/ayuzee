@@ -73,8 +73,428 @@ export type Database = {
           },
         ]
       }
+      ayuzee_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          order_id: string | null
+          reason: string | null
+          type: Database["public"]["Enums"]["ayuzee_txn_type"]
+          user_id: string
+          wallet_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          order_id?: string | null
+          reason?: string | null
+          type: Database["public"]["Enums"]["ayuzee_txn_type"]
+          user_id: string
+          wallet_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          order_id?: string | null
+          reason?: string | null
+          type?: Database["public"]["Enums"]["ayuzee_txn_type"]
+          user_id?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ayuzee_transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "ayuzee_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ayuzee_wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          lifetime_earned: number
+          lifetime_spent: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          lifetime_earned?: number
+          lifetime_spent?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          lifetime_earned?: number
+          lifetime_spent?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      doctor_addresses: {
+        Row: {
+          address_line1: string
+          alternate_phone: string | null
+          city: string
+          created_at: string
+          doctor_user_id: string
+          full_name: string
+          gstin: string | null
+          id: string
+          is_default_billing: boolean
+          is_default_shipping: boolean
+          landmark: string | null
+          legal_entity_name: string | null
+          phone: string
+          pincode: string
+          state: string
+          trade_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          address_line1: string
+          alternate_phone?: string | null
+          city: string
+          created_at?: string
+          doctor_user_id: string
+          full_name: string
+          gstin?: string | null
+          id?: string
+          is_default_billing?: boolean
+          is_default_shipping?: boolean
+          landmark?: string | null
+          legal_entity_name?: string | null
+          phone: string
+          pincode: string
+          state: string
+          trade_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string
+          alternate_phone?: string | null
+          city?: string
+          created_at?: string
+          doctor_user_id?: string
+          full_name?: string
+          gstin?: string | null
+          id?: string
+          is_default_billing?: boolean
+          is_default_shipping?: boolean
+          landmark?: string | null
+          legal_entity_name?: string | null
+          phone?: string
+          pincode?: string
+          state?: string
+          trade_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      doctor_awards: {
+        Row: {
+          awarded_by: string | null
+          created_at: string
+          doctor_user_id: string
+          id: string
+          title: string
+          year: number | null
+        }
+        Insert: {
+          awarded_by?: string | null
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          title: string
+          year?: number | null
+        }
+        Update: {
+          awarded_by?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          title?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
+      doctor_bank_details: {
+        Row: {
+          account_holder_name: string | null
+          account_number: string | null
+          bank_name: string | null
+          created_at: string
+          doctor_user_id: string
+          id: string
+          ifsc_code: string | null
+          is_default: boolean
+          is_verified: boolean
+          type: string
+          updated_at: string
+          upi_id: string | null
+          upi_name: string | null
+        }
+        Insert: {
+          account_holder_name?: string | null
+          account_number?: string | null
+          bank_name?: string | null
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          ifsc_code?: string | null
+          is_default?: boolean
+          is_verified?: boolean
+          type: string
+          updated_at?: string
+          upi_id?: string | null
+          upi_name?: string | null
+        }
+        Update: {
+          account_holder_name?: string | null
+          account_number?: string | null
+          bank_name?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          ifsc_code?: string | null
+          is_default?: boolean
+          is_verified?: boolean
+          type?: string
+          updated_at?: string
+          upi_id?: string | null
+          upi_name?: string | null
+        }
+        Relationships: []
+      }
+      doctor_clinics: {
+        Row: {
+          address_line1: string
+          city: string
+          clinic_name: string
+          consultation_fee: number
+          created_at: string
+          doctor_user_id: string
+          id: string
+          is_active: boolean
+          phone: string | null
+          pincode: string
+          services: string[]
+          state: string
+          timings: string | null
+          updated_at: string
+        }
+        Insert: {
+          address_line1: string
+          city: string
+          clinic_name: string
+          consultation_fee?: number
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          is_active?: boolean
+          phone?: string | null
+          pincode: string
+          services?: string[]
+          state: string
+          timings?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string
+          city?: string
+          clinic_name?: string
+          consultation_fee?: number
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          is_active?: boolean
+          phone?: string | null
+          pincode?: string
+          services?: string[]
+          state?: string
+          timings?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      doctor_education: {
+        Row: {
+          college: string
+          created_at: string
+          degree: string
+          doctor_user_id: string
+          id: string
+          year_completed: number | null
+        }
+        Insert: {
+          college: string
+          created_at?: string
+          degree: string
+          doctor_user_id: string
+          id?: string
+          year_completed?: number | null
+        }
+        Update: {
+          college?: string
+          created_at?: string
+          degree?: string
+          doctor_user_id?: string
+          id?: string
+          year_completed?: number | null
+        }
+        Relationships: []
+      }
+      doctor_memberships: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          membership_id: string | null
+          organization: string
+          year: number | null
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          membership_id?: string | null
+          organization: string
+          year?: number | null
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          membership_id?: string | null
+          organization?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
+      doctor_saved_medicines: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      doctor_saved_posts: {
+        Row: {
+          created_at: string
+          excerpt: string | null
+          id: string
+          post_title: string
+          post_url: string | null
+          thumbnail_url: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          post_title: string
+          post_url?: string | null
+          thumbnail_url?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          post_title?: string
+          post_url?: string | null
+          thumbnail_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      doctor_specializations: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          specialization: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          specialization: string
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          specialization?: string
+        }
+        Relationships: []
+      }
+      doctor_work_history: {
+        Row: {
+          created_at: string
+          description: string | null
+          doctor_user_id: string
+          end_year: number | null
+          id: string
+          organization: string
+          position: string
+          start_year: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          doctor_user_id: string
+          end_year?: number | null
+          id?: string
+          organization: string
+          position: string
+          start_year?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          doctor_user_id?: string
+          end_year?: number | null
+          id?: string
+          organization?: string
+          position?: string
+          start_year?: number | null
+        }
+        Relationships: []
+      }
       doctors: {
         Row: {
+          alternate_phone: string | null
           avatar_url: string | null
           bio: string | null
           category: string
@@ -82,19 +502,30 @@ export type Database = {
           clinic_name: string | null
           consultation_fee: number
           created_at: string
+          date_of_birth: string | null
+          email: string | null
+          escalation_name: string | null
+          escalation_phone: string | null
           experience_years: number
           full_name: string
+          gender: string | null
           id: string
           in_clinic_available: boolean
           is_approved: boolean
           languages: string[]
+          phone: string | null
+          profile_completion: number
+          public_profile: boolean
           rating: number
+          registration_number: string | null
           specialization: string
           total_reviews: number
+          updated_at: string
           user_id: string | null
           video_available: boolean
         }
         Insert: {
+          alternate_phone?: string | null
           avatar_url?: string | null
           bio?: string | null
           category: string
@@ -102,19 +533,30 @@ export type Database = {
           clinic_name?: string | null
           consultation_fee?: number
           created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          escalation_name?: string | null
+          escalation_phone?: string | null
           experience_years?: number
           full_name: string
+          gender?: string | null
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
           languages?: string[]
+          phone?: string | null
+          profile_completion?: number
+          public_profile?: boolean
           rating?: number
+          registration_number?: string | null
           specialization: string
           total_reviews?: number
+          updated_at?: string
           user_id?: string | null
           video_available?: boolean
         }
         Update: {
+          alternate_phone?: string | null
           avatar_url?: string | null
           bio?: string | null
           category?: string
@@ -122,15 +564,25 @@ export type Database = {
           clinic_name?: string | null
           consultation_fee?: number
           created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          escalation_name?: string | null
+          escalation_phone?: string | null
           experience_years?: number
           full_name?: string
+          gender?: string | null
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
           languages?: string[]
+          phone?: string | null
+          profile_completion?: number
+          public_profile?: boolean
           rating?: number
+          registration_number?: string | null
           specialization?: string
           total_reviews?: number
+          updated_at?: string
           user_id?: string | null
           video_available?: boolean
         }
@@ -465,6 +917,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"
+      ayuzee_txn_type:
+        | "credit"
+        | "cashback"
+        | "redeem"
+        | "expiry"
+        | "refund_reversal"
+        | "adjustment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -593,6 +1052,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "doctor", "patient"],
+      ayuzee_txn_type: [
+        "credit",
+        "cashback",
+        "redeem",
+        "expiry",
+        "refund_reversal",
+        "adjustment",
+      ],
     },
   },
 } as const

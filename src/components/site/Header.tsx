@@ -30,6 +30,7 @@ export const Header = () => {
         </nav>
         <div className="hidden items-center gap-2 md:flex">
           <Button variant="ghost" size="icon" aria-label="Cart"><ShoppingCart className="h-5 w-5" /></Button>
+          <Button variant="ghost" asChild><a href="/doctor/auth">For Doctors</a></Button>
           <Button variant="ghost" asChild><a href="/auth">Sign in</a></Button>
           <Button variant="hero" asChild><a href="/auth?mode=signup">Book Consultation</a></Button>
         </div>
