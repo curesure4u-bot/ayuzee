@@ -14,6 +14,17 @@ import Shop from "./pages/Shop.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
 import Cart from "./pages/Cart.tsx";
 import Checkout from "./pages/Checkout.tsx";
+import DoctorAuth from "./pages/doctor/DoctorAuth.tsx";
+import DoctorLayout from "./pages/doctor/DoctorLayout.tsx";
+import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
+import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
+import DoctorMedicines from "./pages/doctor/sections/DoctorMedicines.tsx";
+import DoctorSavedPosts from "./pages/doctor/sections/DoctorSavedPosts.tsx";
+import AyuzeeMoney from "./pages/doctor/sections/AyuzeeMoney.tsx";
+import DoctorAddresses from "./pages/doctor/sections/DoctorAddresses.tsx";
+import DoctorBank from "./pages/doctor/sections/DoctorBank.tsx";
+import DoctorClinic from "./pages/doctor/sections/DoctorClinic.tsx";
+import { DoctorRewards, DoctorCategory, DoctorCompany, DoctorSupport } from "./pages/doctor/sections/Placeholders.tsx";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +45,21 @@ const App = () => (
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/doctor/auth" element={<DoctorAuth />} />
+            <Route path="/doctor" element={<DoctorLayout />}>
+              <Route index element={<DoctorProfile />} />
+              <Route path="orders" element={<DoctorOrders />} />
+              <Route path="medicines" element={<DoctorMedicines />} />
+              <Route path="saved" element={<DoctorSavedPosts />} />
+              <Route path="ayuzee-money" element={<AyuzeeMoney />} />
+              <Route path="addresses" element={<DoctorAddresses />} />
+              <Route path="bank" element={<DoctorBank />} />
+              <Route path="rewards" element={<DoctorRewards />} />
+              <Route path="clinic" element={<DoctorClinic />} />
+              <Route path="category" element={<DoctorCategory />} />
+              <Route path="company" element={<DoctorCompany />} />
+              <Route path="support" element={<DoctorSupport />} />
+            </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
