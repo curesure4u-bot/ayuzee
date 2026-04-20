@@ -9,6 +9,7 @@ const links = [
   { to: "/#therapies", label: "Therapies" },
   { to: "/#learning", label: "Learning" },
   { to: "/#blog", label: "Blog" },
+  { to: "/partner", label: "For Doctors" },
 ];
 
 export const SiteNav = () => {
