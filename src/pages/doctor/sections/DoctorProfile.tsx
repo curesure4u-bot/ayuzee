@@ -87,7 +87,7 @@ const DoctorProfile = () => {
     }
     const merged = { ...doctor, ...payload };
     payload.profile_completion = calcCompletion(merged);
-    const { error } = await supabase.from("doctors").update(payload).eq("id", doctor.id);
+    const { error } = await supabase.from("doctors").update(payload as never).eq("id", doctor.id);
     if (error) toast.error(error.message);
     else {
       toast.success("Saved");
