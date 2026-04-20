@@ -38,17 +38,21 @@ const Dashboard = () => {
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
 
+  const [orderCount, setOrderCount] = useState(0);
+
   const loadAll = async (userId: string) => {
-    const [{ data: prof }, { data: appts }] = await Promise.all([
+    const [{ data: prof }, { data: appts }, { count }] = await Promise.all([
       supabase.from("profiles").select("full_name, phone").eq("user_id", userId).maybeSingle(),
       supabase
         .from("appointments")
         .select("id, appointment_date, time_slot, mode, status, fee, doctors(full_name, specialization, clinic_name)")
         .eq("user_id", userId)
         .order("appointment_date", { ascending: true }),
+      supabase.from("orders").select("id", { count: "exact", head: true }).eq("user_id", userId),
     ]);
     setProfile(prof);
     setAppointments((appts as unknown as Appointment[]) ?? []);
+    setOrderCount(count ?? 0);
     setLoading(false);
   };
 
@@ -64,7 +68,7 @@ const Dashboard = () => {
   const tiles = [
     { icon: Calendar, label: "Appointments", desc: "Upcoming consultations", count: upcoming.length },
     { icon: FileText, label: "Prescriptions", desc: "Digital prescriptions", count: 0 },
-    { icon: ShoppingBag, label: "Orders", desc: "Medicine & products", count: 0 },
+    { icon: ShoppingBag, label: "Orders", desc: "Medicine & products", count: orderCount },
     { icon: Heart, label: "Health Profile", desc: "Your wellness details", count: null },
   ];
 
