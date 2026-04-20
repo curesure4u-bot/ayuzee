@@ -927,6 +927,7 @@ export type Database = {
         Row: {
           address_line1: string
           address_line2: string | null
+          appointment_id: string | null
           city: string
           created_at: string
           full_name: string
@@ -947,6 +948,7 @@ export type Database = {
         Insert: {
           address_line1: string
           address_line2?: string | null
+          appointment_id?: string | null
           city: string
           created_at?: string
           full_name: string
@@ -967,6 +969,7 @@ export type Database = {
         Update: {
           address_line1?: string
           address_line2?: string | null
+          appointment_id?: string | null
           city?: string
           created_at?: string
           full_name?: string
@@ -983,6 +986,42 @@ export type Database = {
           total?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      patient_feedback: {
+        Row: {
+          appointment_id: string | null
+          comment: string | null
+          created_at: string
+          doctor_id: string
+          id: string
+          is_public: boolean
+          patient_user_id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          comment?: string | null
+          created_at?: string
+          doctor_id: string
+          id?: string
+          is_public?: boolean
+          patient_user_id: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          comment?: string | null
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          is_public?: boolean
+          patient_user_id?: string
+          rating?: number
+          updated_at?: string
         }
         Relationships: []
       }
