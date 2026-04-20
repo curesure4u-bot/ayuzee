@@ -83,7 +83,13 @@ const Checkout = () => {
           total,
           payment_status: "pending",
           order_status: "placed",
-          ...parsed.data,
+          full_name: parsed.data.full_name,
+          phone: parsed.data.phone,
+          address_line1: parsed.data.address_line1,
+          address_line2: parsed.data.address_line2 ?? null,
+          city: parsed.data.city,
+          state: parsed.data.state,
+          pincode: parsed.data.pincode,
         })
         .select("id")
         .single();
