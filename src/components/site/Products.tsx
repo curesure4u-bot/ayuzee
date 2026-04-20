@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { ShoppingCart, Star } from "lucide-react";
 import herbsImg from "@/assets/herbs-flatlay.jpg";
 
@@ -20,7 +21,7 @@ export const Products = () => (
             <span className="text-xs font-semibold uppercase tracking-wider opacity-90">Authentic Store</span>
             <h2 className="mt-2 text-3xl md:text-4xl">Lab-tested medicines, delivered to your door</h2>
             <p className="mt-3 text-sm opacity-90">From classical formulations to daily wellness essentials.</p>
-            <Button variant="secondary" className="mt-6 w-fit">Shop all products</Button>
+            <Button variant="secondary" className="mt-6 w-fit" asChild><Link to="/shop">Shop all products</Link></Button>
           </div>
         </div>
 
