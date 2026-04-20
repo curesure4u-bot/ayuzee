@@ -52,7 +52,7 @@ const VaidyaHome = () => {
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
         <h1 className="font-display text-2xl">Welcome, Dr. {doctor?.full_name?.split(" ")[0] || "Vaidya"}</h1>
-        <p className="text-sm text-muted-foreground">Manage your practice end-to-end with the Vaidya Tool.</p>
+        <p className="text-sm text-muted-foreground">Manage your practice end-to-end with the Ayush HMS Tool.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

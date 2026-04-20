@@ -18,7 +18,7 @@ const tiers = [
 const benefits = [
   { icon: BadgePercent, label: "Receive great discounts" },
   { icon: Tag, label: "Exclusive offer every month" },
-  { icon: Smartphone, label: "Free software Vaidya tool" },
+  { icon: Smartphone, label: "Free Ayush HMS Tool" },
   { icon: Headphones, label: "Dedicated account manager" },
 ];
 

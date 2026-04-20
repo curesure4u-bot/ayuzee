@@ -32,8 +32,8 @@ export const PartnershipMenu = () => {
             >
               <Stethoscope className="mt-0.5 h-5 w-5 text-primary" />
               <div>
-                <p className="font-semibold">Vaidya Tool</p>
-                <p className="text-xs text-muted-foreground">Free Ayush HMS for your clinic</p>
+                <p className="font-semibold">Ayush HMS Tool</p>
+                <p className="text-xs text-muted-foreground">Free Hospital Mgmt System for your clinic</p>
               </div>
             </Link>
             <Link
