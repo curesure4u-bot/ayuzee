@@ -878,6 +878,72 @@ export type Database = {
         }
         Relationships: []
       }
+      network_partners: {
+        Row: {
+          about: string | null
+          address: string | null
+          applied_by_user_id: string | null
+          city: string
+          contact_person: string | null
+          created_at: string
+          email: string | null
+          id: string
+          image_url: string | null
+          is_approved: boolean
+          name: string
+          partner_type: string
+          phone: string | null
+          pincode: string | null
+          rating: number
+          services: string[] | null
+          specialities: string[] | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          about?: string | null
+          address?: string | null
+          applied_by_user_id?: string | null
+          city: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          name: string
+          partner_type: string
+          phone?: string | null
+          pincode?: string | null
+          rating?: number
+          services?: string[] | null
+          specialities?: string[] | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about?: string | null
+          address?: string | null
+          applied_by_user_id?: string | null
+          city?: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          name?: string
+          partner_type?: string
+          phone?: string | null
+          pincode?: string | null
+          rating?: number
+          services?: string[] | null
+          specialities?: string[] | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -1337,6 +1403,62 @@ export type Database = {
           },
         ]
       }
+      therapy_plans: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          duration_days: number | null
+          id: string
+          notes: string | null
+          partner_id: string | null
+          patient_id: string | null
+          patient_name: string
+          patient_phone: string | null
+          planned_date: string | null
+          status: string
+          therapy_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id: string
+          duration_days?: number | null
+          id?: string
+          notes?: string | null
+          partner_id?: string | null
+          patient_id?: string | null
+          patient_name: string
+          patient_phone?: string | null
+          planned_date?: string | null
+          status?: string
+          therapy_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          duration_days?: number | null
+          id?: string
+          notes?: string | null
+          partner_id?: string | null
+          patient_id?: string | null
+          patient_name?: string
+          patient_phone?: string | null
+          planned_date?: string | null
+          status?: string
+          therapy_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapy_plans_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "network_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -1355,6 +1477,269 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vaidya_bill_items: {
+        Row: {
+          bill_id: string
+          created_at: string
+          id: string
+          inventory_id: string | null
+          line_total: number
+          medicine_name: string
+          quantity: number
+          unit_price: number
+        }
+        Insert: {
+          bill_id: string
+          created_at?: string
+          id?: string
+          inventory_id?: string | null
+          line_total: number
+          medicine_name: string
+          quantity: number
+          unit_price: number
+        }
+        Update: {
+          bill_id?: string
+          created_at?: string
+          id?: string
+          inventory_id?: string | null
+          line_total?: number
+          medicine_name?: string
+          quantity?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_bill_items_bill_id_fkey"
+            columns: ["bill_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_bills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vaidya_bills: {
+        Row: {
+          bill_type: string
+          created_at: string
+          discount: number
+          doctor_user_id: string
+          id: string
+          notes: string | null
+          patient_id: string | null
+          patient_name: string
+          patient_phone: string | null
+          payment_mode: string | null
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          bill_type?: string
+          created_at?: string
+          discount?: number
+          doctor_user_id: string
+          id?: string
+          notes?: string | null
+          patient_id?: string | null
+          patient_name: string
+          patient_phone?: string | null
+          payment_mode?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          bill_type?: string
+          created_at?: string
+          discount?: number
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string | null
+          patient_name?: string
+          patient_phone?: string | null
+          payment_mode?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vaidya_consultations: {
+        Row: {
+          appointment_id: string | null
+          created_at: string
+          diagnosis: string | null
+          doctor_user_id: string
+          fee: number
+          follow_up_date: string | null
+          id: string
+          notes: string | null
+          patient_id: string | null
+          prescription: string | null
+          updated_at: string
+          visit_date: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          doctor_user_id: string
+          fee?: number
+          follow_up_date?: string | null
+          id?: string
+          notes?: string | null
+          patient_id?: string | null
+          prescription?: string | null
+          updated_at?: string
+          visit_date?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          doctor_user_id?: string
+          fee?: number
+          follow_up_date?: string | null
+          id?: string
+          notes?: string | null
+          patient_id?: string | null
+          prescription?: string | null
+          updated_at?: string
+          visit_date?: string
+        }
+        Relationships: []
+      }
+      vaidya_inventory: {
+        Row: {
+          batch_no: string | null
+          brand: string | null
+          created_at: string
+          doctor_user_id: string
+          expiry_date: string | null
+          id: string
+          low_stock_threshold: number | null
+          medicine_name: string
+          mrp: number
+          purchase_price: number
+          quantity: number
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          batch_no?: string | null
+          brand?: string | null
+          created_at?: string
+          doctor_user_id: string
+          expiry_date?: string | null
+          id?: string
+          low_stock_threshold?: number | null
+          medicine_name: string
+          mrp?: number
+          purchase_price?: number
+          quantity?: number
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          batch_no?: string | null
+          brand?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          expiry_date?: string | null
+          id?: string
+          low_stock_threshold?: number | null
+          medicine_name?: string
+          mrp?: number
+          purchase_price?: number
+          quantity?: number
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vaidya_leads: {
+        Row: {
+          call_type: string | null
+          created_at: string
+          doctor_user_id: string
+          id: string
+          lead_status: string
+          name: string
+          notes: string | null
+          phone: string | null
+          source: string | null
+          updated_at: string
+        }
+        Insert: {
+          call_type?: string | null
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          lead_status?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          call_type?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          lead_status?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vaidya_patients: {
+        Row: {
+          address: string | null
+          age: number | null
+          created_at: string
+          doctor_user_id: string
+          full_name: string
+          gender: string | null
+          id: string
+          notes: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          age?: number | null
+          created_at?: string
+          doctor_user_id: string
+          full_name: string
+          gender?: string | null
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          age?: number | null
+          created_at?: string
+          doctor_user_id?: string
+          full_name?: string
+          gender?: string | null
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
