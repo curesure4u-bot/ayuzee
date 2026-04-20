@@ -14,6 +14,7 @@ import Shop from "./pages/Shop.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
 import Cart from "./pages/Cart.tsx";
 import Checkout from "./pages/Checkout.tsx";
+import Partner from "./pages/Partner.tsx";
 import DoctorAuth from "./pages/doctor/DoctorAuth.tsx";
 import DoctorLayout from "./pages/doctor/DoctorLayout.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/partner" element={<Partner />} />
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
               <Route index element={<DoctorProfile />} />
