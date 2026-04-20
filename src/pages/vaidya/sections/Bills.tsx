@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, ReceiptText, Trash2 } from "lucide-react";
+import { Plus, ReceiptText, Trash2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
 
 interface Props { type: "patient_bill" | "direct_selling" }
 
@@ -103,14 +104,18 @@ const BillsPage = ({ type }: Props) => {
                   <div className="space-y-2">
                     {lines.map((l, idx) => (
                       <div key={idx} className="grid grid-cols-[1fr_70px_90px_auto] gap-2">
-                        <Input placeholder="Medicine name" list="stock-list" value={l.medicine_name} onChange={(e) => { const arr = [...lines]; arr[idx].medicine_name = e.target.value; const m = stock.find((s) => s.medicine_name.toLowerCase() === e.target.value.toLowerCase()); if (m) arr[idx].unit_price = String(m.mrp); setLines(arr); }} />
+                        <Input placeholder="Medicine or therapy" list="bill-catalog" value={l.medicine_name} onChange={(e) => { const arr = [...lines]; arr[idx].medicine_name = e.target.value; const m = stock.find((s) => s.medicine_name.toLowerCase() === e.target.value.toLowerCase()); if (m) { arr[idx].unit_price = String(m.mrp); } else { const th = AYUSH_THERAPIES.find((t) => `${t.code} · ${t.name}`.toLowerCase() === e.target.value.toLowerCase() || t.name.toLowerCase() === e.target.value.toLowerCase()); if (th) arr[idx].unit_price = String(th.price); } setLines(arr); }} />
                         <Input type="number" placeholder="Qty" value={l.quantity} onChange={(e) => { const arr = [...lines]; arr[idx].quantity = e.target.value; setLines(arr); }} />
                         <Input type="number" placeholder="₹" value={l.unit_price} onChange={(e) => { const arr = [...lines]; arr[idx].unit_price = e.target.value; setLines(arr); }} />
                         <Button variant="ghost" size="icon" onClick={() => setLines(lines.filter((_, i) => i !== idx))}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     ))}
-                    <datalist id="stock-list">{stock.map((s) => <option key={s.id} value={s.medicine_name} />)}</datalist>
+                    <datalist id="bill-catalog">
+                      {stock.map((s) => <option key={`s-${s.id}`} value={s.medicine_name} />)}
+                      {AYUSH_THERAPIES.map((t) => <option key={`t-${t.code}`} value={`${t.code} · ${t.name}`}>₹{t.price} · {t.system}</option>)}
+                    </datalist>
                   </div>
+                  <p className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground"><Sparkles className="h-3 w-3" /> Type a medicine, or pick an Ayush therapy (Ayurveda · Yoga · Naturopathy · Unani · Siddha) — price auto-fills from Ayush 2026 benchmark.</p>
                   <Button variant="outline" size="sm" className="mt-2" onClick={() => setLines([...lines, { medicine_name: "", quantity: "1", unit_price: "0" }])}>+ Add line</Button>
                 </div>
                 <div className="flex items-center justify-between rounded-md bg-muted/40 p-3 text-sm">

@@ -48,6 +48,7 @@ const groups = [
     items: [
       { to: "/vaidya/network", label: "Partner Network", icon: HeartHandshake },
       { to: "/vaidya/therapy-plans", label: "Therapy Plans", icon: Sparkles },
+      { to: "/vaidya/therapy-catalog", label: "Ayush Therapy Catalog", icon: Sparkles },
     ],
   },
 ];

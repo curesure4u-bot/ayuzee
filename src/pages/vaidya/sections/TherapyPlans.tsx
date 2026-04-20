@@ -8,20 +8,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Sparkles } from "lucide-react";
+import { Plus, Sparkles, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { AYUSH_THERAPIES, AYUSH_SYSTEMS, findTherapyByCode } from "@/data/ayushTherapyCatalog";
 
 const STATUSES = ["planned", "ongoing", "completed", "cancelled"];
 
 const TherapyPlans = () => {
   const { userId } = useDoctor();
   const [params] = useSearchParams();
-  const preselect = params.get("partner") || "";
+  const preselectPartner = params.get("partner") || "";
+  const preselectCode = params.get("code") || "";
+  const preTherapy = preselectCode ? findTherapyByCode(preselectCode) : undefined;
   const [items, setItems] = useState<any[]>([]);
   const [partners, setPartners] = useState<any[]>([]);
-  const [open, setOpen] = useState(!!preselect);
+  const [open, setOpen] = useState(!!preselectPartner || !!preselectCode);
+  const [showPrice, setShowPrice] = useState(true);
+  const [therapySystem, setTherapySystem] = useState<string>(preTherapy?.system || "Ayurveda");
   const [form, setForm] = useState({
-    patient_name: "", patient_phone: "", partner_id: preselect, therapy_name: "",
+    patient_name: "", patient_phone: "", partner_id: preselectPartner,
+    therapy_code: preTherapy?.code || "",
+    therapy_name: preTherapy?.name || "",
+    unit_price: preTherapy ? String(preTherapy.price) : "",
     planned_date: "", duration_days: "1", notes: "",
   });
 
@@ -53,9 +61,11 @@ const TherapyPlans = () => {
     if (error) return toast.error(error.message);
     toast.success("Therapy plan created");
     setOpen(false);
-    setForm({ patient_name: "", patient_phone: "", partner_id: "", therapy_name: "", planned_date: "", duration_days: "1", notes: "" });
+    setForm({ patient_name: "", patient_phone: "", partner_id: "", therapy_code: "", therapy_name: "", unit_price: "", planned_date: "", duration_days: "1", notes: "" });
     load();
   };
+
+  const therapyOptions = AYUSH_THERAPIES.filter((t) => t.system === therapySystem);
 
   const updateStatus = async (id: string, status: string) => {
     await supabase.from("therapy_plans").update({ status }).eq("id", id);
@@ -79,7 +89,36 @@ const TherapyPlans = () => {
                   <div><Label>Patient name *</Label><Input value={form.patient_name} onChange={(e) => setForm({ ...form, patient_name: e.target.value })} /></div>
                   <div><Label>Phone</Label><Input value={form.patient_phone} onChange={(e) => setForm({ ...form, patient_phone: e.target.value })} /></div>
                 </div>
-                <div><Label>Therapy *</Label><Input placeholder="e.g. Shirodhara, Abhyanga" value={form.therapy_name} onChange={(e) => setForm({ ...form, therapy_name: e.target.value })} /></div>
+                <div className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <Label>Therapy * (Ayush Benchmark 2026)</Label>
+                    <Button type="button" variant="ghost" size="sm" className="h-6 text-[11px]" onClick={() => setShowPrice((v) => !v)}>
+                      {showPrice ? <><EyeOff className="mr-1 h-3 w-3" /> Hide price</> : <><Eye className="mr-1 h-3 w-3" /> Show price</>}
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {AYUSH_SYSTEMS.map((s) => (
+                      <Button key={s} type="button" size="sm" variant={therapySystem === s ? "default" : "outline"} className="h-7 text-[11px]" onClick={() => setTherapySystem(s)}>{s}</Button>
+                    ))}
+                  </div>
+                  <select
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={form.therapy_code}
+                    onChange={(e) => {
+                      const t = findTherapyByCode(e.target.value);
+                      setForm({ ...form, therapy_code: e.target.value, therapy_name: t?.name || "", unit_price: t ? String(t.price) : "" });
+                    }}
+                  >
+                    <option value="">— Select therapy ({therapyOptions.length} available) —</option>
+                    {therapyOptions.map((t) => (
+                      <option key={t.code} value={t.code}>{t.code} · {t.name}{showPrice ? ` — ₹${t.price}` : ""}</option>
+                    ))}
+                  </select>
+                  <Input placeholder="Or type a custom therapy name" value={form.therapy_name} onChange={(e) => setForm({ ...form, therapy_name: e.target.value, therapy_code: "" })} />
+                  {showPrice && form.unit_price && (
+                    <p className="text-[11px] text-muted-foreground">Benchmark unit cost: <strong className="text-primary">₹{form.unit_price}</strong> (hidable, billing reference only)</p>
+                  )}
+                </div>
                 <div>
                   <Label>Partner</Label>
                   <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={form.partner_id} onChange={(e) => setForm({ ...form, partner_id: e.target.value })}>
