@@ -33,6 +33,8 @@ import PatientAppointments from "./pages/doctor/sections/PatientAppointments.tsx
 import MyPatients from "./pages/doctor/sections/MyPatients.tsx";
 import PatientFeedback from "./pages/doctor/sections/PatientFeedback.tsx";
 import PatientOrders from "./pages/doctor/sections/PatientOrders.tsx";
+import DoctorPayouts from "./pages/doctor/sections/DoctorPayouts.tsx";
+import AboutAyuzeePartner from "./pages/doctor/sections/AboutAyuzeePartner.tsx";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +73,8 @@ const App = () => (
               <Route path="clinic" element={<DoctorClinic />} />
               <Route path="category" element={<DoctorCategory />} />
               <Route path="company" element={<DoctorCompany />} />
+              <Route path="payouts" element={<DoctorPayouts />} />
+              <Route path="about-partner" element={<AboutAyuzeePartner />} />
               <Route path="support" element={<DoctorSupport />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
