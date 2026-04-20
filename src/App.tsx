@@ -24,7 +24,9 @@ import AyuzeeMoney from "./pages/doctor/sections/AyuzeeMoney.tsx";
 import DoctorAddresses from "./pages/doctor/sections/DoctorAddresses.tsx";
 import DoctorBank from "./pages/doctor/sections/DoctorBank.tsx";
 import DoctorClinic from "./pages/doctor/sections/DoctorClinic.tsx";
-import { DoctorRewards, DoctorCategory, DoctorCompany, DoctorSupport } from "./pages/doctor/sections/Placeholders.tsx";
+import DoctorRewards from "./pages/doctor/sections/DoctorRewards.tsx";
+import DoctorCategory from "./pages/doctor/sections/DoctorCategory.tsx";
+import { DoctorCompany, DoctorSupport } from "./pages/doctor/sections/Placeholders.tsx";
 
 const queryClient = new QueryClient();
 
