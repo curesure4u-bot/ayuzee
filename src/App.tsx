@@ -81,6 +81,9 @@ import AdminLearning from "./pages/admin/AdminLearning.tsx";
 import Clinics from "./pages/Clinics.tsx";
 import Offers from "./pages/Offers.tsx";
 import Referral from "./pages/Referral.tsx";
+import LoginPicker from "./pages/LoginPicker.tsx";
+import ProviderAuth from "./pages/provider/ProviderAuth.tsx";
+import ProviderHome from "./pages/provider/ProviderHome.tsx";
 
 const queryClient = new QueryClient();
 
@@ -93,7 +96,10 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/login" element={<LoginPicker />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/provider/auth" element={<ProviderAuth />} />
+            <Route path="/provider" element={<ProviderHome />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
