@@ -954,9 +954,11 @@ export type Database = {
           image_url: string | null
           is_published: boolean
           like_count: number
+          post_type: string
           tags: string[]
           title: string | null
           updated_at: string
+          visibility: string
         }
         Insert: {
           author_avatar_url?: string | null
@@ -969,9 +971,11 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean
           like_count?: number
+          post_type?: string
           tags?: string[]
           title?: string | null
           updated_at?: string
+          visibility?: string
         }
         Update: {
           author_avatar_url?: string | null
@@ -984,9 +988,11 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean
           like_count?: number
+          post_type?: string
           tags?: string[]
           title?: string | null
           updated_at?: string
+          visibility?: string
         }
         Relationships: []
       }
