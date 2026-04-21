@@ -11,6 +11,19 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { ShieldCheck } from "lucide-react";
 
+declare global {
+  interface Window { Razorpay: new (opts: Record<string, unknown>) => { open: () => void } }
+}
+
+const loadRazorpay = (): Promise<boolean> => new Promise((resolve) => {
+  if (window.Razorpay) return resolve(true);
+  const s = document.createElement("script");
+  s.src = "https://checkout.razorpay.com/v1/checkout.js";
+  s.onload = () => resolve(true);
+  s.onerror = () => resolve(false);
+  document.body.appendChild(s);
+});
+
 const schema = z.object({
   full_name: z.string().trim().min(2).max(100),
   phone: z.string().trim().min(10).max(15),
@@ -78,9 +91,7 @@ const Checkout = () => {
         .from("orders")
         .insert({
           user_id: s.session.user.id,
-          subtotal,
-          shipping,
-          total,
+          subtotal, shipping, total,
           payment_status: "pending",
           order_status: "placed",
           full_name: parsed.data.full_name,
@@ -91,24 +102,54 @@ const Checkout = () => {
           state: parsed.data.state,
           pincode: parsed.data.pincode,
         })
-        .select("id")
-        .single();
+        .select("id").single();
       if (orderErr) throw orderErr;
 
       const { error: itemsErr } = await supabase.from("order_items").insert(
         items.map((i) => ({
-          order_id: order.id,
-          product_id: i.id,
-          product_name: i.name,
-          quantity: i.quantity,
-          unit_price: i.price,
+          order_id: order.id, product_id: i.id, product_name: i.name,
+          quantity: i.quantity, unit_price: i.price,
         }))
       );
       if (itemsErr) throw itemsErr;
 
-      clear();
-      toast.success("Order placed! 🌿");
-      navigate("/dashboard");
+      // Razorpay checkout
+      const ok = await loadRazorpay();
+      if (!ok) throw new Error("Could not load Razorpay");
+
+      const { data: rzp, error: rzpErr } = await supabase.functions.invoke("razorpay-create-order", {
+        body: { order_id: order.id, kind: "order" },
+      });
+      if (rzpErr || !rzp?.razorpay_order_id) throw new Error(rzpErr?.message || "Payment init failed");
+
+      const rz = new window.Razorpay({
+        key: rzp.key_id,
+        amount: rzp.amount,
+        currency: rzp.currency,
+        order_id: rzp.razorpay_order_id,
+        name: "Ayuzee",
+        description: "Order payment",
+        prefill: { name: parsed.data.full_name, contact: parsed.data.phone },
+        theme: { color: "#16a34a" },
+        handler: async (resp: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => {
+          const { error: vErr } = await supabase.functions.invoke("razorpay-verify-payment", {
+            body: {
+              razorpay_order_id: resp.razorpay_order_id,
+              razorpay_payment_id: resp.razorpay_payment_id,
+              razorpay_signature: resp.razorpay_signature,
+              internal_id: order.id,
+              kind: "order",
+            },
+          });
+          if (vErr) { toast.error("Payment verification failed"); return; }
+          clear();
+          toast.success("Payment successful! 🌿");
+          navigate("/dashboard");
+        },
+        modal: { ondismiss: () => { setSubmitting(false); toast.info("Payment cancelled"); } },
+      });
+      rz.open();
+      return; // don't run finally→submitting=false yet; handler will navigate
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Could not place order";
       toast.error(msg);
@@ -138,7 +179,7 @@ const Checkout = () => {
 
             <div className="mt-8 flex items-center gap-3 rounded-xl bg-accent/60 p-4 text-sm text-muted-foreground">
               <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
-              Razorpay payment wiring comes next — for now your order is placed with status <strong className="mx-1 text-foreground">pending</strong>.
+              Secure payment via Razorpay. Test card: <strong className="mx-1 text-foreground">4111 1111 1111 1111</strong>, any CVV/future expiry.
             </div>
           </div>
 
