@@ -8,16 +8,16 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, BookOpen, Stethoscope, Leaf, Sun, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, BookOpen } from "lucide-react";
 import {
   PRAKRITI_QUESTIONS,
   SECTION_INTROS,
   scorePrakriti,
-  getGuidance,
   type Dosha,
 } from "@/data/prakritiQuestions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { PrakritiResultView } from "@/components/diagnosis/PrakritiResultView";
 
 type Mode = "self" | "doctor" | "therapist";
 
@@ -100,110 +100,23 @@ const PrakritiRun = () => {
 
   // ---------- RESULT VIEW ----------
   if (done) {
-    const guidance = getGuidance(done.dominant);
     return (
       <div className="min-h-screen flex flex-col">
         <SiteNav />
-        <main className="flex-1 container py-12 max-w-3xl">
-          <div className="rounded-2xl border bg-gradient-to-br from-primary/10 to-background p-8 text-center">
-            <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
-            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.25em] text-primary">Your Prakriti</p>
-            <h1 className="mt-2 font-display text-4xl font-semibold capitalize">
-              {done.dominant.replace("-", " – ")}
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground">Based on the CCRAS / Ministry of AYUSH SOP (35 traits)</p>
-          </div>
-
-          <Card className="mt-6 p-6">
-            <h2 className="font-display text-lg font-semibold">Dosha breakdown</h2>
-            <div className="mt-4 space-y-3">
-              {[
-                { k: "Vata", v: done.vataPct, c: "bg-blue-500" },
-                { k: "Pitta", v: done.pittaPct, c: "bg-red-500" },
-                { k: "Kapha", v: done.kaphaPct, c: "bg-emerald-500" },
-              ].map((d) => (
-                <div key={d.k}>
-                  <div className="flex justify-between text-sm">
-                    <span className="font-medium">{d.k}</span>
-                    <span className="text-muted-foreground">{d.v}%</span>
-                  </div>
-                  <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted">
-                    <div className={`h-full ${d.c}`} style={{ width: `${d.v}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {guidance.map((g) => (
-            <Card key={g.title} className="mt-6 p-6">
-              <h3 className="font-display text-xl font-semibold flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" /> {g.title}
-              </h3>
-              <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Element: {g.element}</p>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {g.qualities.map((q) => (
-                  <span key={q} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{q}</span>
-                ))}
-              </div>
-
-              <div className="mt-5 grid gap-5 md:grid-cols-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5"><Leaf className="h-3.5 w-3.5" /> Traits</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    {g.traits.map((t) => <li key={t}>• {t}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Favour in diet</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    {g.diet.map((t) => <li key={t}>• {t}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Avoid</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    {g.avoid.map((t) => <li key={t}>• {t}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Lifestyle (Dinacharya)</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    {g.lifestyle.map((t) => <li key={t}>• {t}</li>)}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <div className="rounded-lg border bg-muted/30 p-4">
-                  <p className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5" /> Recommended exercise</p>
-                  <p className="mt-1 text-sm">{g.exercise}</p>
-                </div>
-                <div className="rounded-lg border bg-muted/30 p-4">
-                  <p className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5"><Sun className="h-3.5 w-3.5" /> Seasonal care (Ritucharya)</p>
-                  <p className="mt-1 text-sm">{g.ritucharya}</p>
-                </div>
-              </div>
-
-              <div className="mt-5 rounded-lg border-l-4 border-destructive bg-destructive/5 p-4">
-                <p className="text-xs font-semibold uppercase text-destructive flex items-center gap-1.5"><AlertCircle className="h-3.5 w-3.5" /> Common imbalances to watch</p>
-                <ul className="mt-2 space-y-1 text-sm">
-                  {g.commonImbalances.map((t) => <li key={t}>• {t}</li>)}
-                </ul>
-              </div>
-            </Card>
-          ))}
-
-          <div className="mt-6 rounded-xl border bg-muted/30 p-5 text-sm text-muted-foreground">
-            <strong className="text-foreground">Disclaimer:</strong> This assessment provides a directional Prakriti analysis based on the CCRAS SOP. For a clinically confirmed evaluation and personalised treatment plan, consult a qualified Ayurveda Vaidya. Some traits (especially Nadi & subtle observations) require in-person examination.
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild variant="hero"><Link to="/doctors">Consult an Ayurveda doctor</Link></Button>
-            <Button asChild variant="outline"><Link to="/dashboard">Go to my dashboard</Link></Button>
-          </div>
-          {savedId && <p className="mt-4 text-xs text-muted-foreground">Saved · #{savedId.slice(0, 8)}</p>}
+        <main className="flex-1 container py-12 max-w-4xl">
+          <PrakritiResultView
+            result={{
+              id: savedId || undefined,
+              dominant: done.dominant,
+              vata: done.vata,
+              pitta: done.pitta,
+              kapha: done.kapha,
+              vataPct: done.vataPct,
+              pittaPct: done.pittaPct,
+              kaphaPct: done.kaphaPct,
+              total: done.total,
+            }}
+          />
         </main>
         <Footer />
       </div>

@@ -60,6 +60,7 @@ import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
+import PrakritiResult from "./pages/diagnosis/PrakritiResult.tsx";
 import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
 import Feed from "./pages/Feed.tsx";
@@ -122,6 +123,7 @@ const App = () => (
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
             <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
+            <Route path="/diagnosis/prakriti/result/:id" element={<PrakritiResult />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/:id" element={<FeedPost />} />
             <Route path="/learning" element={<LearningLayout />}>
