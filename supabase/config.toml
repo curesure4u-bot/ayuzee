@@ -1,1 +1,4 @@
 project_id = "saphetdusyfrcduzsouk"
+
+[functions.dev-api]
+verify_jwt = false
