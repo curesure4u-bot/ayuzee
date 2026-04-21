@@ -70,6 +70,29 @@ const DoctorProfile = () => {
     }
   }, [doctor]);
 
+  // Load partner-progress stats: scheduled / consulted appointments + completed milestones
+  useEffect(() => {
+    if (!doctor) return;
+    (async () => {
+      const [{ count: scheduled }, { count: consulted }] = await Promise.all([
+        supabase.from("appointments").select("id", { count: "exact", head: true }).eq("doctor_id", doctor.id).in("status", ["scheduled", "confirmed", "pending"]),
+        supabase.from("appointments").select("id", { count: "exact", head: true }).eq("doctor_id", doctor.id).eq("status", "completed"),
+      ]);
+      // Compute milestone completion from doctor profile signals
+      const flags = [
+        true, // free digital profile (always)
+        !!doctor.is_approved, // free PMS unlocked once approved
+        !!doctor.video_available,
+        (doctor.bio?.length ?? 0) > 50,
+        (consulted ?? 0) >= 1,
+        !!doctor.in_clinic_available,
+        (doctor.profile_completion ?? 0) >= 80,
+      ];
+      const completedSteps = flags.filter(Boolean).length;
+      setStats({ scheduled: scheduled ?? 0, consulted: consulted ?? 0, completedSteps });
+    })();
+  }, [doctor]);
+
   const togglePublic = async (val: boolean) => {
     if (!doctor) return;
     const { error } = await supabase.from("doctors").update({ public_profile: val }).eq("id", doctor.id);
