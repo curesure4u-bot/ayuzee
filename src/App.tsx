@@ -80,6 +80,9 @@ const App = () => (
             <Route path="/bulk" element={<Bulk />} />
             <Route path="/therapies" element={<Therapies />} />
             <Route path="/admin/therapies" element={<AdminTherapies />} />
+            <Route path="/diagnosis" element={<Diagnosis />} />
+            <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
+            <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
             <Route path="/vaidya" element={<VaidyaLayout />}>
               <Route index element={<VaidyaHome />} />
               <Route path="patients" element={<AllPatients />} />
