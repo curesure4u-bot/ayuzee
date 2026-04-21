@@ -18,6 +18,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { BadgeCheck, Pencil } from "lucide-react";
+import { DoctorGrowth } from "@/components/doctor/DoctorGrowth";
 
 const calcCompletion = (d: Record<string, unknown>): number => {
   const fields = [
@@ -42,6 +43,7 @@ const DoctorProfile = () => {
     avatar_url: "",
   });
   const [saving, setSaving] = useState(false);
+  const [stats, setStats] = useState({ scheduled: 0, consulted: 0, completedSteps: 3 });
 
   useEffect(() => {
     if (doctor) {
@@ -66,6 +68,29 @@ const DoctorProfile = () => {
         avatar_url: doctor.avatar_url ?? "",
       });
     }
+  }, [doctor]);
+
+  // Load partner-progress stats: scheduled / consulted appointments + completed milestones
+  useEffect(() => {
+    if (!doctor) return;
+    (async () => {
+      const [{ count: scheduled }, { count: consulted }] = await Promise.all([
+        supabase.from("appointments").select("id", { count: "exact", head: true }).eq("doctor_id", doctor.id).in("status", ["scheduled", "confirmed", "pending"]),
+        supabase.from("appointments").select("id", { count: "exact", head: true }).eq("doctor_id", doctor.id).eq("status", "completed"),
+      ]);
+      // Compute milestone completion from doctor profile signals
+      const flags = [
+        true, // free digital profile (always)
+        !!doctor.is_approved, // free PMS unlocked once approved
+        !!doctor.video_available,
+        (doctor.bio?.length ?? 0) > 50,
+        (consulted ?? 0) >= 1,
+        !!doctor.in_clinic_available,
+        (doctor.profile_completion ?? 0) >= 80,
+      ];
+      const completedSteps = flags.filter(Boolean).length;
+      setStats({ scheduled: scheduled ?? 0, consulted: consulted ?? 0, completedSteps });
+    })();
   }, [doctor]);
 
   const togglePublic = async (val: boolean) => {
@@ -102,7 +127,9 @@ const DoctorProfile = () => {
   const completion = doctor.profile_completion ?? calcCompletion(doctor as unknown as Record<string, unknown>);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-4">
+    <div className="mx-auto max-w-6xl space-y-6">
+      <DoctorGrowth scheduled={stats.scheduled} consulted={stats.consulted} completedSteps={stats.completedSteps} />
+
       <Card className="p-6">
         <div className="mb-4 flex items-center gap-3">
           <h1 className="font-display text-2xl">{doctor.full_name}</h1>
