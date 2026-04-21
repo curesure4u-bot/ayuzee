@@ -43,6 +43,7 @@ const DoctorProfile = () => {
     avatar_url: "",
   });
   const [saving, setSaving] = useState(false);
+  const [stats, setStats] = useState({ scheduled: 0, consulted: 0, completedSteps: 3 });
 
   useEffect(() => {
     if (doctor) {
