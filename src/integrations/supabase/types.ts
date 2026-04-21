@@ -2021,6 +2021,81 @@ export type Database = {
         }
         Relationships: []
       }
+      service_providers: {
+        Row: {
+          about: string | null
+          address: string | null
+          business_name: string
+          city: string
+          contact_person: string
+          cover_image_url: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_approved: boolean
+          is_verified: boolean
+          logo_url: string | null
+          phone: string | null
+          pincode: string | null
+          provider_type: string
+          rating: number
+          rejection_reason: string | null
+          state: string | null
+          total_reviews: number
+          updated_at: string
+          user_id: string
+          verification_status: string
+        }
+        Insert: {
+          about?: string | null
+          address?: string | null
+          business_name: string
+          city: string
+          contact_person: string
+          cover_image_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_approved?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          pincode?: string | null
+          provider_type: string
+          rating?: number
+          rejection_reason?: string | null
+          state?: string | null
+          total_reviews?: number
+          updated_at?: string
+          user_id: string
+          verification_status?: string
+        }
+        Update: {
+          about?: string | null
+          address?: string | null
+          business_name?: string
+          city?: string
+          contact_person?: string
+          cover_image_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_approved?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          pincode?: string | null
+          provider_type?: string
+          rating?: number
+          rejection_reason?: string | null
+          state?: string | null
+          total_reviews?: number
+          updated_at?: string
+          user_id?: string
+          verification_status?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
@@ -2681,7 +2756,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "doctor" | "patient" | "therapist"
+      app_role: "admin" | "doctor" | "patient" | "therapist" | "provider"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -2817,7 +2892,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "doctor", "patient", "therapist"],
+      app_role: ["admin", "doctor", "patient", "therapist", "provider"],
       ayuzee_txn_type: [
         "credit",
         "cashback",
