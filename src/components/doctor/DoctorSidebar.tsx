@@ -36,7 +36,8 @@ import {
 } from "lucide-react";
 
 const items = [
-  { title: "My Profile", url: "/doctor", icon: User, end: true },
+  { title: "Home", url: "/doctor", icon: Home, end: true },
+  { title: "My Profile", url: "/doctor/profile", icon: User },
   { title: "Appointment Calendar", url: "/doctor/appointments", icon: CalendarDays },
   { title: "My Patients", url: "/doctor/patients", icon: Users },
   { title: "Patient Feedback", url: "/doctor/feedback", icon: MessageSquareHeart },

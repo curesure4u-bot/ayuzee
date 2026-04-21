@@ -19,6 +19,7 @@ import Bulk from "./pages/Bulk.tsx";
 import DoctorAuth from "./pages/doctor/DoctorAuth.tsx";
 import DoctorLayout from "./pages/doctor/DoctorLayout.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
+import DoctorHome from "./pages/doctor/DoctorHome.tsx";
 import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
 import DoctorMedicines from "./pages/doctor/sections/DoctorMedicines.tsx";
 import DoctorSavedPosts from "./pages/doctor/sections/DoctorSavedPosts.tsx";
@@ -158,7 +159,8 @@ const App = () => (
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
-              <Route index element={<DoctorProfile />} />
+              <Route index element={<DoctorHome />} />
+              <Route path="profile" element={<DoctorProfile />} />
               <Route path="appointments" element={<PatientAppointments />} />
               <Route path="patients" element={<MyPatients />} />
               <Route path="feedback" element={<PatientFeedback />} />
