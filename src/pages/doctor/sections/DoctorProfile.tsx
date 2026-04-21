@@ -18,6 +18,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { BadgeCheck, Pencil } from "lucide-react";
+import { DoctorGrowth } from "@/components/doctor/DoctorGrowth";
 
 const calcCompletion = (d: Record<string, unknown>): number => {
   const fields = [
