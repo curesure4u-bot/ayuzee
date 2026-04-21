@@ -51,6 +51,12 @@ import TherapyPlans from "./pages/vaidya/sections/TherapyPlans.tsx";
 import TherapyCatalog from "./pages/vaidya/sections/TherapyCatalog.tsx";
 import Therapies from "./pages/Therapies.tsx";
 import AdminTherapies from "./pages/admin/AdminTherapies.tsx";
+import AdminLayout from "./pages/admin/AdminLayout.tsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
+import AdminUsers from "./pages/admin/AdminUsers.tsx";
+import AdminDoctors from "./pages/admin/AdminDoctors.tsx";
+import AdminOrders from "./pages/admin/AdminOrders.tsx";
+import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
@@ -98,7 +104,21 @@ const App = () => (
             <Route path="/partner/apply" element={<PartnerApply />} />
             <Route path="/bulk" element={<Bulk />} />
             <Route path="/therapies" element={<Therapies />} />
-            <Route path="/admin/therapies" element={<AdminTherapies />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="doctors" element={<AdminDoctors />} />
+              <Route path="appointments" element={<AdminPlaceholder title="Appointments" description="Manage all platform appointments." />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="products" element={<AdminPlaceholder title="Products" description="Manage the product catalog." />} />
+              <Route path="commissions" element={<AdminPlaceholder title="Commissions" description="Doctor & partner commission rates." />} />
+              <Route path="webinars" element={<AdminPlaceholder title="Webinars" description="Schedule and manage webinars." />} />
+              <Route path="blogs" element={<AdminPlaceholder title="Blogs" description="Editorial review for health blogs." />} />
+              <Route path="notifications" element={<AdminPlaceholder title="Notifications" description="Broadcast push and email." />} />
+              <Route path="payments" element={<AdminPlaceholder title="Payments" description="Razorpay transactions & payouts." />} />
+              <Route path="therapies" element={<AdminTherapies />} />
+              <Route path="learning" element={<AdminLearning />} />
+            </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
             <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
@@ -115,7 +135,7 @@ const App = () => (
             <Route path="/learning/courses/:slug/quiz" element={<CourseQuiz />} />
             <Route path="/learning/blogs/:slug" element={<BlogDetail />} />
             <Route path="/learning/certificates/:id" element={<Certificate />} />
-            <Route path="/admin/learning" element={<AdminLearning />} />
+            
             <Route path="/vaidya" element={<VaidyaLayout />}>
               <Route index element={<VaidyaHome />} />
               <Route path="patients" element={<AllPatients />} />
