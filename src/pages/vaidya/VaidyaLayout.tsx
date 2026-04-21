@@ -14,6 +14,7 @@ import {
   HeartHandshake,
   Sparkles,
   ChevronRight,
+  Code2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -56,6 +57,13 @@ const groups = [
     icon: Sparkles,
     items: [
       { to: "/vaidya/prakriti", label: "Prakriti Pareeksha", icon: Sparkles },
+    ],
+  },
+  {
+    label: "Developer",
+    icon: Code2,
+    items: [
+      { to: "/vaidya/developer", label: "API Keys", icon: Code2 },
     ],
   },
 ];

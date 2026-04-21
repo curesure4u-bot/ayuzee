@@ -55,6 +55,7 @@ import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
 import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
+import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
 import Feed from "./pages/Feed.tsx";
 import FeedPost from "./pages/FeedPost.tsx";
 import LearningLayout from "./pages/Learning.tsx";
@@ -129,6 +130,7 @@ const App = () => (
               <Route path="therapy-plans" element={<TherapyPlans />} />
               <Route path="therapy-catalog" element={<TherapyCatalog />} />
               <Route path="prakriti" element={<HmsPrakriti />} />
+              <Route path="developer" element={<DeveloperApi />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>

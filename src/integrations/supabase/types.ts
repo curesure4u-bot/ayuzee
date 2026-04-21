@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      abha_health_records: {
+        Row: {
+          abha_id: string
+          consultation_id: string | null
+          created_at: string
+          doctor_user_id: string
+          fhir_payload: Json
+          id: string
+          patient_name: string | null
+          push_response: Json | null
+          push_status: string
+          pushed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          abha_id: string
+          consultation_id?: string | null
+          created_at?: string
+          doctor_user_id: string
+          fhir_payload?: Json
+          id?: string
+          patient_name?: string | null
+          push_response?: Json | null
+          push_status?: string
+          pushed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          abha_id?: string
+          consultation_id?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          fhir_payload?: Json
+          id?: string
+          patient_name?: string | null
+          push_response?: Json | null
+          push_status?: string
+          pushed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "abha_health_records_consultation_id_fkey"
+            columns: ["consultation_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_consultations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -283,6 +333,42 @@ export type Database = {
           support_email?: string
           updated_at?: string
           website?: string
+        }
+        Relationships: []
+      }
+      developer_api_keys: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          key_hash: string
+          key_prefix: string
+          label: string
+          last_used_at: string | null
+          revoked: boolean
+          scopes: string[]
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          key_hash: string
+          key_prefix: string
+          label: string
+          last_used_at?: string | null
+          revoked?: boolean
+          scopes?: string[]
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          label?: string
+          last_used_at?: string | null
+          revoked?: boolean
+          scopes?: string[]
         }
         Relationships: []
       }
@@ -2126,46 +2212,88 @@ export type Database = {
       }
       vaidya_consultations: {
         Row: {
+          abha_id: string | null
+          advice: string | null
+          ai_generated: boolean
+          ai_model: string | null
           appointment_id: string | null
+          assessment: string | null
+          audio_url: string | null
+          cds_suggestions: Json | null
+          chief_complaint: string | null
           created_at: string
           diagnosis: string | null
           doctor_user_id: string
+          examination: string | null
           fee: number
           follow_up_date: string | null
+          history: string | null
           id: string
           notes: string | null
           patient_id: string | null
+          plan: string | null
           prescription: string | null
+          source_language: string | null
+          transcript: string | null
           updated_at: string
           visit_date: string
+          vitals: Json | null
         }
         Insert: {
+          abha_id?: string | null
+          advice?: string | null
+          ai_generated?: boolean
+          ai_model?: string | null
           appointment_id?: string | null
+          assessment?: string | null
+          audio_url?: string | null
+          cds_suggestions?: Json | null
+          chief_complaint?: string | null
           created_at?: string
           diagnosis?: string | null
           doctor_user_id: string
+          examination?: string | null
           fee?: number
           follow_up_date?: string | null
+          history?: string | null
           id?: string
           notes?: string | null
           patient_id?: string | null
+          plan?: string | null
           prescription?: string | null
+          source_language?: string | null
+          transcript?: string | null
           updated_at?: string
           visit_date?: string
+          vitals?: Json | null
         }
         Update: {
+          abha_id?: string | null
+          advice?: string | null
+          ai_generated?: boolean
+          ai_model?: string | null
           appointment_id?: string | null
+          assessment?: string | null
+          audio_url?: string | null
+          cds_suggestions?: Json | null
+          chief_complaint?: string | null
           created_at?: string
           diagnosis?: string | null
           doctor_user_id?: string
+          examination?: string | null
           fee?: number
           follow_up_date?: string | null
+          history?: string | null
           id?: string
           notes?: string | null
           patient_id?: string | null
+          plan?: string | null
           prescription?: string | null
+          source_language?: string | null
+          transcript?: string | null
           updated_at?: string
           visit_date?: string
+          vitals?: Json | null
         }
         Relationships: []
       }
