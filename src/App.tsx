@@ -79,6 +79,7 @@ import DoctorFeed from "./pages/doctor/sections/DoctorFeed.tsx";
 import AdminLearning from "./pages/admin/AdminLearning.tsx";
 import Clinics from "./pages/Clinics.tsx";
 import Offers from "./pages/Offers.tsx";
+import Referral from "./pages/Referral.tsx";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +94,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
             <Route path="/clinics" element={<Clinics />} />

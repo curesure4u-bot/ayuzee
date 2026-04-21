@@ -11,7 +11,8 @@ const Auth = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const initialMode = params.get("mode") === "signup" ? "signup" : "login";
-  const [mode, setMode] = useState<"login" | "signup">(initialMode);
+  const refCode = params.get("ref") ?? "";
+  const [mode, setMode] = useState<"login" | "signup">(refCode ? "signup" : initialMode);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +39,11 @@ const Auth = () => {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
-            data: { full_name: fullName, phone },
+            data: { full_name: fullName, phone, ref_code: refCode },
           },
         });
         if (error) throw error;
-        toast.success("Account created! Welcome to Ayuzee 🌿");
+        toast.success(refCode ? "Account created via referral! Welcome 🌿" : "Account created! Welcome to Ayuzee 🌿");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -74,6 +75,11 @@ const Auth = () => {
             <p className="mt-2 text-center text-sm text-muted-foreground">
               {mode === "login" ? "Sign in to continue your healing path" : "Create your Ayuzee account"}
             </p>
+            {refCode && mode === "signup" && (
+              <p className="mt-3 rounded-lg bg-primary/10 px-3 py-2 text-center text-xs text-primary">
+                🎁 You were invited! Code <span className="font-mono font-semibold">{refCode}</span> applied.
+              </p>
+            )}
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               {mode === "signup" && (

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Stethoscope, ShoppingBag, IndianRupee } from "lucide-react";
+import { Users, Stethoscope, ShoppingBag, IndianRupee, Gift, Wallet } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-interface Stats { users: number; doctors: number; orders: number; revenue: number; }
+interface Stats { users: number; doctors: number; orders: number; revenue: number; referralCodes: number; referralPayouts: number; }
 interface RecentAppt { id: string; appointment_date: string; time_slot: string; status: string; mode: string; }
 interface RecentOrder { id: string; full_name: string; total: number; order_status: string; created_at: string; }
 interface DayPoint { day: string; revenue: number; }
@@ -12,7 +12,7 @@ interface DayPoint { day: string; revenue: number; }
 const formatINR = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState<Stats>({ users: 0, doctors: 0, orders: 0, revenue: 0 });
+  const [stats, setStats] = useState<Stats>({ users: 0, doctors: 0, orders: 0, revenue: 0, referralCodes: 0, referralPayouts: 0 });
   const [appts, setAppts] = useState<RecentAppt[]>([]);
   const [orders, setOrders] = useState<RecentOrder[]>([]);
   const [chart, setChart] = useState<DayPoint[]>([]);
@@ -23,7 +23,11 @@ const AdminDashboard = () => {
       const since = new Date(); since.setDate(since.getDate() - 30);
       const sinceIso = since.toISOString();
 
-      const [u, d, o, paid, recentAppts, recentOrders, allOrders] = await Promise.all([
+      const monthStart = new Date();
+      monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+      const monthIso = monthStart.toISOString();
+
+      const [u, d, o, paid, recentAppts, recentOrders, allOrders, refCodes, refPayouts] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("doctors").select("*", { count: "exact", head: true }),
         supabase.from("orders").select("*", { count: "exact", head: true }),
@@ -31,10 +35,16 @@ const AdminDashboard = () => {
         supabase.from("appointments").select("id,appointment_date,time_slot,status,mode").order("created_at", { ascending: false }).limit(5),
         supabase.from("orders").select("id,full_name,total,order_status,created_at").order("created_at", { ascending: false }).limit(5),
         supabase.from("orders").select("total,created_at,payment_status").gte("created_at", sinceIso),
+        supabase.from("profiles").select("referral_code", { count: "exact", head: true }).not("referral_code", "is", null),
+        supabase.from("ayuzee_transactions").select("amount").eq("type", "referral_credit").gte("created_at", monthIso),
       ]);
 
       const revenue = (paid.data ?? []).reduce((s, r: { total: number }) => s + (r.total || 0), 0);
-      setStats({ users: u.count ?? 0, doctors: d.count ?? 0, orders: o.count ?? 0, revenue });
+      const referralPayouts = (refPayouts.data ?? []).reduce((s: number, r: { amount: number }) => s + (r.amount || 0), 0);
+      setStats({
+        users: u.count ?? 0, doctors: d.count ?? 0, orders: o.count ?? 0, revenue,
+        referralCodes: refCodes.count ?? 0, referralPayouts,
+      });
       setAppts((recentAppts.data ?? []) as RecentAppt[]);
       setOrders((recentOrders.data ?? []) as RecentOrder[]);
 
@@ -58,6 +68,8 @@ const AdminDashboard = () => {
     { label: "Total Doctors", value: stats.doctors.toLocaleString("en-IN"), icon: Stethoscope },
     { label: "Total Orders", value: stats.orders.toLocaleString("en-IN"), icon: ShoppingBag },
     { label: "Total Revenue", value: formatINR(stats.revenue), icon: IndianRupee },
+    { label: "Active Referral Codes", value: stats.referralCodes.toLocaleString("en-IN"), icon: Gift },
+    { label: "Referral Payouts (this month)", value: formatINR(stats.referralPayouts), icon: Wallet },
   ];
 
   return (
