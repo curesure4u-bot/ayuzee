@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Plus } from "lucide-react";
+import { Sparkles, Plus, Eye, RotateCcw } from "lucide-react";
 
 interface Row {
   id: string;
@@ -52,14 +52,28 @@ export const PrakritiHistory = () => {
       ) : (
         <div className="mt-5 space-y-3">
           {rows.map((r) => (
-            <div key={r.id} className="flex items-center justify-between rounded-lg border p-4">
-              <div>
-                <p className="font-medium capitalize">{r.dominant_dosha?.replace("-", " – ") || "—"}</p>
-                <p className="text-xs text-muted-foreground">
+            <div key={r.id} className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="font-medium capitalize">{r.dominant_dosha?.replace("-", " – ") || "—"}</p>
+                  <Badge variant="outline" className="capitalize">{r.mode}</Badge>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
                   {new Date(r.created_at).toLocaleDateString()} · V {r.vata_score} / P {r.pitta_score} / K {r.kapha_score}
                 </p>
               </div>
-              <Badge variant="outline" className="capitalize">{r.mode}</Badge>
+              <div className="flex gap-2 shrink-0">
+                <Button asChild size="sm" variant="outline">
+                  <Link to={`/diagnosis/prakriti/result/${r.id}`}>
+                    <Eye className="mr-1 h-3.5 w-3.5" /> View
+                  </Link>
+                </Button>
+                <Button asChild size="sm" variant="ghost">
+                  <Link to="/diagnosis/prakriti/run?mode=self">
+                    <RotateCcw className="mr-1 h-3.5 w-3.5" /> Retake
+                  </Link>
+                </Button>
+              </div>
             </div>
           ))}
         </div>
