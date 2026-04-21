@@ -33,7 +33,7 @@ const DoctorLayout = () => {
       }
       const { data: doc } = await supabase
         .from("doctors")
-        .select("is_verified, verification_status, rejection_reason, full_name")
+        .select("is_verified, verification_status, rejection_reason, full_name, avatar_url")
         .eq("user_id", data.session.user.id)
         .maybeSingle();
       if (mounted) {
