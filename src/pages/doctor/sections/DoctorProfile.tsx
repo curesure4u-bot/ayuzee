@@ -127,7 +127,9 @@ const DoctorProfile = () => {
   const completion = doctor.profile_completion ?? calcCompletion(doctor as unknown as Record<string, unknown>);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-4">
+    <div className="mx-auto max-w-6xl space-y-6">
+      <DoctorGrowth scheduled={stats.scheduled} consulted={stats.consulted} completedSteps={stats.completedSteps} />
+
       <Card className="p-6">
         <div className="mb-4 flex items-center gap-3">
           <h1 className="font-display text-2xl">{doctor.full_name}</h1>
