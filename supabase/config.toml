@@ -2,3 +2,6 @@ project_id = "saphetdusyfrcduzsouk"
 
 [functions.dev-api]
 verify_jwt = false
+
+[functions.process-email-queue]
+verify_jwt = true
