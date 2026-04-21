@@ -8,18 +8,18 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
-import { PRAKRITI_QUESTIONS, scorePrakriti, getGuidance, type Dosha } from "@/data/prakritiQuestions";
+import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, BookOpen, Stethoscope, Leaf, Sun, AlertCircle } from "lucide-react";
+import {
+  PRAKRITI_QUESTIONS,
+  SECTION_INTROS,
+  scorePrakriti,
+  getGuidance,
+  type Dosha,
+} from "@/data/prakritiQuestions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 type Mode = "self" | "doctor" | "therapist";
-
-const sectionTitles: Record<string, string> = {
-  physical: "Physical Traits (Sharira Lakshana)",
-  physiological: "Physiological Traits (Kriya Lakshana)",
-  psychological: "Psychological Traits (Manasika Lakshana)",
-};
 
 const PrakritiRun = () => {
   const [params] = useSearchParams();
@@ -108,8 +108,10 @@ const PrakritiRun = () => {
           <div className="rounded-2xl border bg-gradient-to-br from-primary/10 to-background p-8 text-center">
             <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
             <p className="mt-3 text-xs font-semibold uppercase tracking-[0.25em] text-primary">Your Prakriti</p>
-            <h1 className="mt-2 font-display text-4xl font-semibold capitalize">{done.dominant.replace("-", " – ")}</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Based on the CCRAS / Ministry of AYUSH SOP</p>
+            <h1 className="mt-2 font-display text-4xl font-semibold capitalize">
+              {done.dominant.replace("-", " – ")}
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">Based on the CCRAS / Ministry of AYUSH SOP (35 traits)</p>
           </div>
 
           <Card className="mt-6 p-6">
@@ -135,34 +137,66 @@ const PrakritiRun = () => {
 
           {guidance.map((g) => (
             <Card key={g.title} className="mt-6 p-6">
-              <h3 className="font-display text-lg font-semibold flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" /> {g.title}
+              <h3 className="font-display text-xl font-semibold flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" /> {g.title}
               </h3>
-              <div className="mt-4 grid gap-4 md:grid-cols-3">
+              <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Element: {g.element}</p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {g.qualities.map((q) => (
+                  <span key={q} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{q}</span>
+                ))}
+              </div>
+
+              <div className="mt-5 grid gap-5 md:grid-cols-2">
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Traits</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5"><Leaf className="h-3.5 w-3.5" /> Traits</p>
                   <ul className="mt-2 space-y-1 text-sm">
                     {g.traits.map((t) => <li key={t}>• {t}</li>)}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Diet</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Favour in diet</p>
                   <ul className="mt-2 space-y-1 text-sm">
                     {g.diet.map((t) => <li key={t}>• {t}</li>)}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Lifestyle</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Avoid</p>
+                  <ul className="mt-2 space-y-1 text-sm">
+                    {g.avoid.map((t) => <li key={t}>• {t}</li>)}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Lifestyle (Dinacharya)</p>
                   <ul className="mt-2 space-y-1 text-sm">
                     {g.lifestyle.map((t) => <li key={t}>• {t}</li>)}
                   </ul>
                 </div>
               </div>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <div className="rounded-lg border bg-muted/30 p-4">
+                  <p className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5" /> Recommended exercise</p>
+                  <p className="mt-1 text-sm">{g.exercise}</p>
+                </div>
+                <div className="rounded-lg border bg-muted/30 p-4">
+                  <p className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5"><Sun className="h-3.5 w-3.5" /> Seasonal care (Ritucharya)</p>
+                  <p className="mt-1 text-sm">{g.ritucharya}</p>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-lg border-l-4 border-destructive bg-destructive/5 p-4">
+                <p className="text-xs font-semibold uppercase text-destructive flex items-center gap-1.5"><AlertCircle className="h-3.5 w-3.5" /> Common imbalances to watch</p>
+                <ul className="mt-2 space-y-1 text-sm">
+                  {g.commonImbalances.map((t) => <li key={t}>• {t}</li>)}
+                </ul>
+              </div>
             </Card>
           ))}
 
           <div className="mt-6 rounded-xl border bg-muted/30 p-5 text-sm text-muted-foreground">
-            <strong className="text-foreground">Disclaimer:</strong> This self-assessment provides a directional Prakriti analysis. For a clinically confirmed evaluation and personalised treatment plan, consult a qualified Ayurveda Vaidya.
+            <strong className="text-foreground">Disclaimer:</strong> This assessment provides a directional Prakriti analysis based on the CCRAS SOP. For a clinically confirmed evaluation and personalised treatment plan, consult a qualified Ayurveda Vaidya. Some traits (especially Nadi & subtle observations) require in-person examination.
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -228,46 +262,98 @@ const PrakritiRun = () => {
 
   if (!currentQ) return null;
   const isLast = step === total - 1;
-  const allAnswered = Object.keys(responses).length === total;
+  const allAnswered = Object.keys(responses).length >= total - 1; // menstrual is optional
+  const sectionMeta = currentQ.section ? SECTION_INTROS[currentQ.section] : null;
 
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
-      <main className="flex-1 container py-8 max-w-2xl">
+      <main className="flex-1 container py-8 max-w-3xl">
         <div className="mb-4 flex items-center justify-between text-xs text-muted-foreground">
           <span>Question {step + 1} of {total}</span>
           <span className="capitalize">{mode} mode</span>
         </div>
         <Progress value={progress} className="h-1.5" />
 
-        {sectionStart && (
-          <div className="mt-6 rounded-lg border-l-4 border-primary bg-primary/5 px-4 py-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-              {sectionTitles[currentQ.section]}
+        {sectionStart && sectionMeta && (
+          <div className="mt-6 rounded-xl border-l-4 border-primary bg-gradient-to-r from-primary/10 to-transparent p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+              {sectionMeta.sanskrit}
             </p>
+            <h2 className="mt-1 font-display text-xl font-semibold">{sectionMeta.title}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{sectionMeta.intro}</p>
           </div>
         )}
 
-        <Card className="mt-6 p-6">
-          <p className="text-xs font-semibold uppercase text-muted-foreground">{currentQ.trait}</p>
-          <h2 className="mt-1 font-display text-xl font-semibold">{currentQ.question}</h2>
-          <RadioGroup
-            className="mt-5 space-y-2"
-            value={responses[currentQ.id] || ""}
-            onValueChange={(v) => choose(v as Dosha)}
-          >
-            {currentQ.options.map((opt, i) => (
-              <label
-                key={i}
-                className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
-                  responses[currentQ.id] === opt.dosha ? "border-primary bg-primary/5" : "hover:bg-muted/40"
-                }`}
-              >
-                <RadioGroupItem value={opt.dosha} className="mt-0.5" />
-                <span className="text-sm">{opt.label}</span>
-              </label>
-            ))}
-          </RadioGroup>
+        <Card className="mt-6 overflow-hidden">
+          {currentQ.image && (
+            <div className="relative aspect-[3/1] w-full bg-muted">
+              <img
+                src={currentQ.image}
+                alt={`Reference: ${currentQ.trait}`}
+                className="h-full w-full object-cover"
+                loading="lazy"
+                onError={(e) => { (e.currentTarget.parentElement as HTMLElement).style.display = "none"; }}
+              />
+              <div className="absolute inset-x-0 bottom-0 grid grid-cols-3 text-center text-[10px] font-semibold uppercase tracking-wider text-white">
+                <span className="bg-blue-600/80 py-1">Vata</span>
+                <span className="bg-red-600/80 py-1">Pitta</span>
+                <span className="bg-emerald-600/80 py-1">Kapha</span>
+              </div>
+            </div>
+          )}
+
+          <div className="p-6">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-xs font-semibold uppercase text-muted-foreground">{currentQ.trait}</p>
+              {currentQ.sanskritTrait && (
+                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                  {currentQ.sanskritTrait}
+                </span>
+              )}
+            </div>
+            <h2 className="mt-1 font-display text-xl font-semibold">{currentQ.question}</h2>
+            {currentQ.reference && (
+              <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                <BookOpen className="h-3 w-3" /> Ref: {currentQ.reference}
+              </p>
+            )}
+
+            {(mode === "doctor" || mode === "therapist") && currentQ.examinerNote && (
+              <div className="mt-3 rounded-lg border-l-2 border-primary bg-primary/5 p-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">Examiner instruction</p>
+                <p className="mt-1 text-xs text-foreground">{currentQ.examinerNote}</p>
+              </div>
+            )}
+
+            <RadioGroup
+              className="mt-5 space-y-2"
+              value={responses[currentQ.id] || ""}
+              onValueChange={(v) => choose(v as Dosha)}
+            >
+              {currentQ.options.map((opt, i) => (
+                <label
+                  key={i}
+                  className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
+                    responses[currentQ.id] === opt.dosha ? "border-primary bg-primary/5" : "hover:bg-muted/40"
+                  }`}
+                >
+                  <RadioGroupItem value={opt.dosha} className="mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm">{opt.label}</p>
+                    {opt.sanskrit && (
+                      <p className="mt-0.5 text-[11px] italic text-muted-foreground">{opt.sanskrit}</p>
+                    )}
+                  </div>
+                  <span className={`mt-0.5 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${
+                    opt.dosha === "vata" ? "bg-blue-100 text-blue-700" :
+                    opt.dosha === "pitta" ? "bg-red-100 text-red-700" :
+                    "bg-emerald-100 text-emerald-700"
+                  }`}>{opt.dosha}</span>
+                </label>
+              ))}
+            </RadioGroup>
+          </div>
         </Card>
 
         <div className="mt-6 flex items-center justify-between">
@@ -279,8 +365,8 @@ const PrakritiRun = () => {
               {submitting ? "Saving…" : "View my Prakriti"} <CheckCircle2 className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Button variant="hero" disabled={!responses[currentQ.id]} onClick={next}>
-              Next <ArrowRight className="ml-2 h-4 w-4" />
+            <Button variant="hero" onClick={next}>
+              {responses[currentQ.id] ? "Next" : "Skip"} <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
         </div>
