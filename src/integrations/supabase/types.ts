@@ -888,16 +888,19 @@ export type Database = {
           id: string
           in_clinic_available: boolean
           is_approved: boolean
+          is_verified: boolean
           languages: string[]
           phone: string | null
           profile_completion: number
           public_profile: boolean
           rating: number
           registration_number: string | null
+          rejection_reason: string | null
           specialization: string
           total_reviews: number
           updated_at: string
           user_id: string | null
+          verification_status: string
           video_available: boolean
         }
         Insert: {
@@ -919,16 +922,19 @@ export type Database = {
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
+          is_verified?: boolean
           languages?: string[]
           phone?: string | null
           profile_completion?: number
           public_profile?: boolean
           rating?: number
           registration_number?: string | null
+          rejection_reason?: string | null
           specialization: string
           total_reviews?: number
           updated_at?: string
           user_id?: string | null
+          verification_status?: string
           video_available?: boolean
         }
         Update: {
@@ -950,16 +956,19 @@ export type Database = {
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
+          is_verified?: boolean
           languages?: string[]
           phone?: string | null
           profile_completion?: number
           public_profile?: boolean
           rating?: number
           registration_number?: string | null
+          rejection_reason?: string | null
           specialization?: string
           total_reviews?: number
           updated_at?: string
           user_id?: string | null
+          verification_status?: string
           video_available?: boolean
         }
         Relationships: []
