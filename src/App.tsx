@@ -69,6 +69,8 @@ import BlogDetail from "./pages/learning/BlogDetail.tsx";
 import DoctorBlogs from "./pages/doctor/sections/DoctorBlogs.tsx";
 import DoctorFeed from "./pages/doctor/sections/DoctorFeed.tsx";
 import AdminLearning from "./pages/admin/AdminLearning.tsx";
+import Clinics from "./pages/Clinics.tsx";
+import Offers from "./pages/Offers.tsx";
 
 const queryClient = new QueryClient();
 
