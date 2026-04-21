@@ -8,12 +8,14 @@ import { Stethoscope, LogOut, ShieldCheck, Clock, AlertCircle } from "lucide-rea
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { DoctorProfileMenu } from "@/components/doctor/DoctorProfileMenu";
 
 type DoctorVerification = {
   is_verified: boolean;
   verification_status: string;
   rejection_reason: string | null;
   full_name: string;
+  avatar_url: string | null;
 };
 
 const DoctorLayout = () => {
@@ -31,7 +33,7 @@ const DoctorLayout = () => {
       }
       const { data: doc } = await supabase
         .from("doctors")
-        .select("is_verified, verification_status, rejection_reason, full_name")
+        .select("is_verified, verification_status, rejection_reason, full_name, avatar_url")
         .eq("user_id", data.session.user.id)
         .maybeSingle();
       if (mounted) {
@@ -141,9 +143,12 @@ const DoctorLayout = () => {
                 <span className="font-display text-lg font-semibold">Ayuzee Doctor</span>
               </Link>
             </div>
-            <Button variant="outline" size="sm" onClick={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" /> Sign out
-            </Button>
+            <div className="flex items-center gap-3">
+              <DoctorProfileMenu fullName={doctor?.full_name} avatarUrl={doctor?.avatar_url} />
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" /> Sign out
+              </Button>
+            </div>
           </header>
           <main className="flex-1 p-4 md:p-6">
             <Outlet />
