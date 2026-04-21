@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2 } from "lucide-react";
+import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2, Gift } from "lucide-react";
 import { toast } from "sonner";
 import { PatientTherapyPlans } from "@/components/dashboard/PatientTherapyPlans";
 import { PrakritiHistory } from "@/components/dashboard/PrakritiHistory";
@@ -154,6 +154,24 @@ const Dashboard = () => {
               ))}
             </div>
           )}
+        </section>
+
+        <section className="mt-12">
+          <Link
+            to="/referral"
+            className="group flex flex-col items-start justify-between gap-4 rounded-2xl border border-primary/30 gradient-soft p-6 transition-smooth hover:-translate-y-1 hover:shadow-elegant sm:flex-row sm:items-center"
+          >
+            <div className="flex items-start gap-4">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl gradient-leaf text-primary-foreground">
+                <Gift className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-display text-xl">Refer & Earn</h3>
+                <p className="text-sm text-muted-foreground">Invite friends — earn 5% Ayuzee Money on every medicine purchase they make.</p>
+              </div>
+            </div>
+            <Button variant="hero">Get your link</Button>
+          </Link>
         </section>
 
         {userId && <PatientTherapyPlans userId={userId} />}

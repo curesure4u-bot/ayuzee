@@ -1820,6 +1820,8 @@ export type Database = {
           gender: string | null
           id: string
           phone: string | null
+          referral_code: string | null
+          referred_by: string | null
           updated_at: string
           user_id: string
         }
@@ -1830,6 +1832,8 @@ export type Database = {
           gender?: string | null
           id?: string
           phone?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
           updated_at?: string
           user_id: string
         }
@@ -1840,6 +1844,8 @@ export type Database = {
           gender?: string | null
           id?: string
           phone?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -2529,6 +2535,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -2546,6 +2553,7 @@ export type Database = {
         | "expiry"
         | "refund_reversal"
         | "adjustment"
+        | "referral_credit"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2681,6 +2689,7 @@ export const Constants = {
         "expiry",
         "refund_reversal",
         "adjustment",
+        "referral_credit",
       ],
     },
   },
