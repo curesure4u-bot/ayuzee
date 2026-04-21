@@ -51,6 +51,10 @@ import TherapyPlans from "./pages/vaidya/sections/TherapyPlans.tsx";
 import TherapyCatalog from "./pages/vaidya/sections/TherapyCatalog.tsx";
 import Therapies from "./pages/Therapies.tsx";
 import AdminTherapies from "./pages/admin/AdminTherapies.tsx";
+import Diagnosis from "./pages/Diagnosis.tsx";
+import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
+import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
+import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +80,9 @@ const App = () => (
             <Route path="/bulk" element={<Bulk />} />
             <Route path="/therapies" element={<Therapies />} />
             <Route path="/admin/therapies" element={<AdminTherapies />} />
+            <Route path="/diagnosis" element={<Diagnosis />} />
+            <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
+            <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
             <Route path="/vaidya" element={<VaidyaLayout />}>
               <Route index element={<VaidyaHome />} />
               <Route path="patients" element={<AllPatients />} />
@@ -89,6 +96,7 @@ const App = () => (
               <Route path="network" element={<PartnerNetwork />} />
               <Route path="therapy-plans" element={<TherapyPlans />} />
               <Route path="therapy-catalog" element={<TherapyCatalog />} />
+              <Route path="prakriti" element={<HmsPrakriti />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>

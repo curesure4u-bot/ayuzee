@@ -1091,6 +1091,66 @@ export type Database = {
         }
         Relationships: []
       }
+      prakriti_assessments: {
+        Row: {
+          assessor_user_id: string | null
+          created_at: string
+          dominant_dosha: string | null
+          id: string
+          kapha_score: number
+          mode: string
+          notes: string | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_name: string | null
+          patient_user_id: string
+          pitta_score: number
+          responses: Json
+          status: string
+          total_questions: number
+          updated_at: string
+          vata_score: number
+        }
+        Insert: {
+          assessor_user_id?: string | null
+          created_at?: string
+          dominant_dosha?: string | null
+          id?: string
+          kapha_score?: number
+          mode?: string
+          notes?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string | null
+          patient_user_id: string
+          pitta_score?: number
+          responses?: Json
+          status?: string
+          total_questions?: number
+          updated_at?: string
+          vata_score?: number
+        }
+        Update: {
+          assessor_user_id?: string | null
+          created_at?: string
+          dominant_dosha?: string | null
+          id?: string
+          kapha_score?: number
+          mode?: string
+          notes?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string | null
+          patient_user_id?: string
+          pitta_score?: number
+          responses?: Json
+          status?: string
+          total_questions?: number
+          updated_at?: string
+          vata_score?: number
+        }
+        Relationships: []
+      }
       product_bulk_tiers: {
         Row: {
           created_at: string
@@ -1775,7 +1835,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "doctor" | "patient"
+      app_role: "admin" | "doctor" | "patient" | "therapist"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -1910,7 +1970,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "doctor", "patient"],
+      app_role: ["admin", "doctor", "patient", "therapist"],
       ayuzee_txn_type: [
         "credit",
         "cashback",

@@ -51,6 +51,13 @@ const groups = [
       { to: "/vaidya/therapy-catalog", label: "Ayush Therapy Catalog", icon: Sparkles },
     ],
   },
+  {
+    label: "Diagnosis",
+    icon: Sparkles,
+    items: [
+      { to: "/vaidya/prakriti", label: "Prakriti Pareeksha", icon: Sparkles },
+    ],
+  },
 ];
 
 const VaidyaLayout = () => {
