@@ -55,6 +55,20 @@ import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
 import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
+import Feed from "./pages/Feed.tsx";
+import FeedPost from "./pages/FeedPost.tsx";
+import LearningLayout from "./pages/Learning.tsx";
+import Courses from "./pages/learning/Courses.tsx";
+import CourseDetail from "./pages/learning/CourseDetail.tsx";
+import CourseQuiz from "./pages/learning/CourseQuiz.tsx";
+import Certificate from "./pages/learning/Certificate.tsx";
+import Webinars from "./pages/learning/Webinars.tsx";
+import Quizzes from "./pages/learning/Quizzes.tsx";
+import Blogs from "./pages/learning/Blogs.tsx";
+import BlogDetail from "./pages/learning/BlogDetail.tsx";
+import DoctorBlogs from "./pages/doctor/sections/DoctorBlogs.tsx";
+import DoctorFeed from "./pages/doctor/sections/DoctorFeed.tsx";
+import AdminLearning from "./pages/admin/AdminLearning.tsx";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +97,20 @@ const App = () => (
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
             <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/feed/:id" element={<FeedPost />} />
+            <Route path="/learning" element={<LearningLayout />}>
+              <Route index element={<Courses />} />
+              <Route path="courses" element={<Courses />} />
+              <Route path="webinars" element={<Webinars />} />
+              <Route path="quiz" element={<Quizzes />} />
+              <Route path="blogs" element={<Blogs />} />
+            </Route>
+            <Route path="/learning/courses/:slug" element={<CourseDetail />} />
+            <Route path="/learning/courses/:slug/quiz" element={<CourseQuiz />} />
+            <Route path="/learning/blogs/:slug" element={<BlogDetail />} />
+            <Route path="/learning/certificates/:id" element={<Certificate />} />
+            <Route path="/admin/learning" element={<AdminLearning />} />
             <Route path="/vaidya" element={<VaidyaLayout />}>
               <Route index element={<VaidyaHome />} />
               <Route path="patients" element={<AllPatients />} />
@@ -108,6 +136,8 @@ const App = () => (
               <Route path="orders" element={<DoctorOrders />} />
               <Route path="medicines" element={<DoctorMedicines />} />
               <Route path="saved" element={<DoctorSavedPosts />} />
+              <Route path="feed" element={<DoctorFeed />} />
+              <Route path="blogs" element={<DoctorBlogs />} />
               <Route path="ayuzee-money" element={<AyuzeeMoney />} />
               <Route path="addresses" element={<DoctorAddresses />} />
               <Route path="bank" element={<DoctorBank />} />

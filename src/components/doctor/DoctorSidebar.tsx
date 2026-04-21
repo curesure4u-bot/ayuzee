@@ -31,6 +31,8 @@ import {
   Handshake,
   Package,
   Stethoscope,
+  Newspaper,
+  PenSquare,
 } from "lucide-react";
 
 const items = [
@@ -44,6 +46,8 @@ const items = [
   { title: "My Orders", url: "/doctor/orders", icon: ShoppingCart },
   { title: "My Medicine List", url: "/doctor/medicines", icon: ListChecks },
   { title: "Saved Posts", url: "/doctor/saved", icon: Bookmark },
+  { title: "My Feed Posts", url: "/doctor/feed", icon: PenSquare },
+  { title: "My Health Blogs", url: "/doctor/blogs", icon: Newspaper },
   { title: "Ayuzee Money", url: "/doctor/ayuzee-money", icon: Wallet },
   { title: "My Addresses", url: "/doctor/addresses", icon: MapPin },
   { title: "Bank Details", url: "/doctor/bank", icon: Landmark },
