@@ -35,9 +35,13 @@ export const SiteNav = () => {
               key={l.to}
               to={l.to}
               className={({ isActive }) =>
-                `text-sm font-medium transition-smooth hover:text-primary ${
-                  isActive && !l.to.includes("#") ? "text-primary" : "text-muted-foreground"
-                }`
+                l.highlight
+                  ? `inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-secondary-foreground shadow-soft transition-smooth hover:opacity-90 ${
+                      isActive ? "ring-2 ring-secondary/50" : ""
+                    }`
+                  : `text-sm font-medium transition-smooth hover:text-primary ${
+                      isActive && !l.to.includes("#") ? "text-primary" : "text-muted-foreground"
+                    }`
               }
               end={l.to === "/"}
             >
