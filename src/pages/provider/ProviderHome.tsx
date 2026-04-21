@@ -98,11 +98,11 @@ const ProviderHome = () => {
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Badge variant="secondary" className="capitalize">{provider.provider_type}</Badge>
                   {verified ? (
-                    <Badge className="bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/20">
+                    <Badge className="bg-primary/15 text-primary hover:bg-primary/20">
                       <ShieldCheck className="mr-1 h-3 w-3" /> Verified
                     </Badge>
                   ) : (
-                    <Badge variant="outline" className="border-amber-400 text-amber-700">
+                    <Badge variant="outline" className="border-muted-foreground/40 text-muted-foreground">
                       <Clock className="mr-1 h-3 w-3" /> Pending review
                     </Badge>
                   )}
@@ -114,7 +114,7 @@ const ProviderHome = () => {
         </div>
 
         {!verified && (
-          <div className="mt-6 rounded-xl border border-amber-300/60 bg-amber-50 p-5 text-amber-900">
+          <div className="mt-6 rounded-xl border border-border bg-muted/40 p-5 text-foreground">
             <p className="font-semibold">Verification in progress</p>
             <p className="mt-1 text-sm">
               Our team is reviewing your documents. You'll be notified by email and WhatsApp within 24–48 hours. Bookings open as soon as you're approved.
