@@ -69,6 +69,8 @@ import BlogDetail from "./pages/learning/BlogDetail.tsx";
 import DoctorBlogs from "./pages/doctor/sections/DoctorBlogs.tsx";
 import DoctorFeed from "./pages/doctor/sections/DoctorFeed.tsx";
 import AdminLearning from "./pages/admin/AdminLearning.tsx";
+import Clinics from "./pages/Clinics.tsx";
+import Offers from "./pages/Offers.tsx";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +87,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
+            <Route path="/clinics" element={<Clinics />} />
+            <Route path="/offers" element={<Offers />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />

@@ -6,12 +6,14 @@ import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
 import { PartnershipMenu } from "@/components/site/PartnershipMenu";
 
 const links = [
-  { to: "/doctors", label: "Find a Doctor" },
+  { to: "/doctors", label: "Find Doctors" },
+  { to: "/clinics", label: "Find Clinics" },
   { to: "/diagnosis", label: "Diagnosis" },
   { to: "/feed", label: "Feed" },
   { to: "/learning/courses", label: "Learning" },
   { to: "/shop", label: "Medicines" },
   { to: "/therapies", label: "Therapies" },
+  { to: "/offers", label: "Offers", highlight: true },
 ];
 
 export const SiteNav = () => {
@@ -33,9 +35,13 @@ export const SiteNav = () => {
               key={l.to}
               to={l.to}
               className={({ isActive }) =>
-                `text-sm font-medium transition-smooth hover:text-primary ${
-                  isActive && !l.to.includes("#") ? "text-primary" : "text-muted-foreground"
-                }`
+                l.highlight
+                  ? `inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-secondary-foreground shadow-soft transition-smooth hover:opacity-90 ${
+                      isActive ? "ring-2 ring-secondary/50" : ""
+                    }`
+                  : `text-sm font-medium transition-smooth hover:text-primary ${
+                      isActive && !l.to.includes("#") ? "text-primary" : "text-muted-foreground"
+                    }`
               }
               end={l.to === "/"}
             >
