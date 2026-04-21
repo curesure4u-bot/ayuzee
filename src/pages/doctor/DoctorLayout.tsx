@@ -8,12 +8,14 @@ import { Stethoscope, LogOut, ShieldCheck, Clock, AlertCircle } from "lucide-rea
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { DoctorProfileMenu } from "@/components/doctor/DoctorProfileMenu";
 
 type DoctorVerification = {
   is_verified: boolean;
   verification_status: string;
   rejection_reason: string | null;
   full_name: string;
+  avatar_url: string | null;
 };
 
 const DoctorLayout = () => {
