@@ -6,12 +6,14 @@ import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
 import { PartnershipMenu } from "@/components/site/PartnershipMenu";
 
 const links = [
-  { to: "/doctors", label: "Find a Doctor" },
+  { to: "/doctors", label: "Find Doctors" },
+  { to: "/clinics", label: "Find Clinics" },
   { to: "/diagnosis", label: "Diagnosis" },
   { to: "/feed", label: "Feed" },
   { to: "/learning/courses", label: "Learning" },
   { to: "/shop", label: "Medicines" },
   { to: "/therapies", label: "Therapies" },
+  { to: "/offers", label: "Offers", highlight: true },
 ];
 
 export const SiteNav = () => {
