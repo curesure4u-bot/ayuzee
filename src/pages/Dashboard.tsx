@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2 } from "lucide-react";
 import { toast } from "sonner";
 import { PatientTherapyPlans } from "@/components/dashboard/PatientTherapyPlans";
+import { PrakritiHistory } from "@/components/dashboard/PrakritiHistory";
 
 interface Profile { full_name: string | null; phone: string | null; }
 interface Appointment {
@@ -156,6 +157,10 @@ const Dashboard = () => {
         </section>
 
         {userId && <PatientTherapyPlans userId={userId} />}
+
+        <section className="mt-8">
+          <PrakritiHistory />
+        </section>
 
         <div className="mt-12 rounded-2xl border border-border gradient-soft p-8">
           <h2 className="font-display text-2xl">Ready for your next step?</h2>
