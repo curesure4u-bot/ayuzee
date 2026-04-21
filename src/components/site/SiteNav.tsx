@@ -7,6 +7,7 @@ import { PartnershipMenu } from "@/components/site/PartnershipMenu";
 
 const links = [
   { to: "/doctors", label: "Find a Doctor" },
+  { to: "/diagnosis", label: "Diagnosis" },
   { to: "/shop", label: "Medicines" },
   { to: "/therapies", label: "Therapies" },
   { to: "/#learning", label: "Learning" },

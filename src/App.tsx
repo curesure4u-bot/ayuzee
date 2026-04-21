@@ -51,6 +51,10 @@ import TherapyPlans from "./pages/vaidya/sections/TherapyPlans.tsx";
 import TherapyCatalog from "./pages/vaidya/sections/TherapyCatalog.tsx";
 import Therapies from "./pages/Therapies.tsx";
 import AdminTherapies from "./pages/admin/AdminTherapies.tsx";
+import Diagnosis from "./pages/Diagnosis.tsx";
+import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
+import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
+import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 
 const queryClient = new QueryClient();
 

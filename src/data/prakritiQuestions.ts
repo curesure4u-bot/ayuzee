@@ -267,11 +267,13 @@ export function scorePrakriti(responses: Record<string, Dosha>): PrakritiResult 
     else if (d === "kapha") k++;
   });
   const total = v + p + k || 1;
-  const scores: { name: Dosha; n: number }[] = [
-    { name: "vata", n: v },
-    { name: "pitta", n: p },
-    { name: "kapha", n: k },
-  ].sort((a, b) => b.n - a.n);
+  const scores: { name: Dosha; n: number }[] = (
+    [
+      { name: "vata" as Dosha, n: v },
+      { name: "pitta" as Dosha, n: p },
+      { name: "kapha" as Dosha, n: k },
+    ]
+  ).sort((a, b) => b.n - a.n);
 
   const top = scores[0].n;
   const dominant = scores
