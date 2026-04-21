@@ -287,11 +287,11 @@ const PrakritiRun = () => {
 
         <Card className="mt-6 overflow-hidden">
           {currentQ.image && (
-            <div className="relative aspect-[3/1] w-full bg-muted">
+            <div className="relative aspect-square sm:aspect-[16/10] w-full bg-muted">
               <img
                 src={currentQ.image}
                 alt={`Reference: ${currentQ.trait}`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain"
                 loading="lazy"
                 onError={(e) => { (e.currentTarget.parentElement as HTMLElement).style.display = "none"; }}
               />
