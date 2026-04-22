@@ -443,6 +443,57 @@ const HealthConditionDetail = () => {
           </div>
         </section>
 
+        {/* How to Use */}
+        {(c.how_to_use?.recovery_text || c.how_to_use?.after_recovery_text || c.how_to_use?.image_url) && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">How to Use</h2>
+            <div className="mt-6 grid items-center gap-6 rounded-3xl border border-border bg-background p-6 md:grid-cols-2">
+              {c.how_to_use.image_url ? (
+                <img src={c.how_to_use.image_url} alt="How to use" className="h-64 w-full rounded-2xl object-cover" />
+              ) : (
+                <div className="grid h-64 place-items-center rounded-2xl bg-accent"><Leaf className="h-16 w-16 text-primary/40" /></div>
+              )}
+              <div className="space-y-4">
+                {c.how_to_use.recovery_text && (
+                  <div>
+                    <p className="text-sm font-bold text-secondary">{c.how_to_use.recovery_title ?? "For recovery of Disease"}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.how_to_use.recovery_text}</p>
+                  </div>
+                )}
+                {c.how_to_use.after_recovery_text && (
+                  <div>
+                    <p className="text-sm font-bold text-secondary">{c.how_to_use.after_recovery_title ?? "After recovery of Disease"}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.how_to_use.after_recovery_text}</p>
+                  </div>
+                )}
+                {c.how_to_use.note && (
+                  <p className="rounded-md bg-muted/50 p-3 text-xs italic text-muted-foreground">*Note: {c.how_to_use.note}</p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Videos */}
+        {c.videos.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Videos</h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {c.videos.map((v, i) => (
+                <a key={i} href={v.video_url ?? "#"} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-2xl border border-border bg-background">
+                  <div className="aspect-video bg-muted">
+                    {v.thumbnail_url && <img src={v.thumbnail_url} alt={v.title ?? "Video"} className="h-full w-full object-cover transition-transform group-hover:scale-105" />}
+                  </div>
+                  <div className="absolute inset-0 grid place-items-center">
+                    <PlayCircle className="h-14 w-14 text-primary-foreground drop-shadow-lg" />
+                  </div>
+                  {v.title && <div className="p-3 text-sm font-semibold">{v.title}</div>}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* FAQs */}
         {c.faqs.length > 0 && (
           <section className="container mt-12">
