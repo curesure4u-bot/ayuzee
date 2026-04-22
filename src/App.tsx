@@ -84,6 +84,10 @@ import Referral from "./pages/Referral.tsx";
 import LoginPicker from "./pages/LoginPicker.tsx";
 import ProviderAuth from "./pages/provider/ProviderAuth.tsx";
 import ProviderHome from "./pages/provider/ProviderHome.tsx";
+import PatientLayout from "./pages/patient/PatientLayout.tsx";
+import PatientProfile from "./pages/patient/PatientProfile.tsx";
+import PatientAppointmentsList from "./pages/patient/PatientAppointmentsList.tsx";
+import PatientPlaceholder from "./pages/patient/PatientPlaceholder.tsx";
 
 const queryClient = new QueryClient();
 
@@ -101,6 +105,17 @@ const App = () => (
             <Route path="/provider/auth" element={<ProviderAuth />} />
             <Route path="/provider" element={<ProviderHome />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<PatientLayout />}>
+              <Route path="profile" element={<PatientProfile />} />
+              <Route path="appointments" element={<PatientAppointmentsList />} />
+              <Route path="saved-medicines" element={<PatientPlaceholder title="Saved Medicines" description="Your bookmarked medicines will appear here." />} />
+              <Route path="saved-posts" element={<PatientPlaceholder title="Saved Posts" description="Articles and posts you've saved." />} />
+              <Route path="orders" element={<PatientPlaceholder title="My Orders" description="Track all your medicine orders here." />} />
+              <Route path="addresses" element={<PatientPlaceholder title="My Addresses" description="Manage delivery addresses." />} />
+              <Route path="wallet" element={<PatientPlaceholder title="Ayuzee Money" description="Wallet balance, cashback and transactions." />} />
+              <Route path="bank" element={<PatientPlaceholder title="Bank Details" description="For refunds and payouts." />} />
+              <Route path="help" element={<PatientPlaceholder title="Help & Support" description="We're here to help — reach out anytime." />} />
+            </Route>
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />

@@ -1711,6 +1711,48 @@ export type Database = {
         }
         Relationships: []
       }
+      patient_associated_members: {
+        Row: {
+          age: number | null
+          created_at: string
+          full_name: string
+          gender: string | null
+          height_cm: number | null
+          id: string
+          marital_status: string | null
+          patient_user_id: string
+          relation: string
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          age?: number | null
+          created_at?: string
+          full_name: string
+          gender?: string | null
+          height_cm?: number | null
+          id?: string
+          marital_status?: string | null
+          patient_user_id: string
+          relation: string
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          age?: number | null
+          created_at?: string
+          full_name?: string
+          gender?: string | null
+          height_cm?: number | null
+          id?: string
+          marital_status?: string | null
+          patient_user_id?: string
+          relation?: string
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
       patient_feedback: {
         Row: {
           appointment_id: string | null
