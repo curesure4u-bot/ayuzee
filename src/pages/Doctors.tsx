@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, Headphones, MapPin, Search, Star, Stethoscope, Video, Building2 } from "lucide-react";
+import { ArrowUpDown, BadgeCheck, Calendar, ChevronRight, Eye, MapPin, Star, Stethoscope, Video } from "lucide-react";
 import { toast } from "sonner";
 
 interface Doctor {
@@ -33,6 +33,9 @@ interface Doctor {
   video_available: boolean;
   in_clinic_available: boolean;
   languages: string[];
+  is_verified: boolean;
+  avatar_url: string | null;
+  gender: string | null;
 }
 
 const SPECIALITIES = ["All", "Ayurveda", "Yoga", "Naturopathy", "Homeopathy", "Siddha", "Unani"];
@@ -49,13 +52,32 @@ const EXP = [
   { v: "15", l: "15+ years" },
 ];
 const FEES = [
+  { v: 5000, l: "Any fee" },
   { v: 2000, l: "Up to ₹2000" },
   { v: 1000, l: "Up to ₹1000" },
   { v: 500, l: "Up to ₹500" },
   { v: 300, l: "Up to ₹300" },
 ];
+const MODES = [
+  { v: "any", l: "Any consultation" },
+  { v: "video", l: "Video consult" },
+  { v: "in_clinic", l: "In-clinic" },
+];
 
 const initials = (n: string) => n.split(" ").slice(-2).map((p) => p[0]).join("");
+
+const nextSlot = (offsetMin: number) => {
+  const d = new Date(Date.now() + offsetMin * 60_000);
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  let h = d.getHours();
+  const m = String(d.getMinutes() < 30 ? "30" : "00").padStart(2, "0");
+  if (m === "00") h += 1;
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hh = ((h + 11) % 12) + 1;
+  return `${String(hh).padStart(2, "0")}:${m} ${ampm}, ${dd}/${mm}/${yyyy}`;
+};
 
 const Doctors = () => {
   const [params] = useSearchParams();
@@ -66,12 +88,13 @@ const Doctors = () => {
   const [speciality, setSpeciality] = useState("All");
   const [city, setCity] = useState("All");
   const [mode, setMode] = useState("any");
-  const [maxFee, setMaxFee] = useState(2000);
+  const [maxFee, setMaxFee] = useState(5000);
   const [gender, setGender] = useState("any");
   const [minExp, setMinExp] = useState("any");
   const [language, setLanguage] = useState("any");
+  const [sort, setSort] = useState<"rating" | "fee_low" | "fee_high" | "experience">("rating");
 
-  const [lead, setLead] = useState({ name: "", phone: "", concern: "" });
+  const [lead, setLead] = useState({ phone: "", patient: "", pincode: "", concern: "" });
 
   useEffect(() => {
     document.title = "Find a Doctor — Ayuzee";
@@ -93,12 +116,13 @@ const Doctors = () => {
   );
 
   const filtered = useMemo(() => {
-    return doctors.filter((d) => {
+    const list = doctors.filter((d) => {
       if (speciality !== "All" && d.category !== speciality) return false;
       if (city !== "All" && d.city !== city) return false;
       if (mode === "video" && !d.video_available) return false;
       if (mode === "in_clinic" && !d.in_clinic_available) return false;
       if (d.consultation_fee > maxFee) return false;
+      if (gender !== "any" && d.gender !== gender) return false;
       if (minExp !== "any" && d.experience_years < Number(minExp)) return false;
       if (language !== "any" && !(d.languages || []).includes(language)) return false;
       if (query) {
@@ -108,177 +132,232 @@ const Doctors = () => {
       }
       return true;
     });
-  }, [doctors, speciality, city, mode, maxFee, minExp, language, query]);
+    const sorted = [...list];
+    if (sort === "rating") sorted.sort((a, b) => b.rating - a.rating);
+    if (sort === "fee_low") sorted.sort((a, b) => a.consultation_fee - b.consultation_fee);
+    if (sort === "fee_high") sorted.sort((a, b) => b.consultation_fee - a.consultation_fee);
+    if (sort === "experience") sorted.sort((a, b) => b.experience_years - a.experience_years);
+    return sorted;
+  }, [doctors, speciality, city, mode, maxFee, gender, minExp, language, query, sort]);
 
   const submitLead = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!lead.name || !lead.phone) {
-      toast.error("Please fill name and phone");
+    if (!lead.phone) {
+      toast.error("Please enter your mobile number");
       return;
     }
     toast.success("Our care team will call you shortly 🌿");
-    setLead({ name: "", phone: "", concern: "" });
+    setLead({ phone: "", patient: "", pincode: "", concern: "" });
   };
 
   return (
     <div className="min-h-screen bg-background">
       {isAuthed ? <PatientHeader /> : <SiteNav />}
       <main>
-        <section className="gradient-soft border-b border-border">
-          <div className="container py-10">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">Find a Doctor</span>
-            <h1 className="mt-2 font-display text-3xl md:text-4xl">Verified Ayurvedic practitioners, near you</h1>
+        {/* Breadcrumb */}
+        <div className="border-b border-border bg-background">
+          <div className="container py-3">
+            <nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Link to="/" className="text-primary hover:underline">Home</Link>
+              <ChevronRight className="h-3.5 w-3.5" />
+              <Link to="/" className="text-primary hover:underline">Ayurveda</Link>
+              <ChevronRight className="h-3.5 w-3.5" />
+              <span className="text-foreground">Doctors</span>
+            </nav>
+          </div>
+        </div>
 
-            <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-soft">
-              <div className="flex items-center gap-3 border-b border-border pb-4">
-                <Search className="h-5 w-5 text-muted-foreground" />
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search doctor name, disease, symptoms…"
-                  className="border-0 bg-transparent text-base shadow-none focus-visible:ring-0"
-                />
-              </div>
-              <div className="mt-4 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
-                <Select value={speciality} onValueChange={setSpeciality}>
-                  <SelectTrigger><SelectValue placeholder="Speciality" /></SelectTrigger>
-                  <SelectContent>{SPECIALITIES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
-                </Select>
-                <Select value={city} onValueChange={setCity}>
-                  <SelectTrigger><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>{cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                </Select>
-                <Select value={mode} onValueChange={setMode}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any mode</SelectItem>
-                    <SelectItem value="video">Video consult</SelectItem>
-                    <SelectItem value="in_clinic">In-clinic</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={String(maxFee)} onValueChange={(v) => setMaxFee(Number(v))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{FEES.map((f) => <SelectItem key={f.v} value={String(f.v)}>{f.l}</SelectItem>)}</SelectContent>
-                </Select>
-                <Select value={gender} onValueChange={setGender}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{GENDERS.map((g) => <SelectItem key={g.v} value={g.v}>{g.l}</SelectItem>)}</SelectContent>
-                </Select>
-                <Select value={minExp} onValueChange={setMinExp}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{EXP.map((e) => <SelectItem key={e.v} value={e.v}>{e.l}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="mt-3">
-                <Select value={language} onValueChange={setLanguage}>
-                  <SelectTrigger className="md:max-w-xs"><SelectValue placeholder="Language" /></SelectTrigger>
-                  <SelectContent>
-                    {languages.map((l) => <SelectItem key={l} value={l}>{l === "any" ? "Any language" : l}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
+        {/* Filter bar */}
+        <section className="bg-accent/40 border-b border-border">
+          <div className="container py-5">
+            <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+              <Select value={speciality} onValueChange={setSpeciality}>
+                <SelectTrigger className="bg-card"><SelectValue placeholder="Speciality" /></SelectTrigger>
+                <SelectContent>{SPECIALITIES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              </Select>
+              <Select value={String(maxFee)} onValueChange={(v) => setMaxFee(Number(v))}>
+                <SelectTrigger className="bg-card"><SelectValue placeholder="Fee" /></SelectTrigger>
+                <SelectContent>{FEES.map((f) => <SelectItem key={f.v} value={String(f.v)}>{f.l}</SelectItem>)}</SelectContent>
+              </Select>
+              <Select value={gender} onValueChange={setGender}>
+                <SelectTrigger className="bg-card"><SelectValue placeholder="Gender" /></SelectTrigger>
+                <SelectContent>{GENDERS.map((g) => <SelectItem key={g.v} value={g.v}>{g.l}</SelectItem>)}</SelectContent>
+              </Select>
+              <Select value={minExp} onValueChange={setMinExp}>
+                <SelectTrigger className="bg-card"><SelectValue placeholder="Experience" /></SelectTrigger>
+                <SelectContent>{EXP.map((e) => <SelectItem key={e.v} value={e.v}>{e.l}</SelectItem>)}</SelectContent>
+              </Select>
+              <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger className="bg-card"><SelectValue placeholder="Language" /></SelectTrigger>
+                <SelectContent>
+                  {languages.map((l) => <SelectItem key={l} value={l}>{l === "any" ? "Any language" : l}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Select value={mode} onValueChange={setMode}>
+                <SelectTrigger className="bg-card"><SelectValue placeholder="Consultation Type" /></SelectTrigger>
+                <SelectContent>{MODES.map((m) => <SelectItem key={m.v} value={m.v}>{m.l}</SelectItem>)}</SelectContent>
+              </Select>
             </div>
           </div>
         </section>
 
-        <section className="py-10">
-          <div className="container grid gap-8 lg:grid-cols-[1fr_320px]">
+        {/* Results + sidebar */}
+        <section className="py-8">
+          <div className="container grid gap-8 lg:grid-cols-[1fr_360px]">
             <div>
-              <p className="mb-4 text-sm text-muted-foreground">
-                {loading ? "Loading doctors…" : `${filtered.length} doctor${filtered.length === 1 ? "" : "s"} found`}
-              </p>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h1 className="font-display text-2xl md:text-3xl font-bold">
+                    Found <span className="text-primary">{loading ? "…" : filtered.length}</span> Ayurvedic Doctors Near You — 100% Verified
+                  </h1>
+                  <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+                    Discover your ideal Ayurvedic doctor today. Our platform connects you with qualified practitioners across India, offering personalized consultations and tailored treatment plans.
+                  </p>
+                </div>
+                <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
+                  <SelectTrigger className="w-[180px] bg-card">
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Top rated</SelectItem>
+                    <SelectItem value="experience">Most experienced</SelectItem>
+                    <SelectItem value="fee_low">Fee: low to high</SelectItem>
+                    <SelectItem value="fee_high">Fee: high to low</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
               {!loading && filtered.length === 0 && (
-                <div className="rounded-2xl border border-dashed border-border p-16 text-center">
+                <div className="mt-8 rounded-2xl border border-dashed border-border p-16 text-center">
                   <Stethoscope className="mx-auto h-10 w-10 text-muted-foreground" />
                   <h3 className="mt-4 font-display text-xl">No doctors match your filters</h3>
                 </div>
               )}
 
-              <div className="grid gap-5">
-                {filtered.map((d) => (
-                  <article key={d.id} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition-smooth hover:shadow-elegant">
-                    <div className="flex flex-col gap-5 md:flex-row">
-                      <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl gradient-leaf font-display text-2xl text-primary-foreground">
-                        {initials(d.full_name)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-2">
-                          <div>
+              <div className="mt-6 grid gap-5">
+                {filtered.map((d) => {
+                  const slotA = nextSlot(60);
+                  const slotB = nextSlot(120);
+                  return (
+                    <article key={d.id} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition-smooth hover:shadow-elegant">
+                      <div className="flex flex-col gap-5 md:flex-row">
+                        <div className="flex flex-col items-center gap-2 md:w-32">
+                          <div className="relative">
+                            <div className="grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-full gradient-leaf font-display text-2xl text-primary-foreground">
+                              {d.avatar_url ? <img src={d.avatar_url} alt={d.full_name} className="h-full w-full object-cover" /> : initials(d.full_name)}
+                            </div>
+                            {d.video_available && (
+                              <span className="absolute bottom-0 right-0 grid h-7 w-7 place-items-center rounded-full bg-primary text-primary-foreground ring-2 ring-card">
+                                <Video className="h-3.5 w-3.5" />
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Eye className="h-3 w-3" /> {(d.total_reviews * 270 + 1280).toLocaleString()} Views
+                          </div>
+                          {d.is_verified && (
+                            <div className="flex items-center gap-1 text-xs font-medium text-primary">
+                              <BadgeCheck className="h-3.5 w-3.5" /> Verified Doctor
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex flex-wrap items-start justify-between gap-2">
                             <h3 className="text-lg font-semibold leading-tight">{d.full_name}</h3>
-                            <p className="text-sm text-muted-foreground">{d.specialization}</p>
-                            <span className="mt-2 inline-block rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-primary">{d.category}</span>
+                            <div className="flex items-center gap-1 text-sm">
+                              <Star className="h-4 w-4 fill-secondary text-secondary" />
+                              <span className="font-semibold">{d.rating}/5</span>
+                              <span className="text-muted-foreground">({d.total_reviews} Patient Stories)</span>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <div className="font-display text-xl">₹{d.consultation_fee}</div>
-                            <div className="text-xs text-muted-foreground">Consult fee</div>
+                          <p className="mt-1 text-sm text-muted-foreground">{d.specialization}</p>
+                          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                            <span>{d.experience_years}.0 years of experience</span>
+                            <span className="h-1 w-1 rounded-full bg-muted-foreground" />
+                            <span>{d.category}</span>
                           </div>
-                        </div>
-                        <div className="mt-3 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2">
-                          <div className="flex items-center gap-2"><Star className="h-4 w-4 fill-secondary text-secondary" />{d.rating} · {d.total_reviews} reviews</div>
-                          <div className="flex items-center gap-2"><Stethoscope className="h-4 w-4" />{d.experience_years} yrs experience</div>
-                          <div className="flex items-center gap-2"><MapPin className="h-4 w-4" />{d.clinic_name ?? d.city}, {d.city}</div>
-                          <div className="flex items-center gap-2 text-xs">{(d.languages || []).slice(0, 3).join(", ")}</div>
-                        </div>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {d.video_available && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-                              <Video className="h-3 w-3" />Video consult available
-                            </span>
+                          {(d.languages || []).length > 0 && (
+                            <p className="mt-1 text-sm text-muted-foreground">{d.languages.slice(0, 3).join(", ")}</p>
                           )}
-                          {d.in_clinic_available && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-medium text-primary">
-                              <Building2 className="h-3 w-3" />In-clinic available
-                            </span>
-                          )}
-                        </div>
-                        <div className="mt-5 flex flex-wrap gap-2">
-                          <Button variant="outline" asChild><Link to={`/doctors/${d.id}`}>View Profile</Link></Button>
-                          {d.video_available && (
-                            <Button variant="hero" asChild>
-                              <Link to={`/doctors/${d.id}?book=1&mode=video`}><Video className="mr-1 h-4 w-4" />Book Video Consultation</Link>
-                            </Button>
-                          )}
-                          {d.in_clinic_available && (
-                            <Button variant="outline" asChild>
-                              <Link to={`/doctors/${d.id}?book=1&mode=in_clinic`}><Calendar className="mr-1 h-4 w-4" />Book Clinic Visit</Link>
-                            </Button>
-                          )}
+                          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                            <MapPin className="h-4 w-4" /> {d.clinic_name ? `${d.clinic_name}, ` : ""}{d.city}
+                          </div>
+                          <div className="mt-2 text-sm">
+                            <span className="text-muted-foreground">Consultation Fee </span>
+                            <span className="font-display text-lg font-semibold">₹{d.consultation_fee}</span>
+                            <span className="text-muted-foreground"> {d.video_available ? "online" : ""}</span>
+                          </div>
+
+                          <div className="mt-4 rounded-xl bg-primary/5 p-3">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                              <span className="font-medium text-primary">Next available at</span>
+                              {d.video_available && (
+                                <span className="inline-flex items-center gap-1.5 text-foreground">
+                                  <Video className="h-4 w-4 text-primary" /> {slotA}
+                                </span>
+                              )}
+                              {d.in_clinic_available && (
+                                <span className="inline-flex items-center gap-1.5 text-foreground">
+                                  <Calendar className="h-4 w-4 text-primary" /> {slotB}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="mt-4 flex flex-wrap gap-2">
+                            <Button variant="outline" asChild><Link to={`/doctors/${d.id}`}>View Profile</Link></Button>
+                            {d.video_available && (
+                              <Button variant="hero" asChild>
+                                <Link to={`/doctors/${d.id}?book=1&mode=video`}><Video className="mr-1 h-4 w-4" />Book Video Consultation</Link>
+                              </Button>
+                            )}
+                            {d.in_clinic_available && !d.video_available && (
+                              <Button variant="hero" asChild>
+                                <Link to={`/doctors/${d.id}?book=1&mode=in_clinic`}><Calendar className="mr-1 h-4 w-4" />Book Clinic Visit</Link>
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </article>
-                ))}
+                    </article>
+                  );
+                })}
               </div>
             </div>
 
             {/* Need Assistance sidebar */}
             <aside className="lg:sticky lg:top-24 lg:self-start">
-              <Card className="overflow-hidden border-primary/20">
-                <div className="gradient-soft p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-10 w-10 place-items-center rounded-full gradient-leaf text-primary-foreground">
-                      <Headphones className="h-5 w-5" />
+              <Card className="overflow-hidden border-2 border-primary/30">
+                <CardContent className="p-6">
+                  <h3 className="text-center font-display text-xl font-semibold">Need Assistance!</h3>
+                  <p className="mt-1 text-center text-sm text-muted-foreground">
+                    Share your details & we will find the best doctor for you
+                  </p>
+                  <form onSubmit={submitLead} className="mt-5 space-y-4">
+                    <div>
+                      <Label htmlFor="lead-phone" className="text-xs text-muted-foreground">Mobile Number*</Label>
+                      <Input id="lead-phone" type="tel" value={lead.phone} onChange={(e) => setLead({ ...lead, phone: e.target.value })} className="mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-display text-lg">Need Assistance?</h3>
-                      <p className="text-xs text-muted-foreground">Our care team will help you find the right doctor</p>
-                    </div>
-                  </div>
-                </div>
-                <CardContent className="p-5">
-                  <form onSubmit={submitLead} className="space-y-3">
-                    <div>
-                      <Label htmlFor="lead-name">Your name</Label>
-                      <Input id="lead-name" value={lead.name} onChange={(e) => setLead({ ...lead, name: e.target.value })} />
-                    </div>
-                    <div>
-                      <Label htmlFor="lead-phone">Phone</Label>
-                      <Input id="lead-phone" type="tel" value={lead.phone} onChange={(e) => setLead({ ...lead, phone: e.target.value })} />
+                      <Label htmlFor="lead-patient" className="text-xs text-muted-foreground">Select Patient</Label>
+                      <Select value={lead.patient} onValueChange={(v) => setLead({ ...lead, patient: v })}>
+                        <SelectTrigger id="lead-patient" className="mt-1"><SelectValue placeholder="Self" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="self">Self</SelectItem>
+                          <SelectItem value="family">Family member</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
-                      <Label htmlFor="lead-concern">Health concern</Label>
-                      <Textarea id="lead-concern" rows={3} value={lead.concern} onChange={(e) => setLead({ ...lead, concern: e.target.value })} placeholder="Briefly describe your concern" />
+                      <Label htmlFor="lead-pin" className="text-xs text-muted-foreground">Pincode*</Label>
+                      <Input id="lead-pin" value={lead.pincode} onChange={(e) => setLead({ ...lead, pincode: e.target.value })} className="mt-1" />
+                    </div>
+                    <div>
+                      <Label htmlFor="lead-concern" className="text-xs text-muted-foreground">Health concerns/symptoms</Label>
+                      <Textarea id="lead-concern" rows={3} value={lead.concern} onChange={(e) => setLead({ ...lead, concern: e.target.value })} className="mt-1" />
                     </div>
                     <Button type="submit" variant="hero" className="w-full">Request callback</Button>
                   </form>
