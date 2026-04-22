@@ -89,8 +89,7 @@ import PatientProfile from "./pages/patient/PatientProfile.tsx";
 import PatientAppointmentsList from "./pages/patient/PatientAppointmentsList.tsx";
 import PatientPlaceholder from "./pages/patient/PatientPlaceholder.tsx";
 import PatientSavedPosts from "./pages/patient/PatientSavedPosts.tsx";
-import PatientOrders from "./pages/patient/PatientOrders.tsx";
-const _PatientOrdersAlias = PatientOrders;
+import MyOrders from "./pages/patient/PatientOrders.tsx";
 import PatientAddresses from "./pages/patient/PatientAddresses.tsx";
 import PatientBank from "./pages/patient/PatientBank.tsx";
 
@@ -115,7 +114,7 @@ const App = () => (
               <Route path="appointments" element={<PatientAppointmentsList />} />
               <Route path="saved-medicines" element={<PatientPlaceholder title="Saved Medicines" description="Your bookmarked medicines will appear here." />} />
               <Route path="saved-posts" element={<PatientSavedPosts />} />
-              <Route path="orders" element={<PatientOrders />} />
+              <Route path="orders" element={<MyOrders />} />
               <Route path="addresses" element={<PatientAddresses />} />
               <Route path="wallet" element={<PatientPlaceholder title="Ayuzee Money" description="Wallet balance, cashback and transactions." />} />
               <Route path="bank" element={<PatientBank />} />
