@@ -50,6 +50,13 @@ interface Condition {
   plan_steps: PlanGroup[];
   ingredients: IngredientItem[];
   faqs: FaqItem[];
+  gallery_images: string[];
+  benefits: BenefitItem[];
+  ayurveda_qna: QnaItem[];
+  videos: VideoItem[];
+  how_to_use: HowToUse;
+  estimated_delivery_days: number;
+  consult_banner_text: string | null;
 }
 
 interface RelatedCondition { slug: string; name: string; tagline: string | null; product_name: string | null; product_image_url: string | null; hero_image_url: string | null; price: number; discount_price: number | null }
