@@ -34,6 +34,13 @@ interface Condition {
   faqs: any;
   sort_order: number;
   is_published: boolean;
+  gallery_images: any;
+  benefits: any;
+  ayurveda_qna: any;
+  videos: any;
+  how_to_use: any;
+  estimated_delivery_days: number;
+  consult_banner_text: string | null;
 }
 
 const empty: Partial<Condition> = {
@@ -42,6 +49,8 @@ const empty: Partial<Condition> = {
   highlights: [], how_it_works: [], packages: [], doctor_feedback: [], patient_feedback: [],
   approach_title: "", approach_body: "", approach_image_url: "",
   plan_steps: [], ingredients: [], faqs: [], sort_order: 0, is_published: true,
+  gallery_images: [], benefits: [], ayurveda_qna: [], videos: [], how_to_use: {},
+  estimated_delivery_days: 5, consult_banner_text: "",
 };
 
 const JsonField = ({ label, value, onChange, hint }: { label: string; value: any; onChange: (v: any) => void; hint?: string }) => {
