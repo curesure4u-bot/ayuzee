@@ -346,6 +346,26 @@ const HealthConditionDetail = () => {
           </section>
         )}
 
+        {/* Ayurveda Behind Product */}
+        {c.ayurveda_qna.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Ayurveda Behind Product</h2>
+            <div className="mt-6 grid items-center gap-6 rounded-3xl border border-border bg-background p-6 md:grid-cols-[2fr_1fr]">
+              <div className="space-y-4">
+                {c.ayurveda_qna.map((q, i) => (
+                  <div key={i} className={`rounded-xl border p-4 ${q.highlight ? "border-secondary bg-secondary/10" : "border-border bg-muted/30"}`}>
+                    <p className={`text-sm font-bold ${q.highlight ? "text-secondary" : "text-primary"}`}>{q.question}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{q.answer}</p>
+                  </div>
+                ))}
+              </div>
+              {c.approach_image_url && (
+                <img src={c.approach_image_url} alt="Ayurveda" className="hidden h-full w-full rounded-2xl object-cover md:block" />
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Plan steps */}
         {c.plan_steps.length > 0 && (
           <section className="container mt-12">
