@@ -336,6 +336,59 @@ export type Database = {
         }
         Relationships: []
       }
+      condition_leads: {
+        Row: {
+          condition_id: string | null
+          condition_slug: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          notes: string | null
+          package_label: string | null
+          phone: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          condition_id?: string | null
+          condition_slug?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          notes?: string | null
+          package_label?: string | null
+          phone: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          condition_id?: string | null
+          condition_slug?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          notes?: string | null
+          package_label?: string | null
+          phone?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "condition_leads_condition_id_fkey"
+            columns: ["condition_id"]
+            isOneToOne: false
+            referencedRelation: "health_conditions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_api_keys: {
         Row: {
           created_at: string
@@ -1235,6 +1288,93 @@ export type Database = {
           title?: string
           updated_at?: string
           view_count?: number
+        }
+        Relationships: []
+      }
+      health_conditions: {
+        Row: {
+          approach_body: string | null
+          approach_image_url: string | null
+          approach_title: string | null
+          created_at: string
+          discount_price: number | null
+          doctor_feedback: Json
+          faqs: Json
+          hero_image_url: string | null
+          hero_subtitle: string | null
+          hero_title: string | null
+          highlights: Json
+          how_it_works: Json
+          id: string
+          ingredients: Json
+          is_published: boolean
+          name: string
+          packages: Json
+          patient_feedback: Json
+          plan_steps: Json
+          price: number
+          product_image_url: string | null
+          product_name: string | null
+          slug: string
+          sort_order: number
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          approach_body?: string | null
+          approach_image_url?: string | null
+          approach_title?: string | null
+          created_at?: string
+          discount_price?: number | null
+          doctor_feedback?: Json
+          faqs?: Json
+          hero_image_url?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
+          highlights?: Json
+          how_it_works?: Json
+          id?: string
+          ingredients?: Json
+          is_published?: boolean
+          name: string
+          packages?: Json
+          patient_feedback?: Json
+          plan_steps?: Json
+          price?: number
+          product_image_url?: string | null
+          product_name?: string | null
+          slug: string
+          sort_order?: number
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approach_body?: string | null
+          approach_image_url?: string | null
+          approach_title?: string | null
+          created_at?: string
+          discount_price?: number | null
+          doctor_feedback?: Json
+          faqs?: Json
+          hero_image_url?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
+          highlights?: Json
+          how_it_works?: Json
+          id?: string
+          ingredients?: Json
+          is_published?: boolean
+          name?: string
+          packages?: Json
+          patient_feedback?: Json
+          plan_steps?: Json
+          price?: number
+          product_image_url?: string | null
+          product_name?: string | null
+          slug?: string
+          sort_order?: number
+          tagline?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
