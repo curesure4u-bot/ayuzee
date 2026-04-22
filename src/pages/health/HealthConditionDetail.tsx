@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { RequestCallDialog } from "@/components/health/RequestCallDialog";
 import { toast } from "sonner";
-import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight } from "lucide-react";
+import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight, PlayCircle, Truck as TruckIcon, Leaf } from "lucide-react";
 
 interface PackageOpt { label: string; units?: string; price: number; discount_price?: number; in_stock?: boolean }
 interface FeedbackItem { doctor_name?: string; patient_name?: string; location?: string; quote?: string; thumbnail_url?: string; video_url?: string }
@@ -15,6 +15,17 @@ interface PlanGroup { month: string; items: { title: string; description: string
 interface IngredientItem { name: string; image_url?: string }
 interface FaqItem { q: string; a: string }
 interface HowStep { title: string; description?: string; image_url?: string }
+interface BenefitItem { title: string; subtitle?: string; image_url?: string }
+interface QnaItem { question: string; answer: string; highlight?: boolean }
+interface VideoItem { title?: string; thumbnail_url?: string; video_url?: string }
+interface HowToUse {
+  image_url?: string;
+  recovery_title?: string;
+  recovery_text?: string;
+  after_recovery_title?: string;
+  after_recovery_text?: string;
+  note?: string;
+}
 
 interface Condition {
   id: string;
