@@ -93,6 +93,10 @@ import PatientSavedPosts from "./pages/patient/PatientSavedPosts.tsx";
 import MyOrders from "./pages/patient/PatientOrders.tsx";
 import PatientAddresses from "./pages/patient/PatientAddresses.tsx";
 import PatientBank from "./pages/patient/PatientBank.tsx";
+import HealthConditions from "./pages/health/HealthConditions.tsx";
+import HealthConditionDetail from "./pages/health/HealthConditionDetail.tsx";
+import AdminHealthConditions from "./pages/admin/AdminHealthConditions.tsx";
+import AdminConditionLeads from "./pages/admin/AdminConditionLeads.tsx";
 
 const queryClient = new QueryClient();
 
@@ -129,6 +133,8 @@ const App = () => (
             <Route path="/offers" element={<Offers />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
+            <Route path="/health-conditions" element={<HealthConditions />} />
+            <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/partner" element={<Partner />} />
@@ -149,6 +155,8 @@ const App = () => (
               <Route path="payments" element={<AdminPlaceholder title="Payments" description="Razorpay transactions & payouts." />} />
               <Route path="therapies" element={<AdminTherapies />} />
               <Route path="learning" element={<AdminLearning />} />
+              <Route path="health-conditions" element={<AdminHealthConditions />} />
+              <Route path="condition-leads" element={<AdminConditionLeads />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />

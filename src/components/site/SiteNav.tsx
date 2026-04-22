@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
 import { PartnershipMenu } from "@/components/site/PartnershipMenu";
+import { MedicineMenu } from "@/components/site/MedicineMenu";
 
 const links = [
   { to: "/doctors", label: "Find Doctors" },
@@ -11,7 +12,6 @@ const links = [
   { to: "/diagnosis", label: "Diagnosis" },
   { to: "/feed", label: "Feed" },
   { to: "/learning/courses", label: "Learning" },
-  { to: "/shop", label: "Medicines" },
   { to: "/therapies", label: "Therapies" },
   { to: "/offers", label: "Offers", highlight: true },
 ];
@@ -30,6 +30,7 @@ export const SiteNav = () => {
         <nav className="hidden items-center gap-8 md:flex">
           <BulkPurchaseMenu />
           <PartnershipMenu />
+          <MedicineMenu />
           {links.map((l) => (
             <NavLink
               key={l.to}

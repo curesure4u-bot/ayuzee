@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Stethoscope, CalendarCheck, ShoppingBag,
-  Package, Percent, Video, FileText, Bell, CreditCard, GraduationCap, Sparkles,
+  Package, Percent, Video, FileText, Bell, CreditCard, GraduationCap, Sparkles, HeartPulse, PhoneCall,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -25,6 +25,8 @@ const items = [
 const contentItems = [
   { title: "Therapies", url: "/admin/therapies", icon: Sparkles },
   { title: "Learning", url: "/admin/learning", icon: GraduationCap },
+  { title: "Health Conditions", url: "/admin/health-conditions", icon: HeartPulse },
+  { title: "Condition Leads", url: "/admin/condition-leads", icon: PhoneCall },
 ];
 
 export const AdminSidebar = () => {
