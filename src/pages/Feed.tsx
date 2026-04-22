@@ -35,6 +35,15 @@ import {
   Eye,
   Users,
   UserRound,
+  Search,
+  ArrowUpDown,
+  SlidersHorizontal,
+  Flame,
+  CalendarCheck,
+  UserCheck,
+  Share2,
+  Bookmark,
+  ChevronRight,
 } from "lucide-react";
 import { toast } from "sonner";
 
