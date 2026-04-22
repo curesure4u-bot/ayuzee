@@ -35,6 +35,15 @@ import {
   Eye,
   Users,
   UserRound,
+  Search,
+  ArrowUpDown,
+  SlidersHorizontal,
+  Flame,
+  CalendarCheck,
+  UserCheck,
+  Share2,
+  Bookmark,
+  ChevronRight,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -227,134 +236,245 @@ const Feed = () => {
     ? ["doctor_post", "public_post"]
     : ["patient_question"];
 
+  const [search, setSearch] = useState("");
+  const visiblePosts = posts
+    .filter((p) => p.post_type === activeTab)
+    .filter((p) =>
+      search.trim()
+        ? (p.title ?? "").toLowerCase().includes(search.toLowerCase()) ||
+          p.body.toLowerCase().includes(search.toLowerCase()) ||
+          p.author_name.toLowerCase().includes(search.toLowerCase())
+        : true
+    );
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-muted/30">
       <SiteNav />
       <main>
-        <section className="gradient-soft border-b border-border">
-          <div className="container py-10">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-primary">Community Feed</span>
-                <h1 className="mt-2 font-display text-4xl md:text-5xl">Connect with the Ayurveda community</h1>
-                <p className="mt-3 max-w-2xl text-muted-foreground">
-                  Share clinical insights, browse public wisdom, or ask doctors a question.
-                </p>
-              </div>
-              <Button variant="hero" size="lg" onClick={openComposer} className="shrink-0">
-                <Plus className="h-4 w-4" /> Create Post
-              </Button>
-            </div>
-          </div>
-        </section>
+        <section className="container py-6">
+          {/* Breadcrumb */}
+          <nav className="mb-5 flex items-center gap-1.5 text-sm">
+            <Link to="/" className="text-primary hover:underline">Home</Link>
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="font-semibold text-foreground">Feed</span>
+          </nav>
 
-        <section className="container py-10">
-          <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
-            {/* Sidebar — trending tags */}
+          {/* Search + sort + filter + ask */}
+          <div className="mb-6 flex flex-wrap items-center gap-3">
+            <div className="relative min-w-[260px] flex-1">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search"
+                className="h-12 rounded-full border-border bg-card pl-11 text-base shadow-soft"
+              />
+            </div>
+            <Button variant="outline" size="icon" className="h-12 w-12 rounded-xl border-border bg-card" aria-label="Sort">
+              <ArrowUpDown className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" className="h-12 w-12 rounded-xl border-border bg-card" aria-label="Filter">
+              <SlidersHorizontal className="h-4 w-4" />
+            </Button>
+            <Button onClick={openComposer} size="lg" className="h-12 gap-2 rounded-full bg-[hsl(202_88%_53%)] px-6 text-white hover:bg-[hsl(202_88%_46%)]">
+              <HelpCircle className="h-4 w-4" /> Ask a Question
+            </Button>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[280px_1fr_300px]">
+            {/* LEFT — trending tags */}
             <aside className="space-y-4">
-              <Card className="p-5">
-                <h3 className="font-display text-base">Trending Tags</h3>
-                <p className="text-xs text-muted-foreground">Popular topics this week</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {TRENDING_TAGS.map((t) => (
-                    <span key={t} className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground">
+              <Card className="overflow-hidden border-border p-0 shadow-soft">
+                <div className="flex items-center gap-3 border-b border-border bg-accent/40 px-4 py-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-[hsl(14_90%_55%)] text-white">
+                    <Flame className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-base leading-tight">Trending Tags</h3>
+                    <p className="text-xs text-muted-foreground">Popular topics this week</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 p-4">
+                  {TRENDING_TAGS.slice(0, 3).map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1 rounded-full border border-[hsl(14_90%_55%)]/40 bg-[hsl(14_90%_55%)]/5 px-3 py-1 text-xs font-medium text-[hsl(14_70%_40%)]">
+                      <Flame className="h-3 w-3" /> {t}
+                    </span>
+                  ))}
+                  {TRENDING_TAGS.slice(3).map((t) => (
+                    <span key={t} className="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
                       {t}
                     </span>
                   ))}
                 </div>
               </Card>
+
               {!isDoctor && userId && (
-                <Card className="p-4 text-xs text-muted-foreground">
+                <Card className="border-border p-4 text-xs text-muted-foreground">
                   You can post <strong className="text-foreground">Patient Questions</strong>. To share clinical posts, <Link to="/partner/apply" className="font-semibold text-primary hover:underline">apply as a doctor partner</Link>.
                 </Card>
               )}
             </aside>
 
-            {/* Main column — tabs + feed */}
-            <div>
-              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabKey)}>
-                <TabsList className="grid w-full grid-cols-3">
-                  {TABS.map((t) => (
-                    <TabsTrigger key={t.key} value={t.key} className="gap-1.5">
-                      <t.icon className="h-4 w-4" />
-                      <span className="hidden sm:inline">{t.label}</span>
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+            {/* MIDDLE — feed column */}
+            <div className="space-y-5">
+              {/* Welcome banner */}
+              <Card className="overflow-hidden border-0 bg-[hsl(202_88%_53%)] p-6 text-primary-foreground shadow-elegant">
+                <h2 className="font-display text-2xl text-white">Welcome to the Ayurveda Community!</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/90">
+                  Connect with experienced Ayurvedic doctors, get answers to your health questions, and discover natural healing remedies and expert medicine advice.
+                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 text-white">
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15">
+                      <UserCheck className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold">Verified Ayurveda Doctors</p>
+                      <p className="text-xs text-white/80">All doctors are verified practitioners with years of experience</p>
+                    </div>
+                  </div>
+                  <Button asChild className="gap-2 rounded-full bg-white text-[hsl(202_88%_46%)] hover:bg-white/90">
+                    <Link to="/doctors"><CalendarCheck className="h-4 w-4" /> Book Appointment</Link>
+                  </Button>
+                </div>
 
-                {TABS.map((t) => (
-                  <TabsContent key={t.key} value={t.key} className="mt-6 space-y-5">
-                    <Card className="border-primary/20 bg-accent/40 p-4 text-sm text-foreground">
-                      <div className="flex items-start gap-3">
-                        <t.icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                        <div>
-                          <p className="font-semibold">{t.label}</p>
-                          <p className="text-xs text-muted-foreground">{t.helper}</p>
+                {/* Tab pills */}
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {TABS.map((t) => {
+                    const active = activeTab === t.key;
+                    return (
+                      <button
+                        key={t.key}
+                        onClick={() => setActiveTab(t.key)}
+                        className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-smooth ${
+                          active
+                            ? "bg-white text-[hsl(202_88%_46%)] shadow-soft"
+                            : "bg-white/15 text-white hover:bg-white/25"
+                        }`}
+                      >
+                        <t.icon className="h-4 w-4" /> {t.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </Card>
+
+              {/* Posts */}
+              {loading ? (
+                <div className="grid place-items-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
+              ) : visiblePosts.length === 0 ? (
+                <Card className="p-12 text-center text-muted-foreground">
+                  No posts yet in this section. Be the first to share!
+                </Card>
+              ) : (
+                visiblePosts.map((post) => {
+                  const isDoctorPost = post.post_type === "doctor_post";
+                  return (
+                    <Card key={post.id} className="overflow-hidden border-border shadow-soft">
+                      <div className="p-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <div className="grid h-12 w-12 place-items-center rounded-full gradient-leaf font-display text-sm text-primary-foreground">
+                              {post.author_name.split(" ").slice(-2).map((p) => p[0]).join("")}
+                            </div>
+                            <div>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <p className="text-sm font-semibold">{post.author_name}</p>
+                                {isDoctorPost && <span className="text-[hsl(38_95%_55%)]">★</span>}
+                                <span className="rounded-full bg-[hsl(202_88%_95%)] px-2 py-0.5 text-[10px] font-semibold uppercase text-[hsl(202_88%_46%)]">New</span>
+                              </div>
+                              {isDoctorPost && (
+                                <p className="mt-0.5 inline-flex items-center gap-1 text-xs text-primary">
+                                  <Stethoscope className="h-3 w-3" /> Gynaecology <span className="text-muted-foreground">+4 more</span>
+                                </p>
+                              )}
+                              <p className="mt-1 inline-flex items-center gap-2 text-xs text-muted-foreground">
+                                {new Date(post.created_at).toLocaleDateString()}
+                                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase">
+                                  <Eye className="h-3 w-3" /> {post.visibility}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                          {isDoctorPost && (
+                            <Button asChild size="sm" className="hidden gap-1.5 rounded-full bg-[hsl(202_88%_53%)] text-white hover:bg-[hsl(202_88%_46%)] sm:inline-flex">
+                              <Link to="/doctors"><CalendarCheck className="h-3.5 w-3.5" /> Book Appointment</Link>
+                            </Button>
+                          )}
                         </div>
+
+                        {post.title && (
+                          <h3 className="mt-4 font-display text-xl">
+                            {post.title} <span className="text-xs font-normal text-muted-foreground">(edited)</span>
+                          </h3>
+                        )}
+                        <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{post.body}</p>
+                        {post.tags.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {post.tags.map((tag) => (
+                              <span key={tag} className="rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-primary">
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <Link to={`/feed/${post.id}`} className="mt-2 inline-block text-sm font-semibold text-[hsl(202_88%_46%)] hover:underline">View</Link>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          <span className="font-semibold text-foreground">{post.like_count} {post.like_count === 1 ? "Like" : "Likes"}</span> • {Math.max(post.like_count * 12, 48)} Views
+                        </p>
+                      </div>
+
+                      {post.image_url && (
+                        <img src={post.image_url} alt="" className="max-h-[480px] w-full object-cover" loading="lazy" />
+                      )}
+
+                      <div className="grid grid-cols-4 border-t border-border text-sm">
+                        <button
+                          onClick={() => toggleLike(post.id)}
+                          className={`flex items-center justify-center gap-2 py-3 transition-smooth hover:bg-muted/50 ${
+                            likedSet.has(post.id) ? "text-secondary" : "text-muted-foreground"
+                          }`}
+                        >
+                          <Heart className={`h-4 w-4 ${likedSet.has(post.id) ? "fill-secondary" : ""}`} /> Like
+                        </button>
+                        <Link to={`/feed/${post.id}`} className="flex items-center justify-center gap-2 py-3 text-muted-foreground transition-smooth hover:bg-muted/50 hover:text-primary">
+                          <MessageCircle className="h-4 w-4" /> Comment
+                        </Link>
+                        <button className="flex items-center justify-center gap-2 py-3 text-muted-foreground transition-smooth hover:bg-muted/50 hover:text-primary">
+                          <Share2 className="h-4 w-4" /> Share
+                        </button>
+                        <button className="flex items-center justify-center gap-2 py-3 text-muted-foreground transition-smooth hover:bg-muted/50 hover:text-primary">
+                          <Bookmark className="h-4 w-4" /> Save
+                        </button>
                       </div>
                     </Card>
-
-                    {loading ? (
-                      <div className="grid place-items-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
-                    ) : filteredPosts.length === 0 ? (
-                      <Card className="p-12 text-center text-muted-foreground">
-                        No posts yet in this section. Be the first to share!
-                      </Card>
-                    ) : (
-                      filteredPosts.map((post) => (
-                        <Card key={post.id} className="overflow-hidden">
-                          <div className="p-5">
-                            <div className="flex items-center justify-between gap-3">
-                              <div className="flex items-center gap-3">
-                                <div className="grid h-10 w-10 place-items-center rounded-full gradient-leaf font-display text-sm text-primary-foreground">
-                                  {post.author_name.split(" ").slice(-2).map((p) => p[0]).join("")}
-                                </div>
-                                <div>
-                                  <p className="text-sm font-semibold">{post.author_name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {new Date(post.created_at).toLocaleString()}
-                                  </p>
-                                </div>
-                              </div>
-                              <span className="hidden items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground sm:inline-flex">
-                                <Eye className="h-3 w-3" /> {post.visibility}
-                              </span>
-                            </div>
-                            {post.title && <h3 className="mt-4 font-display text-xl">{post.title}</h3>}
-                            <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{post.body}</p>
-                            {post.tags.length > 0 && (
-                              <div className="mt-3 flex flex-wrap gap-1.5">
-                                {post.tags.map((tag) => (
-                                  <span key={tag} className="rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-primary">
-                                    #{tag}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                          {post.image_url && (
-                            <img src={post.image_url} alt="" className="max-h-[480px] w-full object-cover" loading="lazy" />
-                          )}
-                          <div className="flex items-center gap-4 border-t border-border px-5 py-3">
-                            <button
-                              onClick={() => toggleLike(post.id)}
-                              className={`flex items-center gap-1.5 text-sm transition-smooth ${
-                                likedSet.has(post.id) ? "text-secondary" : "text-muted-foreground hover:text-secondary"
-                              }`}
-                            >
-                              <Heart className={`h-4 w-4 ${likedSet.has(post.id) ? "fill-secondary" : ""}`} /> {post.like_count}
-                            </button>
-                            <Link to={`/feed/${post.id}`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary">
-                              <MessageCircle className="h-4 w-4" /> {post.comment_count}
-                            </Link>
-                          </div>
-                        </Card>
-                      ))
-                    )}
-                  </TabsContent>
-                ))}
-              </Tabs>
+                  );
+                })
+              )}
             </div>
+
+            {/* RIGHT — promo column */}
+            <aside className="hidden space-y-4 lg:block">
+              <Card className="border-[hsl(38_95%_60%)]/30 bg-[hsl(38_95%_96%)] p-5 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-wider text-secondary">Medicines</p>
+                <h3 className="mt-1 font-display text-lg leading-tight">1Veda Isabgol Husk</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Classical • Pure</p>
+                <p className="mt-3 font-display text-2xl text-foreground">₹165</p>
+                <p className="text-xs font-semibold text-primary">5% OFF</p>
+                <Button asChild size="sm" className="mt-4 w-full rounded-full">
+                  <Link to="/shop">Buy Medicine</Link>
+                </Button>
+              </Card>
+              <Card className="border-[hsl(38_95%_60%)]/30 bg-[hsl(38_95%_96%)] p-5 shadow-soft">
+                <p className="text-xs font-semibold uppercase tracking-wider text-secondary">Medicines</p>
+                <h3 className="mt-1 font-display text-lg leading-tight">Chandanasava Tonic</h3>
+                <p className="mt-3 font-display text-2xl text-foreground">₹185</p>
+                <p className="text-xs font-semibold text-primary">5% OFF</p>
+                <Button asChild size="sm" className="mt-4 w-full rounded-full">
+                  <Link to="/shop">Buy Medicine</Link>
+                </Button>
+              </Card>
+            </aside>
           </div>
         </section>
       </main>
