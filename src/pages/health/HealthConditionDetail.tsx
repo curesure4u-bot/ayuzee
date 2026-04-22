@@ -256,6 +256,29 @@ const HealthConditionDetail = () => {
           </section>
         )}
 
+        {/* Benefits */}
+        {c.benefits.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Benefits of {c.product_name ?? c.name}</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {c.benefits.map((b, i) => (
+                <div key={i} className="overflow-hidden rounded-2xl border border-border bg-background text-center">
+                  {b.image_url && <img src={b.image_url} alt={b.title} className="h-40 w-full object-cover" />}
+                  <div className="p-4">
+                    <h3 className="font-display text-lg">{b.title}</h3>
+                    {b.subtitle && <p className="mt-1 text-xs text-muted-foreground">{b.subtitle}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Button variant="hero" size="lg" onClick={() => { setSelectedPkg(undefined); setCallOpen(true); }}>
+                <Phone className="mr-2 h-4 w-4" /> {c.consult_banner_text ?? "Consult a Doctor"}
+              </Button>
+            </div>
+          </section>
+        )}
+
         {/* How it works */}
         {c.how_it_works.length > 0 && (
           <section className="container mt-12">
