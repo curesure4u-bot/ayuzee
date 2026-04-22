@@ -67,7 +67,7 @@ export const PatientHeader = () => {
   const signOut = async () => {
     await supabase.auth.signOut();
     toast.success("Signed out");
-    navigate("/", { replace: true });
+    navigate("/?welcome=1", { replace: true });
   };
 
   const initials = (name || "U").split(" ").slice(0, 2).map((p) => p[0]).join("").toUpperCase();

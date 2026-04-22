@@ -30,7 +30,7 @@ export const PatientSidebar = () => {
   const signOut = async () => {
     await supabase.auth.signOut();
     toast.success("Signed out");
-    navigate("/", { replace: true });
+    navigate("/?welcome=1", { replace: true });
   };
 
   return (

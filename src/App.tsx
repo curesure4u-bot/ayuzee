@@ -88,6 +88,10 @@ import PatientLayout from "./pages/patient/PatientLayout.tsx";
 import PatientProfile from "./pages/patient/PatientProfile.tsx";
 import PatientAppointmentsList from "./pages/patient/PatientAppointmentsList.tsx";
 import PatientPlaceholder from "./pages/patient/PatientPlaceholder.tsx";
+import PatientSavedPosts from "./pages/patient/PatientSavedPosts.tsx";
+import MyOrders from "./pages/patient/PatientOrders.tsx";
+import PatientAddresses from "./pages/patient/PatientAddresses.tsx";
+import PatientBank from "./pages/patient/PatientBank.tsx";
 
 const queryClient = new QueryClient();
 
@@ -109,11 +113,11 @@ const App = () => (
               <Route path="profile" element={<PatientProfile />} />
               <Route path="appointments" element={<PatientAppointmentsList />} />
               <Route path="saved-medicines" element={<PatientPlaceholder title="Saved Medicines" description="Your bookmarked medicines will appear here." />} />
-              <Route path="saved-posts" element={<PatientPlaceholder title="Saved Posts" description="Articles and posts you've saved." />} />
-              <Route path="orders" element={<PatientPlaceholder title="My Orders" description="Track all your medicine orders here." />} />
-              <Route path="addresses" element={<PatientPlaceholder title="My Addresses" description="Manage delivery addresses." />} />
+              <Route path="saved-posts" element={<PatientSavedPosts />} />
+              <Route path="orders" element={<MyOrders />} />
+              <Route path="addresses" element={<PatientAddresses />} />
               <Route path="wallet" element={<PatientPlaceholder title="Ayuzee Money" description="Wallet balance, cashback and transactions." />} />
-              <Route path="bank" element={<PatientPlaceholder title="Bank Details" description="For refunds and payouts." />} />
+              <Route path="bank" element={<PatientBank />} />
               <Route path="help" element={<PatientPlaceholder title="Help & Support" description="We're here to help — reach out anytime." />} />
             </Route>
             <Route path="/referral" element={<Referral />} />

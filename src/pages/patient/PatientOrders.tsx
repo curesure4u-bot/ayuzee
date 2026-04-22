@@ -1,0 +1,156 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, ShoppingCart, Filter, Stethoscope } from "lucide-react";
+
+interface OrderRow {
+  id: string;
+  total: number;
+  order_status: string;
+  payment_status: string;
+  created_at: string;
+}
+interface ApptRow {
+  id: string;
+  appointment_date: string;
+  time_slot: string;
+  mode: string;
+  fee: number;
+  status: string;
+  payment_status: string;
+}
+
+const FILTERS = ["All Orders", "Delivered", "In-transit", "Returned"];
+
+const PatientOrders = () => {
+  const [orders, setOrders] = useState<OrderRow[]>([]);
+  const [appts, setAppts] = useState<ApptRow[]>([]);
+  const [filter, setFilter] = useState("All Orders");
+
+  useEffect(() => {
+    (async () => {
+      const { data: sess } = await supabase.auth.getSession();
+      const uid = sess.session?.user.id;
+      if (!uid) return;
+      const [o, a] = await Promise.all([
+        supabase.from("orders").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+        supabase.from("appointments").select("*").eq("user_id", uid).order("appointment_date", { ascending: false }),
+      ]);
+      setOrders((o.data as OrderRow[]) ?? []);
+      setAppts((a.data as ApptRow[]) ?? []);
+    })();
+  }, []);
+
+  const filteredOrders = orders.filter((o) => {
+    if (filter === "All Orders") return true;
+    if (filter === "Delivered") return o.order_status === "delivered";
+    if (filter === "In-transit") return ["shipped", "out_for_delivery", "processing"].includes(o.order_status);
+    if (filter === "Returned") return o.order_status === "returned";
+    return true;
+  });
+
+  return (
+    <Card className="overflow-hidden">
+      <div className="flex items-center gap-3 border-b border-border p-5">
+        <Link to="/dashboard" className="text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-5 w-5" />
+        </Link>
+        <h1 className="flex-1 font-display text-xl font-semibold">My Orders</h1>
+        <Filter className="h-5 w-5 text-primary" />
+      </div>
+
+      <Tabs defaultValue="medicine" className="p-5">
+        <TabsList>
+          <TabsTrigger value="medicine">Medicine Orders</TabsTrigger>
+          <TabsTrigger value="consult">Consultation Orders</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="medicine" className="mt-5">
+          <div className="mb-5 flex flex-wrap gap-2">
+            {FILTERS.map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`rounded-full border px-4 py-1.5 text-sm transition ${
+                  filter === f
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border text-muted-foreground hover:border-primary/40"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          {filteredOrders.length === 0 ? (
+            <EmptyOrders />
+          ) : (
+            <div className="space-y-3">
+              {filteredOrders.map((o) => (
+                <div key={o.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-4">
+                  <div>
+                    <p className="font-mono text-sm text-primary">AYZ-{o.id.slice(0, 8).toUpperCase()}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge>{o.order_status}</Badge>
+                    <Badge variant={o.payment_status === "paid" ? "default" : "outline"}>{o.payment_status}</Badge>
+                    <span className="font-semibold">₹{o.total}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="consult" className="mt-5">
+          {appts.length === 0 ? (
+            <EmptyConsult />
+          ) : (
+            <div className="space-y-3">
+              {appts.map((a) => (
+                <div key={a.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-4">
+                  <div>
+                    <p className="font-medium">
+                      {new Date(a.appointment_date).toLocaleDateString()} • {a.time_slot}
+                    </p>
+                    <p className="text-sm capitalize text-muted-foreground">{a.mode} consultation</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge>{a.status}</Badge>
+                    <Badge variant={a.payment_status === "paid" ? "default" : "outline"}>{a.payment_status}</Badge>
+                    <span className="font-semibold">₹{a.fee}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </Card>
+  );
+};
+
+const EmptyOrders = () => (
+  <div className="grid place-items-center py-16 text-center">
+    <div className="grid h-32 w-32 place-items-center rounded-full bg-emerald-50">
+      <ShoppingCart className="h-16 w-16 text-emerald-600/70" />
+    </div>
+    <p className="mt-6 text-lg font-semibold">No order found. Please change filter</p>
+  </div>
+);
+
+const EmptyConsult = () => (
+  <div className="grid place-items-center py-16 text-center">
+    <div className="grid h-32 w-32 place-items-center rounded-full bg-emerald-50">
+      <Stethoscope className="h-16 w-16 text-emerald-600/70" />
+    </div>
+    <p className="mt-6 text-lg font-semibold">No consultations yet</p>
+    <p className="mt-1 text-sm text-muted-foreground">Book your first appointment to get started.</p>
+  </div>
+);
+
+export default PatientOrders;
