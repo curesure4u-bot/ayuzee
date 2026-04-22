@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { RequestCallDialog } from "@/components/health/RequestCallDialog";
 import { toast } from "sonner";
-import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill } from "lucide-react";
+import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight } from "lucide-react";
 
 interface PackageOpt { label: string; units?: string; price: number; discount_price?: number; in_stock?: boolean }
 interface FeedbackItem { doctor_name?: string; patient_name?: string; location?: string; quote?: string; thumbnail_url?: string; video_url?: string }
