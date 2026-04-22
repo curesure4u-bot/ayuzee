@@ -60,7 +60,7 @@ export const SiteNav = () => {
               )}
             </Link>
           </Button>
-          <Button variant="ghost" asChild className="hidden sm:inline-flex"><Link to="/auth">Sign in</Link></Button>
+          <Button variant="ghost" asChild className="hidden sm:inline-flex"><Link to="/auth">Patient Login</Link></Button>
           <Button variant="hero" asChild><Link to="/auth?mode=signup">Sign up</Link></Button>
         </div>
       </div>
