@@ -175,14 +175,28 @@ const HealthConditionDetail = () => {
                 </Button>
               </div>
             </div>
-            <div className="grid place-items-center">
-              {c.hero_image_url || c.product_image_url ? (
-                <img src={c.hero_image_url ?? c.product_image_url ?? ""} alt={c.name} className="max-h-80 w-auto object-contain drop-shadow-xl" />
-              ) : (
-                <div className="grid aspect-square w-64 place-items-center rounded-3xl bg-background/60 shadow-soft">
-                  <Pill className="h-24 w-24 text-primary/40" />
+            <div className="grid gap-3">
+              <div className="grid place-items-center rounded-2xl bg-background/70 p-4 shadow-soft">
+                {c.hero_image_url || c.product_image_url ? (
+                  <img src={c.hero_image_url ?? c.product_image_url ?? ""} alt={c.name} className="max-h-72 w-auto object-contain drop-shadow-xl" />
+                ) : (
+                  <div className="grid aspect-square w-64 place-items-center"><Pill className="h-24 w-24 text-primary/40" /></div>
+                )}
+              </div>
+              {c.gallery_images.length > 0 && (
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {c.gallery_images.slice(0, 6).map((src, i) => (
+                    <img key={i} src={src} alt={`${c.name} ${i + 1}`} className="h-14 w-14 cursor-pointer rounded-md border border-border bg-background object-contain p-1 transition-smooth hover:border-primary" />
+                  ))}
                 </div>
               )}
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-background/80 px-3 py-2 text-xs">
+                <TruckIcon className="h-4 w-4 text-primary" />
+                <span className="text-muted-foreground">Estimated delivery by</span>
+                <strong>
+                  {new Date(Date.now() + (c.estimated_delivery_days || 5) * 86400000).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                </strong>
+              </div>
             </div>
           </div>
         </section>
