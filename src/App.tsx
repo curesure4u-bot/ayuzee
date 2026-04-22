@@ -90,6 +90,7 @@ import PatientAppointmentsList from "./pages/patient/PatientAppointmentsList.tsx
 import PatientPlaceholder from "./pages/patient/PatientPlaceholder.tsx";
 import PatientSavedPosts from "./pages/patient/PatientSavedPosts.tsx";
 import PatientOrders from "./pages/patient/PatientOrders.tsx";
+const _PatientOrdersAlias = PatientOrders;
 import PatientAddresses from "./pages/patient/PatientAddresses.tsx";
 import PatientBank from "./pages/patient/PatientBank.tsx";
 
