@@ -346,18 +346,90 @@ const HealthConditionDetail = () => {
           ))}
         </section>
 
+        {/* What's Included in the Plan */}
+        <section className="container mt-12">
+          <h2 className="text-center font-display text-3xl">What's Included in the Plan?</h2>
+          <div className="mx-auto mt-6 max-w-4xl overflow-hidden rounded-3xl border border-secondary/30 bg-secondary/10">
+            <div className="grid divide-y divide-secondary/20 md:grid-cols-[1fr_auto] md:divide-x md:divide-y-0">
+              <div className="divide-y divide-secondary/20">
+                {PLAN_INCLUSIONS.map((p, i) => (
+                  <div key={i} className="flex items-center gap-4 p-5">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-background text-primary"><p.icon className="h-5 w-5" /></div>
+                    <p className="font-semibold">{p.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="divide-y divide-primary/20 bg-primary text-primary-foreground">
+                {PLAN_INCLUSIONS.map((p, i) => (
+                  <div key={i} className="flex items-center justify-center px-8 py-5 text-center font-semibold">{p.value}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FAQs */}
         {c.faqs.length > 0 && (
           <section className="container mt-12">
-            <h2 className="font-display text-3xl">Frequently Asked Questions</h2>
-            <div className="mt-4 space-y-3">
+            <h2 className="text-center font-display text-3xl">FAQs</h2>
+            <div className="mx-auto mt-6 max-w-4xl space-y-3">
               {c.faqs.map((f, i) => (
-                <details key={i} className="rounded-xl border border-border bg-background p-4">
-                  <summary className="cursor-pointer font-semibold">{f.q}</summary>
-                  <p className="mt-2 text-sm text-muted-foreground">{f.a}</p>
+                <details key={i} className="group rounded-xl border-t-2 border-primary/40 bg-background p-5 [&_summary::-webkit-details-marker]:hidden">
+                  <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold">
+                    <span>{f.q}</span>
+                    <ChevronRight className="h-5 w-5 shrink-0 text-primary transition-transform group-open:rotate-90" />
+                  </summary>
+                  <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>
                 </details>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* Other Lifestyle Conditions */}
+        {related.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Lifestyle Diseases</h2>
+            <p className="text-center text-sm text-muted-foreground">Explore our other doctor-curated care plans.</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {related.slice(0, 3).map((r) => {
+                const rOff = r.discount_price ? Math.round(((r.price - r.discount_price) / r.price) * 100) : 0;
+                return (
+                  <Link key={r.slug} to={`/health-conditions/${r.slug}`} className="group flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-accent/40 to-background p-5 transition-smooth hover:shadow-elegant">
+                    <div className="flex-1">
+                      <h3 className="font-display text-xl">{r.name}</h3>
+                      {r.tagline && <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{r.tagline}</p>}
+                      <div className="mt-3 flex items-baseline gap-2">
+                        <span className="font-bold text-primary">₹{r.discount_price ?? r.price}</span>
+                        {r.discount_price && (
+                          <>
+                            <span className="text-xs text-muted-foreground line-through">₹{r.price}</span>
+                            <span className="text-xs font-semibold text-secondary">{rOff}% off</span>
+                          </>
+                        )}
+                      </div>
+                      <span className="mt-3 inline-flex items-center gap-1 rounded-md bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground group-hover:gap-2 transition-all">
+                        Buy Now <ArrowRight className="h-3 w-3" />
+                      </span>
+                    </div>
+                    <div className="grid h-24 w-24 shrink-0 place-items-center rounded-xl bg-background/70">
+                      {r.hero_image_url || r.product_image_url ? (
+                        <img src={r.hero_image_url ?? r.product_image_url ?? ""} alt={r.name} className="h-full w-full object-contain p-2" loading="lazy" />
+                      ) : (
+                        <Sparkles className="h-10 w-10 text-primary/40" />
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+            {related.length > 3 && (
+              <div className="mt-5 text-center">
+                <Link to="/health-conditions" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:gap-2 transition-all">
+                  View All <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            )}
           </section>
         )}
 
