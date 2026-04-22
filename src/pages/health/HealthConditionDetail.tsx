@@ -41,22 +41,41 @@ interface Condition {
   faqs: FaqItem[];
 }
 
+interface RelatedCondition { slug: string; name: string; tagline: string | null; product_name: string | null; product_image_url: string | null; hero_image_url: string | null; price: number; discount_price: number | null }
+
+const PLAN_INCLUSIONS = [
+  { icon: Stethoscope, label: "Free Doctor Consultation", value: "Unlimited" },
+  { icon: Pill, label: "Premium-quality Ayurvedic medicine", value: "On a Prescribed Basis" },
+  { icon: Headphones, label: "Dedicated health coach support", value: "12x7" },
+  { icon: ClipboardList, label: "Personalized diet & lifestyle plan", value: "Unlimited" },
+  { icon: Users, label: "Access to our exclusive health community", value: "Unlimited" },
+];
+
 const HealthConditionDetail = () => {
   const { slug } = useParams();
   const { addItem } = useCart();
   const [c, setC] = useState<Condition | null>(null);
+  const [related, setRelated] = useState<RelatedCondition[]>([]);
   const [loading, setLoading] = useState(true);
   const [callOpen, setCallOpen] = useState(false);
   const [selectedPkg, setSelectedPkg] = useState<string | undefined>();
 
   useEffect(() => {
     if (!slug) return;
+    setLoading(true);
     supabase.from("health_conditions").select("*").eq("slug", slug).maybeSingle()
       .then(({ data }) => {
         setC(data as unknown as Condition | null);
         setLoading(false);
         if (data) document.title = `${(data as { name: string }).name} — Ayuzee`;
       });
+    supabase.from("health_conditions")
+      .select("slug,name,tagline,product_name,product_image_url,hero_image_url,price,discount_price")
+      .eq("is_published", true)
+      .neq("slug", slug)
+      .order("sort_order", { ascending: true })
+      .limit(6)
+      .then(({ data }) => setRelated((data as RelatedCondition[]) ?? []));
   }, [slug]);
 
   if (loading) {
