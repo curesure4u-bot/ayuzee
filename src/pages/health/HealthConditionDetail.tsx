@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { RequestCallDialog } from "@/components/health/RequestCallDialog";
 import { toast } from "sonner";
-import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight } from "lucide-react";
+import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight, PlayCircle, Truck as TruckIcon, Leaf } from "lucide-react";
 
 interface PackageOpt { label: string; units?: string; price: number; discount_price?: number; in_stock?: boolean }
 interface FeedbackItem { doctor_name?: string; patient_name?: string; location?: string; quote?: string; thumbnail_url?: string; video_url?: string }
@@ -15,6 +15,17 @@ interface PlanGroup { month: string; items: { title: string; description: string
 interface IngredientItem { name: string; image_url?: string }
 interface FaqItem { q: string; a: string }
 interface HowStep { title: string; description?: string; image_url?: string }
+interface BenefitItem { title: string; subtitle?: string; image_url?: string }
+interface QnaItem { question: string; answer: string; highlight?: boolean }
+interface VideoItem { title?: string; thumbnail_url?: string; video_url?: string }
+interface HowToUse {
+  image_url?: string;
+  recovery_title?: string;
+  recovery_text?: string;
+  after_recovery_title?: string;
+  after_recovery_text?: string;
+  note?: string;
+}
 
 interface Condition {
   id: string;
@@ -39,6 +50,13 @@ interface Condition {
   plan_steps: PlanGroup[];
   ingredients: IngredientItem[];
   faqs: FaqItem[];
+  gallery_images: string[];
+  benefits: BenefitItem[];
+  ayurveda_qna: QnaItem[];
+  videos: VideoItem[];
+  how_to_use: HowToUse;
+  estimated_delivery_days: number;
+  consult_banner_text: string | null;
 }
 
 interface RelatedCondition { slug: string; name: string; tagline: string | null; product_name: string | null; product_image_url: string | null; hero_image_url: string | null; price: number; discount_price: number | null }
@@ -157,14 +175,28 @@ const HealthConditionDetail = () => {
                 </Button>
               </div>
             </div>
-            <div className="grid place-items-center">
-              {c.hero_image_url || c.product_image_url ? (
-                <img src={c.hero_image_url ?? c.product_image_url ?? ""} alt={c.name} className="max-h-80 w-auto object-contain drop-shadow-xl" />
-              ) : (
-                <div className="grid aspect-square w-64 place-items-center rounded-3xl bg-background/60 shadow-soft">
-                  <Pill className="h-24 w-24 text-primary/40" />
+            <div className="grid gap-3">
+              <div className="grid place-items-center rounded-2xl bg-background/70 p-4 shadow-soft">
+                {c.hero_image_url || c.product_image_url ? (
+                  <img src={c.hero_image_url ?? c.product_image_url ?? ""} alt={c.name} className="max-h-72 w-auto object-contain drop-shadow-xl" />
+                ) : (
+                  <div className="grid aspect-square w-64 place-items-center"><Pill className="h-24 w-24 text-primary/40" /></div>
+                )}
+              </div>
+              {c.gallery_images.length > 0 && (
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {c.gallery_images.slice(0, 6).map((src, i) => (
+                    <img key={i} src={src} alt={`${c.name} ${i + 1}`} className="h-14 w-14 cursor-pointer rounded-md border border-border bg-background object-contain p-1 transition-smooth hover:border-primary" />
+                  ))}
                 </div>
               )}
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-background/80 px-3 py-2 text-xs">
+                <TruckIcon className="h-4 w-4 text-primary" />
+                <span className="text-muted-foreground">Estimated delivery by</span>
+                <strong>
+                  {new Date(Date.now() + (c.estimated_delivery_days || 5) * 86400000).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                </strong>
+              </div>
             </div>
           </div>
         </section>
@@ -220,6 +252,29 @@ const HealthConditionDetail = () => {
                   </div>
                 );
               })}
+            </div>
+          </section>
+        )}
+
+        {/* Benefits */}
+        {c.benefits.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Benefits of {c.product_name ?? c.name}</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {c.benefits.map((b, i) => (
+                <div key={i} className="overflow-hidden rounded-2xl border border-border bg-background text-center">
+                  {b.image_url && <img src={b.image_url} alt={b.title} className="h-40 w-full object-cover" />}
+                  <div className="p-4">
+                    <h3 className="font-display text-lg">{b.title}</h3>
+                    {b.subtitle && <p className="mt-1 text-xs text-muted-foreground">{b.subtitle}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Button variant="hero" size="lg" onClick={() => { setSelectedPkg(undefined); setCallOpen(true); }}>
+                <Phone className="mr-2 h-4 w-4" /> {c.consult_banner_text ?? "Consult a Doctor"}
+              </Button>
             </div>
           </section>
         )}
@@ -287,6 +342,26 @@ const HealthConditionDetail = () => {
                 {c.approach_body && <p className="mt-3 leading-relaxed text-muted-foreground">{c.approach_body}</p>}
               </div>
               {c.approach_image_url && <img src={c.approach_image_url} alt="Approach" className="rounded-2xl" />}
+            </div>
+          </section>
+        )}
+
+        {/* Ayurveda Behind Product */}
+        {c.ayurveda_qna.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Ayurveda Behind Product</h2>
+            <div className="mt-6 grid items-center gap-6 rounded-3xl border border-border bg-background p-6 md:grid-cols-[2fr_1fr]">
+              <div className="space-y-4">
+                {c.ayurveda_qna.map((q, i) => (
+                  <div key={i} className={`rounded-xl border p-4 ${q.highlight ? "border-secondary bg-secondary/10" : "border-border bg-muted/30"}`}>
+                    <p className={`text-sm font-bold ${q.highlight ? "text-secondary" : "text-primary"}`}>{q.question}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{q.answer}</p>
+                  </div>
+                ))}
+              </div>
+              {c.approach_image_url && (
+                <img src={c.approach_image_url} alt="Ayurveda" className="hidden h-full w-full rounded-2xl object-cover md:block" />
+              )}
             </div>
           </section>
         )}
@@ -367,6 +442,57 @@ const HealthConditionDetail = () => {
             </div>
           </div>
         </section>
+
+        {/* How to Use */}
+        {(c.how_to_use?.recovery_text || c.how_to_use?.after_recovery_text || c.how_to_use?.image_url) && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">How to Use</h2>
+            <div className="mt-6 grid items-center gap-6 rounded-3xl border border-border bg-background p-6 md:grid-cols-2">
+              {c.how_to_use.image_url ? (
+                <img src={c.how_to_use.image_url} alt="How to use" className="h-64 w-full rounded-2xl object-cover" />
+              ) : (
+                <div className="grid h-64 place-items-center rounded-2xl bg-accent"><Leaf className="h-16 w-16 text-primary/40" /></div>
+              )}
+              <div className="space-y-4">
+                {c.how_to_use.recovery_text && (
+                  <div>
+                    <p className="text-sm font-bold text-secondary">{c.how_to_use.recovery_title ?? "For recovery of Disease"}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.how_to_use.recovery_text}</p>
+                  </div>
+                )}
+                {c.how_to_use.after_recovery_text && (
+                  <div>
+                    <p className="text-sm font-bold text-secondary">{c.how_to_use.after_recovery_title ?? "After recovery of Disease"}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.how_to_use.after_recovery_text}</p>
+                  </div>
+                )}
+                {c.how_to_use.note && (
+                  <p className="rounded-md bg-muted/50 p-3 text-xs italic text-muted-foreground">*Note: {c.how_to_use.note}</p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Videos */}
+        {c.videos.length > 0 && (
+          <section className="container mt-12">
+            <h2 className="text-center font-display text-3xl">Videos</h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {c.videos.map((v, i) => (
+                <a key={i} href={v.video_url ?? "#"} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-2xl border border-border bg-background">
+                  <div className="aspect-video bg-muted">
+                    {v.thumbnail_url && <img src={v.thumbnail_url} alt={v.title ?? "Video"} className="h-full w-full object-cover transition-transform group-hover:scale-105" />}
+                  </div>
+                  <div className="absolute inset-0 grid place-items-center">
+                    <PlayCircle className="h-14 w-14 text-primary-foreground drop-shadow-lg" />
+                  </div>
+                  {v.title && <div className="p-3 text-sm font-semibold">{v.title}</div>}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* FAQs */}
         {c.faqs.length > 0 && (

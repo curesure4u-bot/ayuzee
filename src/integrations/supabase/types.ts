@@ -1296,15 +1296,21 @@ export type Database = {
           approach_body: string | null
           approach_image_url: string | null
           approach_title: string | null
+          ayurveda_qna: Json
+          benefits: Json
+          consult_banner_text: string | null
           created_at: string
           discount_price: number | null
           doctor_feedback: Json
+          estimated_delivery_days: number
           faqs: Json
+          gallery_images: Json
           hero_image_url: string | null
           hero_subtitle: string | null
           hero_title: string | null
           highlights: Json
           how_it_works: Json
+          how_to_use: Json
           id: string
           ingredients: Json
           is_published: boolean
@@ -1319,20 +1325,27 @@ export type Database = {
           sort_order: number
           tagline: string | null
           updated_at: string
+          videos: Json
         }
         Insert: {
           approach_body?: string | null
           approach_image_url?: string | null
           approach_title?: string | null
+          ayurveda_qna?: Json
+          benefits?: Json
+          consult_banner_text?: string | null
           created_at?: string
           discount_price?: number | null
           doctor_feedback?: Json
+          estimated_delivery_days?: number
           faqs?: Json
+          gallery_images?: Json
           hero_image_url?: string | null
           hero_subtitle?: string | null
           hero_title?: string | null
           highlights?: Json
           how_it_works?: Json
+          how_to_use?: Json
           id?: string
           ingredients?: Json
           is_published?: boolean
@@ -1347,20 +1360,27 @@ export type Database = {
           sort_order?: number
           tagline?: string | null
           updated_at?: string
+          videos?: Json
         }
         Update: {
           approach_body?: string | null
           approach_image_url?: string | null
           approach_title?: string | null
+          ayurveda_qna?: Json
+          benefits?: Json
+          consult_banner_text?: string | null
           created_at?: string
           discount_price?: number | null
           doctor_feedback?: Json
+          estimated_delivery_days?: number
           faqs?: Json
+          gallery_images?: Json
           hero_image_url?: string | null
           hero_subtitle?: string | null
           hero_title?: string | null
           highlights?: Json
           how_it_works?: Json
+          how_to_use?: Json
           id?: string
           ingredients?: Json
           is_published?: boolean
@@ -1375,6 +1395,7 @@ export type Database = {
           sort_order?: number
           tagline?: string | null
           updated_at?: string
+          videos?: Json
         }
         Relationships: []
       }

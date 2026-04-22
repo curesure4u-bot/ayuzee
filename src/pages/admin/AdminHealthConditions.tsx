@@ -34,6 +34,13 @@ interface Condition {
   faqs: any;
   sort_order: number;
   is_published: boolean;
+  gallery_images: any;
+  benefits: any;
+  ayurveda_qna: any;
+  videos: any;
+  how_to_use: any;
+  estimated_delivery_days: number;
+  consult_banner_text: string | null;
 }
 
 const empty: Partial<Condition> = {
@@ -42,6 +49,8 @@ const empty: Partial<Condition> = {
   highlights: [], how_it_works: [], packages: [], doctor_feedback: [], patient_feedback: [],
   approach_title: "", approach_body: "", approach_image_url: "",
   plan_steps: [], ingredients: [], faqs: [], sort_order: 0, is_published: true,
+  gallery_images: [], benefits: [], ayurveda_qna: [], videos: [], how_to_use: {},
+  estimated_delivery_days: 5, consult_banner_text: "",
 };
 
 const JsonField = ({ label, value, onChange, hint }: { label: string; value: any; onChange: (v: any) => void; hint?: string }) => {
@@ -197,6 +206,26 @@ const AdminHealthConditions = () => {
 
               <JsonField label="FAQs" value={editing.faqs} onChange={(v) => setEditing({ ...editing, faqs: v })}
                 hint='[{"q":"…","a":"…"}]' />
+
+              <div className="rounded-lg border border-dashed border-border p-3">
+                <p className="mb-2 text-xs font-semibold text-muted-foreground">— Liver-care style extras —</p>
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div><Label>Estimated delivery (days)</Label><Input type="number" value={editing.estimated_delivery_days ?? 5} onChange={(e) => setEditing({ ...editing, estimated_delivery_days: Number(e.target.value) })} /></div>
+                  <div><Label>Consult banner text</Label><Input value={editing.consult_banner_text ?? ""} onChange={(e) => setEditing({ ...editing, consult_banner_text: e.target.value })} placeholder="Consult a Doctor" /></div>
+                </div>
+                <div className="mt-3 space-y-3">
+                  <JsonField label="Gallery images (string[])" value={editing.gallery_images} onChange={(v) => setEditing({ ...editing, gallery_images: v })}
+                    hint='["https://…/img1.jpg","https://…/img2.jpg"]' />
+                  <JsonField label="Benefits (3 cards)" value={editing.benefits} onChange={(v) => setEditing({ ...editing, benefits: v })}
+                    hint='[{"title":"Liver Health","subtitle":"…","image_url":"…"}]' />
+                  <JsonField label="Ayurveda Behind Product (Q&A)" value={editing.ayurveda_qna} onChange={(v) => setEditing({ ...editing, ayurveda_qna: v })}
+                    hint='[{"question":"What happens when…","answer":"…","highlight":false},{"question":"After consuming…","answer":"…","highlight":true}]' />
+                  <JsonField label="Videos" value={editing.videos} onChange={(v) => setEditing({ ...editing, videos: v })}
+                    hint='[{"title":"Patient story","thumbnail_url":"…","video_url":"…"}]' />
+                  <JsonField label="How to Use (object)" value={editing.how_to_use} onChange={(v) => setEditing({ ...editing, how_to_use: v })}
+                    hint='{"image_url":"…","recovery_title":"For recovery of Disease","recovery_text":"2 Tablets…","after_recovery_title":"After recovery of Disease","after_recovery_text":"1 tablet…","note":"Consume regularly for 3 months…"}' />
+                </div>
+              </div>
 
               <div className="flex justify-end gap-2 border-t border-border pt-4">
                 <Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
