@@ -53,9 +53,9 @@ const HealthConditionDetail = () => {
     if (!slug) return;
     supabase.from("health_conditions").select("*").eq("slug", slug).maybeSingle()
       .then(({ data }) => {
-        setC(data as Condition | null);
+        setC(data as unknown as Condition | null);
         setLoading(false);
-        if (data) document.title = `${(data as Condition).name} — Ayuzee`;
+        if (data) document.title = `${(data as { name: string }).name} — Ayuzee`;
       });
   }, [slug]);
 
