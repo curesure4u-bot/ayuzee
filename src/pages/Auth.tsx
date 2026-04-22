@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Leaf } from "lucide-react";
+import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -99,7 +100,19 @@ const Auth = () => {
                 <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
               </div>
               <div>
-                <Label htmlFor="password">Password</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  {mode === "login" && (
+                    <ForgotPasswordDialog
+                      defaultEmail={email}
+                      trigger={
+                        <button type="button" className="text-xs font-medium text-primary hover:underline">
+                          Forgot password?
+                        </button>
+                      }
+                    />
+                  )}
+                </div>
                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} autoComplete={mode === "login" ? "current-password" : "new-password"} />
               </div>
               <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
