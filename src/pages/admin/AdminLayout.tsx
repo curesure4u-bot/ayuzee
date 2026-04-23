@@ -20,13 +20,12 @@ const AdminLayout = () => {
         navigate("/admin/auth", { replace: true });
         return;
       }
-      const { data: roleRow } = await supabase
+      const { data: roleRows } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", data.session.user.id)
-        .in("role", ["admin", "super_admin"])
-        .maybeSingle();
-      if (!roleRow) {
+        .in("role", ["admin", "super_admin"]);
+      if (!roleRows || roleRows.length === 0) {
         toast.error("Admin access required");
         navigate("/", { replace: true });
         return;

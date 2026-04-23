@@ -19,13 +19,12 @@ const AdminAuth = () => {
     (async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        const { data: row } = await supabase
+        const { data: rows } = await supabase
           .from("user_roles")
           .select("role")
           .eq("user_id", data.session.user.id)
-          .in("role", ["admin", "super_admin"])
-          .maybeSingle();
-        if (row) navigate("/admin", { replace: true });
+          .in("role", ["admin", "super_admin"]);
+        if (rows && rows.length > 0) navigate("/admin", { replace: true });
       }
     })();
   }, [navigate]);
@@ -39,20 +38,20 @@ const AdminAuth = () => {
       setLoading(false);
       return;
     }
-    // Verify admin role
-    const { data: row } = await supabase
+    // Verify admin role (user can have multiple roles, e.g. both admin + super_admin)
+    const { data: rows } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", data.user!.id)
-      .in("role", ["admin", "super_admin"])
-      .maybeSingle();
+      .in("role", ["admin", "super_admin"]);
     setLoading(false);
-    if (!row) {
+    if (!rows || rows.length === 0) {
       await supabase.auth.signOut();
       toast.error("This account does not have admin access");
       return;
     }
-    toast.success(`Signed in as ${row.role === "super_admin" ? "Super Admin" : "Admin"}`);
+    const isSuper = rows.some((r) => r.role === "super_admin");
+    toast.success(`Signed in as ${isSuper ? "Super Admin" : "Admin"}`);
     navigate("/admin", { replace: true });
   };
 
