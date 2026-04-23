@@ -190,9 +190,36 @@ const TherapyPlans = () => {
                     {partners.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.partner_type.replace("_", " ")} · {p.city})</option>)}
                   </select>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><Label>Planned date</Label><Input type="date" value={form.planned_date} onChange={(e) => setForm({ ...form, planned_date: e.target.value })} /></div>
-                  <div><Label>Duration (days)</Label><Input type="number" value={form.duration_days} onChange={(e) => setForm({ ...form, duration_days: e.target.value })} /></div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div><Label>Sessions in plan</Label><Input type="number" min="1" value={numSessions} onChange={(e) => setNumSessions(e.target.value)} /></div>
+                  <div><Label>Minutes / session</Label><Input type="number" min="15" step="15" value={perSessionMinutes} onChange={(e) => setPerSessionMinutes(e.target.value)} /></div>
+                  <div><Label>Start date</Label><Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></div>
+                </div>
+                <div className="rounded-md border p-2">
+                  <Label className="text-xs">Medicines to dispatch</Label>
+                  <Input placeholder="Search products…" value={productSearch} onChange={(e) => setProductSearch(e.target.value)} className="mt-1 h-8" />
+                  {productResults.length > 0 && (
+                    <div className="mt-1 max-h-32 overflow-auto rounded border bg-background">
+                      {productResults.map((p) => (
+                        <button key={p.id} type="button" className="block w-full px-2 py-1 text-left text-xs hover:bg-accent"
+                          onClick={() => { setMedicines((m) => [...m, { product_id: p.id, name: p.name, price: p.price, quantity: 1 }]); setProductSearch(""); setProductResults([]); }}>
+                          {p.name} · {p.brand} · ₹{p.price}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {medicines.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {medicines.map((m, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs">
+                          <span className="flex-1 truncate">{m.name}</span>
+                          <Input type="number" min="1" value={m.quantity} className="h-6 w-14"
+                            onChange={(e) => setMedicines((arr) => arr.map((x, j) => j === i ? { ...x, quantity: Number(e.target.value || 1) } : x))} />
+                          <button type="button" className="text-destructive" onClick={() => setMedicines((arr) => arr.filter((_, j) => j !== i))}>×</button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div><Label>Notes</Label><Input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
               </div>
