@@ -10,12 +10,7 @@ import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Loader2, MapPin, Star, Clock, Check, ShoppingBag, CreditCard, User, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
-import SiteNav from "@/components/site/SiteNav";
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  interface Window { Razorpay?: any }
-}
+import { SiteNav } from "@/components/site/SiteNav";
 
 const loadRazorpay = () =>
   new Promise<boolean>((resolve) => {
