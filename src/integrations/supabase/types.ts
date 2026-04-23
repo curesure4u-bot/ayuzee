@@ -2121,38 +2121,56 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          city: string | null
           created_at: string
           date_of_birth: string | null
+          email: string | null
           full_name: string | null
           gender: string | null
           id: string
           phone: string | null
+          pincode: string | null
+          preferred_languages: string[]
           referral_code: string | null
           referred_by: string | null
+          state: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          avatar_url?: string | null
+          city?: string | null
           created_at?: string
           date_of_birth?: string | null
+          email?: string | null
           full_name?: string | null
           gender?: string | null
           id?: string
           phone?: string | null
+          pincode?: string | null
+          preferred_languages?: string[]
           referral_code?: string | null
           referred_by?: string | null
+          state?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          avatar_url?: string | null
+          city?: string | null
           created_at?: string
           date_of_birth?: string | null
+          email?: string | null
           full_name?: string | null
           gender?: string | null
           id?: string
           phone?: string | null
+          pincode?: string | null
+          preferred_languages?: string[]
           referral_code?: string | null
           referred_by?: string | null
+          state?: string | null
           updated_at?: string
           user_id?: string
         }
