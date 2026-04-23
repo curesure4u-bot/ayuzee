@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { ShieldCheck, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 
 const AdminAuth = () => {
   const navigate = useNavigate();
@@ -87,7 +88,17 @@ const AdminAuth = () => {
               />
             </div>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <ForgotPasswordDialog
+                  defaultEmail={email}
+                  trigger={
+                    <button type="button" className="text-xs font-medium text-primary hover:underline">
+                      Forgot password?
+                    </button>
+                  }
+                />
+              </div>
               <Input
                 id="password"
                 type="password"
