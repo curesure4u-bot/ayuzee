@@ -104,6 +104,14 @@ import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
 import TherapistDetail from "./pages/therapists/TherapistDetail.tsx";
+import TherapistAuth from "./pages/therapist/TherapistAuth.tsx";
+import TherapistLayout from "./pages/therapist/TherapistLayout.tsx";
+import TherapistDashboard from "./pages/therapist/TherapistDashboard.tsx";
+import TherapistSessions from "./pages/therapist/TherapistSessions.tsx";
+import TherapistEarnings from "./pages/therapist/TherapistEarnings.tsx";
+import TherapistProfile from "./pages/therapist/TherapistProfile.tsx";
+import TherapistAvailability from "./pages/therapist/TherapistAvailability.tsx";
+import TherapistSupport from "./pages/therapist/TherapistSupport.tsx";
 
 const queryClient = new QueryClient();
 
@@ -151,6 +159,15 @@ const App = () => (
             <Route path="/therapies" element={<Therapies />} />
             <Route path="/therapists" element={<Therapists />} />
             <Route path="/therapists/:id" element={<TherapistDetail />} />
+            <Route path="/therapist/auth" element={<TherapistAuth />} />
+            <Route path="/therapist" element={<TherapistLayout />}>
+              <Route index element={<TherapistDashboard />} />
+              <Route path="sessions" element={<TherapistSessions />} />
+              <Route path="availability" element={<TherapistAvailability />} />
+              <Route path="earnings" element={<TherapistEarnings />} />
+              <Route path="profile" element={<TherapistProfile />} />
+              <Route path="support" element={<TherapistSupport />} />
+            </Route>
             <Route path="/therapy-plans/:planId/book" element={<BookTherapySession />} />
             <Route path="/admin/auth" element={<AdminAuth />} />
             <Route path="/admin" element={<AdminLayout />}>
