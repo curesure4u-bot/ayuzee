@@ -194,6 +194,38 @@ const VenueRevenue = () => {
           )}
         </CardContent>
       </Card>
+
+      {payouts.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle>Recent payout requests</CardTitle></CardHeader>
+          <CardContent className="space-y-2">
+            {payouts.map(p => (
+              <div key={p.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <div className="font-medium">₹{Number(p.amount).toLocaleString("en-IN")}</div>
+                  <div className="text-xs text-muted-foreground">{new Date(p.created_at).toLocaleDateString("en-IN")}</div>
+                </div>
+                <Badge variant={p.status === "paid" ? "default" : p.status === "rejected" ? "destructive" : "secondary"}>{p.status}</Badge>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      <Dialog open={payoutOpen} onOpenChange={setPayoutOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Request payout</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">Available: <span className="font-semibold text-foreground">₹{availableBalance.toLocaleString("en-IN")}</span></p>
+            <div><Label htmlFor="amt">Amount (₹)</Label><Input id="amt" type="number" min={1} max={availableBalance} value={payoutAmount} onChange={(e) => setPayoutAmount(e.target.value)} /></div>
+            <div><Label htmlFor="notes">Notes (optional)</Label><Textarea id="notes" rows={3} value={payoutNotes} onChange={(e) => setPayoutNotes(e.target.value)} /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPayoutOpen(false)}>Cancel</Button>
+            <Button onClick={submitPayout} disabled={submitting}>{submitting ? "Submitting…" : "Submit request"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
