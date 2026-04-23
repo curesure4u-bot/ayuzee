@@ -2441,6 +2441,39 @@ export type Database = {
         }
         Relationships: []
       }
+      therapist_availability: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          is_active: boolean
+          start_time: string
+          therapist_id: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          start_time?: string
+          therapist_id: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          start_time?: string
+          therapist_id?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: []
+      }
       therapist_location_pings: {
         Row: {
           id: string
@@ -2755,6 +2788,7 @@ export type Database = {
           created_at: string
           doctor_referral_fee: number | null
           doctor_user_id: string | null
+          duration_minutes: number
           id: string
           medicines_order_id: string | null
           medicines_prescribed: Json | null
@@ -2765,10 +2799,12 @@ export type Database = {
           patient_user_id: string | null
           payment_status: string | null
           platform_fee: number | null
+          prescribed_medicines: Json
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
           scheduled_date: string
           scheduled_duration_minutes: number
+          scheduled_end: string | null
           scheduled_start: string
           session_number: number | null
           status: string | null
@@ -2798,6 +2834,7 @@ export type Database = {
           created_at?: string
           doctor_referral_fee?: number | null
           doctor_user_id?: string | null
+          duration_minutes?: number
           id?: string
           medicines_order_id?: string | null
           medicines_prescribed?: Json | null
@@ -2808,10 +2845,12 @@ export type Database = {
           patient_user_id?: string | null
           payment_status?: string | null
           platform_fee?: number | null
+          prescribed_medicines?: Json
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
           scheduled_date: string
           scheduled_duration_minutes: number
+          scheduled_end?: string | null
           scheduled_start: string
           session_number?: number | null
           status?: string | null
@@ -2841,6 +2880,7 @@ export type Database = {
           created_at?: string
           doctor_referral_fee?: number | null
           doctor_user_id?: string | null
+          duration_minutes?: number
           id?: string
           medicines_order_id?: string | null
           medicines_prescribed?: Json | null
@@ -2851,10 +2891,12 @@ export type Database = {
           patient_user_id?: string | null
           payment_status?: string | null
           platform_fee?: number | null
+          prescribed_medicines?: Json
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
           scheduled_date?: string
           scheduled_duration_minutes?: number
+          scheduled_end?: string | null
           scheduled_start?: string
           session_number?: number | null
           status?: string | null
@@ -2915,15 +2957,19 @@ export type Database = {
           created_at: string
           email: string | null
           gstin: string | null
+          hourly_rate: number
           id: string
           is_active: boolean | null
           is_verified: boolean | null
           lat: number | null
+          latitude: number | null
           lng: number | null
+          longitude: number | null
           name: string
           owner_user_id: string | null
           phone: string | null
           photo_urls: string[] | null
+          photos: Json
           pincode: string
           rating: number | null
           registration_doc_url: string | null
@@ -2940,15 +2986,19 @@ export type Database = {
           created_at?: string
           email?: string | null
           gstin?: string | null
+          hourly_rate?: number
           id?: string
           is_active?: boolean | null
           is_verified?: boolean | null
           lat?: number | null
+          latitude?: number | null
           lng?: number | null
+          longitude?: number | null
           name: string
           owner_user_id?: string | null
           phone?: string | null
           photo_urls?: string[] | null
+          photos?: Json
           pincode: string
           rating?: number | null
           registration_doc_url?: string | null
@@ -2965,15 +3015,19 @@ export type Database = {
           created_at?: string
           email?: string | null
           gstin?: string | null
+          hourly_rate?: number
           id?: string
           is_active?: boolean | null
           is_verified?: boolean | null
           lat?: number | null
+          latitude?: number | null
           lng?: number | null
+          longitude?: number | null
           name?: string
           owner_user_id?: string | null
           phone?: string | null
           photo_urls?: string[] | null
+          photos?: Json
           pincode?: string
           rating?: number | null
           registration_doc_url?: string | null
