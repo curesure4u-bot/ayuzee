@@ -101,6 +101,7 @@ import AdminTreatmentSystems from "./pages/admin/AdminTreatmentSystems.tsx";
 import AdminAuth from "./pages/admin/AdminAuth.tsx";
 import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
+import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 
 const queryClient = new QueryClient();
 
