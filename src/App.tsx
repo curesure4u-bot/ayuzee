@@ -100,6 +100,10 @@ import AdminConditionLeads from "./pages/admin/AdminConditionLeads.tsx";
 import AdminTreatmentSystems from "./pages/admin/AdminTreatmentSystems.tsx";
 import AdminAuth from "./pages/admin/AdminAuth.tsx";
 import AdminManagement from "./pages/admin/AdminManagement.tsx";
+import AdminTherapists from "./pages/admin/AdminTherapists.tsx";
+import AdminVenues from "./pages/admin/AdminVenues.tsx";
+import AdminTherapySessions from "./pages/admin/AdminTherapySessions.tsx";
+import AdminRevenueSplit from "./pages/admin/AdminRevenueSplit.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
@@ -205,6 +209,10 @@ const App = () => (
               <Route path="health-conditions" element={<AdminHealthConditions />} />
               <Route path="treatment-systems" element={<AdminTreatmentSystems />} />
               <Route path="condition-leads" element={<AdminConditionLeads />} />
+              <Route path="therapists" element={<AdminTherapists />} />
+              <Route path="venues" element={<AdminVenues />} />
+              <Route path="therapy-sessions" element={<AdminTherapySessions />} />
+              <Route path="revenue-split" element={<AdminRevenueSplit />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
