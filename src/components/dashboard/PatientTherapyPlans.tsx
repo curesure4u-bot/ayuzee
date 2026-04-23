@@ -77,8 +77,8 @@ export const PatientTherapyPlans = ({ userId }: { userId: string }) => {
                           <IndianRupee className="h-5 w-5" />{p.estimated_price.toLocaleString("en-IN")}
                         </p>
                       )}
-                      <Button variant="hero" className="mt-2" disabled={busy === p.id} onClick={() => confirm(p.id)}>
-                        {busy === p.id ? "Confirming…" : "Confirm & Pay"}
+                      <Button variant="hero" className="mt-2" onClick={() => navigate(`/therapy-plans/${p.id}/book`)}>
+                        Book session
                       </Button>
                     </>
                   ) : (
