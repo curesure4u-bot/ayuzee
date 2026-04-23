@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Leaf, ShoppingCart, Menu, X, ChevronDown, UserCircle, Stethoscope, HeartPulse, Building2, Handshake } from "lucide-react";
+import { Leaf, ShoppingCart, Menu, X, ChevronDown, UserCircle, Stethoscope, HeartPulse, Building2, Handshake, CalendarCheck, Search, MapPin, Newspaper, Pill, Sparkles, Activity, GraduationCap, BookOpen, Briefcase, Tag, ChevronRight } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
@@ -18,17 +18,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
 
 const primaryLinks = [
-  { to: "/login", label: "Book Appointment" },
-  { to: "/doctors", label: "Find Doctors" },
-  { to: "/clinics", label: "Find Clinics" },
-  { to: "/feed", label: "Feed" },
+  { to: "/login", label: "Book Appointment", icon: CalendarCheck },
+  { to: "/doctors", label: "Find Doctors", icon: Search },
+  { to: "/clinics", label: "Find Clinics", icon: MapPin },
+  { to: "/feed", label: "Feed", icon: Newspaper },
 ];
 
 const tailLinks = [
-  { to: "/therapies", label: "Therapies" },
-  { to: "/learning/courses", label: "Learning" },
-  { to: "/learning/blogs", label: "Blogs" },
-  { to: "/partner", label: "Job Portal" },
+  { to: "/therapies", label: "Therapies", icon: Activity },
+  { to: "/learning/courses", label: "Learning", icon: GraduationCap },
+  { to: "/learning/blogs", label: "Blogs", icon: BookOpen },
+  { to: "/partner", label: "Job Portal", icon: Briefcase },
+];
+
+const mobileExtraLinks = [
+  { to: "/shop", label: "Buy Medicine", icon: Pill },
+  { to: "/treatments/ayurveda", label: "Treatments", icon: Sparkles },
+  { to: "/offers", label: "Offers", icon: Tag },
 ];
 
 const signInRoles = [
@@ -158,33 +164,57 @@ export const SiteNav = () => {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="border-t border-border bg-background lg:hidden">
-          <nav className="container flex flex-col py-3">
-            {[...primaryLinks, ...tailLinks, { to: "/shop", label: "Buy Medicine" }, { to: "/offers", label: "Offers" }].map((l) => (
+          <nav className="container flex flex-col gap-1 py-4">
+            <p className="px-1 pb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Browse
+            </p>
+            {[...primaryLinks, ...tailLinks, ...mobileExtraLinks].map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `border-b border-border/40 py-3 text-sm font-medium ${
-                    isActive ? "text-primary" : "text-foreground"
+                  `flex items-center gap-3 rounded-xl border border-border/60 bg-card px-3 py-3 text-sm font-medium transition-smooth hover:border-primary/40 hover:bg-primary/5 ${
+                    isActive ? "border-primary/50 bg-primary/10 text-primary" : "text-foreground"
                   }`
                 }
               >
-                {l.label}
+                {({ isActive }) => (
+                  <>
+                    <span
+                      className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${
+                        isActive ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
+                      }`}
+                    >
+                      <l.icon className="h-4 w-4" />
+                    </span>
+                    <span className="flex-1">{l.label}</span>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </>
+                )}
               </NavLink>
             ))}
+
             {!authed && (
-              <div className="mt-3 space-y-2">
-                <p className="text-xs font-semibold uppercase text-muted-foreground">Sign in as</p>
+              <div className="mt-4 space-y-2">
+                <p className="px-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Sign in as
+                </p>
                 {signInRoles.map((r) => (
                   <Link
                     key={r.to}
                     to={r.to}
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 rounded-lg border border-border p-3"
+                    className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-smooth hover:border-primary/40 hover:bg-primary/5"
                   >
-                    <r.icon className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">{r.label}</span>
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                      <r.icon className="h-4 w-4" />
+                    </span>
+                    <div className="flex flex-1 flex-col">
+                      <span className="text-sm font-semibold">{r.label}</span>
+                      <span className="text-xs text-muted-foreground">{r.desc}</span>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   </Link>
                 ))}
               </div>
