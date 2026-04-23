@@ -78,22 +78,9 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/60 backdrop-blur">
-        <div className="container flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf">
-              <Leaf className="h-5 w-5 text-primary-foreground" />
-            </span>
-            <span className="font-display text-xl font-semibold">Ayuzee</span>
-          </Link>
-          <Button variant="ghost" onClick={handleSignOut}>
-            <LogOut className="mr-2 h-4 w-4" /> Sign out
-          </Button>
-        </div>
-      </header>
+    <div>
+      <main>
 
-      <main className="container py-12">
         <div className="mb-10">
           <span className="text-xs font-semibold uppercase tracking-wider text-primary">Your Dashboard</span>
           <h1 className="mt-2 font-display text-4xl">Namaste, {loading ? "…" : firstName} 🙏</h1>
