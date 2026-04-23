@@ -118,8 +118,8 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/provider/auth" element={<ProviderAuth />} />
             <Route path="/provider" element={<ProviderHome />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard" element={<PatientLayout />}>
+              <Route index element={<Dashboard />} />
               <Route path="profile" element={<PatientProfile />} />
               <Route path="appointments" element={<PatientAppointmentsList />} />
               <Route path="saved-medicines" element={<PatientPlaceholder title="Saved Medicines" description="Your bookmarked medicines will appear here." />} />
