@@ -64,7 +64,10 @@ const TherapyPlans = () => {
     if (!userId) return;
     if (!form.patient_name.trim()) return toast.error("Patient required");
     if (!form.therapy_name.trim()) return toast.error("Therapy required");
-    const { error } = await supabase.from("therapy_plans").insert({
+    const N = Math.max(1, Number(numSessions || 1));
+    const dur = Math.max(15, Number(perSessionMinutes || 60));
+
+    const { data: plan, error } = await supabase.from("therapy_plans").insert({
       doctor_user_id: userId,
       patient_name: form.patient_name.trim(),
       patient_phone: form.patient_phone || null,
@@ -73,14 +76,50 @@ const TherapyPlans = () => {
       therapy_name: form.therapy_name.trim(),
       therapy_code: form.therapy_code || null,
       estimated_price: form.unit_price ? Number(form.unit_price) : null,
-      planned_date: form.planned_date || null,
-      duration_days: Number(form.duration_days || 1),
+      planned_date: startDate || form.planned_date || null,
+      duration_days: N,
       notes: form.notes || null,
+    }).select("id").single();
+    if (error || !plan) return toast.error(error?.message || "Could not create plan");
+
+    // Create one therapy_sessions row per planned session
+    const baseDate = startDate ? new Date(startDate) : new Date();
+    const rows = Array.from({ length: N }, (_, i) => {
+      const d = new Date(baseDate);
+      d.setDate(d.getDate() + i);
+      return {
+        therapy_plan_id: plan.id,
+        doctor_user_id: userId,
+        therapy_code: form.therapy_code || null,
+        therapy_name: form.therapy_name.trim(),
+        session_number: i + 1,
+        total_sessions_in_plan: N,
+        patient_user_id: form.patient_user_id.trim() || null,
+        patient_name: form.patient_name.trim(),
+        patient_phone: form.patient_phone || null,
+        scheduled_date: d.toISOString().slice(0, 10),
+        duration_minutes: dur,
+        status: "scheduled",
+        medicines_prescribed: medicines,
+      };
     });
-    if (error) return toast.error(error.message);
-    toast.success(form.patient_user_id ? "Plan sent to patient dashboard for confirmation" : "Therapy plan created");
+    const { error: sErr } = await supabase.from("therapy_sessions").insert(rows);
+    if (sErr) toast.error(`Plan saved, but sessions failed: ${sErr.message}`);
+
+    // Notify patient via WhatsApp (stub)
+    if (form.patient_phone) {
+      supabase.functions.invoke("send-whatsapp", {
+        body: {
+          to: form.patient_phone,
+          message: `Dr. has prescribed ${form.therapy_name} for ${N} sessions. Tap to choose your therapist and venue.`,
+        },
+      }).catch(() => {});
+    }
+
+    toast.success(`Plan created with ${N} session(s)`);
     setOpen(false);
     setForm({ patient_name: "", patient_phone: "", patient_user_id: "", partner_id: "", therapy_code: "", therapy_name: "", unit_price: "", planned_date: "", duration_days: "1", notes: "" });
+    setNumSessions("1"); setPerSessionMinutes("60"); setStartDate(""); setMedicines([]); setProductSearch("");
     load();
   };
 
