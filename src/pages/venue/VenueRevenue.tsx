@@ -22,6 +22,7 @@ interface SessionRow {
   total_amount: number | null;
   venue_earnings: number | null;
   platform_fee: number | null;
+  payment_status?: string;
 }
 
 const startOfWeek = (d: Date) => {
