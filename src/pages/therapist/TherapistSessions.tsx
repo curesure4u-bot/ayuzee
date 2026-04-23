@@ -74,8 +74,9 @@ const TherapistSessions = () => {
     );
   });
 
-  const updateStatus = async (id: string, patch: Record<string, any>) => {
-    const { error } = await supabase.from("therapy_sessions").update(patch).eq("id", id);
+  const updateStatus = async (id: string, patch: Record<string, unknown>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from("therapy_sessions") as any).update(patch).eq("id", id);
     if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
     load();
   };
@@ -124,7 +125,7 @@ const TherapistSessions = () => {
           {TABS.map(t => <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>)}
         </TabsList>
         {TABS.map(tab => {
-          const list = sessions.filter(s => tab.statuses.includes(s.status));
+          const list = sessions.filter(s => (tab.statuses as readonly string[]).includes(s.status));
           return (
             <TabsContent key={tab.key} value={tab.key} className="space-y-3 mt-4">
               {loading ? (
