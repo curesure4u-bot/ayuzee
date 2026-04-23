@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
 import { PartnershipMenu } from "@/components/site/PartnershipMenu";
 import { MedicineMenu } from "@/components/site/MedicineMenu";
+import { TreatmentsMenu } from "@/components/site/TreatmentsMenu";
 
 const links = [
   { to: "/doctors", label: "Find Doctors" },
@@ -31,6 +32,7 @@ export const SiteNav = () => {
           <BulkPurchaseMenu />
           <PartnershipMenu />
           <MedicineMenu />
+          <TreatmentsMenu />
           {links.map((l) => (
             <NavLink
               key={l.to}

@@ -97,6 +97,8 @@ import HealthConditions from "./pages/health/HealthConditions.tsx";
 import HealthConditionDetail from "./pages/health/HealthConditionDetail.tsx";
 import AdminHealthConditions from "./pages/admin/AdminHealthConditions.tsx";
 import AdminConditionLeads from "./pages/admin/AdminConditionLeads.tsx";
+import AdminTreatmentSystems from "./pages/admin/AdminTreatmentSystems.tsx";
+import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 
 const queryClient = new QueryClient();
 
@@ -135,6 +137,7 @@ const App = () => (
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
+            <Route path="/treatments/:slug" element={<TreatmentSystem />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/partner" element={<Partner />} />
@@ -156,6 +159,7 @@ const App = () => (
               <Route path="therapies" element={<AdminTherapies />} />
               <Route path="learning" element={<AdminLearning />} />
               <Route path="health-conditions" element={<AdminHealthConditions />} />
+              <Route path="treatment-systems" element={<AdminTreatmentSystems />} />
               <Route path="condition-leads" element={<AdminConditionLeads />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
