@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Leaf, ShoppingCart, Menu, X, ChevronDown, UserCircle, Stethoscope, HeartPulse, Building2, Handshake } from "lucide-react";
+import { Leaf, ShoppingCart, Menu, X, ChevronDown, UserCircle, Stethoscope, HeartPulse, Building2, Handshake, CalendarCheck, Search, MapPin, Newspaper, Pill, Sparkles, Activity, GraduationCap, BookOpen, Briefcase, Tag, ChevronRight } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
