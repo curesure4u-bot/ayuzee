@@ -41,6 +41,8 @@ interface Condition {
   how_to_use: any;
   estimated_delivery_days: number;
   consult_banner_text: string | null;
+  content_sections: any;
+  related_medicines: any;
 }
 
 const empty: Partial<Condition> = {
@@ -51,6 +53,13 @@ const empty: Partial<Condition> = {
   plan_steps: [], ingredients: [], faqs: [], sort_order: 0, is_published: true,
   gallery_images: [], benefits: [], ayurveda_qna: [], videos: [], how_to_use: {},
   estimated_delivery_days: 5, consult_banner_text: "",
+  content_sections: [
+    { key: "overview", title: "Overview", body_markdown: "" },
+    { key: "causes", title: "Causes", body_markdown: "" },
+    { key: "symptoms", title: "Symptoms", body_markdown: "" },
+    { key: "remedies", title: "Remedies", body_markdown: "" },
+  ],
+  related_medicines: [],
 };
 
 const JsonField = ({ label, value, onChange, hint }: { label: string; value: any; onChange: (v: any) => void; hint?: string }) => {
@@ -206,6 +215,19 @@ const AdminHealthConditions = () => {
 
               <JsonField label="FAQs" value={editing.faqs} onChange={(v) => setEditing({ ...editing, faqs: v })}
                 hint='[{"q":"…","a":"…"}]' />
+
+              <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-3">
+                <p className="mb-2 text-xs font-bold text-primary">— Long-form disease sections (sticky tabs) —</p>
+                <p className="mb-3 text-xs text-muted-foreground">
+                  Each entry becomes a tab on the page. Use Markdown for the body: <code>## Heading</code>, <code>**bold**</code>, <code>- bullet</code>.
+                </p>
+                <JsonField label="Content sections" value={editing.content_sections} onChange={(v) => setEditing({ ...editing, content_sections: v })}
+                  hint={'[{"key":"overview","title":"Overview","body_markdown":"Rhinitis is...\\n\\n## Key points\\n- Point 1\\n- Point 2"},{"key":"causes","title":"Causes","body_markdown":"### Allergic Reactions\\n- Pollen\\n- Dust"}]'} />
+                <div className="mt-3">
+                  <JsonField label="Related medicines (sidebar/list)" value={editing.related_medicines} onChange={(v) => setEditing({ ...editing, related_medicines: v })}
+                    hint='[{"name":"Vrida Isabgol","image_url":"…","price":189,"url":"/shop/isabgol"}]' />
+                </div>
+              </div>
 
               <div className="rounded-lg border border-dashed border-border p-3">
                 <p className="mb-2 text-xs font-semibold text-muted-foreground">— Liver-care style extras —</p>

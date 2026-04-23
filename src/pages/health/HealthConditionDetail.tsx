@@ -6,6 +6,7 @@ import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { RequestCallDialog } from "@/components/health/RequestCallDialog";
+import { ContentSections, type ContentSection } from "@/components/health/ContentSections";
 import { toast } from "sonner";
 import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight, PlayCircle, Truck as TruckIcon, Leaf } from "lucide-react";
 
@@ -57,6 +58,8 @@ interface Condition {
   how_to_use: HowToUse;
   estimated_delivery_days: number;
   consult_banner_text: string | null;
+  content_sections: ContentSection[];
+  related_medicines: { name: string; image_url?: string; price?: number; url?: string }[];
 }
 
 interface RelatedCondition { slug: string; name: string; tagline: string | null; product_name: string | null; product_image_url: string | null; hero_image_url: string | null; price: number; discount_price: number | null }
@@ -214,7 +217,8 @@ const HealthConditionDetail = () => {
           </button>
         </section>
 
-        {/* Packages */}
+        {/* Long-form sections (Overview / Causes / Symptoms / Remedies …) */}
+        <ContentSections sections={c.content_sections ?? []} />
         {c.packages.length > 0 && (
           <section className="container mt-10">
             <h2 className="font-display text-2xl">Choose Your Pack</h2>
