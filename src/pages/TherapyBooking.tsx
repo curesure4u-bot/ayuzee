@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import SiteNav from "@/components/site/SiteNav";
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   interface Window { Razorpay?: any }
 }
 
