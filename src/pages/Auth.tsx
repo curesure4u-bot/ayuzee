@@ -114,7 +114,7 @@ const Auth = () => {
         </div>
 
         {/* Right: Form */}
-        <div className="flex flex-col items-center justify-center gradient-soft p-6 sm:p-10">
+        <div className="flex flex-col items-center justify-center bg-muted/40 p-6 sm:p-10">
           <div className="w-full max-w-md">
             <Link to="/" className="mb-6 inline-flex items-center gap-2 lg:hidden">
               <span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf">
@@ -123,134 +123,140 @@ const Auth = () => {
               <span className="font-display text-xl font-semibold">Ayuzee</span>
             </Link>
 
-            {/* Mode toggle pill */}
-            <div className="mb-6 inline-flex rounded-full border border-border bg-card p-1 shadow-soft">
-              <button
-                type="button"
-                onClick={() => setMode("login")}
-                className={`rounded-full px-5 py-1.5 text-sm font-semibold transition ${
-                  mode === "login" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Sign in
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("signup")}
-                className={`rounded-full px-5 py-1.5 text-sm font-semibold transition ${
-                  mode === "signup" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Create account
-              </button>
+            <div className="rounded-3xl border border-border/60 bg-card p-8 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:p-10">
+              <span className="mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-emerald-100/70 text-emerald-700">
+                <HeartPulse className="h-7 w-7" strokeWidth={1.75} />
+              </span>
+
+              {/* Mode toggle pill */}
+              <div className="mb-6 inline-flex rounded-full border border-border bg-muted/50 p-1">
+                <button
+                  type="button"
+                  onClick={() => setMode("login")}
+                  className={`rounded-full px-5 py-1.5 text-sm font-semibold transition ${
+                    mode === "login" ? "bg-card text-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Sign in
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("signup")}
+                  className={`rounded-full px-5 py-1.5 text-sm font-semibold transition ${
+                    mode === "signup" ? "bg-card text-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Create account
+                </button>
+              </div>
+
+              <h1 className="font-display text-3xl font-semibold leading-snug tracking-tight">
+                {mode === "login" ? "Welcome back to Ayuzee" : "Begin your healing journey"}
+              </h1>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {mode === "login"
+                  ? "Sign in to access consultations, orders and your wellness plan."
+                  : "Create your patient account in less than a minute."}
+              </p>
+
+              {refCode && mode === "signup" && (
+                <p className="mt-4 rounded-lg bg-primary/10 px-3 py-2 text-xs text-primary">
+                  🎁 You were invited! Code <span className="font-mono font-semibold">{refCode}</span> applied.
+                </p>
+              )}
+
+              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                {mode === "signup" && (
+                  <>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="fullName">Full name</Label>
+                      <Input
+                        id="fullName"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Your name"
+                        required
+                        autoComplete="name"
+                        className="h-11"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="10-digit mobile"
+                        autoComplete="tel"
+                        className="h-11"
+                      />
+                    </div>
+                  </>
+                )}
+                <div className="space-y-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    required
+                    autoComplete="email"
+                    className="h-11"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Password</Label>
+                    {mode === "login" && (
+                      <ForgotPasswordDialog
+                        defaultEmail={email}
+                        trigger={
+                          <button type="button" className="text-xs font-medium text-primary hover:underline">
+                            Forgot password?
+                          </button>
+                        }
+                      />
+                    )}
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={mode === "signup" ? "At least 6 characters" : "Your password"}
+                    required
+                    minLength={6}
+                    autoComplete={mode === "login" ? "current-password" : "new-password"}
+                    className="h-11"
+                  />
+                </div>
+                <Button type="submit" variant="hero" size="lg" className="h-12 w-full text-base" disabled={loading}>
+                  {loading ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}
+                </Button>
+              </form>
+
+              <p className="mt-6 text-center text-xs text-muted-foreground">
+                By continuing you agree to Ayuzee's{" "}
+                <Link to="/" className="text-primary hover:underline">Terms</Link> &{" "}
+                <Link to="/" className="text-primary hover:underline">Privacy Policy</Link>.
+              </p>
+
+              <p className="mt-4 text-center text-sm text-muted-foreground">
+                {mode === "login" ? "New to Ayuzee?" : "Already have an account?"}{" "}
+                <button
+                  type="button"
+                  onClick={() => setMode(mode === "login" ? "signup" : "login")}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  {mode === "login" ? "Create an account" : "Sign in instead"}
+                </button>
+              </p>
             </div>
 
-            <h1 className="font-display text-3xl font-semibold tracking-tight">
-              {mode === "login" ? "Welcome back to Ayuzee" : "Begin your healing journey"}
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {mode === "login"
-                ? "Sign in to access consultations, orders and your wellness plan."
-                : "Create your patient account in less than a minute."}
-            </p>
-
-            {refCode && mode === "signup" && (
-              <p className="mt-4 rounded-lg bg-primary/10 px-3 py-2 text-xs text-primary">
-                🎁 You were invited! Code <span className="font-mono font-semibold">{refCode}</span> applied.
-              </p>
-            )}
-
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-              {mode === "signup" && (
-                <>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="fullName">Full name</Label>
-                    <Input
-                      id="fullName"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Your name"
-                      required
-                      autoComplete="name"
-                      className="h-11"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="10-digit mobile"
-                      autoComplete="tel"
-                      className="h-11"
-                    />
-                  </div>
-                </>
-              )}
-              <div className="space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  autoComplete="email"
-                  className="h-11"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  {mode === "login" && (
-                    <ForgotPasswordDialog
-                      defaultEmail={email}
-                      trigger={
-                        <button type="button" className="text-xs font-medium text-primary hover:underline">
-                          Forgot password?
-                        </button>
-                      }
-                    />
-                  )}
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={mode === "signup" ? "At least 6 characters" : "Your password"}
-                  required
-                  minLength={6}
-                  autoComplete={mode === "login" ? "current-password" : "new-password"}
-                  className="h-11"
-                />
-              </div>
-              <Button type="submit" variant="hero" size="lg" className="h-12 w-full text-base" disabled={loading}>
-                {loading ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}
-              </Button>
-            </form>
-
-            <p className="mt-6 text-center text-xs text-muted-foreground">
-              By continuing you agree to Ayuzee's{" "}
-              <Link to="/" className="text-primary hover:underline">Terms</Link> &{" "}
-              <Link to="/" className="text-primary hover:underline">Privacy Policy</Link>.
-            </p>
-
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              {mode === "login" ? "New to Ayuzee?" : "Already have an account?"}{" "}
-              <button
-                type="button"
-                onClick={() => setMode(mode === "login" ? "signup" : "login")}
-                className="font-semibold text-primary hover:underline"
-              >
-                {mode === "login" ? "Create an account" : "Sign in instead"}
-              </button>
-            </p>
-
-            <div className="mt-6 rounded-xl border border-dashed border-border bg-card/60 p-3 text-center text-xs text-muted-foreground">
+            <div className="mt-5 rounded-2xl border border-dashed border-border bg-card/60 p-3 text-center text-xs text-muted-foreground">
               Are you a Doctor, Therapist or Hospital?{" "}
               <Link to="/login" className="font-semibold text-primary hover:underline">
                 Choose your role
@@ -259,6 +265,7 @@ const Auth = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
