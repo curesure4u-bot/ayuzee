@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     }
 
     const { order_id, kind } = await req.json();
-    if (!order_id || !["order", "appointment", "therapy"].includes(kind)) {
+    if (!order_id || !["order", "appointment", "therapy", "therapy_session"].includes(kind)) {
       return new Response(JSON.stringify({ error: "order_id and valid kind required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
