@@ -102,6 +102,7 @@ import AdminAuth from "./pages/admin/AdminAuth.tsx";
 import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
+import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
 import TherapistDetail from "./pages/therapists/TherapistDetail.tsx";
 import TherapistAuth from "./pages/therapist/TherapistAuth.tsx";
