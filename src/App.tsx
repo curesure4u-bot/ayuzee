@@ -98,6 +98,8 @@ import HealthConditionDetail from "./pages/health/HealthConditionDetail.tsx";
 import AdminHealthConditions from "./pages/admin/AdminHealthConditions.tsx";
 import AdminConditionLeads from "./pages/admin/AdminConditionLeads.tsx";
 import AdminTreatmentSystems from "./pages/admin/AdminTreatmentSystems.tsx";
+import AdminAuth from "./pages/admin/AdminAuth.tsx";
+import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 
 const queryClient = new QueryClient();
@@ -144,8 +146,10 @@ const App = () => (
             <Route path="/partner/apply" element={<PartnerApply />} />
             <Route path="/bulk" element={<Bulk />} />
             <Route path="/therapies" element={<Therapies />} />
+            <Route path="/admin/auth" element={<AdminAuth />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+              <Route path="admins" element={<AdminManagement />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="doctors" element={<AdminDoctors />} />
               <Route path="appointments" element={<AdminPlaceholder title="Appointments" description="Manage all platform appointments." />} />

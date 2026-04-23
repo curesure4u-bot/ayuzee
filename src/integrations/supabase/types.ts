@@ -2993,6 +2993,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin_or_super: { Args: { _user_id: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -3012,7 +3013,13 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "doctor" | "patient" | "therapist" | "provider"
+      app_role:
+        | "admin"
+        | "doctor"
+        | "patient"
+        | "therapist"
+        | "provider"
+        | "super_admin"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -3148,7 +3155,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "doctor", "patient", "therapist", "provider"],
+      app_role: [
+        "admin",
+        "doctor",
+        "patient",
+        "therapist",
+        "provider",
+        "super_admin",
+      ],
       ayuzee_txn_type: [
         "credit",
         "cashback",
