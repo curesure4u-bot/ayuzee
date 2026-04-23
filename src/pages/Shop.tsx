@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCart } from "@/contexts/CartContext";
-import { Search, ShoppingCart, Heart, Share2, ChevronRight } from "lucide-react";
+import { Search, ShoppingCart, Heart, Share2, ChevronRight, Leaf, Sparkles, FlaskConical, Pill, Flower2, Droplets } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -103,6 +103,134 @@ const Shop = () => {
           </div>
         </div>
       </div>
+
+      {/* Hero billboard */}
+      <section className="border-b border-border bg-gradient-to-r from-primary/95 via-primary to-primary/85 text-primary-foreground">
+        <div className="container grid gap-6 py-10 md:grid-cols-[1.4fr_1fr] md:items-center md:py-14">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-background/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider">
+              <Sparkles className="h-3.5 w-3.5" /> Authentic · Lab-tested
+            </span>
+            <h1 className="mt-4 font-display text-3xl leading-tight md:text-5xl">
+              Buy Ayurvedic, Siddha &amp; Unani <br className="hidden md:block" />
+              medicines online — at the best price
+            </h1>
+            <p className="mt-3 max-w-xl text-sm opacity-90 md:text-base">
+              Doctor-curated formulations from trusted Indian brands, delivered pan-India with free shipping over ₹499.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild variant="secondary" size="lg" className="rounded-full">
+                <a href="#categories">Shop by category</a>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="rounded-full border-background/40 bg-background/10 text-primary-foreground hover:bg-background/20 hover:text-primary-foreground">
+                <Link to="/health-conditions">Browse by condition</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="hidden md:flex justify-center">
+            <div className="relative">
+              <div className="absolute -inset-6 rounded-full bg-background/10 blur-2xl" />
+              <div className="relative grid h-56 w-56 place-items-center rounded-full bg-background/20 backdrop-blur">
+                <Leaf className="h-28 w-28 text-background/90" strokeWidth={1.2} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Promo banners */}
+      <section className="border-b border-border bg-background">
+        <div className="container grid gap-4 py-8 md:grid-cols-3">
+          {[
+            { title: "Ayurveda", sub: "Natural solutions for healthy living", from: "from-emerald-500/15", to2: "to-emerald-500/5", icon: Leaf, accent: "text-emerald-700" },
+            { title: "Siddha & Unani", sub: "Time-tested traditional systems", from: "from-amber-500/15", to2: "to-amber-500/5", icon: FlaskConical, accent: "text-amber-700" },
+            { title: "Wellness & Cosmetic", sub: "Skin, hair & daily care essentials", from: "from-rose-500/15", to2: "to-rose-500/5", icon: Sparkles, accent: "text-rose-700" },
+          ].map((p) => (
+            <Link
+              key={p.title}
+              to="/shop"
+              className={cn(
+                "group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-gradient-to-br p-5 transition-smooth hover:shadow-elegant",
+                p.from, p.to2
+              )}
+            >
+              <div className={cn("grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-background/80", p.accent)}>
+                <p.icon className="h-7 w-7" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display text-lg">{p.title}</h3>
+                <p className="text-xs text-muted-foreground">{p.sub}</p>
+              </div>
+              <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Shop by categories */}
+      <section id="categories" className="border-b border-border bg-muted/30">
+        <div className="container py-10">
+          <div className="mb-6 flex items-end justify-between">
+            <div>
+              <h2 className="font-display text-2xl md:text-3xl">Shop by Categories</h2>
+              <p className="text-sm text-muted-foreground">Explore medicines across systems of healing</p>
+            </div>
+            <Link to="/shop" className="hidden text-sm font-semibold text-primary hover:underline md:inline">View all →</Link>
+          </div>
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6">
+            {[
+              { label: "Ayurveda", icon: Leaf, bg: "bg-emerald-100", fg: "text-emerald-700" },
+              { label: "Siddha", icon: FlaskConical, bg: "bg-amber-100", fg: "text-amber-700" },
+              { label: "Unani", icon: Droplets, bg: "bg-sky-100", fg: "text-sky-700" },
+              { label: "Homeopathy", icon: Pill, bg: "bg-violet-100", fg: "text-violet-700" },
+              { label: "Cosmetic", icon: Sparkles, bg: "bg-rose-100", fg: "text-rose-700" },
+              { label: "Organic", icon: Flower2, bg: "bg-lime-100", fg: "text-lime-700" },
+            ].map((c) => (
+              <button
+                key={c.label}
+                onClick={() => setQuery(c.label)}
+                className="group flex flex-col items-center gap-2"
+              >
+                <div className={cn("grid h-20 w-20 place-items-center rounded-full transition-smooth group-hover:scale-105 group-hover:shadow-elegant md:h-24 md:w-24", c.bg, c.fg)}>
+                  <c.icon className="h-10 w-10 md:h-12 md:w-12" strokeWidth={1.5} />
+                </div>
+                <span className="text-sm font-medium group-hover:text-primary">{c.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured brands strip */}
+      {allBrands.length > 0 && (
+        <section className="border-b border-border bg-background">
+          <div className="container py-8">
+            <div className="mb-4 flex items-end justify-between">
+              <h2 className="font-display text-xl md:text-2xl">Featured Brands</h2>
+              <span className="text-xs text-muted-foreground">{allBrands.length} brands</span>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {allBrands.slice(0, 12).map((b) => {
+                const active = selectedBrands.includes(b);
+                return (
+                  <button
+                    key={b}
+                    onClick={() => toggleBrand(b)}
+                    className={cn(
+                      "shrink-0 rounded-full border px-5 py-2 text-sm font-medium transition-smooth",
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background hover:border-primary hover:text-primary"
+                    )}
+                  >
+                    {b}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       <main className="container py-6">
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
