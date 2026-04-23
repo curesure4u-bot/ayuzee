@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     }
 
     const { order_id, kind } = await req.json();
-    if (!order_id || !["order", "appointment", "therapy"].includes(kind)) {
+    if (!order_id || !["order", "appointment", "therapy", "therapy_session"].includes(kind)) {
       return new Response(JSON.stringify({ error: "order_id and valid kind required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -61,13 +61,21 @@ Deno.serve(async (req) => {
       if (data.user_id !== userData.user.id) throw new Error("Forbidden");
       if (data.payment_status === "paid") throw new Error("Already paid");
       amountInr = Number(data.fee);
-    } else {
+    } else if (kind === "therapy") {
       const { data, error } = await admin.from("therapy_bookings")
         .select("price, user_id, payment_status").eq("id", order_id).single();
       if (error || !data) throw new Error("Booking not found");
       if (data.user_id !== userData.user.id) throw new Error("Forbidden");
       if (data.payment_status === "paid") throw new Error("Already paid");
       amountInr = Number(data.price);
+    } else {
+      // therapy_session — patient booking via Uber-style flow
+      const { data, error } = await admin.from("therapy_sessions")
+        .select("total_amount, patient_user_id, payment_status").eq("id", order_id).single();
+      if (error || !data) throw new Error("Session not found");
+      if (data.patient_user_id !== userData.user.id) throw new Error("Forbidden");
+      if (data.payment_status === "paid") throw new Error("Already paid");
+      amountInr = Number(data.total_amount);
     }
 
     if (amountInr <= 0) throw new Error("Invalid amount");
@@ -87,7 +95,10 @@ Deno.serve(async (req) => {
     if (!rzpRes.ok) throw new Error(rzpOrder?.error?.description || "Razorpay create failed");
 
     // Persist razorpay_order_id on the matching row
-    const table = kind === "order" ? "orders" : kind === "appointment" ? "appointments" : "therapy_bookings";
+    const table = kind === "order" ? "orders"
+      : kind === "appointment" ? "appointments"
+      : kind === "therapy" ? "therapy_bookings"
+      : "therapy_sessions";
     await admin.from(table).update({ razorpay_order_id: rzpOrder.id }).eq("id", order_id);
 
     return new Response(JSON.stringify({

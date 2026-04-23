@@ -102,6 +102,7 @@ import AdminAuth from "./pages/admin/AdminAuth.tsx";
 import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
+import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
 import TherapistDetail from "./pages/therapists/TherapistDetail.tsx";
 import TherapistAuth from "./pages/therapist/TherapistAuth.tsx";
@@ -176,6 +177,7 @@ const App = () => (
               <Route path="support" element={<TherapistSupport />} />
             </Route>
             <Route path="/therapy-plans/:planId/book" element={<BookTherapySession />} />
+            <Route path="/therapy-booking/:sessionId" element={<TherapyBooking />} />
             <Route path="/venue/auth" element={<VenueAuth />} />
             <Route path="/venue" element={<VenueLayout />}>
               <Route index element={<VenueDashboard />} />

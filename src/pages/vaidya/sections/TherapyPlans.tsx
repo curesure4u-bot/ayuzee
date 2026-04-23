@@ -25,6 +25,12 @@ const TherapyPlans = () => {
   const [open, setOpen] = useState(!!preselectPartner || !!preselectCode);
   const [showPrice, setShowPrice] = useState(true);
   const [therapySystem, setTherapySystem] = useState<string>(preTherapy?.system || "Ayurveda");
+  const [numSessions, setNumSessions] = useState("1");
+  const [perSessionMinutes, setPerSessionMinutes] = useState("60");
+  const [startDate, setStartDate] = useState("");
+  const [medicines, setMedicines] = useState<Array<{ product_id: string; name: string; price: number; quantity: number }>>([]);
+  const [productSearch, setProductSearch] = useState("");
+  const [productResults, setProductResults] = useState<any[]>([]);
   const [form, setForm] = useState({
     patient_name: "", patient_phone: "", patient_user_id: "", partner_id: preselectPartner,
     therapy_code: preTherapy?.code || "",
@@ -32,6 +38,16 @@ const TherapyPlans = () => {
     unit_price: preTherapy ? String(preTherapy.price) : "",
     planned_date: "", duration_days: "1", notes: "",
   });
+
+  // Search products for medicines
+  useEffect(() => {
+    if (!productSearch.trim()) { setProductResults([]); return; }
+    const t = setTimeout(async () => {
+      const { data } = await supabase.from("products").select("id, name, brand, price, unit").ilike("name", `%${productSearch}%`).limit(8);
+      setProductResults(data ?? []);
+    }, 250);
+    return () => clearTimeout(t);
+  }, [productSearch]);
 
   const load = async () => {
     if (!userId) return;
@@ -48,7 +64,10 @@ const TherapyPlans = () => {
     if (!userId) return;
     if (!form.patient_name.trim()) return toast.error("Patient required");
     if (!form.therapy_name.trim()) return toast.error("Therapy required");
-    const { error } = await supabase.from("therapy_plans").insert({
+    const N = Math.max(1, Number(numSessions || 1));
+    const dur = Math.max(15, Number(perSessionMinutes || 60));
+
+    const { data: plan, error } = await supabase.from("therapy_plans").insert({
       doctor_user_id: userId,
       patient_name: form.patient_name.trim(),
       patient_phone: form.patient_phone || null,
@@ -57,14 +76,52 @@ const TherapyPlans = () => {
       therapy_name: form.therapy_name.trim(),
       therapy_code: form.therapy_code || null,
       estimated_price: form.unit_price ? Number(form.unit_price) : null,
-      planned_date: form.planned_date || null,
-      duration_days: Number(form.duration_days || 1),
+      planned_date: startDate || form.planned_date || null,
+      duration_days: N,
       notes: form.notes || null,
+    }).select("id").single();
+    if (error || !plan) return toast.error(error?.message || "Could not create plan");
+
+    // Create one therapy_sessions row per planned session
+    const baseDate = startDate ? new Date(startDate) : new Date();
+    const rows = Array.from({ length: N }, (_, i) => {
+      const d = new Date(baseDate);
+      d.setDate(d.getDate() + i);
+      return {
+        therapy_plan_id: plan.id,
+        doctor_user_id: userId,
+        therapy_code: form.therapy_code || null,
+        therapy_name: form.therapy_name.trim(),
+        session_number: i + 1,
+        total_sessions_in_plan: N,
+        patient_user_id: form.patient_user_id.trim() || null,
+        patient_name: form.patient_name.trim(),
+        patient_phone: form.patient_phone || null,
+        scheduled_date: d.toISOString().slice(0, 10),
+        scheduled_start: "09:00:00",
+        scheduled_duration_minutes: dur,
+        duration_minutes: dur,
+        status: "scheduled",
+        medicines_prescribed: medicines,
+      };
     });
-    if (error) return toast.error(error.message);
-    toast.success(form.patient_user_id ? "Plan sent to patient dashboard for confirmation" : "Therapy plan created");
+    const { error: sErr } = await supabase.from("therapy_sessions").insert(rows);
+    if (sErr) toast.error(`Plan saved, but sessions failed: ${sErr.message}`);
+
+    // Notify patient via WhatsApp (stub)
+    if (form.patient_phone) {
+      supabase.functions.invoke("send-whatsapp", {
+        body: {
+          to: form.patient_phone,
+          message: `Dr. has prescribed ${form.therapy_name} for ${N} sessions. Tap to choose your therapist and venue.`,
+        },
+      }).catch(() => {});
+    }
+
+    toast.success(`Plan created with ${N} session(s)`);
     setOpen(false);
     setForm({ patient_name: "", patient_phone: "", patient_user_id: "", partner_id: "", therapy_code: "", therapy_name: "", unit_price: "", planned_date: "", duration_days: "1", notes: "" });
+    setNumSessions("1"); setPerSessionMinutes("60"); setStartDate(""); setMedicines([]); setProductSearch("");
     load();
   };
 
@@ -133,9 +190,36 @@ const TherapyPlans = () => {
                     {partners.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.partner_type.replace("_", " ")} · {p.city})</option>)}
                   </select>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><Label>Planned date</Label><Input type="date" value={form.planned_date} onChange={(e) => setForm({ ...form, planned_date: e.target.value })} /></div>
-                  <div><Label>Duration (days)</Label><Input type="number" value={form.duration_days} onChange={(e) => setForm({ ...form, duration_days: e.target.value })} /></div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div><Label>Sessions in plan</Label><Input type="number" min="1" value={numSessions} onChange={(e) => setNumSessions(e.target.value)} /></div>
+                  <div><Label>Minutes / session</Label><Input type="number" min="15" step="15" value={perSessionMinutes} onChange={(e) => setPerSessionMinutes(e.target.value)} /></div>
+                  <div><Label>Start date</Label><Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></div>
+                </div>
+                <div className="rounded-md border p-2">
+                  <Label className="text-xs">Medicines to dispatch</Label>
+                  <Input placeholder="Search products…" value={productSearch} onChange={(e) => setProductSearch(e.target.value)} className="mt-1 h-8" />
+                  {productResults.length > 0 && (
+                    <div className="mt-1 max-h-32 overflow-auto rounded border bg-background">
+                      {productResults.map((p) => (
+                        <button key={p.id} type="button" className="block w-full px-2 py-1 text-left text-xs hover:bg-accent"
+                          onClick={() => { setMedicines((m) => [...m, { product_id: p.id, name: p.name, price: p.price, quantity: 1 }]); setProductSearch(""); setProductResults([]); }}>
+                          {p.name} · {p.brand} · ₹{p.price}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {medicines.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {medicines.map((m, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs">
+                          <span className="flex-1 truncate">{m.name}</span>
+                          <Input type="number" min="1" value={m.quantity} className="h-6 w-14"
+                            onChange={(e) => setMedicines((arr) => arr.map((x, j) => j === i ? { ...x, quantity: Number(e.target.value || 1) } : x))} />
+                          <button type="button" className="text-destructive" onClick={() => setMedicines((arr) => arr.filter((_, j) => j !== i))}>×</button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div><Label>Notes</Label><Input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
               </div>
