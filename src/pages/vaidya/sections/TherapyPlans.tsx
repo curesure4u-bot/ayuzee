@@ -25,6 +25,12 @@ const TherapyPlans = () => {
   const [open, setOpen] = useState(!!preselectPartner || !!preselectCode);
   const [showPrice, setShowPrice] = useState(true);
   const [therapySystem, setTherapySystem] = useState<string>(preTherapy?.system || "Ayurveda");
+  const [numSessions, setNumSessions] = useState("1");
+  const [perSessionMinutes, setPerSessionMinutes] = useState("60");
+  const [startDate, setStartDate] = useState("");
+  const [medicines, setMedicines] = useState<Array<{ product_id: string; name: string; price: number; quantity: number }>>([]);
+  const [productSearch, setProductSearch] = useState("");
+  const [productResults, setProductResults] = useState<any[]>([]);
   const [form, setForm] = useState({
     patient_name: "", patient_phone: "", patient_user_id: "", partner_id: preselectPartner,
     therapy_code: preTherapy?.code || "",
@@ -32,6 +38,16 @@ const TherapyPlans = () => {
     unit_price: preTherapy ? String(preTherapy.price) : "",
     planned_date: "", duration_days: "1", notes: "",
   });
+
+  // Search products for medicines
+  useEffect(() => {
+    if (!productSearch.trim()) { setProductResults([]); return; }
+    const t = setTimeout(async () => {
+      const { data } = await supabase.from("products").select("id, name, brand, price, unit").ilike("name", `%${productSearch}%`).limit(8);
+      setProductResults(data ?? []);
+    }, 250);
+    return () => clearTimeout(t);
+  }, [productSearch]);
 
   const load = async () => {
     if (!userId) return;
