@@ -3012,7 +3012,13 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "doctor" | "patient" | "therapist" | "provider"
+      app_role:
+        | "admin"
+        | "doctor"
+        | "patient"
+        | "therapist"
+        | "provider"
+        | "super_admin"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -3148,7 +3154,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "doctor", "patient", "therapist", "provider"],
+      app_role: [
+        "admin",
+        "doctor",
+        "patient",
+        "therapist",
+        "provider",
+        "super_admin",
+      ],
       ayuzee_txn_type: [
         "credit",
         "cashback",
