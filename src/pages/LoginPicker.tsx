@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Leaf, User, Stethoscope, Building2, ArrowRight } from "lucide-react";
+import { Leaf, User, Stethoscope, Building2, ShieldCheck, ArrowRight } from "lucide-react";
 
 const choices = [
   {
@@ -23,6 +23,13 @@ const choices = [
     icon: Building2,
     accent: "from-amber-500/15 to-amber-500/5 text-amber-700",
   },
+  {
+    to: "/admin/auth",
+    title: "Admin / Super Admin",
+    description: "Restricted area for Ayuzee staff to manage the platform.",
+    icon: ShieldCheck,
+    accent: "from-slate-500/15 to-slate-500/5 text-slate-700",
+  },
 ];
 
 const LoginPicker = () => {
@@ -41,7 +48,7 @@ const LoginPicker = () => {
           Choose how you'd like to continue
         </p>
 
-        <div className="mt-10 grid w-full max-w-5xl gap-4 md:grid-cols-3">
+        <div className="mt-10 grid w-full max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-4">
           {choices.map((c) => (
             <Link
               key={c.to}

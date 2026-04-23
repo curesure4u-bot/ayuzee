@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Stethoscope, CalendarCheck, ShoppingBag,
-  Package, Percent, Video, FileText, Bell, CreditCard, GraduationCap, Sparkles, HeartPulse, PhoneCall, Layers,
+  Package, Percent, Video, FileText, Bell, CreditCard, GraduationCap, Sparkles, HeartPulse, PhoneCall, Layers, Crown,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -28,6 +28,10 @@ const contentItems = [
   { title: "Health Conditions", url: "/admin/health-conditions", icon: HeartPulse },
   { title: "Treatment Systems", url: "/admin/treatment-systems", icon: Layers },
   { title: "Condition Leads", url: "/admin/condition-leads", icon: PhoneCall },
+];
+
+const governanceItems = [
+  { title: "Admin Management", url: "/admin/admins", icon: Crown },
 ];
 
 export const AdminSidebar = () => {
@@ -59,6 +63,12 @@ export const AdminSidebar = () => {
           <SidebarGroupLabel>Content</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>{contentItems.map(renderItem)}</SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Governance</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>{governanceItems.map(renderItem)}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

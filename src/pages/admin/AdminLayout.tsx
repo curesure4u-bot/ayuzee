@@ -17,14 +17,14 @@ const AdminLayout = () => {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         toast.error("Sign in required");
-        navigate("/auth", { replace: true });
+        navigate("/admin/auth", { replace: true });
         return;
       }
       const { data: roleRow } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", data.session.user.id)
-        .eq("role", "admin")
+        .in("role", ["admin", "super_admin"])
         .maybeSingle();
       if (!roleRow) {
         toast.error("Admin access required");
@@ -35,7 +35,7 @@ const AdminLayout = () => {
     };
     verify();
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate("/auth", { replace: true });
+      if (!session) navigate("/admin/auth", { replace: true });
     });
     return () => { mounted = false; sub.subscription.unsubscribe(); };
   }, [navigate]);
@@ -43,7 +43,7 @@ const AdminLayout = () => {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success("Signed out");
-    navigate("/");
+    navigate("/admin/auth");
   };
 
   if (checking) {
