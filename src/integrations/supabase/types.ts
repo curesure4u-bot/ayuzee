@@ -2259,6 +2259,41 @@ export type Database = {
         }
         Relationships: []
       }
+      room_unavailability: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string | null
+          room_name: string
+          unavailable_date: string
+          venue_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason?: string | null
+          room_name: string
+          unavailable_date: string
+          venue_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string | null
+          room_name?: string
+          unavailable_date?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_unavailability_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_providers: {
         Row: {
           about: string | null
@@ -2876,6 +2911,7 @@ export type Database = {
           address_line1: string
           available_therapies: string[] | null
           city: string
+          contact_person: string | null
           created_at: string
           email: string | null
           gstin: string | null
@@ -2890,6 +2926,7 @@ export type Database = {
           photo_urls: string[] | null
           pincode: string
           rating: number | null
+          registration_doc_url: string | null
           rooms: Json | null
           state: string
           type: string | null
@@ -2899,6 +2936,7 @@ export type Database = {
           address_line1: string
           available_therapies?: string[] | null
           city: string
+          contact_person?: string | null
           created_at?: string
           email?: string | null
           gstin?: string | null
@@ -2913,6 +2951,7 @@ export type Database = {
           photo_urls?: string[] | null
           pincode: string
           rating?: number | null
+          registration_doc_url?: string | null
           rooms?: Json | null
           state: string
           type?: string | null
@@ -2922,6 +2961,7 @@ export type Database = {
           address_line1?: string
           available_therapies?: string[] | null
           city?: string
+          contact_person?: string | null
           created_at?: string
           email?: string | null
           gstin?: string | null
@@ -2936,6 +2976,7 @@ export type Database = {
           photo_urls?: string[] | null
           pincode?: string
           rating?: number | null
+          registration_doc_url?: string | null
           rooms?: Json | null
           state?: string
           type?: string | null
