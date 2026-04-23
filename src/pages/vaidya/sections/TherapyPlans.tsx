@@ -98,6 +98,8 @@ const TherapyPlans = () => {
         patient_name: form.patient_name.trim(),
         patient_phone: form.patient_phone || null,
         scheduled_date: d.toISOString().slice(0, 10),
+        scheduled_start: "09:00:00",
+        scheduled_duration_minutes: dur,
         duration_minutes: dur,
         status: "scheduled",
         medicines_prescribed: medicines,
