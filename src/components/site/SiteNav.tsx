@@ -63,8 +63,8 @@ export const SiteNav = () => {
               )}
             </Link>
           </Button>
-          <Button variant="ghost" asChild className="hidden sm:inline-flex"><Link to="/auth">Patient Login</Link></Button>
-          <Button variant="hero" asChild><Link to="/auth?mode=signup">Sign up</Link></Button>
+          <Button variant="ghost" asChild className="hidden sm:inline-flex"><Link to="/login">Sign in</Link></Button>
+          <Button variant="hero" asChild><Link to="/login">Sign up</Link></Button>
         </div>
       </div>
     </header>

@@ -31,8 +31,8 @@ export const Header = () => {
         <div className="hidden items-center gap-2 md:flex">
           <Button variant="ghost" size="icon" aria-label="Cart"><ShoppingCart className="h-5 w-5" /></Button>
           <Button variant="ghost" asChild><a href="/doctor/auth">For Doctors</a></Button>
-          <Button variant="ghost" asChild><a href="/auth">Sign in</a></Button>
-          <Button variant="hero" asChild><a href="/auth?mode=signup">Book Consultation</a></Button>
+          <Button variant="ghost" asChild><a href="/login">Sign in</a></Button>
+          <Button variant="hero" asChild><a href="/login">Book Consultation</a></Button>
         </div>
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -46,7 +46,7 @@ export const Header = () => {
                 {l.label}
               </a>
             ))}
-            <Button variant="hero" className="mt-3" asChild><a href="/auth?mode=signup">Book Consultation</a></Button>
+            <Button variant="hero" className="mt-3" asChild><a href="/login">Book Consultation</a></Button>
           </nav>
         </div>
       )}
