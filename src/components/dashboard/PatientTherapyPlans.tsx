@@ -21,7 +21,7 @@ type Plan = {
 export const PatientTherapyPlans = ({ userId }: { userId: string }) => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const load = async () => {
     const { data } = await supabase.from("therapy_plans")
@@ -33,17 +33,6 @@ export const PatientTherapyPlans = ({ userId }: { userId: string }) => {
   };
 
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [userId]);
-
-  const confirm = async (id: string) => {
-    setBusy(id);
-    const { error } = await supabase.from("therapy_plans")
-      .update({ payment_status: "paid", confirmed_at: new Date().toISOString(), status: "ongoing" })
-      .eq("id", id);
-    setBusy(null);
-    if (error) return toast.error(error.message);
-    toast.success("Therapy confirmed! Your therapist will reach out soon.");
-    load();
-  };
 
   if (loading) return null;
   if (plans.length === 0) return null;
