@@ -1323,6 +1323,7 @@ export type Database = {
           product_name: string | null
           slug: string
           sort_order: number
+          system_id: string | null
           tagline: string | null
           updated_at: string
           videos: Json
@@ -1358,6 +1359,7 @@ export type Database = {
           product_name?: string | null
           slug: string
           sort_order?: number
+          system_id?: string | null
           tagline?: string | null
           updated_at?: string
           videos?: Json
@@ -1393,11 +1395,20 @@ export type Database = {
           product_name?: string | null
           slug?: string
           sort_order?: number
+          system_id?: string | null
           tagline?: string | null
           updated_at?: string
           videos?: Json
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "health_conditions_system_id_fkey"
+            columns: ["system_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_systems"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lms_certificates: {
         Row: {
@@ -2500,6 +2511,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      treatment_systems: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_published: boolean
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
