@@ -2406,6 +2406,180 @@ export type Database = {
         }
         Relationships: []
       }
+      therapist_location_pings: {
+        Row: {
+          id: string
+          lat: number
+          lng: number
+          pinged_at: string
+          session_id: string | null
+          therapist_id: string | null
+        }
+        Insert: {
+          id?: string
+          lat: number
+          lng: number
+          pinged_at?: string
+          session_id?: string | null
+          therapist_id?: string | null
+        }
+        Update: {
+          id?: string
+          lat?: number
+          lng?: number
+          pinged_at?: string
+          session_id?: string | null
+          therapist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapist_location_pings_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapist_location_pings_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      therapist_safety_flags: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          flagged_by: string | null
+          id: string
+          reason: string
+          resolved: boolean | null
+          session_id: string | null
+          severity: string | null
+          therapist_id: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          flagged_by?: string | null
+          id?: string
+          reason: string
+          resolved?: boolean | null
+          session_id?: string | null
+          severity?: string | null
+          therapist_id?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          flagged_by?: string | null
+          id?: string
+          reason?: string
+          resolved?: boolean | null
+          session_id?: string | null
+          severity?: string | null
+          therapist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapist_safety_flags_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapist_safety_flags_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      therapists: {
+        Row: {
+          allowed_therapies: string[] | null
+          certificate_number: string | null
+          certificate_url: string | null
+          certifying_body: string | null
+          city: string | null
+          created_at: string
+          current_location_lat: number | null
+          current_location_lng: number | null
+          full_name: string
+          gender: string | null
+          id: string
+          is_available: boolean | null
+          is_verified: boolean | null
+          last_location_update: string | null
+          phone: string
+          photo_url: string | null
+          rating: number | null
+          rejection_reason: string | null
+          state: string | null
+          total_sessions: number | null
+          updated_at: string
+          user_id: string | null
+          verification_status: string | null
+          years_experience: number | null
+        }
+        Insert: {
+          allowed_therapies?: string[] | null
+          certificate_number?: string | null
+          certificate_url?: string | null
+          certifying_body?: string | null
+          city?: string | null
+          created_at?: string
+          current_location_lat?: number | null
+          current_location_lng?: number | null
+          full_name: string
+          gender?: string | null
+          id?: string
+          is_available?: boolean | null
+          is_verified?: boolean | null
+          last_location_update?: string | null
+          phone: string
+          photo_url?: string | null
+          rating?: number | null
+          rejection_reason?: string | null
+          state?: string | null
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verification_status?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          allowed_therapies?: string[] | null
+          certificate_number?: string | null
+          certificate_url?: string | null
+          certifying_body?: string | null
+          city?: string | null
+          created_at?: string
+          current_location_lat?: number | null
+          current_location_lng?: number | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          is_available?: boolean | null
+          is_verified?: boolean | null
+          last_location_update?: string | null
+          phone?: string
+          photo_url?: string | null
+          rating?: number | null
+          rejection_reason?: string | null
+          state?: string | null
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verification_status?: string | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       therapy_bookings: {
         Row: {
           booking_date: string
@@ -2535,6 +2709,239 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      therapy_sessions: {
+        Row: {
+          actual_duration_minutes: number | null
+          actual_end_time: string | null
+          actual_start_time: string | null
+          complaint_detail: string | null
+          complaint_flag: boolean | null
+          created_at: string
+          doctor_referral_fee: number | null
+          doctor_user_id: string | null
+          id: string
+          medicines_order_id: string | null
+          medicines_prescribed: Json | null
+          patient_name: string
+          patient_phone: string | null
+          patient_rating: number | null
+          patient_review: string | null
+          patient_user_id: string | null
+          payment_status: string | null
+          platform_fee: number | null
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          scheduled_date: string
+          scheduled_duration_minutes: number
+          scheduled_start: string
+          session_number: number | null
+          status: string | null
+          therapist_checkin_lat: number | null
+          therapist_checkin_lng: number | null
+          therapist_checkout_lat: number | null
+          therapist_checkout_lng: number | null
+          therapist_earnings: number | null
+          therapist_id: string | null
+          therapist_notes: string | null
+          therapy_code: string
+          therapy_name: string
+          therapy_plan_id: string | null
+          total_amount: number
+          total_sessions_in_plan: number | null
+          updated_at: string
+          venue_earnings: number | null
+          venue_id: string | null
+          venue_room: string | null
+        }
+        Insert: {
+          actual_duration_minutes?: number | null
+          actual_end_time?: string | null
+          actual_start_time?: string | null
+          complaint_detail?: string | null
+          complaint_flag?: boolean | null
+          created_at?: string
+          doctor_referral_fee?: number | null
+          doctor_user_id?: string | null
+          id?: string
+          medicines_order_id?: string | null
+          medicines_prescribed?: Json | null
+          patient_name: string
+          patient_phone?: string | null
+          patient_rating?: number | null
+          patient_review?: string | null
+          patient_user_id?: string | null
+          payment_status?: string | null
+          platform_fee?: number | null
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          scheduled_date: string
+          scheduled_duration_minutes: number
+          scheduled_start: string
+          session_number?: number | null
+          status?: string | null
+          therapist_checkin_lat?: number | null
+          therapist_checkin_lng?: number | null
+          therapist_checkout_lat?: number | null
+          therapist_checkout_lng?: number | null
+          therapist_earnings?: number | null
+          therapist_id?: string | null
+          therapist_notes?: string | null
+          therapy_code: string
+          therapy_name: string
+          therapy_plan_id?: string | null
+          total_amount?: number
+          total_sessions_in_plan?: number | null
+          updated_at?: string
+          venue_earnings?: number | null
+          venue_id?: string | null
+          venue_room?: string | null
+        }
+        Update: {
+          actual_duration_minutes?: number | null
+          actual_end_time?: string | null
+          actual_start_time?: string | null
+          complaint_detail?: string | null
+          complaint_flag?: boolean | null
+          created_at?: string
+          doctor_referral_fee?: number | null
+          doctor_user_id?: string | null
+          id?: string
+          medicines_order_id?: string | null
+          medicines_prescribed?: Json | null
+          patient_name?: string
+          patient_phone?: string | null
+          patient_rating?: number | null
+          patient_review?: string | null
+          patient_user_id?: string | null
+          payment_status?: string | null
+          platform_fee?: number | null
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          scheduled_date?: string
+          scheduled_duration_minutes?: number
+          scheduled_start?: string
+          session_number?: number | null
+          status?: string | null
+          therapist_checkin_lat?: number | null
+          therapist_checkin_lng?: number | null
+          therapist_checkout_lat?: number | null
+          therapist_checkout_lng?: number | null
+          therapist_earnings?: number | null
+          therapist_id?: string | null
+          therapist_notes?: string | null
+          therapy_code?: string
+          therapy_name?: string
+          therapy_plan_id?: string | null
+          total_amount?: number
+          total_sessions_in_plan?: number | null
+          updated_at?: string
+          venue_earnings?: number | null
+          venue_id?: string | null
+          venue_room?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapy_sessions_medicines_order_id_fkey"
+            columns: ["medicines_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapy_sessions_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapy_sessions_therapy_plan_id_fkey"
+            columns: ["therapy_plan_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapy_sessions_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      therapy_venues: {
+        Row: {
+          address_line1: string
+          available_therapies: string[] | null
+          city: string
+          created_at: string
+          email: string | null
+          gstin: string | null
+          id: string
+          is_active: boolean | null
+          is_verified: boolean | null
+          lat: number | null
+          lng: number | null
+          name: string
+          owner_user_id: string | null
+          phone: string | null
+          photo_urls: string[] | null
+          pincode: string
+          rating: number | null
+          rooms: Json | null
+          state: string
+          type: string | null
+          updated_at: string
+        }
+        Insert: {
+          address_line1: string
+          available_therapies?: string[] | null
+          city: string
+          created_at?: string
+          email?: string | null
+          gstin?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          name: string
+          owner_user_id?: string | null
+          phone?: string | null
+          photo_urls?: string[] | null
+          pincode: string
+          rating?: number | null
+          rooms?: Json | null
+          state: string
+          type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string
+          available_therapies?: string[] | null
+          city?: string
+          created_at?: string
+          email?: string | null
+          gstin?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          name?: string
+          owner_user_id?: string | null
+          phone?: string | null
+          photo_urls?: string[] | null
+          pincode?: string
+          rating?: number | null
+          rooms?: Json | null
+          state?: string
+          type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       treatment_systems: {
         Row: {
@@ -2897,6 +3304,48 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      venue_revenue_logs: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          session_id: string | null
+          type: string | null
+          venue_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          type?: string | null
+          venue_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          type?: string | null
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_revenue_logs_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_revenue_logs_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       webinar_rsvps: {
         Row: {
