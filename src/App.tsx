@@ -112,6 +112,13 @@ import TherapistEarnings from "./pages/therapist/TherapistEarnings.tsx";
 import TherapistProfile from "./pages/therapist/TherapistProfile.tsx";
 import TherapistAvailability from "./pages/therapist/TherapistAvailability.tsx";
 import TherapistSupport from "./pages/therapist/TherapistSupport.tsx";
+import VenueAuth from "./pages/venue/VenueAuth.tsx";
+import VenueLayout from "./pages/venue/VenueLayout.tsx";
+import VenueDashboard from "./pages/venue/VenueDashboard.tsx";
+import VenueRooms from "./pages/venue/VenueRooms.tsx";
+import VenueBookings from "./pages/venue/VenueBookings.tsx";
+import VenueRevenue from "./pages/venue/VenueRevenue.tsx";
+import VenueProfile from "./pages/venue/VenueProfile.tsx";
 
 const queryClient = new QueryClient();
 
@@ -169,6 +176,14 @@ const App = () => (
               <Route path="support" element={<TherapistSupport />} />
             </Route>
             <Route path="/therapy-plans/:planId/book" element={<BookTherapySession />} />
+            <Route path="/venue/auth" element={<VenueAuth />} />
+            <Route path="/venue" element={<VenueLayout />}>
+              <Route index element={<VenueDashboard />} />
+              <Route path="rooms" element={<VenueRooms />} />
+              <Route path="bookings" element={<VenueBookings />} />
+              <Route path="revenue" element={<VenueRevenue />} />
+              <Route path="profile" element={<VenueProfile />} />
+            </Route>
             <Route path="/admin/auth" element={<AdminAuth />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
