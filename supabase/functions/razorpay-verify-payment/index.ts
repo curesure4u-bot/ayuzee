@@ -59,7 +59,13 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const table = kind === "order" ? "orders" : kind === "appointment" ? "appointments" : "therapy_bookings";
+    const table = kind === "order" ? "orders"
+      : kind === "appointment" ? "appointments"
+      : kind === "therapy" ? "therapy_bookings"
+      : kind === "therapy_session" ? "therapy_sessions"
+      : null;
+    if (!table) throw new Error("Invalid kind");
+
     const update: Record<string, unknown> = {
       payment_status: "paid",
       razorpay_payment_id,
@@ -68,9 +74,11 @@ Deno.serve(async (req) => {
     if (kind === "order") update.order_status = "confirmed";
     if (kind === "appointment") update.status = "confirmed";
     if (kind === "therapy") update.status = "confirmed";
+    if (kind === "therapy_session") update.status = "therapist_assigned";
 
+    const userIdCol = kind === "therapy_session" ? "patient_user_id" : "user_id";
     const { error } = await admin.from(table).update(update)
-      .eq("id", internal_id).eq("user_id", userData.user.id);
+      .eq("id", internal_id).eq(userIdCol, userData.user.id);
     if (error) throw error;
 
     return new Response(JSON.stringify({ ok: true }), {
