@@ -78,7 +78,7 @@ const DoctorLayout = () => {
   }
 
   // Block access until verified
-  if (doctor && !doctor.is_verified) {
+  if (doctor && !doctor.is_verified && !isAdminPreview) {
     const rejected = doctor.verification_status === "rejected";
     return (
       <div className="min-h-screen gradient-soft">
