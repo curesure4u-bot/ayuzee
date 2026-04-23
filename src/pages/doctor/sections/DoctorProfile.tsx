@@ -121,8 +121,47 @@ const DoctorProfile = () => {
     setSaving(false);
   };
 
+  const [creating, setCreating] = useState(false);
+  const createProfile = async () => {
+    if (!userId) {
+      toast.error("Please sign in again");
+      return;
+    }
+    setCreating(true);
+    const { data: sess } = await supabase.auth.getSession();
+    const u = sess.session?.user;
+    const meta = (u?.user_metadata ?? {}) as Record<string, string>;
+    const { error } = await supabase.from("doctors").insert({
+      user_id: userId,
+      full_name: meta.full_name || u?.email?.split("@")[0] || "New Doctor",
+      email: u?.email ?? null,
+      phone: meta.phone ?? null,
+      specialization: "Ayurveda",
+      category: "general",
+      city: "—",
+    } as never);
+    setCreating(false);
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Profile created — fill in your details");
+      refresh();
+    }
+  };
+
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
-  if (!doctor) return <p className="text-muted-foreground">No doctor profile found.</p>;
+  if (!doctor) {
+    return (
+      <Card className="mx-auto max-w-xl p-8 text-center">
+        <h2 className="font-display text-xl">Set up your doctor profile</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          We didn't find a profile for your account yet. Click below to create one — you can edit every detail right after.
+        </p>
+        <Button className="mt-5" onClick={createProfile} disabled={creating}>
+          {creating ? "Creating…" : "Create my profile"}
+        </Button>
+      </Card>
+    );
+  }
 
   const completion = doctor.profile_completion ?? calcCompletion(doctor as unknown as Record<string, unknown>);
 
