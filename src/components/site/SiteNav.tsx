@@ -18,17 +18,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
 
 const primaryLinks = [
-  { to: "/login", label: "Book Appointment" },
-  { to: "/doctors", label: "Find Doctors" },
-  { to: "/clinics", label: "Find Clinics" },
-  { to: "/feed", label: "Feed" },
+  { to: "/login", label: "Book Appointment", icon: CalendarCheck },
+  { to: "/doctors", label: "Find Doctors", icon: Search },
+  { to: "/clinics", label: "Find Clinics", icon: MapPin },
+  { to: "/feed", label: "Feed", icon: Newspaper },
 ];
 
 const tailLinks = [
-  { to: "/therapies", label: "Therapies" },
-  { to: "/learning/courses", label: "Learning" },
-  { to: "/learning/blogs", label: "Blogs" },
-  { to: "/partner", label: "Job Portal" },
+  { to: "/therapies", label: "Therapies", icon: Activity },
+  { to: "/learning/courses", label: "Learning", icon: GraduationCap },
+  { to: "/learning/blogs", label: "Blogs", icon: BookOpen },
+  { to: "/partner", label: "Job Portal", icon: Briefcase },
+];
+
+const mobileExtraLinks = [
+  { to: "/shop", label: "Buy Medicine", icon: Pill },
+  { to: "/treatments/ayurveda", label: "Treatments", icon: Sparkles },
+  { to: "/offers", label: "Offers", icon: Tag },
 ];
 
 const signInRoles = [
