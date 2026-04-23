@@ -6,6 +6,7 @@ import { BulkPurchaseMenu } from "@/components/site/BulkPurchaseMenu";
 import { PartnershipMenu } from "@/components/site/PartnershipMenu";
 import { MedicineMenu } from "@/components/site/MedicineMenu";
 import { TreatmentsMenu } from "@/components/site/TreatmentsMenu";
+import { PatientProfileMenu } from "@/components/site/PatientProfileMenu";
 
 const links = [
   { to: "/doctors", label: "Find Doctors" },
@@ -63,8 +64,7 @@ export const SiteNav = () => {
               )}
             </Link>
           </Button>
-          <Button variant="ghost" asChild className="hidden sm:inline-flex"><Link to="/login">Sign in</Link></Button>
-          <Button variant="hero" asChild><Link to="/login">Sign up</Link></Button>
+          <PatientProfileMenu />
         </div>
       </div>
     </header>
