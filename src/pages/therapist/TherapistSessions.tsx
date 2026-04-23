@@ -112,6 +112,9 @@ const TherapistSessions = () => {
       therapist_checkout_lng: c?.lng ?? null,
       therapist_notes: endNotes || null,
     });
+    // Trigger settlement (idempotent on the server). Don't block UX on errors.
+    supabase.functions.invoke("settle-therapy-session", { body: { session_id: endingSession.id } })
+      .catch((err) => console.warn("settle invoke failed", err));
     setEndingSession(null);
     setEndNotes("");
     toast({ title: "Session completed", description: `Duration: ${duration} min` });

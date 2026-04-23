@@ -1967,6 +1967,66 @@ export type Database = {
         }
         Relationships: []
       }
+      payout_requests: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          notes: string | null
+          processed_at: string | null
+          requester_user_id: string
+          status: string
+          therapist_id: string | null
+          type: string
+          updated_at: string
+          venue_id: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          requester_user_id: string
+          status?: string
+          therapist_id?: string | null
+          type: string
+          updated_at?: string
+          venue_id?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          requester_user_id?: string
+          status?: string
+          therapist_id?: string | null
+          type?: string
+          updated_at?: string
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_requests_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_requests_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prakriti_assessments: {
         Row: {
           assessor_user_id: string | null
@@ -2173,6 +2233,77 @@ export type Database = {
           state?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      refund_requests: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          patient_user_id: string | null
+          processed_at: string | null
+          razorpay_payment_id: string | null
+          reason: string | null
+          session_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          patient_user_id?: string | null
+          processed_at?: string | null
+          razorpay_payment_id?: string | null
+          reason?: string | null
+          session_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          patient_user_id?: string | null
+          processed_at?: string | null
+          razorpay_payment_id?: string | null
+          reason?: string | null
+          session_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refund_requests_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      revenue_split_config: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          value: number
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          value?: number
         }
         Relationships: []
       }

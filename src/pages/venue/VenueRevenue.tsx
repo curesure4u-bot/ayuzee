@@ -3,7 +3,14 @@ import { useOutletContext } from "react-router-dom";
 import type { VenueContext } from "./VenueLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, IndianRupee } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
+import { Loader2, IndianRupee, Wallet } from "lucide-react";
 
 interface SessionRow {
   id: string;
@@ -15,6 +22,7 @@ interface SessionRow {
   total_amount: number | null;
   venue_earnings: number | null;
   platform_fee: number | null;
+  payment_status?: string;
 }
 
 const startOfWeek = (d: Date) => {
@@ -25,20 +33,35 @@ const startOfWeek = (d: Date) => {
   return c;
 };
 
+interface PayoutRow { id: string; amount: number; status: string; created_at: string; }
+
 const VenueRevenue = () => {
   const { venue } = useOutletContext<VenueContext>();
   const [loading, setLoading] = useState(true);
   const [sessions, setSessions] = useState<SessionRow[]>([]);
+  const [payouts, setPayouts] = useState<PayoutRow[]>([]);
+  const [payoutOpen, setPayoutOpen] = useState(false);
+  const [payoutAmount, setPayoutAmount] = useState("");
+  const [payoutNotes, setPayoutNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase.from("therapy_sessions")
-        .select("id, scheduled_date, therapy_name, scheduled_duration_minutes, actual_duration_minutes, venue_room, total_amount, venue_earnings, platform_fee")
-        .eq("venue_id", venue.id).eq("status", "completed").order("scheduled_date", { ascending: false });
-      setSessions((data ?? []) as SessionRow[]);
-      setLoading(false);
-    })();
-  }, [venue.id]);
+  const reload = async () => {
+    const { data } = await supabase.from("therapy_sessions")
+      .select("id, scheduled_date, therapy_name, scheduled_duration_minutes, actual_duration_minutes, venue_room, total_amount, venue_earnings, platform_fee, payment_status")
+      .eq("venue_id", venue.id).eq("status", "completed").order("scheduled_date", { ascending: false });
+    setSessions((data ?? []) as SessionRow[]);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: pr } = await supabase.from("payout_requests")
+        .select("id, amount, status, created_at")
+        .eq("requester_user_id", user.id).eq("type", "venue")
+        .order("created_at", { ascending: false }).limit(10);
+      setPayouts((pr ?? []) as PayoutRow[]);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => { reload(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [venue.id]);
 
   if (loading) return <div className="min-h-[40vh] grid place-items-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
 
@@ -58,13 +81,49 @@ const VenueRevenue = () => {
 
   const totalEarnings = sessions.reduce((s, r) => s + Number(r.venue_earnings ?? 0), 0);
   const totalFees = sessions.reduce((s, r) => s + Number(r.platform_fee ?? 0), 0);
+  const settledEarnings = sessions.filter(s => s.payment_status === "settled").reduce((s, r) => s + Number(r.venue_earnings ?? 0), 0);
+  const requestedAmount = payouts.filter(p => p.status === "pending" || p.status === "approved").reduce((s, p) => s + Number(p.amount), 0);
+  const paidAmount = payouts.filter(p => p.status === "paid").reduce((s, p) => s + Number(p.amount), 0);
+  const availableBalance = Math.max(0, settledEarnings - requestedAmount - paidAmount);
+
+  const submitPayout = async () => {
+    const amt = Math.round(Number(payoutAmount));
+    if (!Number.isFinite(amt) || amt <= 0) return toast({ title: "Enter a valid amount", variant: "destructive" });
+    if (amt > availableBalance) return toast({ title: "Amount exceeds available balance", variant: "destructive" });
+    setSubmitting(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setSubmitting(false); return; }
+    const { error } = await supabase.from("payout_requests").insert({
+      type: "venue", requester_user_id: user.id, venue_id: venue.id, amount: amt, notes: payoutNotes || null,
+    });
+    setSubmitting(false);
+    if (error) return toast({ title: "Request failed", description: error.message, variant: "destructive" });
+    toast({ title: "Payout requested", description: "Our team will process it within 3 business days." });
+    setPayoutOpen(false); setPayoutAmount(""); setPayoutNotes(""); reload();
+  };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Revenue</h1>
-        <p className="text-muted-foreground">Earnings from completed therapy sessions at your venue.</p>
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">Revenue</h1>
+          <p className="text-muted-foreground">Earnings from completed therapy sessions at your venue.</p>
+        </div>
+        <Button onClick={() => setPayoutOpen(true)} disabled={availableBalance <= 0}>
+          <Wallet className="h-4 w-4 mr-2" />Request payout
+        </Button>
       </div>
+
+      <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/30">
+        <CardContent className="p-6 flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <div className="text-sm text-muted-foreground">Available for payout</div>
+            <div className="text-3xl font-bold mt-1">₹{availableBalance.toLocaleString("en-IN")}</div>
+            <div className="text-xs text-muted-foreground mt-1">Settled ₹{settledEarnings.toLocaleString("en-IN")} · Requested ₹{requestedAmount.toLocaleString("en-IN")} · Paid ₹{paidAmount.toLocaleString("en-IN")}</div>
+          </div>
+          <Wallet className="h-12 w-12 text-primary/40" />
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card><CardContent className="p-4">
@@ -135,6 +194,38 @@ const VenueRevenue = () => {
           )}
         </CardContent>
       </Card>
+
+      {payouts.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle>Recent payout requests</CardTitle></CardHeader>
+          <CardContent className="space-y-2">
+            {payouts.map(p => (
+              <div key={p.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <div className="font-medium">₹{Number(p.amount).toLocaleString("en-IN")}</div>
+                  <div className="text-xs text-muted-foreground">{new Date(p.created_at).toLocaleDateString("en-IN")}</div>
+                </div>
+                <Badge variant={p.status === "paid" ? "default" : p.status === "rejected" ? "destructive" : "secondary"}>{p.status}</Badge>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      <Dialog open={payoutOpen} onOpenChange={setPayoutOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Request payout</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">Available: <span className="font-semibold text-foreground">₹{availableBalance.toLocaleString("en-IN")}</span></p>
+            <div><Label htmlFor="amt">Amount (₹)</Label><Input id="amt" type="number" min={1} max={availableBalance} value={payoutAmount} onChange={(e) => setPayoutAmount(e.target.value)} /></div>
+            <div><Label htmlFor="notes">Notes (optional)</Label><Textarea id="notes" rows={3} value={payoutNotes} onChange={(e) => setPayoutNotes(e.target.value)} /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPayoutOpen(false)}>Cancel</Button>
+            <Button onClick={submitPayout} disabled={submitting}>{submitting ? "Submitting…" : "Submit request"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
