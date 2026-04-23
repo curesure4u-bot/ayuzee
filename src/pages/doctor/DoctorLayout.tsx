@@ -158,6 +158,11 @@ const DoctorLayout = () => {
                 </span>
                 <span className="font-display text-lg font-semibold">Ayuzee Doctor</span>
               </Link>
+              {isAdminPreview && (
+                <span className="ml-2 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  Admin preview
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-3">
               <DoctorProfileMenu fullName={doctor?.full_name} avatarUrl={doctor?.avatar_url} />
