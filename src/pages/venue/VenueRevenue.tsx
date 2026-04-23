@@ -47,7 +47,7 @@ const VenueRevenue = () => {
 
   const reload = async () => {
     const { data } = await supabase.from("therapy_sessions")
-      .select("id, scheduled_date, therapy_name, scheduled_duration_minutes, actual_duration_minutes, venue_room, total_amount, venue_earnings, platform_fee")
+      .select("id, scheduled_date, therapy_name, scheduled_duration_minutes, actual_duration_minutes, venue_room, total_amount, venue_earnings, platform_fee, payment_status")
       .eq("venue_id", venue.id).eq("status", "completed").order("scheduled_date", { ascending: false });
     setSessions((data ?? []) as SessionRow[]);
     const { data: { user } } = await supabase.auth.getUser();
@@ -81,13 +81,49 @@ const VenueRevenue = () => {
 
   const totalEarnings = sessions.reduce((s, r) => s + Number(r.venue_earnings ?? 0), 0);
   const totalFees = sessions.reduce((s, r) => s + Number(r.platform_fee ?? 0), 0);
+  const settledEarnings = sessions.filter(s => s.payment_status === "settled").reduce((s, r) => s + Number(r.venue_earnings ?? 0), 0);
+  const requestedAmount = payouts.filter(p => p.status === "pending" || p.status === "approved").reduce((s, p) => s + Number(p.amount), 0);
+  const paidAmount = payouts.filter(p => p.status === "paid").reduce((s, p) => s + Number(p.amount), 0);
+  const availableBalance = Math.max(0, settledEarnings - requestedAmount - paidAmount);
+
+  const submitPayout = async () => {
+    const amt = Math.round(Number(payoutAmount));
+    if (!Number.isFinite(amt) || amt <= 0) return toast({ title: "Enter a valid amount", variant: "destructive" });
+    if (amt > availableBalance) return toast({ title: "Amount exceeds available balance", variant: "destructive" });
+    setSubmitting(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setSubmitting(false); return; }
+    const { error } = await supabase.from("payout_requests").insert({
+      type: "venue", requester_user_id: user.id, venue_id: venue.id, amount: amt, notes: payoutNotes || null,
+    });
+    setSubmitting(false);
+    if (error) return toast({ title: "Request failed", description: error.message, variant: "destructive" });
+    toast({ title: "Payout requested", description: "Our team will process it within 3 business days." });
+    setPayoutOpen(false); setPayoutAmount(""); setPayoutNotes(""); reload();
+  };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Revenue</h1>
-        <p className="text-muted-foreground">Earnings from completed therapy sessions at your venue.</p>
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">Revenue</h1>
+          <p className="text-muted-foreground">Earnings from completed therapy sessions at your venue.</p>
+        </div>
+        <Button onClick={() => setPayoutOpen(true)} disabled={availableBalance <= 0}>
+          <Wallet className="h-4 w-4 mr-2" />Request payout
+        </Button>
       </div>
+
+      <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/30">
+        <CardContent className="p-6 flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <div className="text-sm text-muted-foreground">Available for payout</div>
+            <div className="text-3xl font-bold mt-1">₹{availableBalance.toLocaleString("en-IN")}</div>
+            <div className="text-xs text-muted-foreground mt-1">Settled ₹{settledEarnings.toLocaleString("en-IN")} · Requested ₹{requestedAmount.toLocaleString("en-IN")} · Paid ₹{paidAmount.toLocaleString("en-IN")}</div>
+          </div>
+          <Wallet className="h-12 w-12 text-primary/40" />
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card><CardContent className="p-4">
