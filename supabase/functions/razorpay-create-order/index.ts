@@ -95,7 +95,10 @@ Deno.serve(async (req) => {
     if (!rzpRes.ok) throw new Error(rzpOrder?.error?.description || "Razorpay create failed");
 
     // Persist razorpay_order_id on the matching row
-    const table = kind === "order" ? "orders" : kind === "appointment" ? "appointments" : "therapy_bookings";
+    const table = kind === "order" ? "orders"
+      : kind === "appointment" ? "appointments"
+      : kind === "therapy" ? "therapy_bookings"
+      : "therapy_sessions";
     await admin.from(table).update({ razorpay_order_id: rzpOrder.id }).eq("id", order_id);
 
     return new Response(JSON.stringify({
