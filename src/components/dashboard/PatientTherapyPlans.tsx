@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Calendar, CheckCircle2, IndianRupee } from "lucide-react";
-import { toast } from "sonner";
 
 type Plan = {
   id: string;
@@ -21,7 +21,7 @@ type Plan = {
 export const PatientTherapyPlans = ({ userId }: { userId: string }) => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const load = async () => {
     const { data } = await supabase.from("therapy_plans")
@@ -33,17 +33,6 @@ export const PatientTherapyPlans = ({ userId }: { userId: string }) => {
   };
 
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [userId]);
-
-  const confirm = async (id: string) => {
-    setBusy(id);
-    const { error } = await supabase.from("therapy_plans")
-      .update({ payment_status: "paid", confirmed_at: new Date().toISOString(), status: "ongoing" })
-      .eq("id", id);
-    setBusy(null);
-    if (error) return toast.error(error.message);
-    toast.success("Therapy confirmed! Your therapist will reach out soon.");
-    load();
-  };
 
   if (loading) return null;
   if (plans.length === 0) return null;
@@ -88,8 +77,8 @@ export const PatientTherapyPlans = ({ userId }: { userId: string }) => {
                           <IndianRupee className="h-5 w-5" />{p.estimated_price.toLocaleString("en-IN")}
                         </p>
                       )}
-                      <Button variant="hero" className="mt-2" disabled={busy === p.id} onClick={() => confirm(p.id)}>
-                        {busy === p.id ? "Confirming…" : "Confirm & Pay"}
+                      <Button variant="hero" className="mt-2" onClick={() => navigate(`/therapy-plans/${p.id}/book`)}>
+                        Book session
                       </Button>
                     </>
                   ) : (

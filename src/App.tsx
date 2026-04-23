@@ -101,6 +101,7 @@ import AdminTreatmentSystems from "./pages/admin/AdminTreatmentSystems.tsx";
 import AdminAuth from "./pages/admin/AdminAuth.tsx";
 import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
+import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 
 const queryClient = new QueryClient();
 
@@ -146,6 +147,7 @@ const App = () => (
             <Route path="/partner/apply" element={<PartnerApply />} />
             <Route path="/bulk" element={<Bulk />} />
             <Route path="/therapies" element={<Therapies />} />
+            <Route path="/therapy-plans/:planId/book" element={<BookTherapySession />} />
             <Route path="/admin/auth" element={<AdminAuth />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
