@@ -1299,6 +1299,7 @@ export type Database = {
           ayurveda_qna: Json
           benefits: Json
           consult_banner_text: string | null
+          content_sections: Json
           created_at: string
           discount_price: number | null
           doctor_feedback: Json
@@ -1321,6 +1322,7 @@ export type Database = {
           price: number
           product_image_url: string | null
           product_name: string | null
+          related_medicines: Json
           slug: string
           sort_order: number
           system_id: string | null
@@ -1335,6 +1337,7 @@ export type Database = {
           ayurveda_qna?: Json
           benefits?: Json
           consult_banner_text?: string | null
+          content_sections?: Json
           created_at?: string
           discount_price?: number | null
           doctor_feedback?: Json
@@ -1357,6 +1360,7 @@ export type Database = {
           price?: number
           product_image_url?: string | null
           product_name?: string | null
+          related_medicines?: Json
           slug: string
           sort_order?: number
           system_id?: string | null
@@ -1371,6 +1375,7 @@ export type Database = {
           ayurveda_qna?: Json
           benefits?: Json
           consult_banner_text?: string | null
+          content_sections?: Json
           created_at?: string
           discount_price?: number | null
           doctor_feedback?: Json
@@ -1393,6 +1398,7 @@ export type Database = {
           price?: number
           product_image_url?: string | null
           product_name?: string | null
+          related_medicines?: Json
           slug?: string
           sort_order?: number
           system_id?: string | null
