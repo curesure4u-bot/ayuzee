@@ -177,6 +177,7 @@ const App = () => (
               <Route path="support" element={<TherapistSupport />} />
             </Route>
             <Route path="/therapy-plans/:planId/book" element={<BookTherapySession />} />
+            <Route path="/therapy-booking/:sessionId" element={<TherapyBooking />} />
             <Route path="/venue/auth" element={<VenueAuth />} />
             <Route path="/venue" element={<VenueLayout />}>
               <Route index element={<VenueDashboard />} />
