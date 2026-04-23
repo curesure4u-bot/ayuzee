@@ -22,6 +22,7 @@ const DoctorLayout = () => {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [doctor, setDoctor] = useState<DoctorVerification | null>(null);
+  const [isAdminPreview, setIsAdminPreview] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -31,13 +32,28 @@ const DoctorLayout = () => {
         navigate("/doctor/auth", { replace: true });
         return;
       }
-      const { data: doc } = await supabase
-        .from("doctors")
-        .select("is_verified, verification_status, rejection_reason, full_name, avatar_url")
-        .eq("user_id", data.session.user.id)
-        .maybeSingle();
+      const uid = data.session.user.id;
+      const [{ data: doc }, { data: roleRows }] = await Promise.all([
+        supabase
+          .from("doctors")
+          .select("is_verified, verification_status, rejection_reason, full_name, avatar_url")
+          .eq("user_id", uid)
+          .maybeSingle(),
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", uid)
+          .in("role", ["admin", "super_admin"]),
+      ]);
       if (mounted) {
-        setDoctor(doc as DoctorVerification | null);
+        const isAdmin = !!(roleRows && roleRows.length > 0);
+        setIsAdminPreview(isAdmin);
+        setDoctor(
+          (doc as DoctorVerification | null) ??
+            (isAdmin
+              ? { is_verified: true, verification_status: "approved", rejection_reason: null, full_name: "Admin Preview", avatar_url: null }
+              : null),
+        );
         setChecking(false);
       }
     };
