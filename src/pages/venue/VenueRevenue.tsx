@@ -32,20 +32,35 @@ const startOfWeek = (d: Date) => {
   return c;
 };
 
+interface PayoutRow { id: string; amount: number; status: string; created_at: string; }
+
 const VenueRevenue = () => {
   const { venue } = useOutletContext<VenueContext>();
   const [loading, setLoading] = useState(true);
   const [sessions, setSessions] = useState<SessionRow[]>([]);
+  const [payouts, setPayouts] = useState<PayoutRow[]>([]);
+  const [payoutOpen, setPayoutOpen] = useState(false);
+  const [payoutAmount, setPayoutAmount] = useState("");
+  const [payoutNotes, setPayoutNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase.from("therapy_sessions")
-        .select("id, scheduled_date, therapy_name, scheduled_duration_minutes, actual_duration_minutes, venue_room, total_amount, venue_earnings, platform_fee")
-        .eq("venue_id", venue.id).eq("status", "completed").order("scheduled_date", { ascending: false });
-      setSessions((data ?? []) as SessionRow[]);
-      setLoading(false);
-    })();
-  }, [venue.id]);
+  const reload = async () => {
+    const { data } = await supabase.from("therapy_sessions")
+      .select("id, scheduled_date, therapy_name, scheduled_duration_minutes, actual_duration_minutes, venue_room, total_amount, venue_earnings, platform_fee")
+      .eq("venue_id", venue.id).eq("status", "completed").order("scheduled_date", { ascending: false });
+    setSessions((data ?? []) as SessionRow[]);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: pr } = await supabase.from("payout_requests")
+        .select("id, amount, status, created_at")
+        .eq("requester_user_id", user.id).eq("type", "venue")
+        .order("created_at", { ascending: false }).limit(10);
+      setPayouts((pr ?? []) as PayoutRow[]);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => { reload(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [venue.id]);
 
   if (loading) return <div className="min-h-[40vh] grid place-items-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
 
