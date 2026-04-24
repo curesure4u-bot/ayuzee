@@ -66,6 +66,12 @@ export default {
           warning: "hsl(var(--admin-warning))",
           success: "hsl(var(--admin-success))",
         },
+        success: "hsl(var(--success))",
+        info: "hsl(var(--info))",
+        warning: "hsl(var(--warning))",
+        mystic: "hsl(var(--mystic))",
+        earth: "hsl(var(--earth))",
+        indigo: "hsl(var(--indigo))",
       },
       borderRadius: {
         lg: "var(--radius)",
