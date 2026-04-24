@@ -1,23 +1,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
-import { SiteNav } from "@/components/site/SiteNav";
-import { Footer } from "@/components/site/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, GraduationCap, Video, ChevronRight } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowLeft, GraduationCap, Video, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 const slugify = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
 
 const AdminLearning = () => {
-  const navigate = useNavigate();
   const [tab, setTab] = useState<"courses" | "webinars">("courses");
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(true);
 
   // courses state
   const [courses, setCourses] = useState<any[]>([]);
@@ -32,15 +26,8 @@ const AdminLearning = () => {
   const [editingWebinar, setEditingWebinar] = useState<any | null>(null);
 
   useEffect(() => {
-    (async () => {
-      document.title = "Admin · Learning — Ayuzee";
-      const { data: sess } = await supabase.auth.getSession();
-      if (!sess.session) { navigate("/auth"); return; }
-      const { data: role } = await supabase.from("user_roles").select("id").eq("user_id", sess.session.user.id).eq("role", "admin").maybeSingle();
-      setIsAdmin(!!role);
-      setLoading(false);
-      if (role) loadAll();
-    })();
+    document.title = "Admin · Learning — Ayuzee";
+    loadAll();
   }, []);
 
   const loadAll = async () => {
@@ -138,13 +125,8 @@ const AdminLearning = () => {
     toast.success("Deleted"); loadAll();
   };
 
-  if (loading) return <div className="grid min-h-screen place-items-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
-  if (!isAdmin) return <div className="min-h-screen bg-background"><SiteNav /><div className="container py-24 text-center"><h1 className="font-display text-3xl">Admin access required</h1><p className="mt-3 text-muted-foreground">You need an admin role to manage Learning content.</p></div></div>;
-
   return (
-    <div className="min-h-screen bg-background">
-      <SiteNav />
-      <main className="container py-8">
+    <div className="space-y-6">
         <h1 className="font-display text-3xl">Learning Hub Admin</h1>
         <div className="mt-6 flex gap-2">
           <Button variant={tab === "courses" ? "hero" : "outline"} onClick={() => setTab("courses")}><GraduationCap className="h-4 w-4" /> Courses</Button>
@@ -278,8 +260,6 @@ const AdminLearning = () => {
             )}
           </div>
         )}
-      </main>
-      <Footer />
     </div>
   );
 };

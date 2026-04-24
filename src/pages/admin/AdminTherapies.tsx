@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Sparkles, Eye, EyeOff, ShieldAlert } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 
 type Therapy = {
@@ -36,8 +35,6 @@ const empty = {
 };
 
 const AdminTherapies = () => {
-  const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
   const [items, setItems] = useState<Therapy[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(empty);
@@ -45,15 +42,8 @@ const AdminTherapies = () => {
 
   useEffect(() => {
     document.title = "Admin · Therapies — Ayuzee";
-    (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) { navigate("/auth", { replace: true }); return; }
-      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: data.session.user.id, _role: "admin" });
-      if (!isAdmin) { setChecking(false); return; }
-      setChecking(false);
-      load();
-    })();
-  }, [navigate]);
+    load();
+  }, []);
 
   const load = async () => {
     const { data, error } = await supabase.from("therapies").select("*").order("created_at", { ascending: false });
@@ -113,20 +103,15 @@ const AdminTherapies = () => {
     load();
   };
 
-  if (checking) return <div className="min-h-screen grid place-items-center text-muted-foreground">Checking access…</div>;
-
   return (
-    <div className="min-h-screen bg-muted/30">
-      <header className="border-b border-border bg-card">
-        <div className="container flex h-16 items-center justify-between">
-          <Link to="/" className="font-display text-xl font-semibold flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" /> Admin · Therapies
-          </Link>
-          <Button onClick={startNew}><Plus className="mr-1 h-4 w-4" /> New Therapy</Button>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl">Therapies Catalog</h1>
+          <p className="text-sm text-muted-foreground">Manage public wellness therapies.</p>
         </div>
-      </header>
-
-      <main className="container py-8">
+        <Button onClick={startNew}><Plus className="mr-1 h-4 w-4" /> New Therapy</Button>
+      </div>
         <Card className="p-4">
           <div className="mb-4 flex items-start justify-between">
             <div>
@@ -187,7 +172,6 @@ const AdminTherapies = () => {
             </div>
           </div>
         </Card>
-      </main>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl">

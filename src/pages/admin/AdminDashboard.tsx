@@ -1,195 +1,92 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, Stethoscope, ShoppingBag, IndianRupee, Gift, Wallet, GraduationCap, Award, BookOpen, FileText } from "lucide-react";
-import { toast } from "sonner";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { CalendarDays, IndianRupee, Package, ShieldAlert, Stethoscope, Users } from "lucide-react";
 
-interface Stats { users: number; doctors: number; orders: number; revenue: number; referralCodes: number; referralPayouts: number; }
-interface StudentStats { total: number; verified: number; enrolled: number; certificates: number; }
-interface StudentRow { id: string; user_id: string; full_name: string; phone: string | null; course: string | null; college_name: string | null; year_of_study: number | null; state: string | null; is_verified: boolean; student_id_url: string | null; rejection_note: string | null; }
-interface RecentAppt { id: string; appointment_date: string; time_slot: string; status: string; mode: string; }
-interface RecentOrder { id: string; full_name: string; total: number; order_status: string; created_at: string; }
-interface DayPoint { day: string; revenue: number; }
-interface PrescriptionOrder { id: string; user_id: string | null; guest_name: string | null; guest_phone: string | null; prescription_urls: string[]; delivery_address: { name?: string; phone?: string; address?: string; city?: string; state?: string; pincode?: string }; notes: string | null; status: string; quoted_amount: number | null; admin_note: string | null; created_at: string; }
+type DayPoint = { day: string; revenue?: number; appointments?: number };
+type RecentOrder = { id: string; full_name: string; total: number; order_status: string; payment_status: string; created_at: string };
+type SafetyFlag = { id: string; reason: string; severity: string | null; created_at: string; therapists?: { full_name?: string | null } | null };
 
-const formatINR = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
+const formatINR = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
+const timeAgo = (iso: string) => {
+  const minutes = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.round(hours / 24)}d ago`;
+};
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState<Stats>({ users: 0, doctors: 0, orders: 0, revenue: 0, referralCodes: 0, referralPayouts: 0 });
-  const [appts, setAppts] = useState<RecentAppt[]>([]);
+  const [stats, setStats] = useState({ users: 0, doctors: 0, therapists: 0, appointmentsToday: 0, ordersToday: 0, revenueMonth: 0 });
+  const [revenueChart, setRevenueChart] = useState<DayPoint[]>([]);
+  const [appointmentChart, setAppointmentChart] = useState<DayPoint[]>([]);
   const [orders, setOrders] = useState<RecentOrder[]>([]);
-  const [chart, setChart] = useState<DayPoint[]>([]);
-  const [students, setStudents] = useState<StudentRow[]>([]);
-  const [studentStats, setStudentStats] = useState<StudentStats>({ total: 0, verified: 0, enrolled: 0, certificates: 0 });
-  const [rejecting, setRejecting] = useState<StudentRow | null>(null);
-  const [rejectNote, setRejectNote] = useState("");
-  const [prescriptions, setPrescriptions] = useState<PrescriptionOrder[]>([]);
-  const [prescriptionStatusFilter, setPrescriptionStatusFilter] = useState("all");
-  const [quoteDrafts, setQuoteDrafts] = useState<Record<string, string>>({});
-  const [adminNoteDrafts, setAdminNoteDrafts] = useState<Record<string, string>>({});
+  const [approvals, setApprovals] = useState({ doctors: 0, therapists: 0, venues: 0, students: 0 });
+  const [alerts, setAlerts] = useState<SafetyFlag[]>([]);
 
   useEffect(() => {
     document.title = "Admin Dashboard — Ayuzee";
     const load = async () => {
-      const since = new Date(); since.setDate(since.getDate() - 30);
-      const sinceIso = since.toISOString();
+      const today = new Date();
+      const todayKey = today.toISOString().slice(0, 10);
+      const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
+      const since30 = new Date(today); since30.setDate(since30.getDate() - 29); since30.setHours(0, 0, 0, 0);
+      const since14 = new Date(today); since14.setDate(since14.getDate() - 13); since14.setHours(0, 0, 0, 0);
 
-      const monthStart = new Date();
-      monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
-      const monthIso = monthStart.toISOString();
-
-      const [u, d, o, paid, recentAppts, recentOrders, allOrders, refCodes, refPayouts, studentRows, verifiedStudents, enrolled, certs, prescriptionRows] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("doctors").select("*", { count: "exact", head: true }),
-        supabase.from("orders").select("*", { count: "exact", head: true }),
-        supabase.from("orders").select("total").eq("payment_status", "paid"),
-        supabase.from("appointments").select("id,appointment_date,time_slot,status,mode").order("created_at", { ascending: false }).limit(5),
-        supabase.from("orders").select("id,full_name,total,order_status,created_at").order("created_at", { ascending: false }).limit(5),
-        supabase.from("orders").select("total,created_at,payment_status").gte("created_at", sinceIso),
-        supabase.from("profiles").select("referral_code", { count: "exact", head: true }).not("referral_code", "is", null),
-        supabase.from("ayuzee_transactions").select("amount").eq("type", "referral_credit").gte("created_at", monthIso),
-        (supabase as any).from("student_profiles").select("*").order("created_at", { ascending: false }),
-        (supabase as any).from("student_profiles").select("id", { count: "exact", head: true }).eq("is_verified", true),
-        supabase.from("lms_progress").select("id", { count: "exact", head: true }),
-        supabase.from("lms_certificates").select("id", { count: "exact", head: true }),
-        (supabase as any).from("prescription_orders").select("*").order("created_at", { ascending: false }),
+      const [users, doctors, therapists, apptsToday, ordersToday, monthOrders, revenueRows, apptRows, recentOrders, pendingDoctors, pendingTherapists, pendingVenues, pendingStudents, safetyRows] = await Promise.all([
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
+        supabase.from("doctors").select("id", { count: "exact", head: true }),
+        supabase.from("therapists").select("id", { count: "exact", head: true }).eq("is_verified", true),
+        supabase.from("appointments").select("id", { count: "exact", head: true }).eq("appointment_date", todayKey),
+        supabase.from("orders").select("id", { count: "exact", head: true }).gte("created_at", `${todayKey}T00:00:00.000Z`).lt("created_at", tomorrow.toISOString()),
+        supabase.from("orders").select("total").eq("payment_status", "paid").gte("created_at", monthStart),
+        supabase.from("orders").select("total,created_at,payment_status").eq("payment_status", "paid").gte("created_at", since30.toISOString()),
+        supabase.from("appointments").select("appointment_date").gte("appointment_date", since14.toISOString().slice(0, 10)),
+        supabase.from("orders").select("id,full_name,total,order_status,payment_status,created_at").order("created_at", { ascending: false }).limit(5),
+        supabase.from("doctors").select("id", { count: "exact", head: true }).eq("is_verified", false),
+        supabase.from("therapists").select("id", { count: "exact", head: true }).eq("verification_status", "pending"),
+        supabase.from("therapy_venues").select("id", { count: "exact", head: true }).eq("is_verified", false),
+        (supabase as any).from("student_profiles").select("id", { count: "exact", head: true }).eq("is_verified", false),
+        supabase.from("therapist_safety_flags").select("id,reason,severity,created_at,therapists(full_name)").eq("resolved", false).order("created_at", { ascending: false }).limit(3),
       ]);
 
-      const revenue = (paid.data ?? []).reduce((s, r: { total: number }) => s + (r.total || 0), 0);
-      const referralPayouts = (refPayouts.data ?? []).reduce((s: number, r: { amount: number }) => s + (r.amount || 0), 0);
-      setStats({
-        users: u.count ?? 0, doctors: d.count ?? 0, orders: o.count ?? 0, revenue,
-        referralCodes: refCodes.count ?? 0, referralPayouts,
-      });
-      setAppts((recentAppts.data ?? []) as RecentAppt[]);
+      setStats({ users: users.count ?? 0, doctors: doctors.count ?? 0, therapists: therapists.count ?? 0, appointmentsToday: apptsToday.count ?? 0, ordersToday: ordersToday.count ?? 0, revenueMonth: (monthOrders.data ?? []).reduce((sum, row) => sum + (row.total || 0), 0) });
       setOrders((recentOrders.data ?? []) as RecentOrder[]);
+      setApprovals({ doctors: pendingDoctors.count ?? 0, therapists: pendingTherapists.count ?? 0, venues: pendingVenues.count ?? 0, students: pendingStudents.count ?? 0 });
+      setAlerts((safetyRows.data ?? []) as SafetyFlag[]);
 
-      const days: Record<string, number> = {};
-      for (let i = 29; i >= 0; i--) {
-        const dt = new Date(); dt.setDate(dt.getDate() - i);
-        days[dt.toISOString().slice(0, 10)] = 0;
-      }
-      (allOrders.data ?? []).forEach((row: { total: number; created_at: string; payment_status: string }) => {
-        if (row.payment_status !== "paid") return;
-        const k = row.created_at.slice(0, 10);
-        if (k in days) days[k] += row.total || 0;
-      });
-      setChart(Object.entries(days).map(([day, revenue]) => ({ day: day.slice(5), revenue })));
-      setStudents((studentRows.data ?? []) as StudentRow[]);
-      setStudentStats({ total: studentRows.data?.length ?? 0, verified: verifiedStudents.count ?? 0, enrolled: enrolled.count ?? 0, certificates: certs.count ?? 0 });
-      setPrescriptions((prescriptionRows.data ?? []) as PrescriptionOrder[]);
-      setQuoteDrafts(Object.fromEntries(((prescriptionRows.data ?? []) as PrescriptionOrder[]).map((row) => [row.id, row.quoted_amount?.toString() ?? ""])));
-      setAdminNoteDrafts(Object.fromEntries(((prescriptionRows.data ?? []) as PrescriptionOrder[]).map((row) => [row.id, row.admin_note ?? ""])));
+      const revenue: Record<string, number> = {};
+      for (let i = 29; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); revenue[d.toISOString().slice(0, 10)] = 0; }
+      (revenueRows.data ?? []).forEach((row) => { revenue[row.created_at.slice(0, 10)] += row.total || 0; });
+      setRevenueChart(Object.entries(revenue).map(([day, value]) => ({ day: day.slice(5), revenue: value })));
+
+      const appointments: Record<string, number> = {};
+      for (let i = 13; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); appointments[d.toISOString().slice(0, 10)] = 0; }
+      (apptRows.data ?? []).forEach((row) => { if (row.appointment_date in appointments) appointments[row.appointment_date] += 1; });
+      setAppointmentChart(Object.entries(appointments).map(([day, value]) => ({ day: day.slice(5), appointments: value })));
     };
     load();
   }, []);
 
-  const getStudentIdUrl = async (path: string | null) => {
-    if (!path) return null;
-    const { data } = await supabase.storage.from("student-docs").createSignedUrl(path, 60 * 20);
-    return data?.signedUrl ?? null;
-  };
-
-  const verifyStudent = async (student: StudentRow) => {
-    const { error } = await (supabase as any).from("student_profiles").update({ is_verified: true, rejection_note: null }).eq("id", student.id);
-    if (error) { toast.error(error.message); return; }
-    if (student.phone) {
-      await supabase.functions.invoke("send-whatsapp", {
-        body: { to: student.phone, message: "Your Ayuzee student account is verified! Access all courses and webinars now." },
-      });
-    }
-    toast.success("Student verified");
-    setStudents((rows) => rows.map((row) => row.id === student.id ? { ...row, is_verified: true, rejection_note: null } : row));
-    setStudentStats((current) => ({ ...current, verified: current.verified + 1 }));
-  };
-
-  const rejectStudent = async () => {
-    if (!rejecting) return;
-    const { error } = await (supabase as any).from("student_profiles").update({ is_verified: false, rejection_note: rejectNote || null }).eq("id", rejecting.id);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Student rejected");
-    setStudents((rows) => rows.map((row) => row.id === rejecting.id ? { ...row, is_verified: false, rejection_note: rejectNote || null } : row));
-    setRejecting(null);
-    setRejectNote("");
-  };
-
-  const getPrescriptionUrl = async (path: string) => {
-    const { data } = await supabase.storage.from("prescriptions").createSignedUrl(path, 60 * 20);
-    return data?.signedUrl ?? null;
-  };
-
-  const updatePrescription = async (order: PrescriptionOrder, status = order.status) => {
-    const { error } = await (supabase as any).from("prescription_orders").update({
-      status,
-      quoted_amount: quoteDrafts[order.id] ? Number(quoteDrafts[order.id]) : null,
-      admin_note: adminNoteDrafts[order.id] || null,
-    }).eq("id", order.id);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Prescription order updated");
-    setPrescriptions((rows) => rows.map((row) => row.id === order.id ? { ...row, status, quoted_amount: quoteDrafts[order.id] ? Number(quoteDrafts[order.id]) : null, admin_note: adminNoteDrafts[order.id] || null } : row));
-  };
-
-  const filteredPrescriptions = prescriptions.filter((order) => prescriptionStatusFilter === "all" || order.status === prescriptionStatusFilter);
-
-  const cards = [
+  const statCards = [
     { label: "Total Users", value: stats.users.toLocaleString("en-IN"), icon: Users },
     { label: "Total Doctors", value: stats.doctors.toLocaleString("en-IN"), icon: Stethoscope },
-    { label: "Total Orders", value: stats.orders.toLocaleString("en-IN"), icon: ShoppingBag },
-    { label: "Total Revenue", value: formatINR(stats.revenue), icon: IndianRupee },
-    { label: "Active Referral Codes", value: stats.referralCodes.toLocaleString("en-IN"), icon: Gift },
-    { label: "Referral Payouts (this month)", value: formatINR(stats.referralPayouts), icon: Wallet },
+    { label: "Therapists", value: stats.therapists.toLocaleString("en-IN"), icon: Users },
+    { label: "Today's Appointments", value: stats.appointmentsToday.toLocaleString("en-IN"), icon: CalendarDays },
+    { label: "Orders Today", value: stats.ordersToday.toLocaleString("en-IN"), icon: Package },
+    { label: "Revenue This Month", value: formatINR(stats.revenueMonth), icon: IndianRupee },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Overview of platform performance.</p>
-      </div>
-
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList><TabsTrigger value="overview">Overview</TabsTrigger><TabsTrigger value="students">Students</TabsTrigger><TabsTrigger value="prescriptions">Prescription Orders</TabsTrigger></TabsList>
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {cards.map((c) => (
-              <Card key={c.label}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">{c.label}</CardTitle>
-                  <c.icon className="h-4 w-4 text-primary" />
-                </CardHeader>
-                <CardContent><div className="font-display text-2xl">{c.value}</div></CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <Card>
-            <CardHeader><CardTitle>Daily revenue · last 30 days</CardTitle></CardHeader>
-            <CardContent><div className="h-72 w-full"><ResponsiveContainer width="100%" height="100%"><AreaChart data={chart} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}><defs><linearGradient id="rev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} /><stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} /></linearGradient></defs><CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" /><XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={12} /><YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} /><Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }} formatter={(v: number) => formatINR(v)} /><Area type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" fill="url(#rev)" strokeWidth={2} /></AreaChart></ResponsiveContainer></div></CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="students" className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[{ label: "Total students", value: studentStats.total, icon: GraduationCap }, { label: "Verified students", value: studentStats.verified, icon: Users }, { label: "Courses enrolled", value: studentStats.enrolled, icon: BookOpen }, { label: "Certificates issued", value: studentStats.certificates, icon: Award }].map((s) => <Card key={s.label}><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">{s.label}</CardTitle><s.icon className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="font-display text-2xl">{s.value.toLocaleString("en-IN")}</div></CardContent></Card>)}
-          </div>
-          <Card><CardHeader><CardTitle>Student verification</CardTitle></CardHeader><CardContent className="space-y-3">{students.length === 0 && <p className="text-sm text-muted-foreground">No students yet.</p>}{students.map((student) => <div key={student.id} className="grid gap-3 rounded-xl border border-border p-4 lg:grid-cols-[1fr_auto]"><div><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{student.full_name}</p><Badge variant={student.is_verified ? "default" : "secondary"}>{student.is_verified ? "Verified" : "Pending"}</Badge></div><p className="mt-1 text-sm text-muted-foreground">{student.course || "Course"} · Year {student.year_of_study || "—"} · {student.college_name || "College not added"}</p><p className="text-sm text-muted-foreground">{student.state || "State not added"}</p>{student.rejection_note && <p className="mt-2 text-xs text-destructive">Rejected: {student.rejection_note}</p>}</div><div className="flex flex-wrap items-center gap-2 lg:justify-end">{!student.is_verified && student.student_id_url && <Button variant="outline" size="sm" onClick={async () => { const url = await getStudentIdUrl(student.student_id_url); if (url) window.open(url, "_blank"); }}>View ID</Button>}{!student.is_verified && <Button size="sm" onClick={() => verifyStudent(student)}>Verify</Button>}<Button variant="outline" size="sm" onClick={() => { setRejecting(student); setRejectNote(student.rejection_note || ""); }}>Reject</Button></div></div>)}</CardContent></Card>
-        </TabsContent>
-
-        <TabsContent value="prescriptions" className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Card><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Prescription orders</CardTitle><FileText className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="font-display text-2xl">{prescriptions.length.toLocaleString("en-IN")}</div></CardContent></Card></div>
-          <div className="flex flex-wrap gap-2">{["all", "pending", "reviewing", "quoted", "confirmed", "dispatched", "delivered", "cancelled"].map((status) => <Button key={status} size="sm" variant={prescriptionStatusFilter === status ? "default" : "outline"} onClick={() => setPrescriptionStatusFilter(status)} className="capitalize">{status.replace(/_/g, " ")}</Button>)}</div>
-          <Card><CardHeader><CardTitle>Prescription Orders</CardTitle></CardHeader><CardContent className="space-y-3">{filteredPrescriptions.length === 0 && <p className="text-sm text-muted-foreground">No prescription orders found.</p>}{filteredPrescriptions.map((order) => <div key={order.id} className="rounded-xl border border-border p-4"><div className="grid gap-3 lg:grid-cols-[1fr_auto]"><div><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{order.delivery_address?.name || order.guest_name || "Patient"}</p><Badge>{order.status}</Badge></div><p className="mt-1 text-sm text-muted-foreground">{order.delivery_address?.phone || order.guest_phone} · {order.delivery_address?.city}, {order.delivery_address?.state} · {new Date(order.created_at).toLocaleString("en-IN")}</p><p className="text-sm text-muted-foreground">{order.delivery_address?.address} {order.delivery_address?.pincode}</p>{order.notes && <p className="mt-2 text-sm">Note: {order.notes}</p>}</div><div className="flex flex-wrap items-start gap-2 lg:justify-end">{order.prescription_urls.map((path, index) => <Button key={path} variant="outline" size="sm" onClick={async () => { const url = await getPrescriptionUrl(path); if (url) window.open(url, "_blank"); }}>Prescription {index + 1}</Button>)}</div></div><div className="mt-4 grid gap-3 md:grid-cols-[160px_1fr_auto_auto]"><Input type="number" placeholder="Quoted amount" value={quoteDrafts[order.id] ?? ""} onChange={(event) => setQuoteDrafts((drafts) => ({ ...drafts, [order.id]: event.target.value }))} /><Input placeholder="Admin note" value={adminNoteDrafts[order.id] ?? ""} onChange={(event) => setAdminNoteDrafts((drafts) => ({ ...drafts, [order.id]: event.target.value }))} /><select className="rounded-md border border-input bg-background px-3 py-2 text-sm" value={order.status} onChange={(event) => updatePrescription(order, event.target.value)}>{["pending", "reviewing", "quoted", "confirmed", "dispatched", "delivered", "cancelled"].map((status) => <option key={status} value={status}>{status}</option>)}</select><Button size="sm" onClick={() => updatePrescription(order)}>Save</Button></div></div>)}</CardContent></Card>
-        </TabsContent>
-      </Tabs>
-
-      <Dialog open={!!rejecting} onOpenChange={(open) => !open && setRejecting(null)}><DialogContent><DialogHeader><DialogTitle>Reject student verification</DialogTitle></DialogHeader><Textarea value={rejectNote} onChange={(event) => setRejectNote(event.target.value)} placeholder="Optional note" /><DialogFooter><Button variant="outline" onClick={() => setRejecting(null)}>Cancel</Button><Button variant="destructive" onClick={rejectStudent}>Reject</Button></DialogFooter></DialogContent></Dialog>
+      <div><h1 className="font-display text-3xl">Admin Dashboard</h1><p className="text-sm text-muted-foreground">Live operational overview across Ayuzee.</p></div>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">{statCards.map((card) => <Card key={card.label}><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">{card.label}</CardTitle><card.icon className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="font-display text-2xl">{card.value}</div></CardContent></Card>)}</div>
+      <div className="grid gap-4 xl:grid-cols-2"><Card><CardHeader><CardTitle>Daily revenue · last 30 days</CardTitle></CardHeader><CardContent className="h-80"><ResponsiveContainer width="100%" height="100%"><AreaChart data={revenueChart}><defs><linearGradient id="adminRevenue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} /><stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} /></linearGradient></defs><CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" /><XAxis dataKey="day" fontSize={12} stroke="hsl(var(--muted-foreground))" /><YAxis fontSize={12} stroke="hsl(var(--muted-foreground))" /><Tooltip formatter={(v: number) => formatINR(v)} contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} /><Area type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" fill="url(#adminRevenue)" strokeWidth={2} /></AreaChart></ResponsiveContainer></CardContent></Card><Card><CardHeader><CardTitle>Appointments · last 14 days</CardTitle></CardHeader><CardContent className="h-80"><ResponsiveContainer width="100%" height="100%"><BarChart data={appointmentChart}><CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" /><XAxis dataKey="day" fontSize={12} stroke="hsl(var(--muted-foreground))" /><YAxis fontSize={12} stroke="hsl(var(--muted-foreground))" allowDecimals={false} /><Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} /><Bar dataKey="appointments" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} /></BarChart></ResponsiveContainer></CardContent></Card></div>
+      <div className="grid gap-4 xl:grid-cols-3"><Card><CardHeader><CardTitle>Recent Orders</CardTitle></CardHeader><CardContent className="space-y-3">{orders.map((order) => <div key={order.id} className="flex items-center justify-between gap-3 border-b border-border pb-3 last:border-0"><div><p className="font-medium">{order.full_name}</p><p className="text-xs text-muted-foreground">#{order.id.slice(0, 8)} · {timeAgo(order.created_at)}</p></div><div className="text-right"><p className="font-semibold">{formatINR(order.total)}</p><Badge variant="secondary">{order.order_status}</Badge></div></div>)}{orders.length === 0 && <p className="text-sm text-muted-foreground">No recent orders.</p>}</CardContent></Card><Card><CardHeader><CardTitle>Pending Approvals</CardTitle></CardHeader><CardContent className="space-y-3">{[{ label: "Doctors pending", value: approvals.doctors, url: "/admin/doctors" }, { label: "Therapists pending", value: approvals.therapists, url: "/admin/therapists" }, { label: "Venues pending", value: approvals.venues, url: "/admin/venues" }, { label: "Students pending", value: approvals.students, url: "/admin/students" }].map((item) => <div key={item.label} className="flex items-center justify-between"><span className="text-sm">{item.label}</span><div className="flex items-center gap-3"><Badge>{item.value}</Badge><Link to={item.url} className="text-sm font-medium text-primary hover:underline">Review →</Link></div></div>)}</CardContent></Card><Card><CardHeader className="flex flex-row items-center justify-between"><CardTitle>Safety Alerts</CardTitle><Link to="/admin/safety" className="text-sm font-medium text-primary hover:underline">View all →</Link></CardHeader><CardContent className="space-y-3">{alerts.map((alert) => <div key={alert.id} className="rounded-md border border-border p-3"><div className="flex items-center justify-between gap-2"><p className="font-medium">{alert.therapists?.full_name || "Therapist"}</p><Badge className={alert.severity === "suspension" ? "bg-admin-danger text-destructive-foreground" : "bg-admin-warning text-foreground"}>{alert.severity || "warning"}</Badge></div><p className="mt-1 text-sm text-muted-foreground">{alert.reason}</p></div>)}{alerts.length === 0 && <div className="flex items-center gap-2 text-sm text-muted-foreground"><ShieldAlert className="h-4 w-4" /> No unresolved safety alerts.</div>}</CardContent></Card></div>
     </div>
   );
 };
