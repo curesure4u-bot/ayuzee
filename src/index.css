@@ -75,6 +75,13 @@
     --mystic: 265 58% 58%;
     --earth: 172 58% 38%;
     --indigo: 236 58% 58%;
+
+    --footer: 222 47% 11%;
+    --footer-foreground: 215 20% 78%;
+    --footer-muted: 215 16% 57%;
+    --footer-panel: 217 33% 17%;
+    --footer-border: 215 25% 27%;
+    --footer-pill: 215 25% 22%;
   }
 
   .dark {
@@ -120,6 +127,13 @@
     --mystic: 265 58% 66%;
     --earth: 172 58% 46%;
     --indigo: 236 58% 66%;
+
+    --footer: 222 47% 11%;
+    --footer-foreground: 215 20% 78%;
+    --footer-muted: 215 16% 57%;
+    --footer-panel: 217 33% 17%;
+    --footer-border: 215 25% 27%;
+    --footer-pill: 215 25% 22%;
   }
 }
 
