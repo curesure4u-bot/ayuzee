@@ -43,7 +43,7 @@ const AdminCommissions = () => {
     const payoutRows = (payoutRes.data ?? []) as Payout[];
     const ids = [...new Set(payoutRows.map((p) => p.requester_user_id).filter(Boolean))];
     const { data: profiles } = ids.length ? await supabase.from("profiles").select("user_id,full_name").in("user_id", ids) : { data: [] } as any;
-    const map = new Map((profiles ?? []).map((p: any) => [p.user_id, p.full_name]));
+    const map = new Map<string, string>((profiles ?? []).map((p: any) => [p.user_id, p.full_name || "Partner"]));
     setPayouts(payoutRows.map((p) => ({ ...p, name: p.recipient_name || map.get(p.requester_user_id) || "Partner", bank: last4((p as any).bank_details || p.notes) })));
     setLoading(false);
   };
