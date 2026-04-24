@@ -2569,6 +2569,57 @@ export type Database = {
         }
         Relationships: []
       }
+      student_profiles: {
+        Row: {
+          city: string | null
+          college_name: string | null
+          course: string | null
+          created_at: string | null
+          full_name: string
+          id: string
+          interests: string[] | null
+          is_verified: boolean | null
+          phone: string | null
+          state: string | null
+          student_id_url: string | null
+          updated_at: string | null
+          user_id: string
+          year_of_study: number | null
+        }
+        Insert: {
+          city?: string | null
+          college_name?: string | null
+          course?: string | null
+          created_at?: string | null
+          full_name: string
+          id?: string
+          interests?: string[] | null
+          is_verified?: boolean | null
+          phone?: string | null
+          state?: string | null
+          student_id_url?: string | null
+          updated_at?: string | null
+          user_id: string
+          year_of_study?: number | null
+        }
+        Update: {
+          city?: string | null
+          college_name?: string | null
+          course?: string | null
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          interests?: string[] | null
+          is_verified?: boolean | null
+          phone?: string | null
+          state?: string | null
+          student_id_url?: string | null
+          updated_at?: string | null
+          user_id?: string
+          year_of_study?: number | null
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
@@ -3782,6 +3833,8 @@ export type Database = {
         | "therapist"
         | "provider"
         | "super_admin"
+        | "student"
+        | "venue_owner"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -3924,6 +3977,8 @@ export const Constants = {
         "therapist",
         "provider",
         "super_admin",
+        "student",
+        "venue_owner",
       ],
       ayuzee_txn_type: [
         "credit",
