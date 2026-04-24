@@ -135,7 +135,12 @@ import VenueProfile from "./pages/venue/VenueProfile.tsx";
 import StudentAuth from "./pages/student/StudentAuth.tsx";
 import StudentLayout from "./pages/student/StudentLayout.tsx";
 import StudentDashboard from "./pages/student/StudentDashboard.tsx";
-import { StudentCertificates, StudentProfile as StudentPortalProfile } from "./pages/student/StudentSections.tsx";
+import StudentCourses from "./pages/student/StudentCourses.tsx";
+import StudentWebinars from "./pages/student/StudentWebinars.tsx";
+import StudentJobs from "./pages/student/StudentJobs.tsx";
+import StudentResearch from "./pages/student/StudentResearch.tsx";
+import StudentCertificates from "./pages/student/StudentCertificates.tsx";
+import { StudentProfile as StudentPortalProfile } from "./pages/student/StudentSections.tsx";
 
 const queryClient = new QueryClient();
 
@@ -158,10 +163,10 @@ const App = () => (
             <Route path="/student" element={<StudentLayout />}>
               <Route index element={<StudentDashboard />} />
               <Route path="dashboard" element={<StudentDashboard />} />
-              <Route path="courses" element={<Courses />} />
-              <Route path="webinars" element={<Webinars />} />
-              <Route path="jobs" element={<Jobs />} />
-              <Route path="research" element={<Blogs />} />
+              <Route path="courses" element={<StudentCourses />} />
+              <Route path="webinars" element={<StudentWebinars />} />
+              <Route path="jobs" element={<StudentJobs />} />
+              <Route path="research" element={<StudentResearch />} />
               <Route path="certificates" element={<StudentCertificates />} />
               <Route path="profile" element={<StudentPortalProfile />} />
             </Route>
