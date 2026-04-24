@@ -2182,6 +2182,54 @@ export type Database = {
         }
         Relationships: []
       }
+      patient_vitals: {
+        Row: {
+          blood_sugar_fasting: number | null
+          bp_diastolic: number | null
+          bp_systolic: number | null
+          created_at: string
+          height_cm: number | null
+          id: string
+          notes: string | null
+          pulse: number | null
+          recorded_date: string
+          spo2: number | null
+          temperature: number | null
+          user_id: string
+          weight_kg: number | null
+        }
+        Insert: {
+          blood_sugar_fasting?: number | null
+          bp_diastolic?: number | null
+          bp_systolic?: number | null
+          created_at?: string
+          height_cm?: number | null
+          id?: string
+          notes?: string | null
+          pulse?: number | null
+          recorded_date?: string
+          spo2?: number | null
+          temperature?: number | null
+          user_id: string
+          weight_kg?: number | null
+        }
+        Update: {
+          blood_sugar_fasting?: number | null
+          bp_diastolic?: number | null
+          bp_systolic?: number | null
+          created_at?: string
+          height_cm?: number | null
+          id?: string
+          notes?: string | null
+          pulse?: number | null
+          recorded_date?: string
+          spo2?: number | null
+          temperature?: number | null
+          user_id?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
       payout_requests: {
         Row: {
           admin_note: string | null
