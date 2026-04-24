@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Leaf, ShieldCheck, Stethoscope, HeartPulse, Sparkles } from "lucide-react";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
+import { getDashboardPathForUser } from "@/hooks/useUserRole";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -20,12 +21,16 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
 
+  const redirectForUser = async (userId: string) => {
+    navigate(await getDashboardPathForUser(userId), { replace: true });
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate("/dashboard", { replace: true });
+      if (data.session) redirectForUser(data.session.user.id);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session) navigate("/dashboard", { replace: true });
+      if (session) redirectForUser(session.user.id);
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
@@ -46,9 +51,10 @@ const Auth = () => {
         if (error) throw error;
         toast.success(refCode ? "Account created via referral! Welcome 🌿" : "Account created! Welcome to Ayuzee 🌿");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back!");
+        if (data.user) await redirectForUser(data.user.id);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Something went wrong";
