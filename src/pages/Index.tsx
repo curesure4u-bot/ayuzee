@@ -1,4 +1,4 @@
-import { Header } from "@/components/site/Header";
+import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
 import { Categories } from "@/components/site/Categories";
 import { Doctors } from "@/components/site/Doctors";
@@ -31,7 +31,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <SiteNav />
       <main>
         <Hero />
         <Categories />
