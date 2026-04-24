@@ -191,7 +191,7 @@ export const Categories = () => {
                 <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{step.eyebrow}</p>
                 <h3 className="mt-2 text-xl font-semibold text-foreground">{step.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">{step.desc}</p>
-                {"href" in step && (
+                {"href" in step && "cta" in step && (
                   <Link to={step.href} className="mt-4 inline-flex text-sm font-semibold text-primary hover:underline">
                     {step.cta}
                   </Link>
