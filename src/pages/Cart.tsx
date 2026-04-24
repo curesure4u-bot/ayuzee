@@ -3,6 +3,7 @@ import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 
 const Cart = () => {
@@ -59,6 +60,10 @@ const Cart = () => {
               {subtotal < 499 && subtotal > 0 && (
                 <p className="mt-4 rounded-lg bg-accent/60 p-3 text-xs text-muted-foreground">Add ₹{499 - subtotal} more for free shipping.</p>
               )}
+              <div className="mt-5">
+                <p className="mb-2 text-xs text-muted-foreground">Confirm your delivery location before checkout.</p>
+                <PincodeWidget variant="inline" />
+              </div>
               <Button variant="hero" size="lg" className="mt-6 w-full" onClick={() => navigate("/checkout")}>
                 Proceed to checkout
               </Button>
