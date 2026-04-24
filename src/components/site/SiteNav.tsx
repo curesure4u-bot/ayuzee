@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,16 +9,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
+import { GlobalSearch } from "@/components/site/GlobalSearch";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
-const searchTabs = [
-  { label: "Doctors", path: "/doctors" },
-  { label: "Therapies", path: "/therapies" },
-  { label: "Medicines", path: "/shop" },
-  { label: "Courses", path: "/learning/courses" },
-  { label: "Jobs", path: "/jobs" },
-];
-
 type MegaLink = { label: string; to: string };
 type MegaColumn = { title: string; links?: MegaLink[]; card?: { title: string; body?: string; cta: string; to: string } };
 type MegaMenu = { label: string; columns: MegaColumn[] };
@@ -69,30 +62,6 @@ const megaMenus: MegaMenu[] = [
 
 const initialsFromEmail = (email?: string | null) => (email?.slice(0, 2) || "AZ").toUpperCase();
 
-const SearchBox = ({ mobile = false }: { mobile?: boolean }) => {
-  const navigate = useNavigate();
-  const [value, setValue] = useState("");
-  const [focused, setFocused] = useState(false);
-  const submit = (path = "/doctors") => {
-    const q = value.trim();
-    navigate(q ? `${path}?q=${encodeURIComponent(q)}` : path);
-    setFocused(false);
-  };
-  return (
-    <form onSubmit={(e: FormEvent) => { e.preventDefault(); submit(); }} className="relative w-full">
-      <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-      <Input value={value} onChange={(e) => setValue(e.target.value)} onFocus={() => setFocused(true)} className="h-11 rounded-full border-border bg-background pl-11 pr-4 shadow-soft md:w-80 lg:w-[420px]" placeholder="Search doctors, therapies, medicines, colleges..." />
-      {focused && (
-        <div className="absolute left-0 right-0 top-12 z-[70] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95">
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-            {searchTabs.map((tab) => <button key={tab.label} type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => submit(tab.path)} className="rounded-full border border-border px-3 py-2 text-xs font-semibold hover:border-primary hover:bg-primary/10">{tab.label}</button>)}
-          </div>
-        </div>
-      )}
-    </form>
-  );
-};
-
 const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
   <div className="absolute left-0 top-full z-[60] w-screen border-b border-border bg-background shadow-lg animate-in fade-in-0 slide-in-from-top-2" onMouseLeave={close}>
     <div className="container grid gap-8 py-8 md:grid-cols-3">
@@ -117,6 +86,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [dashboardPath, setDashboardPath] = useState("/dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   useEffect(() => {
     const resolveRole = async (userId?: string) => {
@@ -170,7 +140,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
             <SheetTrigger asChild><Button variant="ghost" size="icon" className="md:hidden"><Menu className="h-5 w-5" /><span className="sr-only">Menu</span></Button></SheetTrigger>
             <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
-              <div className="space-y-5 p-4"><SearchBox mobile /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
+              <div className="space-y-5 p-4"><GlobalSearch className="md:w-full lg:w-full" /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
                 <div className="space-y-2">{megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}</div>
                 <div className="space-y-2"><p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Join Ayuzee</p><JoinRoleCards onSelect={() => setMobileOpen(false)} /></div>
               </div>
@@ -178,8 +148,10 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
           </Sheet>
 
           <Link to="/" className="flex shrink-0 items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf shadow-soft"><Leaf className="h-5 w-5 text-primary-foreground" /></span><span className="font-display text-2xl font-semibold tracking-tight">Ayuzee</span></Link>
-          <div className="mx-auto hidden md:block"><SearchBox /></div>
+          <div className="mx-auto hidden md:block"><GlobalSearch /></div>
+          {mobileSearchOpen && <div className="absolute left-4 right-4 top-[4.5rem] z-[90] md:hidden"><GlobalSearch autoFocus className="md:w-full lg:w-full" /></div>}
           <div className="ml-auto flex items-center gap-2">
+            <Button variant="ghost" size="icon" aria-label="Search" className="md:hidden" onClick={() => setMobileSearchOpen((v) => !v)}><Search className="h-5 w-5" /></Button>
             <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[10px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
             <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:inline-flex"><Bell className="h-5 w-5" /></Button>
             {email ? <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="rounded-full font-bold">{initialsFromEmail(email)}</Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuLabel>{email}</DropdownMenuLabel><DropdownMenuSeparator /><DropdownMenuItem asChild><Link to={dashboardPath}>My Dashboard</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <JoinDropdown />}
