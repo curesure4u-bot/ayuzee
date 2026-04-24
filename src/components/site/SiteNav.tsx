@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Bell, BookOpen, Briefcase, Building2, CalendarCheck, ChevronDown, ChevronRight, GraduationCap, Handshake, HeartPulse, Leaf, LogOut, Menu, Pill, Search, ShoppingCart, Stethoscope, UserCircle } from "lucide-react";
+import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
+import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 const searchTabs = [
@@ -16,14 +17,6 @@ const searchTabs = [
   { label: "Medicines", path: "/shop" },
   { label: "Courses", path: "/learning/courses" },
   { label: "Jobs", path: "/jobs" },
-];
-
-const joinOptions = [
-  { to: "/auth", title: "Patient", subtitle: "Book consults, therapies and medicines", icon: HeartPulse },
-  { to: "/doctor/auth", title: "Doctor / Vaidya", subtitle: "Manage practice, patients and earnings", icon: Stethoscope },
-  { to: "/therapist/auth", title: "Panchakarma Therapist", subtitle: "Accept assigned therapy sessions", icon: UserCircle },
-  { to: "/venue/auth", title: "Hospital / Clinic / Resort", subtitle: "List therapy rooms and venues", icon: Building2 },
-  { to: "/partner/apply", title: "Partner / Collaborator", subtitle: "Bulk, B2B, colleges and brands", icon: Handshake },
 ];
 
 type MegaLink = { label: string; to: string };
@@ -122,10 +115,28 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const navRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [dashboardPath, setDashboardPath] = useState("/dashboard");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user.email ?? null));
+    const resolveRole = async (userId?: string) => {
+      if (!userId) return setDashboardPath("/dashboard");
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+      const roles = (data ?? []).map((r) => r.role as string);
+      if (roles.includes("admin")) setDashboardPath("/admin");
+      else if (roles.includes("doctor")) setDashboardPath("/doctor");
+      else if (roles.includes("therapist")) setDashboardPath("/therapist");
+      else if (roles.includes("venue_owner")) setDashboardPath("/venue");
+      else setDashboardPath("/dashboard");
+    };
+    supabase.auth.getSession().then(({ data }) => {
+      setEmail(data.session?.user.email ?? null);
+      resolveRole(data.session?.user.id);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      setEmail(s?.user.email ?? null);
+      resolveRole(s?.user.id);
+    });
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -155,13 +166,13 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
 
       <div className="border-b border-border bg-background">
         <div className="container flex h-16 items-center gap-4">
-          <Sheet>
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild><Button variant="ghost" size="icon" className="md:hidden"><Menu className="h-5 w-5" /><span className="sr-only">Menu</span></Button></SheetTrigger>
             <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
               <div className="space-y-5 p-4"><SearchBox mobile /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
                 <div className="space-y-2">{megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}</div>
-                <div className="space-y-2"><p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Join Ayuzee</p>{joinOptions.map((item) => <Link key={item.title} to={item.to} className="flex items-start gap-3 rounded-xl border border-border bg-card p-3"><item.icon className="mt-1 h-4 w-4 text-primary" /><span><span className="block text-sm font-semibold">{item.title}</span><span className="text-xs text-muted-foreground">{item.subtitle}</span></span></Link>)}</div>
+                <div className="space-y-2"><p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Join Ayuzee</p><JoinRoleCards onSelect={() => setMobileOpen(false)} /></div>
               </div>
             </SheetContent>
           </Sheet>
@@ -171,7 +182,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
           <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[10px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
             <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:inline-flex"><Bell className="h-5 w-5" /></Button>
-            {email ? <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="rounded-full font-bold">{initialsFromEmail(email)}</Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuLabel>{email}</DropdownMenuLabel><DropdownMenuSeparator /><DropdownMenuItem asChild><Link to="/dashboard">My Dashboard</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <DropdownMenu><DropdownMenuTrigger asChild><Button variant="hero" className="hidden gap-1 rounded-full px-5 sm:inline-flex">Join Ayuzee <ChevronDown className="h-4 w-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-80 p-2">{joinOptions.map((item) => <DropdownMenuItem key={item.title} asChild><Link to={item.to} className="flex cursor-pointer items-start gap-3 rounded-lg p-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></span><span><span className="block text-sm font-semibold">{item.title}</span><span className="text-xs text-muted-foreground">{item.subtitle}</span></span></Link></DropdownMenuItem>)}</DropdownMenuContent></DropdownMenu>}
+            {email ? <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="rounded-full font-bold">{initialsFromEmail(email)}</Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuLabel>{email}</DropdownMenuLabel><DropdownMenuSeparator /><DropdownMenuItem asChild><Link to={dashboardPath}>My Dashboard</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <JoinDropdown />}
           </div>
         </div>
       </div>
