@@ -251,14 +251,19 @@ const App = () => (
               <Route path="admins" element={<AdminManagement />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="doctors" element={<AdminDoctors />} />
+              <Route path="students" element={<AdminPlaceholder title="Students" description="Coming soon — Students" />} />
               <Route path="appointments" element={<AdminPlaceholder title="Appointments" description="Manage all platform appointments." />} />
+              <Route path="sessions" element={<AdminTherapySessions />} />
               <Route path="orders" element={<AdminOrders />} />
+              <Route path="prescriptions" element={<AdminPlaceholder title="Prescription Orders" description="Coming soon — Prescription Orders" />} />
               <Route path="products" element={<AdminPlaceholder title="Products" description="Manage the product catalog." />} />
               <Route path="commissions" element={<AdminPlaceholder title="Commissions" description="Doctor & partner commission rates." />} />
-              <Route path="webinars" element={<AdminPlaceholder title="Webinars" description="Schedule and manage webinars." />} />
               <Route path="blogs" element={<AdminPlaceholder title="Blogs" description="Editorial review for health blogs." />} />
               <Route path="notifications" element={<AdminPlaceholder title="Notifications" description="Broadcast push and email." />} />
               <Route path="payments" element={<AdminPlaceholder title="Payments" description="Razorpay transactions & payouts." />} />
+              <Route path="reports" element={<AdminPlaceholder title="Reports & Analytics" description="Coming soon — Reports & Analytics" />} />
+              <Route path="safety" element={<AdminPlaceholder title="Safety Flags" description="Coming soon — Safety Flags" />} />
+              <Route path="settings" element={<AdminPlaceholder title="Settings" description="Coming soon — Settings" />} />
               <Route path="therapies" element={<AdminTherapies />} />
               <Route path="learning" element={<AdminLearning />} />
               <Route path="health-conditions" element={<AdminHealthConditions />} />
