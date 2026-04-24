@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -10,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 import { GlobalSearch } from "@/components/site/GlobalSearch";
+import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 type MegaLink = { label: string; to: string };
@@ -62,6 +64,13 @@ const megaMenus: MegaMenu[] = [
 
 const initialsFromEmail = (email?: string | null) => (email?.slice(0, 2) || "AZ").toUpperCase();
 
+const roleBadgeClass = (role: string | null) => {
+  if (role === "doctor") return "border-primary/30 bg-primary/10 text-primary";
+  if (role === "student") return "border-secondary/30 bg-secondary/10 text-secondary";
+  if (role === "therapist") return "border-accent bg-accent text-accent-foreground";
+  return "border-primary/30 bg-primary/10 text-primary";
+};
+
 const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
   <div className="absolute left-0 top-full z-[60] w-screen border-b border-border bg-background shadow-lg animate-in fade-in-0 slide-in-from-top-2" onMouseLeave={close}>
     <div className="container grid gap-8 py-8 md:grid-cols-3">
@@ -81,31 +90,29 @@ const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
 export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const { count } = useCart();
   const navigate = useNavigate();
+  const { role } = useUserRole();
   const navRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [dashboardPath, setDashboardPath] = useState("/dashboard");
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const dashboardPath = dashboardPathForRole(role);
+  const roleLabel = labelForRole(role);
 
   useEffect(() => {
-    const resolveRole = async (userId?: string) => {
-      if (!userId) return setDashboardPath("/dashboard");
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-      const roles = (data ?? []).map((r) => r.role as string);
-      if (roles.includes("admin")) setDashboardPath("/admin");
-      else if (roles.includes("doctor")) setDashboardPath("/doctor");
-      else if (roles.includes("therapist")) setDashboardPath("/therapist");
-      else if (roles.includes("venue_owner")) setDashboardPath("/venue");
-      else setDashboardPath("/dashboard");
+    const loadProfileName = async (userId?: string) => {
+      if (!userId) return setDisplayName(null);
+      const { data } = await supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle();
+      setDisplayName(data?.full_name || null);
     };
     supabase.auth.getSession().then(({ data }) => {
       setEmail(data.session?.user.email ?? null);
-      resolveRole(data.session?.user.id);
+      loadProfileName(data.session?.user.id);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setEmail(s?.user.email ?? null);
-      resolveRole(s?.user.id);
+      loadProfileName(s?.user.id);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -142,7 +149,18 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
               <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
               <div className="space-y-5 p-4"><GlobalSearch className="md:w-full lg:w-full" /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
                 <div className="space-y-2">{megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}</div>
-                <div className="space-y-2"><p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Join Ayuzee</p><JoinRoleCards onSelect={() => setMobileOpen(false)} /></div>
+                {email ? (
+                  <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
+                    <div>
+                      <p className="truncate text-sm font-semibold">{displayName || email}</p>
+                      <Badge variant="outline" className={roleBadgeClass(role)}>{roleLabel}</Badge>
+                    </div>
+                    <Button asChild className="w-full" onClick={() => setMobileOpen(false)}><Link to={dashboardPath}>My Dashboard</Link></Button>
+                    <Button variant="outline" className="w-full" onClick={() => { setMobileOpen(false); signOut(); }}>Logout</Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2"><p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Join Ayuzee</p><JoinRoleCards onSelect={() => setMobileOpen(false)} /></div>
+                )}
               </div>
             </SheetContent>
           </Sheet>
@@ -154,7 +172,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
             <Button variant="ghost" size="icon" aria-label="Search" className="md:hidden" onClick={() => setMobileSearchOpen((v) => !v)}><Search className="h-5 w-5" /></Button>
             <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[10px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
             <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:inline-flex"><Bell className="h-5 w-5" /></Button>
-            {email ? <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="rounded-full font-bold">{initialsFromEmail(email)}</Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuLabel>{email}</DropdownMenuLabel><DropdownMenuSeparator /><DropdownMenuItem asChild><Link to={dashboardPath}>My Dashboard</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <JoinDropdown />}
+            {email ? <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" className="gap-2 rounded-full"><span className="font-bold">{initialsFromEmail(email)}</span><Badge variant="outline" className={roleBadgeClass(role)}>{roleLabel}</Badge></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuLabel><div className="max-w-56"><p className="truncate">{displayName || email}</p><p className="truncate text-xs font-normal text-muted-foreground">{email}</p></div></DropdownMenuLabel><DropdownMenuSeparator /><DropdownMenuItem asChild><Link to={dashboardPath}>My Dashboard</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <JoinDropdown />}
           </div>
         </div>
       </div>
