@@ -274,7 +274,7 @@ const App = () => (
               <Route path="condition-leads" element={<AdminConditionLeads />} />
               <Route path="therapists" element={<AdminTherapists />} />
               <Route path="venues" element={<AdminVenues />} />
-              <Route path="therapy-sessions" element={<AdminTherapySessions />} />
+              <Route path="therapy-sessions" element={<AdminSessions />} />
               <Route path="revenue-split" element={<AdminRevenueSplit />} />
               <Route path="jobs" element={<AdminJobs />} />
             </Route>
