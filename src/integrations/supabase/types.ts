@@ -1416,6 +1416,75 @@ export type Database = {
           },
         ]
       }
+      job_listings: {
+        Row: {
+          apply_email: string | null
+          apply_url: string | null
+          created_at: string | null
+          description: string | null
+          experience_years_min: number | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          is_approved: boolean | null
+          job_title: string
+          job_type: string | null
+          location_city: string | null
+          location_state: string | null
+          organization_name: string
+          organization_type: string | null
+          posted_by: string | null
+          requirements: string | null
+          salary_max: number | null
+          salary_min: number | null
+          specialization: string | null
+        }
+        Insert: {
+          apply_email?: string | null
+          apply_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          experience_years_min?: number | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_approved?: boolean | null
+          job_title: string
+          job_type?: string | null
+          location_city?: string | null
+          location_state?: string | null
+          organization_name: string
+          organization_type?: string | null
+          posted_by?: string | null
+          requirements?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          specialization?: string | null
+        }
+        Update: {
+          apply_email?: string | null
+          apply_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          experience_years_min?: number | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_approved?: boolean | null
+          job_title?: string
+          job_type?: string | null
+          location_city?: string | null
+          location_state?: string | null
+          organization_name?: string
+          organization_type?: string | null
+          posted_by?: string | null
+          requirements?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          specialization?: string | null
+        }
+        Relationships: []
+      }
       lms_certificates: {
         Row: {
           certificate_no: string
