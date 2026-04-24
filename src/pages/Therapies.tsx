@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Clock, Leaf } from "lucide-react";
+import { setSEO } from "@/lib/seo";
 
 type Therapy = {
   id: string; name: string; slug: string; category: string;
@@ -19,7 +20,10 @@ const Therapies = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "Ayurvedic Therapies — Ayuzee";
+    setSEO(
+      "Book Panchakarma Therapies | GPS-Tracked Certified Therapists | Ayuzee",
+      "Book Abhyanga, Shirodhara, Kati Basti & 200+ Panchakarma therapies. Certified therapists. GPS-tracked sessions. Doctor-prescribed therapy plans.",
+    );
     supabase.from("therapies").select("*").eq("is_published", true).eq("is_active", true).order("price")
       .then(({ data }) => { setItems((data ?? []) as Therapy[]); setLoading(false); });
   }, []);
