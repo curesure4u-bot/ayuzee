@@ -107,6 +107,7 @@ import AdminAuth from "./pages/admin/AdminAuth.tsx";
 import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import AdminTherapists from "./pages/admin/AdminTherapists.tsx";
 import AdminVenues from "./pages/admin/AdminVenues.tsx";
+import AdminStudents from "./pages/admin/AdminStudents.tsx";
 import AdminTherapySessions from "./pages/admin/AdminTherapySessions.tsx";
 import AdminRevenueSplit from "./pages/admin/AdminRevenueSplit.tsx";
 import AdminJobs from "./pages/admin/AdminJobs.tsx";
@@ -251,7 +252,7 @@ const App = () => (
               <Route path="admins" element={<AdminManagement />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="doctors" element={<AdminDoctors />} />
-              <Route path="students" element={<AdminPlaceholder title="Students" description="Coming soon — Students" />} />
+              <Route path="students" element={<AdminStudents />} />
               <Route path="appointments" element={<AdminPlaceholder title="Appointments" description="Manage all platform appointments." />} />
               <Route path="sessions" element={<AdminTherapySessions />} />
               <Route path="orders" element={<AdminOrders />} />
