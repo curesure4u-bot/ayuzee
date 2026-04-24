@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 import { GlobalSearch } from "@/components/site/GlobalSearch";
+import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
 import { BULK_BRANDS, CLASSICAL_TYPES, PATENTED_TYPES } from "@/data/bulkCatalog";
 
@@ -254,6 +255,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
           <div className="mx-auto hidden md:block"><GlobalSearch /></div>
           {mobileSearchOpen && <div className="absolute left-4 right-4 top-[4.5rem] z-[90] md:hidden"><GlobalSearch autoFocus className="md:w-full lg:w-full" /></div>}
           <div className="ml-auto flex items-center gap-2">
+            <div className="hidden lg:block"><PincodeWidget variant="mini" /></div>
             <Button variant="ghost" size="icon" aria-label="Search" className="md:hidden" onClick={() => setMobileSearchOpen((v) => !v)}><Search className="h-5 w-5" /></Button>
             <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[10px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
             <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:inline-flex"><Bell className="h-5 w-5" /></Button>
