@@ -35,7 +35,7 @@ const megaMenus: MegaMenu[] = [
   { label: "Medicines", columns: [
     { title: "Shop by Brand", links: ["Dabur", "Himalaya", "Baidyanath", "Patanjali", "Kottakkal", "Kerala Ayurveda", "AVP", "SNA"].map((x) => ({ label: x, to: `/shop?brand=${encodeURIComponent(x)}` })) },
     { title: "Shop by Category", links: ["Immunity Boosters", "Pain & Inflammation", "Digestive Health", "Skin & Hair", "Women's Health", "Men's Health", "Classical Medicines", "Oils & Ghee"].map((x) => ({ label: x, to: `/shop?category=${encodeURIComponent(x)}` })) },
-    { title: "Special", links: [{ label: "🛒 Bulk Purchase (Doctor Discounts)", to: "/bulk" }, { label: "💊 Upload Prescription", to: "/shop?upload=1" }, { label: "🎁 Offers & Deals", to: "/offers" }] },
+    { title: "Special", links: [{ label: "🛒 Bulk Purchase (Doctor Discounts)", to: "/bulk" }, { label: "💊 Upload Prescription", to: "/shop/prescription" }, { label: "🚚 Track My Order", to: "/shop/track" }, { label: "🎁 Offers & Deals", to: "/offers" }] },
   ] },
   { label: "Learn", columns: [
     { title: "For Doctors", links: [{ label: "📚 CME Courses", to: "/learning/courses?for=doctor" }, { label: "🎓 Certification Programs", to: "/learning/courses?type=certification" }, { label: "📝 Quizzes & Assessments", to: "/learning/quiz" }, { label: "🏆 My Certificates", to: "/dashboard?tab=certificates" }] },

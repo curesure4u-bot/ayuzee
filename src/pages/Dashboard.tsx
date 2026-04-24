@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2, Gift } from "lucide-react";
+import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2, Gift, Truck } from "lucide-react";
 import { toast } from "sonner";
 import { PatientTherapyPlans } from "@/components/dashboard/PatientTherapyPlans";
 import { PrakritiHistory } from "@/components/dashboard/PrakritiHistory";
@@ -74,6 +74,7 @@ const Dashboard = () => {
     { icon: Calendar, label: "Appointments", desc: "Upcoming consultations", count: upcoming.length },
     { icon: FileText, label: "Prescriptions", desc: "Digital prescriptions", count: 0 },
     { icon: ShoppingBag, label: "Orders", desc: "Medicine & products", count: orderCount },
+    { icon: Truck, label: "Track Order", desc: "Medicine delivery status", count: null, href: "/shop/track" },
     { icon: Heart, label: "Health Profile", desc: "Your wellness details", count: null },
   ];
 
@@ -88,16 +89,13 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {tiles.map((t) => (
+          {tiles.map((t) => {
+            const content = <><div className="mb-4 grid h-12 w-12 place-items-center rounded-xl bg-accent text-primary transition-smooth group-hover:gradient-leaf group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></div><h3 className="text-lg font-semibold">{t.label}</h3><p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>{t.count !== null && <p className="mt-4 font-display text-3xl">{t.count}</p>}</>;
+            return t.href ? <Link key={t.label} to={t.href} className="group rounded-2xl border border-border bg-card p-6 transition-smooth hover:-translate-y-1 hover:shadow-elegant">{content}</Link> : (
             <article key={t.label} className="group rounded-2xl border border-border bg-card p-6 transition-smooth hover:-translate-y-1 hover:shadow-elegant">
-              <div className="mb-4 grid h-12 w-12 place-items-center rounded-xl bg-accent text-primary transition-smooth group-hover:gradient-leaf group-hover:text-primary-foreground">
-                <t.icon className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-semibold">{t.label}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
-              {t.count !== null && <p className="mt-4 font-display text-3xl">{t.count}</p>}
+              {content}
             </article>
-          ))}
+          );})}
         </div>
 
         <section className="mt-12">
