@@ -141,6 +141,10 @@ import StudentJobs from "./pages/student/StudentJobs.tsx";
 import StudentResearch from "./pages/student/StudentResearch.tsx";
 import StudentCertificates from "./pages/student/StudentCertificates.tsx";
 import StudentProfilePage from "./pages/student/StudentProfile.tsx";
+import ShopByCondition from "./pages/shop/ShopByCondition.tsx";
+import ConditionProducts from "./pages/shop/ConditionProducts.tsx";
+import PanchakarmaShop from "./pages/shop/PanchakarmaShop.tsx";
+import AyushSurgicals from "./pages/shop/AyushSurgicals.tsx";
 
 const queryClient = new QueryClient();
 
@@ -191,6 +195,10 @@ const App = () => (
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/post" element={<JobPost />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/conditions" element={<ShopByCondition />} />
+            <Route path="/shop/conditions/:slug" element={<ConditionProducts />} />
+            <Route path="/shop/panchakarma" element={<PanchakarmaShop />} />
+            <Route path="/shop/surgicals" element={<AyushSurgicals />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
