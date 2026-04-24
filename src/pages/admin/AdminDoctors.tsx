@@ -1,269 +1,60 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { Check, X, Eye, FileCheck, IdCard, Camera, ExternalLink } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
-interface Doctor {
-  id: string;
-  full_name: string;
-  specialization: string;
-  city: string;
-  consultation_fee: number;
-  is_approved: boolean;
-  is_verified: boolean;
-  verification_status: string;
-  rejection_reason: string | null;
-  rating: number;
-  created_at: string;
-}
-
-const SLOTS: { key: "cert" | "id" | "selfie"; label: string; icon: typeof FileCheck }[] = [
-  { key: "cert", label: "Certificate", icon: FileCheck },
-  { key: "id", label: "ID proof", icon: IdCard },
-  { key: "selfie", label: "Selfie", icon: Camera },
-];
+type Doctor = { id: string; user_id: string | null; full_name: string; specialization: string; city: string; state?: string | null; created_at: string; verification_status: string; is_verified: boolean; phone: string | null; commission_rate?: number; is_suspended?: boolean; rejection_reason: string | null };
+const tabs = ["all", "pending", "approved", "rejected", "suspended"];
+const statusOf = (d: Doctor) => d.is_suspended ? "suspended" : d.verification_status === "approved" || d.is_verified ? "approved" : d.verification_status === "rejected" ? "rejected" : "pending";
 
 const AdminDoctors = () => {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [reviewing, setReviewing] = useState<Doctor | null>(null);
-  const [docUrls, setDocUrls] = useState<Record<string, string>>({});
+  const [rows, setRows] = useState<Doctor[]>([]);
+  const [tab, setTab] = useState("all");
+  const [query, setQuery] = useState("");
   const [rejectFor, setRejectFor] = useState<Doctor | null>(null);
-  const [rejectReason, setRejectReason] = useState("");
+  const [reason, setReason] = useState("");
+  const [commissions, setCommissions] = useState<Record<string, string>>({});
 
   const load = async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from("doctors")
-      .select("id,full_name,specialization,city,consultation_fee,is_approved,is_verified,verification_status,rejection_reason,rating,created_at")
-      .order("created_at", { ascending: false });
-    setDoctors((data ?? []) as Doctor[]);
-    setLoading(false);
+    const { data, error } = await (supabase as any).from("doctors").select("*").order("created_at", { ascending: false });
+    if (error) return toast.error(error.message);
+    setRows((data ?? []) as Doctor[]);
+    setCommissions(Object.fromEntries(((data ?? []) as Doctor[]).map((d) => [d.id, String(d.commission_rate ?? 0)])));
   };
+  useEffect(() => { document.title = "Admin · Doctors — Ayuzee"; load(); }, []);
 
-  useEffect(() => {
-    document.title = "Admin · Doctors — Ayuzee";
-    load();
-  }, []);
+  const filtered = useMemo(() => rows.filter((d) => (tab === "all" || statusOf(d) === tab) && (!query || `${d.full_name} ${d.specialization} ${d.city} ${d.state ?? ""}`.toLowerCase().includes(query.toLowerCase()))), [rows, tab, query]);
+  const counts = { total: rows.length, pending: rows.filter((d) => statusOf(d) === "pending").length, approved: rows.filter((d) => statusOf(d) === "approved").length, rejected: rows.filter((d) => statusOf(d) === "rejected").length };
 
-  const openReview = async (doc: Doctor) => {
-    setReviewing(doc);
-    setDocUrls({});
-    const exts = ["pdf", "jpg", "jpeg", "png", "webp"];
-    const urls: Record<string, string> = {};
-    for (const slot of SLOTS) {
-      for (const ext of exts) {
-        const path = `${doc.id}/${slot.key}.${ext}`;
-        const { data } = await supabase.storage
-          .from("doctor-documents")
-          .createSignedUrl(path, 60 * 30);
-        if (data?.signedUrl) {
-          urls[slot.key] = data.signedUrl;
-          break;
-        }
-      }
-    }
-    setDocUrls(urls);
+  const notify = (phone: string | null, message: string) => phone ? supabase.functions.invoke("send-whatsapp", { body: { to: phone, message } }) : Promise.resolve();
+  const approve = async (d: Doctor) => {
+    const [doctorUpdate, roleInsert] = await Promise.all([
+      (supabase as any).from("doctors").update({ is_verified: true, is_approved: true, verification_status: "approved", is_suspended: false, rejection_reason: null }).eq("id", d.id),
+      d.user_id ? supabase.from("user_roles").upsert({ user_id: d.user_id, role: "doctor" as any }, { onConflict: "user_id,role" }) : Promise.resolve({ error: null }),
+    ]);
+    if (doctorUpdate.error || (roleInsert as any).error) return toast.error(doctorUpdate.error?.message || (roleInsert as any).error.message);
+    await notify(d.phone, "Your Ayuzee doctor account is approved");
+    toast.success("Doctor approved"); load();
   };
-
-  const approveDoctor = async (id: string) => {
-    const { error } = await supabase
-      .from("doctors")
-      .update({
-        is_approved: true,
-        is_verified: true,
-        verification_status: "approved",
-        rejection_reason: null,
-        public_profile: true,
-      })
-      .eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Doctor approved & verified");
-    setReviewing(null);
-    load();
-  };
-
-  const rejectDoctor = async () => {
+  const reject = async () => {
     if (!rejectFor) return;
-    if (rejectReason.trim().length < 5) {
-      toast.error("Please enter a clear reason (min 5 chars)");
-      return;
-    }
-    const { error } = await supabase
-      .from("doctors")
-      .update({
-        is_approved: false,
-        is_verified: false,
-        verification_status: "rejected",
-        rejection_reason: rejectReason.trim(),
-        public_profile: false,
-      })
-      .eq("id", rejectFor.id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Doctor rejected");
-    setRejectFor(null);
-    setRejectReason("");
-    setReviewing(null);
-    load();
+    const { error } = await (supabase as any).from("doctors").update({ is_verified: false, is_approved: false, verification_status: "rejected", rejection_reason: reason }).eq("id", rejectFor.id);
+    if (error) return toast.error(error.message);
+    await notify(rejectFor.phone, `Your Ayuzee doctor account was rejected. Reason: ${reason}`);
+    toast.success("Doctor rejected"); setRejectFor(null); setReason(""); load();
   };
+  const suspend = async (d: Doctor) => { const { error } = await (supabase as any).from("doctors").update({ is_suspended: true, public_profile: false }).eq("id", d.id); if (error) return toast.error(error.message); toast.success("Doctor suspended"); load(); };
+  const saveCommission = async (d: Doctor) => { const { error } = await (supabase as any).from("doctors").update({ commission_rate: Number(commissions[d.id]) || 0 }).eq("id", d.id); if (error) return toast.error(error.message); toast.success("Commission updated"); load(); };
+  const openDoc = async (d: Doctor, file: string) => { if (!d.user_id) return toast.error("User ID missing"); const { data } = await supabase.storage.from("doctor-documents").createSignedUrl(`${d.user_id}/${file}`, 900); if (data?.signedUrl) window.open(data.signedUrl, "_blank"); else toast.error("Document unavailable"); };
 
-  const StatusBadge = ({ d }: { d: Doctor }) => {
-    if (d.verification_status === "approved" && d.is_verified)
-      return <Badge className="bg-primary text-primary-foreground">Verified</Badge>;
-    if (d.verification_status === "rejected")
-      return <Badge variant="destructive">Rejected</Badge>;
-    return <Badge variant="secondary">Pending review</Badge>;
-  };
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl">Doctors</h1>
-        <p className="text-sm text-muted-foreground">
-          {doctors.length} total · {doctors.filter((d) => d.verification_status === "pending").length} pending review
-        </p>
-      </div>
-
-      <Card>
-        <CardHeader><CardTitle>All doctors</CardTitle></CardHeader>
-        <CardContent>
-          {loading ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Specialization</TableHead>
-                  <TableHead>City</TableHead>
-                  <TableHead className="text-right">Fee</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {doctors.map((d) => (
-                  <TableRow key={d.id}>
-                    <TableCell className="font-medium">{d.full_name}</TableCell>
-                    <TableCell className="text-muted-foreground">{d.specialization}</TableCell>
-                    <TableCell>{d.city}</TableCell>
-                    <TableCell className="text-right">₹{d.consultation_fee}</TableCell>
-                    <TableCell><StatusBadge d={d} /></TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button size="sm" variant="outline" onClick={() => openReview(d)}>
-                          <Eye className="mr-1 h-4 w-4" /> Review
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {doctors.length === 0 && (
-                  <TableRow><TableCell colSpan={6} className="py-6 text-center text-muted-foreground">No doctors yet.</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Review Dialog */}
-      <Dialog open={!!reviewing} onOpenChange={(o) => !o && setReviewing(null)}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Review {reviewing?.full_name}</DialogTitle>
-          </DialogHeader>
-          {reviewing && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">Specialization:</span> {reviewing.specialization}</div>
-                <div><span className="text-muted-foreground">City:</span> {reviewing.city}</div>
-                <div><span className="text-muted-foreground">Fee:</span> ₹{reviewing.consultation_fee}</div>
-                <div><span className="text-muted-foreground">Status:</span> <StatusBadge d={reviewing} /></div>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-sm font-semibold">Submitted documents</p>
-                <div className="grid gap-2">
-                  {SLOTS.map(({ key, label, icon: Icon }) => {
-                    const url = docUrls[key];
-                    return (
-                      <div key={key} className="flex items-center justify-between rounded-lg border border-border p-3">
-                        <div className="flex items-center gap-3">
-                          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary">
-                            <Icon className="h-4 w-4" />
-                          </span>
-                          <span className="text-sm font-medium">{label}</span>
-                        </div>
-                        {url ? (
-                          <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
-                            Preview <ExternalLink className="h-3.5 w-3.5" />
-                          </a>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Not uploaded</span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {reviewing.rejection_reason && (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm">
-                  <p className="font-semibold text-destructive">Previous rejection</p>
-                  <p className="mt-1">{reviewing.rejection_reason}</p>
-                </div>
-              )}
-            </div>
-          )}
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => { setRejectFor(reviewing); setRejectReason(reviewing?.rejection_reason ?? ""); }}>
-              <X className="mr-1 h-4 w-4" /> Reject
-            </Button>
-            <Button variant="hero" onClick={() => reviewing && approveDoctor(reviewing.id)}>
-              <Check className="mr-1 h-4 w-4" /> Approve
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Reject Reason Dialog */}
-      <Dialog open={!!rejectFor} onOpenChange={(o) => !o && setRejectFor(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Reject {rejectFor?.full_name}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-2">
-            <Label htmlFor="reason">Reason (will be shown to the doctor)</Label>
-            <Textarea
-              id="reason"
-              rows={4}
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="e.g. Certificate is not legible. Please re-upload a clearer scan."
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectFor(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={rejectDoctor}>Confirm reject</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
+  return <div className="space-y-6"><div><h1 className="font-display text-3xl">Doctors</h1><p className="text-sm text-muted-foreground">Review doctors, documents, and commission rates.</p></div><div className="grid gap-3 sm:grid-cols-4">{[["Total", counts.total], ["Pending", counts.pending], ["Approved", counts.approved], ["Rejected", counts.rejected]].map(([label, value]) => <Card key={label}><CardContent className="p-4"><p className="text-sm text-muted-foreground">{label}</p><p className="font-display text-2xl">{value}</p></CardContent></Card>)}</div><Card><CardContent className="p-4"><div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><Tabs value={tab} onValueChange={setTab}><TabsList>{tabs.map((t) => <TabsTrigger key={t} value={t} className="capitalize">{t}</TabsTrigger>)}</TabsList></Tabs><Input className="lg:w-80" placeholder="Search doctors" value={query} onChange={(e) => setQuery(e.target.value)} /></div><Table><TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Specialization</TableHead><TableHead>City</TableHead><TableHead>Registered</TableHead><TableHead>Status</TableHead><TableHead>Commission</TableHead><TableHead>Documents</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader><TableBody>{filtered.map((d) => <TableRow key={d.id}><TableCell className="font-medium">{d.full_name}</TableCell><TableCell>{d.specialization}</TableCell><TableCell>{d.city}, {d.state || "—"}</TableCell><TableCell>{new Date(d.created_at).toLocaleDateString("en-IN")}</TableCell><TableCell><Badge variant={statusOf(d) === "rejected" ? "destructive" : statusOf(d) === "approved" ? "default" : "secondary"}>{statusOf(d)}</Badge></TableCell><TableCell><div className="flex min-w-32 gap-2"><Input className="h-8 w-20" value={commissions[d.id] ?? "0"} onChange={(e) => setCommissions((c) => ({ ...c, [d.id]: e.target.value }))} /><Button size="sm" variant="outline" onClick={() => saveCommission(d)}>Save</Button></div></TableCell><TableCell><div className="flex gap-1"><Button size="sm" variant="outline" onClick={() => openDoc(d, "certificate.pdf")}>View Certificate</Button><Button size="sm" variant="outline" onClick={() => openDoc(d, "id.pdf")}>View ID</Button></div></TableCell><TableCell><div className="flex justify-end gap-2">{statusOf(d) === "pending" && <><Button size="sm" onClick={() => approve(d)}>Approve</Button><Button size="sm" variant="destructive" onClick={() => { setRejectFor(d); setReason(""); }}>Reject</Button></>}{statusOf(d) === "approved" && <Button size="sm" variant="destructive" onClick={() => suspend(d)}>Suspend</Button>}</div></TableCell></TableRow>)}{filtered.length === 0 && <TableRow><TableCell colSpan={8} className="py-8 text-center text-muted-foreground">No doctors found.</TableCell></TableRow>}</TableBody></Table></CardContent></Card><Dialog open={!!rejectFor} onOpenChange={(open) => !open && setRejectFor(null)}><DialogContent><DialogHeader><DialogTitle>Reject {rejectFor?.full_name}</DialogTitle></DialogHeader><Textarea rows={4} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Rejection reason" /><DialogFooter><Button variant="outline" onClick={() => setRejectFor(null)}>Cancel</Button><Button variant="destructive" disabled={!reason.trim()} onClick={reject}>Reject</Button></DialogFooter></DialogContent></Dialog></div>;
 };
 
 export default AdminDoctors;
