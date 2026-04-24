@@ -145,6 +145,8 @@ import ShopByCondition from "./pages/shop/ShopByCondition.tsx";
 import ConditionProducts from "./pages/shop/ConditionProducts.tsx";
 import PanchakarmaShop from "./pages/shop/PanchakarmaShop.tsx";
 import AyushSurgicals from "./pages/shop/AyushSurgicals.tsx";
+import TrackOrder from "./pages/shop/TrackOrder.tsx";
+import PrescriptionUpload from "./pages/shop/PrescriptionUpload.tsx";
 
 const queryClient = new QueryClient();
 
@@ -199,6 +201,8 @@ const App = () => (
             <Route path="/shop/conditions/:slug" element={<ConditionProducts />} />
             <Route path="/shop/panchakarma" element={<PanchakarmaShop />} />
             <Route path="/shop/surgicals" element={<AyushSurgicals />} />
+            <Route path="/shop/track" element={<TrackOrder />} />
+            <Route path="/shop/prescription" element={<PrescriptionUpload />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
