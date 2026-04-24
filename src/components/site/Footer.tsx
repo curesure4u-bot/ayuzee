@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { Apple, Facebook, Instagram, Leaf, Linkedin, Play, Twitter, Youtube } from "lucide-react";
+import { Apple, ExternalLink, Leaf, Play } from "lucide-react";
 import { toast } from "sonner";
 
 const patientLinks = [["Find AYUSH Doctor", "/doctors"], ["Book Panchakarma", "/therapist/browse"], ["Buy Medicines", "/shop"], ["Upload Prescription", "/shop/prescription"], ["Track Order", "/shop/track"], ["Prakriti Quiz", "/diagnosis/prakriti"]];
@@ -8,7 +8,7 @@ const doctorLinks = [["Join as Doctor", "/doctor/auth"], ["Doctor Dashboard", "/
 const therapistLinks = [["Join as Therapist", "/therapist/auth"], ["Therapist Dashboard", "/therapist"], ["Register Your Venue", "/venue/auth"], ["Venue Dashboard", "/venue"], ["Browse Therapists", "/therapist/browse"], ["Browse Venues", "/venue/browse"]];
 const learnLinks = [["Courses & CME", "/learning/courses"], ["Webinars", "/learning/webinars"], ["Health Blogs", "/learning/blogs"], ["Doctor Feed", "/feed"], ["Student Portal", "/student"], ["Jobs Board", "/jobs"]];
 const companyLinks = [["About Ayuzee", "#"], ["Careers", "/jobs"], ["Partner With Us", "/partner"], ["Press & Media", "#"], ["Contact Us", "#"], ["Refund Policy", "#"], ["Privacy Policy", "#"], ["Terms of Use", "#"]];
-const socialLinks = [Facebook, Twitter, Instagram, Youtube, Linkedin];
+const socialLinks = ["Facebook", "Twitter/X", "Instagram", "YouTube", "LinkedIn"];
 
 const FooterLinks = ({ title, links }: { title: string; links: string[][] }) => (
   <div>
@@ -52,8 +52,8 @@ export const Footer = () => (
           {["🛡️ Verified by Ministry of AYUSH", "🔒 SSL Secured", "🇮🇳 Made in India"].map((badge) => <span key={badge} className="rounded-full bg-footer-pill px-3 py-1 text-xs text-footer-foreground">{badge}</span>)}
         </div>
         <div className="mt-4 flex gap-3">
-          {socialLinks.map((Icon, index) => (
-            <a key={index} href="#" aria-label="Social link" className="grid h-9 w-9 place-items-center rounded-full bg-footer-pill text-footer-foreground transition-smooth hover:bg-primary hover:text-primary-foreground"><Icon className="h-4 w-4" /></a>
+          {socialLinks.map((label) => (
+            <a key={label} href="#" aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-full bg-footer-pill text-footer-foreground transition-smooth hover:bg-primary hover:text-primary-foreground"><ExternalLink className="h-4 w-4" /></a>
           ))}
         </div>
       </div>
