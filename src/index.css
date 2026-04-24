@@ -68,6 +68,13 @@
     --admin-danger: 0 72% 50%;
     --admin-warning: 38 90% 52%;
     --admin-success: 142 55% 42%;
+
+    --success: 142 55% 42%;
+    --info: 207 80% 50%;
+    --warning: 38 90% 52%;
+    --mystic: 265 58% 58%;
+    --earth: 172 58% 38%;
+    --indigo: 236 58% 58%;
   }
 
   .dark {
@@ -106,6 +113,13 @@
     --admin-danger: 0 72% 50%;
     --admin-warning: 38 90% 52%;
     --admin-success: 142 55% 55%;
+
+    --success: 142 55% 55%;
+    --info: 207 80% 62%;
+    --warning: 38 90% 58%;
+    --mystic: 265 58% 66%;
+    --earth: 172 58% 46%;
+    --indigo: 236 58% 66%;
   }
 }
 
