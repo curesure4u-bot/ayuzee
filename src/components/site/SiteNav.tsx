@@ -122,6 +122,40 @@ const MedicineLink = ({ to, children, close, className = "" }: { to: string; chi
   </Link>
 );
 
+const MedicinesMegaMenu = ({ conditions, close }: { conditions: ConditionMenuLink[]; close: () => void }) => (
+  <div className="fixed left-0 right-0 top-[7.25rem] z-[70] max-h-[75vh] w-screen overflow-y-auto border-b border-border bg-background shadow-lg animate-in fade-in-0 slide-in-from-top-2" onMouseLeave={close}>
+    <div className="container grid gap-6 py-7 lg:grid-cols-5">
+      <MedicineSection title="🛒 Bulk Purchase" subtitle="Doctor & clinic discounts">
+        <div className="space-y-4">
+          <div><p className="text-xs font-semibold text-muted-foreground">By Brand</p>{bulkBrands.map((x) => <MedicineLink key={x.label} to={`/bulk?brand=${encodeURIComponent(x.value)}`} close={close}>{x.label}</MedicineLink>)}<MedicineLink to="/bulk?tab=brands" close={close} className="font-semibold text-primary">View all 44 brands →</MedicineLink></div>
+          <div><p className="text-xs font-semibold text-muted-foreground">Shastriya / Classical Medicines</p>{classicalTypes.map((x) => <MedicineLink key={x.label} to={`/bulk?classical=${encodeURIComponent(x.value)}`} close={close}>{x.label}</MedicineLink>)}<MedicineLink to="/bulk?tab=classical" close={close} className="font-semibold text-primary">View all classical types →</MedicineLink></div>
+          <div><p className="text-xs font-semibold text-muted-foreground">Patented Medicines</p>{patentedTypes.map((x) => <MedicineLink key={x.label} to={`/bulk?patented=${encodeURIComponent(x.value)}`} close={close}>{x.label}</MedicineLink>)}<MedicineLink to="/bulk?tab=patented" close={close} className="font-semibold text-primary">View all patented types →</MedicineLink></div>
+          <MedicineLink to="/bulk" close={close} className="font-bold text-primary">All Bulk Medicines →</MedicineLink>
+        </div>
+      </MedicineSection>
+      <MedicineSection title="🩺 By Health Condition" subtitle="Find medicines for your concern">
+        <div className="grid gap-1">{conditions.map((c) => <MedicineLink key={c.slug} to={`/shop/conditions/${c.slug}`} close={close}>{c.icon} {c.name}</MedicineLink>)}<MedicineLink to="/shop/conditions" close={close} className="font-semibold text-primary">View all 30 conditions →</MedicineLink></div>
+      </MedicineSection>
+      <MedicineSection title="🌿 By AYUSH System">
+        <div className="space-y-1"><MedicineLink to="/shop?system=Ayurveda" close={close}>🌱 Ayurveda Medicines</MedicineLink><MedicineLink to="/shop?system=Homeopathy" close={close}>💊 Homeopathy</MedicineLink><MedicineLink to="/shop?system=Unani" close={close}>🌙 Unani</MedicineLink><MedicineLink to="/shop?system=Siddha" close={close}>🔵 Siddha</MedicineLink><MedicineLink to="/shop?system=Yoga" close={close}>🧘 Yoga & Naturopathy</MedicineLink></div>
+        <div className="my-4 border-t border-border" />
+        <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">🎁 Special Categories</h3>
+        <div className="space-y-1"><MedicineLink to="/shop/treatment-kits" close={close}>📦 Treatment Kits</MedicineLink><MedicineLink to="/shop/panchakarma" close={close}>🫙 Panchakarma Medicines</MedicineLink><MedicineLink to="/shop/surgicals" close={close}>🔪 AYUSH Surgicals</MedicineLink><MedicineLink to="/shop/prescription" close={close}>💊 Upload Prescription</MedicineLink></div>
+      </MedicineSection>
+      <MedicineSection title="📦 My Orders">
+        <div className="space-y-1"><MedicineLink to="/shop/track" close={close}>🚚 Track My Medicine Order</MedicineLink><MedicineLink to="/dashboard?tab=orders" close={close}>📋 My Order History</MedicineLink><MedicineLink to="/dashboard?tab=prescriptions" close={close}>💊 My Prescriptions</MedicineLink><MedicineLink to="/dashboard?tab=notifications" close={close}>🔔 Order Notifications</MedicineLink></div>
+        <div className="my-4 border-t border-border" />
+        <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">🌟 Offers & Deals</h3>
+        <div className="space-y-1"><MedicineLink to="/offers" close={close}>⚡ Flash Sale</MedicineLink><MedicineLink to="/offers?type=b2g1" close={close}>🎁 Buy 2 Get 1 Offers</MedicineLink><MedicineLink to="/offers?type=bulk-deal" close={close}>💰 Bulk Deal of the Day</MedicineLink><MedicineLink to="/shop?sort=newest" close={close}>🆕 New Arrivals</MedicineLink></div>
+      </MedicineSection>
+      <div className="flex min-h-80 flex-col justify-between rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary p-6 text-primary-foreground shadow-soft">
+        <div><p className="font-display text-2xl font-semibold">🌿 Ayuzee Medicine Store</p><div className="mt-6 grid grid-cols-2 gap-2 text-xs font-semibold"><span className="rounded-full bg-background/20 px-3 py-2">5000+ Products</span><span className="rounded-full bg-background/20 px-3 py-2">44+ Brands</span><span className="rounded-full bg-background/20 px-3 py-2">Lab Tested</span><span className="rounded-full bg-background/20 px-3 py-2">Free Delivery on ₹999+</span></div></div>
+        <div className="space-y-3"><Button asChild variant="secondary" className="w-full"><Link to="/shop" onClick={close}>Shop All Medicines →</Link></Button><Link to="/bulk" onClick={close} className="block text-center text-sm font-semibold underline underline-offset-4">Doctor? Get bulk rates →</Link></div>
+      </div>
+    </div>
+  </div>
+);
+
 export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const { count } = useCart();
   const navigate = useNavigate();
