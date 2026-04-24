@@ -132,6 +132,7 @@ import VenueRooms from "./pages/venue/VenueRooms.tsx";
 import VenueBookings from "./pages/venue/VenueBookings.tsx";
 import VenueRevenue from "./pages/venue/VenueRevenue.tsx";
 import VenueProfile from "./pages/venue/VenueProfile.tsx";
+import StudentAuth from "./pages/student/StudentAuth.tsx";
 
 const queryClient = new QueryClient();
 
@@ -150,6 +151,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/provider/auth" element={<ProviderAuth />} />
             <Route path="/provider" element={<ProviderHome />} />
+            <Route path="/student/auth" element={<StudentAuth />} />
             <Route path="/dashboard" element={<PatientLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="profile" element={<PatientProfile />} />
