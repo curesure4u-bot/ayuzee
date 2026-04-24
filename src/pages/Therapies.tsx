@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Header } from "@/components/site/Header";
+import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -26,7 +26,7 @@ const Therapies = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <SiteNav />
       <main>
         <section className="border-b border-border bg-accent/30 py-16">
           <div className="container text-center">

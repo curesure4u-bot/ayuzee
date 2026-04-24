@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Header } from "@/components/site/Header";
+import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,7 +72,7 @@ const Therapists = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <SiteNav />
       <main className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
