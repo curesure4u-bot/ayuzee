@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { PatientTherapyPlans } from "@/components/dashboard/PatientTherapyPlans";
 import { PrakritiHistory } from "@/components/dashboard/PrakritiHistory";
 import { PatientOnboarding } from "@/components/onboarding/PatientOnboarding";
+import { WellnessScore } from "@/components/dashboard/WellnessScore";
+import { VitalsTracker } from "@/components/dashboard/VitalsTracker";
 
 interface Profile { full_name: string | null; phone: string | null; date_of_birth: string | null; gender: string | null; }
 interface Appointment {
@@ -119,6 +121,13 @@ const Dashboard = () => {
             </article>
           );})}
         </div>
+
+        {userId && (
+          <section className="mt-8 grid gap-6 lg:grid-cols-2">
+            <WellnessScore userId={userId} />
+            <VitalsTracker userId={userId} />
+          </section>
+        )}
 
         <section className="mt-12">
           <div className="mb-4 flex items-end justify-between">
