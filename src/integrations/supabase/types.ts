@@ -2672,6 +2672,8 @@ export type Database = {
           interests: string[] | null
           is_verified: boolean | null
           phone: string | null
+          profile_photo_url: string | null
+          rejection_note: string | null
           state: string | null
           student_id_url: string | null
           updated_at: string | null
@@ -2688,6 +2690,8 @@ export type Database = {
           interests?: string[] | null
           is_verified?: boolean | null
           phone?: string | null
+          profile_photo_url?: string | null
+          rejection_note?: string | null
           state?: string | null
           student_id_url?: string | null
           updated_at?: string | null
@@ -2704,6 +2708,8 @@ export type Database = {
           interests?: string[] | null
           is_verified?: boolean | null
           phone?: string | null
+          profile_photo_url?: string | null
+          rejection_note?: string | null
           state?: string | null
           student_id_url?: string | null
           updated_at?: string | null
