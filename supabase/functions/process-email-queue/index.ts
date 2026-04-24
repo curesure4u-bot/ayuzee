@@ -8,6 +8,22 @@ type QueueMessage = {
   message: Record<string, unknown>
 }
 
+type EmailPayload = Record<string, unknown> & {
+  run_id?: string
+  to: string
+  from: string
+  sender_domain?: string
+  subject: string
+  html: string
+  text: string
+  purpose?: string
+  label?: string
+  idempotency_key?: string
+  unsubscribe_token?: string
+  message_id?: string
+  queued_at?: string
+}
+
 type AnySupabaseClient = ReturnType<typeof createClient<any>>
 
 const MAX_RETRIES = 5
