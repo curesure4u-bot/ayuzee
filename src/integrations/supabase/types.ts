@@ -3505,6 +3505,30 @@ export type Database = {
         }
         Relationships: []
       }
+      treatment_kit_waitlist: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          kit_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          kit_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          kit_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       treatment_systems: {
         Row: {
           created_at: string

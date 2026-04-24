@@ -82,7 +82,7 @@ import DoctorBlogs from "./pages/doctor/sections/DoctorBlogs.tsx";
 import DoctorFeed from "./pages/doctor/sections/DoctorFeed.tsx";
 import AdminLearning from "./pages/admin/AdminLearning.tsx";
 import Clinics from "./pages/Clinics.tsx";
-import Offers from "./pages/Offers.tsx";
+import Offers from "./pages/shop/Offers.tsx";
 import Jobs from "./pages/Jobs.tsx";
 import JobPost from "./pages/JobPost.tsx";
 import Search from "./pages/Search.tsx";
@@ -147,6 +147,7 @@ import PanchakarmaShop from "./pages/shop/PanchakarmaShop.tsx";
 import AyushSurgicals from "./pages/shop/AyushSurgicals.tsx";
 import TrackOrder from "./pages/shop/TrackOrder.tsx";
 import PrescriptionUpload from "./pages/shop/PrescriptionUpload.tsx";
+import TreatmentKits from "./pages/shop/TreatmentKits.tsx";
 
 const queryClient = new QueryClient();
 
@@ -203,6 +204,7 @@ const App = () => (
             <Route path="/shop/surgicals" element={<AyushSurgicals />} />
             <Route path="/shop/track" element={<TrackOrder />} />
             <Route path="/shop/prescription" element={<PrescriptionUpload />} />
+            <Route path="/shop/treatment-kits" element={<TreatmentKits />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
