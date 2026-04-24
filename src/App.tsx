@@ -83,6 +83,8 @@ import DoctorFeed from "./pages/doctor/sections/DoctorFeed.tsx";
 import AdminLearning from "./pages/admin/AdminLearning.tsx";
 import Clinics from "./pages/Clinics.tsx";
 import Offers from "./pages/Offers.tsx";
+import Jobs from "./pages/Jobs.tsx";
+import JobPost from "./pages/JobPost.tsx";
 import Referral from "./pages/Referral.tsx";
 import LoginPicker from "./pages/LoginPicker.tsx";
 import ProviderAuth from "./pages/provider/ProviderAuth.tsx";
@@ -106,6 +108,7 @@ import AdminTherapists from "./pages/admin/AdminTherapists.tsx";
 import AdminVenues from "./pages/admin/AdminVenues.tsx";
 import AdminTherapySessions from "./pages/admin/AdminTherapySessions.tsx";
 import AdminRevenueSplit from "./pages/admin/AdminRevenueSplit.tsx";
+import AdminJobs from "./pages/admin/AdminJobs.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
@@ -161,6 +164,8 @@ const App = () => (
             <Route path="/doctors/:id" element={<DoctorDetail />} />
             <Route path="/clinics" element={<Clinics />} />
             <Route path="/offers" element={<Offers />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/jobs/post" element={<JobPost />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
@@ -216,6 +221,7 @@ const App = () => (
               <Route path="venues" element={<AdminVenues />} />
               <Route path="therapy-sessions" element={<AdminTherapySessions />} />
               <Route path="revenue-split" element={<AdminRevenueSplit />} />
+              <Route path="jobs" element={<AdminJobs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
