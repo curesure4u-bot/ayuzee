@@ -929,6 +929,7 @@ export type Database = {
           category: string
           city: string
           clinic_name: string | null
+          commission_rate: number
           consultation_fee: number
           created_at: string
           date_of_birth: string | null
@@ -941,6 +942,7 @@ export type Database = {
           id: string
           in_clinic_available: boolean
           is_approved: boolean
+          is_suspended: boolean
           is_verified: boolean
           languages: string[]
           phone: string | null
@@ -963,6 +965,7 @@ export type Database = {
           category: string
           city: string
           clinic_name?: string | null
+          commission_rate?: number
           consultation_fee?: number
           created_at?: string
           date_of_birth?: string | null
@@ -975,6 +978,7 @@ export type Database = {
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
+          is_suspended?: boolean
           is_verified?: boolean
           languages?: string[]
           phone?: string | null
@@ -997,6 +1001,7 @@ export type Database = {
           category?: string
           city?: string
           clinic_name?: string | null
+          commission_rate?: number
           consultation_fee?: number
           created_at?: string
           date_of_birth?: string | null
@@ -1009,6 +1014,7 @@ export type Database = {
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
+          is_suspended?: boolean
           is_verified?: boolean
           languages?: string[]
           phone?: string | null
@@ -2439,6 +2445,7 @@ export type Database = {
           full_name: string | null
           gender: string | null
           id: string
+          is_active: boolean
           phone: string | null
           pincode: string | null
           preferred_languages: string[]
@@ -2457,6 +2464,7 @@ export type Database = {
           full_name?: string | null
           gender?: string | null
           id?: string
+          is_active?: boolean
           phone?: string | null
           pincode?: string | null
           preferred_languages?: string[]
@@ -2475,6 +2483,7 @@ export type Database = {
           full_name?: string | null
           gender?: string | null
           id?: string
+          is_active?: boolean
           phone?: string | null
           pincode?: string | null
           preferred_languages?: string[]
@@ -3048,6 +3057,8 @@ export type Database = {
           gender: string | null
           id: string
           is_available: boolean | null
+          is_banned: boolean
+          is_suspended: boolean
           is_verified: boolean | null
           last_location_update: string | null
           phone: string
@@ -3074,6 +3085,8 @@ export type Database = {
           gender?: string | null
           id?: string
           is_available?: boolean | null
+          is_banned?: boolean
+          is_suspended?: boolean
           is_verified?: boolean | null
           last_location_update?: string | null
           phone: string
@@ -3100,6 +3113,8 @@ export type Database = {
           gender?: string | null
           id?: string
           is_available?: boolean | null
+          is_banned?: boolean
+          is_suspended?: boolean
           is_verified?: boolean | null
           last_location_update?: string | null
           phone?: string
@@ -3427,6 +3442,7 @@ export type Database = {
           hourly_rate: number
           id: string
           is_active: boolean | null
+          is_suspended: boolean
           is_verified: boolean | null
           lat: number | null
           latitude: number | null
@@ -3456,6 +3472,7 @@ export type Database = {
           hourly_rate?: number
           id?: string
           is_active?: boolean | null
+          is_suspended?: boolean
           is_verified?: boolean | null
           lat?: number | null
           latitude?: number | null
@@ -3485,6 +3502,7 @@ export type Database = {
           hourly_rate?: number
           id?: string
           is_active?: boolean | null
+          is_suspended?: boolean
           is_verified?: boolean | null
           lat?: number | null
           latitude?: number | null
