@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,16 +9,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
+import { GlobalSearch } from "@/components/site/GlobalSearch";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
-const searchTabs = [
-  { label: "Doctors", path: "/doctors" },
-  { label: "Therapies", path: "/therapies" },
-  { label: "Medicines", path: "/shop" },
-  { label: "Courses", path: "/learning/courses" },
-  { label: "Jobs", path: "/jobs" },
-];
-
 type MegaLink = { label: string; to: string };
 type MegaColumn = { title: string; links?: MegaLink[]; card?: { title: string; body?: string; cta: string; to: string } };
 type MegaMenu = { label: string; columns: MegaColumn[] };
@@ -69,30 +62,6 @@ const megaMenus: MegaMenu[] = [
 
 const initialsFromEmail = (email?: string | null) => (email?.slice(0, 2) || "AZ").toUpperCase();
 
-const SearchBox = ({ mobile = false }: { mobile?: boolean }) => {
-  const navigate = useNavigate();
-  const [value, setValue] = useState("");
-  const [focused, setFocused] = useState(false);
-  const submit = (path = "/doctors") => {
-    const q = value.trim();
-    navigate(q ? `${path}?q=${encodeURIComponent(q)}` : path);
-    setFocused(false);
-  };
-  return (
-    <form onSubmit={(e: FormEvent) => { e.preventDefault(); submit(); }} className="relative w-full">
-      <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-      <Input value={value} onChange={(e) => setValue(e.target.value)} onFocus={() => setFocused(true)} className="h-11 rounded-full border-border bg-background pl-11 pr-4 shadow-soft md:w-80 lg:w-[420px]" placeholder="Search doctors, therapies, medicines, colleges..." />
-      {focused && (
-        <div className="absolute left-0 right-0 top-12 z-[70] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95">
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-            {searchTabs.map((tab) => <button key={tab.label} type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => submit(tab.path)} className="rounded-full border border-border px-3 py-2 text-xs font-semibold hover:border-primary hover:bg-primary/10">{tab.label}</button>)}
-          </div>
-        </div>
-      )}
-    </form>
-  );
-};
-
 const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
   <div className="absolute left-0 top-full z-[60] w-screen border-b border-border bg-background shadow-lg animate-in fade-in-0 slide-in-from-top-2" onMouseLeave={close}>
     <div className="container grid gap-8 py-8 md:grid-cols-3">
@@ -117,6 +86,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [dashboardPath, setDashboardPath] = useState("/dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   useEffect(() => {
     const resolveRole = async (userId?: string) => {
