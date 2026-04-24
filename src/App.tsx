@@ -140,7 +140,7 @@ import StudentWebinars from "./pages/student/StudentWebinars.tsx";
 import StudentJobs from "./pages/student/StudentJobs.tsx";
 import StudentResearch from "./pages/student/StudentResearch.tsx";
 import StudentCertificates from "./pages/student/StudentCertificates.tsx";
-import { StudentProfile as StudentPortalProfile } from "./pages/student/StudentSections.tsx";
+import StudentProfilePage from "./pages/student/StudentProfile.tsx";
 
 const queryClient = new QueryClient();
 
@@ -168,7 +168,7 @@ const App = () => (
               <Route path="jobs" element={<StudentJobs />} />
               <Route path="research" element={<StudentResearch />} />
               <Route path="certificates" element={<StudentCertificates />} />
-              <Route path="profile" element={<StudentPortalProfile />} />
+              <Route path="profile" element={<StudentProfilePage />} />
             </Route>
             <Route path="/dashboard" element={<PatientLayout />}>
               <Route index element={<Dashboard />} />
