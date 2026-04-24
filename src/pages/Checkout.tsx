@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCart } from "@/contexts/CartContext";
+import { PincodeWidget } from "@/components/site/PincodeWidget";
+import { usePincode } from "@/hooks/usePincode";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -37,6 +39,7 @@ const schema = z.object({
 const Checkout = () => {
   const { items, subtotal, clear } = useCart();
   const navigate = useNavigate();
+  const { pincode: savedPincode, checkPincode } = usePincode();
   const [submitting, setSubmitting] = useState(false);
   const [authed, setAuthed] = useState<boolean | null>(null);
 
@@ -45,7 +48,7 @@ const Checkout = () => {
 
   const [form, setForm] = useState({
     full_name: "", phone: "", address_line1: "", address_line2: "",
-    city: "", state: "", pincode: "",
+    city: "", state: "", pincode: localStorage.getItem("ayuzee_pincode") || "",
   });
 
   useEffect(() => {
@@ -58,6 +61,10 @@ const Checkout = () => {
   useEffect(() => {
     if (items.length === 0 && !submitting) navigate("/cart", { replace: true });
   }, [items.length, submitting, navigate]);
+
+  useEffect(() => {
+    if (savedPincode && !form.pincode) setForm((current) => ({ ...current, pincode: savedPincode }));
+  }, [savedPincode, form.pincode]);
 
   if (authed === false) {
     return (
@@ -72,8 +79,11 @@ const Checkout = () => {
     );
   }
 
-  const onChange = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm({ ...form, [k]: e.target.value });
+  const onChange = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setForm({ ...form, [k]: value });
+    if (k === "pincode") checkPincode(value);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,6 +177,7 @@ const Checkout = () => {
         <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-[2fr_1fr]">
           <div className="rounded-2xl border border-border bg-card p-6">
             <h2 className="font-display text-xl">Shipping address</h2>
+            <div className="mt-6"><PincodeWidget variant="inline" /></div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2"><Label htmlFor="full_name">Full name</Label><Input id="full_name" value={form.full_name} onChange={onChange("full_name")} required /></div>
               <div><Label htmlFor="phone">Phone</Label><Input id="phone" type="tel" value={form.phone} onChange={onChange("phone")} required /></div>

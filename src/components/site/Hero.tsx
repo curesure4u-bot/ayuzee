@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { usePincode } from "@/hooks/usePincode";
 
 const searchTabs = ["Doctors", "Therapies", "Medicines", "Colleges"] as const;
 type SearchTab = (typeof searchTabs)[number];
@@ -73,6 +74,7 @@ export const Hero = () => {
   const [query, setQuery] = useState("");
   const [pincode, setPincode] = useState("");
   const [deliveryMessage, setDeliveryMessage] = useState("");
+  const { checkPincode } = usePincode();
 
   useEffect(() => {
     setLocation(localStorage.getItem("ayuzee_city") || "");
@@ -85,8 +87,7 @@ export const Hero = () => {
   };
 
   const handleDeliveryCheck = () => {
-    localStorage.setItem("ayuzee_pincode", pincode);
-    setDeliveryMessage(/^\d{6}$/.test(pincode) ? "✅ Delivery available · Arrives Tomorrow" : "⚠️ Limited delivery");
+    setDeliveryMessage(checkPincode(pincode) ? "✅ Delivery available · Arrives Tomorrow" : "⚠️ Enter a valid 6-digit pincode");
   };
 
   return (

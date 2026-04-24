@@ -10,6 +10,7 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { Blog } from "@/components/site/Blog";
 import { CTA } from "@/components/site/CTA";
 import { Footer } from "@/components/site/Footer";
+import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { WelcomeUserTypeDialog } from "@/components/auth/WelcomeUserTypeDialog";
@@ -60,6 +61,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <SiteNav />
+      <PincodeWidget variant="banner" />
       <main>
         <Hero />
         <Categories />

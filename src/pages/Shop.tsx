@@ -6,6 +6,7 @@ import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { useCart } from "@/contexts/CartContext";
 import { Search, ShoppingCart, Heart, Share2, ChevronRight, Leaf, Sparkles, FlaskConical, Pill, Flower2, Droplets } from "lucide-react";
 import { toast } from "sonner";
@@ -87,6 +88,7 @@ const Shop = () => {
   return (
     <div className="min-h-screen bg-muted/30">
       <SiteNav />
+      <PincodeWidget variant="banner" />
 
       {/* Sub navigation strip */}
       <div className="border-b border-border bg-background">
