@@ -59,6 +59,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminDoctors from "./pages/admin/AdminDoctors.tsx";
 import AdminOrders from "./pages/admin/AdminOrders.tsx";
+import AdminAppointments from "./pages/admin/AdminAppointments.tsx";
+import AdminSessions from "./pages/admin/AdminSessions.tsx";
+import AdminPrescriptions from "./pages/admin/AdminPrescriptions.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
@@ -108,7 +111,6 @@ import AdminManagement from "./pages/admin/AdminManagement.tsx";
 import AdminTherapists from "./pages/admin/AdminTherapists.tsx";
 import AdminVenues from "./pages/admin/AdminVenues.tsx";
 import AdminStudents from "./pages/admin/AdminStudents.tsx";
-import AdminTherapySessions from "./pages/admin/AdminTherapySessions.tsx";
 import AdminRevenueSplit from "./pages/admin/AdminRevenueSplit.tsx";
 import AdminJobs from "./pages/admin/AdminJobs.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
@@ -253,10 +255,10 @@ const App = () => (
               <Route path="users" element={<AdminUsers />} />
               <Route path="doctors" element={<AdminDoctors />} />
               <Route path="students" element={<AdminStudents />} />
-              <Route path="appointments" element={<AdminPlaceholder title="Appointments" description="Manage all platform appointments." />} />
-              <Route path="sessions" element={<AdminTherapySessions />} />
+              <Route path="appointments" element={<AdminAppointments />} />
+              <Route path="sessions" element={<AdminSessions />} />
               <Route path="orders" element={<AdminOrders />} />
-              <Route path="prescriptions" element={<AdminPlaceholder title="Prescription Orders" description="Coming soon — Prescription Orders" />} />
+              <Route path="prescriptions" element={<AdminPrescriptions />} />
               <Route path="products" element={<AdminPlaceholder title="Products" description="Manage the product catalog." />} />
               <Route path="commissions" element={<AdminPlaceholder title="Commissions" description="Doctor & partner commission rates." />} />
               <Route path="blogs" element={<AdminPlaceholder title="Blogs" description="Editorial review for health blogs." />} />
