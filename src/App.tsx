@@ -62,6 +62,14 @@ import AdminOrders from "./pages/admin/AdminOrders.tsx";
 import AdminAppointments from "./pages/admin/AdminAppointments.tsx";
 import AdminSessions from "./pages/admin/AdminSessions.tsx";
 import AdminPrescriptions from "./pages/admin/AdminPrescriptions.tsx";
+import AdminCommissions from "./pages/admin/AdminCommissions.tsx";
+import AdminPayments from "./pages/admin/AdminPayments.tsx";
+import AdminReports from "./pages/admin/AdminReports.tsx";
+import AdminSafety from "./pages/admin/AdminSafety.tsx";
+import AdminNotifications from "./pages/admin/AdminNotifications.tsx";
+import AdminSettings from "./pages/admin/AdminSettings.tsx";
+import AdminProducts from "./pages/admin/AdminProducts.tsx";
+import AdminBlogs from "./pages/admin/AdminBlogs.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
@@ -259,14 +267,14 @@ const App = () => (
               <Route path="sessions" element={<AdminSessions />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="prescriptions" element={<AdminPrescriptions />} />
-              <Route path="products" element={<AdminPlaceholder title="Products" description="Manage the product catalog." />} />
-              <Route path="commissions" element={<AdminPlaceholder title="Commissions" description="Doctor & partner commission rates." />} />
-              <Route path="blogs" element={<AdminPlaceholder title="Blogs" description="Editorial review for health blogs." />} />
-              <Route path="notifications" element={<AdminPlaceholder title="Notifications" description="Broadcast push and email." />} />
-              <Route path="payments" element={<AdminPlaceholder title="Payments" description="Razorpay transactions & payouts." />} />
-              <Route path="reports" element={<AdminPlaceholder title="Reports & Analytics" description="Coming soon — Reports & Analytics" />} />
-              <Route path="safety" element={<AdminPlaceholder title="Safety Flags" description="Coming soon — Safety Flags" />} />
-              <Route path="settings" element={<AdminPlaceholder title="Settings" description="Coming soon — Settings" />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="commissions" element={<AdminCommissions />} />
+              <Route path="blogs" element={<AdminBlogs />} />
+              <Route path="notifications" element={<AdminNotifications />} />
+              <Route path="payments" element={<AdminPayments />} />
+              <Route path="reports" element={<AdminReports />} />
+              <Route path="safety" element={<AdminSafety />} />
+              <Route path="settings" element={<AdminSettings />} />
               <Route path="therapies" element={<AdminTherapies />} />
               <Route path="learning" element={<AdminLearning />} />
               <Route path="health-conditions" element={<AdminHealthConditions />} />
