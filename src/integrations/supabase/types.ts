@@ -1315,8 +1315,10 @@ export type Database = {
           highlights: Json
           how_it_works: Json
           how_to_use: Json
+          icon: string | null
           id: string
           ingredients: Json
+          is_active: boolean | null
           is_published: boolean
           name: string
           packages: Json
@@ -1328,6 +1330,7 @@ export type Database = {
           related_medicines: Json
           slug: string
           sort_order: number
+          system_category: string | null
           system_id: string | null
           tagline: string | null
           updated_at: string
@@ -1353,8 +1356,10 @@ export type Database = {
           highlights?: Json
           how_it_works?: Json
           how_to_use?: Json
+          icon?: string | null
           id?: string
           ingredients?: Json
+          is_active?: boolean | null
           is_published?: boolean
           name: string
           packages?: Json
@@ -1366,6 +1371,7 @@ export type Database = {
           related_medicines?: Json
           slug: string
           sort_order?: number
+          system_category?: string | null
           system_id?: string | null
           tagline?: string | null
           updated_at?: string
@@ -1391,8 +1397,10 @@ export type Database = {
           highlights?: Json
           how_it_works?: Json
           how_to_use?: Json
+          icon?: string | null
           id?: string
           ingredients?: Json
+          is_active?: boolean | null
           is_published?: boolean
           name?: string
           packages?: Json
@@ -1404,6 +1412,7 @@ export type Database = {
           related_medicines?: Json
           slug?: string
           sort_order?: number
+          system_category?: string | null
           system_id?: string | null
           tagline?: string | null
           updated_at?: string
@@ -1950,7 +1959,21 @@ export type Database = {
             foreignKeyName: "order_items_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "panchakarma_medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "surgical_products"
             referencedColumns: ["id"]
           },
         ]
@@ -2246,13 +2269,28 @@ export type Database = {
             foreignKeyName: "product_bulk_tiers_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "panchakarma_medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_bulk_tiers_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_bulk_tiers_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "surgical_products"
             referencedColumns: ["id"]
           },
         ]
       }
       products: {
         Row: {
+          ayush_system: string | null
           brand: string
           bulk_brand: string | null
           bulk_classical_type: string | null
@@ -2261,17 +2299,28 @@ export type Database = {
           created_at: string
           description: string | null
           discount_price: number | null
+          dosage_form: string | null
+          health_conditions: string[] | null
           id: string
           image_url: string | null
           is_bulk: boolean
+          is_offers: boolean | null
+          is_prescription_required: boolean | null
+          is_surgical: boolean | null
           name: string
+          offer_label: string | null
           price: number
+          product_type: string | null
           rating: number
           stock: number
+          surgical_category: string | null
+          tags: string[] | null
           total_reviews: number
+          treatment_use: string | null
           unit: string | null
         }
         Insert: {
+          ayush_system?: string | null
           brand: string
           bulk_brand?: string | null
           bulk_classical_type?: string | null
@@ -2280,17 +2329,28 @@ export type Database = {
           created_at?: string
           description?: string | null
           discount_price?: number | null
+          dosage_form?: string | null
+          health_conditions?: string[] | null
           id?: string
           image_url?: string | null
           is_bulk?: boolean
+          is_offers?: boolean | null
+          is_prescription_required?: boolean | null
+          is_surgical?: boolean | null
           name: string
+          offer_label?: string | null
           price: number
+          product_type?: string | null
           rating?: number
           stock?: number
+          surgical_category?: string | null
+          tags?: string[] | null
           total_reviews?: number
+          treatment_use?: string | null
           unit?: string | null
         }
         Update: {
+          ayush_system?: string | null
           brand?: string
           bulk_brand?: string | null
           bulk_classical_type?: string | null
@@ -2299,14 +2359,24 @@ export type Database = {
           created_at?: string
           description?: string | null
           discount_price?: number | null
+          dosage_form?: string | null
+          health_conditions?: string[] | null
           id?: string
           image_url?: string | null
           is_bulk?: boolean
+          is_offers?: boolean | null
+          is_prescription_required?: boolean | null
+          is_surgical?: boolean | null
           name?: string
+          offer_label?: string | null
           price?: number
+          product_type?: string | null
           rating?: number
           stock?: number
+          surgical_category?: string | null
+          tags?: string[] | null
           total_reviews?: number
+          treatment_use?: string | null
           unit?: string | null
         }
         Relationships: []
@@ -3885,7 +3955,192 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      panchakarma_medicines: {
+        Row: {
+          ayush_system: string | null
+          brand: string | null
+          bulk_brand: string | null
+          bulk_classical_type: string | null
+          bulk_patented_type: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          discount_price: number | null
+          dosage_form: string | null
+          health_conditions: string[] | null
+          id: string | null
+          image_url: string | null
+          is_bulk: boolean | null
+          is_offers: boolean | null
+          is_prescription_required: boolean | null
+          is_surgical: boolean | null
+          name: string | null
+          offer_label: string | null
+          price: number | null
+          product_type: string | null
+          rating: number | null
+          stock: number | null
+          surgical_category: string | null
+          tags: string[] | null
+          total_reviews: number | null
+          treatment_use: string | null
+          unit: string | null
+        }
+        Insert: {
+          ayush_system?: string | null
+          brand?: string | null
+          bulk_brand?: string | null
+          bulk_classical_type?: string | null
+          bulk_patented_type?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_price?: number | null
+          dosage_form?: string | null
+          health_conditions?: string[] | null
+          id?: string | null
+          image_url?: string | null
+          is_bulk?: boolean | null
+          is_offers?: boolean | null
+          is_prescription_required?: boolean | null
+          is_surgical?: boolean | null
+          name?: string | null
+          offer_label?: string | null
+          price?: number | null
+          product_type?: string | null
+          rating?: number | null
+          stock?: number | null
+          surgical_category?: string | null
+          tags?: string[] | null
+          total_reviews?: number | null
+          treatment_use?: string | null
+          unit?: string | null
+        }
+        Update: {
+          ayush_system?: string | null
+          brand?: string | null
+          bulk_brand?: string | null
+          bulk_classical_type?: string | null
+          bulk_patented_type?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_price?: number | null
+          dosage_form?: string | null
+          health_conditions?: string[] | null
+          id?: string | null
+          image_url?: string | null
+          is_bulk?: boolean | null
+          is_offers?: boolean | null
+          is_prescription_required?: boolean | null
+          is_surgical?: boolean | null
+          name?: string | null
+          offer_label?: string | null
+          price?: number | null
+          product_type?: string | null
+          rating?: number | null
+          stock?: number | null
+          surgical_category?: string | null
+          tags?: string[] | null
+          total_reviews?: number | null
+          treatment_use?: string | null
+          unit?: string | null
+        }
+        Relationships: []
+      }
+      surgical_products: {
+        Row: {
+          ayush_system: string | null
+          brand: string | null
+          bulk_brand: string | null
+          bulk_classical_type: string | null
+          bulk_patented_type: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          discount_price: number | null
+          dosage_form: string | null
+          health_conditions: string[] | null
+          id: string | null
+          image_url: string | null
+          is_bulk: boolean | null
+          is_offers: boolean | null
+          is_prescription_required: boolean | null
+          is_surgical: boolean | null
+          name: string | null
+          offer_label: string | null
+          price: number | null
+          product_type: string | null
+          rating: number | null
+          stock: number | null
+          surgical_category: string | null
+          tags: string[] | null
+          total_reviews: number | null
+          treatment_use: string | null
+          unit: string | null
+        }
+        Insert: {
+          ayush_system?: string | null
+          brand?: string | null
+          bulk_brand?: string | null
+          bulk_classical_type?: string | null
+          bulk_patented_type?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_price?: number | null
+          dosage_form?: string | null
+          health_conditions?: string[] | null
+          id?: string | null
+          image_url?: string | null
+          is_bulk?: boolean | null
+          is_offers?: boolean | null
+          is_prescription_required?: boolean | null
+          is_surgical?: boolean | null
+          name?: string | null
+          offer_label?: string | null
+          price?: number | null
+          product_type?: string | null
+          rating?: number | null
+          stock?: number | null
+          surgical_category?: string | null
+          tags?: string[] | null
+          total_reviews?: number | null
+          treatment_use?: string | null
+          unit?: string | null
+        }
+        Update: {
+          ayush_system?: string | null
+          brand?: string | null
+          bulk_brand?: string | null
+          bulk_classical_type?: string | null
+          bulk_patented_type?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_price?: number | null
+          dosage_form?: string | null
+          health_conditions?: string[] | null
+          id?: string | null
+          image_url?: string | null
+          is_bulk?: boolean | null
+          is_offers?: boolean | null
+          is_prescription_required?: boolean | null
+          is_surgical?: boolean | null
+          name?: string | null
+          offer_label?: string | null
+          price?: number | null
+          product_type?: string | null
+          rating?: number | null
+          stock?: number | null
+          surgical_category?: string | null
+          tags?: string[] | null
+          total_reviews?: number | null
+          treatment_use?: string | null
+          unit?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       delete_email: {
