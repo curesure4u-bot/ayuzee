@@ -72,6 +72,14 @@ export default {
         mystic: "hsl(var(--mystic))",
         earth: "hsl(var(--earth))",
         indigo: "hsl(var(--indigo))",
+        footer: {
+          DEFAULT: "hsl(var(--footer))",
+          foreground: "hsl(var(--footer-foreground))",
+          muted: "hsl(var(--footer-muted))",
+          panel: "hsl(var(--footer-panel))",
+          border: "hsl(var(--footer-border))",
+          pill: "hsl(var(--footer-pill))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
