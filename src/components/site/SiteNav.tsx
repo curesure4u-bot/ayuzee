@@ -12,11 +12,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 import { GlobalSearch } from "@/components/site/GlobalSearch";
 import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
+import { BULK_BRANDS, CLASSICAL_TYPES, PATENTED_TYPES } from "@/data/bulkCatalog";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 type MegaLink = { label: string; to: string };
 type MegaColumn = { title: string; links?: MegaLink[]; card?: { title: string; body?: string; cta: string; to: string } };
 type MegaMenu = { label: string; columns: MegaColumn[] };
+type ConditionMenuLink = { icon: string; name: string; slug: string; system_category?: string | null };
 
 const specialty = ["Spine & Joint Care", "Skin & Hair", "Women's Health (Gyno)", "Digestive Health", "Mental Wellness", "Diabetes & Lifestyle", "Child Health", "Eye & ENT"];
 const megaMenus: MegaMenu[] = [
@@ -31,11 +33,6 @@ const megaMenus: MegaMenu[] = [
     { title: "Panchakarma", links: ["🫙 Abhyanga (Full Body)", "Shirodhara", "Kati Basti", "Janu Basti", "Vamana", "Virechana", "Basti", "Nasya"].map((x) => ({ label: x, to: "/therapies?category=Panchakarma" })) },
     { title: "Specialty Therapies", links: ["Pizhichil", "Navarakizhi", "Udvartana", "Greeva Basti", "Uro Basti", "Pinda Sweda"].map((x) => ({ label: x, to: "/therapies" })) },
     { title: "Book a Therapist", links: [{ label: "Rent Therapy Room", to: "/venue/browse" }], card: { title: "Certified Therapists", body: "Doctor-recommended, certified, GPS-tracked", cta: "Find Therapist", to: "/therapist/browse" } },
-  ] },
-  { label: "Medicines", columns: [
-    { title: "Shop by Brand", links: ["Dabur", "Himalaya", "Baidyanath", "Patanjali", "Kottakkal", "Kerala Ayurveda", "AVP", "SNA"].map((x) => ({ label: x, to: `/shop?brand=${encodeURIComponent(x)}` })) },
-    { title: "Shop by Category", links: ["Immunity Boosters", "Pain & Inflammation", "Digestive Health", "Skin & Hair", "Women's Health", "Men's Health", "Classical Medicines", "Oils & Ghee"].map((x) => ({ label: x, to: `/shop?category=${encodeURIComponent(x)}` })) },
-    { title: "Special", links: [{ label: "🛒 Bulk Purchase (Doctor Discounts)", to: "/bulk" }, { label: "🧰 Treatment Kits", to: "/shop/treatment-kits" }, { label: "💊 Upload Prescription", to: "/shop/prescription" }, { label: "🚚 Track My Order", to: "/shop/track" }, { label: "🎁 Offers & Deals", to: "/offers" }] },
   ] },
   { label: "Learn", columns: [
     { title: "For Doctors", links: [{ label: "📚 CME Courses", to: "/learning/courses?for=doctor" }, { label: "🎓 Certification Programs", to: "/learning/courses?type=certification" }, { label: "📝 Quizzes & Assessments", to: "/learning/quiz" }, { label: "🏆 My Certificates", to: "/dashboard?tab=certificates" }] },
