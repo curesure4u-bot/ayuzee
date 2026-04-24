@@ -34,6 +34,17 @@ const ProviderHome = () => {
         .select("*")
         .eq("user_id", uid)
         .maybeSingle();
+      if (!data) {
+        const { data: therapist } = await supabase
+          .from("therapists")
+          .select("id")
+          .eq("user_id", uid)
+          .maybeSingle();
+        if (therapist) {
+          navigate("/therapist", { replace: true });
+          return;
+        }
+      }
       setProvider(data);
       setLoading(false);
     })();

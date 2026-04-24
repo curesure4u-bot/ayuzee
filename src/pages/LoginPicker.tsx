@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Leaf, User, Stethoscope, Building2, ShieldCheck, ArrowRight } from "lucide-react";
+import { Leaf, User, Stethoscope, Building2, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 
 const choices = [
   {
@@ -18,10 +18,17 @@ const choices = [
   },
   {
     to: "/provider/auth",
-    title: "Hospital / Therapist / Panchakarma / Resort",
-    description: "List your facility, accept bookings, and reach more patients across India.",
+    title: "Hospital / Clinic / Resort",
+    description: "List your Panchakarma therapy rooms, accept bookings, and reach patients.",
     icon: Building2,
     iconBg: "bg-amber-100/80 text-amber-700",
+  },
+  {
+    to: "/therapist/auth",
+    title: "Panchakarma Therapist",
+    description: "Manage assigned therapy sessions, availability, and earnings.",
+    icon: Sparkles,
+    iconBg: "bg-secondary text-secondary-foreground",
   },
   {
     to: "/admin/auth",
@@ -48,7 +55,7 @@ const LoginPicker = () => {
           Choose how you'd like to continue
         </p>
 
-        <div className="mt-10 grid w-full max-w-5xl gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid w-full max-w-6xl gap-5 md:grid-cols-2 lg:grid-cols-5">
           {choices.map((c) => (
             <Link
               key={c.to}
