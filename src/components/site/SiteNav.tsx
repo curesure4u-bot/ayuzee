@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Bell, BookOpen, Briefcase, Building2, CalendarCheck, ChevronDown, ChevronRight, GraduationCap, Handshake, HeartPulse, Leaf, LogOut, Menu, Pill, Search, ShoppingCart, Stethoscope, UserCircle } from "lucide-react";
+import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
+import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 const searchTabs = [
@@ -16,14 +17,6 @@ const searchTabs = [
   { label: "Medicines", path: "/shop" },
   { label: "Courses", path: "/learning/courses" },
   { label: "Jobs", path: "/jobs" },
-];
-
-const joinOptions = [
-  { to: "/auth", title: "Patient", subtitle: "Book consults, therapies and medicines", icon: HeartPulse },
-  { to: "/doctor/auth", title: "Doctor / Vaidya", subtitle: "Manage practice, patients and earnings", icon: Stethoscope },
-  { to: "/therapist/auth", title: "Panchakarma Therapist", subtitle: "Accept assigned therapy sessions", icon: UserCircle },
-  { to: "/venue/auth", title: "Hospital / Clinic / Resort", subtitle: "List therapy rooms and venues", icon: Building2 },
-  { to: "/partner/apply", title: "Partner / Collaborator", subtitle: "Bulk, B2B, colleges and brands", icon: Handshake },
 ];
 
 type MegaLink = { label: string; to: string };
@@ -122,10 +115,27 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const navRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [dashboardPath, setDashboardPath] = useState("/dashboard");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user.email ?? null));
+    const resolveRole = async (userId?: string) => {
+      if (!userId) return setDashboardPath("/dashboard");
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+      const roles = (data ?? []).map((r) => r.role as string);
+      if (roles.includes("admin")) setDashboardPath("/admin");
+      else if (roles.includes("doctor")) setDashboardPath("/doctor");
+      else if (roles.includes("therapist")) setDashboardPath("/therapist");
+      else if (roles.includes("venue_owner")) setDashboardPath("/venue");
+      else setDashboardPath("/dashboard");
+    };
+    supabase.auth.getSession().then(({ data }) => {
+      setEmail(data.session?.user.email ?? null);
+      resolveRole(data.session?.user.id);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      setEmail(s?.user.email ?? null);
+      resolveRole(s?.user.id);
+    });
     return () => sub.subscription.unsubscribe();
   }, []);
 
