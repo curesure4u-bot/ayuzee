@@ -2,7 +2,6 @@ import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
 import { Categories } from "@/components/site/Categories";
 import { Doctors } from "@/components/site/Doctors";
-import { WhyAyuzee } from "@/components/site/WhyAyuzee";
 import { Products } from "@/components/site/Products";
 import { Therapy } from "@/components/site/Therapy";
 import { PrakritiSection } from "@/components/site/PrakritiSection";
@@ -65,7 +64,6 @@ const Index = () => {
         <Hero />
         <Categories />
         <Doctors />
-        <WhyAyuzee />
         <Products />
         <Therapy />
         <PrakritiSection />
