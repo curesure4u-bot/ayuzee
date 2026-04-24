@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, Stethoscope, ShoppingBag, IndianRupee, Gift, Wallet, GraduationCap, Award, BookOpen } from "lucide-react";
+import { Users, Stethoscope, ShoppingBag, IndianRupee, Gift, Wallet, GraduationCap, Award, BookOpen, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -16,6 +17,7 @@ interface StudentRow { id: string; user_id: string; full_name: string; phone: st
 interface RecentAppt { id: string; appointment_date: string; time_slot: string; status: string; mode: string; }
 interface RecentOrder { id: string; full_name: string; total: number; order_status: string; created_at: string; }
 interface DayPoint { day: string; revenue: number; }
+interface PrescriptionOrder { id: string; user_id: string | null; guest_name: string | null; guest_phone: string | null; prescription_urls: string[]; delivery_address: { name?: string; phone?: string; address?: string; city?: string; state?: string; pincode?: string }; notes: string | null; status: string; quoted_amount: number | null; admin_note: string | null; created_at: string; }
 
 const formatINR = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
 
@@ -28,6 +30,10 @@ const AdminDashboard = () => {
   const [studentStats, setStudentStats] = useState<StudentStats>({ total: 0, verified: 0, enrolled: 0, certificates: 0 });
   const [rejecting, setRejecting] = useState<StudentRow | null>(null);
   const [rejectNote, setRejectNote] = useState("");
+  const [prescriptions, setPrescriptions] = useState<PrescriptionOrder[]>([]);
+  const [prescriptionStatusFilter, setPrescriptionStatusFilter] = useState("all");
+  const [quoteDrafts, setQuoteDrafts] = useState<Record<string, string>>({});
+  const [adminNoteDrafts, setAdminNoteDrafts] = useState<Record<string, string>>({});
 
   useEffect(() => {
     document.title = "Admin Dashboard — Ayuzee";
@@ -39,7 +45,7 @@ const AdminDashboard = () => {
       monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
       const monthIso = monthStart.toISOString();
 
-      const [u, d, o, paid, recentAppts, recentOrders, allOrders, refCodes, refPayouts, studentRows, verifiedStudents, enrolled, certs] = await Promise.all([
+      const [u, d, o, paid, recentAppts, recentOrders, allOrders, refCodes, refPayouts, studentRows, verifiedStudents, enrolled, certs, prescriptionRows] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("doctors").select("*", { count: "exact", head: true }),
         supabase.from("orders").select("*", { count: "exact", head: true }),
@@ -53,6 +59,7 @@ const AdminDashboard = () => {
         (supabase as any).from("student_profiles").select("id", { count: "exact", head: true }).eq("is_verified", true),
         supabase.from("lms_progress").select("id", { count: "exact", head: true }),
         supabase.from("lms_certificates").select("id", { count: "exact", head: true }),
+        (supabase as any).from("prescription_orders").select("*").order("created_at", { ascending: false }),
       ]);
 
       const revenue = (paid.data ?? []).reduce((s, r: { total: number }) => s + (r.total || 0), 0);
@@ -77,6 +84,9 @@ const AdminDashboard = () => {
       setChart(Object.entries(days).map(([day, revenue]) => ({ day: day.slice(5), revenue })));
       setStudents((studentRows.data ?? []) as StudentRow[]);
       setStudentStats({ total: studentRows.data?.length ?? 0, verified: verifiedStudents.count ?? 0, enrolled: enrolled.count ?? 0, certificates: certs.count ?? 0 });
+      setPrescriptions((prescriptionRows.data ?? []) as PrescriptionOrder[]);
+      setQuoteDrafts(Object.fromEntries(((prescriptionRows.data ?? []) as PrescriptionOrder[]).map((row) => [row.id, row.quoted_amount?.toString() ?? ""])));
+      setAdminNoteDrafts(Object.fromEntries(((prescriptionRows.data ?? []) as PrescriptionOrder[]).map((row) => [row.id, row.admin_note ?? ""])));
     };
     load();
   }, []);
