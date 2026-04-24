@@ -1248,6 +1248,7 @@ export type Database = {
           status: string
           tags: string[]
           title: string
+          type: string
           updated_at: string
           view_count: number
         }
@@ -1267,6 +1268,7 @@ export type Database = {
           status?: string
           tags?: string[]
           title: string
+          type?: string
           updated_at?: string
           view_count?: number
         }
@@ -1286,6 +1288,7 @@ export type Database = {
           status?: string
           tags?: string[]
           title?: string
+          type?: string
           updated_at?: string
           view_count?: number
         }
@@ -1418,33 +1421,52 @@ export type Database = {
       }
       job_applications: {
         Row: {
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
           cover_note: string | null
           created_at: string
           id: string
+          job_id: string | null
           job_listing_id: string
           status: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
           cover_note?: string | null
           created_at?: string
           id?: string
+          job_id?: string | null
           job_listing_id: string
           status?: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
           cover_note?: string | null
           created_at?: string
           id?: string
+          job_id?: string | null
           job_listing_id?: string
           status?: string
           updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_listings"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "job_applications_job_listing_id_fkey"
             columns: ["job_listing_id"]
@@ -2609,6 +2631,35 @@ export type Database = {
           verification_status?: string
         }
         Relationships: []
+      }
+      student_bookmarks: {
+        Row: {
+          blog_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          blog_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          blog_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_bookmarks_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "health_blogs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       student_profiles: {
         Row: {
