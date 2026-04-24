@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -10,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 import { GlobalSearch } from "@/components/site/GlobalSearch";
+import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 type MegaLink = { label: string; to: string };
@@ -81,31 +83,29 @@ const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
 export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const { count } = useCart();
   const navigate = useNavigate();
+  const { role } = useUserRole();
   const navRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [dashboardPath, setDashboardPath] = useState("/dashboard");
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const dashboardPath = dashboardPathForRole(role);
+  const roleLabel = labelForRole(role);
 
   useEffect(() => {
-    const resolveRole = async (userId?: string) => {
-      if (!userId) return setDashboardPath("/dashboard");
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-      const roles = (data ?? []).map((r) => r.role as string);
-      if (roles.includes("admin")) setDashboardPath("/admin");
-      else if (roles.includes("doctor")) setDashboardPath("/doctor");
-      else if (roles.includes("therapist")) setDashboardPath("/therapist");
-      else if (roles.includes("venue_owner")) setDashboardPath("/venue");
-      else setDashboardPath("/dashboard");
+    const loadProfileName = async (userId?: string) => {
+      if (!userId) return setDisplayName(null);
+      const { data } = await supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle();
+      setDisplayName(data?.full_name || null);
     };
     supabase.auth.getSession().then(({ data }) => {
       setEmail(data.session?.user.email ?? null);
-      resolveRole(data.session?.user.id);
+      loadProfileName(data.session?.user.id);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setEmail(s?.user.email ?? null);
-      resolveRole(s?.user.id);
+      loadProfileName(s?.user.id);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
