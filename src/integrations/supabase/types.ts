@@ -1416,6 +1416,44 @@ export type Database = {
           },
         ]
       }
+      job_applications: {
+        Row: {
+          cover_note: string | null
+          created_at: string
+          id: string
+          job_listing_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cover_note?: string | null
+          created_at?: string
+          id?: string
+          job_listing_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cover_note?: string | null
+          created_at?: string
+          id?: string
+          job_listing_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_listing_id_fkey"
+            columns: ["job_listing_id"]
+            isOneToOne: false
+            referencedRelation: "job_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_listings: {
         Row: {
           apply_email: string | null
@@ -1621,6 +1659,7 @@ export type Database = {
           course_id: string
           id: string
           lesson_id: string
+          progress_percent: number
           user_id: string
         }
         Insert: {
@@ -1628,6 +1667,7 @@ export type Database = {
           course_id: string
           id?: string
           lesson_id: string
+          progress_percent?: number
           user_id: string
         }
         Update: {
@@ -1635,6 +1675,7 @@ export type Database = {
           course_id?: string
           id?: string
           lesson_id?: string
+          progress_percent?: number
           user_id?: string
         }
         Relationships: [
