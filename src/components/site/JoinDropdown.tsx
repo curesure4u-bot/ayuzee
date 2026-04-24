@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Building2, GraduationCap, HandHelping, Stethoscope, UserCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -85,8 +86,11 @@ export const JoinRoleCards = ({ onSelect }: { onSelect?: () => void }) => (
   </div>
 );
 
-export const JoinDropdown = () => (
-  <DropdownMenu>
+export const JoinDropdown = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+  <DropdownMenu open={open} onOpenChange={setOpen}>
     <DropdownMenuTrigger asChild>
       <Button variant="hero" className="hidden gap-1 rounded-full px-5 sm:inline-flex">
         Join Ayuzee ▾
@@ -97,7 +101,8 @@ export const JoinDropdown = () => (
         <h2 className="font-display text-xl font-semibold">Choose your role</h2>
         <p className="text-sm text-muted-foreground">Select how you want to use Ayuzee.</p>
       </div>
-      <JoinRoleCards />
+      <JoinRoleCards onSelect={() => setOpen(false)} />
     </DropdownMenuContent>
   </DropdownMenu>
-);
+  );
+};
