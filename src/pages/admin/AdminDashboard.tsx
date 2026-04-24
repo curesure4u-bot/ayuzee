@@ -120,6 +120,24 @@ const AdminDashboard = () => {
     setRejectNote("");
   };
 
+  const getPrescriptionUrl = async (path: string) => {
+    const { data } = await supabase.storage.from("prescriptions").createSignedUrl(path, 60 * 20);
+    return data?.signedUrl ?? null;
+  };
+
+  const updatePrescription = async (order: PrescriptionOrder, status = order.status) => {
+    const { error } = await (supabase as any).from("prescription_orders").update({
+      status,
+      quoted_amount: quoteDrafts[order.id] ? Number(quoteDrafts[order.id]) : null,
+      admin_note: adminNoteDrafts[order.id] || null,
+    }).eq("id", order.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Prescription order updated");
+    setPrescriptions((rows) => rows.map((row) => row.id === order.id ? { ...row, status, quoted_amount: quoteDrafts[order.id] ? Number(quoteDrafts[order.id]) : null, admin_note: adminNoteDrafts[order.id] || null } : row));
+  };
+
+  const filteredPrescriptions = prescriptions.filter((order) => prescriptionStatusFilter === "all" || order.status === prescriptionStatusFilter);
+
   const cards = [
     { label: "Total Users", value: stats.users.toLocaleString("en-IN"), icon: Users },
     { label: "Total Doctors", value: stats.doctors.toLocaleString("en-IN"), icon: Stethoscope },
@@ -137,7 +155,7 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList><TabsTrigger value="overview">Overview</TabsTrigger><TabsTrigger value="students">Students</TabsTrigger></TabsList>
+        <TabsList><TabsTrigger value="overview">Overview</TabsTrigger><TabsTrigger value="students">Students</TabsTrigger><TabsTrigger value="prescriptions">Prescription Orders</TabsTrigger></TabsList>
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {cards.map((c) => (
@@ -162,6 +180,12 @@ const AdminDashboard = () => {
             {[{ label: "Total students", value: studentStats.total, icon: GraduationCap }, { label: "Verified students", value: studentStats.verified, icon: Users }, { label: "Courses enrolled", value: studentStats.enrolled, icon: BookOpen }, { label: "Certificates issued", value: studentStats.certificates, icon: Award }].map((s) => <Card key={s.label}><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">{s.label}</CardTitle><s.icon className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="font-display text-2xl">{s.value.toLocaleString("en-IN")}</div></CardContent></Card>)}
           </div>
           <Card><CardHeader><CardTitle>Student verification</CardTitle></CardHeader><CardContent className="space-y-3">{students.length === 0 && <p className="text-sm text-muted-foreground">No students yet.</p>}{students.map((student) => <div key={student.id} className="grid gap-3 rounded-xl border border-border p-4 lg:grid-cols-[1fr_auto]"><div><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{student.full_name}</p><Badge variant={student.is_verified ? "default" : "secondary"}>{student.is_verified ? "Verified" : "Pending"}</Badge></div><p className="mt-1 text-sm text-muted-foreground">{student.course || "Course"} · Year {student.year_of_study || "—"} · {student.college_name || "College not added"}</p><p className="text-sm text-muted-foreground">{student.state || "State not added"}</p>{student.rejection_note && <p className="mt-2 text-xs text-destructive">Rejected: {student.rejection_note}</p>}</div><div className="flex flex-wrap items-center gap-2 lg:justify-end">{!student.is_verified && student.student_id_url && <Button variant="outline" size="sm" onClick={async () => { const url = await getStudentIdUrl(student.student_id_url); if (url) window.open(url, "_blank"); }}>View ID</Button>}{!student.is_verified && <Button size="sm" onClick={() => verifyStudent(student)}>Verify</Button>}<Button variant="outline" size="sm" onClick={() => { setRejecting(student); setRejectNote(student.rejection_note || ""); }}>Reject</Button></div></div>)}</CardContent></Card>
+        </TabsContent>
+
+        <TabsContent value="prescriptions" className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Card><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Prescription orders</CardTitle><FileText className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="font-display text-2xl">{prescriptions.length.toLocaleString("en-IN")}</div></CardContent></Card></div>
+          <div className="flex flex-wrap gap-2">{["all", "pending", "reviewing", "quoted", "confirmed", "dispatched", "delivered", "cancelled"].map((status) => <Button key={status} size="sm" variant={prescriptionStatusFilter === status ? "default" : "outline"} onClick={() => setPrescriptionStatusFilter(status)} className="capitalize">{status.replace(/_/g, " ")}</Button>)}</div>
+          <Card><CardHeader><CardTitle>Prescription Orders</CardTitle></CardHeader><CardContent className="space-y-3">{filteredPrescriptions.length === 0 && <p className="text-sm text-muted-foreground">No prescription orders found.</p>}{filteredPrescriptions.map((order) => <div key={order.id} className="rounded-xl border border-border p-4"><div className="grid gap-3 lg:grid-cols-[1fr_auto]"><div><div className="flex flex-wrap items-center gap-2"><p className="font-semibold">{order.delivery_address?.name || order.guest_name || "Patient"}</p><Badge>{order.status}</Badge></div><p className="mt-1 text-sm text-muted-foreground">{order.delivery_address?.phone || order.guest_phone} · {order.delivery_address?.city}, {order.delivery_address?.state} · {new Date(order.created_at).toLocaleString("en-IN")}</p><p className="text-sm text-muted-foreground">{order.delivery_address?.address} {order.delivery_address?.pincode}</p>{order.notes && <p className="mt-2 text-sm">Note: {order.notes}</p>}</div><div className="flex flex-wrap items-start gap-2 lg:justify-end">{order.prescription_urls.map((path, index) => <Button key={path} variant="outline" size="sm" onClick={async () => { const url = await getPrescriptionUrl(path); if (url) window.open(url, "_blank"); }}>Prescription {index + 1}</Button>)}</div></div><div className="mt-4 grid gap-3 md:grid-cols-[160px_1fr_auto_auto]"><Input type="number" placeholder="Quoted amount" value={quoteDrafts[order.id] ?? ""} onChange={(event) => setQuoteDrafts((drafts) => ({ ...drafts, [order.id]: event.target.value }))} /><Input placeholder="Admin note" value={adminNoteDrafts[order.id] ?? ""} onChange={(event) => setAdminNoteDrafts((drafts) => ({ ...drafts, [order.id]: event.target.value }))} /><select className="rounded-md border border-input bg-background px-3 py-2 text-sm" value={order.status} onChange={(event) => updatePrescription(order, event.target.value)}>{["pending", "reviewing", "quoted", "confirmed", "dispatched", "delivered", "cancelled"].map((status) => <option key={status} value={status}>{status}</option>)}</select><Button size="sm" onClick={() => updatePrescription(order)}>Save</Button></div></div>)}</CardContent></Card>
         </TabsContent>
       </Tabs>
 
