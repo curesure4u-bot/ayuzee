@@ -146,7 +146,7 @@ const Jobs = () => {
           ) : (
             <div className="grid gap-4">
               {filtered.map((job) => (
-                <Card key={job.id} className="transition-smooth hover:shadow-lg">
+                <Card id={`job-${job.id}`} key={job.id} className="scroll-mt-40 transition-smooth hover:shadow-lg">
                   <CardContent className="p-5">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                       <div className="min-w-0">
