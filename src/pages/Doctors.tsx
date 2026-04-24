@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowUpDown, BadgeCheck, Calendar, ChevronRight, Eye, MapPin, Star, Stethoscope, Video } from "lucide-react";
 import { toast } from "sonner";
+import { setSEO } from "@/lib/seo";
 
 interface Doctor {
   id: string;
@@ -97,7 +98,10 @@ const Doctors = () => {
   const [lead, setLead] = useState({ phone: "", patient: "", pincode: "", concern: "" });
 
   useEffect(() => {
-    document.title = "Find a Doctor — Ayuzee";
+    setSEO(
+      "Find AYUSH Doctors Near You | Ayuzee — Ayurveda, Homeopathy, Siddha, Unani",
+      "Search 10,000+ verified AYUSH doctors. Book video or in-clinic consultations. Filter by specialization, city, fee. Free first consult available.",
+    );
     supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
     supabase
       .from("doctors")

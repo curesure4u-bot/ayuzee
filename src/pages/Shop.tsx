@@ -10,6 +10,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Search, ShoppingCart, Heart, Share2, ChevronRight, Leaf, Sparkles, FlaskConical, Pill, Flower2, Droplets } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { setSEO } from "@/lib/seo";
 
 interface Product {
   id: string;
@@ -42,7 +43,10 @@ const Shop = () => {
   const { addItem } = useCart();
 
   useEffect(() => {
-    document.title = "Buy Medicine — Ayuzee";
+    setSEO(
+      "Buy Authentic Ayurvedic Medicines Online | Ayuzee Medicine Store",
+      "Shop 5,000+ lab-tested Ayurvedic, Homeopathic & Unani medicines. Bulk purchase discounts for doctors. Classical & patented formulations. Free delivery on ₹999+.",
+    );
     supabase.from("products").select("*").order("created_at", { ascending: true })
       .then(({ data }) => {
         setProducts((data as Product[]) ?? []);
