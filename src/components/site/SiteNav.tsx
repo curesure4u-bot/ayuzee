@@ -166,6 +166,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [conditions, setConditions] = useState<ConditionMenuLink[]>(fallbackConditions);
   const dashboardPath = dashboardPathForRole(role);
   const roleLabel = labelForRole(role);
 
@@ -192,6 +193,18 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
     };
     document.addEventListener("mousedown", onPointer);
     return () => document.removeEventListener("mousedown", onPointer);
+  }, []);
+
+  useEffect(() => {
+    supabase
+      .from("health_conditions")
+      .select("icon,name,slug,system_category")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .limit(12)
+      .then(({ data }) => {
+        if (data?.length) setConditions(data.map((c) => ({ icon: c.icon || "🌿", name: c.name, slug: c.slug, system_category: c.system_category })));
+      });
   }, []);
 
   if (!appLevel) return null;
