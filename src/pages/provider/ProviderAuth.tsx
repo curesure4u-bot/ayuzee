@@ -62,16 +62,27 @@ const ProviderAuth = () => {
   const [idFile, setIdFile] = useState<File | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
 
+  const redirectForAccount = async (userId: string) => {
+    const { data: therapist } = await supabase
+      .from("therapists")
+      .select("id")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (therapist) {
+      navigate("/therapist", { replace: true });
+      return;
+    }
+
+    navigate("/provider", { replace: true });
+  };
+
   useEffect(() => {
     if (step !== "credentials") return;
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate("/provider", { replace: true });
+      if (data.session && mode === "login") redirectForAccount(data.session.user.id);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session && step === "credentials") navigate("/provider", { replace: true });
-    });
-    return () => sub.subscription.unsubscribe();
-  }, [navigate, step]);
+  }, [mode, step]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,9 +121,10 @@ const ProviderAuth = () => {
         setStep("documents");
         toast.success("Account created. Please upload your verification documents.");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back!");
+        if (data.user) await redirectForAccount(data.user.id);
       }
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
