@@ -21,6 +21,28 @@ type MegaMenu = { label: string; columns: MegaColumn[] };
 type ConditionMenuLink = { icon: string; name: string; slug: string; system_category?: string | null };
 
 const specialty = ["Spine & Joint Care", "Skin & Hair", "Women's Health (Gyno)", "Digestive Health", "Mental Wellness", "Diabetes & Lifestyle", "Child Health", "Eye & ENT"];
+const bulkBrandLabels = ["Dabur", "Kottakkal", "Baidyanath", "Himalaya", "Dhootapapeshwar", "Arya Vaidya Pharmacy", "Nagarjuna", "Vaidyaratnam"];
+const classicalLabels = ["Bhasma", "Churna", "Kashayam", "Ghrita", "Taila / Oil", "Arishta", "Guggulu", "Avaleha"];
+const patentedLabels = ["Tablet", "Capsule", "Syrup", "Oil", "Ointment", "Herbal Tea"];
+const fallbackConditions: ConditionMenuLink[] = [
+  { icon: "🦴", name: "Arthritis & Joint Pain", slug: "arthritis-joint-pain" },
+  { icon: "🔙", name: "Spine & Back Pain", slug: "spine-back-pain" },
+  { icon: "🩸", name: "Diabetes", slug: "diabetes-blood-sugar" },
+  { icon: "🌸", name: "PCOD / Women's Health", slug: "pcod-womens-health" },
+  { icon: "🫁", name: "Digestive Health", slug: "digestive-gut-health" },
+  { icon: "✨", name: "Skin Diseases", slug: "skin-diseases" },
+  { icon: "💆", name: "Hair & Scalp", slug: "hair-scalp" },
+  { icon: "🧠", name: "Mental Health & Stress", slug: "mental-health-stress" },
+  { icon: "🛡️", name: "Immunity Boost", slug: "immunity-boost" },
+  { icon: "❤️", name: "Heart & Cholesterol", slug: "heart-cholesterol" },
+  { icon: "💪", name: "Men's Health", slug: "mens-health" },
+  { icon: "👶", name: "Child Health", slug: "child-health" },
+];
+
+const pickBulkValue = (items: readonly string[], wanted: string) => items.find((x) => x.toLowerCase().includes(wanted.toLowerCase())) || wanted;
+const bulkBrands = bulkBrandLabels.map((label) => ({ label, value: pickBulkValue(BULK_BRANDS, label) }));
+const classicalTypes = classicalLabels.map((label) => ({ label, value: pickBulkValue(CLASSICAL_TYPES, label.replace(" / Oil", "")) }));
+const patentedTypes = patentedLabels.map((label) => ({ label, value: pickBulkValue(PATENTED_TYPES, label) }));
 const megaMenus: MegaMenu[] = [
   { label: "Find Care", columns: [
     { title: "By Doctor Type", links: [
