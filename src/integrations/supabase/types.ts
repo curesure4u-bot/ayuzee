@@ -1985,6 +1985,7 @@ export type Database = {
           appointment_id: string | null
           city: string
           created_at: string
+          delhivery_waybill: string | null
           full_name: string
           id: string
           order_status: string
@@ -2006,6 +2007,7 @@ export type Database = {
           appointment_id?: string | null
           city: string
           created_at?: string
+          delhivery_waybill?: string | null
           full_name: string
           id?: string
           order_status?: string
@@ -2027,6 +2029,7 @@ export type Database = {
           appointment_id?: string | null
           city?: string
           created_at?: string
+          delhivery_waybill?: string | null
           full_name?: string
           id?: string
           order_status?: string
@@ -2239,6 +2242,51 @@ export type Database = {
           total_questions?: number
           updated_at?: string
           vata_score?: number
+        }
+        Relationships: []
+      }
+      prescription_orders: {
+        Row: {
+          admin_note: string | null
+          created_at: string | null
+          delivery_address: Json
+          guest_name: string | null
+          guest_phone: string | null
+          id: string
+          notes: string | null
+          prescription_urls: string[]
+          quoted_amount: number | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string | null
+          delivery_address: Json
+          guest_name?: string | null
+          guest_phone?: string | null
+          id?: string
+          notes?: string | null
+          prescription_urls: string[]
+          quoted_amount?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string | null
+          delivery_address?: Json
+          guest_name?: string | null
+          guest_phone?: string | null
+          id?: string
+          notes?: string | null
+          prescription_urls?: string[]
+          quoted_amount?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
