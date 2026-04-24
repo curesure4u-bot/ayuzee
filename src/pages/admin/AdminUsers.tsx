@@ -1,97 +1,76 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Eye, MessageCircle, Search } from "lucide-react";
+import { toast } from "sonner";
 
-interface Row {
-  user_id: string;
-  full_name: string | null;
-  phone: string | null;
-  created_at: string;
-  is_doctor: boolean;
-}
+type Role = "patient" | "student";
+type ProfileRow = { id: string; user_id: string; full_name: string | null; email: string | null; phone: string | null; city: string | null; state: string | null; created_at: string; updated_at: string; is_active?: boolean; role: Role };
+
+const PAGE_SIZE = 20;
 
 const AdminUsers = () => {
-  const [rows, setRows] = useState<Row[]>([]);
-  const [q, setQ] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<ProfileRow[]>([]);
+  const [query, setQuery] = useState("");
+  const [tab, setTab] = useState("all");
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState<ProfileRow | null>(null);
+  const [messageFor, setMessageFor] = useState<ProfileRow | null>(null);
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    document.title = "Admin · Users — Ayuzee";
-    const load = async () => {
-      const [profiles, doctors] = await Promise.all([
-        supabase.from("profiles").select("user_id,full_name,phone,created_at").order("created_at", { ascending: false }),
-        supabase.from("doctors").select("user_id"),
-      ]);
-      const docSet = new Set((doctors.data ?? []).map((d: { user_id: string | null }) => d.user_id).filter(Boolean));
-      setRows((profiles.data ?? []).map((p) => ({ ...p, is_doctor: docSet.has(p.user_id) })));
-      setLoading(false);
-    };
-    load();
-  }, []);
+  const load = async () => {
+    const [profiles, roles] = await Promise.all([
+      (supabase as any).from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("user_roles").select("user_id,role").in("role", ["student", "patient"]),
+    ]);
+    const roleMap = new Map<string, Role>();
+    (roles.data ?? []).forEach((row: { user_id: string; role: Role }) => roleMap.set(row.user_id, row.role));
+    setRows(((profiles.data ?? []) as ProfileRow[]).map((row) => ({ ...row, is_active: row.is_active ?? true, role: roleMap.get(row.user_id) ?? "patient" })));
+  };
+
+  useEffect(() => { document.title = "Admin · Users — Ayuzee"; load(); }, []);
 
   const filtered = useMemo(() => {
-    if (!q.trim()) return rows;
-    const t = q.toLowerCase();
-    return rows.filter((r) =>
-      (r.full_name ?? "").toLowerCase().includes(t) || (r.phone ?? "").includes(t),
-    );
-  }, [rows, q]);
+    const term = query.trim().toLowerCase();
+    return rows.filter((row) => {
+      const matchesSearch = !term || (row.full_name ?? "").toLowerCase().includes(term) || (row.email ?? "").toLowerCase().includes(term);
+      const matchesTab = tab === "all" || (tab === "inactive" ? row.is_active === false : row.role === tab);
+      return matchesSearch && matchesTab;
+    });
+  }, [rows, query, tab]);
+
+  const pageRows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+  const deactivate = async (row: ProfileRow) => {
+    const { error } = await (supabase as any).from("profiles").update({ is_active: false }).eq("id", row.id);
+    if (error) return toast.error(error.message);
+    toast.success("User deactivated");
+    setRows((current) => current.map((item) => item.id === row.id ? { ...item, is_active: false } : item));
+  };
+
+  const sendWhatsApp = async () => {
+    if (!messageFor?.phone || !message.trim()) return toast.error("Phone and message are required");
+    const { error } = await supabase.functions.invoke("send-whatsapp", { body: { to: messageFor.phone, message } });
+    if (error) return toast.error(error.message);
+    toast.success("WhatsApp sent");
+    setMessageFor(null); setMessage("");
+  };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl">Users</h1>
-        <p className="text-sm text-muted-foreground">{rows.length} total</p>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-3">
-            <span>All profiles</span>
-            <div className="relative w-72">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input className="pl-9" placeholder="Search name or phone" value={q} onChange={(e) => setQ(e.target.value)} />
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Joined</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((r) => (
-                  <TableRow key={r.user_id}>
-                    <TableCell className="font-medium">{r.full_name || "—"}</TableCell>
-                    <TableCell className="text-muted-foreground">{r.phone || "—"}</TableCell>
-                    <TableCell>
-                      {r.is_doctor
-                        ? <Badge className="bg-primary text-primary-foreground">Doctor</Badge>
-                        : <Badge variant="secondary">Patient</Badge>}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{new Date(r.created_at).toLocaleDateString("en-IN")}</TableCell>
-                  </TableRow>
-                ))}
-                {filtered.length === 0 && (
-                  <TableRow><TableCell colSpan={4} className="py-6 text-center text-muted-foreground">No users match.</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+      <div><h1 className="font-display text-3xl">All Users (Patients & Students)</h1><p className="text-sm text-muted-foreground">Search, inspect, and contact user profiles.</p></div>
+      <Card><CardHeader><CardTitle className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><Tabs value={tab} onValueChange={(value) => { setTab(value); setPage(1); }}><TabsList><TabsTrigger value="all">All</TabsTrigger><TabsTrigger value="patient">Patients</TabsTrigger><TabsTrigger value="student">Students</TabsTrigger><TabsTrigger value="inactive">Inactive</TabsTrigger></TabsList></Tabs><div className="relative w-full lg:w-80"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input className="pl-9" placeholder="Search name or email" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} /></div></CardTitle></CardHeader><CardContent><Table><TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Email</TableHead><TableHead>Phone</TableHead><TableHead>Role</TableHead><TableHead>Joined</TableHead><TableHead>Last active</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader><TableBody>{pageRows.map((row) => <TableRow key={row.id}><TableCell className="font-medium">{row.full_name || "—"}</TableCell><TableCell>{row.email || "—"}</TableCell><TableCell>{row.phone || "—"}</TableCell><TableCell><Badge variant={row.role === "student" ? "default" : "secondary"}>{row.role}</Badge></TableCell><TableCell>{new Date(row.created_at).toLocaleDateString("en-IN")}</TableCell><TableCell>{new Date(row.updated_at || row.created_at).toLocaleDateString("en-IN")}</TableCell><TableCell><div className="flex justify-end gap-2"><Button size="sm" variant="outline" onClick={() => setSelected(row)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => { setMessageFor(row); setMessage(""); }}><MessageCircle className="h-4 w-4" /></Button><Button size="sm" variant="destructive" disabled={row.is_active === false} onClick={() => deactivate(row)}>Deactivate</Button></div></TableCell></TableRow>)}{pageRows.length === 0 && <TableRow><TableCell colSpan={7} className="py-8 text-center text-muted-foreground">No users found.</TableCell></TableRow>}</TableBody></Table><div className="mt-4 flex items-center justify-between text-sm text-muted-foreground"><span>Page {page} of {pageCount}</span><div className="flex gap-2"><Button size="sm" variant="outline" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>Prev</Button><Button size="sm" variant="outline" disabled={page === pageCount} onClick={() => setPage((p) => p + 1)}>Next</Button></div></div></CardContent></Card>
+      <Sheet open={!!selected} onOpenChange={(open) => !open && setSelected(null)}><SheetContent className="overflow-y-auto sm:max-w-lg"><SheetHeader><SheetTitle>Profile details</SheetTitle></SheetHeader>{selected && <div className="mt-6 grid gap-3 text-sm">{Object.entries(selected).map(([key, value]) => <div key={key} className="rounded-md border border-border p-3"><p className="text-xs uppercase text-muted-foreground">{key.replace(/_/g, " ")}</p><p className="mt-1 break-words font-medium">{Array.isArray(value) ? value.join(", ") : String(value ?? "—")}</p></div>)}</div>}</SheetContent></Sheet>
+      <Dialog open={!!messageFor} onOpenChange={(open) => !open && setMessageFor(null)}><DialogContent><DialogHeader><DialogTitle>Send WhatsApp to {messageFor?.full_name || "user"}</DialogTitle></DialogHeader><Textarea rows={5} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Type your message" /><DialogFooter><Button variant="outline" onClick={() => setMessageFor(null)}>Cancel</Button><Button onClick={sendWhatsApp}>Send</Button></DialogFooter></DialogContent></Dialog>
     </div>
   );
 };
