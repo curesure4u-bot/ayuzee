@@ -74,6 +74,16 @@ const Dashboard = () => {
 
   const firstName = profile?.full_name?.split(" ")[0] || "there";
   const upcoming = appointments.filter((a) => a.status !== "cancelled" && a.status !== "completed");
+  const goal = localStorage.getItem("ayuzee_goal");
+  const goalMessages: Record<string, { icon: string; text: string; cta: string; href: string }> = {
+    find_doctor: { icon: "🩺", text: "Your next step: Book a consultation", cta: "Browse Doctors", href: "/doctors" },
+    panchakarma: { icon: "🫙", text: "Find a certified Panchakarma therapist near you", cta: "Browse Therapists", href: "/therapist/browse" },
+    medicines: { icon: "💊", text: "Shop authentic Ayurvedic medicines", cta: "Go to Shop", href: "/shop" },
+    prakriti: { icon: "🧬", text: "Discover your Ayurvedic body type in 5 minutes", cta: "Take Quiz", href: "/diagnosis/prakriti" },
+    condition: { icon: "💪", text: "Find doctors specialised in your health condition", cta: "Find Specialists", href: "/doctors" },
+    student: { icon: "🎓", text: "Your student hub is ready", cta: "Go to Student Hub", href: "/student" },
+  };
+  const goalInfo = goal ? goalMessages[goal] : null;
 
   const tiles = [
     { icon: Calendar, label: "Appointments", desc: "Upcoming consultations", count: upcoming.length },
@@ -85,12 +95,19 @@ const Dashboard = () => {
 
   return (
     <div>
+      {showOnboarding && userId && <PatientOnboarding userId={userId} onComplete={() => setShowOnboarding(false)} />}
       <main>
 
         <div className="mb-10">
           <span className="text-xs font-semibold uppercase tracking-wider text-primary">Your Dashboard</span>
           <h1 className="mt-2 font-display text-4xl">Namaste, {loading ? "…" : firstName} 🙏</h1>
           <p className="mt-2 text-muted-foreground">{email}</p>
+          {goalInfo && (
+            <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="font-medium text-foreground">{goalInfo.icon} {goalInfo.text}</p>
+              <Button asChild variant="hero" size="sm"><Link to={goalInfo.href}>{goalInfo.cta} →</Link></Button>
+            </div>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
