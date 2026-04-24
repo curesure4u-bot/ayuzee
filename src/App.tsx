@@ -85,6 +85,7 @@ import Clinics from "./pages/Clinics.tsx";
 import Offers from "./pages/Offers.tsx";
 import Jobs from "./pages/Jobs.tsx";
 import JobPost from "./pages/JobPost.tsx";
+import Search from "./pages/Search.tsx";
 import Referral from "./pages/Referral.tsx";
 import LoginPicker from "./pages/LoginPicker.tsx";
 import ProviderAuth from "./pages/provider/ProviderAuth.tsx";
@@ -164,6 +165,7 @@ const App = () => (
             <Route path="/doctors/:id" element={<DoctorDetail />} />
             <Route path="/clinics" element={<Clinics />} />
             <Route path="/offers" element={<Offers />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/post" element={<JobPost />} />
             <Route path="/shop" element={<Shop />} />
