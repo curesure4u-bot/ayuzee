@@ -172,7 +172,6 @@ const AdminTherapies = () => {
             </div>
           </div>
         </Card>
-      </main>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl">
