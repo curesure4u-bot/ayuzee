@@ -151,25 +151,20 @@ import TreatmentKits from "./pages/shop/TreatmentKits.tsx";
 
 const queryClient = new QueryClient();
 
-const AppRoutes = () => {
+const AdminAwareNav = () => {
   const location = useLocation();
   const isAdminArea = location.pathname.startsWith("/admin");
+  return isAdminArea ? null : <SiteNav appLevel />;
+};
 
-  return (
-    <>
-      {!isAdminArea && <SiteNav appLevel />}
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<LoginPicker />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CartProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <SiteNav appLevel />
+          <AdminAwareNav />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<LoginPicker />} />
