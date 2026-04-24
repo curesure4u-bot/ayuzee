@@ -115,6 +115,8 @@ import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
 import TherapistDetail from "./pages/therapists/TherapistDetail.tsx";
+import TherapistBrowse from "./pages/TherapistBrowse.tsx";
+import VenueBrowse from "./pages/VenueBrowse.tsx";
 import TherapistAuth from "./pages/therapist/TherapistAuth.tsx";
 import TherapistLayout from "./pages/therapist/TherapistLayout.tsx";
 import TherapistDashboard from "./pages/therapist/TherapistDashboard.tsx";
@@ -181,6 +183,8 @@ const App = () => (
             <Route path="/therapies" element={<Therapies />} />
             <Route path="/therapists" element={<Therapists />} />
             <Route path="/therapists/:id" element={<TherapistDetail />} />
+            <Route path="/therapist/browse" element={<TherapistBrowse />} />
+            <Route path="/therapist/:id" element={<TherapistDetail />} />
             <Route path="/therapist/auth" element={<TherapistAuth />} />
             <Route path="/therapist" element={<TherapistLayout />}>
               <Route index element={<TherapistDashboard />} />
@@ -192,6 +196,7 @@ const App = () => (
             </Route>
             <Route path="/therapy-plans/:planId/book" element={<BookTherapySession />} />
             <Route path="/therapy-booking/:sessionId" element={<TherapyBooking />} />
+            <Route path="/venue/browse" element={<VenueBrowse />} />
             <Route path="/venue/auth" element={<VenueAuth />} />
             <Route path="/venue" element={<VenueLayout />}>
               <Route index element={<VenueDashboard />} />
