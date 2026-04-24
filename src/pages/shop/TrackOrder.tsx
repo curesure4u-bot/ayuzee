@@ -59,7 +59,7 @@ const OrderCard = ({ order }: { order: OrderRow }) => (
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:justify-end">
             <Badge variant={order.payment_status === "paid" ? "default" : "outline"}>{order.payment_status}</Badge>
-            <Badge variant="secondary">{order.order_status.replaceAll("_", " ")}</Badge>
+            <Badge variant="secondary">{order.order_status.replace(/_/g, " ")}</Badge>
             <span className="font-semibold">{formatINR(order.total)}</span>
           </div>
         </CardHeader>
