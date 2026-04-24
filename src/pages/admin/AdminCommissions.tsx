@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 type Split = { key: string; value: number; description?: string | null };
 type Doctor = { id: string; full_name: string; specialization: string; city: string; commission_rate: number };
-type Payout = { id: string; requester_user_id: string; type: string; amount: number; status: string; created_at: string; admin_note?: string | null; notes?: string | null; therapist_id?: string | null; venue_id?: string | null; name?: string; bank?: string };
+type Payout = { id: string; requester_user_id: string; type: string; amount: number; status: string; created_at: string; admin_note?: string | null; notes?: string | null; therapist_id?: string | null; venue_id?: string | null; recipient_name?: string | null; bank_details?: unknown; name?: string; bank?: string };
 const splitKeys = ["therapist_percent", "venue_percent", "doctor_referral_percent", "platform_percent"];
 const labels: Record<string, string> = { therapist_percent: "Therapist %", venue_percent: "Venue %", doctor_referral_percent: "Doctor Referral %", platform_percent: "Platform %" };
 const money = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n || 0);
