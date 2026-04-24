@@ -1119,6 +1119,27 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flags: {
+        Row: {
+          description: string | null
+          enabled: boolean
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          description?: string | null
+          enabled?: boolean
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          description?: string | null
+          enabled?: boolean
+          key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feed_comments: {
         Row: {
           author_name: string
@@ -1922,6 +1943,36 @@ export type Database = {
           specialities?: string[] | null
           state?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      notification_logs: {
+        Row: {
+          id: string
+          message_preview: string | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          sent_at: string
+          status: string
+          template_name: string | null
+        }
+        Insert: {
+          id?: string
+          message_preview?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sent_at?: string
+          status?: string
+          template_name?: string | null
+        }
+        Update: {
+          id?: string
+          message_preview?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sent_at?: string
+          status?: string
+          template_name?: string | null
         }
         Relationships: []
       }
