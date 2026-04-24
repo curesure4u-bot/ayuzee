@@ -6,8 +6,9 @@ import { Leaf, LogOut, Calendar, ShoppingBag, FileText, Heart, Video, Building2,
 import { toast } from "sonner";
 import { PatientTherapyPlans } from "@/components/dashboard/PatientTherapyPlans";
 import { PrakritiHistory } from "@/components/dashboard/PrakritiHistory";
+import { PatientOnboarding } from "@/components/onboarding/PatientOnboarding";
 
-interface Profile { full_name: string | null; phone: string | null; }
+interface Profile { full_name: string | null; phone: string | null; date_of_birth: string | null; gender: string | null; }
 interface Appointment {
   id: string;
   appointment_date: string;
@@ -25,6 +26,7 @@ const Dashboard = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     document.title = "Dashboard — Ayuzee";
@@ -47,7 +49,7 @@ const Dashboard = () => {
 
   const loadAll = async (userId: string) => {
     const [{ data: prof }, { data: appts }, { count }] = await Promise.all([
-      supabase.from("profiles").select("full_name, phone").eq("user_id", userId).maybeSingle(),
+      supabase.from("profiles").select("full_name, phone, date_of_birth, gender").eq("user_id", userId).maybeSingle(),
       supabase
         .from("appointments")
         .select("id, appointment_date, time_slot, mode, status, fee, doctors(full_name, specialization, clinic_name)")
@@ -55,6 +57,9 @@ const Dashboard = () => {
         .order("appointment_date", { ascending: true }),
       supabase.from("orders").select("id", { count: "exact", head: true }).eq("user_id", userId),
     ]);
+    const isComplete = localStorage.getItem("ayuzee_onboarding_complete");
+    const isNewUser = !prof?.date_of_birth && !prof?.gender;
+    if (!isComplete && isNewUser) setShowOnboarding(true);
     setProfile(prof);
     setAppointments((appts as unknown as Appointment[]) ?? []);
     setOrderCount(count ?? 0);
