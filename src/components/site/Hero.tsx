@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowRight, Shield } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, CheckCircle2, MapPin, Search, Shield, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePincode } from "@/hooks/usePincode";
 
-const searchTabs = ["Doctors", "Therapies", "Medicines", "Colleges"] as const;
+const searchTabs = ["Doctors", "Therapies", "Medicines", "Courses"] as const;
 type SearchTab = (typeof searchTabs)[number];
 
 const placeholders: Record<SearchTab, string> = {
-  Doctors: "Search by doctor name, specialization...",
+  Doctors: "Search doctor, specialty, city...",
   Therapies: "Search Panchakarma, Shirodhara...",
   Medicines: "Search medicines, brands, conditions...",
-  Colleges: "Search AYUSH colleges by state...",
+  Courses: "Search Ayurveda courses, webinars...",
 };
 
 const routes: Record<SearchTab, string> = {
   Doctors: "/doctors",
   Therapies: "/therapies",
   Medicines: "/shop",
-  Colleges: "/colleges",
+  Courses: "/learning/courses",
 };
 
 const doctors = [
@@ -26,213 +26,250 @@ const doctors = [
     initials: "AS",
     name: "Dr. Anjali Sharma",
     specialty: "Ayurveda · Spine Care",
-    rating: "⭐ 4.9 · 12 yrs exp",
-    location: "📍 New Delhi · ₹499/consult",
-    className: "left-4 top-2 animate-[float_4s_ease-in-out_infinite]",
+    rating: "4.9",
+    reviews: "1,240 reviews",
+    location: "New Delhi · ₹499",
+    className: "left-0 top-4 animate-[hero-float_4.5s_ease-in-out_infinite]",
   },
   {
     initials: "RM",
     name: "Dr. Ravi Menon",
     specialty: "Panchakarma Specialist",
-    rating: "⭐ 4.8 · 18 yrs exp",
-    location: "📍 Kochi · ₹699/consult",
-    className: "right-2 top-28 animate-[float_4s_ease-in-out_infinite_1.3s]",
+    rating: "4.8",
+    reviews: "980 reviews",
+    location: "Kochi · ₹699",
+    className: "right-0 top-32 animate-[hero-float_4.5s_ease-in-out_infinite_1.2s]",
   },
   {
     initials: "PI",
     name: "Dr. Priya Iyer",
     specialty: "Gynaecology · Ayurveda",
-    rating: "⭐ 4.9 · 10 yrs exp",
-    location: "📍 Bengaluru · ₹599/consult",
-    className: "left-10 top-56 animate-[float_4s_ease-in-out_infinite_2.6s]",
+    rating: "4.9",
+    reviews: "860 reviews",
+    location: "Bengaluru · ₹599",
+    className: "left-10 top-64 animate-[hero-float_4.5s_ease-in-out_infinite_2.4s]",
   },
 ];
 
-const quickLinks = [
-  { label: "🩺 Ayurveda Doctors", href: "/doctors?system=Ayurveda" },
-  { label: "🫙 Panchakarma", href: "/therapies?category=Panchakarma" },
-  { label: "💊 Bulk Medicines", href: "/bulk" },
-  { label: "🧬 Prakriti Quiz", href: "/diagnosis/prakriti" },
-  { label: "🤲 Find Therapist", href: "/therapist/browse" },
+const testimonials = [
+  { tag: "Patient", tone: "bg-primary/10 text-primary", quote: "Booked an Ayurveda doctor and got medicines delivered the next day.", name: "Meera K." },
+  { tag: "Therapy", tone: "bg-secondary/10 text-secondary", quote: "The Panchakarma therapist was verified, punctual, and professional.", name: "Arvind S." },
+  { tag: "Medicine", tone: "bg-accent text-accent-foreground", quote: "Authentic classical medicines with clear delivery updates.", name: "Nisha R." },
+  { tag: "Student", tone: "bg-muted text-foreground", quote: "Courses and certificates helped me plan my Ayurveda career.", name: "Karthik M." },
+  { tag: "Prakriti", tone: "bg-primary/10 text-primary", quote: "The Prakriti quiz made recommendations feel personal.", name: "Sonal P." },
 ];
 
-const featureChips = [
-  {
-    label: "🗺️ GPS-Tracked Therapists",
-    title: "Unlike NirogStreet — our therapists are GPS-tracked in real time for your safety",
-  },
-  { label: "🧬 AI Prakriti Diagnosis", title: "Get a guided Prakriti assessment before choosing care" },
-  { label: "🩺 10,000+ AYUSH Doctors", title: "Consult verified practitioners across Ayurveda, Yoga, Unani, Siddha, and Homeopathy" },
-  { label: "💊 5,000+ Authentic Medicines", title: "Shop trusted classical and patented AYUSH medicines" },
-  { label: "🏥 Panchakarma Theater Booking", title: "Book equipped therapy spaces for authentic Panchakarma sessions" },
+const conditionLinks = [
+  { label: "Arthritis", slug: "arthritis" },
+  { label: "Back Pain", slug: "back-pain" },
+  { label: "Diabetes", slug: "diabetes" },
+  { label: "PCOD", slug: "pcod" },
+  { label: "Digestive Care", slug: "digestive-health" },
+  { label: "Skin & Hair", slug: "skin-hair" },
+  { label: "Stress", slug: "mental-wellness" },
+  { label: "Weight Loss", slug: "weight-management" },
+  { label: "Immunity", slug: "immunity" },
+  { label: "Heart & BP", slug: "heart-bp" },
+  { label: "Sleep", slug: "sleep" },
+  { label: "Wellness", slug: "general-wellness" },
 ];
 
 export const Hero = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<SearchTab>("Doctors");
-  const [location, setLocation] = useState("");
   const [query, setQuery] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [deliveryMessage, setDeliveryMessage] = useState("");
-  const { checkPincode } = usePincode();
+  const [pinInput, setPinInput] = useState("");
+  const [pinMessage, setPinMessage] = useState("");
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const { pincode, city, deliveryAvailable, checkPincode } = usePincode();
 
   useEffect(() => {
-    setLocation(localStorage.getItem("ayuzee_city") || "");
-    setPincode(localStorage.getItem("ayuzee_pincode") || "");
+    setPinInput(pincode);
+  }, [pincode]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setTestimonialIndex((index) => (index + 1) % testimonials.length);
+    }, 3600);
+    return () => window.clearInterval(timer);
   }, []);
+
+  const activeTestimonial = testimonials[testimonialIndex];
+  const deliveryStatus = useMemo(() => {
+    if (!pinInput.trim()) return "";
+    return /^[1-9][0-9]{5}$/.test(pinInput.trim()) ? "valid" : "invalid";
+  }, [pinInput]);
 
   const handleSearch = () => {
     const search = query.trim();
-    navigate(`${routes[activeTab]}${search ? `?q=${encodeURIComponent(search)}` : ""}`);
+    const params = new URLSearchParams();
+    if (search) params.set("q", search);
+    navigate(`${routes[activeTab]}${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
   const handleDeliveryCheck = () => {
-    setDeliveryMessage(checkPincode(pincode) ? "✅ Delivery available · Arrives Tomorrow" : "⚠️ Enter a valid 6-digit pincode");
+    const valid = checkPincode(pinInput);
+    setPinMessage(valid ? "Delivery available · Arrives Tomorrow" : "Enter a valid 6-digit pincode");
   };
 
   return (
-    <>
-      <section className="relative min-h-[580px] overflow-hidden gradient-soft">
-        <style>{`@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }`}</style>
-        <div className="container grid gap-10 py-16 md:grid-cols-[1.2fr_0.8fr] md:py-24">
-          <div className="flex flex-col justify-center">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-primary/20 bg-accent px-4 py-1.5 text-xs font-semibold text-primary">
-                🌿 India's #1 AYUSH Aggregator
-              </span>
-              <span className="rounded-full border border-primary/20 bg-secondary/10 px-4 py-1.5 text-xs font-semibold text-secondary">
-                ⭐ 4.9/5 from 12,000+ patients
-              </span>
-            </div>
+    <section className="relative overflow-hidden gradient-soft">
+      <style>{`
+        @keyframes hero-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
+        @keyframes testimonial-in { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+      `}</style>
 
-            <h1 className="mt-5 font-display text-5xl leading-tight text-foreground md:text-6xl">
-              Heal naturally with
-              <br /> authentic Ayurveda.
-            </h1>
-            <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-              India's only platform with verified AYUSH doctors, GPS-tracked Panchakarma therapists, and authentic medicines — all in one place.
-            </p>
+      <div className="container grid min-h-[640px] gap-10 py-14 md:grid-cols-[1.1fr_0.9fr] md:py-20">
+        <div className="flex flex-col justify-center">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full border border-primary/20 bg-accent px-4 py-1.5 text-xs font-semibold text-primary">
+              🌿 India's #1 AYUSH Aggregator
+            </span>
+            <span className="rounded-full border border-secondary/20 bg-secondary/10 px-4 py-1.5 text-xs font-semibold text-secondary">
+              ⭐ 4.9/5 from 12,000+ patients
+            </span>
+          </div>
 
-            <div className="mt-8 rounded-2xl border border-border bg-card p-2 shadow-elegant">
-              <div className="mb-2 flex flex-wrap gap-2 px-2">
-                {searchTabs.map((tab) => (
-                  <button
-                    key={tab}
-                    type="button"
-                    onClick={() => setActiveTab(tab)}
-                    className={
-                      activeTab === tab
-                        ? "rounded-full bg-primary px-3 py-1 text-sm text-primary-foreground"
-                        : "px-3 py-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-                    }
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
+          <h1 className="mt-5 max-w-3xl font-display text-5xl leading-tight text-foreground md:text-6xl">
+            Find trusted AYUSH care for every health goal.
+          </h1>
+          <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+            Book verified doctors, discover therapies, shop authentic medicines, and learn Ayurveda from one connected platform.
+          </p>
 
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                <input
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  onBlur={() => localStorage.setItem("ayuzee_city", location)}
-                  placeholder="City or Pincode"
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground sm:w-36 sm:border-0 sm:border-r sm:rounded-none"
-                />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  placeholder={placeholders[activeTab]}
-                  className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground sm:border-0"
-                />
-                <Button variant="hero" onClick={handleSearch} className="shrink-0">
-                  Search <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-border px-2 pt-2 text-sm">
-                <span className="text-muted-foreground">📦 Deliver to:</span>
-                <input
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value)}
-                  placeholder="Pincode"
-                  className="w-28 rounded-lg border border-border bg-background px-2 py-1 text-sm outline-none placeholder:text-muted-foreground"
-                />
-                <button type="button" onClick={handleDeliveryCheck} className="text-sm font-medium text-primary">
-                  Check
-                </button>
-                {deliveryMessage && (
-                  <span className={deliveryMessage.startsWith("✅") ? "text-primary" : "text-secondary"}>{deliveryMessage}</span>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {quickLinks.map((link) => (
+          <div className="mt-8 rounded-2xl border border-border bg-card p-3 shadow-elegant">
+            <div className="mb-3 grid grid-cols-4 gap-1 rounded-xl bg-muted p-1">
+              {searchTabs.map((tab) => (
                 <button
-                  key={link.href}
+                  key={tab}
                   type="button"
-                  onClick={() => navigate(link.href)}
-                  className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground transition-all hover:border-primary hover:text-primary"
+                  onClick={() => setActiveTab(tab)}
+                  className={
+                    activeTab === tab
+                      ? "rounded-lg bg-background px-2 py-2 text-sm font-semibold text-foreground shadow-sm"
+                      : "rounded-lg px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                  }
                 >
-                  {link.label}
+                  {tab}
                 </button>
               ))}
             </div>
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-background px-3 py-2">
+                <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  onKeyDown={(event) => event.key === "Enter" && handleSearch()}
+                  placeholder={placeholders[activeTab]}
+                  className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
+              <Button variant="hero" onClick={handleSearch} className="shrink-0">
+                Search <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3 text-sm">
+              <span className="flex items-center gap-1 text-muted-foreground">
+                <MapPin className="h-4 w-4" /> Deliver to:
+              </span>
+              <input
+                value={pinInput}
+                onChange={(event) => {
+                  setPinInput(event.target.value);
+                  setPinMessage("");
+                }}
+                onKeyDown={(event) => event.key === "Enter" && handleDeliveryCheck()}
+                placeholder="Pincode"
+                inputMode="numeric"
+                maxLength={6}
+                className="w-28 rounded-lg border border-border bg-background px-2 py-1 text-sm outline-none placeholder:text-muted-foreground"
+              />
+              <button type="button" onClick={handleDeliveryCheck} className="font-medium text-primary">
+                Check
+              </button>
+              {pinMessage && (
+                <span className={pinMessage.startsWith("Delivery") ? "text-primary" : "text-secondary"}>
+                  {pinMessage.startsWith("Delivery") ? "✅" : "⚠️"} {pinMessage}
+                </span>
+              )}
+              {!pinMessage && deliveryStatus === "valid" && deliveryAvailable !== false && (
+                <span className="text-primary">✅ Valid pincode{city ? ` · ${city}` : ""}</span>
+              )}
+              {!pinMessage && deliveryStatus === "invalid" && <span className="text-secondary">⚠️ Enter 6 digits</span>}
+            </div>
           </div>
 
-          <div className="relative hidden h-[420px] md:block">
-            {doctors.map((doctor) => (
-              <div key={doctor.name} className={`absolute w-56 rounded-2xl border border-border bg-card p-4 shadow-elegant ${doctor.className}`}>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-                    {doctor.initials}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">{doctor.name}</p>
-                    <p className="text-sm text-muted-foreground">{doctor.specialty}</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground">{doctor.rating}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{doctor.location}</p>
-                <Button variant="hero" size="sm" className="mt-2 w-full">
-                  Book Now
-                </Button>
-              </div>
-            ))}
-
-            <div className="absolute bottom-4 left-4 flex items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-elegant">
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-primary-foreground">
-                <Shield className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-foreground">100% Verified</p>
-                <p className="text-xs text-muted-foreground">By Ayuzee Medical Board</p>
-              </div>
+          <div className="mt-6">
+            <p className="mb-3 text-sm font-semibold text-muted-foreground">Shop by health condition</p>
+            <div className="flex flex-wrap gap-2">
+              {conditionLinks.map((condition) => (
+                <Link
+                  key={condition.slug}
+                  to={`/shop/conditions/${condition.slug}`}
+                  className="rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:border-primary hover:text-primary"
+                >
+                  {condition.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
-      </section>
 
-      <section className="border-y border-border bg-primary/5 py-6">
-        <div className="container">
-          <p className="mb-4 text-center text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            What makes Ayuzee different
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {featureChips.map((chip) => (
-              <span
-                key={chip.label}
-                title={chip.title}
-                className="rounded-full border border-primary/20 bg-accent px-4 py-2 text-sm font-medium text-primary"
-              >
-                {chip.label}
-              </span>
-            ))}
+        <div className="relative hidden min-h-[500px] md:block">
+          {doctors.map((doctor) => (
+            <div key={doctor.name} className={`absolute w-64 rounded-2xl border border-border bg-card p-4 shadow-elegant ${doctor.className}`}>
+              <div className="mb-3 flex items-center gap-3">
+                <div className="grid h-12 w-12 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                  {doctor.initials}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-foreground">{doctor.name}</p>
+                  <p className="text-sm text-muted-foreground">{doctor.specialty}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Star className="h-4 w-4 fill-secondary text-secondary" />
+                <span className="font-semibold text-foreground">{doctor.rating}</span>
+                <span>{doctor.reviews}</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">📍 {doctor.location}</p>
+              <Button variant="hero" size="sm" className="mt-3 w-full" onClick={() => navigate("/doctors")}>
+                Book Now
+              </Button>
+            </div>
+          ))}
+
+          <div className="absolute bottom-2 right-4 w-72 rounded-2xl border border-border bg-card p-4 shadow-elegant">
+            <div key={testimonialIndex} className="animate-[testimonial-in_0.35s_ease-out]">
+              <div className="mb-3 flex items-center justify-between">
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${activeTestimonial.tone}`}>{activeTestimonial.tag}</span>
+                <div className="flex gap-1">
+                  {testimonials.map((item, index) => (
+                    <span key={item.name} className={`h-1.5 w-1.5 rounded-full ${index === testimonialIndex ? "bg-primary" : "bg-border"}`} />
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm font-medium leading-relaxed text-foreground">“{activeTestimonial.quote}”</p>
+              <p className="mt-3 text-xs text-muted-foreground">— {activeTestimonial.name}</p>
+            </div>
+          </div>
+
+          <div className="absolute bottom-24 left-0 flex items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-elegant">
+            <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+              <Shield className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 font-semibold text-foreground">
+                100% Verified <CheckCircle2 className="h-4 w-4 text-primary" />
+              </p>
+              <p className="text-xs text-muted-foreground">Doctors, therapists, medicines</p>
+            </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
