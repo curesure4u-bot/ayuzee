@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -151,7 +151,18 @@ import TreatmentKits from "./pages/shop/TreatmentKits.tsx";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const AppRoutes = () => {
+  const location = useLocation();
+  const isAdminArea = location.pathname.startsWith("/admin");
+
+  return (
+    <>
+      {!isAdminArea && <SiteNav appLevel />}
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/login" element={<LoginPicker />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CartProvider>
