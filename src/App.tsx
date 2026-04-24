@@ -64,6 +64,7 @@ import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
 import PrakritiResult from "./pages/diagnosis/PrakritiResult.tsx";
+import SymptomChecker from "./pages/diagnosis/SymptomChecker.tsx";
 import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
 import Feed from "./pages/Feed.tsx";
@@ -217,6 +218,7 @@ const App = () => (
               <Route path="revenue-split" element={<AdminRevenueSplit />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
+            <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
             <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
             <Route path="/diagnosis/prakriti/result/:id" element={<PrakritiResult />} />

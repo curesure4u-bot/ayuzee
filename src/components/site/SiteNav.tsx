@@ -149,7 +149,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
       <div className="hidden border-b border-border bg-muted/40 md:block">
         <div className="container flex h-7 items-center justify-between text-xs text-muted-foreground">
           <span>🌿 India's #1 AYUSH Aggregator Platform</span>
-          <div className="flex items-center gap-3">{utilityLinks.map((x) => <Link key={x} to={`/${x.toLowerCase().replaceAll(" ", "-")}`} className="hover:text-primary">{x}</Link>)}<span>EN | हिं | தமிழ்</span></div>
+          <div className="flex items-center gap-3">{utilityLinks.map((x) => <Link key={x} to={`/${x.toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-primary">{x}</Link>)}<span>EN | हिं | தமிழ்</span></div>
         </div>
       </div>
 
