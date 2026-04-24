@@ -106,6 +106,22 @@ const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
   </div>
 );
 
+const MedicineSection = ({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) => (
+  <section className="space-y-3 border-l-2 border-primary/60 pl-4">
+    <div>
+      <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">{title}</h3>
+      {subtitle && <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>}
+    </div>
+    {children}
+  </section>
+);
+
+const MedicineLink = ({ to, children, close, className = "" }: { to: string; children: React.ReactNode; close: () => void; className?: string }) => (
+  <Link to={to} onClick={close} className={`block rounded-lg px-2 py-1.5 text-sm text-foreground/80 transition-smooth hover:bg-primary/10 hover:text-primary ${className}`}>
+    {children}
+  </Link>
+);
+
 export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const { count } = useCart();
   const navigate = useNavigate();
