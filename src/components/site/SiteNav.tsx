@@ -12,13 +12,37 @@ import { supabase } from "@/integrations/supabase/client";
 import { JoinDropdown, JoinRoleCards } from "@/components/site/JoinDropdown";
 import { GlobalSearch } from "@/components/site/GlobalSearch";
 import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
+import { BULK_BRANDS, CLASSICAL_TYPES, PATENTED_TYPES } from "@/data/bulkCatalog";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 type MegaLink = { label: string; to: string };
 type MegaColumn = { title: string; links?: MegaLink[]; card?: { title: string; body?: string; cta: string; to: string } };
 type MegaMenu = { label: string; columns: MegaColumn[] };
+type ConditionMenuLink = { icon: string; name: string; slug: string; system_category?: string | null };
 
 const specialty = ["Spine & Joint Care", "Skin & Hair", "Women's Health (Gyno)", "Digestive Health", "Mental Wellness", "Diabetes & Lifestyle", "Child Health", "Eye & ENT"];
+const bulkBrandLabels = ["Dabur", "Kottakkal", "Baidyanath", "Himalaya", "Dhootapapeshwar", "Arya Vaidya Pharmacy", "Nagarjuna", "Vaidyaratnam"];
+const classicalLabels = ["Bhasma", "Churna", "Kashayam", "Ghrita", "Taila / Oil", "Arishta", "Guggulu", "Avaleha"];
+const patentedLabels = ["Tablet", "Capsule", "Syrup", "Oil", "Ointment", "Herbal Tea"];
+const fallbackConditions: ConditionMenuLink[] = [
+  { icon: "🦴", name: "Arthritis & Joint Pain", slug: "arthritis-joint-pain" },
+  { icon: "🔙", name: "Spine & Back Pain", slug: "spine-back-pain" },
+  { icon: "🩸", name: "Diabetes", slug: "diabetes-blood-sugar" },
+  { icon: "🌸", name: "PCOD / Women's Health", slug: "pcod-womens-health" },
+  { icon: "🫁", name: "Digestive Health", slug: "digestive-gut-health" },
+  { icon: "✨", name: "Skin Diseases", slug: "skin-diseases" },
+  { icon: "💆", name: "Hair & Scalp", slug: "hair-scalp" },
+  { icon: "🧠", name: "Mental Health & Stress", slug: "mental-health-stress" },
+  { icon: "🛡️", name: "Immunity Boost", slug: "immunity-boost" },
+  { icon: "❤️", name: "Heart & Cholesterol", slug: "heart-cholesterol" },
+  { icon: "💪", name: "Men's Health", slug: "mens-health" },
+  { icon: "👶", name: "Child Health", slug: "child-health" },
+];
+
+const pickBulkValue = (items: readonly string[], wanted: string) => items.find((x) => x.toLowerCase().includes(wanted.toLowerCase())) || wanted;
+const bulkBrands = bulkBrandLabels.map((label) => ({ label, value: pickBulkValue(BULK_BRANDS, label) }));
+const classicalTypes = classicalLabels.map((label) => ({ label, value: pickBulkValue(CLASSICAL_TYPES, label.replace(" / Oil", "")) }));
+const patentedTypes = patentedLabels.map((label) => ({ label, value: pickBulkValue(PATENTED_TYPES, label) }));
 const megaMenus: MegaMenu[] = [
   { label: "Find Care", columns: [
     { title: "By Doctor Type", links: [
@@ -31,11 +55,6 @@ const megaMenus: MegaMenu[] = [
     { title: "Panchakarma", links: ["🫙 Abhyanga (Full Body)", "Shirodhara", "Kati Basti", "Janu Basti", "Vamana", "Virechana", "Basti", "Nasya"].map((x) => ({ label: x, to: "/therapies?category=Panchakarma" })) },
     { title: "Specialty Therapies", links: ["Pizhichil", "Navarakizhi", "Udvartana", "Greeva Basti", "Uro Basti", "Pinda Sweda"].map((x) => ({ label: x, to: "/therapies" })) },
     { title: "Book a Therapist", links: [{ label: "Rent Therapy Room", to: "/venue/browse" }], card: { title: "Certified Therapists", body: "Doctor-recommended, certified, GPS-tracked", cta: "Find Therapist", to: "/therapist/browse" } },
-  ] },
-  { label: "Medicines", columns: [
-    { title: "Shop by Brand", links: ["Dabur", "Himalaya", "Baidyanath", "Patanjali", "Kottakkal", "Kerala Ayurveda", "AVP", "SNA"].map((x) => ({ label: x, to: `/shop?brand=${encodeURIComponent(x)}` })) },
-    { title: "Shop by Category", links: ["Immunity Boosters", "Pain & Inflammation", "Digestive Health", "Skin & Hair", "Women's Health", "Men's Health", "Classical Medicines", "Oils & Ghee"].map((x) => ({ label: x, to: `/shop?category=${encodeURIComponent(x)}` })) },
-    { title: "Special", links: [{ label: "🛒 Bulk Purchase (Doctor Discounts)", to: "/bulk" }, { label: "🧰 Treatment Kits", to: "/shop/treatment-kits" }, { label: "💊 Upload Prescription", to: "/shop/prescription" }, { label: "🚚 Track My Order", to: "/shop/track" }, { label: "🎁 Offers & Deals", to: "/offers" }] },
   ] },
   { label: "Learn", columns: [
     { title: "For Doctors", links: [{ label: "📚 CME Courses", to: "/learning/courses?for=doctor" }, { label: "🎓 Certification Programs", to: "/learning/courses?type=certification" }, { label: "📝 Quizzes & Assessments", to: "/learning/quiz" }, { label: "🏆 My Certificates", to: "/dashboard?tab=certificates" }] },
@@ -87,6 +106,56 @@ const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
   </div>
 );
 
+const MedicineSection = ({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) => (
+  <section className="space-y-3 border-l-2 border-primary/60 pl-4">
+    <div>
+      <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">{title}</h3>
+      {subtitle && <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>}
+    </div>
+    {children}
+  </section>
+);
+
+const MedicineLink = ({ to, children, close, className = "" }: { to: string; children: React.ReactNode; close: () => void; className?: string }) => (
+  <Link to={to} onClick={close} className={`block rounded-lg px-2 py-1.5 text-sm text-foreground/80 transition-smooth hover:bg-primary/10 hover:text-primary ${className}`}>
+    {children}
+  </Link>
+);
+
+const MedicinesMegaMenu = ({ conditions, close }: { conditions: ConditionMenuLink[]; close: () => void }) => (
+  <div className="fixed left-0 right-0 top-[7.25rem] z-[70] max-h-[75vh] w-screen overflow-y-auto border-b border-border bg-background shadow-lg animate-in fade-in-0 slide-in-from-top-2" onMouseLeave={close}>
+    <div className="container grid gap-6 py-7 lg:grid-cols-5">
+      <MedicineSection title="🛒 Bulk Purchase" subtitle="Doctor & clinic discounts">
+        <div className="space-y-4">
+          <div><p className="text-xs font-semibold text-muted-foreground">By Brand</p>{bulkBrands.map((x) => <MedicineLink key={x.label} to={`/bulk?brand=${encodeURIComponent(x.value)}`} close={close}>{x.label}</MedicineLink>)}<MedicineLink to="/bulk?tab=brands" close={close} className="font-semibold text-primary">View all 44 brands →</MedicineLink></div>
+          <div><p className="text-xs font-semibold text-muted-foreground">Shastriya / Classical Medicines</p>{classicalTypes.map((x) => <MedicineLink key={x.label} to={`/bulk?classical=${encodeURIComponent(x.value)}`} close={close}>{x.label}</MedicineLink>)}<MedicineLink to="/bulk?tab=classical" close={close} className="font-semibold text-primary">View all classical types →</MedicineLink></div>
+          <div><p className="text-xs font-semibold text-muted-foreground">Patented Medicines</p>{patentedTypes.map((x) => <MedicineLink key={x.label} to={`/bulk?patented=${encodeURIComponent(x.value)}`} close={close}>{x.label}</MedicineLink>)}<MedicineLink to="/bulk?tab=patented" close={close} className="font-semibold text-primary">View all patented types →</MedicineLink></div>
+          <MedicineLink to="/bulk" close={close} className="font-bold text-primary">All Bulk Medicines →</MedicineLink>
+        </div>
+      </MedicineSection>
+      <MedicineSection title="🩺 By Health Condition" subtitle="Find medicines for your concern">
+        <div className="grid gap-1">{conditions.map((c) => <MedicineLink key={c.slug} to={`/shop/conditions/${c.slug}`} close={close}>{c.icon} {c.name}</MedicineLink>)}<MedicineLink to="/shop/conditions" close={close} className="font-semibold text-primary">View all 30 conditions →</MedicineLink></div>
+      </MedicineSection>
+      <MedicineSection title="🌿 By AYUSH System">
+        <div className="space-y-1"><MedicineLink to="/shop?system=Ayurveda" close={close}>🌱 Ayurveda Medicines</MedicineLink><MedicineLink to="/shop?system=Homeopathy" close={close}>💊 Homeopathy</MedicineLink><MedicineLink to="/shop?system=Unani" close={close}>🌙 Unani</MedicineLink><MedicineLink to="/shop?system=Siddha" close={close}>🔵 Siddha</MedicineLink><MedicineLink to="/shop?system=Yoga" close={close}>🧘 Yoga & Naturopathy</MedicineLink></div>
+        <div className="my-4 border-t border-border" />
+        <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">🎁 Special Categories</h3>
+        <div className="space-y-1"><MedicineLink to="/shop/treatment-kits" close={close}>📦 Treatment Kits</MedicineLink><MedicineLink to="/shop/panchakarma" close={close}>🫙 Panchakarma Medicines</MedicineLink><MedicineLink to="/shop/surgicals" close={close}>🔪 AYUSH Surgicals</MedicineLink><MedicineLink to="/shop/prescription" close={close}>💊 Upload Prescription</MedicineLink></div>
+      </MedicineSection>
+      <MedicineSection title="📦 My Orders">
+        <div className="space-y-1"><MedicineLink to="/shop/track" close={close}>🚚 Track My Medicine Order</MedicineLink><MedicineLink to="/dashboard?tab=orders" close={close}>📋 My Order History</MedicineLink><MedicineLink to="/dashboard?tab=prescriptions" close={close}>💊 My Prescriptions</MedicineLink><MedicineLink to="/dashboard?tab=notifications" close={close}>🔔 Order Notifications</MedicineLink></div>
+        <div className="my-4 border-t border-border" />
+        <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">🌟 Offers & Deals</h3>
+        <div className="space-y-1"><MedicineLink to="/offers" close={close}>⚡ Flash Sale</MedicineLink><MedicineLink to="/offers?type=b2g1" close={close}>🎁 Buy 2 Get 1 Offers</MedicineLink><MedicineLink to="/offers?type=bulk-deal" close={close}>💰 Bulk Deal of the Day</MedicineLink><MedicineLink to="/shop?sort=newest" close={close}>🆕 New Arrivals</MedicineLink></div>
+      </MedicineSection>
+      <div className="flex min-h-80 flex-col justify-between rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary p-6 text-primary-foreground shadow-soft">
+        <div><p className="font-display text-2xl font-semibold">🌿 Ayuzee Medicine Store</p><div className="mt-6 grid grid-cols-2 gap-2 text-xs font-semibold"><span className="rounded-full bg-background/20 px-3 py-2">5000+ Products</span><span className="rounded-full bg-background/20 px-3 py-2">44+ Brands</span><span className="rounded-full bg-background/20 px-3 py-2">Lab Tested</span><span className="rounded-full bg-background/20 px-3 py-2">Free Delivery on ₹999+</span></div></div>
+        <div className="space-y-3"><Button asChild variant="secondary" className="w-full"><Link to="/shop" onClick={close}>Shop All Medicines →</Link></Button><Link to="/bulk" onClick={close} className="block text-center text-sm font-semibold underline underline-offset-4">Doctor? Get bulk rates →</Link></div>
+      </div>
+    </div>
+  </div>
+);
+
 export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const { count } = useCart();
   const navigate = useNavigate();
@@ -97,6 +166,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [conditions, setConditions] = useState<ConditionMenuLink[]>(fallbackConditions);
   const dashboardPath = dashboardPathForRole(role);
   const roleLabel = labelForRole(role);
 
@@ -125,6 +195,18 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
     return () => document.removeEventListener("mousedown", onPointer);
   }, []);
 
+  useEffect(() => {
+    supabase
+      .from("health_conditions")
+      .select("icon,name,slug,system_category")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .limit(12)
+      .then(({ data }) => {
+        if (data?.length) setConditions(data.map((c) => ({ icon: c.icon || "🌿", name: c.name, slug: c.slug, system_category: c.system_category })));
+      });
+  }, []);
+
   if (!appLevel) return null;
 
   const signOut = async () => {
@@ -148,7 +230,10 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
             <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
               <div className="space-y-5 p-4"><GlobalSearch className="md:w-full lg:w-full" /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
-                <div className="space-y-2">{megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}</div>
+                <div className="space-y-2">
+                  <Collapsible><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">Medicines<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3"><MedicineSection title="🛒 Bulk Purchase" subtitle="Doctor & clinic discounts"><div className="grid gap-1"><MedicineLink to="/bulk?tab=brands" close={() => setMobileOpen(false)}>By Brand</MedicineLink><MedicineLink to="/bulk?tab=classical" close={() => setMobileOpen(false)}>Shastriya / Classical Medicines</MedicineLink><MedicineLink to="/bulk?tab=patented" close={() => setMobileOpen(false)}>Patented Medicines</MedicineLink><MedicineLink to="/bulk" close={() => setMobileOpen(false)}>All Bulk Medicines →</MedicineLink></div></MedicineSection><MedicineSection title="🩺 By Health Condition"><div className="grid gap-1">{conditions.map((c) => <MedicineLink key={c.slug} to={`/shop/conditions/${c.slug}`} close={() => setMobileOpen(false)}>{c.icon} {c.name}</MedicineLink>)}<MedicineLink to="/shop/conditions" close={() => setMobileOpen(false)}>View all 30 conditions →</MedicineLink></div></MedicineSection><MedicineSection title="🌿 By AYUSH System"><div className="grid gap-1"><MedicineLink to="/shop?system=Ayurveda" close={() => setMobileOpen(false)}>🌱 Ayurveda Medicines</MedicineLink><MedicineLink to="/shop?system=Homeopathy" close={() => setMobileOpen(false)}>💊 Homeopathy</MedicineLink><MedicineLink to="/shop?system=Unani" close={() => setMobileOpen(false)}>🌙 Unani</MedicineLink><MedicineLink to="/shop?system=Siddha" close={() => setMobileOpen(false)}>🔵 Siddha</MedicineLink></div></MedicineSection><MedicineSection title="🎁 Special Categories"><div className="grid gap-1"><MedicineLink to="/shop/treatment-kits" close={() => setMobileOpen(false)}>📦 Treatment Kits</MedicineLink><MedicineLink to="/shop/panchakarma" close={() => setMobileOpen(false)}>🫙 Panchakarma Medicines</MedicineLink><MedicineLink to="/shop/surgicals" close={() => setMobileOpen(false)}>🔪 AYUSH Surgicals</MedicineLink><MedicineLink to="/shop/prescription" close={() => setMobileOpen(false)}>💊 Upload Prescription</MedicineLink></div></MedicineSection><MedicineSection title="📦 Track & Manage"><div className="grid gap-1"><MedicineLink to="/shop/track" close={() => setMobileOpen(false)}>🚚 Track My Medicine Order</MedicineLink><MedicineLink to="/dashboard?tab=orders" close={() => setMobileOpen(false)}>📋 My Order History</MedicineLink><MedicineLink to="/offers" close={() => setMobileOpen(false)}>⚡ Flash Sale</MedicineLink></div></MedicineSection></CollapsibleContent></Collapsible>
+                  {megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}
+                </div>
                 {email ? (
                   <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
                     <div>
@@ -179,9 +264,11 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
 
       <div className="relative hidden h-11 border-b border-border bg-background md:block" onMouseLeave={() => setActive(null)}>
         <nav className="container flex h-full items-center justify-center gap-1">
-          {megaMenus.map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
+          {megaMenus.slice(0, 2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
+          <button onMouseEnter={() => setActive("Medicines")} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">Medicines<ChevronDown className="h-3.5 w-3.5" /></button>
+          {megaMenus.slice(2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
         </nav>
-        {active && <MegaPanel menu={megaMenus.find((m) => m.label === active)!} close={() => setActive(null)} />}
+        {active === "Medicines" ? <MedicinesMegaMenu conditions={conditions} close={() => setActive(null)} /> : active && <MegaPanel menu={megaMenus.find((m) => m.label === active)!} close={() => setActive(null)} />}
       </div>
     </header>
   );
