@@ -117,7 +117,7 @@ const StudentAuth = () => {
         toast.error("This account is not registered as a student.");
         return;
       }
-      navigate("/student/dashboard", { replace: true });
+      navigate("/student", { replace: true });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to sign in.");
     } finally {
@@ -133,7 +133,7 @@ const StudentAuth = () => {
         email: signup.email.trim(),
         password: signup.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/student/dashboard`,
+          emailRedirectTo: `${window.location.origin}/student`,
           data: { full_name: signup.fullName.trim(), phone: signup.phone.trim() },
         },
       });
@@ -173,7 +173,7 @@ const StudentAuth = () => {
       if (roleError) throw roleError;
 
       toast.success("Welcome to Ayuzee Student Hub 🎓");
-      navigate("/student/dashboard", { replace: true });
+      navigate("/student", { replace: true });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to create student account.");
     } finally {
