@@ -221,7 +221,14 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
       <div className="hidden border-b border-border bg-muted/40 md:block">
         <div className="container flex h-7 items-center justify-between text-xs text-muted-foreground">
           <span>🌿 India's #1 AYUSH Aggregator Platform</span>
-          <div className="flex items-center gap-3">{utilityLinks.map((x) => <Link key={x} to={`/${x.toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-primary">{x}</Link>)}<span>EN | हिं | தமிழ்</span></div>
+          <div className="flex items-center gap-3">
+            {utilityLinks.map((x) => <Link key={x} to={`/${x.toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-primary">{x}</Link>)}
+            <Link to="/atmri-help" className="relative inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800 transition-all hover:bg-amber-100">
+              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-500 opacity-75"></span><span className="relative inline-flex h-2 w-2 rounded-full bg-amber-600"></span></span>
+              ❤️ Ayush Help
+            </Link>
+            <span>EN | हिं | தமிழ்</span>
+          </div>
         </div>
       </div>
 
