@@ -165,6 +165,7 @@ import AtmriCaseDetail from "./pages/atmri-help/CaseDetail.tsx";
 import AtmriApply from "./pages/atmri-help/Apply.tsx";
 import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
 import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
+import AdminAtmriHelp from "./pages/admin/AdminAtmriHelp.tsx";
 
 const queryClient = new QueryClient();
 
@@ -291,6 +292,7 @@ const App = () => (
               <Route path="therapy-sessions" element={<AdminSessions />} />
               <Route path="revenue-split" element={<AdminRevenueSplit />} />
               <Route path="jobs" element={<AdminJobs />} />
+              <Route path="atmri-help" element={<AdminAtmriHelp />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />

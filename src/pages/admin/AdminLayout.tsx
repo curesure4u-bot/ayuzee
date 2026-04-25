@@ -11,6 +11,7 @@ const groups = [
   { label: "Operations", items: [{ title: "📅 Appointments", url: "/admin/appointments" }, { title: "🫙 Therapy Sessions", url: "/admin/sessions" }, { title: "📦 Orders", url: "/admin/orders" }, { title: "💊 Prescription Orders", url: "/admin/prescriptions" }] },
   { label: "Content & Store", items: [{ title: "🌿 Therapies Catalog", url: "/admin/therapies" }, { title: "📚 Learning & Webinars", url: "/admin/learning" }, { title: "🛒 Products / Store", url: "/admin/products" }, { title: "📝 Blogs & Content", url: "/admin/blogs" }, { title: "💼 Jobs Board", url: "/admin/jobs" }] },
   { label: "Finance", items: [{ title: "💰 Commissions & Payouts", url: "/admin/commissions" }, { title: "💳 Payments & Transactions", url: "/admin/payments" }, { title: "📊 Reports & Analytics", url: "/admin/reports" }] },
+  { label: "❤️ AYUSH Help", items: [{ title: "🌿 ATMRI Model 3", url: "/admin/atmri-help" }] },
   { label: "Safety & Config", items: [{ title: "🚨 Safety Flags", url: "/admin/safety" }, { title: "🔔 Notifications", url: "/admin/notifications" }, { title: "⚙️ Settings", url: "/admin/settings" }] },
 ];
 
