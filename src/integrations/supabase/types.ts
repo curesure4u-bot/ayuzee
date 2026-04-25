@@ -123,6 +123,401 @@ export type Database = {
           },
         ]
       }
+      atmri_case_updates: {
+        Row: {
+          case_id: string | null
+          created_at: string | null
+          id: string
+          is_public: boolean | null
+          photo_urls: string[] | null
+          posted_by: string | null
+          update_text: string
+          update_type: string | null
+        }
+        Insert: {
+          case_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          photo_urls?: string[] | null
+          posted_by?: string | null
+          update_text: string
+          update_type?: string | null
+        }
+        Update: {
+          case_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          photo_urls?: string[] | null
+          posted_by?: string | null
+          update_text?: string
+          update_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atmri_case_updates_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "atmri_sponsored_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      atmri_doctor_signatures: {
+        Row: {
+          case_id: string | null
+          doctor_id: string | null
+          doctor_registration_number: string | null
+          doctor_user_id: string | null
+          id: string
+          legal_declaration: string
+          signed_at: string | null
+        }
+        Insert: {
+          case_id?: string | null
+          doctor_id?: string | null
+          doctor_registration_number?: string | null
+          doctor_user_id?: string | null
+          id?: string
+          legal_declaration: string
+          signed_at?: string | null
+        }
+        Update: {
+          case_id?: string | null
+          doctor_id?: string | null
+          doctor_registration_number?: string | null
+          doctor_user_id?: string | null
+          id?: string
+          legal_declaration?: string
+          signed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atmri_doctor_signatures_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "atmri_sponsored_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atmri_doctor_signatures_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      atmri_partner_hospitals: {
+        Row: {
+          address: string
+          beds_reserved_for_atmri: number | null
+          city: string
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string | null
+          discount_percent: number | null
+          hospital_name: string
+          hospital_type: string | null
+          id: string
+          is_active: boolean | null
+          mou_document_url: string | null
+          mou_expiry_date: string | null
+          mou_signed_date: string | null
+          notes: string | null
+          state: string
+          venue_id: string | null
+        }
+        Insert: {
+          address: string
+          beds_reserved_for_atmri?: number | null
+          city: string
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          discount_percent?: number | null
+          hospital_name: string
+          hospital_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          mou_document_url?: string | null
+          mou_expiry_date?: string | null
+          mou_signed_date?: string | null
+          notes?: string | null
+          state: string
+          venue_id?: string | null
+        }
+        Update: {
+          address?: string
+          beds_reserved_for_atmri?: number | null
+          city?: string
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          discount_percent?: number | null
+          hospital_name?: string
+          hospital_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          mou_document_url?: string | null
+          mou_expiry_date?: string | null
+          mou_signed_date?: string | null
+          notes?: string | null
+          state?: string
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atmri_partner_hospitals_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      atmri_sponsored_cases: {
+        Row: {
+          approved_at_1: string | null
+          approved_at_2: string | null
+          approved_by_1: string | null
+          approved_by_2: string | null
+          assigned_doctor_id: string | null
+          assigned_doctor_user_id: string | null
+          checkpoint_corpus_allocated: boolean | null
+          checkpoint_doctor_signed: boolean | null
+          checkpoint_documents_verified: boolean | null
+          checkpoint_hospital_confirmed: boolean | null
+          checkpoint_video_verified: boolean | null
+          completion_notes: string | null
+          condition_category: string | null
+          condition_name: string
+          corpus_amount_allocated: number | null
+          corpus_amount_spent: number | null
+          created_at: string | null
+          doctor_completion_note: string | null
+          doctor_countersigned: boolean | null
+          doctor_fee_waived: number | null
+          doctor_legal_declaration_accepted: boolean | null
+          doctor_signed_at: string | null
+          estimated_cost: number
+          id: string
+          is_urgent: boolean | null
+          medical_report_urls: string[] | null
+          medicine_order_id: string | null
+          medicines_cost: number | null
+          medicines_dispatched: boolean | null
+          medicines_dispatched_at: string | null
+          partner_hospital_id: string | null
+          partner_venue_id: string | null
+          patient_age: number | null
+          patient_city: string
+          patient_gender: string | null
+          patient_name: string
+          patient_outcome_photo_url: string | null
+          patient_phone: string | null
+          patient_photo_url: string | null
+          patient_state: string
+          patient_story: string
+          rejection_reason: string | null
+          sessions_completed: number | null
+          status: string | null
+          submitted_by: string | null
+          submitted_by_relation: string | null
+          therapy_sessions_cost: number | null
+          total_sessions_planned: number | null
+          transport_allowance: number | null
+          treatment_duration_days: number | null
+          treatment_location: string | null
+          treatment_plan: string
+          updated_at: string | null
+          venue_fee_waived: number | null
+          video_call_recording_url: string | null
+        }
+        Insert: {
+          approved_at_1?: string | null
+          approved_at_2?: string | null
+          approved_by_1?: string | null
+          approved_by_2?: string | null
+          assigned_doctor_id?: string | null
+          assigned_doctor_user_id?: string | null
+          checkpoint_corpus_allocated?: boolean | null
+          checkpoint_doctor_signed?: boolean | null
+          checkpoint_documents_verified?: boolean | null
+          checkpoint_hospital_confirmed?: boolean | null
+          checkpoint_video_verified?: boolean | null
+          completion_notes?: string | null
+          condition_category?: string | null
+          condition_name: string
+          corpus_amount_allocated?: number | null
+          corpus_amount_spent?: number | null
+          created_at?: string | null
+          doctor_completion_note?: string | null
+          doctor_countersigned?: boolean | null
+          doctor_fee_waived?: number | null
+          doctor_legal_declaration_accepted?: boolean | null
+          doctor_signed_at?: string | null
+          estimated_cost: number
+          id?: string
+          is_urgent?: boolean | null
+          medical_report_urls?: string[] | null
+          medicine_order_id?: string | null
+          medicines_cost?: number | null
+          medicines_dispatched?: boolean | null
+          medicines_dispatched_at?: string | null
+          partner_hospital_id?: string | null
+          partner_venue_id?: string | null
+          patient_age?: number | null
+          patient_city: string
+          patient_gender?: string | null
+          patient_name: string
+          patient_outcome_photo_url?: string | null
+          patient_phone?: string | null
+          patient_photo_url?: string | null
+          patient_state: string
+          patient_story: string
+          rejection_reason?: string | null
+          sessions_completed?: number | null
+          status?: string | null
+          submitted_by?: string | null
+          submitted_by_relation?: string | null
+          therapy_sessions_cost?: number | null
+          total_sessions_planned?: number | null
+          transport_allowance?: number | null
+          treatment_duration_days?: number | null
+          treatment_location?: string | null
+          treatment_plan: string
+          updated_at?: string | null
+          venue_fee_waived?: number | null
+          video_call_recording_url?: string | null
+        }
+        Update: {
+          approved_at_1?: string | null
+          approved_at_2?: string | null
+          approved_by_1?: string | null
+          approved_by_2?: string | null
+          assigned_doctor_id?: string | null
+          assigned_doctor_user_id?: string | null
+          checkpoint_corpus_allocated?: boolean | null
+          checkpoint_doctor_signed?: boolean | null
+          checkpoint_documents_verified?: boolean | null
+          checkpoint_hospital_confirmed?: boolean | null
+          checkpoint_video_verified?: boolean | null
+          completion_notes?: string | null
+          condition_category?: string | null
+          condition_name?: string
+          corpus_amount_allocated?: number | null
+          corpus_amount_spent?: number | null
+          created_at?: string | null
+          doctor_completion_note?: string | null
+          doctor_countersigned?: boolean | null
+          doctor_fee_waived?: number | null
+          doctor_legal_declaration_accepted?: boolean | null
+          doctor_signed_at?: string | null
+          estimated_cost?: number
+          id?: string
+          is_urgent?: boolean | null
+          medical_report_urls?: string[] | null
+          medicine_order_id?: string | null
+          medicines_cost?: number | null
+          medicines_dispatched?: boolean | null
+          medicines_dispatched_at?: string | null
+          partner_hospital_id?: string | null
+          partner_venue_id?: string | null
+          patient_age?: number | null
+          patient_city?: string
+          patient_gender?: string | null
+          patient_name?: string
+          patient_outcome_photo_url?: string | null
+          patient_phone?: string | null
+          patient_photo_url?: string | null
+          patient_state?: string
+          patient_story?: string
+          rejection_reason?: string | null
+          sessions_completed?: number | null
+          status?: string | null
+          submitted_by?: string | null
+          submitted_by_relation?: string | null
+          therapy_sessions_cost?: number | null
+          total_sessions_planned?: number | null
+          transport_allowance?: number | null
+          treatment_duration_days?: number | null
+          treatment_location?: string | null
+          treatment_plan?: string
+          updated_at?: string | null
+          venue_fee_waived?: number | null
+          video_call_recording_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atmri_sponsored_cases_assigned_doctor_id_fkey"
+            columns: ["assigned_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atmri_sponsored_cases_medicine_order_id_fkey"
+            columns: ["medicine_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atmri_sponsored_cases_partner_venue_id_fkey"
+            columns: ["partner_venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      atmri_trust_corpus: {
+        Row: {
+          balance: number
+          cases_this_month: number | null
+          corpus_amount_allocated: number | null
+          id: string
+          last_updated_at: string | null
+          last_updated_by: string | null
+          minimum_balance_alert: number | null
+          monthly_case_limit: number | null
+          notes: string | null
+          total_received: number | null
+          total_spent: number | null
+        }
+        Insert: {
+          balance?: number
+          cases_this_month?: number | null
+          corpus_amount_allocated?: number | null
+          id?: string
+          last_updated_at?: string | null
+          last_updated_by?: string | null
+          minimum_balance_alert?: number | null
+          monthly_case_limit?: number | null
+          notes?: string | null
+          total_received?: number | null
+          total_spent?: number | null
+        }
+        Update: {
+          balance?: number
+          cases_this_month?: number | null
+          corpus_amount_allocated?: number | null
+          id?: string
+          last_updated_at?: string | null
+          last_updated_by?: string | null
+          minimum_balance_alert?: number | null
+          monthly_case_limit?: number | null
+          notes?: string | null
+          total_received?: number | null
+          total_spent?: number | null
+        }
+        Relationships: []
+      }
       ayuzee_transactions: {
         Row: {
           amount: number
@@ -595,6 +990,59 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      doctor_charity_pledges: {
+        Row: {
+          created_at: string | null
+          doctor_id: string
+          doctor_user_id: string | null
+          id: string
+          is_active: boolean | null
+          pledge_motivation: string | null
+          pledge_since: string | null
+          pledged_consultations_per_month: number | null
+          total_consultations_donated: number | null
+          total_fee_value_donated: number | null
+          updated_at: string | null
+          used_this_month: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          doctor_id: string
+          doctor_user_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          pledge_motivation?: string | null
+          pledge_since?: string | null
+          pledged_consultations_per_month?: number | null
+          total_consultations_donated?: number | null
+          total_fee_value_donated?: number | null
+          updated_at?: string | null
+          used_this_month?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          doctor_id?: string
+          doctor_user_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          pledge_motivation?: string | null
+          pledge_since?: string | null
+          pledged_consultations_per_month?: number | null
+          total_consultations_donated?: number | null
+          total_fee_value_donated?: number | null
+          updated_at?: string | null
+          used_this_month?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_charity_pledges_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: true
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       doctor_clinics: {
         Row: {
