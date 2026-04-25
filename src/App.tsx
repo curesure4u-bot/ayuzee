@@ -162,6 +162,9 @@ import TreatmentKits from "./pages/shop/TreatmentKits.tsx";
 import AtmriHelp from "./pages/atmri-help/AtmriHelp.tsx";
 import AtmriCasesList from "./pages/atmri-help/CasesList.tsx";
 import AtmriCaseDetail from "./pages/atmri-help/CaseDetail.tsx";
+import AtmriApply from "./pages/atmri-help/Apply.tsx";
+import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
+import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 
 const queryClient = new QueryClient();
 
@@ -351,6 +354,9 @@ const App = () => (
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
             <Route path="/atmri-help/cases/:id" element={<AtmriCaseDetail />} />
+            <Route path="/atmri-help/apply" element={<AtmriApply />} />
+            <Route path="/atmri-help/pledge" element={<AtmriDoctorPledge />} />
+            <Route path="/atmri-help/hospitals" element={<AtmriPartnerHospitals />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
