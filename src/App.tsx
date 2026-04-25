@@ -162,6 +162,9 @@ import TreatmentKits from "./pages/shop/TreatmentKits.tsx";
 import AtmriHelp from "./pages/atmri-help/AtmriHelp.tsx";
 import AtmriCasesList from "./pages/atmri-help/CasesList.tsx";
 import AtmriCaseDetail from "./pages/atmri-help/CaseDetail.tsx";
+import AtmriApply from "./pages/atmri-help/Apply.tsx";
+import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
+import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 
 const queryClient = new QueryClient();
 
