@@ -63,10 +63,10 @@ const AtmriApply = () => {
   });
 
   useEffect(() => {
-    setSEO({
-      title: "Apply for Free AYUSH Treatment · ATMRI Trust",
-      description: "Submit your application for free Ayurvedic treatment sponsored by ATMRI Trust.",
-    });
+    setSEO(
+      "Apply for Free AYUSH Treatment · ATMRI Trust",
+      "Submit your application for free Ayurvedic treatment sponsored by ATMRI Trust."
+    );
   }, []);
 
   useEffect(() => {
