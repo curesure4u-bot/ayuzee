@@ -316,7 +316,7 @@ function CaseSlidePanel({ caseData, onClose, onSaved }: { caseData: Case; onClos
 
   const toggleCheckpoint = async (key: string) => {
     const next = !c[key];
-    const { error } = await supabase.from("atmri_sponsored_cases").update({ [key]: next, updated_at: new Date().toISOString() }).eq("id", c.id);
+    const { error } = await supabase.from("atmri_sponsored_cases").update({ [key]: next, updated_at: new Date().toISOString() } as any).eq("id", c.id);
     if (error) return toast.error(error.message);
     setC({ ...c, [key]: next });
   };
