@@ -159,6 +159,9 @@ import AyushSurgicals from "./pages/shop/AyushSurgicals.tsx";
 import TrackOrder from "./pages/shop/TrackOrder.tsx";
 import PrescriptionUpload from "./pages/shop/PrescriptionUpload.tsx";
 import TreatmentKits from "./pages/shop/TreatmentKits.tsx";
+import AtmriHelp from "./pages/atmri-help/AtmriHelp.tsx";
+import AtmriCasesList from "./pages/atmri-help/CasesList.tsx";
+import AtmriCaseDetail from "./pages/atmri-help/CaseDetail.tsx";
 
 const queryClient = new QueryClient();
 
@@ -345,6 +348,9 @@ const App = () => (
               <Route path="about-partner" element={<AboutAyuzeePartner />} />
               <Route path="support" element={<DoctorSupport />} />
             </Route>
+            <Route path="/atmri-help" element={<AtmriHelp />} />
+            <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
+            <Route path="/atmri-help/cases/:id" element={<AtmriCaseDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
