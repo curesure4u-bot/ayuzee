@@ -14,6 +14,7 @@ import { GlobalSearch } from "@/components/site/GlobalSearch";
 import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
 import { BULK_BRANDS, CLASSICAL_TYPES, PATENTED_TYPES } from "@/data/bulkCatalog";
+import { AyushHelpMenu } from "@/components/site/AyushHelpMenu";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 type MegaLink = { label: string; to: string };
