@@ -115,6 +115,17 @@ const DoctorHome = () => {
       {/* 1. Partner Progress */}
       <DoctorGrowth scheduled={stats2.scheduled} consulted={stats2.consulted} completedSteps={stats2.completedSteps} />
 
+      {/* 1b. ATMRI Trust widget */}
+      {doctor?.id && doctor?.user_id && (
+        <AtmriDoctorWidget
+          doctorId={doctor.id}
+          doctorUserId={doctor.user_id}
+          consultationFee={doctor.consultation_fee ?? 500}
+          doctorName={doctor.full_name}
+          registrationNumber={doctor.registration_number}
+        />
+      )}
+
       {/* 2. Promo banner carousel */}
       <Carousel opts={{ loop: true }} className="w-full">
         <CarouselContent>
