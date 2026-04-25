@@ -35,6 +35,7 @@ import {
   Stethoscope,
   Newspaper,
   PenSquare,
+  HeartHandshake,
 } from "lucide-react";
 
 const items = [
