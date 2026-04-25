@@ -50,6 +50,16 @@ const DoctorDetail = () => {
         setLoading(false);
         if (data) document.title = `${(data as Doctor).full_name} — Ayuzee`;
       });
+    supabase
+      .from("doctor_charity_pledges")
+      .select("total_consultations_donated, total_fee_value_donated")
+      .eq("doctor_id", id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data && (data.total_consultations_donated ?? 0) > 0) {
+          setHealingPledge(data as { total_consultations_donated: number; total_fee_value_donated: number });
+        }
+      });
   }, [id]);
 
   const handleBookClick = async () => {
