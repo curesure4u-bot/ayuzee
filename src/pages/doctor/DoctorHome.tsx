@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { DoctorGrowth } from "@/components/doctor/DoctorGrowth";
+import { AtmriDoctorWidget } from "@/components/doctor/AtmriDoctorWidget";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
