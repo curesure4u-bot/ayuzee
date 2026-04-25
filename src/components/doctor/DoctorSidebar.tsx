@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "@/components/NavLink";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Sidebar,
   SidebarContent,
