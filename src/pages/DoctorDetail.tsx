@@ -125,6 +125,14 @@ const DoctorDetail = () => {
                   <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-primary">{doctor.category}</span>
                   <h1 className="mt-3 font-display text-4xl">{doctor.full_name}</h1>
                   <p className="mt-1 text-lg text-muted-foreground">{doctor.specialization}</p>
+                  {healingPledge && (
+                    <div className="mt-2 inline-flex items-center gap-2 rounded-full border-2 border-amber-400 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
+                      <span>🏅</span>
+                      <span>
+                        ATMRI Healing Doctor · {healingPledge.total_consultations_donated} free consultations donated
+                      </span>
+                    </div>
+                  )}
                   <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1.5"><Star className="h-4 w-4 fill-secondary text-secondary" /> {doctor.rating} ({doctor.total_reviews} reviews)</span>
                     <span>{doctor.experience_years} years of experience</span>
