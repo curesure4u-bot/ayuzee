@@ -166,6 +166,7 @@ import AtmriApply from "./pages/atmri-help/Apply.tsx";
 import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
 import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 import AdminAtmriHelp from "./pages/admin/AdminAtmriHelp.tsx";
+import AtmriComingSoon from "./pages/atmri-help/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
 
