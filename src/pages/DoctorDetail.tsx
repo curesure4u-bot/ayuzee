@@ -34,6 +34,7 @@ const DoctorDetail = () => {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [loading, setLoading] = useState(true);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [healingPledge, setHealingPledge] = useState<{ total_consultations_donated: number; total_fee_value_donated: number } | null>(null);
 
   const shouldOpenOnLoad = useMemo(() => params.get("book") === "1", [params]);
 
