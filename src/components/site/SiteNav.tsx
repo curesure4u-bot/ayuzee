@@ -14,6 +14,7 @@ import { GlobalSearch } from "@/components/site/GlobalSearch";
 import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
 import { BULK_BRANDS, CLASSICAL_TYPES, PATENTED_TYPES } from "@/data/bulkCatalog";
+import { AyushHelpMenu } from "@/components/site/AyushHelpMenu";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
 type MegaLink = { label: string; to: string };
@@ -220,7 +221,14 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
       <div className="hidden border-b border-border bg-muted/40 md:block">
         <div className="container flex h-7 items-center justify-between text-xs text-muted-foreground">
           <span>🌿 India's #1 AYUSH Aggregator Platform</span>
-          <div className="flex items-center gap-3">{utilityLinks.map((x) => <Link key={x} to={`/${x.toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-primary">{x}</Link>)}<span>EN | हिं | தமிழ்</span></div>
+          <div className="flex items-center gap-3">
+            {utilityLinks.map((x) => <Link key={x} to={`/${x.toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-primary">{x}</Link>)}
+            <Link to="/atmri-help" className="relative inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800 transition-all hover:bg-amber-100">
+              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-500 opacity-75"></span><span className="relative inline-flex h-2 w-2 rounded-full bg-amber-600"></span></span>
+              ❤️ Ayush Help
+            </Link>
+            <span>EN | हिं | தமிழ்</span>
+          </div>
         </div>
       </div>
 
@@ -231,6 +239,15 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
             <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
               <div className="space-y-5 p-4"><GlobalSearch className="md:w-full lg:w-full" /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
+                <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-green-50 p-4">
+                  <p className="font-display text-lg font-semibold text-amber-900">❤️ Ayush Help</p>
+                  <p className="mt-1 text-xs text-foreground/70">Free Ayurvedic treatment for patients who cannot afford it. ATMRI Trust pays the hospital directly.</p>
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    <Link to="/atmri-help/apply" onClick={() => setMobileOpen(false)} className="rounded-lg bg-primary px-2 py-1.5 text-center text-[11px] font-semibold text-primary-foreground">Apply Free</Link>
+                    <Link to="/atmri-help" onClick={() => setMobileOpen(false)} className="rounded-lg border border-primary/30 px-2 py-1.5 text-center text-[11px] font-semibold text-primary">Donate</Link>
+                    <Link to="/atmri-help/pledge" onClick={() => setMobileOpen(false)} className="rounded-lg bg-amber-100 px-2 py-1.5 text-center text-[11px] font-semibold text-amber-800">🏅 Pledge</Link>
+                  </div>
+                </div>
                 <div className="space-y-2">
                   <Collapsible><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">Medicines<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3"><MedicineSection title="🛒 Bulk Purchase" subtitle="Doctor & clinic discounts"><div className="grid gap-1"><MedicineLink to="/bulk?tab=brands" close={() => setMobileOpen(false)}>By Brand</MedicineLink><MedicineLink to="/bulk?tab=classical" close={() => setMobileOpen(false)}>Shastriya / Classical Medicines</MedicineLink><MedicineLink to="/bulk?tab=patented" close={() => setMobileOpen(false)}>Patented Medicines</MedicineLink><MedicineLink to="/bulk" close={() => setMobileOpen(false)}>All Bulk Medicines →</MedicineLink></div></MedicineSection><MedicineSection title="🩺 By Health Condition"><div className="grid gap-1">{conditions.map((c) => <MedicineLink key={c.slug} to={`/shop/conditions/${c.slug}`} close={() => setMobileOpen(false)}>{c.icon} {c.name}</MedicineLink>)}<MedicineLink to="/shop/conditions" close={() => setMobileOpen(false)}>View all 30 conditions →</MedicineLink></div></MedicineSection><MedicineSection title="🌿 By AYUSH System"><div className="grid gap-1"><MedicineLink to="/shop?system=Ayurveda" close={() => setMobileOpen(false)}>🌱 Ayurveda Medicines</MedicineLink><MedicineLink to="/shop?system=Homeopathy" close={() => setMobileOpen(false)}>💊 Homeopathy</MedicineLink><MedicineLink to="/shop?system=Unani" close={() => setMobileOpen(false)}>🌙 Unani</MedicineLink><MedicineLink to="/shop?system=Siddha" close={() => setMobileOpen(false)}>🔵 Siddha</MedicineLink></div></MedicineSection><MedicineSection title="🎁 Special Categories"><div className="grid gap-1"><MedicineLink to="/shop/treatment-kits" close={() => setMobileOpen(false)}>📦 Treatment Kits</MedicineLink><MedicineLink to="/shop/panchakarma" close={() => setMobileOpen(false)}>🫙 Panchakarma Medicines</MedicineLink><MedicineLink to="/shop/surgicals" close={() => setMobileOpen(false)}>🔪 AYUSH Surgicals</MedicineLink><MedicineLink to="/shop/prescription" close={() => setMobileOpen(false)}>💊 Upload Prescription</MedicineLink></div></MedicineSection><MedicineSection title="📦 Track & Manage"><div className="grid gap-1"><MedicineLink to="/shop/track" close={() => setMobileOpen(false)}>🚚 Track My Medicine Order</MedicineLink><MedicineLink to="/dashboard?tab=orders" close={() => setMobileOpen(false)}>📋 My Order History</MedicineLink><MedicineLink to="/offers" close={() => setMobileOpen(false)}>⚡ Flash Sale</MedicineLink></div></MedicineSection></CollapsibleContent></Collapsible>
                   {megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}
@@ -269,6 +286,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
           {megaMenus.slice(0, 2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
           <button onMouseEnter={() => setActive("Medicines")} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">Medicines<ChevronDown className="h-3.5 w-3.5" /></button>
           {megaMenus.slice(2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
+          <div onMouseEnter={() => setActive(null)}><AyushHelpMenu /></div>
         </nav>
         {active === "Medicines" ? <MedicinesMegaMenu conditions={conditions} close={() => setActive(null)} /> : active && <MegaPanel menu={megaMenus.find((m) => m.label === active)!} close={() => setActive(null)} />}
       </div>

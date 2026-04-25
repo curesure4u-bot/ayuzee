@@ -166,6 +166,7 @@ import AtmriApply from "./pages/atmri-help/Apply.tsx";
 import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
 import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 import AdminAtmriHelp from "./pages/admin/AdminAtmriHelp.tsx";
+import AtmriComingSoon from "./pages/atmri-help/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
 
@@ -359,6 +360,21 @@ const App = () => (
             <Route path="/atmri-help/apply" element={<AtmriApply />} />
             <Route path="/atmri-help/pledge" element={<AtmriDoctorPledge />} />
             <Route path="/atmri-help/hospitals" element={<AtmriPartnerHospitals />} />
+            <Route path="/atmri-help/campaigns" element={<AtmriComingSoon title="Active Campaigns" />} />
+            <Route path="/atmri-help/csr" element={<AtmriComingSoon title="CSR Partnerships" />} />
+            <Route path="/atmri-help/impact" element={<AtmriComingSoon title="Impact Dashboard" />} />
+            <Route path="/atmri-help/leaderboard" element={<AtmriComingSoon title="Doctor Leaderboard" />} />
+            {/* /ayush-help aliases */}
+            <Route path="/ayush-help" element={<AtmriHelp />} />
+            <Route path="/ayush-help/cases" element={<AtmriCasesList />} />
+            <Route path="/ayush-help/cases/:id" element={<AtmriCaseDetail />} />
+            <Route path="/ayush-help/apply" element={<AtmriApply />} />
+            <Route path="/ayush-help/pledge" element={<AtmriDoctorPledge />} />
+            <Route path="/ayush-help/hospitals" element={<AtmriPartnerHospitals />} />
+            <Route path="/ayush-help/campaigns" element={<AtmriComingSoon title="Active Campaigns" />} />
+            <Route path="/ayush-help/csr" element={<AtmriComingSoon title="CSR Partnerships" />} />
+            <Route path="/ayush-help/impact" element={<AtmriComingSoon title="Impact Dashboard" />} />
+            <Route path="/ayush-help/leaderboard" element={<AtmriComingSoon title="Doctor Leaderboard" />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
