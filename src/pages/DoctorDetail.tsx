@@ -34,6 +34,7 @@ const DoctorDetail = () => {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [loading, setLoading] = useState(true);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [healingPledge, setHealingPledge] = useState<{ total_consultations_donated: number; total_fee_value_donated: number } | null>(null);
 
   const shouldOpenOnLoad = useMemo(() => params.get("book") === "1", [params]);
 
@@ -48,6 +49,16 @@ const DoctorDetail = () => {
         setDoctor(data as Doctor | null);
         setLoading(false);
         if (data) document.title = `${(data as Doctor).full_name} — Ayuzee`;
+      });
+    supabase
+      .from("doctor_charity_pledges")
+      .select("total_consultations_donated, total_fee_value_donated")
+      .eq("doctor_id", id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data && (data.total_consultations_donated ?? 0) > 0) {
+          setHealingPledge(data as { total_consultations_donated: number; total_fee_value_donated: number });
+        }
       });
   }, [id]);
 
@@ -114,6 +125,14 @@ const DoctorDetail = () => {
                   <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-primary">{doctor.category}</span>
                   <h1 className="mt-3 font-display text-4xl">{doctor.full_name}</h1>
                   <p className="mt-1 text-lg text-muted-foreground">{doctor.specialization}</p>
+                  {healingPledge && (
+                    <div className="mt-2 inline-flex items-center gap-2 rounded-full border-2 border-amber-400 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
+                      <span>🏅</span>
+                      <span>
+                        ATMRI Healing Doctor · {healingPledge.total_consultations_donated} free consultations donated
+                      </span>
+                    </div>
+                  )}
                   <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1.5"><Star className="h-4 w-4 fill-secondary text-secondary" /> {doctor.rating} ({doctor.total_reviews} reviews)</span>
                     <span>{doctor.experience_years} years of experience</span>

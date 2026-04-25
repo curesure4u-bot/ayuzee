@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { DoctorGrowth } from "@/components/doctor/DoctorGrowth";
+import { AtmriDoctorWidget } from "@/components/doctor/AtmriDoctorWidget";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
@@ -113,6 +114,17 @@ const DoctorHome = () => {
     <div className="mx-auto max-w-7xl space-y-10 pb-10">
       {/* 1. Partner Progress */}
       <DoctorGrowth scheduled={stats2.scheduled} consulted={stats2.consulted} completedSteps={stats2.completedSteps} />
+
+      {/* 1b. ATMRI Trust widget */}
+      {doctor?.id && doctor?.user_id && (
+        <AtmriDoctorWidget
+          doctorId={doctor.id}
+          doctorUserId={doctor.user_id}
+          consultationFee={doctor.consultation_fee ?? 500}
+          doctorName={doctor.full_name}
+          registrationNumber={doctor.registration_number}
+        />
+      )}
 
       {/* 2. Promo banner carousel */}
       <Carousel opts={{ loop: true }} className="w-full">
