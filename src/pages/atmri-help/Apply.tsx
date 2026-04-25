@@ -419,7 +419,7 @@ const AtmriApply = () => {
                     <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Condition</div>
                     <div className="font-semibold">{form.condition_name}</div>
                     <div className="text-sm text-muted-foreground">{CATEGORIES.find(c => c.value === form.condition_category)?.label}</div>
-                    {form.is_urgent && <div className="text-xs text-red-600 mt-1">🔴 Urgent</div>}
+                    {form.is_urgent && <div className="text-xs text-destructive mt-1">🔴 Urgent</div>}
                     <p className="text-sm mt-3 line-clamp-4">{form.patient_story}</p>
                   </div>
                   <div className="rounded-2xl border border-border bg-accent/30 p-4">
