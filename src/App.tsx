@@ -354,6 +354,9 @@ const App = () => (
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
             <Route path="/atmri-help/cases/:id" element={<AtmriCaseDetail />} />
+            <Route path="/atmri-help/apply" element={<AtmriApply />} />
+            <Route path="/atmri-help/pledge" element={<AtmriDoctorPledge />} />
+            <Route path="/atmri-help/hospitals" element={<AtmriPartnerHospitals />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
