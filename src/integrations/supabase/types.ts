@@ -2786,6 +2786,7 @@ export type Database = {
           chief_complaint: string
           complaint_duration: string | null
           complaint_onset: string | null
+          constitutional_summary: string | null
           created_at: string
           desires: string[]
           doctor_notes: string | null
@@ -2831,6 +2832,7 @@ export type Database = {
           chief_complaint?: string
           complaint_duration?: string | null
           complaint_onset?: string | null
+          constitutional_summary?: string | null
           created_at?: string
           desires?: string[]
           doctor_notes?: string | null
@@ -2876,6 +2878,7 @@ export type Database = {
           chief_complaint?: string
           complaint_duration?: string | null
           complaint_onset?: string | null
+          constitutional_summary?: string | null
           created_at?: string
           desires?: string[]
           doctor_notes?: string | null
