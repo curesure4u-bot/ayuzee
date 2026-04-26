@@ -123,6 +123,7 @@ const StudentDashboard = () => {
     const { data: registeredWebinars } = await supabase.from("webinar_rsvps").select("webinar_id").eq("user_id", uid);
 
     setProfile(profileRes.data ?? null);
+    setProfileMissing(!!profileRes.error || !profileRes.data);
     setStats({
       courses: progressRes.count ?? 0,
       certificates: certRes.count ?? 0,
