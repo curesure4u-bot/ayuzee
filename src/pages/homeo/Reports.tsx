@@ -73,8 +73,8 @@ const Reports = () => {
         ["Age / Gender", `${c.patient?.age ?? "?"} y · ${c.patient?.gender ?? "—"}`],
         ["Occupation", c.patient?.occupation ?? "—"],
         ["Phone", c.patient?.phone ?? "—"],
-        ["Chief complaint", c.chief_complaint ?? "—"],
-        ["Chronicity", c.chronicity ?? "—"],
+        ["Chief complaint", c.patient?.chief_complaint ?? "—"],
+        ["Chronicity", c.patient?.chronicity ?? "—"],
       ],
     });
 
