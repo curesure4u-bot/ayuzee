@@ -16,6 +16,8 @@ const AssessmentRun = () => {
   const mod = ASSESSMENT_MODULES[slug];
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const total = mod?.questions.length ?? 0;
+  const progress = useMemo(() => (total ? Math.round((step / total) * 100) : 0), [step, total]);
 
   if (!mod) {
     return (
