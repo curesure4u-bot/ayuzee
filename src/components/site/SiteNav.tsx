@@ -77,6 +77,47 @@ const megaMenus: MegaMenu[] = [
     { title: "Assessments", links: [{ label: "🧬 Prakriti Assessment (Dosha Quiz)", to: "/diagnosis/prakriti" }, { label: "🔍 Symptom Checker", to: "/diagnosis/symptoms" }, { label: "📋 Health Risk Assessment", to: "/diagnosis" }] },
     { title: "Reports", links: [{ label: "My Past Assessments", to: "/dashboard?tab=assessments" }, { label: "Share Report with Doctor", to: "/doctors" }] },
   ] },
+  {
+    label: "Homeopathy",
+    columns: [
+      {
+        title: "🩺 For Patients",
+        links: [
+          { label: "💊 Find Homeopathy Doctor", to: "/doctors?system=Homeopathy" },
+          { label: "📅 Book Online Consultation", to: "/doctors?system=Homeopathy" },
+          { label: "🛒 Buy Homeopathy Medicines", to: "/shop?system=Homeopathy" },
+          { label: "💊 Upload Prescription", to: "/shop/prescription" },
+          { label: "📋 My Homeopathy Cases", to: "/dashboard?tab=homeopathy" },
+        ],
+      },
+      {
+        title: "🏥 For BHMS Doctors",
+        links: [
+          { label: "📋 Case Taking Software ✨", to: "/homeopathy/case/new" },
+          { label: "🔍 Kent Repertory Search", to: "/homeopathy/repertory" },
+          { label: "📚 Materia Medica Library", to: "/homeopathy/materia-medica" },
+          { label: "💊 Write Prescription", to: "/homeopathy/case/new" },
+          { label: "📊 My Case Files", to: "/homeopathy/cases" },
+          { label: "🎓 CME for BHMS Doctors", to: "/learning/courses?system=Homeopathy" },
+        ],
+      },
+      {
+        title: "📖 Learn & Explore",
+        links: [
+          { label: "🧬 Remedy Finder", to: "/homeopathy/materia-medica" },
+          { label: "📰 Homeopathy Research", to: "/learning/blogs?system=Homeopathy" },
+          { label: "🎙 Webinars for Homeopaths", to: "/learning/webinars" },
+          { label: "💼 Homeopathy Jobs", to: "/jobs?specialization=Homeopathy" },
+        ],
+        card: {
+          title: "🏥 BHMS Doctor?",
+          body: "Free case taking + Kent Repertory + AI remedy analysis. India's only cloud homeopathy software.",
+          cta: "Join Free →",
+          to: "/doctor/auth",
+        },
+      },
+    ],
+  },
   { label: "Partner With Us", columns: [
     { title: "Join as", links: [{ label: "🏥 Hospital / Clinic", to: "/venue/auth" }, { label: "💊 Pharma Company", to: "/partner/apply?type=pharma" }, { label: "🌿 Medicine Manufacturer", to: "/partner/apply?type=manufacturer" }, { label: "🎓 Ayurveda College", to: "/partner/apply?type=college" }, { label: "🏨 Resort / Wellness Center", to: "/venue/auth" }] },
     { title: "Already a partner?", links: [{ label: "Partner Dashboard", to: "/venue" }, { label: "Track Performance", to: "/venue/revenue" }] },
@@ -342,7 +383,20 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
         <nav className="container flex h-full items-center justify-center gap-1">
           {megaMenus.slice(0, 2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
           <button onMouseEnter={() => setActive("Medicines")} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">Medicines<ChevronDown className="h-3.5 w-3.5" /></button>
-          {megaMenus.slice(2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
+         {megaMenus.slice(2).map((menu) => (
+           <button
+             key={menu.label}
+             onMouseEnter={() => setActive(menu.label)}
+             className={`inline-flex h-full items-center gap-1 px-4 text-sm font-semibold transition-smooth ${
+               menu.label === "Homeopathy"
+                 ? "text-purple-700 hover:text-purple-900"
+                 : "text-foreground/80 hover:text-primary"
+             }`}
+           >
+             {menu.label}
+             <ChevronDown className="h-3.5 w-3.5" />
+           </button>
+         ))}
           <div onMouseEnter={() => setActive(null)}><AyushHelpMenu /></div>
         </nav>
         {active === "Medicines" ? <MedicinesMegaMenu conditions={conditions} close={() => setActive(null)} /> : active && <MegaPanel menu={megaMenus.find((m) => m.label === active)!} close={() => setActive(null)} />}
