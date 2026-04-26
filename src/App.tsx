@@ -209,13 +209,13 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="profile" element={<PatientProfile />} />
               <Route path="appointments" element={<PatientAppointmentsList />} />
-              <Route path="saved-medicines" element={<PatientPlaceholder title="Saved Medicines" description="Your bookmarked medicines will appear here." />} />
+              <Route path="saved-medicines" element={<PatientSavedMedicines />} />
               <Route path="saved-posts" element={<PatientSavedPosts />} />
               <Route path="orders" element={<MyOrders />} />
               <Route path="addresses" element={<PatientAddresses />} />
-              <Route path="wallet" element={<PatientPlaceholder title="Ayuzee Money" description="Wallet balance, cashback and transactions." />} />
+              <Route path="wallet" element={<PatientWallet />} />
               <Route path="bank" element={<PatientBank />} />
-              <Route path="help" element={<PatientPlaceholder title="Help & Support" description="We're here to help — reach out anytime." />} />
+              <Route path="help" element={<PatientHelp />} />
             </Route>
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
