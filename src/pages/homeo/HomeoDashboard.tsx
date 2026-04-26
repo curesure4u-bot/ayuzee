@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { homeoTokens as t } from "./lib/ui";
-import { Users, ClipboardList, Search, BookOpen, CalendarCheck, FileText, UserPlus, TrendingUp, Pill } from "lucide-react";
+import { toast } from "sonner";
+import { Users, ClipboardList, Search, BookOpen, CalendarCheck, FileText, UserPlus, TrendingUp, Pill, Sparkles } from "lucide-react";
 
 const HomeoDashboard = () => {
   const [stats, setStats] = useState({ patients: 0, cases: 0, prescriptions: 0, followups: 0, remedies: 0, symptoms: 0 });
   const [recent, setRecent] = useState<any[]>([]);
+  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -36,6 +38,17 @@ const HomeoDashboard = () => {
     load();
   }, []);
 
+  const runSeed = async () => {
+    if (!confirm("Seed 200 remedies + 500 rubrics? This calls AI and may take ~30s.")) return;
+    setSeeding(true);
+    const { data, error } = await supabase.functions.invoke("homeo-seed", { body: {} });
+    setSeeding(false);
+    if (error) return toast.error(error.message);
+    if ((data as any)?.error) return toast.error((data as any).error);
+    toast.success(`Seeded ${(data as any)?.remedies_total} remedies, ${(data as any)?.symptoms_total} rubrics`);
+    window.location.reload();
+  };
+
   const tiles = [
     { to: "/homeo/patients/new", label: "New Patient", icon: UserPlus, hint: "Start a fresh case" },
     { to: "/homeo/case-taking", label: "Case Taking", icon: ClipboardList, hint: "Full Hahnemannian protocol" },
@@ -62,10 +75,17 @@ const HomeoDashboard = () => {
 
   return (
     <div className="space-y-8">
-      <div>
-        <p className={t.label}>Overview</p>
-        <h2 className="font-display text-3xl font-semibold text-[hsl(45_85%_78%)]">Welcome back, Doctor.</h2>
-        <p className={`mt-1 ${t.mutedText}`}>Your premium homeopathy practice — case taking, repertory, materia medica.</p>
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <p className={t.label}>Overview</p>
+          <h2 className="font-display text-3xl font-semibold text-[hsl(45_85%_78%)]">Welcome back, Doctor.</h2>
+          <p className={`mt-1 ${t.mutedText}`}>Your premium homeopathy practice — case taking, repertory, materia medica.</p>
+        </div>
+        {(stats.remedies < 50 || stats.symptoms < 100) && (
+          <button onClick={runSeed} disabled={seeding} className={t.primaryBtn}>
+            <Sparkles className="h-4 w-4" /> {seeding ? "Seeding…" : "Seed 200 remedies + 500 rubrics (AI)"}
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">

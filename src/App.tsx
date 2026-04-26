@@ -173,6 +173,15 @@ import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
 import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 import AdminAtmriHelp from "./pages/admin/AdminAtmriHelp.tsx";
 import AtmriComingSoon from "./pages/atmri-help/ComingSoon.tsx";
+import HomeoLayout from "./pages/homeo/HomeoLayout.tsx";
+import HomeoDashboard from "./pages/homeo/HomeoDashboard.tsx";
+import HomeoNewPatient from "./pages/homeo/NewPatient.tsx";
+import HomeoCaseTaking from "./pages/homeo/CaseTaking.tsx";
+import HomeoRepertory from "./pages/homeo/Repertory.tsx";
+import HomeoMateriaMedica from "./pages/homeo/MateriaMedica.tsx";
+import HomeoPrescription from "./pages/homeo/Prescription.tsx";
+import HomeoFollowUp from "./pages/homeo/FollowUp.tsx";
+import HomeoReports from "./pages/homeo/Reports.tsx";
 
 const queryClient = new QueryClient();
 
@@ -385,6 +394,16 @@ const App = () => (
             <Route path="/ayush-help/csr" element={<AtmriComingSoon title="CSR Partnerships" />} />
             <Route path="/ayush-help/impact" element={<AtmriComingSoon title="Impact Dashboard" />} />
             <Route path="/ayush-help/leaderboard" element={<AtmriComingSoon title="Doctor Leaderboard" />} />
+            <Route path="/homeo" element={<HomeoLayout />}>
+              <Route index element={<HomeoDashboard />} />
+              <Route path="patients/new" element={<HomeoNewPatient />} />
+              <Route path="case-taking" element={<HomeoCaseTaking />} />
+              <Route path="repertory" element={<HomeoRepertory />} />
+              <Route path="materia-medica" element={<HomeoMateriaMedica />} />
+              <Route path="prescription" element={<HomeoPrescription />} />
+              <Route path="follow-up" element={<HomeoFollowUp />} />
+              <Route path="reports" element={<HomeoReports />} />
+            </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
