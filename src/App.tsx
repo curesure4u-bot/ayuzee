@@ -179,6 +179,8 @@ import HomeoNewPatient from "./pages/homeo/NewPatient.tsx";
 import HomeoCaseTaking from "./pages/homeo/CaseTaking.tsx";
 import HomeoRepertory from "./pages/homeo/Repertory.tsx";
 import HomeoMateriaMedica from "./pages/homeo/MateriaMedica.tsx";
+import HomeoRemedyDetail from "./pages/homeo/RemedyDetail.tsx";
+import HomeoRemedyCompare from "./pages/homeo/RemedyCompare.tsx";
 import HomeoPrescription from "./pages/homeo/Prescription.tsx";
 import HomeoFollowUp from "./pages/homeo/FollowUp.tsx";
 import HomeoReports from "./pages/homeo/Reports.tsx";
