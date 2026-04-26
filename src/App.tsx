@@ -404,6 +404,8 @@ const App = () => (
               <Route path="repertory" element={<HomeoRepertory />} />
               <Route path="saved-cases" element={<HomeoSavedCases />} />
               <Route path="materia-medica" element={<HomeoMateriaMedica />} />
+              <Route path="materia-medica/compare" element={<HomeoRemedyCompare />} />
+              <Route path="materia-medica/:id" element={<HomeoRemedyDetail />} />
               <Route path="prescription" element={<HomeoPrescription />} />
               <Route path="follow-up" element={<HomeoFollowUp />} />
               <Route path="reports" element={<HomeoReports />} />
