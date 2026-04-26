@@ -193,6 +193,8 @@ import MindCaseDetail from "./pages/homeo/mind/MindCaseDetail.tsx";
 import MindFollowUp from "./pages/homeo/mind/MindFollowUp.tsx";
 import MindFollowUpsList from "./pages/homeo/mind/MindFollowUpsList.tsx";
 import MindReports from "./pages/homeo/mind/MindReports.tsx";
+import EmotionalEngine from "./pages/homeo/emotional/EmotionalEngine.tsx";
+import EmotionalAdmin from "./pages/homeo/emotional/EmotionalAdmin.tsx";
 
 const queryClient = new QueryClient();
 
@@ -425,6 +427,8 @@ const App = () => (
               <Route path="mind/cases/:id/followup" element={<MindFollowUp />} />
               <Route path="mind/followups" element={<MindFollowUpsList />} />
               <Route path="mind/reports" element={<MindReports />} />
+              <Route path="emotional" element={<EmotionalEngine />} />
+              <Route path="emotional/admin" element={<EmotionalAdmin />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
