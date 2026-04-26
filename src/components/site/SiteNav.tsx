@@ -166,6 +166,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string | null>(null);
+  const [allRoles, setAllRoles] = useState<string[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [conditions, setConditions] = useState<ConditionMenuLink[]>(fallbackConditions);
@@ -174,9 +175,17 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
 
   useEffect(() => {
     const loadProfileName = async (userId?: string) => {
-      if (!userId) return setDisplayName(null);
-      const { data } = await supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle();
-      setDisplayName(data?.full_name || null);
+      if (!userId) {
+        setDisplayName(null);
+        setAllRoles([]);
+        return;
+      }
+      const [{ data: prof }, { data: roleRows }] = await Promise.all([
+        supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle(),
+        (supabase as any).from("user_roles").select("role").eq("user_id", userId),
+      ]);
+      setDisplayName(prof?.full_name || null);
+      setAllRoles((roleRows || []).map((r: { role: string }) => r.role));
     };
     supabase.auth.getSession().then(({ data }) => {
       setEmail(data.session?.user.email ?? null);
@@ -306,6 +315,18 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
                     <>
                       <DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem>
                       <DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem>
+                    </>
+                  )}
+                  {allRoles.length > 1 && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">My Portals</DropdownMenuLabel>
+                      {allRoles.includes("admin") && <DropdownMenuItem asChild><Link to="/admin">🛡️ Admin Panel</Link></DropdownMenuItem>}
+                      {allRoles.includes("doctor") && <DropdownMenuItem asChild><Link to="/doctor">🩺 Doctor Panel</Link></DropdownMenuItem>}
+                      {allRoles.includes("therapist") && <DropdownMenuItem asChild><Link to="/therapist">🤲 Therapist Portal</Link></DropdownMenuItem>}
+                      {allRoles.includes("venue_owner") && <DropdownMenuItem asChild><Link to="/venue">🏥 Venue Portal</Link></DropdownMenuItem>}
+                      {allRoles.includes("student") && <DropdownMenuItem asChild><Link to="/student">🎓 Student Hub</Link></DropdownMenuItem>}
+                      {(allRoles.includes("patient") || allRoles.length === 0) && <DropdownMenuItem asChild><Link to="/dashboard">👤 Patient Dashboard</Link></DropdownMenuItem>}
                     </>
                   )}
                   <DropdownMenuSeparator />

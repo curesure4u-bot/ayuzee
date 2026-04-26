@@ -73,7 +73,10 @@ const AdminLayout = () => {
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           {groups.map((group) => <div key={group.label} className="mb-5"><p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-admin-sidebar-muted">{group.label}</p><div className="space-y-1">{group.items.map((item) => <NavLink key={item.url} to={item.url} end={item.end} className={({ isActive }) => `block rounded-md px-3 py-2 text-sm transition-colors ${isActive ? "bg-admin-sidebar-accent text-primary-foreground" : "text-admin-sidebar-muted hover:bg-admin-sidebar-foreground/10 hover:text-admin-sidebar-foreground"}`}>{item.title}</NavLink>)}</div></div>)}
         </nav>
-        <Link to="/" className="border-t border-admin-sidebar-foreground/10 p-5 text-sm text-admin-sidebar-muted hover:text-admin-sidebar-foreground">← Back to main site</Link>
+        <div className="border-t border-admin-sidebar-foreground/10">
+          <Link to="/" className="block p-5 pb-2 text-sm text-admin-sidebar-muted hover:text-admin-sidebar-foreground">← Back to main site</Link>
+          <Link to="/login-picker" className="block px-5 pb-5 text-sm text-admin-sidebar-muted hover:text-admin-sidebar-foreground">⇄ Switch Portal</Link>
+        </div>
       </aside>
       <main className="ml-64 min-h-screen p-6 lg:p-8"><Outlet /></main>
     </div>
