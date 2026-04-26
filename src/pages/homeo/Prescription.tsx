@@ -13,10 +13,10 @@ const Prescription = () => {
   const caseId = params.get("case");
   const [caseData, setCaseData] = useState<any>(null);
   const [remedies, setRemedies] = useState<any[]>([]);
-  const [list, setList] = useState<any[]>([{ remedy_id: "", remedy_name: "", potency: "30C", repetition: "Single dose", instructions: "" }]);
-  const [diagnosis, setDiagnosis] = useState("");
+  const [list, setList] = useState<any[]>([{ remedy_id: "", remedy_name: "", potency: "30C", dosage: "Single dose", instructions: "" }]);
   const [advice, setAdvice] = useState("");
   const [followupDate, setFollowupDate] = useState("");
+  const [durationDays, setDurationDays] = useState<number | "">("");
   const [saving, setSaving] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
 
