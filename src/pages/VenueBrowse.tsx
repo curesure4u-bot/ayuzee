@@ -155,7 +155,16 @@ const VenueBrowse = () => {
         {loading ? (
           <div className="grid gap-4 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <Card key={index} className="h-72 animate-pulse" />)}</div>
         ) : filtered.length === 0 ? (
-          <Card><CardContent className="p-12 text-center text-muted-foreground">No verified venues match these filters yet.</CardContent></Card>
+          <Card>
+            <CardContent className="flex flex-col items-center gap-3 p-12 text-center">
+              <div className="text-5xl">🏥</div>
+              <h2 className="text-xl font-semibold">No venues listed yet</h2>
+              <p className="max-w-md text-sm text-muted-foreground">
+                Partner hospitals and wellness centres will appear here soon.
+              </p>
+              <Button className="mt-2" onClick={() => navigate("/venue/auth")}>Register Your Venue</Button>
+            </CardContent>
+          </Card>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {filtered.map((venue) => {

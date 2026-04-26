@@ -33,8 +33,7 @@ const VenueLayout = () => {
     const { data } = await supabase.from("therapy_venues")
       .select("id, owner_user_id, name, type, is_verified, is_active")
       .eq("owner_user_id", session.user.id).maybeSingle();
-    if (!data) { navigate("/venue/auth", { replace: true }); return; }
-    setVenue(data as VenueRow);
+    setVenue((data as VenueRow) ?? null);
     setLoading(false);
   };
 
@@ -48,7 +47,25 @@ const VenueLayout = () => {
   }, []);
 
   if (loading) return <div className="min-h-screen grid place-items-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
-  if (!venue) return null;
+  if (!venue) return (
+    <div className="min-h-screen grid place-items-center bg-gradient-to-br from-primary/5 via-background to-background px-4">
+      <Card className="max-w-lg w-full text-center">
+        <CardContent className="p-10">
+          <div className="mx-auto text-5xl">🏥</div>
+          <h1 className="mt-4 text-2xl font-bold">Setting up your venue profile…</h1>
+          <p className="mt-2 text-muted-foreground">
+            Your venue profile is being created. If this persists, please sign out and sign in again.
+          </p>
+          <div className="mt-6 flex justify-center gap-3">
+            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
+              <LogOut className="mr-2 h-4 w-4" /> Sign Out
+            </Button>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 
   if (!venue.is_verified) {
     return (

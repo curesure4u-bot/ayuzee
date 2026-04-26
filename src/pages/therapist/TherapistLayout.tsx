@@ -35,8 +35,7 @@ const TherapistLayout = () => {
     const { data } = await supabase.from("therapists")
       .select("id, user_id, full_name, verification_status, is_available")
       .eq("user_id", session.user.id).maybeSingle();
-    if (!data) { navigate("/therapist/auth", { replace: true }); return; }
-    setTherapist(data as TherapistRow);
+    setTherapist((data as TherapistRow) ?? null);
     setLoading(false);
   };
 
@@ -58,7 +57,25 @@ const TherapistLayout = () => {
   };
 
   if (loading) return <div className="min-h-screen grid place-items-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
-  if (!therapist) return null;
+  if (!therapist) return (
+    <div className="min-h-screen grid place-items-center bg-gradient-to-br from-primary/5 via-background to-background px-4">
+      <Card className="max-w-lg w-full text-center">
+        <CardContent className="p-10">
+          <div className="mx-auto text-5xl">🤲</div>
+          <h1 className="mt-4 text-2xl font-bold">Setting up your profile…</h1>
+          <p className="mt-2 text-muted-foreground">
+            Your therapist profile is being created. If this persists, please sign out and sign in again.
+          </p>
+          <div className="mt-6 flex justify-center gap-3">
+            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
+              <LogOut className="mr-2 h-4 w-4" /> Sign Out
+            </Button>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 
   if (therapist.verification_status !== "approved") {
     return (
