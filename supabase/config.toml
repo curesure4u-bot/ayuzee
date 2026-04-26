@@ -11,3 +11,7 @@ project_id = "saphetdusyfrcduzsouk"
     verify_jwt = false
   [functions.homeo-seed]
     verify_jwt = false
+  [functions.homeo-seed-1000]
+    verify_jwt = false
+  [functions.homeo-rubric-finder]
+    verify_jwt = false

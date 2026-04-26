@@ -182,6 +182,7 @@ import HomeoMateriaMedica from "./pages/homeo/MateriaMedica.tsx";
 import HomeoPrescription from "./pages/homeo/Prescription.tsx";
 import HomeoFollowUp from "./pages/homeo/FollowUp.tsx";
 import HomeoReports from "./pages/homeo/Reports.tsx";
+import HomeoSavedCases from "./pages/homeo/SavedCases.tsx";
 
 const queryClient = new QueryClient();
 
@@ -399,6 +400,7 @@ const App = () => (
               <Route path="patients/new" element={<HomeoNewPatient />} />
               <Route path="case-taking" element={<HomeoCaseTaking />} />
               <Route path="repertory" element={<HomeoRepertory />} />
+              <Route path="saved-cases" element={<HomeoSavedCases />} />
               <Route path="materia-medica" element={<HomeoMateriaMedica />} />
               <Route path="prescription" element={<HomeoPrescription />} />
               <Route path="follow-up" element={<HomeoFollowUp />} />
