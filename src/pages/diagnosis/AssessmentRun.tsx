@@ -32,10 +32,8 @@ const AssessmentRun = () => {
     );
   }
 
-  const total = mod.questions.length;
   const q = mod.questions[step];
   const current = answers[q.id];
-  const progress = useMemo(() => Math.round((step / total) * 100), [step, total]);
 
   const choose = (val: number) => setAnswers((a) => ({ ...a, [q.id]: val }));
 
