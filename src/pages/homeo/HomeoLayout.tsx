@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, LogOut, LayoutDashboard, UserPlus, ClipboardList, Search, BookOpen, CalendarCheck, FileText, Sparkles, Pill } from "lucide-react";
+import { Loader2, LogOut, LayoutDashboard, UserPlus, ClipboardList, Search, BookOpen, CalendarCheck, FileText, Sparkles, Pill, FolderOpen } from "lucide-react";
 import { toast } from "sonner";
 
 const nav = [
@@ -10,6 +10,7 @@ const nav = [
   { to: "/homeo/patients/new", label: "New Patient", icon: UserPlus },
   { to: "/homeo/case-taking", label: "Case Taking", icon: ClipboardList },
   { to: "/homeo/repertory", label: "Repertory", icon: Search },
+  { to: "/homeo/saved-cases", label: "Saved Cases", icon: FolderOpen },
   { to: "/homeo/materia-medica", label: "Materia Medica", icon: BookOpen },
   { to: "/homeo/prescription", label: "Prescription", icon: Pill },
   { to: "/homeo/follow-up", label: "Follow Up", icon: CalendarCheck },
@@ -139,6 +140,9 @@ const HomeoLayout = () => {
         <div className="p-6 lg:p-8">
           <Outlet />
         </div>
+        <footer className="mt-8 border-t border-[hsl(45_40%_55%/0.12)] px-6 py-4 text-center text-[11px] uppercase tracking-[0.2em] text-[hsl(45_40%_55%/0.7)]">
+          Powered by Ayuzee AI · Integrative AYUSH Intelligence Platform
+        </footer>
       </main>
     </div>
   );
