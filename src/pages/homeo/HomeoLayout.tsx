@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, LogOut, LayoutDashboard, UserPlus, ClipboardList, Search, BookOpen, CalendarCheck, FileText, Sparkles, Pill, FolderOpen, Brain, Heart } from "lucide-react";
+import { Loader2, LogOut, LayoutDashboard, UserPlus, ClipboardList, Search, BookOpen, CalendarCheck, FileText, Sparkles, Pill, FolderOpen, Brain, Heart, FileEdit } from "lucide-react";
 import { toast } from "sonner";
 
 const nav = [
   { to: "/homeo", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/homeo/patients/new", label: "New Patient", icon: UserPlus },
   { to: "/homeo/case-taking", label: "Case Taking", icon: ClipboardList },
+  { to: "/homeo/case-form", label: "Digital Case Form", icon: FileEdit },
   { to: "/homeo/repertory", label: "Repertory", icon: Search },
   { to: "/homeo/saved-cases", label: "Saved Cases", icon: FolderOpen },
   { to: "/homeo/materia-medica", label: "Materia Medica", icon: BookOpen },
