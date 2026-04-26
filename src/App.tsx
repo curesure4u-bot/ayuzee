@@ -172,6 +172,7 @@ import AtmriApply from "./pages/atmri-help/Apply.tsx";
 import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
 import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 import AdminAtmriHelp from "./pages/admin/AdminAtmriHelp.tsx";
+import AdminRoadmap from "./pages/admin/AdminRoadmap.tsx";
 import AtmriComingSoon from "./pages/atmri-help/ComingSoon.tsx";
 import HomeoLayout from "./pages/homeo/HomeoLayout.tsx";
 import HomeoDashboard from "./pages/homeo/HomeoDashboard.tsx";
@@ -313,6 +314,7 @@ const App = () => (
               <Route path="revenue-split" element={<AdminRevenueSplit />} />
               <Route path="jobs" element={<AdminJobs />} />
               <Route path="atmri-help" element={<AdminAtmriHelp />} />
+              <Route path="roadmap" element={<AdminRoadmap />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />

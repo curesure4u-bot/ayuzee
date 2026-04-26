@@ -6,7 +6,7 @@ import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 const groups = [
-  { label: "Overview", items: [{ title: "🏠 Dashboard", url: "/admin", end: true }] },
+  { label: "Overview", items: [{ title: "🏠 Dashboard", url: "/admin", end: true }, { title: "🗺️ Super App Roadmap", url: "/admin/roadmap" }] },
   { label: "User Management", items: [{ title: "👥 All Users", url: "/admin/users" }, { title: "🩺 Doctors", url: "/admin/doctors" }, { title: "🤲 Therapists", url: "/admin/therapists" }, { title: "🏥 Venues", url: "/admin/venues" }, { title: "🎓 Students", url: "/admin/students" }] },
   { label: "Operations", items: [{ title: "📅 Appointments", url: "/admin/appointments" }, { title: "🫙 Therapy Sessions", url: "/admin/sessions" }, { title: "📦 Orders", url: "/admin/orders" }, { title: "💊 Prescription Orders", url: "/admin/prescriptions" }] },
   { label: "Content & Store", items: [{ title: "🌿 Therapies Catalog", url: "/admin/therapies" }, { title: "📚 Learning & Webinars", url: "/admin/learning" }, { title: "🛒 Products / Store", url: "/admin/products" }, { title: "📝 Blogs & Content", url: "/admin/blogs" }, { title: "💼 Jobs Board", url: "/admin/jobs" }] },
