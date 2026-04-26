@@ -197,6 +197,7 @@ import MindFollowUpsList from "./pages/homeo/mind/MindFollowUpsList.tsx";
 import MindReports from "./pages/homeo/mind/MindReports.tsx";
 import EmotionalEngine from "./pages/homeo/emotional/EmotionalEngine.tsx";
 import EmotionalAdmin from "./pages/homeo/emotional/EmotionalAdmin.tsx";
+import Homeopathy from "./pages/Homeopathy.tsx";
 
 const queryClient = new QueryClient();
 
@@ -265,6 +266,7 @@ const App = () => (
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
             <Route path="/treatments/:slug" element={<TreatmentSystem />} />
+            <Route path="/homeopathy" element={<Homeopathy />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/partner" element={<Partner />} />
