@@ -26,13 +26,13 @@ const AdminLayout = () => {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         toast.error("Sign in required");
-        navigate("/auth", { replace: true });
+        navigate("/admin/auth", { replace: true });
         return;
       }
       const { data: isAdmin, error } = await supabase.rpc("has_role", { _user_id: data.session.user.id, _role: "admin" });
       if (error || !isAdmin) {
         toast.error("Access denied");
-        navigate("/", { replace: true });
+        navigate("/admin/auth", { replace: true });
         return;
       }
       if (active) {
