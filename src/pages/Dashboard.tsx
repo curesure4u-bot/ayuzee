@@ -9,6 +9,7 @@ import { PrakritiHistory } from "@/components/dashboard/PrakritiHistory";
 import { PatientOnboarding } from "@/components/onboarding/PatientOnboarding";
 import { WellnessScore } from "@/components/dashboard/WellnessScore";
 import { VitalsTracker } from "@/components/dashboard/VitalsTracker";
+import { HomeopathyCard } from "@/components/dashboard/HomeopathyCard";
 
 interface Profile { full_name: string | null; phone: string | null; date_of_birth: string | null; gender: string | null; }
 interface Appointment {
@@ -189,6 +190,8 @@ const Dashboard = () => {
             <Button variant="hero">Get your link</Button>
           </Link>
         </section>
+
+        <HomeopathyCard userEmail={email} />
 
         {userId && <PatientTherapyPlans userId={userId} />}
 

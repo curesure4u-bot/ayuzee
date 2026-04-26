@@ -36,6 +36,7 @@ import {
   Newspaper,
   PenSquare,
   HeartHandshake,
+  Pill,
 } from "lucide-react";
 
 const items = [
@@ -110,6 +111,62 @@ export function DoctorSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Homeopathy</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/homeo"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <Pill className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>💊 Homeo Console</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/homeo/case-form"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <PenSquare className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>New Case</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/homeo/repertorisation"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <ListChecks className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>Repertorisation</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/homeo/materia-medica"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <Newspaper className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>Materia Medica</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
