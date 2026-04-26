@@ -592,6 +592,51 @@ export type Database = {
         }
         Relationships: []
       }
+      case_rubric_selections: {
+        Row: {
+          case_id: string
+          created_at: string
+          doctor_note: string | null
+          doctor_user_id: string
+          id: string
+          intensity: number
+          rubric_id: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          doctor_note?: string | null
+          doctor_user_id: string
+          id?: string
+          intensity?: number
+          rubric_id: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          doctor_note?: string | null
+          doctor_user_id?: string
+          id?: string
+          intensity?: number
+          rubric_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_rubric_selections_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "homeopathy_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_rubric_selections_rubric_id_fkey"
+            columns: ["rubric_id"]
+            isOneToOne: false
+            referencedRelation: "homeopathy_rubrics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clinic_media: {
         Row: {
           clinic_id: string
@@ -2733,6 +2778,348 @@ export type Database = {
         }
         Relationships: []
       }
+      homeopathy_cases: {
+        Row: {
+          appetite: string | null
+          aversions_mind: string[]
+          case_number: string | null
+          chief_complaint: string
+          complaint_duration: string | null
+          complaint_onset: string | null
+          created_at: string
+          desires: string[]
+          doctor_notes: string | null
+          doctor_user_id: string
+          dreams: string | null
+          emotional_themes: string[]
+          family_history: string | null
+          fears: string[]
+          food_aversions: string[]
+          food_cravings: string[]
+          history_present_illness: string | null
+          id: string
+          intellectual_state: string | null
+          life_situation: string | null
+          menses: string | null
+          mental_state: string | null
+          miasm_assessment: string | null
+          miasm_evidence: string | null
+          modalities_better: string[]
+          modalities_worse: string[]
+          particulars: Json
+          past_medical_history: string | null
+          patient_address: string | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_name: string
+          patient_occupation: string | null
+          patient_phone: string | null
+          perspiration: string | null
+          sexual_history: string | null
+          significant_events: string | null
+          sleep: string | null
+          sleep_position: string | null
+          status: string
+          thermal_state: string | null
+          thirst: string | null
+          updated_at: string
+        }
+        Insert: {
+          appetite?: string | null
+          aversions_mind?: string[]
+          case_number?: string | null
+          chief_complaint?: string
+          complaint_duration?: string | null
+          complaint_onset?: string | null
+          created_at?: string
+          desires?: string[]
+          doctor_notes?: string | null
+          doctor_user_id: string
+          dreams?: string | null
+          emotional_themes?: string[]
+          family_history?: string | null
+          fears?: string[]
+          food_aversions?: string[]
+          food_cravings?: string[]
+          history_present_illness?: string | null
+          id?: string
+          intellectual_state?: string | null
+          life_situation?: string | null
+          menses?: string | null
+          mental_state?: string | null
+          miasm_assessment?: string | null
+          miasm_evidence?: string | null
+          modalities_better?: string[]
+          modalities_worse?: string[]
+          particulars?: Json
+          past_medical_history?: string | null
+          patient_address?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name: string
+          patient_occupation?: string | null
+          patient_phone?: string | null
+          perspiration?: string | null
+          sexual_history?: string | null
+          significant_events?: string | null
+          sleep?: string | null
+          sleep_position?: string | null
+          status?: string
+          thermal_state?: string | null
+          thirst?: string | null
+          updated_at?: string
+        }
+        Update: {
+          appetite?: string | null
+          aversions_mind?: string[]
+          case_number?: string | null
+          chief_complaint?: string
+          complaint_duration?: string | null
+          complaint_onset?: string | null
+          created_at?: string
+          desires?: string[]
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          dreams?: string | null
+          emotional_themes?: string[]
+          family_history?: string | null
+          fears?: string[]
+          food_aversions?: string[]
+          food_cravings?: string[]
+          history_present_illness?: string | null
+          id?: string
+          intellectual_state?: string | null
+          life_situation?: string | null
+          menses?: string | null
+          mental_state?: string | null
+          miasm_assessment?: string | null
+          miasm_evidence?: string | null
+          modalities_better?: string[]
+          modalities_worse?: string[]
+          particulars?: Json
+          past_medical_history?: string | null
+          patient_address?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string
+          patient_occupation?: string | null
+          patient_phone?: string | null
+          perspiration?: string | null
+          sexual_history?: string | null
+          significant_events?: string | null
+          sleep?: string | null
+          sleep_position?: string | null
+          status?: string
+          thermal_state?: string | null
+          thirst?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homeopathy_prescriptions: {
+        Row: {
+          case_id: string
+          created_at: string
+          doctor_notes: string | null
+          doctor_user_id: string
+          dosage: string | null
+          duration: string | null
+          follow_up_date: string | null
+          id: string
+          instructions: string | null
+          is_active: boolean
+          outcome: string | null
+          placebo_instructions: string | null
+          potency: string
+          prescribed_at: string
+          remedy_id: string | null
+          remedy_name: string
+          repetition: string | null
+          updated_at: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          doctor_notes?: string | null
+          doctor_user_id: string
+          dosage?: string | null
+          duration?: string | null
+          follow_up_date?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          outcome?: string | null
+          placebo_instructions?: string | null
+          potency: string
+          prescribed_at?: string
+          remedy_id?: string | null
+          remedy_name: string
+          repetition?: string | null
+          updated_at?: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          dosage?: string | null
+          duration?: string | null
+          follow_up_date?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          outcome?: string | null
+          placebo_instructions?: string | null
+          potency?: string
+          prescribed_at?: string
+          remedy_id?: string | null
+          remedy_name?: string
+          repetition?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeopathy_prescriptions_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "homeopathy_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "homeopathy_prescriptions_remedy_id_fkey"
+            columns: ["remedy_id"]
+            isOneToOne: false
+            referencedRelation: "homeopathy_remedies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homeopathy_remedies: {
+        Row: {
+          abbreviation: string
+          clinical_indications: string[]
+          common_name: string | null
+          created_at: string
+          doctor_notes: string | null
+          food_aversions: string[]
+          food_cravings: string[]
+          generals: string
+          id: string
+          is_active: boolean
+          keynotes: string[]
+          latin_name: string | null
+          miasm: string[]
+          mind_summary: string
+          modalities_better: string[]
+          modalities_worse: string[]
+          name: string
+          particulars: Json
+          potency_range: string | null
+          relationships: Json
+          source_kingdom: string | null
+          source_substance: string | null
+          thermal_state: string | null
+          updated_at: string
+        }
+        Insert: {
+          abbreviation: string
+          clinical_indications?: string[]
+          common_name?: string | null
+          created_at?: string
+          doctor_notes?: string | null
+          food_aversions?: string[]
+          food_cravings?: string[]
+          generals?: string
+          id?: string
+          is_active?: boolean
+          keynotes?: string[]
+          latin_name?: string | null
+          miasm?: string[]
+          mind_summary?: string
+          modalities_better?: string[]
+          modalities_worse?: string[]
+          name: string
+          particulars?: Json
+          potency_range?: string | null
+          relationships?: Json
+          source_kingdom?: string | null
+          source_substance?: string | null
+          thermal_state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          abbreviation?: string
+          clinical_indications?: string[]
+          common_name?: string | null
+          created_at?: string
+          doctor_notes?: string | null
+          food_aversions?: string[]
+          food_cravings?: string[]
+          generals?: string
+          id?: string
+          is_active?: boolean
+          keynotes?: string[]
+          latin_name?: string | null
+          miasm?: string[]
+          mind_summary?: string
+          modalities_better?: string[]
+          modalities_worse?: string[]
+          name?: string
+          particulars?: Json
+          potency_range?: string | null
+          relationships?: Json
+          source_kingdom?: string | null
+          source_substance?: string | null
+          thermal_state?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homeopathy_rubrics: {
+        Row: {
+          chapter: string
+          created_at: string
+          full_path: string
+          id: string
+          is_active: boolean
+          remedies: Json
+          remedy_count: number
+          rubric: string
+          search_text: string | null
+          section: string | null
+          sub_rubric: string | null
+          updated_at: string
+        }
+        Insert: {
+          chapter: string
+          created_at?: string
+          full_path: string
+          id?: string
+          is_active?: boolean
+          remedies?: Json
+          remedy_count?: number
+          rubric: string
+          search_text?: string | null
+          section?: string | null
+          sub_rubric?: string | null
+          updated_at?: string
+        }
+        Update: {
+          chapter?: string
+          created_at?: string
+          full_path?: string
+          id?: string
+          is_active?: boolean
+          remedies?: Json
+          remedy_count?: number
+          rubric?: string
+          search_text?: string | null
+          section?: string | null
+          sub_rubric?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           applicant_email: string | null
@@ -3918,6 +4305,50 @@ export type Database = {
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "therapy_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      repertorisation_results: {
+        Row: {
+          case_id: string
+          created_at: string
+          doctor_notes: string | null
+          doctor_user_id: string
+          id: string
+          results: Json
+          rubric_ids: string[]
+          top_remedy: string | null
+          total_rubrics: number
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          doctor_notes?: string | null
+          doctor_user_id: string
+          id?: string
+          results?: Json
+          rubric_ids?: string[]
+          top_remedy?: string | null
+          total_rubrics?: number
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          id?: string
+          results?: Json
+          rubric_ids?: string[]
+          top_remedy?: string | null
+          total_rubrics?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "repertorisation_results_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "homeopathy_cases"
             referencedColumns: ["id"]
           },
         ]
