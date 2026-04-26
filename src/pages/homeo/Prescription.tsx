@@ -86,7 +86,7 @@ const Prescription = () => {
           <h2 className="font-display text-2xl font-semibold text-[hsl(45_85%_78%)]">
             {caseData?.patient?.full_name ? `Rx for ${caseData.patient.full_name}` : "New Prescription"}
           </h2>
-          {caseData?.patient && <p className={`mt-1 text-sm ${t.mutedText}`}>{caseData.patient.age} y · {caseData.patient.gender} · {caseData.chief_complaint}</p>}
+          {caseData?.patient && <p className={`mt-1 text-sm ${t.mutedText}`}>{caseData.patient.age} y · {caseData.patient.gender} · {caseData.patient.chief_complaint}</p>}
         </div>
         {caseId && <Link to={`/homeo/reports?case=${caseId}`} className={t.ghostBtn}>📄 Export PDF</Link>}
       </div>
