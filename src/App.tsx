@@ -394,6 +394,16 @@ const App = () => (
             <Route path="/ayush-help/csr" element={<AtmriComingSoon title="CSR Partnerships" />} />
             <Route path="/ayush-help/impact" element={<AtmriComingSoon title="Impact Dashboard" />} />
             <Route path="/ayush-help/leaderboard" element={<AtmriComingSoon title="Doctor Leaderboard" />} />
+            <Route path="/homeo" element={<HomeoLayout />}>
+              <Route index element={<HomeoDashboard />} />
+              <Route path="patients/new" element={<HomeoNewPatient />} />
+              <Route path="case-taking" element={<HomeoCaseTaking />} />
+              <Route path="repertory" element={<HomeoRepertory />} />
+              <Route path="materia-medica" element={<HomeoMateriaMedica />} />
+              <Route path="prescription" element={<HomeoPrescription />} />
+              <Route path="follow-up" element={<HomeoFollowUp />} />
+              <Route path="reports" element={<HomeoReports />} />
+            </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
