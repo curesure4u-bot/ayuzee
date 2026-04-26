@@ -166,6 +166,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string | null>(null);
+  const [allRoles, setAllRoles] = useState<string[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [conditions, setConditions] = useState<ConditionMenuLink[]>(fallbackConditions);
@@ -174,9 +175,17 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
 
   useEffect(() => {
     const loadProfileName = async (userId?: string) => {
-      if (!userId) return setDisplayName(null);
-      const { data } = await supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle();
-      setDisplayName(data?.full_name || null);
+      if (!userId) {
+        setDisplayName(null);
+        setAllRoles([]);
+        return;
+      }
+      const [{ data: prof }, { data: roleRows }] = await Promise.all([
+        supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle(),
+        (supabase as any).from("user_roles").select("role").eq("user_id", userId),
+      ]);
+      setDisplayName(prof?.full_name || null);
+      setAllRoles((roleRows || []).map((r: { role: string }) => r.role));
     };
     supabase.auth.getSession().then(({ data }) => {
       setEmail(data.session?.user.email ?? null);
