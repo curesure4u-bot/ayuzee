@@ -2239,6 +2239,50 @@ export type Database = {
         }
         Relationships: []
       }
+      homeo_saved_cases: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          notes: string | null
+          patient_id: string | null
+          ranking_snapshot: Json | null
+          selected_rubric_ids: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          notes?: string | null
+          patient_id?: string | null
+          ranking_snapshot?: Json | null
+          selected_rubric_ids?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string | null
+          ranking_snapshot?: Json | null
+          selected_rubric_ids?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_saved_cases_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       homeo_symptom_remedies: {
         Row: {
           grade: number
@@ -2277,28 +2321,55 @@ export type Database = {
       }
       homeo_symptoms: {
         Row: {
+          body_location: string | null
           chapter: string
+          concomitant_symptoms: string[]
           created_at: string
           description: string | null
           id: string
+          modalities_better: string[]
+          modalities_worse: string[]
+          notes: string | null
           rubric: string
+          search_text: string | null
+          sensation: string | null
           sub_rubric: string | null
+          subcategory: string | null
+          symptom_keywords: string[]
         }
         Insert: {
+          body_location?: string | null
           chapter: string
+          concomitant_symptoms?: string[]
           created_at?: string
           description?: string | null
           id?: string
+          modalities_better?: string[]
+          modalities_worse?: string[]
+          notes?: string | null
           rubric: string
+          search_text?: string | null
+          sensation?: string | null
           sub_rubric?: string | null
+          subcategory?: string | null
+          symptom_keywords?: string[]
         }
         Update: {
+          body_location?: string | null
           chapter?: string
+          concomitant_symptoms?: string[]
           created_at?: string
           description?: string | null
           id?: string
+          modalities_better?: string[]
+          modalities_worse?: string[]
+          notes?: string | null
           rubric?: string
+          search_text?: string | null
+          sensation?: string | null
           sub_rubric?: string | null
+          subcategory?: string | null
+          symptom_keywords?: string[]
         }
         Relationships: []
       }
