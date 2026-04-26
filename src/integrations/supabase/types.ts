@@ -2027,6 +2027,63 @@ export type Database = {
           },
         ]
       }
+      homeo_emotional_themes: {
+        Row: {
+          body_correlations: string[]
+          caution_notes: string
+          created_at: string
+          differential_remedies: string[]
+          doctor_notes: string
+          dominant_reaction: string[]
+          emotional_theme: string
+          followup_questions: string[]
+          id: string
+          is_active: boolean
+          likely_remedies_ranked: Json
+          short_description: string
+          slug: string
+          sort_order: number
+          trigger_patterns: string[]
+          updated_at: string
+        }
+        Insert: {
+          body_correlations?: string[]
+          caution_notes?: string
+          created_at?: string
+          differential_remedies?: string[]
+          doctor_notes?: string
+          dominant_reaction?: string[]
+          emotional_theme: string
+          followup_questions?: string[]
+          id?: string
+          is_active?: boolean
+          likely_remedies_ranked?: Json
+          short_description?: string
+          slug: string
+          sort_order?: number
+          trigger_patterns?: string[]
+          updated_at?: string
+        }
+        Update: {
+          body_correlations?: string[]
+          caution_notes?: string
+          created_at?: string
+          differential_remedies?: string[]
+          doctor_notes?: string
+          dominant_reaction?: string[]
+          emotional_theme?: string
+          followup_questions?: string[]
+          id?: string
+          is_active?: boolean
+          likely_remedies_ranked?: Json
+          short_description?: string
+          slug?: string
+          sort_order?: number
+          trigger_patterns?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       homeo_followups: {
         Row: {
           case_id: string
