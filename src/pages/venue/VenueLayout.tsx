@@ -33,8 +33,7 @@ const VenueLayout = () => {
     const { data } = await supabase.from("therapy_venues")
       .select("id, owner_user_id, name, type, is_verified, is_active")
       .eq("owner_user_id", session.user.id).maybeSingle();
-    if (!data) { navigate("/venue/auth", { replace: true }); return; }
-    setVenue(data as VenueRow);
+    setVenue((data as VenueRow) ?? null);
     setLoading(false);
   };
 
