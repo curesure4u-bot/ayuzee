@@ -106,7 +106,7 @@ const RepertorisationEngine = () => {
       const { data, error } = await query.order("remedy_count", { ascending: false });
       setSearching(false);
       if (error) { toast.error(error.message); return; }
-      setResults((data ?? []) as Rubric[]);
+      setResults((data ?? []) as unknown as Rubric[]);
     }, 250);
     return () => clearTimeout(handle);
   }, [q, chapter]);
@@ -135,7 +135,7 @@ const RepertorisationEngine = () => {
     setSelections((prev) => [...prev, { ...(data as any), rubric: r } as Selection]);
   };
 
-  const updateSelection = async (id: string, patch: Partial<Selection>) => {
+  const updateSelection = async (id: string, patch: Partial<Omit<Selection, "rubric" | "id">>) => {
     setSelections((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
     const { error } = await supabase.from("case_rubric_selections").update(patch).eq("id", id);
     if (error) toast.error(error.message);
