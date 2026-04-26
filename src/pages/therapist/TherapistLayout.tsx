@@ -35,8 +35,7 @@ const TherapistLayout = () => {
     const { data } = await supabase.from("therapists")
       .select("id, user_id, full_name, verification_status, is_available")
       .eq("user_id", session.user.id).maybeSingle();
-    if (!data) { navigate("/therapist/auth", { replace: true }); return; }
-    setTherapist(data as TherapistRow);
+    setTherapist((data as TherapistRow) ?? null);
     setLoading(false);
   };
 
