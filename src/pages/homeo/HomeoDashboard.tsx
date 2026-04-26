@@ -38,6 +38,17 @@ const HomeoDashboard = () => {
     load();
   }, []);
 
+  const runSeed = async () => {
+    if (!confirm("Seed 200 remedies + 500 rubrics? This calls AI and may take ~30s.")) return;
+    setSeeding(true);
+    const { data, error } = await supabase.functions.invoke("homeo-seed", { body: {} });
+    setSeeding(false);
+    if (error) return toast.error(error.message);
+    if ((data as any)?.error) return toast.error((data as any).error);
+    toast.success(`Seeded ${(data as any)?.remedies_total} remedies, ${(data as any)?.symptoms_total} rubrics`);
+    window.location.reload();
+  };
+
   const tiles = [
     { to: "/homeo/patients/new", label: "New Patient", icon: UserPlus, hint: "Start a fresh case" },
     { to: "/homeo/case-taking", label: "Case Taking", icon: ClipboardList, hint: "Full Hahnemannian protocol" },
