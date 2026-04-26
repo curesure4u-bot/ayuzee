@@ -76,6 +76,9 @@ import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
 import PrakritiResult from "./pages/diagnosis/PrakritiResult.tsx";
 import SymptomChecker from "./pages/diagnosis/SymptomChecker.tsx";
+import AssessmentIntro from "./pages/diagnosis/AssessmentIntro.tsx";
+import AssessmentRun from "./pages/diagnosis/AssessmentRun.tsx";
+import AssessmentResult from "./pages/diagnosis/AssessmentResult.tsx";
 import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
 import Feed from "./pages/Feed.tsx";
@@ -303,6 +306,9 @@ const App = () => (
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
             <Route path="/diagnosis/prakriti/run" element={<PrakritiRun />} />
             <Route path="/diagnosis/prakriti/result/:id" element={<PrakritiResult />} />
+            <Route path="/diagnosis/:slug" element={<AssessmentIntro />} />
+            <Route path="/diagnosis/:slug/run" element={<AssessmentRun />} />
+            <Route path="/diagnosis/:slug/result" element={<AssessmentResult />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/feed/:id" element={<FeedPost />} />
             <Route path="/learning" element={<LearningLayout />}>
