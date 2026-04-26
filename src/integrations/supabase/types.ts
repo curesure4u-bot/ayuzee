@@ -1992,6 +1992,41 @@ export type Database = {
           },
         ]
       }
+      homeo_doctor_remedy_notes: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          notes: string
+          remedy_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          notes?: string
+          remedy_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          notes?: string
+          remedy_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_doctor_remedy_notes_remedy_id_fkey"
+            columns: ["remedy_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_remedies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       homeo_followups: {
         Row: {
           case_id: string
@@ -2174,68 +2209,143 @@ export type Database = {
         Row: {
           abbreviation: string
           affinities: string[] | null
+          antidotes: string[] | null
           aversions: string[] | null
+          children_indications: string | null
+          common_clinical_uses: string[] | null
+          common_name: string | null
           common_potencies: string[] | null
+          compare_with: string[] | null
+          complementary_remedies: string[] | null
           cravings: string[] | null
           created_at: string
+          detail_level: string
+          digestive_symptoms: string | null
+          doctor_notes: string | null
+          dreams: string | null
           family: string | null
+          female_symptoms: string | null
+          food_aversions: string[] | null
+          food_cravings: string[] | null
           full_text: string | null
+          general_symptoms: string | null
           id: string
+          key_personality: string | null
+          keynote_symptoms: string[] | null
           keynotes: string[] | null
+          kingdom: string | null
           latin_name: string | null
+          male_symptoms: string | null
+          mental_emotional_picture: string | null
           mind_sphere: string | null
           modalities_better: string[] | null
           modalities_worse: string[] | null
           name: string
+          respiratory_symptoms: string | null
+          safety_notes: string | null
           short_description: string | null
+          skin_symptoms: string | null
+          sleep_pattern: string | null
           source: string | null
+          sweat: string | null
           thermal: string | null
           thirst: string | null
           updated_at: string
+          usual_potencies: string[] | null
         }
         Insert: {
           abbreviation: string
           affinities?: string[] | null
+          antidotes?: string[] | null
           aversions?: string[] | null
+          children_indications?: string | null
+          common_clinical_uses?: string[] | null
+          common_name?: string | null
           common_potencies?: string[] | null
+          compare_with?: string[] | null
+          complementary_remedies?: string[] | null
           cravings?: string[] | null
           created_at?: string
+          detail_level?: string
+          digestive_symptoms?: string | null
+          doctor_notes?: string | null
+          dreams?: string | null
           family?: string | null
+          female_symptoms?: string | null
+          food_aversions?: string[] | null
+          food_cravings?: string[] | null
           full_text?: string | null
+          general_symptoms?: string | null
           id?: string
+          key_personality?: string | null
+          keynote_symptoms?: string[] | null
           keynotes?: string[] | null
+          kingdom?: string | null
           latin_name?: string | null
+          male_symptoms?: string | null
+          mental_emotional_picture?: string | null
           mind_sphere?: string | null
           modalities_better?: string[] | null
           modalities_worse?: string[] | null
           name: string
+          respiratory_symptoms?: string | null
+          safety_notes?: string | null
           short_description?: string | null
+          skin_symptoms?: string | null
+          sleep_pattern?: string | null
           source?: string | null
+          sweat?: string | null
           thermal?: string | null
           thirst?: string | null
           updated_at?: string
+          usual_potencies?: string[] | null
         }
         Update: {
           abbreviation?: string
           affinities?: string[] | null
+          antidotes?: string[] | null
           aversions?: string[] | null
+          children_indications?: string | null
+          common_clinical_uses?: string[] | null
+          common_name?: string | null
           common_potencies?: string[] | null
+          compare_with?: string[] | null
+          complementary_remedies?: string[] | null
           cravings?: string[] | null
           created_at?: string
+          detail_level?: string
+          digestive_symptoms?: string | null
+          doctor_notes?: string | null
+          dreams?: string | null
           family?: string | null
+          female_symptoms?: string | null
+          food_aversions?: string[] | null
+          food_cravings?: string[] | null
           full_text?: string | null
+          general_symptoms?: string | null
           id?: string
+          key_personality?: string | null
+          keynote_symptoms?: string[] | null
           keynotes?: string[] | null
+          kingdom?: string | null
           latin_name?: string | null
+          male_symptoms?: string | null
+          mental_emotional_picture?: string | null
           mind_sphere?: string | null
           modalities_better?: string[] | null
           modalities_worse?: string[] | null
           name?: string
+          respiratory_symptoms?: string | null
+          safety_notes?: string | null
           short_description?: string | null
+          skin_symptoms?: string | null
+          sleep_pattern?: string | null
           source?: string | null
+          sweat?: string | null
           thermal?: string | null
           thirst?: string | null
           updated_at?: string
+          usual_potencies?: string[] | null
         }
         Relationships: []
       }
