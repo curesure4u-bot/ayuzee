@@ -317,6 +317,18 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
                       <DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem>
                     </>
                   )}
+                  {allRoles.length > 1 && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">My Portals</DropdownMenuLabel>
+                      {allRoles.includes("admin") && <DropdownMenuItem asChild><Link to="/admin">🛡️ Admin Panel</Link></DropdownMenuItem>}
+                      {allRoles.includes("doctor") && <DropdownMenuItem asChild><Link to="/doctor">🩺 Doctor Panel</Link></DropdownMenuItem>}
+                      {allRoles.includes("therapist") && <DropdownMenuItem asChild><Link to="/therapist">🤲 Therapist Portal</Link></DropdownMenuItem>}
+                      {allRoles.includes("venue_owner") && <DropdownMenuItem asChild><Link to="/venue">🏥 Venue Portal</Link></DropdownMenuItem>}
+                      {allRoles.includes("student") && <DropdownMenuItem asChild><Link to="/student">🎓 Student Hub</Link></DropdownMenuItem>}
+                      {(allRoles.includes("patient") || allRoles.length === 0) && <DropdownMenuItem asChild><Link to="/dashboard">👤 Patient Dashboard</Link></DropdownMenuItem>}
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem>
                 </DropdownMenuContent>
