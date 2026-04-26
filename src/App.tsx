@@ -180,6 +180,7 @@ import HomeoNewPatient from "./pages/homeo/NewPatient.tsx";
 import HomeoCaseTaking from "./pages/homeo/CaseTaking.tsx";
 import HomeoCaseTakingForm from "./pages/homeo/CaseTakingForm.tsx";
 import HomeoRepertory from "./pages/homeo/Repertory.tsx";
+import HomeoRepertorisationEngine from "./pages/homeo/RepertorisationEngine.tsx";
 import HomeoMateriaMedica from "./pages/homeo/MateriaMedica.tsx";
 import HomeoRemedyDetail from "./pages/homeo/RemedyDetail.tsx";
 import HomeoRemedyCompare from "./pages/homeo/RemedyCompare.tsx";
@@ -415,6 +416,7 @@ const App = () => (
               <Route path="case-taking" element={<HomeoCaseTaking />} />
               <Route path="case-form" element={<HomeoCaseTakingForm />} />
               <Route path="repertory" element={<HomeoRepertory />} />
+              <Route path="repertorisation" element={<HomeoRepertorisationEngine />} />
               <Route path="saved-cases" element={<HomeoSavedCases />} />
               <Route path="materia-medica" element={<HomeoMateriaMedica />} />
               <Route path="materia-medica/compare" element={<HomeoRemedyCompare />} />

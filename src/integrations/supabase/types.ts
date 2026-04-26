@@ -596,28 +596,37 @@ export type Database = {
         Row: {
           case_id: string
           created_at: string
+          doctor_grade: number
           doctor_note: string | null
           doctor_user_id: string
           id: string
           intensity: number
+          is_keynote: boolean
+          is_srp: boolean
           rubric_id: string
         }
         Insert: {
           case_id: string
           created_at?: string
+          doctor_grade?: number
           doctor_note?: string | null
           doctor_user_id: string
           id?: string
           intensity?: number
+          is_keynote?: boolean
+          is_srp?: boolean
           rubric_id: string
         }
         Update: {
           case_id?: string
           created_at?: string
+          doctor_grade?: number
           doctor_note?: string | null
           doctor_user_id?: string
           id?: string
           intensity?: number
+          is_keynote?: boolean
+          is_srp?: boolean
           rubric_id?: string
         }
         Relationships: [
@@ -3085,6 +3094,7 @@ export type Database = {
           full_path: string
           id: string
           is_active: boolean
+          is_small_rubric: boolean
           remedies: Json
           remedy_count: number
           rubric: string
@@ -3099,6 +3109,7 @@ export type Database = {
           full_path: string
           id?: string
           is_active?: boolean
+          is_small_rubric?: boolean
           remedies?: Json
           remedy_count?: number
           rubric: string
@@ -3113,6 +3124,7 @@ export type Database = {
           full_path?: string
           id?: string
           is_active?: boolean
+          is_small_rubric?: boolean
           remedies?: Json
           remedy_count?: number
           rubric?: string
@@ -6087,6 +6099,19 @@ export type Database = {
           message: Json
           msg_id: number
           read_ct: number
+        }[]
+      }
+      repertorize_case: {
+        Args: { _case_id: string }
+        Returns: {
+          abbreviation: string
+          coverage_pct: number
+          max_grade: number
+          remedy_name: string
+          rubrics_covered: number
+          srp_hits: number
+          total_rubrics: number
+          total_score: number
         }[]
       }
       show_limit: { Args: never; Returns: number }
