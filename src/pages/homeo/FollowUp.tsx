@@ -87,7 +87,7 @@ const FollowUp = () => {
             <option value="">Select a case…</option>
             {cases.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.patient?.full_name ?? "—"} · {c.chief_complaint?.slice(0, 40)} · {new Date(c.case_date).toLocaleDateString()}
+                {c.patient?.full_name ?? "—"} · {c.patient?.chief_complaint?.slice(0, 40)} · {new Date(c.case_date).toLocaleDateString()}
               </option>
             ))}
           </select>
