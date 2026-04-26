@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { homeoTokens as t } from "./lib/ui";
-import { Users, ClipboardList, Search, BookOpen, CalendarCheck, FileText, UserPlus, TrendingUp, Pill } from "lucide-react";
+import { toast } from "sonner";
+import { Users, ClipboardList, Search, BookOpen, CalendarCheck, FileText, UserPlus, TrendingUp, Pill, Sparkles } from "lucide-react";
 
 const HomeoDashboard = () => {
   const [stats, setStats] = useState({ patients: 0, cases: 0, prescriptions: 0, followups: 0, remedies: 0, symptoms: 0 });
   const [recent, setRecent] = useState<any[]>([]);
+  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     const load = async () => {
