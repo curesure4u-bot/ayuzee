@@ -173,6 +173,15 @@ import AtmriDoctorPledge from "./pages/atmri-help/DoctorPledge.tsx";
 import AtmriPartnerHospitals from "./pages/atmri-help/PartnerHospitals.tsx";
 import AdminAtmriHelp from "./pages/admin/AdminAtmriHelp.tsx";
 import AtmriComingSoon from "./pages/atmri-help/ComingSoon.tsx";
+import HomeoLayout from "./pages/homeo/HomeoLayout.tsx";
+import HomeoDashboard from "./pages/homeo/HomeoDashboard.tsx";
+import HomeoNewPatient from "./pages/homeo/NewPatient.tsx";
+import HomeoCaseTaking from "./pages/homeo/CaseTaking.tsx";
+import HomeoRepertory from "./pages/homeo/Repertory.tsx";
+import HomeoMateriaMedica from "./pages/homeo/MateriaMedica.tsx";
+import HomeoPrescription from "./pages/homeo/Prescription.tsx";
+import HomeoFollowUp from "./pages/homeo/FollowUp.tsx";
+import HomeoReports from "./pages/homeo/Reports.tsx";
 
 const queryClient = new QueryClient();
 
