@@ -153,6 +153,9 @@ const StudentLayout = () => {
         </nav>
 
         <Separator className="my-4 hidden lg:block" />
+        <Button variant="ghost" size="sm" asChild className="justify-start text-muted-foreground hidden lg:flex">
+          <Link to="/login-picker">⇄ Switch Portal</Link>
+        </Button>
         <div className="mt-4 flex items-center gap-3 rounded-2xl bg-muted/60 p-3 lg:mt-0">
           <Avatar>
             <AvatarFallback className="bg-primary text-primary-foreground">{initials(profile?.full_name)}</AvatarFallback>

@@ -197,7 +197,18 @@ const BookTherapySession = () => {
       </div>
     );
   }
-  if (!plan) return null;
+  if (!plan) return (
+    <div className="mx-auto max-w-xl px-4 py-16 text-center">
+      <Card className="p-10">
+        <div className="mx-auto text-5xl">🌿</div>
+        <h1 className="mt-4 font-display text-2xl font-semibold">Therapy plan not found</h1>
+        <p className="mt-2 text-sm text-muted-foreground">This plan may have been removed or you may not have access to it.</p>
+        <Button className="mt-6" variant="outline" onClick={() => navigate(-1)}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> Go Back
+        </Button>
+      </Card>
+    </div>
+  );
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-6">
