@@ -1903,6 +1903,405 @@ export type Database = {
           },
         ]
       }
+      homeo_cases: {
+        Row: {
+          aversions: string | null
+          case_date: string
+          cravings: string | null
+          created_at: string
+          doctor_user_id: string
+          dreams: string | null
+          family_history: string | null
+          female_complaints: string | null
+          id: string
+          mind: string | null
+          modalities_better: string | null
+          modalities_worse: string | null
+          past_history: string | null
+          patient_id: string
+          perspiration: string | null
+          repertory_result: Json | null
+          selected_symptom_ids: string[] | null
+          sleep: string | null
+          status: string
+          stool: string | null
+          thermal_state: string | null
+          thirst: string | null
+          updated_at: string
+          urine: string | null
+        }
+        Insert: {
+          aversions?: string | null
+          case_date?: string
+          cravings?: string | null
+          created_at?: string
+          doctor_user_id: string
+          dreams?: string | null
+          family_history?: string | null
+          female_complaints?: string | null
+          id?: string
+          mind?: string | null
+          modalities_better?: string | null
+          modalities_worse?: string | null
+          past_history?: string | null
+          patient_id: string
+          perspiration?: string | null
+          repertory_result?: Json | null
+          selected_symptom_ids?: string[] | null
+          sleep?: string | null
+          status?: string
+          stool?: string | null
+          thermal_state?: string | null
+          thirst?: string | null
+          updated_at?: string
+          urine?: string | null
+        }
+        Update: {
+          aversions?: string | null
+          case_date?: string
+          cravings?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          dreams?: string | null
+          family_history?: string | null
+          female_complaints?: string | null
+          id?: string
+          mind?: string | null
+          modalities_better?: string | null
+          modalities_worse?: string | null
+          past_history?: string | null
+          patient_id?: string
+          perspiration?: string | null
+          repertory_result?: Json | null
+          selected_symptom_ids?: string[] | null
+          sleep?: string | null
+          status?: string
+          stool?: string | null
+          thermal_state?: string | null
+          thirst?: string | null
+          updated_at?: string
+          urine?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_cases_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homeo_followups: {
+        Row: {
+          case_id: string
+          created_at: string
+          doctor_user_id: string
+          followup_date: string
+          id: string
+          next_action: string | null
+          next_followup_date: string | null
+          notes: string | null
+          outcome: string
+          patient_id: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          doctor_user_id: string
+          followup_date?: string
+          id?: string
+          next_action?: string | null
+          next_followup_date?: string | null
+          notes?: string | null
+          outcome: string
+          patient_id: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          followup_date?: string
+          id?: string
+          next_action?: string | null
+          next_followup_date?: string | null
+          notes?: string | null
+          outcome?: string
+          patient_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_followups_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "homeo_followups_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homeo_patients: {
+        Row: {
+          address: string | null
+          age: number | null
+          chief_complaint: string | null
+          chronicity: string | null
+          created_at: string
+          doctor_user_id: string
+          email: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          notes: string | null
+          occupation: string | null
+          patient_code: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          age?: number | null
+          chief_complaint?: string | null
+          chronicity?: string | null
+          created_at?: string
+          doctor_user_id: string
+          email?: string | null
+          full_name: string
+          gender?: string | null
+          id?: string
+          notes?: string | null
+          occupation?: string | null
+          patient_code?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          age?: number | null
+          chief_complaint?: string | null
+          chronicity?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          email?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          notes?: string | null
+          occupation?: string | null
+          patient_code?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homeo_prescriptions: {
+        Row: {
+          case_id: string
+          created_at: string
+          doctor_user_id: string
+          dosage: string
+          duration_days: number | null
+          follow_up_date: string | null
+          id: string
+          instructions: string | null
+          patient_id: string
+          potency: string
+          prescribed_at: string
+          remedy_id: string | null
+          remedy_name: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          doctor_user_id: string
+          dosage: string
+          duration_days?: number | null
+          follow_up_date?: string | null
+          id?: string
+          instructions?: string | null
+          patient_id: string
+          potency: string
+          prescribed_at?: string
+          remedy_id?: string | null
+          remedy_name: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          dosage?: string
+          duration_days?: number | null
+          follow_up_date?: string | null
+          id?: string
+          instructions?: string | null
+          patient_id?: string
+          potency?: string
+          prescribed_at?: string
+          remedy_id?: string | null
+          remedy_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_prescriptions_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "homeo_prescriptions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "homeo_prescriptions_remedy_id_fkey"
+            columns: ["remedy_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_remedies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homeo_remedies: {
+        Row: {
+          abbreviation: string
+          affinities: string[] | null
+          aversions: string[] | null
+          common_potencies: string[] | null
+          cravings: string[] | null
+          created_at: string
+          family: string | null
+          full_text: string | null
+          id: string
+          keynotes: string[] | null
+          latin_name: string | null
+          mind_sphere: string | null
+          modalities_better: string[] | null
+          modalities_worse: string[] | null
+          name: string
+          short_description: string | null
+          source: string | null
+          thermal: string | null
+          thirst: string | null
+          updated_at: string
+        }
+        Insert: {
+          abbreviation: string
+          affinities?: string[] | null
+          aversions?: string[] | null
+          common_potencies?: string[] | null
+          cravings?: string[] | null
+          created_at?: string
+          family?: string | null
+          full_text?: string | null
+          id?: string
+          keynotes?: string[] | null
+          latin_name?: string | null
+          mind_sphere?: string | null
+          modalities_better?: string[] | null
+          modalities_worse?: string[] | null
+          name: string
+          short_description?: string | null
+          source?: string | null
+          thermal?: string | null
+          thirst?: string | null
+          updated_at?: string
+        }
+        Update: {
+          abbreviation?: string
+          affinities?: string[] | null
+          aversions?: string[] | null
+          common_potencies?: string[] | null
+          cravings?: string[] | null
+          created_at?: string
+          family?: string | null
+          full_text?: string | null
+          id?: string
+          keynotes?: string[] | null
+          latin_name?: string | null
+          mind_sphere?: string | null
+          modalities_better?: string[] | null
+          modalities_worse?: string[] | null
+          name?: string
+          short_description?: string | null
+          source?: string | null
+          thermal?: string | null
+          thirst?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homeo_symptom_remedies: {
+        Row: {
+          grade: number
+          id: string
+          remedy_id: string
+          symptom_id: string
+        }
+        Insert: {
+          grade?: number
+          id?: string
+          remedy_id: string
+          symptom_id: string
+        }
+        Update: {
+          grade?: number
+          id?: string
+          remedy_id?: string
+          symptom_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_symptom_remedies_remedy_id_fkey"
+            columns: ["remedy_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_remedies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "homeo_symptom_remedies_symptom_id_fkey"
+            columns: ["symptom_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_symptoms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homeo_symptoms: {
+        Row: {
+          chapter: string
+          created_at: string
+          description: string | null
+          id: string
+          rubric: string
+          sub_rubric: string | null
+        }
+        Insert: {
+          chapter: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          rubric: string
+          sub_rubric?: string | null
+        }
+        Update: {
+          chapter?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          rubric?: string
+          sub_rubric?: string | null
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           applicant_email: string | null
@@ -4796,6 +5195,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      homeo_repertorize: {
+        Args: { _symptom_ids: string[] }
+        Returns: {
+          abbreviation: string
+          max_grade: number
+          name: string
+          remedy_id: string
+          rubrics_covered: number
+          total_score: number
+        }[]
+      }
       is_admin_or_super: { Args: { _user_id: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
@@ -4814,6 +5224,8 @@ export type Database = {
           read_ct: number
         }[]
       }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       app_role:
