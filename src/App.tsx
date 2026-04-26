@@ -186,6 +186,13 @@ import HomeoPrescription from "./pages/homeo/Prescription.tsx";
 import HomeoFollowUp from "./pages/homeo/FollowUp.tsx";
 import HomeoReports from "./pages/homeo/Reports.tsx";
 import HomeoSavedCases from "./pages/homeo/SavedCases.tsx";
+import MindDashboard from "./pages/homeo/mind/MindDashboard.tsx";
+import MindNewCase from "./pages/homeo/mind/MindNewCase.tsx";
+import MindCasesList from "./pages/homeo/mind/MindCasesList.tsx";
+import MindCaseDetail from "./pages/homeo/mind/MindCaseDetail.tsx";
+import MindFollowUp from "./pages/homeo/mind/MindFollowUp.tsx";
+import MindFollowUpsList from "./pages/homeo/mind/MindFollowUpsList.tsx";
+import MindReports from "./pages/homeo/mind/MindReports.tsx";
 
 const queryClient = new QueryClient();
 
@@ -411,6 +418,13 @@ const App = () => (
               <Route path="prescription" element={<HomeoPrescription />} />
               <Route path="follow-up" element={<HomeoFollowUp />} />
               <Route path="reports" element={<HomeoReports />} />
+              <Route path="mind" element={<MindDashboard />} />
+              <Route path="mind/new" element={<MindNewCase />} />
+              <Route path="mind/cases" element={<MindCasesList />} />
+              <Route path="mind/cases/:id" element={<MindCaseDetail />} />
+              <Route path="mind/cases/:id/followup" element={<MindFollowUp />} />
+              <Route path="mind/followups" element={<MindFollowUpsList />} />
+              <Route path="mind/reports" element={<MindReports />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

@@ -2081,6 +2081,172 @@ export type Database = {
           },
         ]
       }
+      homeo_mind_cases: {
+        Row: {
+          additional_notes: string | null
+          ai_analysis: Json | null
+          bothers_most: string | null
+          chief_complaint: string | null
+          created_at: string
+          deepest_fear: string | null
+          detected_themes: string[] | null
+          differential_remedies: string[] | null
+          doctor_decision_notes: string | null
+          doctor_final_remedy: string | null
+          doctor_user_id: string
+          duration: string | null
+          id: string
+          key_reasons: string | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_id: string | null
+          patient_name: string | null
+          potency: string | null
+          reaction: string | null
+          relationship_pattern: string | null
+          remedy_cluster: string[] | null
+          repeating_emotion: string | null
+          status: string
+          suggested_remedy: string | null
+          trigger_event: string | null
+          updated_at: string
+          what_hurts: string | null
+          what_suppressed: string | null
+          work_pattern: string | null
+        }
+        Insert: {
+          additional_notes?: string | null
+          ai_analysis?: Json | null
+          bothers_most?: string | null
+          chief_complaint?: string | null
+          created_at?: string
+          deepest_fear?: string | null
+          detected_themes?: string[] | null
+          differential_remedies?: string[] | null
+          doctor_decision_notes?: string | null
+          doctor_final_remedy?: string | null
+          doctor_user_id: string
+          duration?: string | null
+          id?: string
+          key_reasons?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_id?: string | null
+          patient_name?: string | null
+          potency?: string | null
+          reaction?: string | null
+          relationship_pattern?: string | null
+          remedy_cluster?: string[] | null
+          repeating_emotion?: string | null
+          status?: string
+          suggested_remedy?: string | null
+          trigger_event?: string | null
+          updated_at?: string
+          what_hurts?: string | null
+          what_suppressed?: string | null
+          work_pattern?: string | null
+        }
+        Update: {
+          additional_notes?: string | null
+          ai_analysis?: Json | null
+          bothers_most?: string | null
+          chief_complaint?: string | null
+          created_at?: string
+          deepest_fear?: string | null
+          detected_themes?: string[] | null
+          differential_remedies?: string[] | null
+          doctor_decision_notes?: string | null
+          doctor_final_remedy?: string | null
+          doctor_user_id?: string
+          duration?: string | null
+          id?: string
+          key_reasons?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_id?: string | null
+          patient_name?: string | null
+          potency?: string | null
+          reaction?: string | null
+          relationship_pattern?: string | null
+          remedy_cluster?: string[] | null
+          repeating_emotion?: string | null
+          status?: string
+          suggested_remedy?: string | null
+          trigger_event?: string | null
+          updated_at?: string
+          what_hurts?: string | null
+          what_suppressed?: string | null
+          work_pattern?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_mind_cases_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homeo_mind_followups: {
+        Row: {
+          case_id: string
+          created_at: string
+          doctor_user_id: string
+          emotional_resilience_score: number | null
+          energy_score: number | null
+          id: string
+          next_action: string | null
+          observations: string | null
+          physical_complaint_score: number | null
+          potency: string | null
+          remedy_given: string | null
+          sleep_score: number | null
+          trigger_response_score: number | null
+          visit_date: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          doctor_user_id: string
+          emotional_resilience_score?: number | null
+          energy_score?: number | null
+          id?: string
+          next_action?: string | null
+          observations?: string | null
+          physical_complaint_score?: number | null
+          potency?: string | null
+          remedy_given?: string | null
+          sleep_score?: number | null
+          trigger_response_score?: number | null
+          visit_date?: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          emotional_resilience_score?: number | null
+          energy_score?: number | null
+          id?: string
+          next_action?: string | null
+          observations?: string | null
+          physical_complaint_score?: number | null
+          potency?: string | null
+          remedy_given?: string | null
+          sleep_score?: number | null
+          trigger_response_score?: number | null
+          visit_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homeo_mind_followups_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_mind_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       homeo_patients: {
         Row: {
           address: string | null
@@ -2480,6 +2646,33 @@ export type Database = {
           sub_rubric?: string | null
           subcategory?: string | null
           symptom_keywords?: string[]
+        }
+        Relationships: []
+      }
+      homeo_theme_remedy_map: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          remedy_name: string
+          theme: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          remedy_name: string
+          theme: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          remedy_name?: string
+          theme?: string
+          weight?: number
         }
         Relationships: []
       }
