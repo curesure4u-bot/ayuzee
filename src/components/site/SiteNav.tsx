@@ -276,7 +276,43 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
             <Button variant="ghost" size="icon" aria-label="Search" className="md:hidden" onClick={() => setMobileSearchOpen((v) => !v)}><Search className="h-5 w-5" /></Button>
             <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[10px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
             <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:inline-flex"><Bell className="h-5 w-5" /></Button>
-            {email ? <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" className="gap-2 rounded-full"><span className="font-bold">{initialsFromEmail(email)}</span><Badge variant="outline" className={roleBadgeClass(role)}>{roleLabel}</Badge></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuLabel><div className="max-w-56"><p className="truncate">{displayName || email}</p><p className="truncate text-xs font-normal text-muted-foreground">{email}</p></div></DropdownMenuLabel><DropdownMenuSeparator /><DropdownMenuItem asChild><Link to={dashboardPath}>My Dashboard</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu> : <JoinDropdown />}
+            {email ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-2 rounded-full">
+                    <span className="font-bold">{initialsFromEmail(email)}</span>
+                    <Badge variant="outline" className={roleBadgeClass(role)}>{roleLabel}</Badge>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>
+                    <div className="max-w-56">
+                      <p className="truncate">{displayName || email}</p>
+                      <p className="truncate text-xs font-normal text-muted-foreground">{email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to={dashboardPath}>
+                      {role === "doctor" ? "Doctor Panel"
+                        : role === "admin" ? "Admin Panel"
+                        : role === "therapist" ? "Therapist Panel"
+                        : role === "venue_owner" ? "Venue Panel"
+                        : role === "student" ? "Student Hub"
+                        : "My Dashboard"}
+                    </Link>
+                  </DropdownMenuItem>
+                  {(role === null || role === "patient") && (
+                    <>
+                      <DropdownMenuItem asChild><Link to="/dashboard/orders">My Orders</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link to="/dashboard/appointments">My Appointments</Link></DropdownMenuItem>
+                    </>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : <JoinDropdown />}
           </div>
         </div>
       </div>
