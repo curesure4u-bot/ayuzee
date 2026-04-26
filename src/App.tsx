@@ -178,8 +178,9 @@ const queryClient = new QueryClient();
 
 const AdminAwareNav = () => {
   const location = useLocation();
-  const isAdminArea = location.pathname.startsWith("/admin");
-  return isAdminArea ? null : <SiteNav appLevel />;
+  const hideNav =
+    location.pathname.startsWith("/admin") || location.pathname.startsWith("/homeo");
+  return hideNav ? null : <SiteNav appLevel />;
 };
 
 const App = () => (
