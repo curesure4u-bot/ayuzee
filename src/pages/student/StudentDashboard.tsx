@@ -65,6 +65,7 @@ const StudentDashboard = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [profile, setProfile] = useState<StudentProfile | null>(null);
+  const [profileMissing, setProfileMissing] = useState(false);
   const [stats, setStats] = useState({ courses: 0, certificates: 0, webinars: 0, jobs: 0 });
   const [activeCourses, setActiveCourses] = useState<ActiveCourse[]>([]);
   const [webinars, setWebinars] = useState<Webinar[]>([]);
