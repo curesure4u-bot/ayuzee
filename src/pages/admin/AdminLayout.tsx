@@ -42,7 +42,7 @@ const AdminLayout = () => {
     };
     verify();
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) navigate("/auth", { replace: true });
+      if (!session) navigate("/admin/auth", { replace: true });
     });
     return () => { active = false; sub.subscription.unsubscribe(); };
   }, [navigate]);
