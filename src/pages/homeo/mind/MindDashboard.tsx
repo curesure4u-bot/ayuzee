@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { homeoTokens as t } from "./lib/ui";
+import { homeoTokens as t } from "../lib/ui";
 import { Brain, Plus, ListChecks, CalendarCheck, FileText, Sparkles, Loader2 } from "lucide-react";
 
 const MindDashboard = () => {
