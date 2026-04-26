@@ -109,6 +109,9 @@ import PatientSavedPosts from "./pages/patient/PatientSavedPosts.tsx";
 import MyOrders from "./pages/patient/PatientOrders.tsx";
 import PatientAddresses from "./pages/patient/PatientAddresses.tsx";
 import PatientBank from "./pages/patient/PatientBank.tsx";
+import PatientSavedMedicines from "./pages/patient/PatientSavedMedicines.tsx";
+import PatientWallet from "./pages/patient/PatientWallet.tsx";
+import PatientHelp from "./pages/patient/PatientHelp.tsx";
 import HealthConditions from "./pages/health/HealthConditions.tsx";
 import HealthConditionDetail from "./pages/health/HealthConditionDetail.tsx";
 import AdminHealthConditions from "./pages/admin/AdminHealthConditions.tsx";
@@ -206,13 +209,13 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="profile" element={<PatientProfile />} />
               <Route path="appointments" element={<PatientAppointmentsList />} />
-              <Route path="saved-medicines" element={<PatientPlaceholder title="Saved Medicines" description="Your bookmarked medicines will appear here." />} />
+              <Route path="saved-medicines" element={<PatientSavedMedicines />} />
               <Route path="saved-posts" element={<PatientSavedPosts />} />
               <Route path="orders" element={<MyOrders />} />
               <Route path="addresses" element={<PatientAddresses />} />
-              <Route path="wallet" element={<PatientPlaceholder title="Ayuzee Money" description="Wallet balance, cashback and transactions." />} />
+              <Route path="wallet" element={<PatientWallet />} />
               <Route path="bank" element={<PatientBank />} />
-              <Route path="help" element={<PatientPlaceholder title="Help & Support" description="We're here to help — reach out anytime." />} />
+              <Route path="help" element={<PatientHelp />} />
             </Route>
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
