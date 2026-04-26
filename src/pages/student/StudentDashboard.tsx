@@ -65,6 +65,7 @@ const StudentDashboard = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [profile, setProfile] = useState<StudentProfile | null>(null);
+  const [profileMissing, setProfileMissing] = useState(false);
   const [stats, setStats] = useState({ courses: 0, certificates: 0, webinars: 0, jobs: 0 });
   const [activeCourses, setActiveCourses] = useState<ActiveCourse[]>([]);
   const [webinars, setWebinars] = useState<Webinar[]>([]);
@@ -122,6 +123,7 @@ const StudentDashboard = () => {
     const { data: registeredWebinars } = await supabase.from("webinar_rsvps").select("webinar_id").eq("user_id", uid);
 
     setProfile(profileRes.data ?? null);
+    setProfileMissing(!!profileRes.error || !profileRes.data);
     setStats({
       courses: progressRes.count ?? 0,
       certificates: certRes.count ?? 0,
@@ -170,6 +172,17 @@ const StudentDashboard = () => {
 
   return (
     <div className="space-y-8">
+      {profileMissing && (
+        <div className="flex flex-col gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-amber-900 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm font-medium">
+            <strong>Setup needed:</strong> Complete your student profile to access all features.
+          </p>
+          <Button asChild size="sm" variant="outline" className="border-amber-400 bg-background text-amber-900 hover:bg-amber-100">
+            <Link to="/student/profile">Complete Profile</Link>
+          </Button>
+        </div>
+      )}
+
       <header className="rounded-3xl border border-border bg-card p-6 shadow-soft">
         <Badge variant="outline">Ayuzee Student Hub</Badge>
         <h1 className="mt-3 font-display text-3xl leading-tight md:text-4xl">
