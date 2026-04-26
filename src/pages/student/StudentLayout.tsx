@@ -66,17 +66,18 @@ const StudentLayout = () => {
         return;
       }
 
-      const { data: roleRows, error: roleError } = await (supabase as any)
+      const { data: roleRow, error: roleError } = await (supabase as any)
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
-        .eq("role", "student");
+        .eq("role", "student")
+        .maybeSingle();
 
       if (!active) return;
 
-      if (roleError || !roleRows?.length) {
-        setAccessDenied(true);
-        setLoading(false);
+      if (roleError || !roleRow) {
+        toast.error("Please sign in as a student");
+        navigate("/student/auth", { replace: true });
         return;
       }
 
