@@ -20,7 +20,7 @@ const Reports = () => {
     const load = async () => {
       const { data } = await supabase
         .from("homeo_cases")
-        .select("id, case_date, chief_complaint, patient:homeo_patients(full_name)")
+        .select("id, case_date, patient:homeo_patients(full_name, chief_complaint)")
         .order("case_date", { ascending: false })
         .limit(100);
       setCases(data ?? []);
