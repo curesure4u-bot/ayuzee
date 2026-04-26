@@ -106,8 +106,9 @@ const PatientSavedMedicines = () => {
                       addItem({
                         id: row.product_id,
                         name: p.name,
+                        brand: p.brand ?? "",
+                        unit: null,
                         price: finalPrice,
-                        image: p.image_url || "",
                       });
                       toast.success("Added to cart");
                     }}
