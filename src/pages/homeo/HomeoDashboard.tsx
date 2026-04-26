@@ -75,10 +75,17 @@ const HomeoDashboard = () => {
 
   return (
     <div className="space-y-8">
-      <div>
-        <p className={t.label}>Overview</p>
-        <h2 className="font-display text-3xl font-semibold text-[hsl(45_85%_78%)]">Welcome back, Doctor.</h2>
-        <p className={`mt-1 ${t.mutedText}`}>Your premium homeopathy practice — case taking, repertory, materia medica.</p>
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <p className={t.label}>Overview</p>
+          <h2 className="font-display text-3xl font-semibold text-[hsl(45_85%_78%)]">Welcome back, Doctor.</h2>
+          <p className={`mt-1 ${t.mutedText}`}>Your premium homeopathy practice — case taking, repertory, materia medica.</p>
+        </div>
+        {(stats.remedies < 50 || stats.symptoms < 100) && (
+          <button onClick={runSeed} disabled={seeding} className={t.primaryBtn}>
+            <Sparkles className="h-4 w-4" /> {seeding ? "Seeding…" : "Seed 200 remedies + 500 rubrics (AI)"}
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
