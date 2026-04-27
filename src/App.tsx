@@ -394,6 +394,7 @@ const App = () => (
               <Route path="developer" element={<DeveloperApi />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
+              <Route path="unani-prescription" element={<UnaniPrescription />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
