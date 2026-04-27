@@ -197,7 +197,11 @@ import MindFollowUpsList from "./pages/homeo/mind/MindFollowUpsList.tsx";
 import MindReports from "./pages/homeo/mind/MindReports.tsx";
 import EmotionalEngine from "./pages/homeo/emotional/EmotionalEngine.tsx";
 import EmotionalAdmin from "./pages/homeo/emotional/EmotionalAdmin.tsx";
-import Homeopathy from "./pages/Homeopathy.tsx";
+import HomeopathyHub from "./pages/homeopathy/HomeopathyHub.tsx";
+import HomeopathyRepertory from "./pages/homeopathy/HomeopathyRepertory.tsx";
+import MateriaMedica from "./pages/homeopathy/MateriaMedica.tsx";
+import HomeopathyCases from "./pages/homeopathy/HomeopathyCases.tsx";
+import CaseTakingForm from "./pages/homeopathy/CaseTakingForm.tsx";
 
 const queryClient = new QueryClient();
 
@@ -266,7 +270,13 @@ const App = () => (
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
             <Route path="/treatments/:slug" element={<TreatmentSystem />} />
-            <Route path="/homeopathy" element={<Homeopathy />} />
+            <Route path="/homeopathy" element={<HomeopathyHub />} />
+            <Route path="/homeopathy/repertory" element={<HomeopathyRepertory />} />
+            <Route path="/homeopathy/materia-medica" element={<MateriaMedica />} />
+            <Route path="/homeopathy/materia-medica/:abbreviation" element={<MateriaMedica />} />
+            <Route path="/homeopathy/cases" element={<HomeopathyCases />} />
+            <Route path="/homeopathy/case/new" element={<CaseTakingForm />} />
+            <Route path="/homeopathy/case/:id" element={<HomeopathyCases />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/partner" element={<Partner />} />
