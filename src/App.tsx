@@ -456,6 +456,8 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
            <Route path="/food-as-medicine" element={<FoodAsMedicine />} />
            <Route path="/food-as-medicine/:slug" element={<FoodAsMedicine />} />
+           <Route path="/essential-drugs" element={<EssentialDrugs />} />
+           <Route path="/essential-drugs/:slug" element={<EssentialDrugDetail />} />
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
