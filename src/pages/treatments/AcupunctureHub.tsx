@@ -4,7 +4,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Sparkles, Stethoscope, ListChecks, Combine } from "lucide-react";
+import { ArrowRight, BookOpen, Sparkles, Stethoscope, ListChecks, Combine, MapPin } from "lucide-react";
 import { setSEO } from "@/lib/seo";
 
 const AcupunctureHub = () => {
@@ -22,6 +22,13 @@ const AcupunctureHub = () => {
       desc: "Master Tung Ching-Chang's classical extraordinary points — locations, indications and clinical pearls.",
       icon: Sparkles,
       tag: "Classical reference",
+    },
+    {
+      to: "/treatments/acupoints-uses",
+      title: "Acupoints & Their Uses",
+      desc: "Point-by-point reference: location, channel and clinical uses for instant applicability.",
+      icon: MapPin,
+      tag: "Point reference",
     },
     {
       to: "/treatments/acupuncture-50-diseases",

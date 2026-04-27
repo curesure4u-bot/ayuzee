@@ -145,6 +145,7 @@ import AcupunctureHub from "./pages/treatments/AcupunctureHub.tsx";
 import Acupuncture300Diseases from "./pages/treatments/Acupuncture300Diseases.tsx";
 import Acupuncture50Diseases from "./pages/treatments/Acupuncture50Diseases.tsx";
 import AcupunctureHomeopathy from "./pages/treatments/AcupunctureHomeopathy.tsx";
+import AcupointsAndUses from "./pages/treatments/AcupointsAndUses.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
