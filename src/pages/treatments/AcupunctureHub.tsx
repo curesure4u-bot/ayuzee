@@ -24,9 +24,16 @@ const AcupunctureHub = () => {
       tag: "Classical reference",
     },
     {
+      to: "/treatments/acupuncture-50-diseases",
+      title: "50 Diseases — Quick Protocols",
+      desc: "Clinic-ready protocols for 50 common conditions — fast, applicable, point-by-point.",
+      icon: Stethoscope,
+      tag: "Quick protocols",
+    },
+    {
       to: "/treatments/acupuncture-300-diseases",
       title: "300 Diseases with Points",
-      desc: "Quick clinical lookup: 300 common conditions mapped to acupuncture point prescriptions.",
+      desc: "Comprehensive lookup: 300 conditions mapped to acupuncture point prescriptions.",
       icon: ListChecks,
       tag: "Clinical lookup",
     },
