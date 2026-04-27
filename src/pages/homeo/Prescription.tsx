@@ -159,13 +159,47 @@ const Prescription = () => {
       duration_days: durationDays ? parseInt(durationDays, 10) : null,
       follow_up_date: followupDate || null,
     }));
-    const { error } = await supabase.from("homeo_prescriptions").insert(rows);
+    const { data: rxInserted, error } = await supabase.from("homeo_prescriptions").insert(rows).select("id");
+    if (error) { setSaving(false); return toast.error(error.message); }
+
+    // Attach food recipes to first prescription row (acts as the "diet plan" for this Rx)
+    if (foodPicks.length && rxInserted?.[0]?.id) {
+      const rxId = rxInserted[0].id;
+      const foodRows = foodPicks.map((f) => ({
+        prescription_id: rxId,
+        recipe_id: f.recipe_id,
+        dose: f.dose || null,
+        when_to_take: f.when_to_take || null,
+        duration: f.duration || null,
+      }));
+      await supabase.from("prescription_food_recipes" as any).insert(foodRows);
+    }
+
     setSaving(false);
-    if (error) return toast.error(error.message);
     toast.success("Prescription saved");
     setList([{ remedy_id: "", remedy_name: "", potency: "30C", dosage: "Single dose", instructions: "" }]);
+    setFoodPicks([]);
     await loadHistory();
   };
+
+  const addFoodPick = (recipe: { id: string; name: string }) => {
+    if (foodPicks.find((f) => f.recipe_id === recipe.id)) return;
+    setFoodPicks([...foodPicks, { recipe_id: recipe.id, name: recipe.name, dose: "1 serving", when_to_take: "After meals", duration: "2 weeks" }]);
+    setFoodSearch("");
+  };
+  const updateFoodPick = (i: number, key: keyof FoodPick, val: string) => {
+    const copy = [...foodPicks]; copy[i] = { ...copy[i], [key]: val }; setFoodPicks(copy);
+  };
+  const removeFoodPick = (i: number) => setFoodPicks(foodPicks.filter((_, idx) => idx !== i));
+
+  const foodMatches = useMemo(() => {
+    const term = foodSearch.trim().toLowerCase();
+    if (!term) return [];
+    return foodRecipes
+      .filter((r) => !foodPicks.find((f) => f.recipe_id === r.id))
+      .filter((r) => r.name.toLowerCase().includes(term) || r.indications?.some((i) => i.toLowerCase().includes(term)))
+      .slice(0, 8);
+  }, [foodSearch, foodRecipes, foodPicks]);
 
   return (
     <TooltipProvider delayDuration={150}>
