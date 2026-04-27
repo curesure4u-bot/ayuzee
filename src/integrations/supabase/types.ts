@@ -2090,6 +2090,167 @@ export type Database = {
         }
         Relationships: []
       }
+      gam_badges: {
+        Row: {
+          code: string
+          created_at: string
+          criteria_type: string
+          criteria_value: number
+          description: string | null
+          icon: string
+          id: string
+          name: string
+          role: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          criteria_type: string
+          criteria_value?: number
+          description?: string | null
+          icon?: string
+          id?: string
+          name: string
+          role?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          criteria_type?: string
+          criteria_value?: number
+          description?: string | null
+          icon?: string
+          id?: string
+          name?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
+      gam_levels: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          level_name: string
+          level_number: number
+          max_points: number | null
+          min_points: number
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          level_name: string
+          level_number: number
+          max_points?: number | null
+          min_points: number
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          level_name?: string
+          level_number?: number
+          max_points?: number | null
+          min_points?: number
+        }
+        Relationships: []
+      }
+      gam_points_transactions: {
+        Row: {
+          action_type: string
+          created_at: string
+          description: string | null
+          id: string
+          points: number
+          reference_id: string | null
+          reference_table: string | null
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          points: number
+          reference_id?: string | null
+          reference_table?: string | null
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          points?: number
+          reference_id?: string | null
+          reference_table?: string | null
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gam_user_badges: {
+        Row: {
+          awarded_at: string
+          badge_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          badge_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          badge_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gam_user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "gam_badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gam_user_stats: {
+        Row: {
+          current_streak: number
+          last_activity_date: string | null
+          level_number: number
+          longest_streak: number
+          total_points: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          current_streak?: number
+          last_activity_date?: string | null
+          level_number?: number
+          longest_streak?: number
+          total_points?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          current_streak?: number
+          last_activity_date?: string | null
+          level_number?: number
+          longest_streak?: number
+          total_points?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       health_blogs: {
         Row: {
           author_avatar_url: string | null
@@ -7220,6 +7381,20 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      gam_award: {
+        Args: {
+          _action: string
+          _desc: string
+          _points: number
+          _ref_id: string
+          _ref_table: string
+          _role: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      gam_check_badges: { Args: { _user_id: string }; Returns: undefined }
+      gam_compute_level: { Args: { _points: number }; Returns: number }
       generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {

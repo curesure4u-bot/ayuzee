@@ -56,6 +56,12 @@ import TherapyCatalog from "./pages/vaidya/sections/TherapyCatalog.tsx";
 import Therapies from "./pages/Therapies.tsx";
 import AdminTherapies from "./pages/admin/AdminTherapies.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
+import AdminGamification from "./pages/admin/AdminGamification.tsx";
+import GamificationLayout from "./pages/gamification/GamificationLayout.tsx";
+import GamificationDashboard from "./pages/gamification/GamificationDashboard.tsx";
+import MyPoints from "./pages/gamification/MyPoints.tsx";
+import MyBadges from "./pages/gamification/MyBadges.tsx";
+import Leaderboard from "./pages/gamification/Leaderboard.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminDoctors from "./pages/admin/AdminDoctors.tsx";
@@ -351,6 +357,7 @@ const App = () => (
               <Route path="reports" element={<AdminReports />} />
               <Route path="safety" element={<AdminSafety />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
               <Route path="learning" element={<AdminLearning />} />
               <Route path="health-conditions" element={<AdminHealthConditions />} />
@@ -500,6 +507,12 @@ const App = () => (
            <Route path="/essential-unani-drugs/:slug" element={<EssentialUnaniDrugDetail />} />
            <Route path="/essential-homeopathy-drugs" element={<EssentialHomeopathyDrugs />} />
            <Route path="/essential-homeopathy-drugs/:slug" element={<EssentialHomeopathyDrugDetail />} />
+           <Route path="/gamification" element={<GamificationLayout />}>
+             <Route index element={<GamificationDashboard />} />
+             <Route path="points" element={<MyPoints />} />
+             <Route path="badges" element={<MyBadges />} />
+             <Route path="leaderboard" element={<Leaderboard />} />
+           </Route>
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
