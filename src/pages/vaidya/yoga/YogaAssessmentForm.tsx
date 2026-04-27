@@ -313,7 +313,7 @@ export async function buildPlanFromProtocol({
     doctor_user_id: userId,
     patient_name: patientName,
     plan_name: `${protocol.condition_name} – Yoga Plan`,
-    plan_type: "condition_specific" as const,
+    plan_type: "therapeutic" as const,
     condition_name: protocol.condition_name,
     duration_weeks: protocol.duration_weeks ?? 6,
     frequency_per_week: protocol.frequency_per_week ?? 5,
