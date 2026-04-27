@@ -104,10 +104,10 @@ const megaMenus: MegaMenu[] = [
       {
         title: "📖 Learn & Explore",
         links: [
-          { label: "🧬 Remedy Finder", to: "/homeopathy/materia-medica" },
-          { label: "📰 Homeopathy Research", to: "/learning/blogs?system=Homeopathy" },
+          { label: "🧬 Remedy Finder", to: "/homeo/materia-medica" },
+          { label: "📰 Homeopathy Research", to: "/learning/blogs" },
           { label: "🎙 Webinars for Homeopaths", to: "/learning/webinars" },
-          { label: "💼 Homeopathy Jobs", to: "/jobs?specialization=Homeopathy" },
+          { label: "💼 Homeopathy Jobs", to: "/jobs" },
         ],
         card: {
           title: "🏥 BHMS Doctor?",
