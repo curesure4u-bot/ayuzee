@@ -353,6 +353,7 @@ const App = () => (
               <Route path="roadmap" element={<AdminRoadmap />} />
               <Route path="essential-drugs" element={<AdminEssentialDrugs />} />
               <Route path="essential-siddha-drugs" element={<AdminEssentialSiddhaDrugs />} />
+              <Route path="essential-unani-drugs" element={<AdminEssentialUnaniDrugs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
@@ -393,6 +394,7 @@ const App = () => (
               <Route path="developer" element={<DeveloperApi />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
+              <Route path="unani-prescription" element={<UnaniPrescription />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
@@ -470,6 +472,8 @@ const App = () => (
            <Route path="/essential-drugs/:slug" element={<EssentialDrugDetail />} />
            <Route path="/essential-siddha-drugs" element={<EssentialSiddhaDrugs />} />
            <Route path="/essential-siddha-drugs/:slug" element={<EssentialSiddhaDrugDetail />} />
+           <Route path="/essential-unani-drugs" element={<EssentialUnaniDrugs />} />
+           <Route path="/essential-unani-drugs/:slug" element={<EssentialUnaniDrugDetail />} />
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
