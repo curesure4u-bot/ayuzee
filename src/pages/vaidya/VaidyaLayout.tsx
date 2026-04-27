@@ -15,6 +15,7 @@ import {
   Sparkles,
   ChevronRight,
   Code2,
+  Pill,
 } from "lucide-react";
 import { toast } from "sonner";
 
