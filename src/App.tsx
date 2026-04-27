@@ -306,9 +306,9 @@ const App = () => (
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
-            <Route path="/treatments/:slug" element={<TreatmentSystem />} />
             <Route path="/treatments/tung-points" element={<TungPoints />} />
             <Route path="/tung-points" element={<TungPoints />} />
+            <Route path="/treatments/:slug" element={<TreatmentSystem />} />
             <Route path="/homeopathy" element={<HomeopathyHub />} />
             <Route path="/homeopathy/repertory" element={<HomeopathyRepertory />} />
             <Route path="/homeopathy/materia-medica" element={<MateriaMedica />} />
