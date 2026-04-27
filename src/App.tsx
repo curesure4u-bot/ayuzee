@@ -211,6 +211,10 @@ import EssentialSiddhaDrugs from "./pages/essentialSiddhaDrugs/EssentialSiddhaDr
 import EssentialSiddhaDrugDetail from "./pages/essentialSiddhaDrugs/EssentialSiddhaDrugDetail.tsx";
 import SiddhaPrescription from "./pages/vaidya/sections/SiddhaPrescription.tsx";
 import AdminEssentialSiddhaDrugs from "./pages/admin/AdminEssentialSiddhaDrugs.tsx";
+import EssentialUnaniDrugs from "./pages/essentialUnaniDrugs/EssentialUnaniDrugs.tsx";
+import EssentialUnaniDrugDetail from "./pages/essentialUnaniDrugs/EssentialUnaniDrugDetail.tsx";
+import UnaniPrescription from "./pages/vaidya/sections/UnaniPrescription.tsx";
+import AdminEssentialUnaniDrugs from "./pages/admin/AdminEssentialUnaniDrugs.tsx";
 
 const queryClient = new QueryClient();
 
