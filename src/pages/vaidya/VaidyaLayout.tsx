@@ -17,6 +17,7 @@ import {
   Code2,
   Pill,
   Flower2,
+  Activity,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -56,6 +57,18 @@ const groups = [
       { to: "/vaidya/network", label: "Partner Network", icon: HeartHandshake },
       { to: "/vaidya/therapy-plans", label: "Therapy Plans", icon: Sparkles },
       { to: "/vaidya/therapy-catalog", label: "Ayush Therapy Catalog", icon: Sparkles },
+    ],
+  },
+  {
+    label: "Integrated Acupuncture",
+    icon: Activity,
+    items: [
+      { to: "/treatments/acupuncture", label: "Acupuncture Hub", icon: Activity },
+      { to: "/treatments/tung-points", label: "Tung's Points", icon: Activity },
+      { to: "/treatments/acupoints-uses", label: "Acupoints & Uses", icon: Activity },
+      { to: "/treatments/acupuncture-50-diseases", label: "50 Diseases — Quick", icon: Activity },
+      { to: "/treatments/acupuncture-300-diseases", label: "300 Diseases", icon: Activity },
+      { to: "/treatments/acupuncture-homeopathy", label: "Acupuncture × Homeopathy", icon: Activity },
     ],
   },
   {

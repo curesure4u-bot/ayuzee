@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { Card } from "@/components/ui/card";
-import { Users, IndianRupee, CalendarDays, Boxes, ReceiptText, HeartHandshake } from "lucide-react";
+import { Users, IndianRupee, CalendarDays, Boxes, ReceiptText, HeartHandshake, Activity } from "lucide-react";
 
 const VaidyaHome = () => {
   const { doctor, userId } = useDoctor();
@@ -45,6 +45,7 @@ const VaidyaHome = () => {
     { to: "/vaidya/consultations", label: "My Consultation", icon: ReceiptText },
     { to: "/vaidya/patients", label: "All Patients", icon: Users },
     { to: "/vaidya/inventory", label: "Inventory", icon: Boxes },
+    { to: "/treatments/acupuncture", label: "Integrated Acupuncture", icon: Activity },
     { to: "/vaidya/network", label: "Partner Network", icon: HeartHandshake },
   ];
 
