@@ -343,6 +343,7 @@ const App = () => (
               <Route path="jobs" element={<AdminJobs />} />
               <Route path="atmri-help" element={<AdminAtmriHelp />} />
               <Route path="roadmap" element={<AdminRoadmap />} />
+              <Route path="essential-drugs" element={<AdminEssentialDrugs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
