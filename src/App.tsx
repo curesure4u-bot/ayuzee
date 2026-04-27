@@ -270,7 +270,13 @@ const App = () => (
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
             <Route path="/treatments/:slug" element={<TreatmentSystem />} />
-            <Route path="/homeopathy" element={<Homeopathy />} />
+            <Route path="/homeopathy" element={<HomeopathyHub />} />
+            <Route path="/homeopathy/repertory" element={<HomeopathyRepertory />} />
+            <Route path="/homeopathy/materia-medica" element={<MateriaMedica />} />
+            <Route path="/homeopathy/materia-medica/:abbreviation" element={<MateriaMedica />} />
+            <Route path="/homeopathy/cases" element={<HomeopathyCases />} />
+            <Route path="/homeopathy/case/new" element={<CaseTakingForm />} />
+            <Route path="/homeopathy/case/:id" element={<HomeopathyCases />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/partner" element={<Partner />} />
