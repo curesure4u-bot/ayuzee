@@ -45,6 +45,7 @@ const VaidyaHome = () => {
     { to: "/vaidya/consultations", label: "My Consultation", icon: ReceiptText },
     { to: "/vaidya/patients", label: "All Patients", icon: Users },
     { to: "/vaidya/inventory", label: "Inventory", icon: Boxes },
+    { to: "/treatments/acupuncture", label: "Integrated Acupuncture", icon: Activity },
     { to: "/vaidya/network", label: "Partner Network", icon: HeartHandshake },
   ];
 
