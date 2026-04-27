@@ -76,6 +76,7 @@ const megaMenus: MegaMenu[] = [
   { label: "Diagnosis", columns: [
     { title: "Assessments", links: [{ label: "🧬 Prakriti Assessment (Dosha Quiz)", to: "/diagnosis/prakriti" }, { label: "🔍 Symptom Checker", to: "/diagnosis/symptoms" }, { label: "📋 Health Risk Assessment", to: "/diagnosis" }] },
     { title: "Reports", links: [{ label: "My Past Assessments", to: "/dashboard?tab=assessments" }, { label: "Share Report with Doctor", to: "/doctors" }] },
+    { title: "Wellness", links: [{ label: "🍲 Food as Medicine (AYUSH)", to: "/food-as-medicine" }] },
   ] },
   {
     label: "Homeopathy",
