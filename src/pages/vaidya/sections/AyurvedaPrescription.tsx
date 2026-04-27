@@ -153,6 +153,13 @@ const AyurvedaPrescription = () => {
       </Card>
 
       <Card className="p-4 print:hidden">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <Label className="text-base font-semibold">Add Medicines</Label>
+          <a href="/essential-drugs" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-smooth">
+            📋 View Ayurveda Drug Reference ↗
+          </a>
+        </div>
         <Label>Search & add drug</Label>
         <div className="relative mt-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

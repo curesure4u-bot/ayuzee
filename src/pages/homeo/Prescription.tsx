@@ -212,7 +212,10 @@ const Prescription = () => {
             </h2>
             {caseData?.patient && <p className={`mt-1 text-sm ${t.mutedText}`}>{caseData.patient.age} y · {caseData.patient.gender} · {caseData.patient.chief_complaint}</p>}
           </div>
-          {caseId && <Link to={`/homeo/reports?case=${caseId}`} className={t.ghostBtn}>📄 Export PDF</Link>}
+          <div className="flex items-center gap-2">
+            <a href="/essential-homeopathy-drugs" target="_blank" rel="noopener noreferrer" className={t.ghostBtn}>💧 Essential Homeopathy Drug List ↗</a>
+            {caseId && <Link to={`/homeo/reports?case=${caseId}`} className={t.ghostBtn}>📄 Export PDF</Link>}
+          </div>
         </div>
 
         <div className="grid gap-6 xl:grid-cols-3">
