@@ -36,6 +36,7 @@ const ANTIDOTES: { label: string; note: string }[] = [
 ];
 
 type Row = { remedy_id: string; remedy_name: string; potency: string; dosage: string; instructions: string };
+type FoodPick = { recipe_id: string; name: string; dose: string; when_to_take: string; duration: string };
 
 const Prescription = () => {
   const [params] = useSearchParams();
@@ -49,6 +50,11 @@ const Prescription = () => {
   const [durationDays, setDurationDays] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+
+  // Food as Medicine
+  const [foodRecipes, setFoodRecipes] = useState<{ id: string; name: string; category: string; indications: string[] }[]>([]);
+  const [foodPicks, setFoodPicks] = useState<FoodPick[]>([]);
+  const [foodSearch, setFoodSearch] = useState("");
 
   // Reference panel
   const [refRemedy, setRefRemedy] = useState<any>(null);
@@ -68,6 +74,12 @@ const Prescription = () => {
     const load = async () => {
       const { data: rem } = await supabase.from("homeo_remedies").select("id, name, abbreviation").order("name").limit(500);
       setRemedies(rem ?? []);
+      const { data: foods } = await supabase
+        .from("food_recipes" as any)
+        .select("id, name, category, indications")
+        .eq("is_published", true)
+        .order("name");
+      setFoodRecipes((foods ?? []) as any);
       if (caseId) {
         const { data: c } = await supabase.from("homeo_cases").select("*, patient:homeo_patients(*)").eq("id", caseId).single();
         setCaseData(c);
