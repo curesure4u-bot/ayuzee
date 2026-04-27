@@ -314,6 +314,8 @@ const App = () => (
             <Route path="/treatments/tung-points" element={<TungPoints />} />
             <Route path="/tung-points" element={<TungPoints />} />
             <Route path="/treatments/acupuncture-300-diseases" element={<Acupuncture300Diseases />} />
+            <Route path="/treatments/acupuncture-50-diseases" element={<Acupuncture50Diseases />} />
+            <Route path="/acupuncture/50-diseases" element={<Acupuncture50Diseases />} />
             <Route path="/acupuncture/300-diseases" element={<Acupuncture300Diseases />} />
             <Route path="/treatments/:slug" element={<TreatmentSystem />} />
             <Route path="/homeopathy" element={<HomeopathyHub />} />
