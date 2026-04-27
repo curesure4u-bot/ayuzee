@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { Card } from "@/components/ui/card";
-import { Users, IndianRupee, CalendarDays, Boxes, ReceiptText, HeartHandshake } from "lucide-react";
+import { Users, IndianRupee, CalendarDays, Boxes, ReceiptText, HeartHandshake, Activity } from "lucide-react";
 
 const VaidyaHome = () => {
   const { doctor, userId } = useDoctor();
