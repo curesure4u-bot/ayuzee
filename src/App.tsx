@@ -145,6 +145,7 @@ import AcupunctureHub from "./pages/treatments/AcupunctureHub.tsx";
 import Acupuncture300Diseases from "./pages/treatments/Acupuncture300Diseases.tsx";
 import Acupuncture50Diseases from "./pages/treatments/Acupuncture50Diseases.tsx";
 import AcupunctureHomeopathy from "./pages/treatments/AcupunctureHomeopathy.tsx";
+import AcupointsAndUses from "./pages/treatments/AcupointsAndUses.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
@@ -317,6 +318,8 @@ const App = () => (
             <Route path="/treatments/acupuncture-300-diseases" element={<Acupuncture300Diseases />} />
             <Route path="/treatments/acupuncture-50-diseases" element={<Acupuncture50Diseases />} />
             <Route path="/treatments/acupuncture-homeopathy" element={<AcupunctureHomeopathy />} />
+            <Route path="/treatments/acupoints-uses" element={<AcupointsAndUses />} />
+            <Route path="/acupuncture/points" element={<AcupointsAndUses />} />
             <Route path="/acupuncture/homeopathy" element={<AcupunctureHomeopathy />} />
             <Route path="/acupuncture/50-diseases" element={<Acupuncture50Diseases />} />
             <Route path="/acupuncture/300-diseases" element={<Acupuncture300Diseases />} />
