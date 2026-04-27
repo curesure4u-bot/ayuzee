@@ -140,6 +140,7 @@ import AdminStudents from "./pages/admin/AdminStudents.tsx";
 import AdminRevenueSplit from "./pages/admin/AdminRevenueSplit.tsx";
 import AdminJobs from "./pages/admin/AdminJobs.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
+import TungPoints from "./pages/treatments/TungPoints.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
