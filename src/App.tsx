@@ -143,6 +143,7 @@ import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import TungPoints from "./pages/treatments/TungPoints.tsx";
 import AcupunctureHub from "./pages/treatments/AcupunctureHub.tsx";
 import Acupuncture300Diseases from "./pages/treatments/Acupuncture300Diseases.tsx";
+import Acupuncture50Diseases from "./pages/treatments/Acupuncture50Diseases.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
