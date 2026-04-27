@@ -309,11 +309,11 @@ export async function buildPlanFromProtocol({
     .from("yoga_condition_protocols").select("*").eq("id", protocolId).maybeSingle();
   if (pErr || !protocol) return { data: null, error: pErr || new Error("Protocol not found") };
 
-  const { data: plan, error: plErr } = await supabase.from("yoga_plans").insert({
+  const planPayload = {
     doctor_user_id: userId,
     patient_name: patientName,
     plan_name: `${protocol.condition_name} – Yoga Plan`,
-    plan_type: "condition_specific",
+    plan_type: "condition_specific" as const,
     condition_name: protocol.condition_name,
     duration_weeks: protocol.duration_weeks ?? 6,
     frequency_per_week: protocol.frequency_per_week ?? 5,
@@ -321,7 +321,8 @@ export async function buildPlanFromProtocol({
     assessment_id: assessmentId ?? null,
     precautions: protocol.precautions ?? null,
     status: "active",
-  }).select().single();
+  };
+  const { data: plan, error: plErr } = await supabase.from("yoga_plans").insert(planPayload).select().single();
   if (plErr || !plan) return { data: null, error: plErr };
 
   const items: any[] = [];
