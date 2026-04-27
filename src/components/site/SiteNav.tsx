@@ -93,21 +93,21 @@ const megaMenus: MegaMenu[] = [
       {
         title: "🏥 For BHMS Doctors",
         links: [
-          { label: "📋 Case Taking Software ✨", to: "/homeopathy/case/new" },
-          { label: "🔍 Kent Repertory Search", to: "/homeopathy/repertory" },
-          { label: "📚 Materia Medica Library", to: "/homeopathy/materia-medica" },
-          { label: "💊 Write Prescription", to: "/homeopathy/case/new" },
-          { label: "📊 My Case Files", to: "/homeopathy/cases" },
-          { label: "🎓 CME for BHMS Doctors", to: "/learning/courses?system=Homeopathy" },
+          { label: "📋 Case Taking Software ✨", to: "/homeo/case-form" },
+          { label: "🔍 Kent Repertory Search", to: "/homeo/repertory" },
+          { label: "📚 Materia Medica Library", to: "/homeo/materia-medica" },
+          { label: "💊 Write Prescription", to: "/homeo/prescription" },
+          { label: "📊 My Case Files", to: "/homeo/saved-cases" },
+          { label: "🎓 CME for BHMS Doctors", to: "/learning/courses" },
         ],
       },
       {
         title: "📖 Learn & Explore",
         links: [
-          { label: "🧬 Remedy Finder", to: "/homeopathy/materia-medica" },
-          { label: "📰 Homeopathy Research", to: "/learning/blogs?system=Homeopathy" },
+          { label: "🧬 Remedy Finder", to: "/homeo/materia-medica" },
+          { label: "📰 Homeopathy Research", to: "/learning/blogs" },
           { label: "🎙 Webinars for Homeopaths", to: "/learning/webinars" },
-          { label: "💼 Homeopathy Jobs", to: "/jobs?specialization=Homeopathy" },
+          { label: "💼 Homeopathy Jobs", to: "/jobs" },
         ],
         card: {
           title: "🏥 BHMS Doctor?",
