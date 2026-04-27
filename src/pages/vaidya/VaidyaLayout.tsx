@@ -66,6 +66,17 @@ const groups = [
     ],
   },
   {
+    label: "Yoga Therapy AI",
+    icon: Flower2,
+    items: [
+      { to: "/vaidya/yoga", label: "Yoga Dashboard", icon: Flower2 },
+      { to: "/vaidya/yoga/assessment/new", label: "New Yoga Assessment", icon: Flower2 },
+      { to: "/vaidya/yoga/plans", label: "Patient Yoga Plans", icon: Flower2 },
+      { to: "/vaidya/yoga/protocols", label: "Condition Protocols", icon: Flower2 },
+      { to: "/vaidya/yoga/progress", label: "Progress Tracker", icon: Flower2 },
+    ],
+  },
+  {
     label: "Developer",
     icon: Code2,
     items: [
