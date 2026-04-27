@@ -472,6 +472,8 @@ const App = () => (
            <Route path="/essential-drugs/:slug" element={<EssentialDrugDetail />} />
            <Route path="/essential-siddha-drugs" element={<EssentialSiddhaDrugs />} />
            <Route path="/essential-siddha-drugs/:slug" element={<EssentialSiddhaDrugDetail />} />
+           <Route path="/essential-unani-drugs" element={<EssentialUnaniDrugs />} />
+           <Route path="/essential-unani-drugs/:slug" element={<EssentialUnaniDrugDetail />} />
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
