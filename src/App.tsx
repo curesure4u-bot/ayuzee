@@ -207,6 +207,10 @@ import EssentialDrugs from "./pages/essentialDrugs/EssentialDrugs.tsx";
 import EssentialDrugDetail from "./pages/essentialDrugs/EssentialDrugDetail.tsx";
 import AyurvedaPrescription from "./pages/vaidya/sections/AyurvedaPrescription.tsx";
 import AdminEssentialDrugs from "./pages/admin/AdminEssentialDrugs.tsx";
+import EssentialSiddhaDrugs from "./pages/essentialSiddhaDrugs/EssentialSiddhaDrugs.tsx";
+import EssentialSiddhaDrugDetail from "./pages/essentialSiddhaDrugs/EssentialSiddhaDrugDetail.tsx";
+import SiddhaPrescription from "./pages/vaidya/sections/SiddhaPrescription.tsx";
+import AdminEssentialSiddhaDrugs from "./pages/admin/AdminEssentialSiddhaDrugs.tsx";
 
 const queryClient = new QueryClient();
 
@@ -344,6 +348,7 @@ const App = () => (
               <Route path="atmri-help" element={<AdminAtmriHelp />} />
               <Route path="roadmap" element={<AdminRoadmap />} />
               <Route path="essential-drugs" element={<AdminEssentialDrugs />} />
+              <Route path="essential-siddha-drugs" element={<AdminEssentialSiddhaDrugs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
@@ -383,6 +388,7 @@ const App = () => (
               <Route path="prakriti" element={<HmsPrakriti />} />
               <Route path="developer" element={<DeveloperApi />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
+              <Route path="siddha-prescription" element={<SiddhaPrescription />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
@@ -458,6 +464,8 @@ const App = () => (
            <Route path="/food-as-medicine/:slug" element={<FoodAsMedicine />} />
            <Route path="/essential-drugs" element={<EssentialDrugs />} />
            <Route path="/essential-drugs/:slug" element={<EssentialDrugDetail />} />
+           <Route path="/essential-siddha-drugs" element={<EssentialSiddhaDrugs />} />
+           <Route path="/essential-siddha-drugs/:slug" element={<EssentialSiddhaDrugDetail />} />
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -31,6 +31,7 @@ const contentItems = [
   { title: "Condition Leads", url: "/admin/condition-leads", icon: PhoneCall },
   { title: "Jobs", url: "/admin/jobs", icon: Briefcase },
   { title: "Essential Drugs", url: "/admin/essential-drugs", icon: Pill },
+  { title: "Essential Siddha Drugs", url: "/admin/essential-siddha-drugs", icon: Pill },
 ];
 
 const governanceItems = [
