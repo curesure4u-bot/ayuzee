@@ -17,6 +17,7 @@ import {
   Code2,
   Pill,
   Flower2,
+  Activity,
 } from "lucide-react";
 import { toast } from "sonner";
 
