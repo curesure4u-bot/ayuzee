@@ -99,7 +99,9 @@ const CaseTakingForm = () => {
   const [form, setForm] = useState(initialForm);
   const [saving, setSaving] = useState(false);
   const [genLoading, setGenLoading] = useState(false);
-
+  const [sehgalNarrative, setSehgalNarrative] = useState("");
+  const [sehgalLoading, setSehgalLoading] = useState(false);
+  const [sehgalResult, setSehgalResult] = useState<SehgalResult | null>(null);
   useEffect(() => {
     const load = async () => {
       if (caseId) {
