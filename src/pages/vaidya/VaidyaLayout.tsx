@@ -28,6 +28,7 @@ const groups = [
       { to: "/vaidya/ayurveda-prescription", label: "Ayurveda Prescription", icon: Pill },
       { to: "/vaidya/siddha-prescription", label: "Siddha Prescription", icon: Pill },
       { to: "/vaidya/unani-prescription", label: "Unani Prescription", icon: Pill },
+      { to: "/vaidya/homeopathy-prescription", label: "Homeopathy Prescription", icon: Pill },
       { to: "/vaidya/patients", label: "All Patients", icon: Users },
       { to: "/vaidya/follow-up", label: "Follow up list", icon: CalendarClock },
       { to: "/vaidya/upcoming", label: "Upcoming Appointment", icon: CalendarClock },
