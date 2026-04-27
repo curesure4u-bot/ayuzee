@@ -32,6 +32,7 @@ const contentItems = [
   { title: "Jobs", url: "/admin/jobs", icon: Briefcase },
   { title: "Essential Drugs", url: "/admin/essential-drugs", icon: Pill },
   { title: "Essential Siddha Drugs", url: "/admin/essential-siddha-drugs", icon: Pill },
+  { title: "Essential Unani Drugs", url: "/admin/essential-unani-drugs", icon: Pill },
 ];
 
 const governanceItems = [
