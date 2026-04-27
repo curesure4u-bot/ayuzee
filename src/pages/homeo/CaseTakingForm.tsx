@@ -3,17 +3,32 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { homeoTokens as t } from "./lib/ui";
 import { toast } from "sonner";
-import { Brain, HeartPulse, Activity, Scroll, Sparkles, ChevronLeft, ChevronRight, Save, Loader2, Wand2 } from "lucide-react";
+import { Brain, HeartPulse, Activity, Scroll, Sparkles, ChevronLeft, ChevronRight, Save, Loader2, Wand2, Telescope, Quote, Star } from "lucide-react";
 
 type Mode = "case" | "patient";
 
 const TABS = [
   { id: "complaint", label: "Chief Complaint", icon: HeartPulse },
   { id: "mental", label: "Mental Symptoms", icon: Brain },
+  { id: "sehgal", label: "Sehgal AI", icon: Telescope },
   { id: "physical", label: "Physical Generals", icon: Activity },
   { id: "history", label: "History", icon: Scroll },
   { id: "review", label: "Review", icon: Sparkles },
 ] as const;
+
+type SehgalTheme = {
+  theme: string; slug: string; short_description: string; confidence: number;
+  evidence: string[]; reasoning: string;
+  ranked_remedies: { remedy: string; score: number }[];
+  differentials: string[]; followup_questions: string[];
+};
+type SehgalResult = {
+  case_summary: string;
+  detected_themes: SehgalTheme[];
+  ranked_remedies: { remedy: string; score: number; themes_supporting: string[]; max_theme_confidence: number }[];
+  suggested_similimum: { remedy: string; score: number; rationale: string } | null;
+  followup_questions: string[];
+};
 
 const FEAR_CHIPS = ["Death","Dark","Heights","Crowds","Animals","Disease","Poverty","Failure","Being alone","Robbers","Thunderstorms","Future","Closed spaces","Open spaces","Snakes","Insanity"];
 const AVERSION_MIND = ["Consolation","Company","Sympathy","Contradiction","Noise","Music","Touch","Being observed","Responsibility"];
