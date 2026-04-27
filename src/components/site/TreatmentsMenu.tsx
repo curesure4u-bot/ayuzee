@@ -58,6 +58,16 @@ export const TreatmentsMenu = () => {
 
       {open && (
         <div className="absolute left-1/2 top-full z-50 mt-2 w-64 -translate-x-1/2 rounded-xl border border-border bg-popover p-2 shadow-elegant">
+          <Link
+            to="/treatments/acupuncture"
+            className="flex items-center justify-between rounded-md px-3 py-2 text-sm font-semibold text-primary hover:bg-accent"
+          >
+            <span className="inline-flex items-center gap-2">
+              <Stethoscope className="h-4 w-4" /> Integrated Acupuncture
+            </span>
+            <ChevronRight className="h-4 w-4 opacity-60" />
+          </Link>
+          <div className="my-1 h-px bg-border" />
           {systems.length === 0 && (
             <p className="px-3 py-2 text-xs text-muted-foreground">No treatment systems yet.</p>
           )}

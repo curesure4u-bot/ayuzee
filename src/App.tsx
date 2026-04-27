@@ -141,6 +141,8 @@ import AdminRevenueSplit from "./pages/admin/AdminRevenueSplit.tsx";
 import AdminJobs from "./pages/admin/AdminJobs.tsx";
 import TreatmentSystem from "./pages/treatments/TreatmentSystem.tsx";
 import TungPoints from "./pages/treatments/TungPoints.tsx";
+import AcupunctureHub from "./pages/treatments/AcupunctureHub.tsx";
+import Acupuncture300Diseases from "./pages/treatments/Acupuncture300Diseases.tsx";
 import BookTherapySession from "./pages/patient/BookTherapySession.tsx";
 import TherapyBooking from "./pages/TherapyBooking.tsx";
 import Therapists from "./pages/therapists/Therapists.tsx";
@@ -306,8 +308,12 @@ const App = () => (
             <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/health-conditions" element={<HealthConditions />} />
             <Route path="/health-conditions/:slug" element={<HealthConditionDetail />} />
+            <Route path="/treatments/acupuncture" element={<AcupunctureHub />} />
+            <Route path="/acupuncture" element={<AcupunctureHub />} />
             <Route path="/treatments/tung-points" element={<TungPoints />} />
             <Route path="/tung-points" element={<TungPoints />} />
+            <Route path="/treatments/acupuncture-300-diseases" element={<Acupuncture300Diseases />} />
+            <Route path="/acupuncture/300-diseases" element={<Acupuncture300Diseases />} />
             <Route path="/treatments/:slug" element={<TreatmentSystem />} />
             <Route path="/homeopathy" element={<HomeopathyHub />} />
             <Route path="/homeopathy/repertory" element={<HomeopathyRepertory />} />
