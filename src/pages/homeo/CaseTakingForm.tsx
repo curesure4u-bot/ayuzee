@@ -166,6 +166,38 @@ const CaseTakingForm = () => {
     }
   };
 
+  const runSehgal = async () => {
+    const narrative = sehgalNarrative.trim();
+    const hasContext = narrative || form.mental_state || form.chief_complaint || form.life_situation;
+    if (!hasContext) { toast.error("Add a narrative or fill the chief complaint / mental state first"); return; }
+    setSehgalLoading(true);
+    setSehgalResult(null);
+    try {
+      const { data, error } = await supabase.functions.invoke("homeo-sehgal-analyze", {
+        body: { narrative, caseData: buildPayload() },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      setSehgalResult(data as SehgalResult);
+      toast.success(`Detected ${(data as SehgalResult).detected_themes.length} themes`);
+    } catch (e: any) {
+      toast.error(e.message || "Sehgal analysis failed");
+    } finally {
+      setSehgalLoading(false);
+    }
+  };
+
+  const applySehgalToForm = () => {
+    if (!sehgalResult) return;
+    const themeNames = sehgalResult.detected_themes.map((t) => t.theme);
+    const merged = Array.from(new Set([...(form.emotional_themes || []), ...themeNames]));
+    set("emotional_themes", merged);
+    if (sehgalResult.case_summary && !form.constitutional_summary) {
+      set("constitutional_summary", sehgalResult.case_summary);
+    }
+    toast.success("Themes added to case");
+  };
+
   const completion = useMemo(() => {
     const filled = [
       form.patient_name, form.chief_complaint, form.mental_state,
