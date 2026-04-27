@@ -76,7 +76,13 @@ const HomeopathyPrescription = () => {
       </div>
 
       <div className="bg-card border rounded-xl p-5">
-        <h3 className="font-semibold mb-3">Add Remedy</h3>
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h3 className="font-semibold">Add Remedies</h3>
+          <a href="/essential-homeopathy-drugs" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-smooth">
+            📋 View Homeopathy Drug Reference ↗
+          </a>
+        </div>
         <Input placeholder="Search remedy (e.g. Arnica, Belladonna)..." value={search} onChange={(e) => setSearch(e.target.value)} />
         {results.length > 0 && (
           <div className="mt-2 border rounded-md max-h-60 overflow-y-auto">
