@@ -1681,6 +1681,66 @@ export type Database = {
         }
         Relationships: []
       }
+      essential_siddha_drugs: {
+        Row: {
+          category: string
+          category_code: string | null
+          created_at: string
+          description: string | null
+          dose: string | null
+          id: string
+          indications: string[] | null
+          mode_of_administration: string | null
+          name: string
+          pack_size: string | null
+          precautions: string | null
+          preferred_use: string | null
+          reference_text: string | null
+          search_text: string | null
+          serial_no: number | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          category_code?: string | null
+          created_at?: string
+          description?: string | null
+          dose?: string | null
+          id?: string
+          indications?: string[] | null
+          mode_of_administration?: string | null
+          name: string
+          pack_size?: string | null
+          precautions?: string | null
+          preferred_use?: string | null
+          reference_text?: string | null
+          search_text?: string | null
+          serial_no?: number | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          category_code?: string | null
+          created_at?: string
+          description?: string | null
+          dose?: string | null
+          id?: string
+          indications?: string[] | null
+          mode_of_administration?: string | null
+          name?: string
+          pack_size?: string | null
+          precautions?: string | null
+          preferred_use?: string | null
+          reference_text?: string | null
+          search_text?: string | null
+          serial_no?: number | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feature_flags: {
         Row: {
           description: string | null
@@ -4224,6 +4284,60 @@ export type Database = {
             columns: ["drug_id"]
             isOneToOne: false
             referencedRelation: "essential_drugs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prescription_essential_siddha_drugs: {
+        Row: {
+          anupana: string | null
+          consultation_id: string
+          created_at: string
+          dose_override: string | null
+          drug_id: string
+          duration: string | null
+          frequency: string | null
+          id: string
+          instructions: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          anupana?: string | null
+          consultation_id: string
+          created_at?: string
+          dose_override?: string | null
+          drug_id: string
+          duration?: string | null
+          frequency?: string | null
+          id?: string
+          instructions?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          anupana?: string | null
+          consultation_id?: string
+          created_at?: string
+          dose_override?: string | null
+          drug_id?: string
+          duration?: string | null
+          frequency?: string | null
+          id?: string
+          instructions?: string | null
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_essential_siddha_drugs_consultation_id_fkey"
+            columns: ["consultation_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_consultations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescription_essential_siddha_drugs_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "essential_siddha_drugs"
             referencedColumns: ["id"]
           },
         ]
