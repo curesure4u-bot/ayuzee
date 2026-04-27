@@ -30,6 +30,7 @@ const contentItems = [
   { title: "Treatment Systems", url: "/admin/treatment-systems", icon: Layers },
   { title: "Condition Leads", url: "/admin/condition-leads", icon: PhoneCall },
   { title: "Jobs", url: "/admin/jobs", icon: Briefcase },
+  { title: "Essential Drugs", url: "/admin/essential-drugs", icon: Pill },
 ];
 
 const governanceItems = [
