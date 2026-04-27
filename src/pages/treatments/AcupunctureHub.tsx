@@ -4,7 +4,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Sparkles, Stethoscope, ListChecks } from "lucide-react";
+import { ArrowRight, BookOpen, Sparkles, Stethoscope, ListChecks, Combine } from "lucide-react";
 import { setSEO } from "@/lib/seo";
 
 const AcupunctureHub = () => {
@@ -36,6 +36,13 @@ const AcupunctureHub = () => {
       desc: "Comprehensive lookup: 300 conditions mapped to acupuncture point prescriptions.",
       icon: ListChecks,
       tag: "Clinical lookup",
+    },
+    {
+      to: "/treatments/acupuncture-homeopathy",
+      title: "Acupuncture × Homeopathy",
+      desc: "Cross-modality protocols pairing acupuncture points with matched homeopathic remedies.",
+      icon: Combine,
+      tag: "Integrative",
     },
   ];
 
