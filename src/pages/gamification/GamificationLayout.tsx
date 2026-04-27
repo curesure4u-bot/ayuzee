@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trophy, Sparkles, Award, BarChart3, Home } from "lucide-react";
+import { Trophy, Sparkles, Award, BarChart3, Home, ScrollText, Target, Heart, Gift } from "lucide-react";
 
 const tabs = [
   { to: "/gamification", end: true, label: "Dashboard", icon: Home },
   { to: "/gamification/points", end: false, label: "My Points", icon: Sparkles },
   { to: "/gamification/badges", end: false, label: "My Badges", icon: Award },
+  { to: "/gamification/certificates", end: false, label: "Certificates", icon: ScrollText },
+  { to: "/gamification/challenges", end: false, label: "Challenges", icon: Target },
   { to: "/gamification/leaderboard", end: false, label: "Leaderboard", icon: BarChart3 },
+  { to: "/gamification/wall", end: false, label: "Appreciation", icon: Heart },
+  { to: "/gamification/rewards", end: false, label: "Rewards", icon: Gift },
 ];
 
 const GamificationLayout = () => {
