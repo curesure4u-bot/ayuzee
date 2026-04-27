@@ -409,6 +409,16 @@ const App = () => (
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />
               <Route path="homeopathy-prescription" element={<HomeopathyPrescription />} />
+              <Route path="yoga" element={<YogaLayout />}>
+                <Route index element={<YogaDashboard />} />
+                <Route path="assessment/new" element={<YogaAssessmentForm />} />
+                <Route path="plans" element={<YogaPlansList />} />
+                <Route path="plans/new" element={<YogaPlanNew />} />
+                <Route path="plans/:id" element={<YogaPlanDetail />} />
+                <Route path="protocols" element={<YogaProtocolsList />} />
+                <Route path="progress" element={<YogaProgressTracker />} />
+                <Route path="notes" element={<YogaDashboard />} />
+              </Route>
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
