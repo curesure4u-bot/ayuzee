@@ -1681,6 +1681,72 @@ export type Database = {
         }
         Relationships: []
       }
+      essential_homeopathy_drugs: {
+        Row: {
+          available_forms: string[]
+          available_potencies: string[]
+          common_name: string | null
+          created_at: string
+          description: string | null
+          dose: string | null
+          id: string
+          indications: string[] | null
+          keynotes: string[] | null
+          kingdom: string | null
+          latin_name: string | null
+          mode_of_administration: string | null
+          name: string
+          precautions: string | null
+          reference_text: string | null
+          search_text: string | null
+          serial_no: number | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          available_forms?: string[]
+          available_potencies?: string[]
+          common_name?: string | null
+          created_at?: string
+          description?: string | null
+          dose?: string | null
+          id?: string
+          indications?: string[] | null
+          keynotes?: string[] | null
+          kingdom?: string | null
+          latin_name?: string | null
+          mode_of_administration?: string | null
+          name: string
+          precautions?: string | null
+          reference_text?: string | null
+          search_text?: string | null
+          serial_no?: number | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          available_forms?: string[]
+          available_potencies?: string[]
+          common_name?: string | null
+          created_at?: string
+          description?: string | null
+          dose?: string | null
+          id?: string
+          indications?: string[] | null
+          keynotes?: string[] | null
+          kingdom?: string | null
+          latin_name?: string | null
+          mode_of_administration?: string | null
+          name?: string
+          precautions?: string | null
+          reference_text?: string | null
+          search_text?: string | null
+          serial_no?: number | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       essential_siddha_drugs: {
         Row: {
           category: string
@@ -4506,6 +4572,69 @@ export type Database = {
             columns: ["recipe_id"]
             isOneToOne: false
             referencedRelation: "food_recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prescription_homeopathy_drugs: {
+        Row: {
+          consultation_id: string
+          created_at: string
+          dose: string | null
+          drug_id: string
+          duration_days: number | null
+          form: string | null
+          frequency: string | null
+          id: string
+          instructions: string | null
+          potency: string
+          repetition: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          consultation_id: string
+          created_at?: string
+          dose?: string | null
+          drug_id: string
+          duration_days?: number | null
+          form?: string | null
+          frequency?: string | null
+          id?: string
+          instructions?: string | null
+          potency: string
+          repetition?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          consultation_id?: string
+          created_at?: string
+          dose?: string | null
+          drug_id?: string
+          duration_days?: number | null
+          form?: string | null
+          frequency?: string | null
+          id?: string
+          instructions?: string | null
+          potency?: string
+          repetition?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_homeopathy_drugs_consultation_id_fkey"
+            columns: ["consultation_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_consultations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescription_homeopathy_drugs_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "essential_homeopathy_drugs"
             referencedColumns: ["id"]
           },
         ]

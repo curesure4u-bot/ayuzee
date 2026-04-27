@@ -215,6 +215,10 @@ import EssentialUnaniDrugs from "./pages/essentialUnaniDrugs/EssentialUnaniDrugs
 import EssentialUnaniDrugDetail from "./pages/essentialUnaniDrugs/EssentialUnaniDrugDetail.tsx";
 import UnaniPrescription from "./pages/vaidya/sections/UnaniPrescription.tsx";
 import AdminEssentialUnaniDrugs from "./pages/admin/AdminEssentialUnaniDrugs.tsx";
+import EssentialHomeopathyDrugs from "./pages/essentialHomeopathyDrugs/EssentialHomeopathyDrugs.tsx";
+import EssentialHomeopathyDrugDetail from "./pages/essentialHomeopathyDrugs/EssentialHomeopathyDrugDetail.tsx";
+import HomeopathyPrescription from "./pages/vaidya/sections/HomeopathyPrescription.tsx";
+import AdminEssentialHomeopathyDrugs from "./pages/admin/AdminEssentialHomeopathyDrugs.tsx";
 
 const queryClient = new QueryClient();
 
@@ -354,6 +358,7 @@ const App = () => (
               <Route path="essential-drugs" element={<AdminEssentialDrugs />} />
               <Route path="essential-siddha-drugs" element={<AdminEssentialSiddhaDrugs />} />
               <Route path="essential-unani-drugs" element={<AdminEssentialUnaniDrugs />} />
+              <Route path="essential-homeopathy-drugs" element={<AdminEssentialHomeopathyDrugs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
@@ -395,6 +400,7 @@ const App = () => (
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />
+              <Route path="homeopathy-prescription" element={<HomeopathyPrescription />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
@@ -474,6 +480,8 @@ const App = () => (
            <Route path="/essential-siddha-drugs/:slug" element={<EssentialSiddhaDrugDetail />} />
            <Route path="/essential-unani-drugs" element={<EssentialUnaniDrugs />} />
            <Route path="/essential-unani-drugs/:slug" element={<EssentialUnaniDrugDetail />} />
+           <Route path="/essential-homeopathy-drugs" element={<EssentialHomeopathyDrugs />} />
+           <Route path="/essential-homeopathy-drugs/:slug" element={<EssentialHomeopathyDrugDetail />} />
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

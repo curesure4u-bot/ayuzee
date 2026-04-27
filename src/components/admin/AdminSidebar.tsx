@@ -33,6 +33,7 @@ const contentItems = [
   { title: "Essential Drugs", url: "/admin/essential-drugs", icon: Pill },
   { title: "Essential Siddha Drugs", url: "/admin/essential-siddha-drugs", icon: Pill },
   { title: "Essential Unani Drugs", url: "/admin/essential-unani-drugs", icon: Pill },
+  { title: "Essential Homeopathy Drugs", url: "/admin/essential-homeopathy-drugs", icon: Pill },
 ];
 
 const governanceItems = [
