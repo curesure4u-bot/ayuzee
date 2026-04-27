@@ -353,6 +353,7 @@ const App = () => (
               <Route path="roadmap" element={<AdminRoadmap />} />
               <Route path="essential-drugs" element={<AdminEssentialDrugs />} />
               <Route path="essential-siddha-drugs" element={<AdminEssentialSiddhaDrugs />} />
+              <Route path="essential-unani-drugs" element={<AdminEssentialUnaniDrugs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
