@@ -93,12 +93,12 @@ const megaMenus: MegaMenu[] = [
       {
         title: "🏥 For BHMS Doctors",
         links: [
-          { label: "📋 Case Taking Software ✨", to: "/homeopathy/case/new" },
-          { label: "🔍 Kent Repertory Search", to: "/homeopathy/repertory" },
-          { label: "📚 Materia Medica Library", to: "/homeopathy/materia-medica" },
-          { label: "💊 Write Prescription", to: "/homeopathy/case/new" },
-          { label: "📊 My Case Files", to: "/homeopathy/cases" },
-          { label: "🎓 CME for BHMS Doctors", to: "/learning/courses?system=Homeopathy" },
+          { label: "📋 Case Taking Software ✨", to: "/homeo/case-form" },
+          { label: "🔍 Kent Repertory Search", to: "/homeo/repertory" },
+          { label: "📚 Materia Medica Library", to: "/homeo/materia-medica" },
+          { label: "💊 Write Prescription", to: "/homeo/prescription" },
+          { label: "📊 My Case Files", to: "/homeo/saved-cases" },
+          { label: "🎓 CME for BHMS Doctors", to: "/learning/courses" },
         ],
       },
       {
