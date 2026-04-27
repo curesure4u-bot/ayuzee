@@ -18,6 +18,7 @@ import Cart from "./pages/Cart.tsx";
 import Checkout from "./pages/Checkout.tsx";
 import Partner from "./pages/Partner.tsx";
 import Bulk from "./pages/Bulk.tsx";
+import FoodAsMedicine from "./pages/FoodAsMedicine.tsx";
 import DoctorAuth from "./pages/doctor/DoctorAuth.tsx";
 import DoctorLayout from "./pages/doctor/DoctorLayout.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
@@ -447,7 +448,9 @@ const App = () => (
               <Route path="emotional/admin" element={<EmotionalAdmin />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+           <Route path="/food-as-medicine" element={<FoodAsMedicine />} />
+           <Route path="/food-as-medicine/:slug" element={<FoodAsMedicine />} />
+           <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </CartProvider>

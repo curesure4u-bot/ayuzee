@@ -36,6 +36,7 @@ const ANTIDOTES: { label: string; note: string }[] = [
 ];
 
 type Row = { remedy_id: string; remedy_name: string; potency: string; dosage: string; instructions: string };
+type FoodPick = { recipe_id: string; name: string; dose: string; when_to_take: string; duration: string };
 
 const Prescription = () => {
   const [params] = useSearchParams();
@@ -49,6 +50,11 @@ const Prescription = () => {
   const [durationDays, setDurationDays] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+
+  // Food as Medicine
+  const [foodRecipes, setFoodRecipes] = useState<{ id: string; name: string; category: string; indications: string[] }[]>([]);
+  const [foodPicks, setFoodPicks] = useState<FoodPick[]>([]);
+  const [foodSearch, setFoodSearch] = useState("");
 
   // Reference panel
   const [refRemedy, setRefRemedy] = useState<any>(null);
@@ -68,6 +74,12 @@ const Prescription = () => {
     const load = async () => {
       const { data: rem } = await supabase.from("homeo_remedies").select("id, name, abbreviation").order("name").limit(500);
       setRemedies(rem ?? []);
+      const { data: foods } = await supabase
+        .from("food_recipes" as any)
+        .select("id, name, category, indications")
+        .eq("is_published", true)
+        .order("name");
+      setFoodRecipes((foods ?? []) as any);
       if (caseId) {
         const { data: c } = await supabase.from("homeo_cases").select("*, patient:homeo_patients(*)").eq("id", caseId).single();
         setCaseData(c);
@@ -147,13 +159,47 @@ const Prescription = () => {
       duration_days: durationDays ? parseInt(durationDays, 10) : null,
       follow_up_date: followupDate || null,
     }));
-    const { error } = await supabase.from("homeo_prescriptions").insert(rows);
+    const { data: rxInserted, error } = await supabase.from("homeo_prescriptions").insert(rows).select("id");
+    if (error) { setSaving(false); return toast.error(error.message); }
+
+    // Attach food recipes to first prescription row (acts as the "diet plan" for this Rx)
+    if (foodPicks.length && rxInserted?.[0]?.id) {
+      const rxId = rxInserted[0].id;
+      const foodRows = foodPicks.map((f) => ({
+        prescription_id: rxId,
+        recipe_id: f.recipe_id,
+        dose: f.dose || null,
+        when_to_take: f.when_to_take || null,
+        duration: f.duration || null,
+      }));
+      await supabase.from("prescription_food_recipes" as any).insert(foodRows);
+    }
+
     setSaving(false);
-    if (error) return toast.error(error.message);
     toast.success("Prescription saved");
     setList([{ remedy_id: "", remedy_name: "", potency: "30C", dosage: "Single dose", instructions: "" }]);
+    setFoodPicks([]);
     await loadHistory();
   };
+
+  const addFoodPick = (recipe: { id: string; name: string }) => {
+    if (foodPicks.find((f) => f.recipe_id === recipe.id)) return;
+    setFoodPicks([...foodPicks, { recipe_id: recipe.id, name: recipe.name, dose: "1 serving", when_to_take: "After meals", duration: "2 weeks" }]);
+    setFoodSearch("");
+  };
+  const updateFoodPick = (i: number, key: keyof FoodPick, val: string) => {
+    const copy = [...foodPicks]; copy[i] = { ...copy[i], [key]: val }; setFoodPicks(copy);
+  };
+  const removeFoodPick = (i: number) => setFoodPicks(foodPicks.filter((_, idx) => idx !== i));
+
+  const foodMatches = useMemo(() => {
+    const term = foodSearch.trim().toLowerCase();
+    if (!term) return [];
+    return foodRecipes
+      .filter((r) => !foodPicks.find((f) => f.recipe_id === r.id))
+      .filter((r) => r.name.toLowerCase().includes(term) || r.indications?.some((i) => i.toLowerCase().includes(term)))
+      .slice(0, 8);
+  }, [foodSearch, foodRecipes, foodPicks]);
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -276,6 +322,50 @@ const Prescription = () => {
                     <input type="date" className={`${t.input} mt-1`} value={followupDate} onChange={(e) => setFollowupDate(e.target.value)} />
                   </div>
                 </div>
+              </div>
+
+              {/* Food as Medicine — AYUSH diet plan */}
+              <div>
+                <label className={t.label}>🍲 Food as Medicine — AYUSH diet plan</label>
+                <p className={`text-xs ${t.mutedText} mt-1`}>Attach traditional AYUSH recipes to this prescription. Patient sees method, ingredients & benefits in their dashboard.</p>
+                <div className="mt-2 relative">
+                  <input
+                    className={`${t.input} w-full`}
+                    placeholder="Search recipes by name or condition (e.g. anaemia, digestion, lactation)…"
+                    value={foodSearch}
+                    onChange={(e) => setFoodSearch(e.target.value)}
+                  />
+                  {foodMatches.length > 0 && (
+                    <div className="absolute z-10 mt-1 w-full rounded-md border border-[hsl(45_40%_55%/0.25)] bg-[hsl(160_30%_6%)] shadow-lg max-h-64 overflow-y-auto">
+                      {foodMatches.map((r) => (
+                        <button
+                          key={r.id}
+                          type="button"
+                          onClick={() => addFoodPick(r)}
+                          className="block w-full text-left px-3 py-2 text-sm hover:bg-[hsl(45_85%_55%/0.08)] border-b border-[hsl(45_40%_55%/0.08)]"
+                        >
+                          <span className={t.goldText}>{r.name}</span>
+                          <span className={`ml-2 text-xs ${t.mutedText}`}>{r.category}{r.indications?.length ? ` · ${r.indications.slice(0, 2).join(", ")}` : ""}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {foodPicks.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {foodPicks.map((f, i) => (
+                      <div key={f.recipe_id} className="grid gap-2 md:grid-cols-12 items-center rounded-md border border-[hsl(45_40%_55%/0.18)] bg-[hsl(160_30%_5%)] p-2.5">
+                        <div className={`md:col-span-3 text-sm ${t.goldText}`}>{f.name}</div>
+                        <input className={`${t.input} md:col-span-3`} placeholder="Dose (e.g. 1 cup)" value={f.dose} onChange={(e) => updateFoodPick(i, "dose", e.target.value)} />
+                        <input className={`${t.input} md:col-span-3`} placeholder="When (e.g. After meals)" value={f.when_to_take} onChange={(e) => updateFoodPick(i, "when_to_take", e.target.value)} />
+                        <input className={`${t.input} md:col-span-2`} placeholder="Duration" value={f.duration} onChange={(e) => updateFoodPick(i, "duration", e.target.value)} />
+                        <button onClick={() => removeFoodPick(i)} className="md:col-span-1 inline-flex items-center justify-center rounded-md border border-[hsl(0_70%_55%/0.3)] text-[hsl(0_70%_70%)] py-2 hover:bg-[hsl(0_70%_55%/0.1)]">
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <button onClick={save} disabled={saving} className={t.primaryBtn}>
