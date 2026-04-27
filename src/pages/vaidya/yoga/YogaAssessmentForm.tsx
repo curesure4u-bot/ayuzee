@@ -322,7 +322,7 @@ export async function buildPlanFromProtocol({
     precautions: protocol.precautions ?? null,
     status: "active",
   };
-  const { data: plan, error: plErr } = await supabase.from("yoga_plans").insert(planPayload).select().single();
+  const { data: plan, error: plErr } = await supabase.from("yoga_plans").insert([planPayload]).select().single();
   if (plErr || !plan) return { data: null, error: plErr };
 
   const items: any[] = [];
