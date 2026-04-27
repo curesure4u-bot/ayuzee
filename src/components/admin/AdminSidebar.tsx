@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Stethoscope, CalendarCheck, ShoppingBag,
   Package, Percent, Video, FileText, Bell, CreditCard, GraduationCap, Sparkles, HeartPulse, PhoneCall, Layers, Crown,
-  HandHeart, Building2, ClipboardList, Coins, Briefcase,
+  HandHeart, Building2, ClipboardList, Coins, Briefcase, Pill,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
