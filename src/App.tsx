@@ -203,6 +203,10 @@ import HomeopathyRepertory from "./pages/homeopathy/HomeopathyRepertory.tsx";
 import MateriaMedica from "./pages/homeopathy/MateriaMedica.tsx";
 import HomeopathyCases from "./pages/homeopathy/HomeopathyCases.tsx";
 import CaseTakingForm from "./pages/homeopathy/CaseTakingForm.tsx";
+import EssentialDrugs from "./pages/essentialDrugs/EssentialDrugs.tsx";
+import EssentialDrugDetail from "./pages/essentialDrugs/EssentialDrugDetail.tsx";
+import AyurvedaPrescription from "./pages/vaidya/sections/AyurvedaPrescription.tsx";
+import AdminEssentialDrugs from "./pages/admin/AdminEssentialDrugs.tsx";
 
 const queryClient = new QueryClient();
 
