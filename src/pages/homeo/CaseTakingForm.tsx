@@ -310,6 +310,127 @@ const CaseTakingForm = () => {
           </div>
         )}
 
+        {tab === "sehgal" && (
+          <div className="space-y-5">
+            <div className="rounded-lg border border-[hsl(45_85%_55%/0.25)] bg-[hsl(45_85%_55%/0.06)] p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-[hsl(45_85%_78%)]">Dr. M. L. Sehgal — Perception Analyzer</p>
+                  <p className={`${t.mutedText} text-xs`}>Paste the patient's narrative in their own words. AI maps it to 50 emotional themes, ranks remedies, and suggests a similimum.</p>
+                </div>
+                <button onClick={runSehgal} disabled={sehgalLoading} className={t.primaryBtn}>
+                  {sehgalLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Telescope className="h-4 w-4" />}
+                  {sehgalLoading ? "Analyzing…" : "Analyze Narrative"}
+                </button>
+              </div>
+              <textarea
+                className={`${t.input} mt-3 min-h-[140px] leading-relaxed`}
+                placeholder="e.g. 'I feel everyone watches me. Whenever my husband leaves I panic. I keep thinking I will fail at work. I cannot bear consolation — it makes me cry more…'"
+                value={sehgalNarrative}
+                onChange={(e) => setSehgalNarrative(e.target.value)}
+              />
+              <p className={`${t.mutedText} mt-2 text-xs`}>Tip: also fill Chief Complaint and Mental State for stronger context.</p>
+            </div>
+
+            {sehgalResult && (
+              <>
+                {sehgalResult.case_summary && (
+                  <div className="rounded-lg border border-[hsl(142_55%_45%/0.3)] bg-[hsl(142_55%_30%/0.08)] p-4">
+                    <p className="mb-1 text-[10px] uppercase tracking-[0.18em] text-[hsl(142_55%_70%)]">Sehgalian Portrait</p>
+                    <p className="text-sm leading-relaxed text-[hsl(45_30%_92%)]">{sehgalResult.case_summary}</p>
+                  </div>
+                )}
+
+                {sehgalResult.suggested_similimum && (
+                  <div className="rounded-lg border border-[hsl(45_85%_55%/0.4)] bg-gradient-to-br from-[hsl(45_85%_55%/0.12)] to-[hsl(142_55%_30%/0.12)] p-4">
+                    <div className="flex items-start gap-3">
+                      <Star className="mt-0.5 h-5 w-5 fill-[hsl(45_85%_60%)] text-[hsl(45_85%_60%)]" />
+                      <div className="flex-1">
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-[hsl(45_85%_60%)]">Suggested Similimum</p>
+                        <p className="mt-0.5 font-display text-2xl font-semibold text-[hsl(45_85%_82%)]">
+                          {sehgalResult.suggested_similimum.remedy}
+                          <span className="ml-2 text-sm font-normal text-[hsl(142_55%_70%)]">{sehgalResult.suggested_similimum.score} pts</span>
+                        </p>
+                        <p className="mt-1 text-xs text-[hsl(45_15%_80%)]">{sehgalResult.suggested_similimum.rationale}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className={`${t.card} p-4`}>
+                    <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-[hsl(45_85%_60%)]">Top Ranked Remedies</p>
+                    <div className="space-y-2">
+                      {sehgalResult.ranked_remedies.slice(0, 8).map((r, i) => {
+                        const max = sehgalResult.ranked_remedies[0]?.score || 1;
+                        return (
+                          <div key={r.remedy} className="rounded border border-[hsl(45_40%_55%/0.18)] bg-[hsl(160_25%_7%)] p-2.5">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-[hsl(45_85%_78%)]"><span className="text-[hsl(45_40%_55%)]">{i + 1}.</span> {r.remedy}</span>
+                              <span className="text-xs text-[hsl(142_55%_70%)]">{r.score}</span>
+                            </div>
+                            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-[hsl(160_25%_12%)]">
+                              <div className="h-full bg-gradient-to-r from-[hsl(142_55%_45%)] to-[hsl(45_85%_55%)]" style={{ width: `${Math.round((r.score / max) * 100)}%` }} />
+                            </div>
+                            <p className="mt-1 text-[10px] text-[hsl(45_15%_65%)]">{r.themes_supporting.join(" · ")}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className={`${t.card} p-4`}>
+                    <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-[hsl(45_85%_60%)]">Detected Themes</p>
+                    <div className="space-y-2">
+                      {sehgalResult.detected_themes.map((th) => (
+                        <div key={th.slug} className="rounded border border-[hsl(45_40%_55%/0.18)] bg-[hsl(160_25%_7%)] p-2.5">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="font-medium text-[hsl(45_85%_78%)]">{th.theme}</span>
+                            <span className="text-xs text-[hsl(142_55%_70%)]">{th.confidence}%</span>
+                          </div>
+                          {th.evidence?.[0] && (
+                            <div className="mt-1.5 flex items-start gap-1.5 text-[11px] italic text-[hsl(45_15%_75%)]">
+                              <Quote className="mt-0.5 h-3 w-3 shrink-0 text-[hsl(45_40%_55%)]" />
+                              <span>"{th.evidence[0]}"</span>
+                            </div>
+                          )}
+                          <p className="mt-1 text-[11px] text-[hsl(45_15%_65%)]">{th.reasoning}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {sehgalResult.followup_questions.length > 0 && (
+                  <div className={`${t.card} p-4`}>
+                    <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-[hsl(45_85%_60%)]">Suggested Follow-up Questions</p>
+                    <ul className="space-y-1.5 text-sm text-[hsl(45_15%_88%)]">
+                      {sehgalResult.followup_questions.map((q, i) => (
+                        <li key={i} className="rounded border border-[hsl(45_40%_55%/0.15)] bg-[hsl(160_25%_7%)] px-3 py-2">{q}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={applySehgalToForm} className={t.primaryBtn}>
+                    <Wand2 className="h-4 w-4" /> Add themes & summary to case
+                  </button>
+                  <button onClick={runSehgal} disabled={sehgalLoading} className={t.ghostBtn}>
+                    Re-analyze
+                  </button>
+                </div>
+              </>
+            )}
+
+            {!sehgalResult && !sehgalLoading && (
+              <p className={`${t.mutedText} rounded-md border border-dashed border-[hsl(45_40%_55%/0.2)] p-4 text-center text-xs`}>
+                Sehgal's "Revolutionised" method prescribes on the patient's <em>perception</em> of reality. Click <strong>Analyze Narrative</strong> to detect themes and rank remedies.
+              </p>
+            )}
+          </div>
+        )}
+
         {tab === "physical" && (
           <div className="space-y-5">
             <div className="grid gap-4 md:grid-cols-2">
