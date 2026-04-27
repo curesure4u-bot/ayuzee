@@ -215,6 +215,10 @@ import EssentialUnaniDrugs from "./pages/essentialUnaniDrugs/EssentialUnaniDrugs
 import EssentialUnaniDrugDetail from "./pages/essentialUnaniDrugs/EssentialUnaniDrugDetail.tsx";
 import UnaniPrescription from "./pages/vaidya/sections/UnaniPrescription.tsx";
 import AdminEssentialUnaniDrugs from "./pages/admin/AdminEssentialUnaniDrugs.tsx";
+import EssentialHomeopathyDrugs from "./pages/essentialHomeopathyDrugs/EssentialHomeopathyDrugs.tsx";
+import EssentialHomeopathyDrugDetail from "./pages/essentialHomeopathyDrugs/EssentialHomeopathyDrugDetail.tsx";
+import HomeopathyPrescription from "./pages/vaidya/sections/HomeopathyPrescription.tsx";
+import AdminEssentialHomeopathyDrugs from "./pages/admin/AdminEssentialHomeopathyDrugs.tsx";
 
 const queryClient = new QueryClient();
 
