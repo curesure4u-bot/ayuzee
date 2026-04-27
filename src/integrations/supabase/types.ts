@@ -2090,6 +2090,77 @@ export type Database = {
         }
         Relationships: []
       }
+      gam_appreciation_claps: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gam_appreciation_claps_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "gam_appreciation_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gam_appreciation_posts: {
+        Row: {
+          claps_count: number
+          created_at: string
+          description: string | null
+          emoji: string | null
+          id: string
+          post_type: string
+          reference_id: string | null
+          role: string | null
+          title: string
+          user_id: string
+          user_name: string | null
+        }
+        Insert: {
+          claps_count?: number
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          post_type: string
+          reference_id?: string | null
+          role?: string | null
+          title: string
+          user_id: string
+          user_name?: string | null
+        }
+        Update: {
+          claps_count?: number
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          post_type?: string
+          reference_id?: string | null
+          role?: string | null
+          title?: string
+          user_id?: string
+          user_name?: string | null
+        }
+        Relationships: []
+      }
       gam_badges: {
         Row: {
           code: string
@@ -2125,6 +2196,164 @@ export type Database = {
           role?: string | null
         }
         Relationships: []
+      }
+      gam_certificates: {
+        Row: {
+          certificate_no: string
+          certificate_type: string
+          created_at: string
+          id: string
+          issued_at: string
+          metadata: Json | null
+          recipient_name: string
+          reference_id: string | null
+          reference_table: string | null
+          role: string
+          subtitle: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          certificate_no: string
+          certificate_type: string
+          created_at?: string
+          id?: string
+          issued_at?: string
+          metadata?: Json | null
+          recipient_name: string
+          reference_id?: string | null
+          reference_table?: string | null
+          role: string
+          subtitle?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          certificate_no?: string
+          certificate_type?: string
+          created_at?: string
+          id?: string
+          issued_at?: string
+          metadata?: Json | null
+          recipient_name?: string
+          reference_id?: string | null
+          reference_table?: string | null
+          role?: string
+          subtitle?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gam_challenge_participants: {
+        Row: {
+          certificate_id: string | null
+          challenge_id: string
+          completed_at: string | null
+          id: string
+          joined_at: string
+          progress_count: number
+          user_id: string
+        }
+        Insert: {
+          certificate_id?: string | null
+          challenge_id: string
+          completed_at?: string | null
+          id?: string
+          joined_at?: string
+          progress_count?: number
+          user_id: string
+        }
+        Update: {
+          certificate_id?: string | null
+          challenge_id?: string
+          completed_at?: string | null
+          id?: string
+          joined_at?: string
+          progress_count?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gam_challenge_participants_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "gam_certificates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gam_challenge_participants_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "gam_challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gam_challenges: {
+        Row: {
+          audience_role: string
+          badge_id: string | null
+          cover_emoji: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          end_date: string
+          id: string
+          is_active: boolean
+          issues_certificate: boolean
+          points_reward: number
+          start_date: string
+          target_action: string
+          target_count: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audience_role?: string
+          badge_id?: string | null
+          cover_emoji?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date: string
+          id?: string
+          is_active?: boolean
+          issues_certificate?: boolean
+          points_reward?: number
+          start_date?: string
+          target_action: string
+          target_count?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audience_role?: string
+          badge_id?: string | null
+          cover_emoji?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date?: string
+          id?: string
+          is_active?: boolean
+          issues_certificate?: boolean
+          points_reward?: number
+          start_date?: string
+          target_action?: string
+          target_count?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gam_challenges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "gam_badges"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       gam_levels: {
         Row: {
@@ -2189,6 +2418,128 @@ export type Database = {
           reference_table?: string | null
           role?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      gam_reward_redemptions: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          fulfilled_at: string | null
+          fulfilled_by: string | null
+          id: string
+          points_spent: number
+          reward_id: string | null
+          reward_title: string
+          reward_type: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          fulfilled_at?: string | null
+          fulfilled_by?: string | null
+          id?: string
+          points_spent: number
+          reward_id?: string | null
+          reward_title: string
+          reward_type: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          fulfilled_at?: string | null
+          fulfilled_by?: string | null
+          id?: string
+          points_spent?: number
+          reward_id?: string | null
+          reward_title?: string
+          reward_type?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gam_reward_redemptions_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "gam_rewards_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gam_rewards_catalog: {
+        Row: {
+          audience_role: string
+          created_at: string
+          description: string | null
+          emoji: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          point_cost: number
+          reward_type: string
+          sort_order: number | null
+          stock: number | null
+          title: string
+          updated_at: string
+          wallet_credit_amount: number | null
+        }
+        Insert: {
+          audience_role?: string
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          point_cost: number
+          reward_type: string
+          sort_order?: number | null
+          stock?: number | null
+          title: string
+          updated_at?: string
+          wallet_credit_amount?: number | null
+        }
+        Update: {
+          audience_role?: string
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          point_cost?: number
+          reward_type?: string
+          sort_order?: number | null
+          stock?: number | null
+          title?: string
+          updated_at?: string
+          wallet_credit_amount?: number | null
+        }
+        Relationships: []
+      }
+      gam_settings: {
+        Row: {
+          id: number
+          min_redeem_points: number
+          points_to_rupee_ratio: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          min_redeem_points?: number
+          points_to_rupee_ratio?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          min_redeem_points?: number
+          points_to_rupee_ratio?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -7395,6 +7746,22 @@ export type Database = {
       }
       gam_check_badges: { Args: { _user_id: string }; Returns: undefined }
       gam_compute_level: { Args: { _points: number }; Returns: number }
+      gam_issue_certificate: {
+        Args: {
+          _metadata?: Json
+          _ref_id: string
+          _ref_table: string
+          _role: string
+          _subtitle: string
+          _title: string
+          _type: string
+          _user_id: string
+        }
+        Returns: string
+      }
+      gam_next_cert_no: { Args: { _type: string }; Returns: string }
+      gam_redeem_catalog: { Args: { _reward_id: string }; Returns: string }
+      gam_redeem_to_wallet: { Args: { _points: number }; Returns: Json }
       generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {

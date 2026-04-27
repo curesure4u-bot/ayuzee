@@ -62,6 +62,11 @@ import GamificationDashboard from "./pages/gamification/GamificationDashboard.ts
 import MyPoints from "./pages/gamification/MyPoints.tsx";
 import MyBadges from "./pages/gamification/MyBadges.tsx";
 import Leaderboard from "./pages/gamification/Leaderboard.tsx";
+import MyCertificates from "./pages/gamification/MyCertificates.tsx";
+import CertificateView from "./pages/gamification/CertificateView.tsx";
+import Challenges from "./pages/gamification/Challenges.tsx";
+import AppreciationWall from "./pages/gamification/AppreciationWall.tsx";
+import GamRewards from "./pages/gamification/Rewards.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminDoctors from "./pages/admin/AdminDoctors.tsx";
@@ -507,12 +512,17 @@ const App = () => (
            <Route path="/essential-unani-drugs/:slug" element={<EssentialUnaniDrugDetail />} />
            <Route path="/essential-homeopathy-drugs" element={<EssentialHomeopathyDrugs />} />
            <Route path="/essential-homeopathy-drugs/:slug" element={<EssentialHomeopathyDrugDetail />} />
-           <Route path="/gamification" element={<GamificationLayout />}>
-             <Route index element={<GamificationDashboard />} />
-             <Route path="points" element={<MyPoints />} />
-             <Route path="badges" element={<MyBadges />} />
-             <Route path="leaderboard" element={<Leaderboard />} />
-           </Route>
+            <Route path="/gamification/certificates/:id" element={<CertificateView />} />
+            <Route path="/gamification" element={<GamificationLayout />}>
+              <Route index element={<GamificationDashboard />} />
+              <Route path="points" element={<MyPoints />} />
+              <Route path="badges" element={<MyBadges />} />
+              <Route path="certificates" element={<MyCertificates />} />
+              <Route path="challenges" element={<Challenges />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="wall" element={<AppreciationWall />} />
+              <Route path="rewards" element={<GamRewards />} />
+            </Route>
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
