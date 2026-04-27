@@ -25,7 +25,7 @@ const Leaderboard = () => {
           ? await (supabase as any).from("profiles").select("user_id, full_name").in("user_id", ids)
           : { data: [] };
         const nameMap = new Map((profiles.data ?? []).map((p: any) => [p.user_id, p.full_name]));
-        setRows((data ?? []).map((r: any) => ({ user_id: r.user_id, full_name: nameMap.get(r.user_id) ?? null, total: r.total_points })));
+        setRows((data ?? []).map((r: any) => ({ user_id: r.user_id, full_name: (nameMap.get(r.user_id) as any) ?? null, total: r.total_points })));
       } else {
         const since = new Date();
         if (period === "weekly") since.setDate(since.getDate() - 7);
@@ -40,7 +40,7 @@ const Leaderboard = () => {
           ? await (supabase as any).from("profiles").select("user_id, full_name").in("user_id", ids)
           : { data: [] };
         const nameMap = new Map((profiles.data ?? []).map((p: any) => [p.user_id, p.full_name]));
-        setRows(sorted.map(([id, total]) => ({ user_id: id, full_name: nameMap.get(id) ?? null, total })));
+        setRows(sorted.map(([id, total]) => ({ user_id: id, full_name: (nameMap.get(id) as any) ?? null, total })));
       }
     })();
   }, [period]);

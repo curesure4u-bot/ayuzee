@@ -30,7 +30,7 @@ const AdminGamification = () => {
     const ids = (s.data ?? []).map((r: any) => r.user_id);
     const profiles = ids.length ? await (supabase as any).from("profiles").select("user_id, full_name").in("user_id", ids) : { data: [] };
     const nameMap = new Map((profiles.data ?? []).map((p: any) => [p.user_id, p.full_name]));
-    setTopUsers((s.data ?? []).map((r: any) => ({ ...r, full_name: nameMap.get(r.user_id) ?? null })));
+    setTopUsers((s.data ?? []).map((r: any) => ({ ...r, full_name: (nameMap.get(r.user_id) as any) ?? null })));
   };
 
   useEffect(() => { document.title = "Gamification — Admin"; load(); }, []);
