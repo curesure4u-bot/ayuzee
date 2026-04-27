@@ -324,6 +324,50 @@ const Prescription = () => {
                 </div>
               </div>
 
+              {/* Food as Medicine — AYUSH diet plan */}
+              <div>
+                <label className={t.label}>🍲 Food as Medicine — AYUSH diet plan</label>
+                <p className={`text-xs ${t.mutedText} mt-1`}>Attach traditional AYUSH recipes to this prescription. Patient sees method, ingredients & benefits in their dashboard.</p>
+                <div className="mt-2 relative">
+                  <input
+                    className={`${t.input} w-full`}
+                    placeholder="Search recipes by name or condition (e.g. anaemia, digestion, lactation)…"
+                    value={foodSearch}
+                    onChange={(e) => setFoodSearch(e.target.value)}
+                  />
+                  {foodMatches.length > 0 && (
+                    <div className="absolute z-10 mt-1 w-full rounded-md border border-[hsl(45_40%_55%/0.25)] bg-[hsl(160_30%_6%)] shadow-lg max-h-64 overflow-y-auto">
+                      {foodMatches.map((r) => (
+                        <button
+                          key={r.id}
+                          type="button"
+                          onClick={() => addFoodPick(r)}
+                          className="block w-full text-left px-3 py-2 text-sm hover:bg-[hsl(45_85%_55%/0.08)] border-b border-[hsl(45_40%_55%/0.08)]"
+                        >
+                          <span className={t.goldText}>{r.name}</span>
+                          <span className={`ml-2 text-xs ${t.mutedText}`}>{r.category}{r.indications?.length ? ` · ${r.indications.slice(0, 2).join(", ")}` : ""}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {foodPicks.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {foodPicks.map((f, i) => (
+                      <div key={f.recipe_id} className="grid gap-2 md:grid-cols-12 items-center rounded-md border border-[hsl(45_40%_55%/0.18)] bg-[hsl(160_30%_5%)] p-2.5">
+                        <div className={`md:col-span-3 text-sm ${t.goldText}`}>{f.name}</div>
+                        <input className={`${t.input} md:col-span-3`} placeholder="Dose (e.g. 1 cup)" value={f.dose} onChange={(e) => updateFoodPick(i, "dose", e.target.value)} />
+                        <input className={`${t.input} md:col-span-3`} placeholder="When (e.g. After meals)" value={f.when_to_take} onChange={(e) => updateFoodPick(i, "when_to_take", e.target.value)} />
+                        <input className={`${t.input} md:col-span-2`} placeholder="Duration" value={f.duration} onChange={(e) => updateFoodPick(i, "duration", e.target.value)} />
+                        <button onClick={() => removeFoodPick(i)} className="md:col-span-1 inline-flex items-center justify-center rounded-md border border-[hsl(0_70%_55%/0.3)] text-[hsl(0_70%_70%)] py-2 hover:bg-[hsl(0_70%_55%/0.1)]">
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <button onClick={save} disabled={saving} className={t.primaryBtn}>
                 <Save className="h-4 w-4" /> {saving ? "Saving…" : "Save Prescription"}
               </button>
