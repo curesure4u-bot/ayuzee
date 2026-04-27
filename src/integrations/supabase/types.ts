@@ -1760,6 +1760,90 @@ export type Database = {
         }
         Relationships: []
       }
+      food_recipes: {
+        Row: {
+          category: string
+          children_friendly: boolean
+          contraindications: string | null
+          created_at: string
+          description: string | null
+          diabetic_friendly: boolean
+          display_order: number
+          health_benefits: string
+          id: string
+          image_url: string | null
+          indications: string[]
+          ingredients: Json
+          is_published: boolean
+          lactation_friendly: boolean
+          method: string
+          name: string
+          precautions: string | null
+          pregnancy_safe: boolean
+          servings: string | null
+          slug: string
+          source: string
+          subtitle: string | null
+          suitable_doshas: string[]
+          system: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          children_friendly?: boolean
+          contraindications?: string | null
+          created_at?: string
+          description?: string | null
+          diabetic_friendly?: boolean
+          display_order?: number
+          health_benefits: string
+          id?: string
+          image_url?: string | null
+          indications?: string[]
+          ingredients?: Json
+          is_published?: boolean
+          lactation_friendly?: boolean
+          method: string
+          name: string
+          precautions?: string | null
+          pregnancy_safe?: boolean
+          servings?: string | null
+          slug: string
+          source?: string
+          subtitle?: string | null
+          suitable_doshas?: string[]
+          system?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          children_friendly?: boolean
+          contraindications?: string | null
+          created_at?: string
+          description?: string | null
+          diabetic_friendly?: boolean
+          display_order?: number
+          health_benefits?: string
+          id?: string
+          image_url?: string | null
+          indications?: string[]
+          ingredients?: Json
+          is_published?: boolean
+          lactation_friendly?: boolean
+          method?: string
+          name?: string
+          precautions?: string | null
+          pregnancy_safe?: boolean
+          servings?: string | null
+          slug?: string
+          source?: string
+          subtitle?: string | null
+          suitable_doshas?: string[]
+          system?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       health_blogs: {
         Row: {
           author_avatar_url: string | null
@@ -4029,6 +4113,60 @@ export type Database = {
           vata_score?: number
         }
         Relationships: []
+      }
+      prescription_food_recipes: {
+        Row: {
+          created_at: string
+          doctor_note: string | null
+          doctor_user_id: string
+          dose: string | null
+          duration: string | null
+          id: string
+          patient_id: string | null
+          prescription_id: string
+          recipe_id: string
+          when_to_take: string | null
+        }
+        Insert: {
+          created_at?: string
+          doctor_note?: string | null
+          doctor_user_id: string
+          dose?: string | null
+          duration?: string | null
+          id?: string
+          patient_id?: string | null
+          prescription_id: string
+          recipe_id: string
+          when_to_take?: string | null
+        }
+        Update: {
+          created_at?: string
+          doctor_note?: string | null
+          doctor_user_id?: string
+          dose?: string | null
+          duration?: string | null
+          id?: string
+          patient_id?: string | null
+          prescription_id?: string
+          recipe_id?: string
+          when_to_take?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_food_recipes_prescription_id_fkey"
+            columns: ["prescription_id"]
+            isOneToOne: false
+            referencedRelation: "homeo_prescriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescription_food_recipes_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "food_recipes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       prescription_orders: {
         Row: {
