@@ -219,6 +219,14 @@ import EssentialHomeopathyDrugs from "./pages/essentialHomeopathyDrugs/Essential
 import EssentialHomeopathyDrugDetail from "./pages/essentialHomeopathyDrugs/EssentialHomeopathyDrugDetail.tsx";
 import HomeopathyPrescription from "./pages/vaidya/sections/HomeopathyPrescription.tsx";
 import AdminEssentialHomeopathyDrugs from "./pages/admin/AdminEssentialHomeopathyDrugs.tsx";
+import YogaLayout from "./pages/vaidya/yoga/YogaLayout.tsx";
+import YogaDashboard from "./pages/vaidya/yoga/YogaDashboard.tsx";
+import YogaAssessmentForm from "./pages/vaidya/yoga/YogaAssessmentForm.tsx";
+import YogaPlansList from "./pages/vaidya/yoga/YogaPlansList.tsx";
+import YogaPlanNew from "./pages/vaidya/yoga/YogaPlanNew.tsx";
+import YogaPlanDetail from "./pages/vaidya/yoga/YogaPlanDetail.tsx";
+import YogaProtocolsList from "./pages/vaidya/yoga/YogaProtocolsList.tsx";
+import YogaProgressTracker from "./pages/vaidya/yoga/YogaProgressTracker.tsx";
 
 const queryClient = new QueryClient();
 
@@ -401,6 +409,16 @@ const App = () => (
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />
               <Route path="homeopathy-prescription" element={<HomeopathyPrescription />} />
+              <Route path="yoga" element={<YogaLayout />}>
+                <Route index element={<YogaDashboard />} />
+                <Route path="assessment/new" element={<YogaAssessmentForm />} />
+                <Route path="plans" element={<YogaPlansList />} />
+                <Route path="plans/new" element={<YogaPlanNew />} />
+                <Route path="plans/:id" element={<YogaPlanDetail />} />
+                <Route path="protocols" element={<YogaProtocolsList />} />
+                <Route path="progress" element={<YogaProgressTracker />} />
+                <Route path="notes" element={<YogaDashboard />} />
+              </Route>
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>

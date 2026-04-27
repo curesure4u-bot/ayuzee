@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Code2,
   Pill,
+  Flower2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -62,6 +63,17 @@ const groups = [
     icon: Sparkles,
     items: [
       { to: "/vaidya/prakriti", label: "Prakriti Pareeksha", icon: Sparkles },
+    ],
+  },
+  {
+    label: "Yoga Therapy AI",
+    icon: Flower2,
+    items: [
+      { to: "/vaidya/yoga", label: "Yoga Dashboard", icon: Flower2 },
+      { to: "/vaidya/yoga/assessment/new", label: "New Yoga Assessment", icon: Flower2 },
+      { to: "/vaidya/yoga/plans", label: "Patient Yoga Plans", icon: Flower2 },
+      { to: "/vaidya/yoga/protocols", label: "Condition Protocols", icon: Flower2 },
+      { to: "/vaidya/yoga/progress", label: "Progress Tracker", icon: Flower2 },
     ],
   },
   {
