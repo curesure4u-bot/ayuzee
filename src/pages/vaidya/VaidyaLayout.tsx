@@ -15,6 +15,7 @@ import {
   Sparkles,
   ChevronRight,
   Code2,
+  Pill,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -24,6 +25,7 @@ const groups = [
     icon: Users,
     items: [
       { to: "/vaidya/consultations", label: "My Consultation", icon: ClipboardList },
+      { to: "/vaidya/ayurveda-prescription", label: "Ayurveda Prescription", icon: Pill },
       { to: "/vaidya/patients", label: "All Patients", icon: Users },
       { to: "/vaidya/follow-up", label: "Follow up list", icon: CalendarClock },
       { to: "/vaidya/upcoming", label: "Upcoming Appointment", icon: CalendarClock },

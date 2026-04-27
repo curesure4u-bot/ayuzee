@@ -203,6 +203,10 @@ import HomeopathyRepertory from "./pages/homeopathy/HomeopathyRepertory.tsx";
 import MateriaMedica from "./pages/homeopathy/MateriaMedica.tsx";
 import HomeopathyCases from "./pages/homeopathy/HomeopathyCases.tsx";
 import CaseTakingForm from "./pages/homeopathy/CaseTakingForm.tsx";
+import EssentialDrugs from "./pages/essentialDrugs/EssentialDrugs.tsx";
+import EssentialDrugDetail from "./pages/essentialDrugs/EssentialDrugDetail.tsx";
+import AyurvedaPrescription from "./pages/vaidya/sections/AyurvedaPrescription.tsx";
+import AdminEssentialDrugs from "./pages/admin/AdminEssentialDrugs.tsx";
 
 const queryClient = new QueryClient();
 
@@ -339,6 +343,7 @@ const App = () => (
               <Route path="jobs" element={<AdminJobs />} />
               <Route path="atmri-help" element={<AdminAtmriHelp />} />
               <Route path="roadmap" element={<AdminRoadmap />} />
+              <Route path="essential-drugs" element={<AdminEssentialDrugs />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
@@ -377,6 +382,7 @@ const App = () => (
               <Route path="therapy-catalog" element={<TherapyCatalog />} />
               <Route path="prakriti" element={<HmsPrakriti />} />
               <Route path="developer" element={<DeveloperApi />} />
+              <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
             </Route>
             <Route path="/doctor/auth" element={<DoctorAuth />} />
             <Route path="/doctor" element={<DoctorLayout />}>
@@ -450,6 +456,8 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
            <Route path="/food-as-medicine" element={<FoodAsMedicine />} />
            <Route path="/food-as-medicine/:slug" element={<FoodAsMedicine />} />
+           <Route path="/essential-drugs" element={<EssentialDrugs />} />
+           <Route path="/essential-drugs/:slug" element={<EssentialDrugDetail />} />
            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

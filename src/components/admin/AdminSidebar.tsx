@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Stethoscope, CalendarCheck, ShoppingBag,
   Package, Percent, Video, FileText, Bell, CreditCard, GraduationCap, Sparkles, HeartPulse, PhoneCall, Layers, Crown,
-  HandHeart, Building2, ClipboardList, Coins, Briefcase,
+  HandHeart, Building2, ClipboardList, Coins, Briefcase, Pill,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -30,6 +30,7 @@ const contentItems = [
   { title: "Treatment Systems", url: "/admin/treatment-systems", icon: Layers },
   { title: "Condition Leads", url: "/admin/condition-leads", icon: PhoneCall },
   { title: "Jobs", url: "/admin/jobs", icon: Briefcase },
+  { title: "Essential Drugs", url: "/admin/essential-drugs", icon: Pill },
 ];
 
 const governanceItems = [
