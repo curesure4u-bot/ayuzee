@@ -197,7 +197,11 @@ import MindFollowUpsList from "./pages/homeo/mind/MindFollowUpsList.tsx";
 import MindReports from "./pages/homeo/mind/MindReports.tsx";
 import EmotionalEngine from "./pages/homeo/emotional/EmotionalEngine.tsx";
 import EmotionalAdmin from "./pages/homeo/emotional/EmotionalAdmin.tsx";
-import Homeopathy from "./pages/Homeopathy.tsx";
+import HomeopathyHub from "./pages/homeopathy/HomeopathyHub.tsx";
+import HomeopathyRepertory from "./pages/homeopathy/HomeopathyRepertory.tsx";
+import MateriaMedica from "./pages/homeopathy/MateriaMedica.tsx";
+import HomeopathyCases from "./pages/homeopathy/HomeopathyCases.tsx";
+import CaseTakingForm from "./pages/homeopathy/CaseTakingForm.tsx";
 
 const queryClient = new QueryClient();
 
