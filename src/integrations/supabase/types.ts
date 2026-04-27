@@ -6475,6 +6475,553 @@ export type Database = {
         }
         Relationships: []
       }
+      yoga_asanas: {
+        Row: {
+          benefits: string[]
+          breathing_pattern: string | null
+          category: string | null
+          common_mistakes: string[] | null
+          contraindications: string[]
+          created_at: string
+          difficulty_level: Database["public"]["Enums"]["yoga_difficulty"]
+          doctor_notes: string | null
+          duration_seconds: number | null
+          english_name: string
+          id: string
+          image_url: string | null
+          indications: string[]
+          is_published: boolean
+          modifications: string[] | null
+          props_needed: string[] | null
+          repetitions: number | null
+          sanskrit_name: string
+          search_text: string | null
+          slug: string
+          step_by_step_instructions: string[]
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          benefits?: string[]
+          breathing_pattern?: string | null
+          category?: string | null
+          common_mistakes?: string[] | null
+          contraindications?: string[]
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["yoga_difficulty"]
+          doctor_notes?: string | null
+          duration_seconds?: number | null
+          english_name: string
+          id?: string
+          image_url?: string | null
+          indications?: string[]
+          is_published?: boolean
+          modifications?: string[] | null
+          props_needed?: string[] | null
+          repetitions?: number | null
+          sanskrit_name: string
+          search_text?: string | null
+          slug: string
+          step_by_step_instructions?: string[]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          benefits?: string[]
+          breathing_pattern?: string | null
+          category?: string | null
+          common_mistakes?: string[] | null
+          contraindications?: string[]
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["yoga_difficulty"]
+          doctor_notes?: string | null
+          duration_seconds?: number | null
+          english_name?: string
+          id?: string
+          image_url?: string | null
+          indications?: string[]
+          is_published?: boolean
+          modifications?: string[] | null
+          props_needed?: string[] | null
+          repetitions?: number | null
+          sanskrit_name?: string
+          search_text?: string | null
+          slug?: string
+          step_by_step_instructions?: string[]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      yoga_assessments: {
+        Row: {
+          bmi: number | null
+          bp_history: string | null
+          chief_complaint: string | null
+          created_at: string
+          current_fitness_level:
+            | Database["public"]["Enums"]["yoga_difficulty"]
+            | null
+          diabetes_history: string | null
+          doctor_notes: string | null
+          doctor_user_id: string
+          energy_level: number | null
+          height_cm: number | null
+          id: string
+          mobility_limitation: string | null
+          pain_score: number | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_name: string
+          patient_user_id: string | null
+          preferred_session_time: string | null
+          pregnancy_status: string | null
+          red_flags: string[] | null
+          sleep_quality: number | null
+          stress_level: number | null
+          surgery_history: string | null
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          bmi?: number | null
+          bp_history?: string | null
+          chief_complaint?: string | null
+          created_at?: string
+          current_fitness_level?:
+            | Database["public"]["Enums"]["yoga_difficulty"]
+            | null
+          diabetes_history?: string | null
+          doctor_notes?: string | null
+          doctor_user_id: string
+          energy_level?: number | null
+          height_cm?: number | null
+          id?: string
+          mobility_limitation?: string | null
+          pain_score?: number | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name: string
+          patient_user_id?: string | null
+          preferred_session_time?: string | null
+          pregnancy_status?: string | null
+          red_flags?: string[] | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          surgery_history?: string | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          bmi?: number | null
+          bp_history?: string | null
+          chief_complaint?: string | null
+          created_at?: string
+          current_fitness_level?:
+            | Database["public"]["Enums"]["yoga_difficulty"]
+            | null
+          diabetes_history?: string | null
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          energy_level?: number | null
+          height_cm?: number | null
+          id?: string
+          mobility_limitation?: string | null
+          pain_score?: number | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string
+          patient_user_id?: string | null
+          preferred_session_time?: string | null
+          pregnancy_status?: string | null
+          red_flags?: string[] | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          surgery_history?: string | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      yoga_condition_protocols: {
+        Row: {
+          category: string | null
+          condition_name: string
+          created_at: string
+          description: string | null
+          duration_weeks: number | null
+          expected_outcome: string | null
+          frequency_per_week: number | null
+          id: string
+          is_published: boolean
+          precautions: string[] | null
+          recommended_asanas: string[] | null
+          recommended_meditations: string[] | null
+          recommended_pranayamas: string[] | null
+          recommended_warmup: string[] | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          condition_name: string
+          created_at?: string
+          description?: string | null
+          duration_weeks?: number | null
+          expected_outcome?: string | null
+          frequency_per_week?: number | null
+          id?: string
+          is_published?: boolean
+          precautions?: string[] | null
+          recommended_asanas?: string[] | null
+          recommended_meditations?: string[] | null
+          recommended_pranayamas?: string[] | null
+          recommended_warmup?: string[] | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          condition_name?: string
+          created_at?: string
+          description?: string | null
+          duration_weeks?: number | null
+          expected_outcome?: string | null
+          frequency_per_week?: number | null
+          id?: string
+          is_published?: boolean
+          precautions?: string[] | null
+          recommended_asanas?: string[] | null
+          recommended_meditations?: string[] | null
+          recommended_pranayamas?: string[] | null
+          recommended_warmup?: string[] | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      yoga_meditations: {
+        Row: {
+          audio_url: string | null
+          benefits: string[]
+          contraindications: string[] | null
+          created_at: string
+          difficulty_level: Database["public"]["Enums"]["yoga_difficulty"]
+          duration_minutes: number | null
+          id: string
+          image_url: string | null
+          is_published: boolean
+          meditation_type: string | null
+          name: string
+          script: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          audio_url?: string | null
+          benefits?: string[]
+          contraindications?: string[] | null
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["yoga_difficulty"]
+          duration_minutes?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          meditation_type?: string | null
+          name: string
+          script?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          audio_url?: string | null
+          benefits?: string[]
+          contraindications?: string[] | null
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["yoga_difficulty"]
+          duration_minutes?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          meditation_type?: string | null
+          name?: string
+          script?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      yoga_plan_items: {
+        Row: {
+          asana_id: string | null
+          created_at: string
+          doctor_notes: string | null
+          duration_seconds: number | null
+          id: string
+          item_kind: Database["public"]["Enums"]["yoga_item_kind"]
+          meditation_id: string | null
+          plan_id: string
+          pranayama_id: string | null
+          repetitions: number | null
+          section: Database["public"]["Enums"]["yoga_plan_section"]
+          sort_order: number
+        }
+        Insert: {
+          asana_id?: string | null
+          created_at?: string
+          doctor_notes?: string | null
+          duration_seconds?: number | null
+          id?: string
+          item_kind: Database["public"]["Enums"]["yoga_item_kind"]
+          meditation_id?: string | null
+          plan_id: string
+          pranayama_id?: string | null
+          repetitions?: number | null
+          section: Database["public"]["Enums"]["yoga_plan_section"]
+          sort_order?: number
+        }
+        Update: {
+          asana_id?: string | null
+          created_at?: string
+          doctor_notes?: string | null
+          duration_seconds?: number | null
+          id?: string
+          item_kind?: Database["public"]["Enums"]["yoga_item_kind"]
+          meditation_id?: string | null
+          plan_id?: string
+          pranayama_id?: string | null
+          repetitions?: number | null
+          section?: Database["public"]["Enums"]["yoga_plan_section"]
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yoga_plan_items_asana_id_fkey"
+            columns: ["asana_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_asanas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "yoga_plan_items_meditation_id_fkey"
+            columns: ["meditation_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_meditations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "yoga_plan_items_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "yoga_plan_items_pranayama_id_fkey"
+            columns: ["pranayama_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_pranayamas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      yoga_plans: {
+        Row: {
+          assessment_id: string | null
+          condition_name: string | null
+          created_at: string
+          doctor_notes: string | null
+          doctor_user_id: string
+          duration_weeks: number | null
+          follow_up_date: string | null
+          frequency_per_week: number | null
+          id: string
+          patient_name: string
+          patient_user_id: string | null
+          plan_name: string
+          plan_type: Database["public"]["Enums"]["yoga_plan_type"]
+          precautions: string[] | null
+          protocol_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_id?: string | null
+          condition_name?: string | null
+          created_at?: string
+          doctor_notes?: string | null
+          doctor_user_id: string
+          duration_weeks?: number | null
+          follow_up_date?: string | null
+          frequency_per_week?: number | null
+          id?: string
+          patient_name: string
+          patient_user_id?: string | null
+          plan_name: string
+          plan_type?: Database["public"]["Enums"]["yoga_plan_type"]
+          precautions?: string[] | null
+          protocol_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_id?: string | null
+          condition_name?: string | null
+          created_at?: string
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          duration_weeks?: number | null
+          follow_up_date?: string | null
+          frequency_per_week?: number | null
+          id?: string
+          patient_name?: string
+          patient_user_id?: string | null
+          plan_name?: string
+          plan_type?: Database["public"]["Enums"]["yoga_plan_type"]
+          precautions?: string[] | null
+          protocol_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yoga_plans_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "yoga_plans_protocol_id_fkey"
+            columns: ["protocol_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_condition_protocols"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      yoga_pranayamas: {
+        Row: {
+          benefits: string[]
+          category: string | null
+          contraindications: string[]
+          created_at: string
+          difficulty_level: Database["public"]["Enums"]["yoga_difficulty"]
+          duration_minutes: number | null
+          english_name: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean
+          name: string
+          ratio: string | null
+          safety_notes: string | null
+          slug: string
+          steps: string[]
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          benefits?: string[]
+          category?: string | null
+          contraindications?: string[]
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["yoga_difficulty"]
+          duration_minutes?: number | null
+          english_name?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          name: string
+          ratio?: string | null
+          safety_notes?: string | null
+          slug: string
+          steps?: string[]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          benefits?: string[]
+          category?: string | null
+          contraindications?: string[]
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["yoga_difficulty"]
+          duration_minutes?: number | null
+          english_name?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          name?: string
+          ratio?: string | null
+          safety_notes?: string | null
+          slug?: string
+          steps?: string[]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      yoga_progress_logs: {
+        Row: {
+          after_notes: string | null
+          before_notes: string | null
+          created_at: string
+          doctor_user_id: string
+          energy_score: number | null
+          flexibility_score: number | null
+          id: string
+          log_date: string
+          pain_score: number | null
+          patient_user_id: string | null
+          plan_id: string
+          practice_adherence_pct: number | null
+          sleep_score: number | null
+          stress_score: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          after_notes?: string | null
+          before_notes?: string | null
+          created_at?: string
+          doctor_user_id: string
+          energy_score?: number | null
+          flexibility_score?: number | null
+          id?: string
+          log_date?: string
+          pain_score?: number | null
+          patient_user_id?: string | null
+          plan_id: string
+          practice_adherence_pct?: number | null
+          sleep_score?: number | null
+          stress_score?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          after_notes?: string | null
+          before_notes?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          energy_score?: number | null
+          flexibility_score?: number | null
+          id?: string
+          log_date?: string
+          pain_score?: number | null
+          patient_user_id?: string | null
+          plan_id?: string
+          practice_adherence_pct?: number | null
+          sleep_score?: number | null
+          stress_score?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yoga_progress_logs_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "yoga_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       panchakarma_medicines: {
@@ -6744,6 +7291,22 @@ export type Database = {
         | "refund_reversal"
         | "adjustment"
         | "referral_credit"
+      yoga_difficulty: "beginner" | "intermediate" | "advanced"
+      yoga_item_kind: "asana" | "pranayama" | "meditation"
+      yoga_plan_section:
+        | "warmup"
+        | "main"
+        | "pranayama"
+        | "meditation"
+        | "relaxation"
+      yoga_plan_type:
+        | "beginner"
+        | "therapeutic"
+        | "advanced"
+        | "7_day"
+        | "21_day"
+        | "48_day_rejuvenation"
+        | "custom"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -6889,6 +7452,24 @@ export const Constants = {
         "refund_reversal",
         "adjustment",
         "referral_credit",
+      ],
+      yoga_difficulty: ["beginner", "intermediate", "advanced"],
+      yoga_item_kind: ["asana", "pranayama", "meditation"],
+      yoga_plan_section: [
+        "warmup",
+        "main",
+        "pranayama",
+        "meditation",
+        "relaxation",
+      ],
+      yoga_plan_type: [
+        "beginner",
+        "therapeutic",
+        "advanced",
+        "7_day",
+        "21_day",
+        "48_day_rejuvenation",
+        "custom",
       ],
     },
   },
