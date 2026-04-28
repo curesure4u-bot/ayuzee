@@ -102,6 +102,7 @@ import CourseQuiz from "./pages/learning/CourseQuiz.tsx";
 import Certificate from "./pages/learning/Certificate.tsx";
 import Webinars from "./pages/learning/Webinars.tsx";
 import Quizzes from "./pages/learning/Quizzes.tsx";
+import Library from "./pages/learning/Library.tsx";
 import Blogs from "./pages/learning/Blogs.tsx";
 import BlogDetail from "./pages/learning/BlogDetail.tsx";
 import DoctorBlogs from "./pages/doctor/sections/DoctorBlogs.tsx";
@@ -414,7 +415,9 @@ const App = () => (
               <Route path="webinars" element={<Webinars />} />
               <Route path="quiz" element={<Quizzes />} />
               <Route path="blogs" element={<Blogs />} />
+              <Route path="library" element={<Library />} />
             </Route>
+            <Route path="/library" element={<Library />} />
             <Route path="/learning/courses/:slug" element={<CourseDetail />} />
             <Route path="/learning/courses/:slug/quiz" element={<CourseQuiz />} />
             <Route path="/learning/blogs/:slug" element={<BlogDetail />} />

@@ -60,18 +60,6 @@ const groups = [
     ],
   },
   {
-    label: "Integrated Acupuncture",
-    icon: Activity,
-    items: [
-      { to: "/treatments/acupuncture", label: "Acupuncture Hub", icon: Activity },
-      { to: "/treatments/tung-points", label: "Tung's Points", icon: Activity },
-      { to: "/treatments/acupoints-uses", label: "Acupoints & Uses", icon: Activity },
-      { to: "/treatments/acupuncture-50-diseases", label: "50 Diseases — Quick", icon: Activity },
-      { to: "/treatments/acupuncture-300-diseases", label: "300 Diseases", icon: Activity },
-      { to: "/treatments/acupuncture-homeopathy", label: "Acupuncture × Homeopathy", icon: Activity },
-    ],
-  },
-  {
     label: "Diagnosis",
     icon: Sparkles,
     items: [

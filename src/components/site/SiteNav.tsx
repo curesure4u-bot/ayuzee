@@ -56,12 +56,6 @@ const megaMenus: MegaMenu[] = [
   { label: "Therapies", columns: [
     { title: "Panchakarma", links: ["🫙 Abhyanga (Full Body)", "Shirodhara", "Kati Basti", "Janu Basti", "Vamana", "Virechana", "Basti", "Nasya"].map((x) => ({ label: x, to: "/therapies?category=Panchakarma" })) },
     { title: "Specialty Therapies", links: [
-      { label: "🩺 Integrated Acupuncture Hub", to: "/treatments/acupuncture" },
-      { label: "📍 Tung's Acupuncture Points", to: "/treatments/tung-points" },
-      { label: "🗺️ Acupoints & Their Uses", to: "/treatments/acupoints-uses" },
-      { label: "⚡ 50 Diseases — Quick Protocols", to: "/treatments/acupuncture-50-diseases" },
-      { label: "📖 300 Diseases with Points", to: "/treatments/acupuncture-300-diseases" },
-      { label: "🔗 Acupuncture × Homeopathy", to: "/treatments/acupuncture-homeopathy" },
       { label: "Pizhichil", to: "/therapies" },
       { label: "Navarakizhi", to: "/therapies" },
       { label: "Udvartana", to: "/therapies" },
@@ -74,7 +68,7 @@ const megaMenus: MegaMenu[] = [
   { label: "Learn", columns: [
     { title: "For Doctors", links: [{ label: "📚 CME Courses", to: "/learning/courses?for=doctor" }, { label: "🎓 Certification Programs", to: "/learning/courses?type=certification" }, { label: "📝 Quizzes & Assessments", to: "/learning/quiz" }, { label: "🏆 My Certificates", to: "/dashboard?tab=certificates" }] },
     { title: "For Students", links: [{ label: "🎓 BAMS Study Material", to: "/learning/courses?for=student" }, { label: "📖 Research Papers", to: "/learning/blogs?type=research" }, { label: "💼 Ayurveda Jobs", to: "/jobs" }, { label: "🏫 College Directory", to: "/colleges" }] },
-    { title: "Live & Events", links: [{ label: "🎙 Upcoming Webinars", to: "/learning/webinars" }, { label: "📹 Recorded Sessions", to: "/learning/courses?type=recorded" }, { label: "🗓 CME Calendar", to: "/learning/webinars" }] },
+    { title: "Knowledge & Library", links: [{ label: "📚 Ayuzee Library (Acupuncture & more)", to: "/learning/library" }, { label: "📰 Articles & Blogs", to: "/learning/blogs" }, { label: "🎬 Videos", to: "/learning/blogs?type=video" }, { label: "📊 Case Studies", to: "/feed?type=case_study" }, { label: "⬇️ Downloads", to: "/learning/library?cat=Downloads" }, { label: "🎙 Webinars", to: "/learning/webinars" }] },
   ] },
   { label: "Community", columns: [
     { title: "Connect", links: [{ label: "📣 Doctor Feed (Case Studies)", to: "/feed" }, { label: "💬 Discussion Forum", to: "/feed?type=discussion" }, { label: "🤝 Network Partners", to: "/partner" }] },
