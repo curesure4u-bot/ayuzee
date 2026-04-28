@@ -26,7 +26,7 @@ const items = [
   { to: "/doctor/orders", label: "My Orders", icon: ShoppingBag },
   { to: "/doctor/medicines", label: "My Medicine List", icon: ClipboardList },
   { to: "/doctor/saved-posts", label: "Saved Posts", icon: Bookmark },
-  { to: "/doctor/money", label: "Nirog Money", icon: Wallet },
+  { to: "/doctor/money", label: "Ayuzee Money", icon: Wallet },
   { to: "/doctor/addresses", label: "My Addresses", icon: MapPin },
   { to: "/doctor/bank", label: "Bank Details", icon: Landmark },
   { to: "/doctor/rewards", label: "My Rewards", icon: Gift },

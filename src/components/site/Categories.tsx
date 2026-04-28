@@ -206,7 +206,7 @@ export const Categories = () => {
 
         {audience === "patients" ? (
           <div className="mt-8 rounded-2xl border border-primary/20 bg-accent px-5 py-4 text-sm font-medium text-primary">
-            💡 Unlike NirogStreet or 1mg — Ayuzee is the ONLY platform that connects your doctor's prescription directly to a verified therapist AND your medicine delivery in one workflow.
+            💡 Unlike other platforms — Ayuzee is the ONLY platform that connects your doctor's prescription directly to a verified therapist AND your medicine delivery in one workflow.
           </div>
         ) : (
           <div className="mt-8 flex flex-col items-start gap-4 rounded-2xl border border-primary/20 bg-accent px-5 py-4 text-primary sm:flex-row sm:items-center sm:justify-between">
