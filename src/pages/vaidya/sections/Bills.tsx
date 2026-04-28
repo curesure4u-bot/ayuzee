@@ -178,6 +178,7 @@ const BillsPage = ({ type }: Props) => {
       }
     }
     toast.success(`Bill ${bill.bill_no || ""} saved`);
+    if (form.gstin && userId) localStorage.setItem(`vaidya:gstin:${userId}`, form.gstin);
     setOpen(false);
     resetForm();
     load();
