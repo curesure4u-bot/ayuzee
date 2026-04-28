@@ -415,7 +415,9 @@ const App = () => (
               <Route path="webinars" element={<Webinars />} />
               <Route path="quiz" element={<Quizzes />} />
               <Route path="blogs" element={<Blogs />} />
+              <Route path="library" element={<Library />} />
             </Route>
+            <Route path="/library" element={<Library />} />
             <Route path="/learning/courses/:slug" element={<CourseDetail />} />
             <Route path="/learning/courses/:slug/quiz" element={<CourseQuiz />} />
             <Route path="/learning/blogs/:slug" element={<BlogDetail />} />
