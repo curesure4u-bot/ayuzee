@@ -237,6 +237,24 @@ const UnaniPrescription = () => {
           <Printer className="mr-1 h-4 w-4" /> Print
         </Button>
       </div>
+      </div>
+
+      <PrescriptionPrintable
+        system="Unani"
+        patientName={selectedPatient?.full_name || ""}
+        patientPhone={selectedPatient?.phone}
+        patientAge={selectedPatient?.age}
+        patientGender={selectedPatient?.gender}
+        visitDate={visitDate}
+        followUpDate={followUp}
+        diagnosis={diagnosis}
+        advice={advice}
+        lines={lines.map((l) => ({
+          name: l.drug.name, category: l.drug.category,
+          dose: l.dose_override, frequency: l.frequency,
+          duration: l.duration, anupana: l.anupana, instructions: l.instructions,
+        }))}
+      />
     </div>
   );
 };
