@@ -171,6 +171,11 @@ const ParaSurgicalCaseDetail = () => {
     if (caseRow?.ai_analysis) setAi(caseQ.data.ai_analysis as AIResult);
     if (caseQ.data?.ai_analysis) setAi(caseQ.data.ai_analysis as AIResult);
     if (caseQ.data?.selected_procedure) {
+      const sel: string[] = String(caseQ.data.selected_procedure)
+        .split("+")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      setSelectedTherapies(sel);
       const t = THERAPY_TABS.find((t) =>
         caseQ.data.selected_procedure.toLowerCase().includes(t.key.replace("-", " ")),
       );
