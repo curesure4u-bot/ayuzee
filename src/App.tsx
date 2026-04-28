@@ -12,6 +12,8 @@ import ResetPassword from "./pages/ResetPassword.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import PreConsultationForm from "./pages/consultation/PreConsultationForm.tsx";
 import ConsultationRoom from "./pages/consultation/ConsultationRoom.tsx";
+import PostConsultationFeedback from "./pages/consultation/PostConsultationFeedback.tsx";
+import ConsultationSummary from "./pages/consultation/ConsultationSummary.tsx";
 import Doctors from "./pages/Doctors.tsx";
 import DoctorDetail from "./pages/DoctorDetail.tsx";
 import Shop from "./pages/Shop.tsx";
@@ -306,6 +308,8 @@ const App = () => (
             </Route>
             <Route path="/consultation/:id/pre-form" element={<PreConsultationForm />} />
             <Route path="/consultation/:id/room" element={<ConsultationRoom />} />
+            <Route path="/consultation/:id/post-feedback" element={<PostConsultationFeedback />} />
+            <Route path="/consultation/:id/summary" element={<ConsultationSummary />} />
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
