@@ -37,6 +37,7 @@ import {
   PenSquare,
   HeartHandshake,
   Pill,
+  Sparkles,
 } from "lucide-react";
 
 const items = [
