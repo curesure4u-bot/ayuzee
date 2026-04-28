@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Pill, Plus, Trash2, Search, Save, Printer, FileText } from "lucide-react";
 import { toast } from "sonner";
+import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
 
 type Drug = {
   id: string; name: string; category: string;
@@ -113,8 +114,11 @@ const SiddhaPrescription = () => {
 
   const printRx = () => window.print();
 
+  const selectedPatient = patients.find((p) => p.id === patientId);
+
   return (
-    <div className="mx-auto max-w-5xl space-y-4 p-4 print:p-0">
+    <div className="mx-auto max-w-5xl space-y-4 p-4">
+      <div className="space-y-4 print:hidden">
       <Card className="p-4 print:hidden">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
