@@ -6889,6 +6889,269 @@ export type Database = {
         }
         Relationships: []
       }
+      vaidya_hijama_assessments: {
+        Row: {
+          age: number | null
+          ai_plan: Json | null
+          anemia: boolean | null
+          bleeding_disorder: boolean | null
+          blood_thinner: boolean | null
+          bp_status: string | null
+          chief_complaint: string | null
+          condition_protocol: string | null
+          consent_given: boolean | null
+          consent_signed_at: string | null
+          contraindications: Json | null
+          created_at: string
+          diabetes_status: string | null
+          doctor_approved: boolean | null
+          doctor_user_id: string
+          fainting_tendency: boolean | null
+          fever_acute: boolean | null
+          gender: string | null
+          hijama_type: string | null
+          id: string
+          immunocompromised: boolean | null
+          keloid_tendency: boolean | null
+          medical_history: string | null
+          medication_history: string | null
+          notes: string | null
+          pain_duration: string | null
+          pain_location: string | null
+          pain_score: number | null
+          patient_id: string | null
+          patient_name: string
+          phone: string | null
+          pregnancy: boolean | null
+          previous_hijama: string | null
+          recent_surgery: boolean | null
+          risk_level: string | null
+          selected_points: Json | null
+          skin_infection: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          ai_plan?: Json | null
+          anemia?: boolean | null
+          bleeding_disorder?: boolean | null
+          blood_thinner?: boolean | null
+          bp_status?: string | null
+          chief_complaint?: string | null
+          condition_protocol?: string | null
+          consent_given?: boolean | null
+          consent_signed_at?: string | null
+          contraindications?: Json | null
+          created_at?: string
+          diabetes_status?: string | null
+          doctor_approved?: boolean | null
+          doctor_user_id: string
+          fainting_tendency?: boolean | null
+          fever_acute?: boolean | null
+          gender?: string | null
+          hijama_type?: string | null
+          id?: string
+          immunocompromised?: boolean | null
+          keloid_tendency?: boolean | null
+          medical_history?: string | null
+          medication_history?: string | null
+          notes?: string | null
+          pain_duration?: string | null
+          pain_location?: string | null
+          pain_score?: number | null
+          patient_id?: string | null
+          patient_name: string
+          phone?: string | null
+          pregnancy?: boolean | null
+          previous_hijama?: string | null
+          recent_surgery?: boolean | null
+          risk_level?: string | null
+          selected_points?: Json | null
+          skin_infection?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          ai_plan?: Json | null
+          anemia?: boolean | null
+          bleeding_disorder?: boolean | null
+          blood_thinner?: boolean | null
+          bp_status?: string | null
+          chief_complaint?: string | null
+          condition_protocol?: string | null
+          consent_given?: boolean | null
+          consent_signed_at?: string | null
+          contraindications?: Json | null
+          created_at?: string
+          diabetes_status?: string | null
+          doctor_approved?: boolean | null
+          doctor_user_id?: string
+          fainting_tendency?: boolean | null
+          fever_acute?: boolean | null
+          gender?: string | null
+          hijama_type?: string | null
+          id?: string
+          immunocompromised?: boolean | null
+          keloid_tendency?: boolean | null
+          medical_history?: string | null
+          medication_history?: string | null
+          notes?: string | null
+          pain_duration?: string | null
+          pain_location?: string | null
+          pain_score?: number | null
+          patient_id?: string | null
+          patient_name?: string
+          phone?: string | null
+          pregnancy?: boolean | null
+          previous_hijama?: string | null
+          recent_surgery?: boolean | null
+          risk_level?: string | null
+          selected_points?: Json | null
+          skin_infection?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vaidya_hijama_followups: {
+        Row: {
+          adverse_reaction: string | null
+          assessment_id: string
+          created_at: string
+          doctor_user_id: string
+          energy_improvement: string | null
+          followup_date: string
+          id: string
+          next_session_date: string | null
+          notes: string | null
+          pain_after: number | null
+          pain_before: number | null
+          session_id: string | null
+          skin_healing: string | null
+          sleep_improvement: string | null
+          updated_at: string
+        }
+        Insert: {
+          adverse_reaction?: string | null
+          assessment_id: string
+          created_at?: string
+          doctor_user_id: string
+          energy_improvement?: string | null
+          followup_date?: string
+          id?: string
+          next_session_date?: string | null
+          notes?: string | null
+          pain_after?: number | null
+          pain_before?: number | null
+          session_id?: string | null
+          skin_healing?: string | null
+          sleep_improvement?: string | null
+          updated_at?: string
+        }
+        Update: {
+          adverse_reaction?: string | null
+          assessment_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          energy_improvement?: string | null
+          followup_date?: string
+          id?: string
+          next_session_date?: string | null
+          notes?: string | null
+          pain_after?: number | null
+          pain_before?: number | null
+          session_id?: string | null
+          skin_healing?: string | null
+          sleep_improvement?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_hijama_followups_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_hijama_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaidya_hijama_followups_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_hijama_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vaidya_hijama_sessions: {
+        Row: {
+          aftercare_advice: string | null
+          assessment_id: string
+          blood_quantity_ml: number | null
+          complications: string | null
+          created_at: string
+          cupping_type: string | null
+          doctor_approval: boolean | null
+          doctor_user_id: string
+          duration_minutes: number | null
+          id: string
+          notes: string | null
+          number_of_cups: number | null
+          patient_response: string | null
+          points_used: Json | null
+          session_date: string
+          skin_response: string | null
+          therapist_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          aftercare_advice?: string | null
+          assessment_id: string
+          blood_quantity_ml?: number | null
+          complications?: string | null
+          created_at?: string
+          cupping_type?: string | null
+          doctor_approval?: boolean | null
+          doctor_user_id: string
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          number_of_cups?: number | null
+          patient_response?: string | null
+          points_used?: Json | null
+          session_date?: string
+          skin_response?: string | null
+          therapist_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aftercare_advice?: string | null
+          assessment_id?: string
+          blood_quantity_ml?: number | null
+          complications?: string | null
+          created_at?: string
+          cupping_type?: string | null
+          doctor_approval?: boolean | null
+          doctor_user_id?: string
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          number_of_cups?: number | null
+          patient_response?: string | null
+          points_used?: Json | null
+          session_date?: string
+          skin_response?: string | null
+          therapist_name?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_hijama_sessions_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_hijama_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vaidya_inventory: {
         Row: {
           batch_no: string | null
