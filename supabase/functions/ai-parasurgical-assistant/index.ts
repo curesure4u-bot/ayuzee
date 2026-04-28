@@ -104,14 +104,19 @@ Tasks:
                     likely_pain_generator: { type: "string" },
                     suggestions: {
                       type: "array",
+                      description:
+                        "Suitable therapy options for this case (no ranking).",
                       items: {
                         type: "object",
                         properties: {
                           procedure: { type: "string", enum: PROCEDURES },
-                          confidence: { type: "number" },
-                          rationale: { type: "string" },
+                          use: {
+                            type: "string",
+                            description:
+                              "One-line clinical use / why suitable for this case.",
+                          },
                         },
-                        required: ["procedure", "confidence", "rationale"],
+                        required: ["procedure", "use"],
                       },
                     },
                     candidate_points: {
