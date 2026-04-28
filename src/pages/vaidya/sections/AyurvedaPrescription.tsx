@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Pill, Plus, Trash2, Search, Save, Printer, FileText } from "lucide-react";
 import { toast } from "sonner";
+import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
 
 type Drug = {
   id: string; name: string; category: string;
