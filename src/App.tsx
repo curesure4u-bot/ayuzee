@@ -50,6 +50,8 @@ import VaidyaHome from "./pages/vaidya/VaidyaHome.tsx";
 import AllPatients from "./pages/vaidya/sections/AllPatients.tsx";
 import Consultations from "./pages/vaidya/sections/Consultations.tsx";
 import FollowUps from "./pages/vaidya/sections/FollowUps.tsx";
+import VaidyaGuidance from "./pages/vaidya/sections/Guidance.tsx";
+import PatientGuidance from "./pages/patient/PatientGuidance.tsx";
 import UpcomingAppointments from "./pages/vaidya/sections/UpcomingAppointments.tsx";
 import Leads from "./pages/vaidya/sections/Leads.tsx";
 import Inventory from "./pages/vaidya/sections/Inventory.tsx";
