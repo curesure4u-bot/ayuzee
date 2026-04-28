@@ -22,7 +22,6 @@ import {
 } from "@/lib/posture/poseAnalysis";
 import { detectFromImage } from "@/lib/posture/poseDetector";
 import { PostureSkeleton } from "@/components/posture/PostureSkeleton";
-import { PrescriptionPrintable } from "@/components/vaidya/PrescriptionPrintable";
 
 type Mode = "dashboard" | "new" | "report" | "compare";
 
