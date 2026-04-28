@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDoctor } from "@/hooks/useDoctor";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -172,15 +173,22 @@ const AllPatients = () => {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((r, i) => (
-                  <tr key={`${r.source}-${r.id}`} className="border-b last:border-0">
-                    <td className="py-3 pr-2">{i + 1}</td>
-                    <td className="py-3 pr-2 font-mono text-xs">PT-{r.id.slice(0, 6).toUpperCase()}</td>
-                    <td className="py-3 pr-2 flex items-center gap-2"><User className="h-4 w-4 text-primary" />{r.full_name}</td>
-                    <td className="py-3 pr-2"><span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{r.phone || "—"}</span></td>
-                    <td className="py-3 pr-2 text-xs capitalize text-muted-foreground">{r.source === "manual" ? "Walk-in" : "Appointment"}</td>
-                  </tr>
-                ))}
+                {filtered.map((r, i) => {
+                  const profileUrl = `/vaidya/patients/${r.source === "manual" ? "vaidya" : "user"}/${r.id}`;
+                  return (
+                    <tr key={`${r.source}-${r.id}`} className="border-b last:border-0 hover:bg-muted/40">
+                      <td className="py-3 pr-2">{i + 1}</td>
+                      <td className="py-3 pr-2 font-mono text-xs">PT-{r.id.slice(0, 6).toUpperCase()}</td>
+                      <td className="py-3 pr-2">
+                        <Link to={profileUrl} className="flex items-center gap-2 text-primary hover:underline">
+                          <User className="h-4 w-4" />{r.full_name}
+                        </Link>
+                      </td>
+                      <td className="py-3 pr-2"><span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{r.phone || "—"}</span></td>
+                      <td className="py-3 pr-2 text-xs capitalize text-muted-foreground">{r.source === "manual" ? "Walk-in" : "Appointment"}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
