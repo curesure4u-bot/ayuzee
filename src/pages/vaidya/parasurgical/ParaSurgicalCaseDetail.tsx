@@ -328,108 +328,186 @@ const ParaSurgicalCaseDetail = () => {
         </Card>
       )}
 
-      <Tabs defaultValue="ai">
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="flex-wrap h-auto">
-          <TabsTrigger value="ai">AI Selector</TabsTrigger>
+          <TabsTrigger value="ai">AI Recommendations</TabsTrigger>
           <TabsTrigger value="map">Body Map</TabsTrigger>
           <TabsTrigger value="technique">Technique</TabsTrigger>
           <TabsTrigger value="sessions">Sessions</TabsTrigger>
           <TabsTrigger value="outcomes">Outcomes</TabsTrigger>
         </TabsList>
 
-        {/* AI SELECTOR */}
+        {/* AI RECOMMENDATION PANEL */}
         <TabsContent value="ai" className="space-y-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" /> AI Procedure Suggestions
+                  <Sparkles className="h-4 w-4 text-primary" /> AI Therapy Recommendation Panel
                 </CardTitle>
                 <CardDescription>
-                  Decision support — final choice rests with the licensed clinician.
+                  AI suggests suitable options — no ranking. Doctor selects one or combines multiple.
                 </CardDescription>
               </div>
               <Button onClick={runAI} disabled={aiLoading} variant="hero">
                 {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Analyze Case"}
               </Button>
             </CardHeader>
-            <CardContent>
-              {!ai && (
-                <p className="text-sm text-muted-foreground">
-                  Click <strong>Analyze Case</strong> to get AI suggestions based on the assessment.
-                </p>
+            <CardContent className="space-y-5">
+              {ai?.likely_pain_generator && (
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground mb-1">
+                    Likely pain generator
+                  </p>
+                  <p className="text-sm">{ai.likely_pain_generator}</p>
+                </div>
               )}
-              {ai && (
-                <div className="space-y-4">
-                  {ai.likely_pain_generator && (
-                    <div>
-                      <p className="text-xs uppercase text-muted-foreground mb-1">
-                        Likely pain generator
+
+              <div>
+                <p className="text-xs uppercase text-muted-foreground mb-2">
+                  Suggested suitable therapies
+                </p>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {ALL_THERAPIES.map((name) => {
+                    const aiMatch = ai?.suggestions?.find(
+                      (s) => s.procedure.toLowerCase() === name.toLowerCase(),
+                    );
+                    const aiSuggested = !!aiMatch;
+                    const checked = selectedTherapies.includes(name);
+                    return (
+                      <label
+                        key={name}
+                        className={`flex items-start gap-3 rounded-md border p-3 cursor-pointer transition-colors ${
+                          checked
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:bg-muted/40"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          className="mt-1 h-4 w-4 accent-primary"
+                          checked={checked}
+                          onChange={() => toggleTherapy(name)}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-sm">{name}</span>
+                            {aiSuggested && (
+                              <Badge variant="secondary" className="text-[10px] py-0">
+                                AI suggested
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {aiMatch?.use ?? THERAPY_USES[name]}
+                          </p>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Custom additions */}
+              <div>
+                <p className="text-xs uppercase text-muted-foreground mb-2">Add custom therapy</p>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="e.g. Kati Basti, Custom modality…"
+                    value={customTherapy}
+                    onChange={(e) => setCustomTherapy(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTherapy())}
+                  />
+                  <Button type="button" variant="outline" onClick={addCustomTherapy}>
+                    <Plus className="h-4 w-4 mr-1" /> Add
+                  </Button>
+                </div>
+                {selectedTherapies.filter((t) => !ALL_THERAPIES.includes(t)).length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {selectedTherapies
+                      .filter((t) => !ALL_THERAPIES.includes(t))
+                      .map((t) => (
+                        <Badge
+                          key={t}
+                          variant="outline"
+                          className="cursor-pointer"
+                          onClick={() => toggleTherapy(t)}
+                        >
+                          {t} ✕
+                        </Badge>
+                      ))}
+                  </div>
+                )}
+              </div>
+
+              {ai?.candidate_points && ai.candidate_points.length > 0 && (
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground mb-1">Candidate points</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ai.candidate_points.map((p, i) => (
+                      <Badge key={i} variant="secondary">
+                        {p}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {ai?.risks && ai.risks.length > 0 && (
+                <div>
+                  <p className="text-xs uppercase text-amber-600 mb-1">Risks</p>
+                  <ul className="text-sm list-disc list-inside text-muted-foreground">
+                    {ai.risks.map((r, i) => (
+                      <li key={i}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {ai?.combined_protocol && (
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground mb-1">
+                    Combined protocol idea
+                  </p>
+                  <p className="text-sm">{ai.combined_protocol}</p>
+                </div>
+              )}
+
+              {/* Selection summary + proceed */}
+              <div className="rounded-md border border-border p-3 bg-muted/30">
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase text-muted-foreground mb-1">
+                      Selected therapies ({selectedTherapies.length})
+                    </p>
+                    {selectedTherapies.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        Tick one or more cards to build the procedure plan.
                       </p>
-                      <p className="text-sm">{ai.likely_pain_generator}</p>
-                    </div>
-                  )}
-                  {ai.suggestions && ai.suggestions.length > 0 && (
-                    <div>
-                      <p className="text-xs uppercase text-muted-foreground mb-2">
-                        Ranked procedures
-                      </p>
-                      <ul className="space-y-2">
-                        {ai.suggestions.map((s, i) => (
-                          <li
-                            key={i}
-                            className="rounded-md border border-border p-3 flex items-start gap-3"
-                          >
-                            <div className="grid place-items-center h-10 w-12 rounded bg-primary/10 text-primary font-semibold text-sm">
-                              {Math.round(s.confidence)}%
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium">{s.procedure}</p>
-                              <p className="text-sm text-muted-foreground">{s.rationale}</p>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {ai.candidate_points && ai.candidate_points.length > 0 && (
-                    <div>
-                      <p className="text-xs uppercase text-muted-foreground mb-1">
-                        Candidate points
-                      </p>
+                    ) : (
                       <div className="flex flex-wrap gap-1.5">
-                        {ai.candidate_points.map((p, i) => (
-                          <Badge key={i} variant="secondary">
-                            {p}
+                        {selectedTherapies.map((t) => (
+                          <Badge key={t} variant="default">
+                            {t}
                           </Badge>
                         ))}
                       </div>
-                    </div>
-                  )}
-                  {ai.risks && ai.risks.length > 0 && (
-                    <div>
-                      <p className="text-xs uppercase text-amber-600 mb-1">Risks</p>
-                      <ul className="text-sm list-disc list-inside text-muted-foreground">
-                        {ai.risks.map((r, i) => (
-                          <li key={i}>{r}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {ai.combined_protocol && (
-                    <div>
-                      <p className="text-xs uppercase text-muted-foreground mb-1">
-                        Combined protocol
-                      </p>
-                      <p className="text-sm">{ai.combined_protocol}</p>
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground italic">
-                    {ai.disclaimer ??
-                      "Decision support only. A licensed clinician must approve before any procedure."}
-                  </p>
+                    )}
+                  </div>
+                  <Button
+                    variant="hero"
+                    onClick={proceedWithSelection}
+                    disabled={selectedTherapies.length === 0}
+                  >
+                    Proceed with Selected Therapies
+                  </Button>
                 </div>
-              )}
+              </div>
+
+              <p className="text-xs text-muted-foreground italic">
+                {ai?.disclaimer ??
+                  "Decision support only. AI suggests suitable options without ranking. Final decision always by the licensed doctor."}
+              </p>
             </CardContent>
           </Card>
         </TabsContent>
