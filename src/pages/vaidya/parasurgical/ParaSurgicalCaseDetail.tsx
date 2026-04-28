@@ -45,13 +45,54 @@ const TECHNIQUES = [
   "Myofascial release",
 ];
 
+type AISuggestion = { procedure: string; use: string };
 type AIResult = {
   likely_pain_generator?: string;
-  suggestions?: { procedure: string; confidence: number; rationale: string }[];
+  suggestions?: AISuggestion[];
   candidate_points?: string[];
   risks?: string[];
   combined_protocol?: string;
   disclaimer?: string;
+};
+
+const ALL_THERAPIES = [
+  "Agni Karma",
+  "Viddha Karma",
+  "Marma Therapy",
+  "Varmam Therapy",
+  "Acupuncture Therapy",
+  "Tung's Acupuncture Therapy",
+  "Dry Needling Therapy",
+  "Hijama / Cupping Support",
+  "Manual Therapy",
+  "Yoga Rehab Support",
+  "Conservative Care",
+];
+
+const THERAPY_USES: Record<string, string> = {
+  "Agni Karma": "For localized chronic pain, heel pain, OA support",
+  "Viddha Karma": "For chronic musculoskeletal & neurological pain",
+  "Marma Therapy": "For pain, mobility, soft-tissue dysfunction",
+  "Varmam Therapy": "For neuromuscular pain & functional restoration",
+  "Acupuncture Therapy": "For nerve pain, chronic pain, trigger pathways",
+  "Tung's Acupuncture Therapy": "For distal point pain relief & mobility",
+  "Dry Needling Therapy": "For trigger points / myofascial pain",
+  "Hijama / Cupping Support": "For congestion, stiffness, detox support",
+  "Manual Therapy": "For joint mobility & soft-tissue release",
+  "Yoga Rehab Support": "For long-term mobility, posture & rehab",
+  "Conservative Care": "For monitoring with rest, activity modification",
+};
+
+const therapyToTabKey = (label: string): string | null => {
+  const l = label.toLowerCase();
+  if (l.includes("marma")) return "marma";
+  if (l.includes("varmam")) return "varmam";
+  if (l.includes("tung")) return "tung";
+  if (l.includes("dry needling")) return "dry-needling";
+  if (l.includes("acupuncture")) return "acupuncture";
+  if (l.includes("agni")) return "agni-karma";
+  if (l.includes("viddha")) return "viddha-karma";
+  return null;
 };
 
 const ParaSurgicalCaseDetail = () => {
