@@ -74,12 +74,15 @@ export type Database = {
           mode: string
           notes: string | null
           payment_status: string
+          post_feedback_submitted: boolean
+          pre_form_submitted: boolean
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
           status: string
           time_slot: string
           updated_at: string
           user_id: string
+          zoom_start_url: string | null
         }
         Insert: {
           appointment_date: string
@@ -90,12 +93,15 @@ export type Database = {
           mode: string
           notes?: string | null
           payment_status?: string
+          post_feedback_submitted?: boolean
+          pre_form_submitted?: boolean
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
           status?: string
           time_slot: string
           updated_at?: string
           user_id: string
+          zoom_start_url?: string | null
         }
         Update: {
           appointment_date?: string
@@ -106,12 +112,15 @@ export type Database = {
           mode?: string
           notes?: string | null
           payment_status?: string
+          post_feedback_submitted?: boolean
+          pre_form_submitted?: boolean
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
           status?: string
           time_slot?: string
           updated_at?: string
           user_id?: string
+          zoom_start_url?: string | null
         }
         Relationships: [
           {
@@ -834,6 +843,136 @@ export type Database = {
             columns: ["condition_id"]
             isOneToOne: false
             referencedRelation: "health_conditions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultation_assessments: {
+        Row: {
+          advice: string | null
+          ai_summary: string | null
+          appointment_id: string
+          assessment: string | null
+          created_at: string
+          diagnosis: string | null
+          doctor_user_id: string
+          follow_up_date: string | null
+          icd_codes: string[] | null
+          id: string
+          objective: string | null
+          patient_user_id: string
+          plan: string | null
+          prescription: string | null
+          subjective: string | null
+          updated_at: string
+          vitals: Json
+        }
+        Insert: {
+          advice?: string | null
+          ai_summary?: string | null
+          appointment_id: string
+          assessment?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          doctor_user_id: string
+          follow_up_date?: string | null
+          icd_codes?: string[] | null
+          id?: string
+          objective?: string | null
+          patient_user_id: string
+          plan?: string | null
+          prescription?: string | null
+          subjective?: string | null
+          updated_at?: string
+          vitals?: Json
+        }
+        Update: {
+          advice?: string | null
+          ai_summary?: string | null
+          appointment_id?: string
+          assessment?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          doctor_user_id?: string
+          follow_up_date?: string | null
+          icd_codes?: string[] | null
+          id?: string
+          objective?: string | null
+          patient_user_id?: string
+          plan?: string | null
+          prescription?: string | null
+          subjective?: string | null
+          updated_at?: string
+          vitals?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultation_assessments_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultation_guidance: {
+        Row: {
+          acknowledged: boolean
+          acknowledged_at: string | null
+          appointment_id: string
+          content: Json
+          created_at: string
+          doctor_user_id: string
+          end_date: string | null
+          guidance_type: string
+          id: string
+          patient_user_id: string
+          schedule: Json
+          sent_via: string[] | null
+          start_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          acknowledged?: boolean
+          acknowledged_at?: string | null
+          appointment_id: string
+          content?: Json
+          created_at?: string
+          doctor_user_id: string
+          end_date?: string | null
+          guidance_type: string
+          id?: string
+          patient_user_id: string
+          schedule?: Json
+          sent_via?: string[] | null
+          start_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          acknowledged?: boolean
+          acknowledged_at?: string | null
+          appointment_id?: string
+          content?: Json
+          created_at?: string
+          doctor_user_id?: string
+          end_date?: string | null
+          guidance_type?: string
+          id?: string
+          patient_user_id?: string
+          schedule?: Json
+          sent_via?: string[] | null
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultation_guidance_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
             referencedColumns: ["id"]
           },
         ]
@@ -4854,6 +4993,65 @@ export type Database = {
           },
         ]
       }
+      post_consultation_feedback: {
+        Row: {
+          appointment_id: string
+          clarity_rating: number | null
+          comments: string | null
+          created_at: string
+          doctor_id: string
+          doctor_rating: number | null
+          id: string
+          listening_rating: number | null
+          outcome_status: string | null
+          patient_user_id: string
+          rating: number | null
+          submitted_at: string
+          updated_at: string
+          would_recommend: boolean | null
+        }
+        Insert: {
+          appointment_id: string
+          clarity_rating?: number | null
+          comments?: string | null
+          created_at?: string
+          doctor_id: string
+          doctor_rating?: number | null
+          id?: string
+          listening_rating?: number | null
+          outcome_status?: string | null
+          patient_user_id: string
+          rating?: number | null
+          submitted_at?: string
+          updated_at?: string
+          would_recommend?: boolean | null
+        }
+        Update: {
+          appointment_id?: string
+          clarity_rating?: number | null
+          comments?: string | null
+          created_at?: string
+          doctor_id?: string
+          doctor_rating?: number | null
+          id?: string
+          listening_rating?: number | null
+          outcome_status?: string | null
+          patient_user_id?: string
+          rating?: number | null
+          submitted_at?: string
+          updated_at?: string
+          would_recommend?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_consultation_feedback_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prakriti_assessments: {
         Row: {
           assessor_user_id: string | null
@@ -4913,6 +5111,74 @@ export type Database = {
           vata_score?: number
         }
         Relationships: []
+      }
+      pre_consultation_forms: {
+        Row: {
+          allergies: string | null
+          appointment_id: string
+          attachments: Json
+          chief_complaint: string | null
+          created_at: string
+          current_medications: string | null
+          doctor_id: string
+          duration: string | null
+          id: string
+          language_preference: string | null
+          lifestyle_notes: string | null
+          medical_history: string | null
+          patient_user_id: string
+          severity: string | null
+          submitted_at: string
+          symptoms: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          allergies?: string | null
+          appointment_id: string
+          attachments?: Json
+          chief_complaint?: string | null
+          created_at?: string
+          current_medications?: string | null
+          doctor_id: string
+          duration?: string | null
+          id?: string
+          language_preference?: string | null
+          lifestyle_notes?: string | null
+          medical_history?: string | null
+          patient_user_id: string
+          severity?: string | null
+          submitted_at?: string
+          symptoms?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          allergies?: string | null
+          appointment_id?: string
+          attachments?: Json
+          chief_complaint?: string | null
+          created_at?: string
+          current_medications?: string | null
+          doctor_id?: string
+          duration?: string | null
+          id?: string
+          language_preference?: string | null
+          lifestyle_notes?: string | null
+          medical_history?: string | null
+          patient_user_id?: string
+          severity?: string | null
+          submitted_at?: string
+          symptoms?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pre_consultation_forms_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       prescription_essential_drugs: {
         Row: {
