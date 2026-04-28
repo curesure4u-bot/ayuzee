@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import PreConsultationForm from "./pages/consultation/PreConsultationForm.tsx";
 import Doctors from "./pages/Doctors.tsx";
 import DoctorDetail from "./pages/DoctorDetail.tsx";
 import Shop from "./pages/Shop.tsx";
@@ -300,6 +301,7 @@ const App = () => (
               <Route path="bank" element={<PatientBank />} />
               <Route path="help" element={<PatientHelp />} />
             </Route>
+            <Route path="/consultation/:id/pre-form" element={<PreConsultationForm />} />
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
