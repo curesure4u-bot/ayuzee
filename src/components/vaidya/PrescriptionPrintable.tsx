@@ -53,11 +53,11 @@ const PrescriptionPrintable = ({
             </div>
             <div style={{ fontSize: 12, color: "#444" }}>
               {doctor?.full_name ? `Dr. ${doctor.full_name}` : ""}
-              {doctor?.qualification ? `, ${doctor.qualification}` : ""}
               {doctor?.specialization ? ` · ${doctor.specialization}` : ` · ${system} Practitioner`}
+              {doctor?.experience_years ? ` · ${doctor.experience_years} yrs exp.` : ""}
             </div>
             <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-              {doctor?.clinic_address || ""}
+              {doctor?.city || ""}
               {doctor?.phone ? ` · ☏ ${doctor.phone}` : ""}
               {doctor?.email ? ` · ${doctor.email}` : ""}
             </div>
