@@ -105,6 +105,14 @@ const groups = [
     ],
   },
   {
+    label: "Para-Surgical AI",
+    icon: Sparkles,
+    items: [
+      { to: "/vaidya/parasurgical", label: "Procedure Dashboard", icon: Sparkles },
+      { to: "/vaidya/parasurgical/new", label: "New Case", icon: Sparkles },
+    ],
+  },
+  {
     label: "Yoga Therapy AI",
     icon: Flower2,
     items: [
