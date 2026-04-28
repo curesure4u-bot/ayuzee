@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ArrowLeft, Download, ExternalLink, Combine } from "lucide-react";
 import { setSEO } from "@/lib/seo";
+import { PdfViewer } from "@/components/library/PdfViewer";
 
 const PDF_URL = "/acupuncture-homeopathy.pdf";
 
