@@ -6853,6 +6853,81 @@ export type Database = {
         }
         Relationships: []
       }
+      vaidya_queue_tokens: {
+        Row: {
+          age: number | null
+          appointment_id: string | null
+          called_at: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          doctor_user_id: string
+          gender: string | null
+          id: string
+          notes: string | null
+          patient_name: string
+          patient_user_id: string | null
+          phone: string | null
+          priority: string
+          reason: string | null
+          started_at: string | null
+          status: string
+          token_date: string
+          token_no: number
+          updated_at: string
+          vaidya_patient_id: string | null
+          visit_type: string
+        }
+        Insert: {
+          age?: number | null
+          appointment_id?: string | null
+          called_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          doctor_user_id: string
+          gender?: string | null
+          id?: string
+          notes?: string | null
+          patient_name: string
+          patient_user_id?: string | null
+          phone?: string | null
+          priority?: string
+          reason?: string | null
+          started_at?: string | null
+          status?: string
+          token_date?: string
+          token_no: number
+          updated_at?: string
+          vaidya_patient_id?: string | null
+          visit_type?: string
+        }
+        Update: {
+          age?: number | null
+          appointment_id?: string | null
+          called_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          doctor_user_id?: string
+          gender?: string | null
+          id?: string
+          notes?: string | null
+          patient_name?: string
+          patient_user_id?: string | null
+          phone?: string | null
+          priority?: string
+          reason?: string | null
+          started_at?: string | null
+          status?: string
+          token_date?: string
+          token_no?: number
+          updated_at?: string
+          vaidya_patient_id?: string | null
+          visit_type?: string
+        }
+        Relationships: []
+      }
       venue_revenue_logs: {
         Row: {
           amount: number
