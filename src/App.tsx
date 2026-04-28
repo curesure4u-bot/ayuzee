@@ -50,6 +50,8 @@ import VaidyaHome from "./pages/vaidya/VaidyaHome.tsx";
 import AllPatients from "./pages/vaidya/sections/AllPatients.tsx";
 import Consultations from "./pages/vaidya/sections/Consultations.tsx";
 import FollowUps from "./pages/vaidya/sections/FollowUps.tsx";
+import VaidyaGuidance from "./pages/vaidya/sections/Guidance.tsx";
+import PatientGuidance from "./pages/patient/PatientGuidance.tsx";
 import UpcomingAppointments from "./pages/vaidya/sections/UpcomingAppointments.tsx";
 import Leads from "./pages/vaidya/sections/Leads.tsx";
 import Inventory from "./pages/vaidya/sections/Inventory.tsx";
@@ -305,6 +307,7 @@ const App = () => (
               <Route path="wallet" element={<PatientWallet />} />
               <Route path="bank" element={<PatientBank />} />
               <Route path="help" element={<PatientHelp />} />
+              <Route path="guidance" element={<PatientGuidance />} />
             </Route>
             <Route path="/consultation/:id/pre-form" element={<PreConsultationForm />} />
             <Route path="/consultation/:id/room" element={<ConsultationRoom />} />
@@ -445,6 +448,7 @@ const App = () => (
               <Route path="patients" element={<AllPatients />} />
               <Route path="consultations" element={<Consultations />} />
               <Route path="follow-up" element={<FollowUps />} />
+              <Route path="guidance" element={<VaidyaGuidance />} />
               <Route path="upcoming" element={<UpcomingAppointments />} />
               <Route path="leads" element={<Leads />} />
               <Route path="inventory" element={<Inventory />} />
