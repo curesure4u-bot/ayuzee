@@ -56,12 +56,6 @@ const megaMenus: MegaMenu[] = [
   { label: "Therapies", columns: [
     { title: "Panchakarma", links: ["🫙 Abhyanga (Full Body)", "Shirodhara", "Kati Basti", "Janu Basti", "Vamana", "Virechana", "Basti", "Nasya"].map((x) => ({ label: x, to: "/therapies?category=Panchakarma" })) },
     { title: "Specialty Therapies", links: [
-      { label: "🩺 Integrated Acupuncture Hub", to: "/treatments/acupuncture" },
-      { label: "📍 Tung's Acupuncture Points", to: "/treatments/tung-points" },
-      { label: "🗺️ Acupoints & Their Uses", to: "/treatments/acupoints-uses" },
-      { label: "⚡ 50 Diseases — Quick Protocols", to: "/treatments/acupuncture-50-diseases" },
-      { label: "📖 300 Diseases with Points", to: "/treatments/acupuncture-300-diseases" },
-      { label: "🔗 Acupuncture × Homeopathy", to: "/treatments/acupuncture-homeopathy" },
       { label: "Pizhichil", to: "/therapies" },
       { label: "Navarakizhi", to: "/therapies" },
       { label: "Udvartana", to: "/therapies" },
