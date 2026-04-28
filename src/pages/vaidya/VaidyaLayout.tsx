@@ -31,6 +31,13 @@ const groups = [
     ],
   },
   {
+    label: "Analytics",
+    icon: TrendingUp,
+    items: [
+      { to: "/vaidya/analytics", label: "Practice Analytics", icon: TrendingUp },
+    ],
+  },
+  {
     label: "My Patients",
     icon: Users,
     items: [
