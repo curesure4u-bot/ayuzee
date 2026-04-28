@@ -93,6 +93,7 @@ import AssessmentRun from "./pages/diagnosis/AssessmentRun.tsx";
 import AssessmentResult from "./pages/diagnosis/AssessmentResult.tsx";
 import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
+import Reception from "./pages/vaidya/sections/Reception.tsx";
 import Feed from "./pages/Feed.tsx";
 import FeedPost from "./pages/FeedPost.tsx";
 import LearningLayout from "./pages/Learning.tsx";
@@ -438,6 +439,7 @@ const App = () => (
               <Route path="therapy-catalog" element={<TherapyCatalog />} />
               <Route path="prakriti" element={<HmsPrakriti />} />
               <Route path="developer" element={<DeveloperApi />} />
+              <Route path="reception" element={<Reception />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />
