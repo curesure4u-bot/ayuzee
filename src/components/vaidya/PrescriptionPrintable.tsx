@@ -165,7 +165,7 @@ const PrescriptionPrintable = ({
         </div>
         <div style={{ textAlign: "center", borderTop: "1px solid #333", paddingTop: 4, minWidth: 200 }}>
           {doctor?.full_name ? `Dr. ${doctor.full_name}` : "Signature"}
-          <div style={{ fontSize: 10, color: "#666" }}>{doctor?.qualification || ""}</div>
+          <div style={{ fontSize: 10, color: "#666" }}>{doctor?.specialization || ""}</div>
         </div>
       </div>
     </div>
