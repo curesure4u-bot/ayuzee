@@ -79,6 +79,14 @@ const groups = [
     icon: Sparkles,
     items: [
       { to: "/vaidya/prakriti", label: "Prakriti Pareeksha", icon: Sparkles },
+      { to: "/vaidya/ashtavidha", label: "Ashtavidha Pariksha", icon: Sparkles },
+    ],
+  },
+  {
+    label: "Panchakarma",
+    icon: Flower2,
+    items: [
+      { to: "/vaidya/panchakarma", label: "Panchakarma Planner", icon: Flower2 },
     ],
   },
   {

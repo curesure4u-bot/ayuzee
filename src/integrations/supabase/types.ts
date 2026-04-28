@@ -6590,6 +6590,75 @@ export type Database = {
         }
         Relationships: []
       }
+      vaidya_ashtavidha_exams: {
+        Row: {
+          akriti: Json | null
+          clinical_impression: string | null
+          created_at: string
+          doctor_user_id: string
+          dosha_assessment: string | null
+          drik: Json | null
+          exam_date: string
+          id: string
+          jihva: Json | null
+          mala: Json | null
+          mutra: Json | null
+          nadi: Json | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_name: string | null
+          patient_user_id: string | null
+          recommendations: string | null
+          shabda: Json | null
+          sparsha: Json | null
+          updated_at: string
+        }
+        Insert: {
+          akriti?: Json | null
+          clinical_impression?: string | null
+          created_at?: string
+          doctor_user_id: string
+          dosha_assessment?: string | null
+          drik?: Json | null
+          exam_date?: string
+          id?: string
+          jihva?: Json | null
+          mala?: Json | null
+          mutra?: Json | null
+          nadi?: Json | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string | null
+          patient_user_id?: string | null
+          recommendations?: string | null
+          shabda?: Json | null
+          sparsha?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          akriti?: Json | null
+          clinical_impression?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          dosha_assessment?: string | null
+          drik?: Json | null
+          exam_date?: string
+          id?: string
+          jihva?: Json | null
+          mala?: Json | null
+          mutra?: Json | null
+          nadi?: Json | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string | null
+          patient_user_id?: string | null
+          recommendations?: string | null
+          shabda?: Json | null
+          sparsha?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       vaidya_bill_items: {
         Row: {
           bill_id: string
@@ -6853,6 +6922,125 @@ export type Database = {
           phone?: string | null
           source?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      vaidya_panchakarma_days: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          day_number: number
+          diet: string | null
+          duration_minutes: number | null
+          id: string
+          medicines: string | null
+          notes: string | null
+          phase: string
+          plan_id: string
+          procedure: string
+          scheduled_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          day_number: number
+          diet?: string | null
+          duration_minutes?: number | null
+          id?: string
+          medicines?: string | null
+          notes?: string | null
+          phase: string
+          plan_id: string
+          procedure: string
+          scheduled_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          day_number?: number
+          diet?: string | null
+          duration_minutes?: number | null
+          id?: string
+          medicines?: string | null
+          notes?: string | null
+          phase?: string
+          plan_id?: string
+          procedure?: string
+          scheduled_date?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_panchakarma_days_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_panchakarma_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vaidya_panchakarma_plans: {
+        Row: {
+          ai_recommendation: Json | null
+          created_at: string
+          doctor_user_id: string
+          id: string
+          indication: string
+          notes: string | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_name: string
+          patient_user_id: string | null
+          prakriti: string | null
+          primary_procedure: string | null
+          start_date: string
+          status: string
+          total_days: number
+          updated_at: string
+          vikriti: string | null
+        }
+        Insert: {
+          ai_recommendation?: Json | null
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          indication: string
+          notes?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name: string
+          patient_user_id?: string | null
+          prakriti?: string | null
+          primary_procedure?: string | null
+          start_date?: string
+          status?: string
+          total_days?: number
+          updated_at?: string
+          vikriti?: string | null
+        }
+        Update: {
+          ai_recommendation?: Json | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          indication?: string
+          notes?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_name?: string
+          patient_user_id?: string | null
+          prakriti?: string | null
+          primary_procedure?: string | null
+          start_date?: string
+          status?: string
+          total_days?: number
+          updated_at?: string
+          vikriti?: string | null
         }
         Relationships: []
       }
