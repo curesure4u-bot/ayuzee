@@ -90,6 +90,13 @@ const groups = [
     ],
   },
   {
+    label: "Posture AI",
+    icon: Activity,
+    items: [
+      { to: "/vaidya/posture", label: "Posture Screening", icon: Activity },
+    ],
+  },
+  {
     label: "Yoga Therapy AI",
     icon: Flower2,
     items: [

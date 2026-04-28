@@ -7134,6 +7134,134 @@ export type Database = {
         }
         Relationships: []
       }
+      vaidya_posture_assessments: {
+        Row: {
+          assessment_date: string
+          corrective_plan: Json
+          created_at: string
+          diagnosis: string | null
+          doctor_approved: boolean
+          doctor_notes: string | null
+          doctor_user_id: string
+          ergonomic_advice: string | null
+          findings: Json
+          follow_up_date: string | null
+          head_score: number | null
+          id: string
+          knee_score: number | null
+          overall_index: number | null
+          patient_age: number | null
+          patient_gender: string | null
+          patient_id: string | null
+          patient_name: string
+          patient_phone: string | null
+          pelvic_score: number | null
+          risk_level: string | null
+          shoulder_score: number | null
+          spine_score: number | null
+          status: string
+          treatment_plan: string | null
+          updated_at: string
+          yoga_recommendations: Json
+        }
+        Insert: {
+          assessment_date?: string
+          corrective_plan?: Json
+          created_at?: string
+          diagnosis?: string | null
+          doctor_approved?: boolean
+          doctor_notes?: string | null
+          doctor_user_id: string
+          ergonomic_advice?: string | null
+          findings?: Json
+          follow_up_date?: string | null
+          head_score?: number | null
+          id?: string
+          knee_score?: number | null
+          overall_index?: number | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_id?: string | null
+          patient_name: string
+          patient_phone?: string | null
+          pelvic_score?: number | null
+          risk_level?: string | null
+          shoulder_score?: number | null
+          spine_score?: number | null
+          status?: string
+          treatment_plan?: string | null
+          updated_at?: string
+          yoga_recommendations?: Json
+        }
+        Update: {
+          assessment_date?: string
+          corrective_plan?: Json
+          created_at?: string
+          diagnosis?: string | null
+          doctor_approved?: boolean
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          ergonomic_advice?: string | null
+          findings?: Json
+          follow_up_date?: string | null
+          head_score?: number | null
+          id?: string
+          knee_score?: number | null
+          overall_index?: number | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          patient_id?: string | null
+          patient_name?: string
+          patient_phone?: string | null
+          pelvic_score?: number | null
+          risk_level?: string | null
+          shoulder_score?: number | null
+          spine_score?: number | null
+          status?: string
+          treatment_plan?: string | null
+          updated_at?: string
+          yoga_recommendations?: Json
+        }
+        Relationships: []
+      }
+      vaidya_posture_images: {
+        Row: {
+          assessment_id: string
+          created_at: string
+          doctor_user_id: string
+          id: string
+          landmarks: Json | null
+          storage_path: string
+          view_type: string
+        }
+        Insert: {
+          assessment_id: string
+          created_at?: string
+          doctor_user_id: string
+          id?: string
+          landmarks?: Json | null
+          storage_path: string
+          view_type: string
+        }
+        Update: {
+          assessment_id?: string
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          landmarks?: Json | null
+          storage_path?: string
+          view_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_posture_images_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_posture_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vaidya_queue_tokens: {
         Row: {
           age: number | null
