@@ -95,6 +95,7 @@ import HmsPrakriti from "./pages/vaidya/sections/HmsPrakriti.tsx";
 import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
 import Reception from "./pages/vaidya/sections/Reception.tsx";
 import VaidyaPatientProfile from "./pages/vaidya/sections/PatientProfile.tsx";
+import VaidyaAnalytics from "./pages/vaidya/sections/Analytics.tsx";
 import Feed from "./pages/Feed.tsx";
 import FeedPost from "./pages/FeedPost.tsx";
 import LearningLayout from "./pages/Learning.tsx";
@@ -442,6 +443,7 @@ const App = () => (
               <Route path="developer" element={<DeveloperApi />} />
               <Route path="reception" element={<Reception />} />
               <Route path="patients/:source/:id" element={<VaidyaPatientProfile />} />
+              <Route path="analytics" element={<VaidyaAnalytics />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />

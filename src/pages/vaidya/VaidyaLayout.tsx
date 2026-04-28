@@ -18,6 +18,7 @@ import {
   Pill,
   Flower2,
   Activity,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,6 +28,13 @@ const groups = [
     icon: Activity,
     items: [
       { to: "/vaidya/reception", label: "Queue & Tokens", icon: Activity },
+    ],
+  },
+  {
+    label: "Analytics",
+    icon: TrendingUp,
+    items: [
+      { to: "/vaidya/analytics", label: "Practice Analytics", icon: TrendingUp },
     ],
   },
   {
