@@ -46,7 +46,7 @@ const SiddhaPrescription = () => {
     if (!userId) return;
     (async () => {
       const [{ data: pts }, { data: ds }] = await Promise.all([
-        (supabase as any).from("vaidya_patients").select("id, full_name").eq("doctor_user_id", userId),
+        (supabase as any).from("vaidya_patients").select("id, full_name, phone, age, gender").eq("doctor_user_id", userId),
         (supabase as any).from("essential_siddha_drugs").select("id, name, category, indications, dose, precautions, mode_of_administration").order("name"),
       ]);
       setPatients(pts ?? []);
