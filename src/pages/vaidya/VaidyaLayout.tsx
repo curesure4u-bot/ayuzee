@@ -23,6 +23,13 @@ import { toast } from "sonner";
 
 const groups = [
   {
+    label: "Reception",
+    icon: Activity,
+    items: [
+      { to: "/vaidya/reception", label: "Queue & Tokens", icon: Activity },
+    ],
+  },
+  {
     label: "My Patients",
     icon: Users,
     items: [
