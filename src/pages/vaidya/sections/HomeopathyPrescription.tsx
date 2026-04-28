@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Printer } from "lucide-react";
+import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
 
 interface Drug {
   id: string; name: string; kingdom: string;
@@ -66,6 +67,7 @@ const HomeopathyPrescription = () => {
 
   return (
     <div className="space-y-6 max-w-5xl">
+      <div className="space-y-6 print:hidden">
       <div>
         <h1 className="text-2xl font-bold">💧 Homeopathy Prescription Writer</h1>
         <p className="text-sm text-muted-foreground mt-1">Select remedies and potencies from the official Essential Drugs list.</p>
@@ -136,9 +138,27 @@ const HomeopathyPrescription = () => {
         </div>
       )}
 
-      <Button onClick={save} disabled={saving} className="w-full md:w-auto">
-        <Plus className="h-4 w-4 mr-2" /> {saving ? "Saving…" : "Save Prescription"}
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={save} disabled={saving}>
+          <Plus className="h-4 w-4 mr-2" /> {saving ? "Saving…" : "Save Prescription"}
+        </Button>
+        <Button variant="outline" onClick={() => window.print()} disabled={lines.length === 0}>
+          <Printer className="h-4 w-4 mr-2" /> Print
+        </Button>
+      </div>
+      </div>
+
+      <PrescriptionPrintable
+        system="Homeopathy"
+        patientName={patientName}
+        visitDate={new Date().toISOString().slice(0, 10)}
+        lines={lines.map((l) => ({
+          name: l.drug.name, category: l.drug.kingdom,
+          potency: l.potency, dose: l.dose,
+          frequency: l.frequency, repetition: l.repetition,
+          instructions: l.instructions,
+        }))}
+      />
     </div>
   );
 };

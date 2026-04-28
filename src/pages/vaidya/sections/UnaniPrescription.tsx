@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Pill, Plus, Trash2, Search, Save, Printer, FileText } from "lucide-react";
 import { toast } from "sonner";
+import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
 
 type Drug = {
   id: string; name: string; category: string;
@@ -42,7 +43,7 @@ const UnaniPrescription = () => {
     if (!userId) return;
     (async () => {
       const [{ data: pts }, { data: ds }] = await Promise.all([
-        (supabase as any).from("vaidya_patients").select("id, full_name").eq("doctor_user_id", userId),
+        (supabase as any).from("vaidya_patients").select("id, full_name, phone, age, gender").eq("doctor_user_id", userId),
         (supabase as any).from("essential_unani_drugs").select("id, name, category, indications, dose, precautions, mode_of_administration").order("name"),
       ]);
       setPatients(pts ?? []);
@@ -103,8 +104,11 @@ const UnaniPrescription = () => {
     finally { setSaving(false); }
   };
 
+  const selectedPatient = patients.find((p) => p.id === patientId);
+
   return (
-    <div className="mx-auto max-w-5xl space-y-4 p-4 print:p-0">
+    <div className="mx-auto max-w-5xl space-y-4 p-4">
+      <div className="space-y-4 print:hidden">
       <Card className="p-4 print:hidden">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
@@ -233,6 +237,24 @@ const UnaniPrescription = () => {
           <Printer className="mr-1 h-4 w-4" /> Print
         </Button>
       </div>
+      </div>
+
+      <PrescriptionPrintable
+        system="Unani"
+        patientName={selectedPatient?.full_name || ""}
+        patientPhone={selectedPatient?.phone}
+        patientAge={selectedPatient?.age}
+        patientGender={selectedPatient?.gender}
+        visitDate={visitDate}
+        followUpDate={followUp}
+        diagnosis={diagnosis}
+        advice={advice}
+        lines={lines.map((l) => ({
+          name: l.drug.name, category: l.drug.category,
+          dose: l.dose_override, frequency: l.frequency,
+          duration: l.duration, anupana: l.anupana, instructions: l.instructions,
+        }))}
+      />
     </div>
   );
 };
