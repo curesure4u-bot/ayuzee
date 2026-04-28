@@ -137,6 +137,38 @@ const Dashboard = () => {
             <Button asChild variant="outline" size="sm"><Link to="/doctors">Book another</Link></Button>
           </div>
 
+          {(() => {
+            const needsPreForm = upcoming.filter((a) => a.mode === "video" && !a.pre_form_submitted);
+            if (needsPreForm.length === 0) return null;
+            return (
+              <div className="mb-4 space-y-2">
+                {needsPreForm.map((a) => (
+                  <Link
+                    key={a.id}
+                    to={`/consultation/${a.id}/pre-form`}
+                    className="group flex flex-col items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 transition-smooth hover:bg-amber-100 dark:border-amber-500/40 dark:bg-amber-500/10 dark:hover:bg-amber-500/15 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/20 text-2xl">📋</div>
+                      <div>
+                        <p className="font-semibold text-amber-900 dark:text-amber-200">
+                          Fill Pre-Consultation Form
+                        </p>
+                        <p className="text-xs text-amber-800/80 dark:text-amber-200/80">
+                          Required before joining your video call with {a.doctors?.full_name ?? "your doctor"} on{" "}
+                          {new Date(a.appointment_date).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" })} · {a.time_slot}
+                        </p>
+                      </div>
+                    </div>
+                    <Button size="sm" variant="hero" className="shrink-0">
+                      Fill now →
+                    </Button>
+                  </Link>
+                ))}
+              </div>
+            );
+          })()}
+
           {loading ? (
             <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">Loading…</div>
           ) : upcoming.length === 0 ? (
