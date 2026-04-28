@@ -48,6 +48,7 @@ const groups = [
       { to: "/vaidya/homeopathy-prescription", label: "Homeopathy Prescription", icon: Pill },
       { to: "/vaidya/patients", label: "All Patients", icon: Users },
       { to: "/vaidya/follow-up", label: "Follow up list", icon: CalendarClock },
+      { to: "/vaidya/guidance", label: "Follow-up Guidance", icon: Sparkles },
       { to: "/vaidya/upcoming", label: "Upcoming Appointment", icon: CalendarClock },
       { to: "/vaidya/leads", label: "Ayuzee Leads", icon: PhoneCall },
     ],
