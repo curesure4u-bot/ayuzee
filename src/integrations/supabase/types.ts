@@ -4704,6 +4704,48 @@ export type Database = {
         }
         Relationships: []
       }
+      patient_files: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          doctor_user_id: string
+          file_name: string
+          id: string
+          mime_type: string | null
+          patient_user_id: string | null
+          size_bytes: number | null
+          storage_path: string
+          vaidya_patient_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          doctor_user_id: string
+          file_name: string
+          id?: string
+          mime_type?: string | null
+          patient_user_id?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          vaidya_patient_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          doctor_user_id?: string
+          file_name?: string
+          id?: string
+          mime_type?: string | null
+          patient_user_id?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          vaidya_patient_id?: string | null
+        }
+        Relationships: []
+      }
       patient_vitals: {
         Row: {
           blood_sugar_fasting: number | null
