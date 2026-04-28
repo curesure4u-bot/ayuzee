@@ -138,9 +138,27 @@ const HomeopathyPrescription = () => {
         </div>
       )}
 
-      <Button onClick={save} disabled={saving} className="w-full md:w-auto">
-        <Plus className="h-4 w-4 mr-2" /> {saving ? "Saving…" : "Save Prescription"}
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={save} disabled={saving}>
+          <Plus className="h-4 w-4 mr-2" /> {saving ? "Saving…" : "Save Prescription"}
+        </Button>
+        <Button variant="outline" onClick={() => window.print()} disabled={lines.length === 0}>
+          <Printer className="h-4 w-4 mr-2" /> Print
+        </Button>
+      </div>
+      </div>
+
+      <PrescriptionPrintable
+        system="Homeopathy"
+        patientName={patientName}
+        visitDate={new Date().toISOString().slice(0, 10)}
+        lines={lines.map((l) => ({
+          name: l.drug.name, category: l.drug.kingdom,
+          potency: l.potency, dose: l.dose,
+          frequency: l.frequency, repetition: l.repetition,
+          instructions: l.instructions,
+        }))}
+      />
     </div>
   );
 };
