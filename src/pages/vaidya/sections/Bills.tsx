@@ -78,14 +78,17 @@ const BillsPage = ({ type }: Props) => {
 
   const load = async () => {
     if (!userId) return;
-    const [{ data: bills }, { data: inv }, { data: prof }] = await Promise.all([
+    const [{ data: bills }, { data: inv }, { data: doc }] = await Promise.all([
       supabase.from("vaidya_bills").select("*").eq("doctor_user_id", userId).eq("bill_type", type).order("created_at", { ascending: false }),
       supabase.from("vaidya_inventory").select("id, medicine_name, mrp, quantity").eq("doctor_user_id", userId),
-      supabase.from("doctor_profiles").select("clinic_name, clinic_address, gstin").eq("user_id", userId).maybeSingle(),
+      supabase.from("doctors").select("clinic_name, city").eq("user_id", userId).maybeSingle(),
     ]);
     setItems(bills ?? []);
     setStock(inv ?? []);
-    if (prof) setClinic({ name: prof.clinic_name || "", address: prof.clinic_address || "", gstin: prof.gstin || "" });
+    // Last-used GSTIN persists per doctor in localStorage
+    const savedGstin = typeof window !== "undefined" ? localStorage.getItem(`vaidya:gstin:${userId}`) || "" : "";
+    if (doc) setClinic({ name: doc.clinic_name || "", address: doc.city || "", gstin: savedGstin });
+    else setClinic(c => ({ ...c, gstin: savedGstin }));
   };
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [userId, type]);
 
