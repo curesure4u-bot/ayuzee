@@ -58,22 +58,7 @@ const AcupunctureHomeopathy = () => {
           </div>
         </div>
 
-        <Card className="overflow-hidden">
-          <div className="aspect-[4/5] w-full bg-muted md:aspect-[16/10]">
-            <object
-              data={PDF_URL}
-              type="application/pdf"
-              className="h-full w-full"
-              aria-label="Acupuncture and Homeopathy clinical reference PDF"
-            >
-              <iframe
-                src={PDF_URL}
-                title="Acupuncture × Homeopathy"
-                className="h-full w-full border-0"
-              />
-            </object>
-          </div>
-        </Card>
+        <PdfViewer src={PDF_URL} title="Acupuncture × Homeopathy" />
 
         <p className="mt-6 text-xs text-muted-foreground">
           Curated educational reference integrated into Ayuzee. For clinical
