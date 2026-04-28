@@ -110,7 +110,45 @@ const ParaSurgicalCaseDetail = () => {
   const [ai, setAi] = useState<AIResult | null>(null);
   const [sessions, setSessions] = useState<any[]>([]);
   const [outcomes, setOutcomes] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("ai");
+  const [selectedTherapies, setSelectedTherapies] = useState<string[]>([]);
+  const [customTherapy, setCustomTherapy] = useState<string>("");
   const printableRef = useRef<HTMLDivElement>(null);
+
+  const toggleTherapy = (name: string) =>
+    setSelectedTherapies((arr) =>
+      arr.includes(name) ? arr.filter((t) => t !== name) : [...arr, name],
+    );
+
+  const addCustomTherapy = () => {
+    const v = customTherapy.trim();
+    if (!v) return;
+    if (!selectedTherapies.includes(v)) setSelectedTherapies((a) => [...a, v]);
+    setCustomTherapy("");
+  };
+
+  const proceedWithSelection = async () => {
+    if (selectedTherapies.length === 0) {
+      toast.error("Select at least one therapy");
+      return;
+    }
+    const first = selectedTherapies.find((t) => therapyToTabKey(t));
+    if (first) {
+      const k = therapyToTabKey(first);
+      if (k) setTherapy(k);
+    }
+    if (caseRow) {
+      await (supabase as any)
+        .from("parasurgical_cases")
+        .update({
+          selected_procedure: selectedTherapies.join(" + "),
+          status: "planned",
+        })
+        .eq("id", caseRow.id);
+    }
+    setActiveTab("map");
+    toast.success("Proceeding with selected therapies");
+  };
 
   const load = async () => {
     if (!id) return;
