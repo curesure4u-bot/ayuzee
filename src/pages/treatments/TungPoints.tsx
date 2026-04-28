@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ArrowLeft, Download, ExternalLink, Sparkles } from "lucide-react";
 import { setSEO } from "@/lib/seo";
+import { PdfViewer } from "@/components/library/PdfViewer";
 
 const PDF_URL = "/tung-acupuncture-points.pdf";
 
@@ -58,22 +58,7 @@ const TungPoints = () => {
           </div>
         </div>
 
-        <Card className="overflow-hidden">
-          <div className="aspect-[4/5] md:aspect-[16/10] w-full bg-muted">
-            <object
-              data={PDF_URL}
-              type="application/pdf"
-              className="h-full w-full"
-              aria-label="Tung's Acupuncture Points reference PDF"
-            >
-              <iframe
-                src={PDF_URL}
-                title="Tung's Acupuncture Points"
-                className="h-full w-full border-0"
-              />
-            </object>
-          </div>
-        </Card>
+        <PdfViewer src={PDF_URL} title="Tung's Acupuncture Points" />
 
         <p className="mt-6 text-xs text-muted-foreground">
           Curated reference integrated into the Ayuzee AYUSH platform for educational

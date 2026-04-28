@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ArrowLeft, Download, ExternalLink, Stethoscope } from "lucide-react";
 import { setSEO } from "@/lib/seo";
+import { PdfViewer } from "@/components/library/PdfViewer";
 
 const PDF_URL = "/acupuncture-50-diseases.pdf";
 
@@ -58,22 +58,7 @@ const Acupuncture50Diseases = () => {
           </div>
         </div>
 
-        <Card className="overflow-hidden">
-          <div className="aspect-[4/5] w-full bg-muted md:aspect-[16/10]">
-            <object
-              data={PDF_URL}
-              type="application/pdf"
-              className="h-full w-full"
-              aria-label="50 Diseases Acupuncture Protocols PDF"
-            >
-              <iframe
-                src={PDF_URL}
-                title="50 Diseases — Acupuncture Quick Protocols"
-                className="h-full w-full border-0"
-              />
-            </object>
-          </div>
-        </Card>
+        <PdfViewer src={PDF_URL} title="50 Diseases — Acupuncture Quick Protocols" />
 
         <p className="mt-6 text-xs text-muted-foreground">
           Curated educational reference integrated into Ayuzee. For clinical
