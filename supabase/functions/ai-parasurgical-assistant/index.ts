@@ -58,23 +58,24 @@ Deno.serve(async (req) => {
     const c = body?.case ?? {};
 
     const sysPrompt = `You are an AYUSH para-surgical clinical decision support assistant.
-You assist qualified doctors only. You DO NOT auto-prescribe.
-Always remind that the final decision rests with the licensed clinician.
-Output strictly via the suggested tool function.
+You assist qualified doctors only. You DO NOT auto-prescribe and you DO NOT rank
+or score therapies. The final decision rests with the licensed clinician.
+You only suggest which therapies from the list are SUITABLE options for this
+case. Doctors will pick one or combine multiple.
 
-Available procedures: ${PROCEDURES.join(", ")}.
-Score each suggestion 0-100 by symptom-procedure fit, considering chronicity,
-tissue involved, nerve signs, contraindications, and patient safety.`;
+Available procedures: ${PROCEDURES.join(", ")}.`;
 
     const userPrompt = `Patient case (decision support):
 ${JSON.stringify(c, null, 2)}
 
 Tasks:
-1. Identify likely pain generator(s).
-2. Rank up to 5 best procedures from the list with confidence %.
+1. Identify likely pain generator(s) (1-2 lines).
+2. From the available procedures list, return ONLY the ones that are clinically
+   suitable for this case (no ranking, no percentages). For each suitable
+   therapy include a one-line "use" describing why it fits this case.
 3. Suggest candidate point names (Marma/Acu/Tung/TrP) relevant to the location.
 4. List safety risks / contraindication red flags.
-5. Suggest a combined protocol (1-2 sentences).`;
+5. Suggest a combined protocol idea (1-2 sentences) the doctor may consider.`;
 
     const resp = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
@@ -103,14 +104,19 @@ Tasks:
                     likely_pain_generator: { type: "string" },
                     suggestions: {
                       type: "array",
+                      description:
+                        "Suitable therapy options for this case (no ranking).",
                       items: {
                         type: "object",
                         properties: {
                           procedure: { type: "string", enum: PROCEDURES },
-                          confidence: { type: "number" },
-                          rationale: { type: "string" },
+                          use: {
+                            type: "string",
+                            description:
+                              "One-line clinical use / why suitable for this case.",
+                          },
                         },
-                        required: ["procedure", "confidence", "rationale"],
+                        required: ["procedure", "use"],
                       },
                     },
                     candidate_points: {
