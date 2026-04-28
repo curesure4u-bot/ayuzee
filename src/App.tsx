@@ -251,6 +251,7 @@ import YogaPlanDetail from "./pages/vaidya/yoga/YogaPlanDetail.tsx";
 import YogaProtocolsList from "./pages/vaidya/yoga/YogaProtocolsList.tsx";
 import YogaProgressTracker from "./pages/vaidya/yoga/YogaProgressTracker.tsx";
 import PosturePage from "./pages/vaidya/sections/Posture.tsx";
+import HijamaPage from "./pages/vaidya/sections/Hijama.tsx";
 
 const queryClient = new QueryClient();
 
@@ -450,6 +451,7 @@ const App = () => (
               <Route path="ashtavidha" element={<Ashtavidha />} />
               <Route path="panchakarma" element={<Panchakarma />} />
               <Route path="posture" element={<PosturePage />} />
+              <Route path="hijama" element={<HijamaPage />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />

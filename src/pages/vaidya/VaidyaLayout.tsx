@@ -97,6 +97,13 @@ const groups = [
     ],
   },
   {
+    label: "Hijama AI",
+    icon: Activity,
+    items: [
+      { to: "/vaidya/hijama", label: "Hijama Screening", icon: Activity },
+    ],
+  },
+  {
     label: "Yoga Therapy AI",
     icon: Flower2,
     items: [
