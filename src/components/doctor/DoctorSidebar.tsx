@@ -37,6 +37,7 @@ import {
   PenSquare,
   HeartHandshake,
   Pill,
+  Sparkles,
 } from "lucide-react";
 
 const items = [
@@ -48,6 +49,7 @@ const items = [
   { title: "Patient Orders", url: "/doctor/patient-orders", icon: ClipboardList },
   { title: "Bulk Purchase", url: "/bulk", icon: Package },
   { title: "Ayush HMS Tool", url: "/vaidya", icon: Stethoscope },
+  { title: "Para-Surgical AI", url: "/vaidya/parasurgical", icon: Sparkles },
   { title: "My Orders", url: "/doctor/orders", icon: ShoppingCart },
   { title: "My Medicine List", url: "/doctor/medicines", icon: ListChecks },
   { title: "Saved Posts", url: "/doctor/saved", icon: Bookmark },
