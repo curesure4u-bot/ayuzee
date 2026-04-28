@@ -4765,6 +4765,295 @@ export type Database = {
         }
         Relationships: []
       }
+      parasurgical_cases: {
+        Row: {
+          age: number | null
+          ai_analysis: Json | null
+          ai_suggestions: Json | null
+          bleeding_history: boolean | null
+          chief_complaint: string
+          contraindications: Json | null
+          created_at: string
+          diabetes: boolean | null
+          doctor_notes: string | null
+          doctor_user_id: string
+          duration: string | null
+          gender: string | null
+          hypertension: boolean | null
+          id: string
+          imaging_available: string | null
+          lifestyle_factors: string | null
+          numbness: boolean | null
+          occupation: string | null
+          pain_location: string | null
+          pain_severity: number | null
+          patient_name: string
+          patient_user_id: string | null
+          posture_issues: string | null
+          previous_treatment: string | null
+          radiation: string | null
+          rom_restriction: string | null
+          selected_points: Json | null
+          selected_procedure: string | null
+          status: string
+          stiffness: boolean | null
+          surgery_history: string | null
+          swelling: boolean | null
+          therapist_user_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          ai_analysis?: Json | null
+          ai_suggestions?: Json | null
+          bleeding_history?: boolean | null
+          chief_complaint: string
+          contraindications?: Json | null
+          created_at?: string
+          diabetes?: boolean | null
+          doctor_notes?: string | null
+          doctor_user_id: string
+          duration?: string | null
+          gender?: string | null
+          hypertension?: boolean | null
+          id?: string
+          imaging_available?: string | null
+          lifestyle_factors?: string | null
+          numbness?: boolean | null
+          occupation?: string | null
+          pain_location?: string | null
+          pain_severity?: number | null
+          patient_name: string
+          patient_user_id?: string | null
+          posture_issues?: string | null
+          previous_treatment?: string | null
+          radiation?: string | null
+          rom_restriction?: string | null
+          selected_points?: Json | null
+          selected_procedure?: string | null
+          status?: string
+          stiffness?: boolean | null
+          surgery_history?: string | null
+          swelling?: boolean | null
+          therapist_user_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          ai_analysis?: Json | null
+          ai_suggestions?: Json | null
+          bleeding_history?: boolean | null
+          chief_complaint?: string
+          contraindications?: Json | null
+          created_at?: string
+          diabetes?: boolean | null
+          doctor_notes?: string | null
+          doctor_user_id?: string
+          duration?: string | null
+          gender?: string | null
+          hypertension?: boolean | null
+          id?: string
+          imaging_available?: string | null
+          lifestyle_factors?: string | null
+          numbness?: boolean | null
+          occupation?: string | null
+          pain_location?: string | null
+          pain_severity?: number | null
+          patient_name?: string
+          patient_user_id?: string | null
+          posture_issues?: string | null
+          previous_treatment?: string | null
+          radiation?: string | null
+          rom_restriction?: string | null
+          selected_points?: Json | null
+          selected_procedure?: string | null
+          status?: string
+          stiffness?: boolean | null
+          surgery_history?: string | null
+          swelling?: boolean | null
+          therapist_user_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      parasurgical_outcomes: {
+        Row: {
+          case_id: string
+          created_at: string
+          followup_day: number | null
+          id: string
+          mobility_score: number | null
+          needs_repeat: boolean | null
+          notes: string | null
+          pain_score: number | null
+          recorded_by: string
+          rom_gain: string | null
+          sleep_score: number | null
+          walking_ability: string | null
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          followup_day?: number | null
+          id?: string
+          mobility_score?: number | null
+          needs_repeat?: boolean | null
+          notes?: string | null
+          pain_score?: number | null
+          recorded_by: string
+          rom_gain?: string | null
+          sleep_score?: number | null
+          walking_ability?: string | null
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          followup_day?: number | null
+          id?: string
+          mobility_score?: number | null
+          needs_repeat?: boolean | null
+          notes?: string | null
+          pain_score?: number | null
+          recorded_by?: string
+          rom_gain?: string | null
+          sleep_score?: number | null
+          walking_ability?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parasurgical_outcomes_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "parasurgical_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parasurgical_points: {
+        Row: {
+          anatomical_location: string | null
+          body_region: string
+          contraindications: string[] | null
+          created_at: string
+          id: string
+          indications: string[] | null
+          name: string
+          needling_depth: string | null
+          notes: string | null
+          point_code: string | null
+          side: string
+          stimulation_method: string | null
+          therapy: string
+          x_pct: number | null
+          y_pct: number | null
+        }
+        Insert: {
+          anatomical_location?: string | null
+          body_region: string
+          contraindications?: string[] | null
+          created_at?: string
+          id?: string
+          indications?: string[] | null
+          name: string
+          needling_depth?: string | null
+          notes?: string | null
+          point_code?: string | null
+          side?: string
+          stimulation_method?: string | null
+          therapy: string
+          x_pct?: number | null
+          y_pct?: number | null
+        }
+        Update: {
+          anatomical_location?: string | null
+          body_region?: string
+          contraindications?: string[] | null
+          created_at?: string
+          id?: string
+          indications?: string[] | null
+          name?: string
+          needling_depth?: string | null
+          notes?: string | null
+          point_code?: string | null
+          side?: string
+          stimulation_method?: string | null
+          therapy?: string
+          x_pct?: number | null
+          y_pct?: number | null
+        }
+        Relationships: []
+      }
+      parasurgical_sessions: {
+        Row: {
+          advice_given: string | null
+          case_id: string
+          complications: string | null
+          created_at: string
+          doctor_user_id: string
+          duration_minutes: number | null
+          id: string
+          immediate_response: string | null
+          notes: string | null
+          pain_after: number | null
+          pain_before: number | null
+          points_used: Json | null
+          procedure: string
+          session_date: string
+          technique: string | null
+          technique_details: Json | null
+          therapist_user_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          advice_given?: string | null
+          case_id: string
+          complications?: string | null
+          created_at?: string
+          doctor_user_id: string
+          duration_minutes?: number | null
+          id?: string
+          immediate_response?: string | null
+          notes?: string | null
+          pain_after?: number | null
+          pain_before?: number | null
+          points_used?: Json | null
+          procedure: string
+          session_date?: string
+          technique?: string | null
+          technique_details?: Json | null
+          therapist_user_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          advice_given?: string | null
+          case_id?: string
+          complications?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          duration_minutes?: number | null
+          id?: string
+          immediate_response?: string | null
+          notes?: string | null
+          pain_after?: number | null
+          pain_before?: number | null
+          points_used?: Json | null
+          procedure?: string
+          session_date?: string
+          technique?: string | null
+          technique_details?: Json | null
+          therapist_user_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parasurgical_sessions_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "parasurgical_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patient_associated_members: {
         Row: {
           age: number | null

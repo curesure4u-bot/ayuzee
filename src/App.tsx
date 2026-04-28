@@ -258,6 +258,9 @@ import YogaProtocolsList from "./pages/vaidya/yoga/YogaProtocolsList.tsx";
 import YogaProgressTracker from "./pages/vaidya/yoga/YogaProgressTracker.tsx";
 import PosturePage from "./pages/vaidya/sections/Posture.tsx";
 import HijamaPage from "./pages/vaidya/sections/Hijama.tsx";
+import ParaSurgicalDashboard from "./pages/vaidya/parasurgical/ParaSurgicalDashboard.tsx";
+import ParaSurgicalNewCase from "./pages/vaidya/parasurgical/ParaSurgicalNewCase.tsx";
+import ParaSurgicalCaseDetail from "./pages/vaidya/parasurgical/ParaSurgicalCaseDetail.tsx";
 
 const queryClient = new QueryClient();
 
@@ -466,6 +469,9 @@ const App = () => (
               <Route path="panchakarma" element={<Panchakarma />} />
               <Route path="posture" element={<PosturePage />} />
               <Route path="hijama" element={<HijamaPage />} />
+              <Route path="parasurgical" element={<ParaSurgicalDashboard />} />
+              <Route path="parasurgical/new" element={<ParaSurgicalNewCase />} />
+              <Route path="parasurgical/:id" element={<ParaSurgicalCaseDetail />} />
               <Route path="ayurveda-prescription" element={<AyurvedaPrescription />} />
               <Route path="siddha-prescription" element={<SiddhaPrescription />} />
               <Route path="unani-prescription" element={<UnaniPrescription />} />
