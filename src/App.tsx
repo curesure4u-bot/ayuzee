@@ -307,6 +307,7 @@ const App = () => (
               <Route path="wallet" element={<PatientWallet />} />
               <Route path="bank" element={<PatientBank />} />
               <Route path="help" element={<PatientHelp />} />
+              <Route path="guidance" element={<PatientGuidance />} />
             </Route>
             <Route path="/consultation/:id/pre-form" element={<PreConsultationForm />} />
             <Route path="/consultation/:id/room" element={<ConsultationRoom />} />
