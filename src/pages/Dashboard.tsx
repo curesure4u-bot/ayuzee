@@ -19,6 +19,7 @@ interface Appointment {
   mode: "video" | "in_clinic";
   status: string;
   fee: number;
+  pre_form_submitted?: boolean;
   doctors: { full_name: string; specialization: string; clinic_name: string | null } | null;
 }
 
@@ -55,7 +56,7 @@ const Dashboard = () => {
       supabase.from("profiles").select("full_name, phone, date_of_birth, gender").eq("user_id", userId).maybeSingle(),
       supabase
         .from("appointments")
-        .select("id, appointment_date, time_slot, mode, status, fee, doctors(full_name, specialization, clinic_name)")
+        .select("id, appointment_date, time_slot, mode, status, fee, pre_form_submitted, doctors(full_name, specialization, clinic_name)")
         .eq("user_id", userId)
         .order("appointment_date", { ascending: true }),
       supabase.from("orders").select("id", { count: "exact", head: true }).eq("user_id", userId),
