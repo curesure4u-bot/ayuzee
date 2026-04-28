@@ -11,6 +11,7 @@ import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import PreConsultationForm from "./pages/consultation/PreConsultationForm.tsx";
+import ConsultationRoom from "./pages/consultation/ConsultationRoom.tsx";
 import Doctors from "./pages/Doctors.tsx";
 import DoctorDetail from "./pages/DoctorDetail.tsx";
 import Shop from "./pages/Shop.tsx";
@@ -259,7 +260,9 @@ const queryClient = new QueryClient();
 const AdminAwareNav = () => {
   const location = useLocation();
   const hideNav =
-    location.pathname.startsWith("/admin") || location.pathname.startsWith("/homeo");
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/homeo") ||
+    /^\/consultation\/[^/]+\/room$/.test(location.pathname);
   return hideNav ? null : <SiteNav appLevel />;
 };
 
@@ -302,6 +305,7 @@ const App = () => (
               <Route path="help" element={<PatientHelp />} />
             </Route>
             <Route path="/consultation/:id/pre-form" element={<PreConsultationForm />} />
+            <Route path="/consultation/:id/room" element={<ConsultationRoom />} />
             <Route path="/referral" element={<Referral />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/doctors/:id" element={<DoctorDetail />} />
