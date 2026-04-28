@@ -6663,8 +6663,11 @@ export type Database = {
         Row: {
           bill_id: string
           created_at: string
+          gst_rate: number | null
+          hsn_code: string | null
           id: string
           inventory_id: string | null
+          item_type: string
           line_total: number
           medicine_name: string
           quantity: number
@@ -6673,8 +6676,11 @@ export type Database = {
         Insert: {
           bill_id: string
           created_at?: string
+          gst_rate?: number | null
+          hsn_code?: string | null
           id?: string
           inventory_id?: string | null
+          item_type?: string
           line_total: number
           medicine_name: string
           quantity: number
@@ -6683,8 +6689,11 @@ export type Database = {
         Update: {
           bill_id?: string
           created_at?: string
+          gst_rate?: number | null
+          hsn_code?: string | null
           id?: string
           inventory_id?: string | null
+          item_type?: string
           line_total?: number
           medicine_name?: string
           quantity?: number
@@ -6702,52 +6711,94 @@ export type Database = {
       }
       vaidya_bills: {
         Row: {
+          bill_date: string
+          bill_no: string | null
           bill_type: string
+          cgst_amount: number
+          clinic_address: string | null
+          clinic_name: string | null
           created_at: string
           discount: number
           doctor_user_id: string
+          gst_amount: number
+          gst_rate: number
+          gstin: string | null
           id: string
+          igst_amount: number
+          is_interstate: boolean
           notes: string | null
+          patient_gstin: string | null
           patient_id: string | null
           patient_name: string
           patient_phone: string | null
           payment_mode: string | null
+          payment_reference: string | null
+          sgst_amount: number
           status: string
           subtotal: number
           total: number
           updated_at: string
+          whatsapp_sent_at: string | null
         }
         Insert: {
+          bill_date?: string
+          bill_no?: string | null
           bill_type?: string
+          cgst_amount?: number
+          clinic_address?: string | null
+          clinic_name?: string | null
           created_at?: string
           discount?: number
           doctor_user_id: string
+          gst_amount?: number
+          gst_rate?: number
+          gstin?: string | null
           id?: string
+          igst_amount?: number
+          is_interstate?: boolean
           notes?: string | null
+          patient_gstin?: string | null
           patient_id?: string | null
           patient_name: string
           patient_phone?: string | null
           payment_mode?: string | null
+          payment_reference?: string | null
+          sgst_amount?: number
           status?: string
           subtotal?: number
           total?: number
           updated_at?: string
+          whatsapp_sent_at?: string | null
         }
         Update: {
+          bill_date?: string
+          bill_no?: string | null
           bill_type?: string
+          cgst_amount?: number
+          clinic_address?: string | null
+          clinic_name?: string | null
           created_at?: string
           discount?: number
           doctor_user_id?: string
+          gst_amount?: number
+          gst_rate?: number
+          gstin?: string | null
           id?: string
+          igst_amount?: number
+          is_interstate?: boolean
           notes?: string | null
+          patient_gstin?: string | null
           patient_id?: string | null
           patient_name?: string
           patient_phone?: string | null
           payment_mode?: string | null
+          payment_reference?: string | null
+          sgst_amount?: number
           status?: string
           subtotal?: number
           total?: number
           updated_at?: string
+          whatsapp_sent_at?: string | null
         }
         Relationships: []
       }
