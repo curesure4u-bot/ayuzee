@@ -11,12 +11,14 @@ import {
   Wallet,
   LogOut,
   Pill,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
   { to: "/dashboard/profile", label: "My Profile", icon: User },
   { to: "/dashboard/appointments", label: "My Appointments", icon: Calendar },
+  { to: "/dashboard/guidance", label: "My Guidance", icon: Sparkles },
   { to: "/dashboard/saved-medicines", label: "Saved Medicines", icon: Pill },
   { to: "/dashboard/saved-posts", label: "Saved Posts", icon: BookmarkCheck },
   { to: "/dashboard/orders", label: "My Orders", icon: ShoppingBag },
