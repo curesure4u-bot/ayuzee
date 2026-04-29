@@ -11,7 +11,21 @@ import { usePincode } from "@/hooks/usePincode";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import { ShieldCheck } from "lucide-react";
+import { Check, MapPin, Plus, ShieldCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface SavedAddress {
+  id: string;
+  label: string | null;
+  full_name: string;
+  phone: string;
+  address_line1: string;
+  address_line2: string | null;
+  city: string;
+  state: string;
+  pincode: string;
+  is_default: boolean;
+}
 
 declare global {
   interface Window { Razorpay: new (opts: Record<string, unknown>) => { open: () => void } }
