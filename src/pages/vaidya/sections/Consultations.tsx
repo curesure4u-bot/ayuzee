@@ -12,9 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Plus, Search, ClipboardList, Mic, Square, Upload, Sparkles, Brain, ShieldCheck, Loader2,
+  Plus, Search, ClipboardList, Mic, Square, Upload, Sparkles, Brain, ShieldCheck, Loader2, Download,
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  startAyuzeePdf, addTitle, addPlainTable, addSectionTable, addParagraph,
+  finalizeAyuzeePdf, safeFileName,
+} from "@/lib/pdf/ayuzeePdf";
 
 const LANGS = [
   { v: "en", l: "English" }, { v: "hi", l: "Hindi" }, { v: "ta", l: "Tamil" },
