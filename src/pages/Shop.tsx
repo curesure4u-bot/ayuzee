@@ -363,11 +363,14 @@ const Shop = () => {
                       <ShoppingCart className="h-4 w-4" />
                     </div>
 
-                    <Link to={`/shop/${p.id}`} className="mb-3 grid aspect-square place-items-center overflow-hidden rounded-lg bg-muted/40">
+                    <Link to={`/shop/${p.id}`} className="relative mb-3 grid aspect-square place-items-center overflow-hidden rounded-lg bg-muted/40">
                       {p.image_url ? (
-                        <img src={p.image_url} alt={p.name} className="h-full w-full object-contain p-3" loading="lazy" />
+                        <img src={p.image_url} alt={p.name} className={cn("h-full w-full object-contain p-3", p.stock <= 0 && "opacity-40")} loading="lazy" />
                       ) : (
-                        <div className="font-display text-5xl text-primary/25">{p.name[0]}</div>
+                        <div className={cn("font-display text-5xl text-primary/25", p.stock <= 0 && "opacity-40")}>{p.name[0]}</div>
+                      )}
+                      {p.stock <= 0 && (
+                        <span className="absolute inset-x-3 top-3 rounded-md bg-destructive/90 px-2 py-1 text-center text-xs font-semibold text-destructive-foreground">Out of Stock</span>
                       )}
                     </Link>
 
@@ -396,16 +399,20 @@ const Shop = () => {
                           </>
                         )}
                       </div>
+                      {p.stock > 0 && p.stock <= 5 && (
+                        <p className="mt-1 text-xs font-semibold text-amber-600">Only {p.stock} left!</p>
+                      )}
                     </div>
 
                     <Button
                       className="mt-3 w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+                      disabled={p.stock <= 0}
                       onClick={() => {
                         addItem({ id: p.id, name: p.name, brand: p.brand, unit: p.unit, price: price(p) });
                         toast.success(`${p.name} added to cart`);
                       }}
                     >
-                      Add to cart
+                      {p.stock <= 0 ? "Out of Stock" : "Add to cart"}
                     </Button>
                   </article>
                 ))}
