@@ -4,7 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ShoppingCart, Filter, Stethoscope } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ShoppingCart, Filter, Stethoscope, RotateCcw, Loader2 } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 interface OrderRow {
   id: string;
@@ -26,9 +29,42 @@ interface ApptRow {
 const FILTERS = ["All Orders", "Delivered", "In-transit", "Returned"];
 
 const PatientOrders = () => {
+  const { addItem } = useCart();
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [appts, setAppts] = useState<ApptRow[]>([]);
   const [filter, setFilter] = useState("All Orders");
+  const [reorderingId, setReorderingId] = useState<string | null>(null);
+
+  const reorder = async (orderId: string) => {
+    setReorderingId(orderId);
+    try {
+      const { data: items, error } = await supabase
+        .from("order_items")
+        .select("product_id, product_name, quantity, unit_price, products(brand, unit, stock)")
+        .eq("order_id", orderId);
+      if (error) throw error;
+      if (!items || items.length === 0) {
+        toast.error("No items found in this order");
+        return;
+      }
+      let added = 0;
+      let skipped = 0;
+      for (const it of items as Array<{ product_id: string; product_name: string; quantity: number; unit_price: number; products: { brand: string | null; unit: string | null; stock: number } | null }>) {
+        if (!it.products || it.products.stock <= 0) { skipped++; continue; }
+        addItem(
+          { id: it.product_id, name: it.product_name, brand: it.products.brand ?? "", unit: it.products.unit ?? null, price: it.unit_price },
+          it.quantity,
+        );
+        added++;
+      }
+      if (added) toast.success(`Re-added ${added} item${added === 1 ? "" : "s"} to your cart${skipped ? ` (${skipped} out of stock)` : ""}`);
+      else toast.error("All items in this order are out of stock");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not reorder");
+    } finally {
+      setReorderingId(null);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -95,10 +131,19 @@ const PatientOrders = () => {
                     <p className="font-mono text-sm text-primary">AYZ-{o.id.slice(0, 8).toUpperCase()}</p>
                     <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge>{o.order_status}</Badge>
                     <Badge variant={o.payment_status === "paid" ? "default" : "outline"}>{o.payment_status}</Badge>
                     <span className="font-semibold">₹{o.total}</span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => reorder(o.id)}
+                      disabled={reorderingId === o.id}
+                    >
+                      {reorderingId === o.id ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="mr-2 h-3.5 w-3.5" />}
+                      Reorder
+                    </Button>
                   </div>
                 </div>
               ))}
