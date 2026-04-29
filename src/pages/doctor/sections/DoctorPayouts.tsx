@@ -28,7 +28,10 @@ const DoctorPayouts = () => {
   const [query, setQuery] = useState("");
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [payoutOpen, setPayoutOpen] = useState(false);
+  const [payoutAmount, setPayoutAmount] = useState("");
+  const [payoutNotes, setPayoutNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   useEffect(() => {
     const load = async () => {
       if (!doctor?.id) {
