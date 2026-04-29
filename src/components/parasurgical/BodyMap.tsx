@@ -18,11 +18,14 @@ interface BodyMapProps {
   selectedIds: string[];
   onTogglePoint: (p: BodyPoint) => void;
   onHoverPoint?: (p: BodyPoint | null) => void;
+  showLabels?: boolean;
 }
 
 /**
  * Stylised front/back human body silhouette with clickable therapy points.
- * Uses normalised x_pct/y_pct (0-100) coordinates from the points library.
+ * - Larger, numbered markers
+ * - Always-visible labels for each point (name + code)
+ * - Wide invisible hit area for easier tapping on mobile
  */
 export const BodyMap = ({
   side,
@@ -30,14 +33,18 @@ export const BodyMap = ({
   selectedIds,
   onTogglePoint,
   onHoverPoint,
+  showLabels = true,
 }: BodyMapProps) => {
   const visible = useMemo(
-    () => points.filter((p) => p.side === side && p.x_pct != null && p.y_pct != null),
+    () =>
+      points
+        .filter((p) => p.side === side && p.x_pct != null && p.y_pct != null)
+        .map((p, i) => ({ ...p, _idx: i + 1 })),
     [points, side],
   );
 
   return (
-    <div className="relative w-full max-w-[280px] mx-auto aspect-[1/2.4] select-none">
+    <div className="relative w-full max-w-[340px] mx-auto aspect-[1/2.4] select-none">
       <svg
         viewBox="0 0 100 240"
         className="absolute inset-0 w-full h-full"
@@ -62,9 +69,15 @@ export const BodyMap = ({
 
         {/* Points */}
         {visible.map((p) => {
-          const cx = (p.x_pct ?? 50);
+          const cx = p.x_pct ?? 50;
           const cy = ((p.y_pct ?? 50) / 100) * 240;
           const selected = selectedIds.includes(p.id);
+          // Place label to the right or left depending on x to avoid edge clipping
+          const labelLeft = cx > 60;
+          const labelX = labelLeft ? cx - 4 : cx + 4;
+          const labelAnchor = labelLeft ? "end" : "start";
+          const shortLabel = (p.point_code || p.name || "").slice(0, 18);
+
           return (
             <g
               key={p.id}
@@ -73,15 +86,60 @@ export const BodyMap = ({
               onMouseEnter={() => onHoverPoint?.(p)}
               onMouseLeave={() => onHoverPoint?.(null)}
             >
+              {/* Large invisible hit target */}
+              <circle cx={cx} cy={cy} r={6} fill="transparent" />
+
+              {/* Marker */}
               <circle
                 cx={cx}
                 cy={cy}
-                r={selected ? 3 : 2}
-                fill={selected ? "hsl(var(--primary))" : "hsl(var(--accent-foreground))"}
-                stroke="hsl(var(--background))"
-                strokeWidth="0.5"
-                opacity={selected ? 1 : 0.85}
+                r={selected ? 3.4 : 2.8}
+                fill={selected ? "hsl(var(--primary))" : "hsl(var(--background))"}
+                stroke={selected ? "hsl(var(--primary))" : "hsl(var(--primary))"}
+                strokeWidth="0.7"
               />
+              {/* Marker number */}
+              <text
+                x={cx}
+                y={cy + 1.1}
+                textAnchor="middle"
+                fontSize="2.4"
+                fontWeight="700"
+                fill={selected ? "hsl(var(--primary-foreground))" : "hsl(var(--primary))"}
+                style={{ pointerEvents: "none" }}
+              >
+                {p._idx}
+              </text>
+
+              {/* Always-visible label */}
+              {showLabels && (
+                <>
+                  <rect
+                    x={labelLeft ? labelX - shortLabel.length * 1.25 : labelX - 0.4}
+                    y={cy - 2.2}
+                    width={Math.max(shortLabel.length * 1.25 + 0.8, 6)}
+                    height={3.2}
+                    rx={0.8}
+                    fill="hsl(var(--background))"
+                    fillOpacity={0.85}
+                    stroke="hsl(var(--border))"
+                    strokeWidth="0.2"
+                    style={{ pointerEvents: "none" }}
+                  />
+                  <text
+                    x={labelX}
+                    y={cy + 0.1}
+                    textAnchor={labelAnchor}
+                    fontSize="2.1"
+                    fontWeight={selected ? "700" : "500"}
+                    fill={selected ? "hsl(var(--primary))" : "hsl(var(--foreground))"}
+                    style={{ pointerEvents: "none" }}
+                  >
+                    {shortLabel}
+                  </text>
+                </>
+              )}
+
               {selected && (
                 <circle
                   cx={cx}
