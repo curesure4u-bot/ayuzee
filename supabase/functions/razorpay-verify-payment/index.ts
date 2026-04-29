@@ -81,6 +81,38 @@ Deno.serve(async (req) => {
       .eq("id", internal_id).eq(userIdCol, userData.user.id);
     if (error) throw error;
 
+    // Fire-and-forget WhatsApp confirmation (never blocks payment success)
+    try {
+      const { data: row } = await admin.from(table).select("*").eq("id", internal_id).maybeSingle();
+      if (row) {
+        let to: string | null = null;
+        let message = "";
+        if (kind === "order") {
+          to = (row as any).phone ?? null;
+          const name = (row as any).full_name ?? "Customer";
+          const total = (row as any).total ?? "";
+          const shortId = String(internal_id).slice(0, 8).toUpperCase();
+          message = `Hi ${name}, your Ayuzee order AYZ-${shortId} for ₹${total} is confirmed. We'll notify you when it ships. Thank you!`;
+        } else if (kind === "appointment") {
+          const date = (row as any).appointment_date ?? "";
+          const slot = (row as any).time_slot ?? "";
+          message = `Your Ayuzee appointment is confirmed for ${date} at ${slot}. We'll send a reminder before your consultation.`;
+          // Try fetch profile phone
+          const { data: prof } = await admin.from("profiles").select("phone").eq("user_id", userData.user.id).maybeSingle();
+          to = (prof as any)?.phone ?? null;
+        } else if (kind === "therapy" || kind === "therapy_session") {
+          message = `Your Ayuzee therapy booking is confirmed. Our team will reach out shortly with next steps.`;
+          const { data: prof } = await admin.from("profiles").select("phone").eq("user_id", userData.user.id).maybeSingle();
+          to = (prof as any)?.phone ?? null;
+        }
+        if (to && message) {
+          await admin.functions.invoke("send-whatsapp", { body: { to, message } });
+        }
+      }
+    } catch (waErr) {
+      console.warn("WhatsApp notification failed (non-fatal):", waErr);
+    }
+
     return new Response(JSON.stringify({ ok: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
