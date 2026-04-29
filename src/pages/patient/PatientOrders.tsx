@@ -29,9 +29,42 @@ interface ApptRow {
 const FILTERS = ["All Orders", "Delivered", "In-transit", "Returned"];
 
 const PatientOrders = () => {
+  const { addItem } = useCart();
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [appts, setAppts] = useState<ApptRow[]>([]);
   const [filter, setFilter] = useState("All Orders");
+  const [reorderingId, setReorderingId] = useState<string | null>(null);
+
+  const reorder = async (orderId: string) => {
+    setReorderingId(orderId);
+    try {
+      const { data: items, error } = await supabase
+        .from("order_items")
+        .select("product_id, product_name, quantity, unit_price, products(brand, unit, stock)")
+        .eq("order_id", orderId);
+      if (error) throw error;
+      if (!items || items.length === 0) {
+        toast.error("No items found in this order");
+        return;
+      }
+      let added = 0;
+      let skipped = 0;
+      for (const it of items as Array<{ product_id: string; product_name: string; quantity: number; unit_price: number; products: { brand: string | null; unit: string | null; stock: number } | null }>) {
+        if (!it.products || it.products.stock <= 0) { skipped++; continue; }
+        addItem(
+          { id: it.product_id, name: it.product_name, brand: it.products.brand ?? "", unit: it.products.unit ?? null, price: it.unit_price },
+          it.quantity,
+        );
+        added++;
+      }
+      if (added) toast.success(`Re-added ${added} item${added === 1 ? "" : "s"} to your cart${skipped ? ` (${skipped} out of stock)` : ""}`);
+      else toast.error("All items in this order are out of stock");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not reorder");
+    } finally {
+      setReorderingId(null);
+    }
+  };
 
   useEffect(() => {
     (async () => {
