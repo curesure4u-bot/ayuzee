@@ -131,10 +131,19 @@ const PatientOrders = () => {
                     <p className="font-mono text-sm text-primary">AYZ-{o.id.slice(0, 8).toUpperCase()}</p>
                     <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge>{o.order_status}</Badge>
                     <Badge variant={o.payment_status === "paid" ? "default" : "outline"}>{o.payment_status}</Badge>
                     <span className="font-semibold">₹{o.total}</span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => reorder(o.id)}
+                      disabled={reorderingId === o.id}
+                    >
+                      {reorderingId === o.id ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="mr-2 h-3.5 w-3.5" />}
+                      Reorder
+                    </Button>
                   </div>
                 </div>
               ))}
