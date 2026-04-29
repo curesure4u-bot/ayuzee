@@ -29,6 +29,7 @@ interface Product {
 const ProductDetail = () => {
   const { id } = useParams();
   const { addItem } = useCart();
+  const { isSaved, toggle: toggleWishlist } = useWishlist();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
