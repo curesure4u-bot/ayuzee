@@ -20,6 +20,7 @@ interface Product {
   unit: string | null;
   rating: number;
   total_reviews: number;
+  image_url?: string | null;
 }
 
 const ProductDetail = () => {
