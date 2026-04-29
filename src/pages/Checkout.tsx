@@ -186,6 +186,25 @@ const Checkout = () => {
       );
       if (itemsErr) throw itemsErr;
 
+      // Save the address for next time (best-effort, non-blocking)
+      if (saveAddress) {
+        try {
+          await supabase.from("patient_addresses").insert({
+            user_id: s.session.user.id,
+            full_name: parsed.data.full_name,
+            phone: parsed.data.phone,
+            address_line1: parsed.data.address_line1,
+            address_line2: parsed.data.address_line2 ?? null,
+            city: parsed.data.city,
+            state: parsed.data.state,
+            pincode: parsed.data.pincode,
+            is_default: savedAddresses.length === 0,
+          });
+        } catch (saveErr) {
+          console.warn("Could not save address:", saveErr);
+        }
+      }
+
       // Razorpay checkout
       const ok = await loadRazorpay();
       if (!ok) throw new Error("Could not load Razorpay");
