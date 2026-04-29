@@ -215,6 +215,48 @@ const DoctorPayouts = () => {
           </TabsContent>
         </Tabs>
       </Card>
+
+      <Dialog open={payoutOpen} onOpenChange={setPayoutOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request withdrawal</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="amt">Amount (₹)</Label>
+              <Input
+                id="amt"
+                type="number"
+                min={1}
+                max={totalPending}
+                value={payoutAmount}
+                onChange={(e) => setPayoutAmount(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                Available balance: ₹{totalPending.toFixed(0)}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes (optional)</Label>
+              <Textarea
+                id="notes"
+                rows={3}
+                value={payoutNotes}
+                onChange={(e) => setPayoutNotes(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPayoutOpen(false)} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button onClick={submitWithdraw} disabled={submitting}>
+              {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Submit request
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
