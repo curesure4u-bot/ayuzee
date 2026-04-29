@@ -244,6 +244,17 @@ const PatientOrders = () => {
                       {reorderingId === o.id ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="mr-2 h-3.5 w-3.5" />}
                       Reorder
                     </Button>
+                    {o.payment_status === "paid" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => downloadInvoice(o)}
+                        disabled={invoiceLoading === o.id}
+                      >
+                        {invoiceLoading === o.id ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <Download className="mr-2 h-3.5 w-3.5" />}
+                        Invoice
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
