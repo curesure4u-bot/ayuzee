@@ -86,6 +86,42 @@ const DoctorPayouts = () => {
     .filter((p) => p.status !== "processed")
     .reduce((s, p) => s + p.amount, 0);
 
+  const submitWithdraw = async () => {
+    const amt = Math.round(Number(payoutAmount));
+    if (!Number.isFinite(amt) || amt <= 0) {
+      toast.error("Enter a valid amount");
+      return;
+    }
+    if (amt > totalPending) {
+      toast.error("Amount exceeds available balance");
+      return;
+    }
+    setSubmitting(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setSubmitting(false);
+      toast.error("Please sign in again");
+      return;
+    }
+    const { error } = await supabase.from("payout_requests").insert({
+      type: "doctor",
+      requester_user_id: user.id,
+      amount: amt,
+      notes: payoutNotes || null,
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error("Withdrawal request failed", { description: error.message });
+      return;
+    }
+    toast.success("Withdrawal requested", {
+      description: "Our team will process it within 3 business days.",
+    });
+    setPayoutOpen(false);
+    setPayoutAmount("");
+    setPayoutNotes("");
+  };
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <Card className="p-5">
@@ -98,6 +134,18 @@ const DoctorPayouts = () => {
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <h1 className="font-display text-2xl">Payouts</h1>
+          <div className="ml-auto">
+            <Button
+              onClick={() => {
+                setPayoutAmount(String(totalPending || ""));
+                setPayoutOpen(true);
+              }}
+              disabled={totalPending <= 0}
+            >
+              <Wallet className="mr-2 h-4 w-4" />
+              Withdraw
+            </Button>
+          </div>
         </div>
       </Card>
 
