@@ -5054,6 +5054,54 @@ export type Database = {
           },
         ]
       }
+      patient_addresses: {
+        Row: {
+          address_line1: string
+          address_line2: string | null
+          city: string
+          created_at: string
+          full_name: string
+          id: string
+          is_default: boolean
+          label: string | null
+          phone: string
+          pincode: string
+          state: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_line1: string
+          address_line2?: string | null
+          city: string
+          created_at?: string
+          full_name: string
+          id?: string
+          is_default?: boolean
+          label?: string | null
+          phone: string
+          pincode: string
+          state: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string | null
+          city?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_default?: boolean
+          label?: string | null
+          phone?: string
+          pincode?: string
+          state?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       patient_associated_members: {
         Row: {
           age: number | null
@@ -5221,6 +5269,49 @@ export type Database = {
           weight_kg?: number | null
         }
         Relationships: []
+      }
+      patient_wishlist: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "panchakarma_medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "surgical_products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payout_requests: {
         Row: {
