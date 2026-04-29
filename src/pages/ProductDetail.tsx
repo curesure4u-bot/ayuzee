@@ -152,6 +152,7 @@ const ProductDetail = () => {
         </section>
 
         <ProductReviews productId={product.id} productName={product.name} />
+        <RelatedProducts productId={product.id} brand={product.brand} category={product.category} />
       </main>
       <Footer />
     </div>
