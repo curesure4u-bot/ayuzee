@@ -64,6 +64,10 @@ const Checkout = () => {
     full_name: "", phone: "", address_line1: "", address_line2: "",
     city: "", state: "", pincode: localStorage.getItem("ayuzee_pincode") || "",
   });
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | "new" | null>(null);
+  const [saveAddress, setSaveAddress] = useState(true);
+  const [showForm, setShowForm] = useState(true);
 
   useEffect(() => {
     document.title = "Checkout — Ayuzee";
@@ -71,6 +75,51 @@ const Checkout = () => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setAuthed(!!s));
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  // Load saved addresses once authed
+  useEffect(() => {
+    if (!authed) return;
+    (async () => {
+      const { data } = await supabase
+        .from("patient_addresses")
+        .select("id,label,full_name,phone,address_line1,address_line2,city,state,pincode,is_default")
+        .order("is_default", { ascending: false })
+        .order("created_at", { ascending: false });
+      const list = (data as SavedAddress[]) ?? [];
+      setSavedAddresses(list);
+      if (list.length) {
+        const def = list.find((a) => a.is_default) ?? list[0];
+        applyAddress(def);
+        setShowForm(false);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed]);
+
+  const applyAddress = (a: SavedAddress) => {
+    setSelectedAddressId(a.id);
+    setForm({
+      full_name: a.full_name,
+      phone: a.phone,
+      address_line1: a.address_line1,
+      address_line2: a.address_line2 ?? "",
+      city: a.city,
+      state: a.state,
+      pincode: a.pincode,
+    });
+    checkPincode(a.pincode);
+    setSaveAddress(false);
+  };
+
+  const startNewAddress = () => {
+    setSelectedAddressId("new");
+    setShowForm(true);
+    setForm({
+      full_name: "", phone: "", address_line1: "", address_line2: "",
+      city: "", state: "", pincode: localStorage.getItem("ayuzee_pincode") || "",
+    });
+    setSaveAddress(true);
+  };
 
   useEffect(() => {
     if (items.length === 0 && !submitting) navigate("/cart", { replace: true });
