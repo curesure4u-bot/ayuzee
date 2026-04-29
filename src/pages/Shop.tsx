@@ -43,6 +43,7 @@ const Shop = () => {
   const [brandFilter, setBrandFilter] = useState("");
   const [showAllBrands, setShowAllBrands] = useState(false);
   const { addItem } = useCart();
+  const { isSaved, toggle: toggleWishlist } = useWishlist();
 
   useEffect(() => {
     setSEO(
