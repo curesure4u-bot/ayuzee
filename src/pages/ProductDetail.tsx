@@ -5,8 +5,10 @@ import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { ArrowLeft, Minus, Package, Plus, ShieldCheck, Star, Truck } from "lucide-react";
+import { useWishlist } from "@/hooks/useWishlist";
+import { ArrowLeft, Heart, Minus, Package, Plus, ShieldCheck, Star, Truck } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import ProductReviews from "@/components/shop/ProductReviews";
 
 interface Product {
@@ -27,6 +29,7 @@ interface Product {
 const ProductDetail = () => {
   const { id } = useParams();
   const { addItem } = useCart();
+  const { isSaved, toggle: toggleWishlist } = useWishlist();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
@@ -126,6 +129,17 @@ const ProductDetail = () => {
                 >
                   {product.stock <= 0 ? "Out of Stock" : "Add to cart"}
                 </Button>
+                <button
+                  type="button"
+                  onClick={() => toggleWishlist(product.id)}
+                  aria-label={isSaved(product.id) ? "Remove from wishlist" : "Save to wishlist"}
+                  className={cn(
+                    "grid h-11 w-11 place-items-center rounded-lg border border-border transition",
+                    isSaved(product.id) ? "border-rose-300 bg-rose-50 text-rose-500" : "text-muted-foreground hover:border-rose-300 hover:text-rose-500",
+                  )}
+                >
+                  <Heart className={cn("h-5 w-5", isSaved(product.id) && "fill-rose-500")} />
+                </button>
               </div>
 
               <div className="mt-10 grid gap-3 sm:grid-cols-2">
