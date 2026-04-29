@@ -3,10 +3,15 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowLeft, Wallet, IndianRupee } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Search, ArrowLeft, Wallet, IndianRupee, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
+import { toast } from "sonner";
 
 type Payout = {
   id: string;
@@ -23,7 +28,10 @@ const DoctorPayouts = () => {
   const [query, setQuery] = useState("");
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [payoutOpen, setPayoutOpen] = useState(false);
+  const [payoutAmount, setPayoutAmount] = useState("");
+  const [payoutNotes, setPayoutNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   useEffect(() => {
     const load = async () => {
       if (!doctor?.id) {
@@ -78,6 +86,42 @@ const DoctorPayouts = () => {
     .filter((p) => p.status !== "processed")
     .reduce((s, p) => s + p.amount, 0);
 
+  const submitWithdraw = async () => {
+    const amt = Math.round(Number(payoutAmount));
+    if (!Number.isFinite(amt) || amt <= 0) {
+      toast.error("Enter a valid amount");
+      return;
+    }
+    if (amt > totalPending) {
+      toast.error("Amount exceeds available balance");
+      return;
+    }
+    setSubmitting(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setSubmitting(false);
+      toast.error("Please sign in again");
+      return;
+    }
+    const { error } = await supabase.from("payout_requests").insert({
+      type: "doctor",
+      requester_user_id: user.id,
+      amount: amt,
+      notes: payoutNotes || null,
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error("Withdrawal request failed", { description: error.message });
+      return;
+    }
+    toast.success("Withdrawal requested", {
+      description: "Our team will process it within 3 business days.",
+    });
+    setPayoutOpen(false);
+    setPayoutAmount("");
+    setPayoutNotes("");
+  };
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <Card className="p-5">
@@ -90,6 +134,18 @@ const DoctorPayouts = () => {
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <h1 className="font-display text-2xl">Payouts</h1>
+          <div className="ml-auto">
+            <Button
+              onClick={() => {
+                setPayoutAmount(String(totalPending || ""));
+                setPayoutOpen(true);
+              }}
+              disabled={totalPending <= 0}
+            >
+              <Wallet className="mr-2 h-4 w-4" />
+              Withdraw
+            </Button>
+          </div>
         </div>
       </Card>
 
@@ -159,6 +215,48 @@ const DoctorPayouts = () => {
           </TabsContent>
         </Tabs>
       </Card>
+
+      <Dialog open={payoutOpen} onOpenChange={setPayoutOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request withdrawal</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="amt">Amount (₹)</Label>
+              <Input
+                id="amt"
+                type="number"
+                min={1}
+                max={totalPending}
+                value={payoutAmount}
+                onChange={(e) => setPayoutAmount(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                Available balance: ₹{totalPending.toFixed(0)}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes (optional)</Label>
+              <Textarea
+                id="notes"
+                rows={3}
+                value={payoutNotes}
+                onChange={(e) => setPayoutNotes(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPayoutOpen(false)} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button onClick={submitWithdraw} disabled={submitting}>
+              {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Submit request
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
