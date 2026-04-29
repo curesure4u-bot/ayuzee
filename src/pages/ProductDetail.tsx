@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { ArrowLeft, Minus, Package, Plus, ShieldCheck, Star, Truck } from "lucide-react";
 import { toast } from "sonner";
+import ProductReviews from "@/components/shop/ProductReviews";
 
 interface Product {
   id: string;
