@@ -259,16 +259,79 @@ const Checkout = () => {
         <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-[2fr_1fr]">
           <div className="rounded-2xl border border-border bg-card p-6">
             <h2 className="font-display text-xl">Shipping address</h2>
-            <div className="mt-6"><PincodeWidget variant="inline" /></div>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2"><Label htmlFor="full_name">Full name</Label><Input id="full_name" value={form.full_name} onChange={onChange("full_name")} required /></div>
-              <div><Label htmlFor="phone">Phone</Label><Input id="phone" type="tel" value={form.phone} onChange={onChange("phone")} required /></div>
-              <div><Label htmlFor="pincode">Pincode</Label><Input id="pincode" value={form.pincode} onChange={onChange("pincode")} required /></div>
-              <div className="sm:col-span-2"><Label htmlFor="address_line1">Address line 1</Label><Input id="address_line1" value={form.address_line1} onChange={onChange("address_line1")} required /></div>
-              <div className="sm:col-span-2"><Label htmlFor="address_line2">Address line 2 (optional)</Label><Input id="address_line2" value={form.address_line2} onChange={onChange("address_line2")} /></div>
-              <div><Label htmlFor="city">City</Label><Input id="city" value={form.city} onChange={onChange("city")} required /></div>
-              <div><Label htmlFor="state">State</Label><Input id="state" value={form.state} onChange={onChange("state")} required /></div>
-            </div>
+
+            {savedAddresses.length > 0 && (
+              <div className="mt-5 space-y-3">
+                <p className="text-sm font-semibold text-muted-foreground">Choose a saved address</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {savedAddresses.map((a) => {
+                    const active = selectedAddressId === a.id;
+                    return (
+                      <button
+                        key={a.id}
+                        type="button"
+                        onClick={() => { applyAddress(a); setShowForm(false); }}
+                        className={cn(
+                          "relative rounded-xl border p-4 text-left text-sm transition",
+                          active ? "border-primary bg-primary/5 ring-2 ring-primary/40" : "border-border bg-background hover:border-primary/50",
+                        )}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-primary" />
+                          <span className="font-semibold">{a.full_name}</span>
+                          {a.is_default && <span className="rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-semibold text-secondary">Default</span>}
+                          {active && <Check className="ml-auto h-4 w-4 text-primary" />}
+                        </div>
+                        <p className="mt-1 text-muted-foreground">{a.address_line1}{a.address_line2 ? `, ${a.address_line2}` : ""}</p>
+                        <p className="text-muted-foreground">{a.city}, {a.state} — {a.pincode}</p>
+                        <p className="mt-1 text-xs text-muted-foreground">📞 {a.phone}</p>
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={startNewAddress}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed p-4 text-sm transition",
+                      selectedAddressId === "new" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary",
+                    )}
+                  >
+                    <Plus className="h-5 w-5" />
+                    Use a new address
+                  </button>
+                </div>
+                {!showForm && selectedAddressId && selectedAddressId !== "new" && (
+                  <button type="button" onClick={() => setShowForm(true)} className="text-xs font-semibold text-primary hover:underline">
+                    Edit details
+                  </button>
+                )}
+              </div>
+            )}
+
+            {(showForm || savedAddresses.length === 0) && (
+              <>
+                <div className="mt-6"><PincodeWidget variant="inline" /></div>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="sm:col-span-2"><Label htmlFor="full_name">Full name</Label><Input id="full_name" value={form.full_name} onChange={onChange("full_name")} required /></div>
+                  <div><Label htmlFor="phone">Phone</Label><Input id="phone" type="tel" value={form.phone} onChange={onChange("phone")} required /></div>
+                  <div><Label htmlFor="pincode">Pincode</Label><Input id="pincode" value={form.pincode} onChange={onChange("pincode")} required /></div>
+                  <div className="sm:col-span-2"><Label htmlFor="address_line1">Address line 1</Label><Input id="address_line1" value={form.address_line1} onChange={onChange("address_line1")} required /></div>
+                  <div className="sm:col-span-2"><Label htmlFor="address_line2">Address line 2 (optional)</Label><Input id="address_line2" value={form.address_line2} onChange={onChange("address_line2")} /></div>
+                  <div><Label htmlFor="city">City</Label><Input id="city" value={form.city} onChange={onChange("city")} required /></div>
+                  <div><Label htmlFor="state">State</Label><Input id="state" value={form.state} onChange={onChange("state")} required /></div>
+                </div>
+
+                <label className="mt-5 flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={saveAddress}
+                    onChange={(e) => setSaveAddress(e.target.checked)}
+                    className="h-4 w-4 accent-primary"
+                  />
+                  Save this address for future orders
+                </label>
+              </>
+            )}
 
             <div className="mt-8 flex items-center gap-3 rounded-xl bg-accent/60 p-4 text-sm text-muted-foreground">
               <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
