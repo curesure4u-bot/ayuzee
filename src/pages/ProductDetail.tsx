@@ -129,6 +129,17 @@ const ProductDetail = () => {
                 >
                   {product.stock <= 0 ? "Out of Stock" : "Add to cart"}
                 </Button>
+                <button
+                  type="button"
+                  onClick={() => toggleWishlist(product.id)}
+                  aria-label={isSaved(product.id) ? "Remove from wishlist" : "Save to wishlist"}
+                  className={cn(
+                    "grid h-11 w-11 place-items-center rounded-lg border border-border transition",
+                    isSaved(product.id) ? "border-rose-300 bg-rose-50 text-rose-500" : "text-muted-foreground hover:border-rose-300 hover:text-rose-500",
+                  )}
+                >
+                  <Heart className={cn("h-5 w-5", isSaved(product.id) && "fill-rose-500")} />
+                </button>
               </div>
 
               <div className="mt-10 grid gap-3 sm:grid-cols-2">
