@@ -10,6 +10,7 @@ import { ArrowLeft, Heart, Minus, Package, Plus, ShieldCheck, Star, Truck } from
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import ProductReviews from "@/components/shop/ProductReviews";
+import RelatedProducts from "@/components/shop/RelatedProducts";
 
 interface Product {
   id: string;
@@ -151,6 +152,7 @@ const ProductDetail = () => {
         </section>
 
         <ProductReviews productId={product.id} productName={product.name} />
+        <RelatedProducts productId={product.id} brand={product.brand} category={product.category} />
       </main>
       <Footer />
     </div>
