@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, ExternalLink, HelpCircle, PackageCheck, Search, ShoppingBag, Truck } from "lucide-react";
+import { ChevronRight, ExternalLink, HelpCircle, Loader2, MapPin, PackageCheck, Search, ShoppingBag, Truck } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
