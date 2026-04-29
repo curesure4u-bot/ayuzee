@@ -5,8 +5,10 @@ import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { ArrowLeft, Minus, Package, Plus, ShieldCheck, Star, Truck } from "lucide-react";
+import { useWishlist } from "@/hooks/useWishlist";
+import { ArrowLeft, Heart, Minus, Package, Plus, ShieldCheck, Star, Truck } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import ProductReviews from "@/components/shop/ProductReviews";
 
 interface Product {
