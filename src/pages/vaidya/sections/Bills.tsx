@@ -592,7 +592,8 @@ Thank you 🙏`;
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={printBill}><Printer className="mr-2 h-4 w-4" /> Print / Save PDF</Button>
+            <Button variant="outline" onClick={printBill}><Printer className="mr-2 h-4 w-4" /> Print</Button>
+            <Button variant="outline" onClick={downloadPDF}><Download className="mr-2 h-4 w-4" /> Download PDF</Button>
             <Button onClick={sendWhatsApp}><MessageCircle className="mr-2 h-4 w-4" /> Send on WhatsApp</Button>
           </DialogFooter>
         </DialogContent>
