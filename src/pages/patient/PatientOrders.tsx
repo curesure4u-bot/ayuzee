@@ -5,9 +5,11 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Filter, Stethoscope, RotateCcw, Loader2 } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Filter, Stethoscope, RotateCcw, Loader2, Download } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface OrderRow {
   id: string;
