@@ -4,8 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, Plus, Printer } from "lucide-react";
+import { Trash2, Plus, Printer, Download } from "lucide-react";
 import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
+import {
+  startAyuzeePdf, addTitle, addPlainTable, addSectionTable,
+  finalizeAyuzeePdf, safeFileName,
+} from "@/lib/pdf/ayuzeePdf";
 
 interface Drug {
   id: string; name: string; kingdom: string;
