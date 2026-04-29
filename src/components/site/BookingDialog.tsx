@@ -8,6 +8,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Video, Building2 } from "lucide-react";
 
+declare global {
+  interface Window { Razorpay: new (opts: Record<string, unknown>) => { open: () => void } }
+}
+
+const loadRazorpay = (): Promise<boolean> => new Promise((resolve) => {
+  if (window.Razorpay) return resolve(true);
+  const s = document.createElement("script");
+  s.src = "https://checkout.razorpay.com/v1/checkout.js";
+  s.onload = () => resolve(true);
+  s.onerror = () => resolve(false);
+  document.body.appendChild(s);
+});
+
 interface Doctor {
   id: string;
   full_name: string;
