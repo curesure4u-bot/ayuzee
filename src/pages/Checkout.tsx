@@ -141,6 +141,53 @@ const Checkout = () => {
     setSaveAddress(true);
   };
 
+  const applyCoupon = async () => {
+    const code = couponCode.trim().toUpperCase();
+    if (!code) return;
+    setCouponLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("coupons")
+        .select("id,code,description,discount_type,discount_value,min_order_amount,max_discount,valid_until,is_active")
+        .eq("code", code)
+        .eq("is_active", true)
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) { toast.error("Invalid coupon code"); return; }
+      if (data.valid_until && new Date(data.valid_until) < new Date()) {
+        toast.error("This coupon has expired"); return;
+      }
+      if (subtotal < Number(data.min_order_amount)) {
+        toast.error(`Minimum order ₹${data.min_order_amount} required for ${code}`); return;
+      }
+      let discountAmount = 0;
+      let freeShipping = false;
+      if (data.discount_type === "percent") {
+        discountAmount = Math.round((subtotal * Number(data.discount_value)) / 100);
+        if (data.max_discount) discountAmount = Math.min(discountAmount, Number(data.max_discount));
+      } else if (data.discount_type === "fixed") {
+        discountAmount = Math.min(Number(data.discount_value), subtotal);
+      } else if (data.discount_type === "free_shipping") {
+        freeShipping = true;
+      }
+      setCoupon({
+        id: data.id,
+        code: data.code,
+        discount_type: data.discount_type as AppliedCoupon["discount_type"],
+        discount_amount: discountAmount,
+        free_shipping: freeShipping,
+        description: data.description,
+      });
+      toast.success(`Coupon ${code} applied! 🎉`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not apply coupon");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCoupon = () => { setCoupon(null); setCouponCode(""); };
+
   useEffect(() => {
     if (items.length === 0 && !submitting) navigate("/cart", { replace: true });
   }, [items.length, submitting, navigate]);
