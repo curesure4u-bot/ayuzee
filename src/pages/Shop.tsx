@@ -377,8 +377,15 @@ const Shop = () => {
                     </Link>
 
                     <div className="mb-2 flex items-center justify-end gap-1">
-                      <button className="grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-primary">
-                        <Heart className="h-4 w-4" />
+                      <button
+                        onClick={() => toggleWishlist(p.id)}
+                        aria-label={isSaved(p.id) ? "Remove from wishlist" : "Save to wishlist"}
+                        className={cn(
+                          "grid h-7 w-7 place-items-center rounded-full transition",
+                          isSaved(p.id) ? "text-rose-500" : "text-muted-foreground hover:text-rose-500",
+                        )}
+                      >
+                        <Heart className={cn("h-4 w-4", isSaved(p.id) && "fill-rose-500")} />
                       </button>
                       <button className="grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-primary">
                         <Share2 className="h-4 w-4" />
