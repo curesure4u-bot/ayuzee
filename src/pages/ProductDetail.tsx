@@ -135,6 +135,8 @@ const ProductDetail = () => {
             </div>
           </div>
         </section>
+
+        <ProductReviews productId={product.id} productName={product.name} />
       </main>
       <Footer />
     </div>
