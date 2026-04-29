@@ -178,6 +178,9 @@ const YogaPlanDetail = () => {
               <Button variant="outline" size="sm" onClick={() => window.print()}>
                 <FileText className="mr-2 h-4 w-4" /> Print
               </Button>
+              <Button variant="outline" size="sm" onClick={downloadPDF}>
+                <Download className="mr-2 h-4 w-4" /> Download PDF
+              </Button>
             </div>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-4">
