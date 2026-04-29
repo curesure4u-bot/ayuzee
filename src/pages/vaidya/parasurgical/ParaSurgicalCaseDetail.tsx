@@ -574,7 +574,47 @@ const ParaSurgicalCaseDetail = () => {
                       </p>
                     </div>
                   )}
+
+                  {/* Quick-pick all points for this therapy/side */}
                   <div>
+                    <p className="text-xs uppercase text-muted-foreground mb-2">
+                      All points ({filteredPoints.filter((p) => p.side === side).length})
+                    </p>
+                    {filteredPoints.filter((p) => p.side === side).length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        No points mapped for this therapy on the {side}. Switch view or therapy.
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-1.5">
+                        {filteredPoints
+                          .filter((p) => p.side === side)
+                          .map((p, i) => {
+                            const isSel = selectedPoints.some((s) => s.id === p.id);
+                            return (
+                              <button
+                                key={p.id}
+                                type="button"
+                                onClick={() => toggleSelect(p)}
+                                onMouseEnter={() => setHoverPoint(p)}
+                                onMouseLeave={() => setHoverPoint(null)}
+                                title={p.anatomical_location ?? p.name}
+                                className={`text-xs px-2 py-1 rounded-md border transition ${
+                                  isSel
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-background border-border hover:bg-muted"
+                                }`}
+                              >
+                                <span className="font-mono opacity-70 mr-1">{i + 1}.</span>
+                                {p.point_code ? `${p.point_code} — ${p.name}` : p.name}
+                              </button>
+                            );
+                          })}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+
                     <p className="text-xs uppercase text-muted-foreground mb-2">
                       Selected ({selectedPoints.length})
                     </p>
