@@ -67,8 +67,18 @@ const Checkout = () => {
   const [submitting, setSubmitting] = useState(false);
   const [authed, setAuthed] = useState<boolean | null>(null);
 
-  const shipping = subtotal === 0 ? 0 : subtotal >= 499 ? 0 : 49;
-  const total = subtotal + shipping;
+  const FREE_SHIPPING_THRESHOLD = 499;
+  const [coupon, setCoupon] = useState<AppliedCoupon | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  const discount = coupon?.discount_amount ?? 0;
+  const discountedSubtotal = Math.max(0, subtotal - discount);
+  const baseShipping = discountedSubtotal === 0 ? 0 : discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 49;
+  const shipping = coupon?.free_shipping ? 0 : baseShipping;
+  const total = discountedSubtotal + shipping;
+  const remainingForFreeShip = Math.max(0, FREE_SHIPPING_THRESHOLD - discountedSubtotal);
+  const shipProgress = Math.min(100, (discountedSubtotal / FREE_SHIPPING_THRESHOLD) * 100);
 
   const [form, setForm] = useState({
     full_name: "", phone: "", address_line1: "", address_line2: "",
