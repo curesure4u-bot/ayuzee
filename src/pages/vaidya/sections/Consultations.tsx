@@ -471,9 +471,14 @@ const Consultations = () => {
                     </p>
                     <p className="text-xs text-muted-foreground">{c.visit_date} · {c.chief_complaint || c.diagnosis || "—"}</p>
                   </div>
-                  <div className="text-right text-xs text-muted-foreground">
-                    {c.follow_up_date && <p>Follow-up: {c.follow_up_date}</p>}
-                    {c.fee > 0 && <p>Fee: ₹{c.fee}</p>}
+                  <div className="flex items-start gap-3">
+                    <div className="text-right text-xs text-muted-foreground">
+                      {c.follow_up_date && <p>Follow-up: {c.follow_up_date}</p>}
+                      {c.fee > 0 && <p>Fee: ₹{c.fee}</p>}
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => downloadConsultationPDF(c)}>
+                      <Download className="mr-1 h-3.5 w-3.5" /> PDF
+                    </Button>
                   </div>
                 </div>
                 {c.assessment && <p className="mt-2 text-sm"><span className="font-medium">Dx:</span> {c.assessment}</p>}
