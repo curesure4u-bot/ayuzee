@@ -11,8 +11,18 @@ import { usePincode } from "@/hooks/usePincode";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Check, MapPin, Plus, ShieldCheck } from "lucide-react";
+import { Check, MapPin, Plus, ShieldCheck, Tag, Truck, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
+
+interface AppliedCoupon {
+  id: string;
+  code: string;
+  discount_type: "percent" | "fixed" | "free_shipping";
+  discount_amount: number; // computed rupees off subtotal
+  free_shipping: boolean;
+  description: string | null;
+}
 
 interface SavedAddress {
   id: string;
