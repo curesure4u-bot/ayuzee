@@ -48,6 +48,62 @@ const Stepper = ({ order }: { order: OrderRow }) => (
   </div>
 );
 
+interface ScanEvent { date: string; status: string; location: string; instructions?: string; }
+interface LiveTracking { waybill: string; status: string; current_location?: string; expected_delivery?: string; scans: ScanEvent[]; simulated: boolean; }
+
+const LiveTrackingPanel = ({ waybill }: { waybill: string }) => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<LiveTracking | null>(null);
+
+  const load = async () => {
+    setLoading(true);
+    const { data: res, error } = await supabase.functions.invoke("delhivery-track", { body: { waybill } });
+    setLoading(false);
+    if (error) return toast.error(error.message);
+    if ((res as any)?.error) return toast.error((res as any).error);
+    setData(res as LiveTracking);
+  };
+
+  if (!data) {
+    return (
+      <Button onClick={load} disabled={loading} variant="default">
+        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Truck className="mr-2 h-4 w-4" />}
+        Get Live Tracking
+      </Button>
+    );
+  }
+
+  return (
+    <div className="mt-4 w-full rounded-lg border border-border bg-muted/30 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold">Status: <span className="text-primary">{data.status}</span></p>
+          {data.current_location && <p className="text-xs text-muted-foreground"><MapPin className="mr-1 inline h-3 w-3" />{data.current_location}</p>}
+          {data.expected_delivery && <p className="text-xs text-muted-foreground">Expected: {new Date(data.expected_delivery).toLocaleDateString("en-IN")}</p>}
+        </div>
+        <div className="flex items-center gap-2">
+          {data.simulated && <Badge variant="outline">Simulated</Badge>}
+          <Button size="sm" variant="ghost" onClick={load} disabled={loading}>
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Refresh"}
+          </Button>
+        </div>
+      </div>
+      <ol className="relative mt-4 space-y-4 border-l-2 border-border pl-5">
+        {data.scans.length === 0 && <li className="text-sm text-muted-foreground">No scan events yet.</li>}
+        {[...data.scans].reverse().map((s, i) => (
+          <li key={i} className="relative">
+            <span className={`absolute -left-[27px] top-1 h-3 w-3 rounded-full ${i === 0 ? "bg-primary ring-4 ring-primary/20" : "bg-muted-foreground/40"}`} />
+            <p className="text-sm font-medium">{s.status}</p>
+            <p className="text-xs text-muted-foreground">{s.location}</p>
+            {s.instructions && <p className="text-xs text-muted-foreground/80">{s.instructions}</p>}
+            <p className="mt-0.5 text-[11px] text-muted-foreground">{s.date ? new Date(s.date).toLocaleString("en-IN") : ""}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+};
+
 const OrderCard = ({ order }: { order: OrderRow }) => (
   <Collapsible defaultOpen={false}>
     <Card className="overflow-hidden">
@@ -75,11 +131,12 @@ const OrderCard = ({ order }: { order: OrderRow }) => (
             ))}
           </div>
           <Stepper order={order} />
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap items-start gap-3">
+            {order.delhivery_waybill && <LiveTrackingPanel waybill={order.delhivery_waybill} />}
             {order.delhivery_waybill && (
               <Button asChild variant="outline">
                 <a href={`https://www.delhivery.com/track/package/${order.delhivery_waybill}`} target="_blank" rel="noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" /> Track on Delhivery
+                  <ExternalLink className="mr-2 h-4 w-4" /> Open on Delhivery
                 </a>
               </Button>
             )}
