@@ -272,6 +272,9 @@ const UnaniPrescription = () => {
         <Button variant="outline" onClick={() => window.print()} disabled={lines.length === 0}>
           <Printer className="mr-1 h-4 w-4" /> Print
         </Button>
+        <Button variant="outline" onClick={downloadPDF} disabled={lines.length === 0}>
+          <Download className="mr-1 h-4 w-4" /> Download PDF
+        </Button>
       </div>
       </div>
 
