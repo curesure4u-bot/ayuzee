@@ -253,6 +253,18 @@ const Checkout = () => {
       );
       if (itemsErr) throw itemsErr;
 
+      // Log coupon redemption (best-effort)
+      if (coupon) {
+        try {
+          await supabase.from("coupon_redemptions").insert({
+            coupon_id: coupon.id,
+            user_id: s.session.user.id,
+            order_id: order.id,
+            discount_applied: coupon.discount_amount + (coupon.free_shipping ? baseShipping : 0),
+          });
+        } catch (e) { console.warn("Coupon log failed", e); }
+      }
+
       // Save the address for next time (best-effort, non-blocking)
       if (saveAddress) {
         try {
