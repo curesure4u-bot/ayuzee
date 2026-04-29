@@ -177,6 +177,9 @@ const HomeopathyPrescription = () => {
         <Button variant="outline" onClick={() => window.print()} disabled={lines.length === 0}>
           <Printer className="h-4 w-4 mr-2" /> Print
         </Button>
+        <Button variant="outline" onClick={downloadPDF} disabled={lines.length === 0}>
+          <Download className="h-4 w-4 mr-2" /> Download PDF
+        </Button>
       </div>
       </div>
 
