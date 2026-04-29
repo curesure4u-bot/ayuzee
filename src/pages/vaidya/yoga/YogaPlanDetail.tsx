@@ -13,8 +13,12 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash2, Plus, GripVertical, Flower2, Wind, Brain, Loader2, FileText } from "lucide-react";
+import { Trash2, Plus, GripVertical, Flower2, Wind, Brain, Loader2, FileText, Download } from "lucide-react";
 import { toast } from "sonner";
+import {
+  startAyuzeePdf, addTitle, addPlainTable, addSectionTable,
+  finalizeAyuzeePdf, safeFileName,
+} from "@/lib/pdf/ayuzeePdf";
 
 type Section = "warmup" | "main" | "pranayama" | "meditation" | "relaxation";
 type Kind = "asana" | "pranayama" | "meditation";
