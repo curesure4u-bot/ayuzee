@@ -4,7 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ShoppingCart, Filter, Stethoscope } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ShoppingCart, Filter, Stethoscope, RotateCcw, Loader2 } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 interface OrderRow {
   id: string;
