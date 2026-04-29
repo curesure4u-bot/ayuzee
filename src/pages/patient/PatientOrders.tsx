@@ -14,9 +14,18 @@ import autoTable from "jspdf-autotable";
 interface OrderRow {
   id: string;
   total: number;
+  subtotal?: number | null;
+  shipping?: number | null;
   order_status: string;
   payment_status: string;
   created_at: string;
+  full_name?: string | null;
+  phone?: string | null;
+  address_line1?: string | null;
+  address_line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  pincode?: string | null;
 }
 interface ApptRow {
   id: string;
