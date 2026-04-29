@@ -11,8 +11,18 @@ import { usePincode } from "@/hooks/usePincode";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Check, MapPin, Plus, ShieldCheck } from "lucide-react";
+import { Check, MapPin, Plus, ShieldCheck, Tag, Truck, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
+
+interface AppliedCoupon {
+  id: string;
+  code: string;
+  discount_type: "percent" | "fixed" | "free_shipping";
+  discount_amount: number; // computed rupees off subtotal
+  free_shipping: boolean;
+  description: string | null;
+}
 
 interface SavedAddress {
   id: string;
@@ -57,8 +67,18 @@ const Checkout = () => {
   const [submitting, setSubmitting] = useState(false);
   const [authed, setAuthed] = useState<boolean | null>(null);
 
-  const shipping = subtotal === 0 ? 0 : subtotal >= 499 ? 0 : 49;
-  const total = subtotal + shipping;
+  const FREE_SHIPPING_THRESHOLD = 499;
+  const [coupon, setCoupon] = useState<AppliedCoupon | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  const discount = coupon?.discount_amount ?? 0;
+  const discountedSubtotal = Math.max(0, subtotal - discount);
+  const baseShipping = discountedSubtotal === 0 ? 0 : discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 49;
+  const shipping = coupon?.free_shipping ? 0 : baseShipping;
+  const total = discountedSubtotal + shipping;
+  const remainingForFreeShip = Math.max(0, FREE_SHIPPING_THRESHOLD - discountedSubtotal);
+  const shipProgress = Math.min(100, (discountedSubtotal / FREE_SHIPPING_THRESHOLD) * 100);
 
   const [form, setForm] = useState({
     full_name: "", phone: "", address_line1: "", address_line2: "",
@@ -120,6 +140,53 @@ const Checkout = () => {
     });
     setSaveAddress(true);
   };
+
+  const applyCoupon = async () => {
+    const code = couponCode.trim().toUpperCase();
+    if (!code) return;
+    setCouponLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("coupons")
+        .select("id,code,description,discount_type,discount_value,min_order_amount,max_discount,valid_until,is_active")
+        .eq("code", code)
+        .eq("is_active", true)
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) { toast.error("Invalid coupon code"); return; }
+      if (data.valid_until && new Date(data.valid_until) < new Date()) {
+        toast.error("This coupon has expired"); return;
+      }
+      if (subtotal < Number(data.min_order_amount)) {
+        toast.error(`Minimum order ₹${data.min_order_amount} required for ${code}`); return;
+      }
+      let discountAmount = 0;
+      let freeShipping = false;
+      if (data.discount_type === "percent") {
+        discountAmount = Math.round((subtotal * Number(data.discount_value)) / 100);
+        if (data.max_discount) discountAmount = Math.min(discountAmount, Number(data.max_discount));
+      } else if (data.discount_type === "fixed") {
+        discountAmount = Math.min(Number(data.discount_value), subtotal);
+      } else if (data.discount_type === "free_shipping") {
+        freeShipping = true;
+      }
+      setCoupon({
+        id: data.id,
+        code: data.code,
+        discount_type: data.discount_type as AppliedCoupon["discount_type"],
+        discount_amount: discountAmount,
+        free_shipping: freeShipping,
+        description: data.description,
+      });
+      toast.success(`Coupon ${code} applied! 🎉`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not apply coupon");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCoupon = () => { setCoupon(null); setCouponCode(""); };
 
   useEffect(() => {
     if (items.length === 0 && !submitting) navigate("/cart", { replace: true });
@@ -185,6 +252,18 @@ const Checkout = () => {
         }))
       );
       if (itemsErr) throw itemsErr;
+
+      // Log coupon redemption (best-effort)
+      if (coupon) {
+        try {
+          await supabase.from("coupon_redemptions").insert({
+            coupon_id: coupon.id,
+            user_id: s.session.user.id,
+            order_id: order.id,
+            discount_applied: coupon.discount_amount + (coupon.free_shipping ? baseShipping : 0),
+          });
+        } catch (e) { console.warn("Coupon log failed", e); }
+      }
 
       // Save the address for next time (best-effort, non-blocking)
       if (saveAddress) {
@@ -349,9 +428,62 @@ const Checkout = () => {
                 </li>
               ))}
             </ul>
+
+            {/* Free shipping progress */}
+            {!coupon?.free_shipping && shipping > 0 && (
+              <div className="mt-5 rounded-xl bg-accent/40 p-3">
+                <div className="flex items-center gap-2 text-xs font-medium text-foreground">
+                  <Truck className="h-4 w-4 text-primary" />
+                  Add <span className="font-bold text-primary">₹{remainingForFreeShip}</span> more for FREE shipping
+                </div>
+                <Progress value={shipProgress} className="mt-2 h-2" />
+              </div>
+            )}
+            {(!coupon?.free_shipping && shipping === 0 && discountedSubtotal > 0) && (
+              <div className="mt-5 flex items-center gap-2 rounded-xl bg-primary/10 p-3 text-xs font-semibold text-primary">
+                <Truck className="h-4 w-4" /> You've unlocked FREE shipping! 🎉
+              </div>
+            )}
+
+            {/* Coupon input */}
+            <div className="mt-5 rounded-xl border border-dashed border-border p-3">
+              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                <Tag className="h-4 w-4 text-primary" /> Have a coupon?
+              </div>
+              {coupon ? (
+                <div className="mt-2 flex items-center justify-between rounded-lg bg-primary/10 p-2 text-sm">
+                  <div>
+                    <p className="font-bold text-primary">{coupon.code} applied</p>
+                    <p className="text-xs text-muted-foreground">
+                      {coupon.free_shipping ? "Free shipping" : `−₹${coupon.discount_amount} off`}
+                    </p>
+                  </div>
+                  <button type="button" onClick={removeCoupon} className="rounded-full p-1 text-muted-foreground hover:bg-background hover:text-foreground" aria-label="Remove coupon">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-2 flex gap-2">
+                  <Input
+                    placeholder="Enter code (e.g. AYUZEE10)"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    className="h-9 text-sm uppercase"
+                  />
+                  <Button type="button" variant="outline" size="sm" onClick={applyCoupon} disabled={couponLoading || !couponCode.trim()}>
+                    {couponLoading ? "…" : "Apply"}
+                  </Button>
+                </div>
+              )}
+              <p className="mt-2 text-[10px] text-muted-foreground">Try AYUZEE10, FIRST100, DOCTOR20, FREESHIP</p>
+            </div>
+
             <dl className="mt-6 space-y-2 border-t border-border pt-4 text-sm">
               <div className="flex justify-between"><dt className="text-muted-foreground">Subtotal</dt><dd>₹{subtotal}</dd></div>
-              <div className="flex justify-between"><dt className="text-muted-foreground">Shipping</dt><dd>{shipping === 0 ? "Free" : `₹${shipping}`}</dd></div>
+              {coupon && coupon.discount_amount > 0 && (
+                <div className="flex justify-between text-primary"><dt>Coupon ({coupon.code})</dt><dd>−₹{coupon.discount_amount}</dd></div>
+              )}
+              <div className="flex justify-between"><dt className="text-muted-foreground">Shipping</dt><dd>{shipping === 0 ? <span className="font-semibold text-primary">Free</span> : `₹${shipping}`}</dd></div>
               <div className="flex justify-between border-t border-border pt-3 text-base font-semibold"><dt>Total</dt><dd>₹{total}</dd></div>
             </dl>
             <Button type="submit" variant="hero" size="lg" className="mt-6 w-full" disabled={submitting}>

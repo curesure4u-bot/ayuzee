@@ -5,16 +5,27 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Filter, Stethoscope, RotateCcw, Loader2 } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Filter, Stethoscope, RotateCcw, Loader2, Download } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface OrderRow {
   id: string;
   total: number;
+  subtotal?: number | null;
+  shipping?: number | null;
   order_status: string;
   payment_status: string;
   created_at: string;
+  full_name?: string | null;
+  phone?: string | null;
+  address_line1?: string | null;
+  address_line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  pincode?: string | null;
 }
 interface ApptRow {
   id: string;
@@ -63,6 +74,95 @@ const PatientOrders = () => {
       toast.error(e instanceof Error ? e.message : "Could not reorder");
     } finally {
       setReorderingId(null);
+    }
+  };
+
+  const [invoiceLoading, setInvoiceLoading] = useState<string | null>(null);
+  const downloadInvoice = async (order: OrderRow) => {
+    setInvoiceLoading(order.id);
+    try {
+      const { data: items, error } = await supabase
+        .from("order_items")
+        .select("product_name, quantity, unit_price")
+        .eq("order_id", order.id);
+      if (error) throw error;
+
+      const doc = new jsPDF();
+      const orderNo = `AYZ-${order.id.slice(0, 8).toUpperCase()}`;
+      const dateStr = new Date(order.created_at).toLocaleString();
+
+      // Header
+      doc.setFontSize(20);
+      doc.setTextColor(22, 163, 74);
+      doc.text("Ayuzee", 14, 18);
+      doc.setFontSize(10);
+      doc.setTextColor(90);
+      doc.text("Holistic Wellness · ayuzee.com", 14, 24);
+
+      doc.setFontSize(16);
+      doc.setTextColor(20);
+      doc.text("INVOICE", 196, 18, { align: "right" });
+      doc.setFontSize(9);
+      doc.setTextColor(90);
+      doc.text(`Invoice #: ${orderNo}`, 196, 25, { align: "right" });
+      doc.text(`Date: ${dateStr}`, 196, 30, { align: "right" });
+      doc.text(`Status: ${order.payment_status.toUpperCase()}`, 196, 35, { align: "right" });
+
+      // Bill to
+      doc.setFontSize(11);
+      doc.setTextColor(20);
+      doc.text("Bill To:", 14, 48);
+      doc.setFontSize(10);
+      doc.setTextColor(60);
+      const billLines = [
+        order.full_name || "Customer",
+        order.address_line1 || "",
+        [order.address_line2, order.city].filter(Boolean).join(", "),
+        [order.state, order.pincode].filter(Boolean).join(" — "),
+        order.phone ? `Phone: ${order.phone}` : "",
+      ].filter(Boolean);
+      billLines.forEach((line, i) => doc.text(line, 14, 54 + i * 5));
+
+      // Items table
+      const rows = (items ?? []).map((it) => [
+        it.product_name,
+        String(it.quantity),
+        `Rs. ${Number(it.unit_price).toFixed(2)}`,
+        `Rs. ${(Number(it.unit_price) * Number(it.quantity)).toFixed(2)}`,
+      ]);
+      autoTable(doc, {
+        startY: 88,
+        head: [["Item", "Qty", "Unit price", "Amount"]],
+        body: rows,
+        theme: "striped",
+        headStyles: { fillColor: [22, 163, 74] },
+        styles: { fontSize: 10 },
+      });
+
+      const finalY = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 100;
+      const subtotal = Number(order.subtotal ?? order.total);
+      const shipping = Number(order.shipping ?? 0);
+      doc.setFontSize(10);
+      doc.setTextColor(60);
+      doc.text(`Subtotal:`, 150, finalY + 10);
+      doc.text(`Rs. ${subtotal.toFixed(2)}`, 196, finalY + 10, { align: "right" });
+      doc.text(`Shipping:`, 150, finalY + 16);
+      doc.text(shipping === 0 ? "Free" : `Rs. ${shipping.toFixed(2)}`, 196, finalY + 16, { align: "right" });
+      doc.setFontSize(12);
+      doc.setTextColor(20);
+      doc.text(`Total:`, 150, finalY + 24);
+      doc.text(`Rs. ${Number(order.total).toFixed(2)}`, 196, finalY + 24, { align: "right" });
+
+      doc.setFontSize(9);
+      doc.setTextColor(120);
+      doc.text("Thank you for choosing Ayuzee 🌿", 14, 285);
+
+      doc.save(`Invoice-${orderNo}.pdf`);
+      toast.success("Invoice downloaded");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not generate invoice");
+    } finally {
+      setInvoiceLoading(null);
     }
   };
 
@@ -144,6 +244,17 @@ const PatientOrders = () => {
                       {reorderingId === o.id ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="mr-2 h-3.5 w-3.5" />}
                       Reorder
                     </Button>
+                    {o.payment_status === "paid" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => downloadInvoice(o)}
+                        disabled={invoiceLoading === o.id}
+                      >
+                        {invoiceLoading === o.id ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <Download className="mr-2 h-3.5 w-3.5" />}
+                        Invoice
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
