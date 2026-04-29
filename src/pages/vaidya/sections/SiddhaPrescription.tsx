@@ -7,9 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Pill, Plus, Trash2, Search, Save, Printer, FileText } from "lucide-react";
+import { Pill, Plus, Trash2, Search, Save, Printer, FileText, Download } from "lucide-react";
 import { toast } from "sonner";
 import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
+import {
+  startAyuzeePdf, addTitle, addPlainTable, addSectionTable, addParagraph,
+  finalizeAyuzeePdf, safeFileName,
+} from "@/lib/pdf/ayuzeePdf";
 
 type Drug = {
   id: string; name: string; category: string;
