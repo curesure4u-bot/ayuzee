@@ -62,7 +62,7 @@ export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
         navigate("/auth");
         return;
       }
-      const { error } = await supabase.from("appointments").insert({
+      const { data: appt, error } = await supabase.from("appointments").insert({
         user_id: sessionData.session.user.id,
         doctor_id: doctor.id,
         appointment_date: date,
@@ -71,11 +71,46 @@ export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
         fee: doctor.consultation_fee,
         notes: notes || null,
         status: "pending",
-      });
+        payment_status: "pending",
+      }).select("id").single();
       if (error) throw error;
-      toast.success("Appointment booked! View it in your dashboard.");
-      onOpenChange(false);
-      navigate("/dashboard");
+
+      const ok = await loadRazorpay();
+      if (!ok) throw new Error("Could not load Razorpay");
+
+      const { data: rzp, error: rzpErr } = await supabase.functions.invoke("razorpay-create-order", {
+        body: { order_id: appt.id, kind: "appointment" },
+      });
+      if (rzpErr || !rzp?.razorpay_order_id) throw new Error(rzpErr?.message || "Payment init failed");
+
+      const rz = new window.Razorpay({
+        key: rzp.key_id,
+        amount: rzp.amount,
+        currency: rzp.currency,
+        order_id: rzp.razorpay_order_id,
+        name: "Ayuzee",
+        description: `Consultation with ${doctor.full_name}`,
+        prefill: { name: sessionData.session.user.email || "", contact: "" },
+        theme: { color: "#16a34a" },
+        handler: async (resp: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => {
+          const { error: vErr } = await supabase.functions.invoke("razorpay-verify-payment", {
+            body: {
+              razorpay_order_id: resp.razorpay_order_id,
+              razorpay_payment_id: resp.razorpay_payment_id,
+              razorpay_signature: resp.razorpay_signature,
+              internal_id: appt.id,
+              kind: "appointment",
+            },
+          });
+          if (vErr) { toast.error("Payment verification failed"); return; }
+          toast.success("Appointment booked & paid! 🌿");
+          onOpenChange(false);
+          navigate("/dashboard");
+        },
+        modal: { ondismiss: () => { setSaving(false); toast.info("Payment cancelled — appointment not confirmed"); } },
+      });
+      rz.open();
+      return;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Could not book";
       toast.error(msg);
