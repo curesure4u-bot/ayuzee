@@ -10,9 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, ReceiptText, Trash2, Sparkles, FileText, MessageCircle, Printer, Search } from "lucide-react";
+import { Plus, ReceiptText, Trash2, Sparkles, FileText, MessageCircle, Printer, Search, Download } from "lucide-react";
 import { toast } from "sonner";
 import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
+import {
+  startAyuzeePdf, addTitle, addPlainTable, addSectionTable,
+  finalizeAyuzeePdf, safeFileName,
+} from "@/lib/pdf/ayuzeePdf";
 
 interface Props { type: "patient_bill" | "direct_selling" }
 
