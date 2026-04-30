@@ -6109,6 +6109,7 @@ export type Database = {
       }
       products: {
         Row: {
+          approval_status: string | null
           ayush_system: string | null
           brand: string
           bulk_brand: string | null
@@ -6122,15 +6123,18 @@ export type Database = {
           health_conditions: string[] | null
           id: string
           image_url: string | null
+          is_approved: boolean | null
           is_bulk: boolean
           is_offers: boolean | null
           is_prescription_required: boolean | null
           is_surgical: boolean | null
+          mrp: number | null
           name: string
           offer_label: string | null
           price: number
           product_type: string | null
           rating: number
+          rejection_reason: string | null
           stock: number
           surgical_category: string | null
           tags: string[] | null
@@ -6139,6 +6143,7 @@ export type Database = {
           unit: string | null
         }
         Insert: {
+          approval_status?: string | null
           ayush_system?: string | null
           brand: string
           bulk_brand?: string | null
@@ -6152,15 +6157,18 @@ export type Database = {
           health_conditions?: string[] | null
           id?: string
           image_url?: string | null
+          is_approved?: boolean | null
           is_bulk?: boolean
           is_offers?: boolean | null
           is_prescription_required?: boolean | null
           is_surgical?: boolean | null
+          mrp?: number | null
           name: string
           offer_label?: string | null
           price: number
           product_type?: string | null
           rating?: number
+          rejection_reason?: string | null
           stock?: number
           surgical_category?: string | null
           tags?: string[] | null
@@ -6169,6 +6177,7 @@ export type Database = {
           unit?: string | null
         }
         Update: {
+          approval_status?: string | null
           ayush_system?: string | null
           brand?: string
           bulk_brand?: string | null
@@ -6182,15 +6191,18 @@ export type Database = {
           health_conditions?: string[] | null
           id?: string
           image_url?: string | null
+          is_approved?: boolean | null
           is_bulk?: boolean
           is_offers?: boolean | null
           is_prescription_required?: boolean | null
           is_surgical?: boolean | null
+          mrp?: number | null
           name?: string
           offer_label?: string | null
           price?: number
           product_type?: string | null
           rating?: number
+          rejection_reason?: string | null
           stock?: number
           surgical_category?: string | null
           tags?: string[] | null
