@@ -64,6 +64,36 @@ export type Database = {
           },
         ]
       }
+      admin_team_log: {
+        Row: {
+          action: string
+          created_at: string | null
+          granted_by: string | null
+          granted_to: string | null
+          id: string
+          notes: string | null
+          role: string
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          granted_by?: string | null
+          granted_to?: string | null
+          id?: string
+          notes?: string | null
+          role: string
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          granted_by?: string | null
+          granted_to?: string | null
+          id?: string
+          notes?: string | null
+          role?: string
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -9368,6 +9398,11 @@ export type Database = {
         | "product_admin"
         | "blog_admin"
         | "content_admin"
+        | "orders_admin"
+        | "accounts_admin"
+        | "doctor_admin"
+        | "ayush_admin"
+        | "support_admin"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -9531,6 +9566,11 @@ export const Constants = {
         "product_admin",
         "blog_admin",
         "content_admin",
+        "orders_admin",
+        "accounts_admin",
+        "doctor_admin",
+        "ayush_admin",
+        "support_admin",
       ],
       ayuzee_txn_type: [
         "credit",
