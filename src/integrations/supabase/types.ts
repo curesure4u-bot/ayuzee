@@ -9368,6 +9368,11 @@ export type Database = {
         | "product_admin"
         | "blog_admin"
         | "content_admin"
+        | "orders_admin"
+        | "accounts_admin"
+        | "doctor_admin"
+        | "ayush_admin"
+        | "support_admin"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -9531,6 +9536,11 @@ export const Constants = {
         "product_admin",
         "blog_admin",
         "content_admin",
+        "orders_admin",
+        "accounts_admin",
+        "doctor_admin",
+        "ayush_admin",
+        "support_admin",
       ],
       ayuzee_txn_type: [
         "credit",
