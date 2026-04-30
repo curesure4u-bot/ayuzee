@@ -89,6 +89,7 @@ import AdminSettings from "./pages/admin/AdminSettings.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminBlogs from "./pages/admin/AdminBlogs.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
+import AdminTeam from "./pages/admin/AdminTeam.tsx";
 import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
@@ -404,6 +405,7 @@ const App = () => (
               <Route path="reports" element={<AdminReports />} />
               <Route path="safety" element={<AdminSafety />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="team" element={<AdminTeam />} />
               <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
               <Route path="learning" element={<AdminLearning />} />
