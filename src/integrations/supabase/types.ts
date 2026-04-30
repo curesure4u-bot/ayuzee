@@ -9365,6 +9365,9 @@ export type Database = {
         | "super_admin"
         | "student"
         | "venue_owner"
+        | "product_admin"
+        | "blog_admin"
+        | "content_admin"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -9525,6 +9528,9 @@ export const Constants = {
         "super_admin",
         "student",
         "venue_owner",
+        "product_admin",
+        "blog_admin",
+        "content_admin",
       ],
       ayuzee_txn_type: [
         "credit",
