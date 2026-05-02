@@ -408,6 +408,7 @@ const App = () => (
               <Route path="products/approvals" element={<ProductApprovals />} />
               <Route path="manufacturers/approvals" element={<ManufacturerApprovals />} />
               <Route path="commissions" element={<AdminCommissions />} />
+              <Route path="commission-rules" element={<CommissionRules />} />
               <Route path="blogs" element={<AdminBlogs />} />
               <Route path="notifications" element={<AdminNotifications />} />
               <Route path="payments" element={<AdminPayments />} />
