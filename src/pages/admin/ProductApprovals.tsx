@@ -242,6 +242,55 @@ const ProductApprovals = () => {
                   )}
                 </div>
               </CardHeader>
+              <div className="grid gap-3 border-t bg-muted/20 px-6 py-3 lg:grid-cols-[1fr_auto_auto_auto]">
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">
+                    Price range: ₹{priceRange[0].toLocaleString("en-IN")} – ₹
+                    {priceRange[1].toLocaleString("en-IN")}
+                  </Label>
+                  <Slider
+                    value={priceRange}
+                    onValueChange={(v) => setPriceRange([v[0], v[1]] as [number, number])}
+                    min={0}
+                    max={10000}
+                    step={50}
+                    className="max-w-md"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">From</Label>
+                  <Input
+                    type="date"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    className="h-9 w-40"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">To</Label>
+                  <Input
+                    type="date"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    className="h-9 w-40"
+                  />
+                </div>
+                <div className="flex items-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setPriceRange([0, 10000]);
+                      setFromDate("");
+                      setToDate("");
+                      setManufacturer("all");
+                      setCategory("all");
+                    }}
+                  >
+                    Reset filters
+                  </Button>
+                </div>
+              </div>
               <CardContent>
                 {list.isLoading && (
                   <p className="py-10 text-center text-muted-foreground">Loading…</p>
