@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Eye, Shield } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Eye, Shield, MoreHorizontal, Mail, Ban, CheckCircle2, Activity } from "lucide-react";
 import type { AdminUserRow } from "@/hooks/useAdminUsers";
 
 const roleColor: Record<string, string> = {
