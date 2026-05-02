@@ -63,13 +63,47 @@ const ProductApprovals = () => {
       rows = rows.filter((r) => (r.manufacturer_name || r.brand) === manufacturer);
     }
     if (category !== "all") rows = rows.filter((r) => r.category === category);
+    rows = rows.filter((r) => {
+      const p = Number(r.discount_price ?? r.price ?? 0);
+      return p >= priceRange[0] && p <= priceRange[1];
+    });
+    if (fromDate) {
+      const f = new Date(fromDate).getTime();
+      rows = rows.filter((r) => new Date(r.submitted_at || r.created_at).getTime() >= f);
+    }
+    if (toDate) {
+      const t = new Date(toDate).getTime() + 24 * 60 * 60 * 1000;
+      rows = rows.filter((r) => new Date(r.submitted_at || r.created_at).getTime() <= t);
+    }
     rows = [...rows].sort((a, b) => {
       const ad = new Date(a.submitted_at || a.created_at).getTime();
       const bd = new Date(b.submitted_at || b.created_at).getTime();
       return sort === "newest" ? bd - ad : ad - bd;
     });
     return rows;
-  }, [list.data, manufacturer, category, sort]);
+  }, [list.data, manufacturer, category, sort, priceRange, fromDate, toDate]);
+
+  const stats = useMemo(() => {
+    const rows = list.data ?? [];
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const thisMonth = rows.filter(
+      (r) => new Date(r.submitted_at || r.created_at).getTime() >= startOfMonth.getTime(),
+    ).length;
+    const approvedRows = rows.filter((r) => r.approval_status === "approved" && r.approved_at);
+    const avgHours =
+      approvedRows.length === 0
+        ? null
+        : Math.round(
+            approvedRows.reduce((sum, r) => {
+              const submitted = new Date(r.submitted_at || r.created_at).getTime();
+              const approved = new Date(r.approved_at!).getTime();
+              return sum + Math.max(0, (approved - submitted) / 36e5);
+            }, 0) / approvedRows.length,
+          );
+    return { thisMonth, avgHours };
+  }, [list.data]);
 
   const manufacturers = useMemo(() => {
     const set = new Set<string>();
