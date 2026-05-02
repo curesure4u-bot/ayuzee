@@ -6773,6 +6773,102 @@ export type Database = {
           },
         ]
       }
+      product_inventory: {
+        Row: {
+          batch_number: string
+          cost_price: number | null
+          created_at: string
+          expiry_date: string
+          id: string
+          is_active: boolean
+          manufacturer_id: string
+          manufacturing_date: string
+          mrp: number
+          product_id: string
+          quantity_available: number
+          quantity_reserved: number
+          quantity_sold: number
+          selling_price: number
+          supplier_id: string | null
+          updated_at: string
+          warehouse_location: string | null
+        }
+        Insert: {
+          batch_number: string
+          cost_price?: number | null
+          created_at?: string
+          expiry_date: string
+          id?: string
+          is_active?: boolean
+          manufacturer_id: string
+          manufacturing_date: string
+          mrp: number
+          product_id: string
+          quantity_available?: number
+          quantity_reserved?: number
+          quantity_sold?: number
+          selling_price: number
+          supplier_id?: string | null
+          updated_at?: string
+          warehouse_location?: string | null
+        }
+        Update: {
+          batch_number?: string
+          cost_price?: number | null
+          created_at?: string
+          expiry_date?: string
+          id?: string
+          is_active?: boolean
+          manufacturer_id?: string
+          manufacturing_date?: string
+          mrp?: number
+          product_id?: string
+          quantity_available?: number
+          quantity_reserved?: number
+          quantity_sold?: number
+          selling_price?: number
+          supplier_id?: string | null
+          updated_at?: string
+          warehouse_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_inventory_manufacturer_id_fkey"
+            columns: ["manufacturer_id"]
+            isOneToOne: false
+            referencedRelation: "manufacturers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "panchakarma_medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "surgical_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_inventory_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_reviews: {
         Row: {
           body: string | null
@@ -6847,30 +6943,42 @@ export type Database = {
           created_at: string
           description: string | null
           discount_price: number | null
+          doctor_commission_fixed: number | null
+          doctor_commission_percentage: number | null
           dosage_form: string | null
           expiry_date: string | null
           fssai_certificate_url: string | null
           gallery_urls: string[] | null
           gmp_certificate_url: string | null
           health_conditions: string[] | null
+          hsn_code: string | null
           id: string
           image_url: string | null
+          info_requested_at: string | null
           ingredients: string[] | null
           is_approved: boolean | null
           is_bulk: boolean
           is_offers: boolean | null
           is_prescription_required: boolean | null
           is_surgical: boolean | null
+          is_visible_to_doctors: boolean | null
           iso_certificate_url: string | null
           license_number: string | null
           license_url: string | null
+          manufacturer_id: string | null
           manufacturer_name: string | null
+          manufacturing_date: string | null
           mrp: number | null
           name: string
           offer_label: string | null
+          platform_fee_percentage: number | null
           price: number
           product_type: string | null
           rating: number
+          regulatory_documents: Json | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_comments: string | null
           rejection_reason: string | null
           requested_info: string | null
           stock: number
@@ -6897,30 +7005,42 @@ export type Database = {
           created_at?: string
           description?: string | null
           discount_price?: number | null
+          doctor_commission_fixed?: number | null
+          doctor_commission_percentage?: number | null
           dosage_form?: string | null
           expiry_date?: string | null
           fssai_certificate_url?: string | null
           gallery_urls?: string[] | null
           gmp_certificate_url?: string | null
           health_conditions?: string[] | null
+          hsn_code?: string | null
           id?: string
           image_url?: string | null
+          info_requested_at?: string | null
           ingredients?: string[] | null
           is_approved?: boolean | null
           is_bulk?: boolean
           is_offers?: boolean | null
           is_prescription_required?: boolean | null
           is_surgical?: boolean | null
+          is_visible_to_doctors?: boolean | null
           iso_certificate_url?: string | null
           license_number?: string | null
           license_url?: string | null
+          manufacturer_id?: string | null
           manufacturer_name?: string | null
+          manufacturing_date?: string | null
           mrp?: number | null
           name: string
           offer_label?: string | null
+          platform_fee_percentage?: number | null
           price: number
           product_type?: string | null
           rating?: number
+          regulatory_documents?: Json | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_comments?: string | null
           rejection_reason?: string | null
           requested_info?: string | null
           stock?: number
@@ -6947,30 +7067,42 @@ export type Database = {
           created_at?: string
           description?: string | null
           discount_price?: number | null
+          doctor_commission_fixed?: number | null
+          doctor_commission_percentage?: number | null
           dosage_form?: string | null
           expiry_date?: string | null
           fssai_certificate_url?: string | null
           gallery_urls?: string[] | null
           gmp_certificate_url?: string | null
           health_conditions?: string[] | null
+          hsn_code?: string | null
           id?: string
           image_url?: string | null
+          info_requested_at?: string | null
           ingredients?: string[] | null
           is_approved?: boolean | null
           is_bulk?: boolean
           is_offers?: boolean | null
           is_prescription_required?: boolean | null
           is_surgical?: boolean | null
+          is_visible_to_doctors?: boolean | null
           iso_certificate_url?: string | null
           license_number?: string | null
           license_url?: string | null
+          manufacturer_id?: string | null
           manufacturer_name?: string | null
+          manufacturing_date?: string | null
           mrp?: number | null
           name?: string
           offer_label?: string | null
+          platform_fee_percentage?: number | null
           price?: number
           product_type?: string | null
           rating?: number
+          regulatory_documents?: Json | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_comments?: string | null
           rejection_reason?: string | null
           requested_info?: string | null
           stock?: number
@@ -6982,7 +7114,15 @@ export type Database = {
           unit?: string | null
           uploaded_by?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_manufacturer_id_fkey"
+            columns: ["manufacturer_id"]
+            isOneToOne: false
+            referencedRelation: "manufacturers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
