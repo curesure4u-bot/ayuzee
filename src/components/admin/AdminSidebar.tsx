@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard, Users, Package, Building2, Coins, Wallet, Settings,
+  LayoutDashboard, Users, Package, Building2, Coins, Wallet,
+  Settings, PackageCheck, CreditCard,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -10,10 +11,12 @@ import {
 const items = [
   { title: "Dashboard",              url: "/admin/dashboard", icon: LayoutDashboard, end: true },
   { title: "User Management",        url: "/admin/users",     icon: Users },
-  { title: "Product Approvals",      url: "/admin/products",  icon: Package },
-  { title: "Manufacturer Approvals", url: "/admin/team",      icon: Building2 },
-  { title: "Commission Rules",       url: "/admin/commissions", icon: Coins },
-  { title: "Payout Control",         url: "/admin/payments",  icon: Wallet },
+  { title: "Products",               url: "/admin/products",  icon: Package },
+  { title: "Product Approvals",      url: "/admin/products/approvals", icon: PackageCheck },
+  { title: "Manufacturer Approvals", url: "/admin/manufacturers/approvals", icon: Building2 },
+  { title: "Commission Rules",       url: "/admin/commission-rules", icon: Coins },
+  { title: "Payout Requests",        url: "/admin/payouts",   icon: CreditCard },
+  { title: "Payments",               url: "/admin/payments",  icon: Wallet },
   { title: "Platform Settings",      url: "/admin/settings",  icon: Settings },
 ];
 
