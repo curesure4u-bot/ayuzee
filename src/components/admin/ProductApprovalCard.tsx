@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, MessageSquare, X, Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Check, MessageSquare, X, Loader2, ShieldCheck, History } from "lucide-react";
 import {
   ProductDocumentViewer,
   type DocumentItem,
@@ -27,6 +28,17 @@ const statusBadge: Record<string, string> = {
 const fmtINR = (n: number | null | undefined) =>
   n == null ? "—" : `₹${Number(n).toLocaleString("en-IN")}`;
 
+const REJECTION_REASONS = [
+  "Missing or invalid license document",
+  "Incomplete product information",
+  "Pricing or MRP discrepancy",
+  "Banned or restricted ingredient",
+  "Image quality insufficient",
+  "Misleading or unverified claims",
+  "Expired or near-expiry batch",
+  "Other (specify below)",
+];
+
 type Props = {
   product: ProductApproval;
   selected?: boolean;
@@ -46,9 +58,12 @@ export const ProductApprovalCard = ({
 
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [rejectOpen, setRejectOpen] = useState(false);
-  const [reason, setReason] = useState("");
+  const [reasonChoice, setReasonChoice] = useState(REJECTION_REASONS[0]);
+  const [reasonNote, setReasonNote] = useState("");
   const [infoOpen, setInfoOpen] = useState(false);
   const [info, setInfo] = useState("");
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [verified, setVerified] = useState<Record<string, boolean>>({});
 
   const sellingPrice = product.discount_price ?? product.price;
   const margin =
@@ -67,8 +82,34 @@ export const ProductApprovalCard = ({
     { label: "ISO Certificate", url: product.iso_certificate_url },
     { label: "FSSAI", url: product.fssai_certificate_url },
   ];
+  const availableDocs = docs.filter((d) => !!d.url);
+
+  const timeline = useMemo(() => {
+    const items: { label: string; at: string | null; tone: string }[] = [
+      { label: "Submitted", at: product.submitted_at || product.created_at, tone: "text-muted-foreground" },
+    ];
+    if (product.approval_status === "info_requested") {
+      items.push({ label: "Info requested", at: null, tone: "text-sky-600" });
+    }
+    if (product.approval_status === "rejected") {
+      items.push({ label: "Rejected", at: null, tone: "text-red-600" });
+    }
+    if (product.approval_status === "approved") {
+      items.push({ label: "Approved", at: product.approved_at, tone: "text-emerald-600" });
+    }
+    return items;
+  }, [product]);
 
   const busy = approve.isPending || reject.isPending || requestInfo.isPending;
+  const allDocsVerified =
+    availableDocs.length > 0 && availableDocs.every((d) => verified[d.label]);
+
+  const buildReason = () =>
+    reasonChoice === REJECTION_REASONS[REJECTION_REASONS.length - 1]
+      ? reasonNote.trim()
+      : reasonNote.trim()
+        ? `${reasonChoice} — ${reasonNote.trim()}`
+        : reasonChoice;
 
   return (
     <Card>
@@ -107,6 +148,14 @@ export const ProductApprovalCard = ({
             </p>
           </div>
         </div>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => setHistoryOpen(true)}
+          className="gap-1 text-muted-foreground"
+        >
+          <History className="h-3.5 w-3.5" /> History
+        </Button>
       </CardHeader>
 
       <CardContent className="grid gap-4 lg:grid-cols-[180px_1fr]">
@@ -183,8 +232,38 @@ export const ProductApprovalCard = ({
           )}
 
           <div>
-            <p className="mb-1 text-xs font-medium uppercase text-muted-foreground">Documents</p>
+            <div className="mb-1 flex items-center justify-between">
+              <p className="text-xs font-medium uppercase text-muted-foreground">Documents</p>
+              {availableDocs.length > 0 && (
+                <span
+                  className={`flex items-center gap-1 text-xs ${
+                    allDocsVerified ? "text-emerald-600" : "text-amber-600"
+                  }`}
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  {Object.values(verified).filter(Boolean).length}/{availableDocs.length} verified
+                </span>
+              )}
+            </div>
             <ProductDocumentViewer documents={docs} />
+            {showActions && availableDocs.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-3">
+                {availableDocs.map((d) => (
+                  <label
+                    key={d.label}
+                    className="flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground"
+                  >
+                    <Checkbox
+                      checked={!!verified[d.label]}
+                      onCheckedChange={(v) =>
+                        setVerified((prev) => ({ ...prev, [d.label]: !!v }))
+                      }
+                    />
+                    Verify {d.label}
+                  </label>
+                ))}
+              </div>
+            )}
           </div>
 
           {product.rejection_reason && (
@@ -199,12 +278,17 @@ export const ProductApprovalCard = ({
           )}
 
           {showActions && (
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap items-center gap-2 pt-2">
               <Button
                 size="sm"
-                disabled={busy}
+                disabled={busy || (availableDocs.length > 0 && !allDocsVerified)}
                 onClick={() => approve.mutate(product)}
                 className="bg-emerald-600 hover:bg-emerald-700"
+                title={
+                  availableDocs.length > 0 && !allDocsVerified
+                    ? "Verify all documents before approving"
+                    : undefined
+                }
               >
                 {approve.isPending ? (
                   <Loader2 className="mr-1 h-4 w-4 animate-spin" />
@@ -229,6 +313,11 @@ export const ProductApprovalCard = ({
               >
                 <MessageSquare className="mr-1 h-4 w-4" /> Request info
               </Button>
+              {availableDocs.length > 0 && !allDocsVerified && (
+                <span className="text-xs text-amber-600">
+                  Verify all documents to enable approval
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -250,26 +339,52 @@ export const ProductApprovalCard = ({
           <DialogHeader>
             <DialogTitle>Reject product</DialogTitle>
           </DialogHeader>
-          <Textarea
-            rows={4}
-            placeholder="Provide a reason that will be sent to the manufacturer"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
+          <div className="space-y-3">
+            <div>
+              <p className="mb-1 text-xs font-medium uppercase text-muted-foreground">Reason</p>
+              <Select value={reasonChoice} onValueChange={setReasonChoice}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {REJECTION_REASONS.map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {r}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Textarea
+              rows={3}
+              placeholder={
+                reasonChoice === REJECTION_REASONS[REJECTION_REASONS.length - 1]
+                  ? "Describe the reason (required)"
+                  : "Add additional notes (optional)"
+              }
+              value={reasonNote}
+              onChange={(e) => setReasonNote(e.target.value)}
+            />
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setRejectOpen(false)}>
               Cancel
             </Button>
             <Button
               variant="destructive"
-              disabled={!reason.trim() || reject.isPending}
+              disabled={
+                reject.isPending ||
+                (reasonChoice === REJECTION_REASONS[REJECTION_REASONS.length - 1] &&
+                  !reasonNote.trim())
+              }
               onClick={() => {
                 reject.mutate(
-                  { product, reason: reason.trim() },
+                  { product, reason: buildReason() },
                   {
                     onSuccess: () => {
                       setRejectOpen(false);
-                      setReason("");
+                      setReasonNote("");
+                      setReasonChoice(REJECTION_REASONS[0]);
                     },
                   },
                 );
@@ -316,6 +431,48 @@ export const ProductApprovalCard = ({
               Send request
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* History dialog */}
+      <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Approval history — {product.name}</DialogTitle>
+          </DialogHeader>
+          <ol className="relative ml-3 space-y-4 border-l pl-5">
+            {timeline.map((t, i) => (
+              <li key={i} className="relative">
+                <span className="absolute -left-[27px] top-1 h-3 w-3 rounded-full border-2 border-background bg-primary" />
+                <p className={`text-sm font-medium ${t.tone}`}>{t.label}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t.at
+                    ? new Date(t.at).toLocaleString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    : "—"}
+                </p>
+              </li>
+            ))}
+            {product.rejection_reason && (
+              <li className="relative">
+                <span className="absolute -left-[27px] top-1 h-3 w-3 rounded-full border-2 border-background bg-red-500" />
+                <p className="text-sm font-medium text-red-600">Reason</p>
+                <p className="text-xs text-muted-foreground">{product.rejection_reason}</p>
+              </li>
+            )}
+            {product.requested_info && (
+              <li className="relative">
+                <span className="absolute -left-[27px] top-1 h-3 w-3 rounded-full border-2 border-background bg-sky-500" />
+                <p className="text-sm font-medium text-sky-600">Info requested</p>
+                <p className="text-xs text-muted-foreground">{product.requested_info}</p>
+              </li>
+            )}
+          </ol>
         </DialogContent>
       </Dialog>
     </Card>
