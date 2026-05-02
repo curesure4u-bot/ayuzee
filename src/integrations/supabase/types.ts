@@ -5413,26 +5413,82 @@ export type Database = {
           },
         ]
       }
+      order_tracking_events: {
+        Row: {
+          created_at: string
+          event_time: string
+          event_type: string
+          id: string
+          location: string | null
+          order_id: string
+          raw_data: Json | null
+          status_code: string | null
+          status_description: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_time: string
+          event_type: string
+          id?: string
+          location?: string | null
+          order_id: string
+          raw_data?: Json | null
+          status_code?: string | null
+          status_description?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_time?: string
+          event_type?: string
+          id?: string
+          location?: string | null
+          order_id?: string
+          raw_data?: Json | null
+          status_code?: string | null
+          status_description?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_tracking_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           address_line1: string
           address_line2: string | null
           appointment_id: string | null
+          assigned_supplier_id: string | null
           city: string
+          commission_distributed: boolean | null
+          commission_distributed_at: string | null
+          courier_partner: string | null
           created_at: string
           delhivery_waybill: string | null
+          delivered_at: string | null
+          dispatched_at: string | null
+          doctor_commission: number | null
           full_name: string
           id: string
           order_status: string
           payment_status: string
           phone: string
           pincode: string
+          platform_fee: number | null
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
+          referring_doctor_id: string | null
+          shipment_id: string | null
           shipping: number
           state: string
           subtotal: number
           total: number
+          total_commission: number | null
+          tracking_number: string | null
           updated_at: string
           user_id: string
         }
@@ -5440,21 +5496,33 @@ export type Database = {
           address_line1: string
           address_line2?: string | null
           appointment_id?: string | null
+          assigned_supplier_id?: string | null
           city: string
+          commission_distributed?: boolean | null
+          commission_distributed_at?: string | null
+          courier_partner?: string | null
           created_at?: string
           delhivery_waybill?: string | null
+          delivered_at?: string | null
+          dispatched_at?: string | null
+          doctor_commission?: number | null
           full_name: string
           id?: string
           order_status?: string
           payment_status?: string
           phone: string
           pincode: string
+          platform_fee?: number | null
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
+          referring_doctor_id?: string | null
+          shipment_id?: string | null
           shipping?: number
           state: string
           subtotal: number
           total: number
+          total_commission?: number | null
+          tracking_number?: string | null
           updated_at?: string
           user_id: string
         }
@@ -5462,25 +5530,45 @@ export type Database = {
           address_line1?: string
           address_line2?: string | null
           appointment_id?: string | null
+          assigned_supplier_id?: string | null
           city?: string
+          commission_distributed?: boolean | null
+          commission_distributed_at?: string | null
+          courier_partner?: string | null
           created_at?: string
           delhivery_waybill?: string | null
+          delivered_at?: string | null
+          dispatched_at?: string | null
+          doctor_commission?: number | null
           full_name?: string
           id?: string
           order_status?: string
           payment_status?: string
           phone?: string
           pincode?: string
+          platform_fee?: number | null
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
+          referring_doctor_id?: string | null
+          shipment_id?: string | null
           shipping?: number
           state?: string
           subtotal?: number
           total?: number
+          total_commission?: number | null
+          tracking_number?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_assigned_supplier_id_fkey"
+            columns: ["assigned_supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       parasurgical_cases: {
         Row: {
