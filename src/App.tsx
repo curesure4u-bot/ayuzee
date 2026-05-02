@@ -89,6 +89,7 @@ import AdminSafety from "./pages/admin/AdminSafety.tsx";
 import AdminNotifications from "./pages/admin/AdminNotifications.tsx";
 import AdminSettings from "./pages/admin/AdminSettings.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
+import ProductApprovals from "./pages/admin/ProductApprovals.tsx";
 import AdminBlogs from "./pages/admin/AdminBlogs.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import AdminTeam from "./pages/admin/AdminTeam.tsx";
@@ -402,6 +403,7 @@ const App = () => (
               <Route path="orders" element={<AdminOrders />} />
               <Route path="prescriptions" element={<AdminPrescriptions />} />
               <Route path="products" element={<AdminProducts />} />
+              <Route path="products/approvals" element={<ProductApprovals />} />
               <Route path="commissions" element={<AdminCommissions />} />
               <Route path="blogs" element={<AdminBlogs />} />
               <Route path="notifications" element={<AdminNotifications />} />

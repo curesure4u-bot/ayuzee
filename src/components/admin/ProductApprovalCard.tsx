@@ -159,7 +159,7 @@ export const ProductApprovalCard = ({
                   : "—"
               }
             />
-            <Field label="Reviews" value={`${product.total_reviews ?? 0}` } />
+            <Field label="System" value={product.ayush_system ?? "—"} />
           </div>
 
           {product.ingredients && product.ingredients.length > 0 && (
