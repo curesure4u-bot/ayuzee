@@ -6137,24 +6137,37 @@ export type Database = {
       products: {
         Row: {
           approval_status: string | null
+          approved_at: string | null
+          approved_by: string | null
           ayush_system: string | null
+          batch_number: string | null
           brand: string
           bulk_brand: string | null
           bulk_classical_type: string | null
           bulk_patented_type: string | null
           category: string
+          claims: string | null
           created_at: string
           description: string | null
           discount_price: number | null
           dosage_form: string | null
+          expiry_date: string | null
+          fssai_certificate_url: string | null
+          gallery_urls: string[] | null
+          gmp_certificate_url: string | null
           health_conditions: string[] | null
           id: string
           image_url: string | null
+          ingredients: string[] | null
           is_approved: boolean | null
           is_bulk: boolean
           is_offers: boolean | null
           is_prescription_required: boolean | null
           is_surgical: boolean | null
+          iso_certificate_url: string | null
+          license_number: string | null
+          license_url: string | null
+          manufacturer_name: string | null
           mrp: number | null
           name: string
           offer_label: string | null
@@ -6162,33 +6175,49 @@ export type Database = {
           product_type: string | null
           rating: number
           rejection_reason: string | null
+          requested_info: string | null
           stock: number
+          submitted_at: string | null
           surgical_category: string | null
           tags: string[] | null
           total_reviews: number
           treatment_use: string | null
           unit: string | null
+          uploaded_by: string | null
         }
         Insert: {
           approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           ayush_system?: string | null
+          batch_number?: string | null
           brand: string
           bulk_brand?: string | null
           bulk_classical_type?: string | null
           bulk_patented_type?: string | null
           category: string
+          claims?: string | null
           created_at?: string
           description?: string | null
           discount_price?: number | null
           dosage_form?: string | null
+          expiry_date?: string | null
+          fssai_certificate_url?: string | null
+          gallery_urls?: string[] | null
+          gmp_certificate_url?: string | null
           health_conditions?: string[] | null
           id?: string
           image_url?: string | null
+          ingredients?: string[] | null
           is_approved?: boolean | null
           is_bulk?: boolean
           is_offers?: boolean | null
           is_prescription_required?: boolean | null
           is_surgical?: boolean | null
+          iso_certificate_url?: string | null
+          license_number?: string | null
+          license_url?: string | null
+          manufacturer_name?: string | null
           mrp?: number | null
           name: string
           offer_label?: string | null
@@ -6196,33 +6225,49 @@ export type Database = {
           product_type?: string | null
           rating?: number
           rejection_reason?: string | null
+          requested_info?: string | null
           stock?: number
+          submitted_at?: string | null
           surgical_category?: string | null
           tags?: string[] | null
           total_reviews?: number
           treatment_use?: string | null
           unit?: string | null
+          uploaded_by?: string | null
         }
         Update: {
           approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           ayush_system?: string | null
+          batch_number?: string | null
           brand?: string
           bulk_brand?: string | null
           bulk_classical_type?: string | null
           bulk_patented_type?: string | null
           category?: string
+          claims?: string | null
           created_at?: string
           description?: string | null
           discount_price?: number | null
           dosage_form?: string | null
+          expiry_date?: string | null
+          fssai_certificate_url?: string | null
+          gallery_urls?: string[] | null
+          gmp_certificate_url?: string | null
           health_conditions?: string[] | null
           id?: string
           image_url?: string | null
+          ingredients?: string[] | null
           is_approved?: boolean | null
           is_bulk?: boolean
           is_offers?: boolean | null
           is_prescription_required?: boolean | null
           is_surgical?: boolean | null
+          iso_certificate_url?: string | null
+          license_number?: string | null
+          license_url?: string | null
+          manufacturer_name?: string | null
           mrp?: number | null
           name?: string
           offer_label?: string | null
@@ -6230,12 +6275,15 @@ export type Database = {
           product_type?: string | null
           rating?: number
           rejection_reason?: string | null
+          requested_info?: string | null
           stock?: number
+          submitted_at?: string | null
           surgical_category?: string | null
           tags?: string[] | null
           total_reviews?: number
           treatment_use?: string | null
           unit?: string | null
+          uploaded_by?: string | null
         }
         Relationships: []
       }
