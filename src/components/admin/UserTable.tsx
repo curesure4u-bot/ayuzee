@@ -149,13 +149,40 @@ export const UserTable = ({
                   <TableCell className="text-sm">{fmtDate(r.created_at)}</TableCell>
                   <TableCell className="text-sm">{fmtDate(r.updated_at || r.created_at)}</TableCell>
                   <TableCell>
-                    <div className="flex justify-end gap-2">
-                      <Button size="sm" variant="outline" onClick={() => onEditRole(r)}>
-                        <Shield className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => onViewProfile(r)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                    <div className="flex justify-end">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button size="sm" variant="ghost" aria-label="Open actions">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => onViewProfile(r)}>
+                            <Eye className="mr-2 h-4 w-4" /> View profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onEditRole(r)}>
+                            <Shield className="mr-2 h-4 w-4" /> Edit role
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onToggleActive(r, !r.is_active)}>
+                            {r.is_active ? (
+                              <><Ban className="mr-2 h-4 w-4" /> Suspend user</>
+                            ) : (
+                              <><CheckCircle2 className="mr-2 h-4 w-4" /> Activate user</>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            disabled={!r.email}
+                            onClick={() => r.email && (window.location.href = `mailto:${r.email}`)}
+                          >
+                            <Mail className="mr-2 h-4 w-4" /> Send email
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onViewActivity?.(r)}>
+                            <Activity className="mr-2 h-4 w-4" /> View activity log
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
                 </TableRow>
