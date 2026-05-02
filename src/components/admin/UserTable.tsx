@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Eye, Shield } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Eye, Shield, MoreHorizontal, Mail, Ban, CheckCircle2, Activity } from "lucide-react";
 import type { AdminUserRow } from "@/hooks/useAdminUsers";
 
 const roleColor: Record<string, string> = {
@@ -30,6 +38,7 @@ type Props = {
   onEditRole: (user: AdminUserRow) => void;
   onViewProfile: (user: AdminUserRow) => void;
   onToggleActive: (user: AdminUserRow, next: boolean) => void;
+  onViewActivity?: (user: AdminUserRow) => void;
 };
 
 export const UserTable = ({
@@ -41,6 +50,7 @@ export const UserTable = ({
   onEditRole,
   onViewProfile,
   onToggleActive,
+  onViewActivity,
 }: Props) => {
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.user_id));
 
@@ -141,13 +151,40 @@ export const UserTable = ({
                   <TableCell className="text-sm">{fmtDate(r.created_at)}</TableCell>
                   <TableCell className="text-sm">{fmtDate(r.updated_at || r.created_at)}</TableCell>
                   <TableCell>
-                    <div className="flex justify-end gap-2">
-                      <Button size="sm" variant="outline" onClick={() => onEditRole(r)}>
-                        <Shield className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => onViewProfile(r)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                    <div className="flex justify-end">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button size="sm" variant="ghost" aria-label="Open actions">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => onViewProfile(r)}>
+                            <Eye className="mr-2 h-4 w-4" /> View profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onEditRole(r)}>
+                            <Shield className="mr-2 h-4 w-4" /> Edit role
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onToggleActive(r, !r.is_active)}>
+                            {r.is_active ? (
+                              <><Ban className="mr-2 h-4 w-4" /> Suspend user</>
+                            ) : (
+                              <><CheckCircle2 className="mr-2 h-4 w-4" /> Activate user</>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            disabled={!r.email}
+                            onClick={() => r.email && (window.location.href = `mailto:${r.email}`)}
+                          >
+                            <Mail className="mr-2 h-4 w-4" /> Send email
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onViewActivity?.(r)}>
+                            <Activity className="mr-2 h-4 w-4" /> View activity log
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
                 </TableRow>
