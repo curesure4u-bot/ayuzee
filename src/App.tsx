@@ -74,6 +74,7 @@ import Challenges from "./pages/gamification/Challenges.tsx";
 import AppreciationWall from "./pages/gamification/AppreciationWall.tsx";
 import GamRewards from "./pages/gamification/Rewards.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
+import SuperAdminDashboard from "./pages/admin/Dashboard.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminDoctors from "./pages/admin/AdminDoctors.tsx";
 import AdminOrders from "./pages/admin/AdminOrders.tsx";
@@ -389,6 +390,7 @@ const App = () => (
             <Route path="/admin/auth" element={<AdminAuth />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+              <Route path="dashboard" element={<SuperAdminDashboard />} />
               <Route path="admins" element={<AdminManagement />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="doctors" element={<AdminDoctors />} />
