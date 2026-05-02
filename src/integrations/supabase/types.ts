@@ -878,6 +878,227 @@ export type Database = {
         }
         Relationships: []
       }
+      commission_transactions: {
+        Row: {
+          base_amount: number
+          beneficiary_id: string | null
+          beneficiary_type: string
+          calculation_details: Json | null
+          commission_amount: number
+          commission_percentage: number | null
+          commission_rule_id: string | null
+          created_at: string | null
+          credited_at: string | null
+          id: string
+          notes: string | null
+          order_id: string | null
+          order_item_id: string | null
+          product_id: string | null
+          status: string
+        }
+        Insert: {
+          base_amount: number
+          beneficiary_id?: string | null
+          beneficiary_type: string
+          calculation_details?: Json | null
+          commission_amount: number
+          commission_percentage?: number | null
+          commission_rule_id?: string | null
+          created_at?: string | null
+          credited_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          order_item_id?: string | null
+          product_id?: string | null
+          status?: string
+        }
+        Update: {
+          base_amount?: number
+          beneficiary_id?: string | null
+          beneficiary_type?: string
+          calculation_details?: Json | null
+          commission_amount?: number
+          commission_percentage?: number | null
+          commission_rule_id?: string | null
+          created_at?: string | null
+          credited_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          order_item_id?: string | null
+          product_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_transactions_commission_rule_id_fkey"
+            columns: ["commission_rule_id"]
+            isOneToOne: false
+            referencedRelation: "commission_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "panchakarma_medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "surgical_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_wallet_transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          balance_before: number
+          commission_transaction_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          order_id: string | null
+          payout_request_id: string | null
+          performed_by: string | null
+          status: string
+          transaction_type: string
+          user_id: string
+          wallet_id: string
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          balance_before: number
+          commission_transaction_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payout_request_id?: string | null
+          performed_by?: string | null
+          status?: string
+          transaction_type: string
+          user_id: string
+          wallet_id: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          balance_before?: number
+          commission_transaction_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payout_request_id?: string | null
+          performed_by?: string | null
+          status?: string
+          transaction_type?: string
+          user_id?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_wallet_transactions_commission_transaction_id_fkey"
+            columns: ["commission_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "commission_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_wallet_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_wallet_transactions_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_wallet_transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "commission_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_wallets: {
+        Row: {
+          balance: number | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          is_locked: boolean | null
+          locked_at: string | null
+          locked_by: string | null
+          locked_reason: string | null
+          pending_balance: number | null
+          total_earned: number | null
+          total_withdrawn: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          balance?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_locked?: boolean | null
+          locked_at?: string | null
+          locked_by?: string | null
+          locked_reason?: string | null
+          pending_balance?: number | null
+          total_earned?: number | null
+          total_withdrawn?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          balance?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_locked?: boolean | null
+          locked_at?: string | null
+          locked_by?: string | null
+          locked_reason?: string | null
+          pending_balance?: number | null
+          total_earned?: number | null
+          total_withdrawn?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       company_content: {
         Row: {
           body: string
@@ -5768,6 +5989,7 @@ export type Database = {
           bank_branch: string | null
           bank_name: string | null
           created_at: string
+          final_payout_amount: number | null
           held_at: string | null
           held_by: string | null
           hold_reason: string | null
@@ -5776,11 +5998,15 @@ export type Database = {
           net_amount: number | null
           notes: string | null
           payment_method: string | null
+          payment_proof_url: string | null
           processed_at: string | null
+          processed_by: string | null
+          processing_fee: number | null
           razorpay_payout_id: string | null
           rejected_at: string | null
           rejected_by: string | null
           rejection_reason: string | null
+          requested_amount: number | null
           requester_user_id: string
           status: string
           supporting_documents: Json | null
@@ -5790,6 +6016,7 @@ export type Database = {
           updated_at: string
           utr_number: string | null
           venue_id: string | null
+          wallet_id: string | null
         }
         Insert: {
           account_holder_name?: string | null
@@ -5801,6 +6028,7 @@ export type Database = {
           bank_branch?: string | null
           bank_name?: string | null
           created_at?: string
+          final_payout_amount?: number | null
           held_at?: string | null
           held_by?: string | null
           hold_reason?: string | null
@@ -5809,11 +6037,15 @@ export type Database = {
           net_amount?: number | null
           notes?: string | null
           payment_method?: string | null
+          payment_proof_url?: string | null
           processed_at?: string | null
+          processed_by?: string | null
+          processing_fee?: number | null
           razorpay_payout_id?: string | null
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          requested_amount?: number | null
           requester_user_id: string
           status?: string
           supporting_documents?: Json | null
@@ -5823,6 +6055,7 @@ export type Database = {
           updated_at?: string
           utr_number?: string | null
           venue_id?: string | null
+          wallet_id?: string | null
         }
         Update: {
           account_holder_name?: string | null
@@ -5834,6 +6067,7 @@ export type Database = {
           bank_branch?: string | null
           bank_name?: string | null
           created_at?: string
+          final_payout_amount?: number | null
           held_at?: string | null
           held_by?: string | null
           hold_reason?: string | null
@@ -5842,11 +6076,15 @@ export type Database = {
           net_amount?: number | null
           notes?: string | null
           payment_method?: string | null
+          payment_proof_url?: string | null
           processed_at?: string | null
+          processed_by?: string | null
+          processing_fee?: number | null
           razorpay_payout_id?: string | null
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          requested_amount?: number | null
           requester_user_id?: string
           status?: string
           supporting_documents?: Json | null
@@ -5856,6 +6094,7 @@ export type Database = {
           updated_at?: string
           utr_number?: string | null
           venue_id?: string | null
+          wallet_id?: string | null
         }
         Relationships: [
           {
@@ -5870,6 +6109,13 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_requests_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "commission_wallets"
             referencedColumns: ["id"]
           },
         ]
