@@ -10441,6 +10441,19 @@ export type Database = {
       }
     }
     Functions: {
+      calculate_order_commission: {
+        Args: { order_id_param: string }
+        Returns: Json
+      }
+      credit_commission_to_wallet: {
+        Args: {
+          amount_param: number
+          commission_tx_id: string
+          order_id_param: string
+          user_id_param: string
+        }
+        Returns: boolean
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -10480,6 +10493,7 @@ export type Database = {
       gam_redeem_catalog: { Args: { _reward_id: string }; Returns: string }
       gam_redeem_to_wallet: { Args: { _points: number }; Returns: Json }
       generate_referral_code: { Args: never; Returns: string }
+      get_wallet_balance: { Args: { user_id_param: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
