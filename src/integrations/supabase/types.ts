@@ -591,9 +591,13 @@ export type Database = {
           actor_id: string | null
           actor_role: string | null
           created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_type: string | null
           id: string
           ip_address: string | null
           metadata: Json
+          performed_by: string | null
           target_id: string | null
           target_label: string | null
           target_table: string | null
@@ -605,9 +609,13 @@ export type Database = {
           actor_id?: string | null
           actor_role?: string | null
           created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
           id?: string
           ip_address?: string | null
           metadata?: Json
+          performed_by?: string | null
           target_id?: string | null
           target_label?: string | null
           target_table?: string | null
@@ -619,9 +627,13 @@ export type Database = {
           actor_id?: string | null
           actor_role?: string | null
           created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
           id?: string
           ip_address?: string | null
           metadata?: Json
+          performed_by?: string | null
           target_id?: string | null
           target_label?: string | null
           target_table?: string | null
@@ -5351,6 +5363,45 @@ export type Database = {
           sent_at?: string
           status?: string
           template_name?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          link: string | null
+          message: string
+          metadata: Json | null
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message: string
+          metadata?: Json | null
+          read_at?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string
+          metadata?: Json | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
         }
         Relationships: []
       }
