@@ -5668,47 +5668,148 @@ export type Database = {
           },
         ]
       }
+      payout_audit_log: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          payout_request_id: string
+          to_status: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          payout_request_id: string
+          to_status?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          payout_request_id?: string
+          to_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_audit_log_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payout_requests: {
         Row: {
+          account_holder_name: string | null
+          account_number_masked: string | null
           admin_note: string | null
           amount: number
+          approved_at: string | null
+          approved_by: string | null
+          bank_branch: string | null
+          bank_name: string | null
           created_at: string
+          held_at: string | null
+          held_by: string | null
+          hold_reason: string | null
           id: string
+          ifsc_code: string | null
+          net_amount: number | null
           notes: string | null
+          payment_method: string | null
           processed_at: string | null
+          razorpay_payout_id: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
           requester_user_id: string
           status: string
+          supporting_documents: Json | null
+          tds_amount: number | null
           therapist_id: string | null
           type: string
           updated_at: string
+          utr_number: string | null
           venue_id: string | null
         }
         Insert: {
+          account_holder_name?: string | null
+          account_number_masked?: string | null
           admin_note?: string | null
           amount: number
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_branch?: string | null
+          bank_name?: string | null
           created_at?: string
+          held_at?: string | null
+          held_by?: string | null
+          hold_reason?: string | null
           id?: string
+          ifsc_code?: string | null
+          net_amount?: number | null
           notes?: string | null
+          payment_method?: string | null
           processed_at?: string | null
+          razorpay_payout_id?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           requester_user_id: string
           status?: string
+          supporting_documents?: Json | null
+          tds_amount?: number | null
           therapist_id?: string | null
           type: string
           updated_at?: string
+          utr_number?: string | null
           venue_id?: string | null
         }
         Update: {
+          account_holder_name?: string | null
+          account_number_masked?: string | null
           admin_note?: string | null
           amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_branch?: string | null
+          bank_name?: string | null
           created_at?: string
+          held_at?: string | null
+          held_by?: string | null
+          hold_reason?: string | null
           id?: string
+          ifsc_code?: string | null
+          net_amount?: number | null
           notes?: string | null
+          payment_method?: string | null
           processed_at?: string | null
+          razorpay_payout_id?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           requester_user_id?: string
           status?: string
+          supporting_documents?: Json | null
+          tds_amount?: number | null
           therapist_id?: string | null
           type?: string
           updated_at?: string
+          utr_number?: string | null
           venue_id?: string | null
         }
         Relationships: [
