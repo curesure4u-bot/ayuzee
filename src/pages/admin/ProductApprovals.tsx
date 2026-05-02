@@ -39,6 +39,9 @@ const ProductApprovals = () => {
   const [manufacturer, setManufacturer] = useState("all");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState<"newest" | "oldest">("newest");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
 
