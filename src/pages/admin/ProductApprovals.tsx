@@ -144,6 +144,33 @@ const ProductApprovals = () => {
         </p>
       </div>
 
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <StatTile
+          icon={<Clock className="h-4 w-4" />}
+          label="Pending review"
+          value={counts.data?.pending ?? 0}
+          tone="text-amber-600 bg-amber-500/10"
+        />
+        <StatTile
+          icon={<CheckCircle2 className="h-4 w-4" />}
+          label="Approved total"
+          value={counts.data?.approved ?? 0}
+          tone="text-emerald-600 bg-emerald-500/10"
+        />
+        <StatTile
+          icon={<MessageSquare className="h-4 w-4" />}
+          label="Submitted this month"
+          value={stats.thisMonth}
+          tone="text-sky-600 bg-sky-500/10"
+        />
+        <StatTile
+          icon={<XCircle className="h-4 w-4" />}
+          label="Avg. approval time"
+          value={stats.avgHours == null ? "—" : `${stats.avgHours} h`}
+          tone="text-violet-600 bg-violet-500/10"
+        />
+      </div>
+
       <Tabs value={tab} onValueChange={(v) => setTab(v as ApprovalStatus)}>
         <TabsList>
           {tabs.map((t) => (
