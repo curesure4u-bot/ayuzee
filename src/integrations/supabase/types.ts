@@ -4687,6 +4687,164 @@ export type Database = {
           },
         ]
       }
+      manufacturer_verification_logs: {
+        Row: {
+          comments: string | null
+          created_at: string
+          document_type: string
+          id: string
+          manufacturer_id: string
+          status: string
+          verified_by: string | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string
+          document_type: string
+          id?: string
+          manufacturer_id: string
+          status?: string
+          verified_by?: string | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string
+          document_type?: string
+          id?: string
+          manufacturer_id?: string
+          status?: string
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manufacturer_verification_logs_manufacturer_id_fkey"
+            columns: ["manufacturer_id"]
+            isOneToOne: false
+            referencedRelation: "manufacturers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      manufacturers: {
+        Row: {
+          address: string | null
+          admin_notes: Json | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
+          bank_account_holder: string | null
+          bank_account_number: string | null
+          bank_ifsc: string | null
+          bank_name: string | null
+          cancelled_cheque_url: string | null
+          city: string | null
+          company_name: string
+          contact_email: string | null
+          contact_person_name: string | null
+          contact_phone: string | null
+          created_at: string
+          drug_license_no: string | null
+          drug_license_url: string | null
+          fssai_certificate_url: string | null
+          fssai_license_no: string | null
+          gmp_certificate_url: string | null
+          gst_certificate_url: string | null
+          gst_number: string | null
+          id: string
+          logo_url: string | null
+          manufacturing_license_expiry: string | null
+          manufacturing_license_no: string | null
+          pincode: string | null
+          registration_certificate_url: string | null
+          registration_number: string | null
+          rejection_comment: string | null
+          rejection_reasons: string[] | null
+          state: string | null
+          submitted_at: string
+          updated_at: string
+          user_id: string | null
+          who_gmp_certificate_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          admin_notes?: Json | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_holder?: string | null
+          bank_account_number?: string | null
+          bank_ifsc?: string | null
+          bank_name?: string | null
+          cancelled_cheque_url?: string | null
+          city?: string | null
+          company_name: string
+          contact_email?: string | null
+          contact_person_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          drug_license_no?: string | null
+          drug_license_url?: string | null
+          fssai_certificate_url?: string | null
+          fssai_license_no?: string | null
+          gmp_certificate_url?: string | null
+          gst_certificate_url?: string | null
+          gst_number?: string | null
+          id?: string
+          logo_url?: string | null
+          manufacturing_license_expiry?: string | null
+          manufacturing_license_no?: string | null
+          pincode?: string | null
+          registration_certificate_url?: string | null
+          registration_number?: string | null
+          rejection_comment?: string | null
+          rejection_reasons?: string[] | null
+          state?: string | null
+          submitted_at?: string
+          updated_at?: string
+          user_id?: string | null
+          who_gmp_certificate_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          admin_notes?: Json | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_holder?: string | null
+          bank_account_number?: string | null
+          bank_ifsc?: string | null
+          bank_name?: string | null
+          cancelled_cheque_url?: string | null
+          city?: string | null
+          company_name?: string
+          contact_email?: string | null
+          contact_person_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          drug_license_no?: string | null
+          drug_license_url?: string | null
+          fssai_certificate_url?: string | null
+          fssai_license_no?: string | null
+          gmp_certificate_url?: string | null
+          gst_certificate_url?: string | null
+          gst_number?: string | null
+          id?: string
+          logo_url?: string | null
+          manufacturing_license_expiry?: string | null
+          manufacturing_license_no?: string | null
+          pincode?: string | null
+          registration_certificate_url?: string | null
+          registration_number?: string | null
+          rejection_comment?: string | null
+          rejection_reasons?: string[] | null
+          state?: string | null
+          submitted_at?: string
+          updated_at?: string
+          user_id?: string | null
+          who_gmp_certificate_url?: string | null
+        }
+        Relationships: []
+      }
       network_partners: {
         Row: {
           about: string | null
@@ -9490,6 +9648,7 @@ export type Database = {
         | "doctor_admin"
         | "ayush_admin"
         | "support_admin"
+        | "manufacturer"
       ayuzee_txn_type:
         | "credit"
         | "cashback"
@@ -9658,6 +9817,7 @@ export const Constants = {
         "doctor_admin",
         "ayush_admin",
         "support_admin",
+        "manufacturer",
       ],
       ayuzee_txn_type: [
         "credit",
