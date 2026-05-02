@@ -14,7 +14,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Loader2 } from "lucide-react";
+import { Loader2, Clock, CheckCircle2, XCircle, MessageSquare } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   useApprovalCounts,
   useBulkApprove,
@@ -36,6 +39,9 @@ const ProductApprovals = () => {
   const [manufacturer, setManufacturer] = useState("all");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState<"newest" | "oldest">("newest");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
 
@@ -57,13 +63,47 @@ const ProductApprovals = () => {
       rows = rows.filter((r) => (r.manufacturer_name || r.brand) === manufacturer);
     }
     if (category !== "all") rows = rows.filter((r) => r.category === category);
+    rows = rows.filter((r) => {
+      const p = Number(r.discount_price ?? r.price ?? 0);
+      return p >= priceRange[0] && p <= priceRange[1];
+    });
+    if (fromDate) {
+      const f = new Date(fromDate).getTime();
+      rows = rows.filter((r) => new Date(r.submitted_at || r.created_at).getTime() >= f);
+    }
+    if (toDate) {
+      const t = new Date(toDate).getTime() + 24 * 60 * 60 * 1000;
+      rows = rows.filter((r) => new Date(r.submitted_at || r.created_at).getTime() <= t);
+    }
     rows = [...rows].sort((a, b) => {
       const ad = new Date(a.submitted_at || a.created_at).getTime();
       const bd = new Date(b.submitted_at || b.created_at).getTime();
       return sort === "newest" ? bd - ad : ad - bd;
     });
     return rows;
-  }, [list.data, manufacturer, category, sort]);
+  }, [list.data, manufacturer, category, sort, priceRange, fromDate, toDate]);
+
+  const stats = useMemo(() => {
+    const rows = list.data ?? [];
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const thisMonth = rows.filter(
+      (r) => new Date(r.submitted_at || r.created_at).getTime() >= startOfMonth.getTime(),
+    ).length;
+    const approvedRows = rows.filter((r) => r.approval_status === "approved" && r.approved_at);
+    const avgHours =
+      approvedRows.length === 0
+        ? null
+        : Math.round(
+            approvedRows.reduce((sum, r) => {
+              const submitted = new Date(r.submitted_at || r.created_at).getTime();
+              const approved = new Date(r.approved_at!).getTime();
+              return sum + Math.max(0, (approved - submitted) / 36e5);
+            }, 0) / approvedRows.length,
+          );
+    return { thisMonth, avgHours };
+  }, [list.data]);
 
   const manufacturers = useMemo(() => {
     const set = new Set<string>();
@@ -102,6 +142,33 @@ const ProductApprovals = () => {
         <p className="text-sm text-muted-foreground">
           Review submitted products, verify documents, and approve, reject, or request more information.
         </p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <StatTile
+          icon={<Clock className="h-4 w-4" />}
+          label="Pending review"
+          value={counts.data?.pending ?? 0}
+          tone="text-amber-600 bg-amber-500/10"
+        />
+        <StatTile
+          icon={<CheckCircle2 className="h-4 w-4" />}
+          label="Approved total"
+          value={counts.data?.approved ?? 0}
+          tone="text-emerald-600 bg-emerald-500/10"
+        />
+        <StatTile
+          icon={<MessageSquare className="h-4 w-4" />}
+          label="Submitted this month"
+          value={stats.thisMonth}
+          tone="text-sky-600 bg-sky-500/10"
+        />
+        <StatTile
+          icon={<XCircle className="h-4 w-4" />}
+          label="Avg. approval time"
+          value={stats.avgHours == null ? "—" : `${stats.avgHours} h`}
+          tone="text-violet-600 bg-violet-500/10"
+        />
       </div>
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as ApprovalStatus)}>
@@ -175,6 +242,55 @@ const ProductApprovals = () => {
                   )}
                 </div>
               </CardHeader>
+              <div className="grid gap-3 border-t bg-muted/20 px-6 py-3 lg:grid-cols-[1fr_auto_auto_auto]">
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">
+                    Price range: ₹{priceRange[0].toLocaleString("en-IN")} – ₹
+                    {priceRange[1].toLocaleString("en-IN")}
+                  </Label>
+                  <Slider
+                    value={priceRange}
+                    onValueChange={(v) => setPriceRange([v[0], v[1]] as [number, number])}
+                    min={0}
+                    max={10000}
+                    step={50}
+                    className="max-w-md"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">From</Label>
+                  <Input
+                    type="date"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    className="h-9 w-40"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-muted-foreground">To</Label>
+                  <Input
+                    type="date"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    className="h-9 w-40"
+                  />
+                </div>
+                <div className="flex items-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setPriceRange([0, 10000]);
+                      setFromDate("");
+                      setToDate("");
+                      setManufacturer("all");
+                      setCategory("all");
+                    }}
+                  >
+                    Reset filters
+                  </Button>
+                </div>
+              </div>
               <CardContent>
                 {list.isLoading && (
                   <p className="py-10 text-center text-muted-foreground">Loading…</p>
@@ -218,5 +334,27 @@ const ProductApprovals = () => {
     </div>
   );
 };
+
+const StatTile = ({
+  icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number | string;
+  tone: string;
+}) => (
+  <Card>
+    <CardContent className="flex items-center gap-3 p-4">
+      <div className={`rounded-md p-2 ${tone}`}>{icon}</div>
+      <div>
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="font-display text-xl">{value}</p>
+      </div>
+    </CardContent>
+  </Card>
+);
 
 export default ProductApprovals;
