@@ -38,6 +38,7 @@ type Props = {
   onEditRole: (user: AdminUserRow) => void;
   onViewProfile: (user: AdminUserRow) => void;
   onToggleActive: (user: AdminUserRow, next: boolean) => void;
+  onViewActivity?: (user: AdminUserRow) => void;
 };
 
 export const UserTable = ({
