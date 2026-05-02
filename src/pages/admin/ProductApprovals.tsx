@@ -335,4 +335,26 @@ const ProductApprovals = () => {
   );
 };
 
+const StatTile = ({
+  icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number | string;
+  tone: string;
+}) => (
+  <Card>
+    <CardContent className="flex items-center gap-3 p-4">
+      <div className={`rounded-md p-2 ${tone}`}>{icon}</div>
+      <div>
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="font-display text-xl">{value}</p>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export default ProductApprovals;
