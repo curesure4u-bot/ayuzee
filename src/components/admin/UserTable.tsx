@@ -50,6 +50,7 @@ export const UserTable = ({
   onEditRole,
   onViewProfile,
   onToggleActive,
+  onViewActivity,
 }: Props) => {
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.user_id));
 
