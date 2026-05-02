@@ -5010,6 +5010,7 @@ export type Database = {
           created_at: string
           document_type: string
           id: string
+          issue_type: string | null
           manufacturer_id: string
           status: string
           verified_by: string | null
@@ -5019,6 +5020,7 @@ export type Database = {
           created_at?: string
           document_type: string
           id?: string
+          issue_type?: string | null
           manufacturer_id: string
           status?: string
           verified_by?: string | null
@@ -5028,6 +5030,7 @@ export type Database = {
           created_at?: string
           document_type?: string
           id?: string
+          issue_type?: string | null
           manufacturer_id?: string
           status?: string
           verified_by?: string | null
@@ -5044,121 +5047,214 @@ export type Database = {
       }
       manufacturers: {
         Row: {
+          account_type: string | null
           address: string | null
           admin_notes: Json | null
+          alternate_phone: string | null
           approval_status: string
           approved_at: string | null
           approved_by: string | null
+          ayush_license_number: string | null
           bank_account_holder: string | null
           bank_account_number: string | null
+          bank_branch: string | null
           bank_ifsc: string | null
           bank_name: string | null
           cancelled_cheque_url: string | null
           city: string | null
           company_name: string
+          company_type: string | null
           contact_email: string | null
+          contact_person_designation: string | null
           contact_person_name: string | null
           contact_phone: string | null
           created_at: string
+          documents: Json | null
           drug_license_no: string | null
           drug_license_url: string | null
           fssai_certificate_url: string | null
           fssai_license_no: string | null
+          gmp_certificate_number: string | null
+          gmp_certificate_type: string | null
           gmp_certificate_url: string | null
           gst_certificate_url: string | null
           gst_number: string | null
           id: string
+          info_requested_at: string | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          iso_certification: string | null
+          license_issuing_authority: string | null
           logo_url: string | null
+          manufacturing_address_line1: string | null
+          manufacturing_address_line2: string | null
+          manufacturing_city: string | null
+          manufacturing_country: string | null
           manufacturing_license_expiry: string | null
           manufacturing_license_no: string | null
+          manufacturing_pincode: string | null
+          manufacturing_state: string | null
+          pan_number: string | null
           pincode: string | null
+          registered_address_line1: string | null
+          registered_address_line2: string | null
+          registered_country: string | null
           registration_certificate_url: string | null
           registration_number: string | null
+          rejected_at: string | null
+          rejected_by: string | null
           rejection_comment: string | null
           rejection_reasons: string[] | null
+          requested_info: string | null
           state: string | null
           submitted_at: string
+          trade_name: string | null
           updated_at: string
           user_id: string | null
+          website: string | null
+          whatsapp_number: string | null
           who_gmp_certificate_url: string | null
+          year_established: number | null
         }
         Insert: {
+          account_type?: string | null
           address?: string | null
           admin_notes?: Json | null
+          alternate_phone?: string | null
           approval_status?: string
           approved_at?: string | null
           approved_by?: string | null
+          ayush_license_number?: string | null
           bank_account_holder?: string | null
           bank_account_number?: string | null
+          bank_branch?: string | null
           bank_ifsc?: string | null
           bank_name?: string | null
           cancelled_cheque_url?: string | null
           city?: string | null
           company_name: string
+          company_type?: string | null
           contact_email?: string | null
+          contact_person_designation?: string | null
           contact_person_name?: string | null
           contact_phone?: string | null
           created_at?: string
+          documents?: Json | null
           drug_license_no?: string | null
           drug_license_url?: string | null
           fssai_certificate_url?: string | null
           fssai_license_no?: string | null
+          gmp_certificate_number?: string | null
+          gmp_certificate_type?: string | null
           gmp_certificate_url?: string | null
           gst_certificate_url?: string | null
           gst_number?: string | null
           id?: string
+          info_requested_at?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          iso_certification?: string | null
+          license_issuing_authority?: string | null
           logo_url?: string | null
+          manufacturing_address_line1?: string | null
+          manufacturing_address_line2?: string | null
+          manufacturing_city?: string | null
+          manufacturing_country?: string | null
           manufacturing_license_expiry?: string | null
           manufacturing_license_no?: string | null
+          manufacturing_pincode?: string | null
+          manufacturing_state?: string | null
+          pan_number?: string | null
           pincode?: string | null
+          registered_address_line1?: string | null
+          registered_address_line2?: string | null
+          registered_country?: string | null
           registration_certificate_url?: string | null
           registration_number?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
           rejection_comment?: string | null
           rejection_reasons?: string[] | null
+          requested_info?: string | null
           state?: string | null
           submitted_at?: string
+          trade_name?: string | null
           updated_at?: string
           user_id?: string | null
+          website?: string | null
+          whatsapp_number?: string | null
           who_gmp_certificate_url?: string | null
+          year_established?: number | null
         }
         Update: {
+          account_type?: string | null
           address?: string | null
           admin_notes?: Json | null
+          alternate_phone?: string | null
           approval_status?: string
           approved_at?: string | null
           approved_by?: string | null
+          ayush_license_number?: string | null
           bank_account_holder?: string | null
           bank_account_number?: string | null
+          bank_branch?: string | null
           bank_ifsc?: string | null
           bank_name?: string | null
           cancelled_cheque_url?: string | null
           city?: string | null
           company_name?: string
+          company_type?: string | null
           contact_email?: string | null
+          contact_person_designation?: string | null
           contact_person_name?: string | null
           contact_phone?: string | null
           created_at?: string
+          documents?: Json | null
           drug_license_no?: string | null
           drug_license_url?: string | null
           fssai_certificate_url?: string | null
           fssai_license_no?: string | null
+          gmp_certificate_number?: string | null
+          gmp_certificate_type?: string | null
           gmp_certificate_url?: string | null
           gst_certificate_url?: string | null
           gst_number?: string | null
           id?: string
+          info_requested_at?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          iso_certification?: string | null
+          license_issuing_authority?: string | null
           logo_url?: string | null
+          manufacturing_address_line1?: string | null
+          manufacturing_address_line2?: string | null
+          manufacturing_city?: string | null
+          manufacturing_country?: string | null
           manufacturing_license_expiry?: string | null
           manufacturing_license_no?: string | null
+          manufacturing_pincode?: string | null
+          manufacturing_state?: string | null
+          pan_number?: string | null
           pincode?: string | null
+          registered_address_line1?: string | null
+          registered_address_line2?: string | null
+          registered_country?: string | null
           registration_certificate_url?: string | null
           registration_number?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
           rejection_comment?: string | null
           rejection_reasons?: string[] | null
+          requested_info?: string | null
           state?: string | null
           submitted_at?: string
+          trade_name?: string | null
           updated_at?: string
           user_id?: string | null
+          website?: string | null
+          whatsapp_number?: string | null
           who_gmp_certificate_url?: string | null
+          year_established?: number | null
         }
         Relationships: []
       }
@@ -7339,6 +7435,90 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           year_of_study?: number | null
+        }
+        Relationships: []
+      }
+      suppliers: {
+        Row: {
+          address_line1: string
+          address_line2: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
+          bank_account_holder_name: string | null
+          bank_account_number: string | null
+          bank_branch: string | null
+          bank_ifsc_code: string | null
+          bank_name: string | null
+          city: string
+          company_name: string
+          contact_person_name: string
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean | null
+          phone: string
+          pincode: string
+          serviceable_pincodes: Json | null
+          serviceable_states: Json | null
+          state: string
+          supplier_type: string | null
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          address_line1: string
+          address_line2?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_holder_name?: string | null
+          bank_account_number?: string | null
+          bank_branch?: string | null
+          bank_ifsc_code?: string | null
+          bank_name?: string | null
+          city: string
+          company_name: string
+          contact_person_name: string
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean | null
+          phone: string
+          pincode: string
+          serviceable_pincodes?: Json | null
+          serviceable_states?: Json | null
+          state: string
+          supplier_type?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_holder_name?: string | null
+          bank_account_number?: string | null
+          bank_branch?: string | null
+          bank_ifsc_code?: string | null
+          bank_name?: string | null
+          city?: string
+          company_name?: string
+          contact_person_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          phone?: string
+          pincode?: string
+          serviceable_pincodes?: Json | null
+          serviceable_states?: Json | null
+          state?: string
+          supplier_type?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
         }
         Relationships: []
       }
