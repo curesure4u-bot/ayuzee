@@ -1,22 +1,47 @@
-export const setSEO = (title: string, description: string, canonicalPath?: string) => {
+type JsonLd = Record<string, unknown> | Record<string, unknown>[];
+
+interface SEOOptions {
+  ogType?: "website" | "article" | "product" | "profile";
+  ogImage?: string;
+  jsonLd?: JsonLd;
+}
+
+const JSONLD_ID = "route-jsonld";
+
+export const setSEO = (
+  title: string,
+  description: string,
+  canonicalPath?: string,
+  options: SEOOptions = {},
+) => {
   document.title = title;
 
-  let meta = document.querySelector('meta[name="description"]');
-  if (!meta) {
-    meta = document.createElement("meta");
-    meta.setAttribute("name", "description");
-    document.head.appendChild(meta);
-  }
-  meta.setAttribute("content", description);
+  const upsertMeta = (selector: string, attr: string, attrValue: string, content: string) => {
+    let el = document.querySelector(selector);
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attr, attrValue);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("content", content);
+  };
 
-  const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute("content", title);
-  const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.setAttribute("content", description);
-  const twTitle = document.querySelector('meta[name="twitter:title"]');
-  if (twTitle) twTitle.setAttribute("content", title);
-  const twDesc = document.querySelector('meta[name="twitter:description"]');
-  if (twDesc) twDesc.setAttribute("content", description);
+  upsertMeta('meta[name="description"]', "name", "description", description);
+  upsertMeta('meta[property="og:title"]', "property", "og:title", title);
+  upsertMeta('meta[property="og:description"]', "property", "og:description", description);
+  upsertMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
+  upsertMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
+
+  if (options.ogType) {
+    upsertMeta('meta[property="og:type"]', "property", "og:type", options.ogType);
+  } else {
+    upsertMeta('meta[property="og:type"]', "property", "og:type", "website");
+  }
+
+  if (options.ogImage) {
+    upsertMeta('meta[property="og:image"]', "property", "og:image", options.ogImage);
+    upsertMeta('meta[name="twitter:image"]', "name", "twitter:image", options.ogImage);
+  }
 
   // Self-referencing canonical + og:url for the current route
   const href = canonicalPath
@@ -33,11 +58,16 @@ export const setSEO = (title: string, description: string, canonicalPath?: strin
   }
   canonical.setAttribute("href", href);
 
-  let ogUrl = document.querySelector('meta[property="og:url"]');
-  if (!ogUrl) {
-    ogUrl = document.createElement("meta");
-    ogUrl.setAttribute("property", "og:url");
-    document.head.appendChild(ogUrl);
+  upsertMeta('meta[property="og:url"]', "property", "og:url", href);
+
+  // Manage per-route JSON-LD (kept separate from the sitewide Organization schema in index.html)
+  const existing = document.getElementById(JSONLD_ID);
+  if (existing) existing.remove();
+  if (options.jsonLd) {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = JSONLD_ID;
+    script.text = JSON.stringify(options.jsonLd);
+    document.head.appendChild(script);
   }
-  ogUrl.setAttribute("content", href);
 };
