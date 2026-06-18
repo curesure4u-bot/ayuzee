@@ -12,3 +12,18 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /doctor/
+Disallow: /vaidya/
+Disallow: /homeo/
+Disallow: /student/
+Disallow: /therapist/
+Disallow: /venue/
+Disallow: /dashboard/
+Disallow: /checkout
+Disallow: /cart
+Disallow: /auth
+Disallow: /login
+Disallow: /reset-password
+
+Sitemap: https://ayuzee.com/sitemap.xml

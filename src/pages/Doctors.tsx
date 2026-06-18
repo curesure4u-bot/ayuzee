@@ -99,8 +99,8 @@ const Doctors = () => {
 
   useEffect(() => {
     setSEO(
-      "Find AYUSH Doctors Near You | Ayuzee — Ayurveda, Homeopathy, Siddha, Unani",
-      "Search 10,000+ verified AYUSH doctors. Book video or in-clinic consultations. Filter by specialization, city, fee. Free first consult available.",
+      "AYUSH Doctors Near You | Ayuzee",
+      "Search verified AYUSH doctors and book video or in-clinic consultations. Filter by specialization, city and fee.",
     );
     supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
     supabase
@@ -269,7 +269,7 @@ const Doctors = () => {
 
                         <div className="flex-1">
                           <div className="flex flex-wrap items-start justify-between gap-2">
-                            <h3 className="text-lg font-semibold leading-tight">{d.full_name}</h3>
+                            <h2 className="text-lg font-semibold leading-tight">{d.full_name}</h2>
                             <div className="flex items-center gap-1 text-sm">
                               <Star className="h-4 w-4 fill-secondary text-secondary" />
                               <span className="font-semibold">{d.rating}/5</span>
@@ -335,7 +335,7 @@ const Doctors = () => {
             <aside className="lg:sticky lg:top-24 lg:self-start">
               <Card className="overflow-hidden border-2 border-primary/30">
                 <CardContent className="p-6">
-                  <h3 className="text-center font-display text-xl font-semibold">Need Assistance!</h3>
+                  <h2 className="text-center font-display text-xl font-semibold">Need Assistance!</h2>
                   <p className="mt-1 text-center text-sm text-muted-foreground">
                     Share your details & we will find the best doctor for you
                   </p>
