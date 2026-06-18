@@ -26,7 +26,7 @@
     --secondary-foreground: 40 33% 98%;
 
     --muted: 40 20% 94%;
-    --muted-foreground: 140 12% 38%;
+    --muted-foreground: 140 14% 30%;
 
     --accent: 38 85% 94%;
     --accent-foreground: 142 48% 28%;
@@ -78,7 +78,7 @@
 
     --footer: 222 47% 11%;
     --footer-foreground: 215 20% 78%;
-    --footer-muted: 215 16% 57%;
+    --footer-muted: 215 20% 72%;
     --footer-panel: 217 33% 17%;
     --footer-border: 215 25% 27%;
     --footer-pill: 215 25% 22%;
