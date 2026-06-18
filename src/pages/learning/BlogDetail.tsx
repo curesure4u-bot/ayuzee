@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
 import { ArrowLeft, Clock, Loader2 } from "lucide-react";
+import { setSEO } from "@/lib/seo";
 
 const BlogDetail = () => {
   const { slug } = useParams();
@@ -15,7 +16,29 @@ const BlogDetail = () => {
       .then(({ data }) => {
         setBlog(data); setLoading(false);
         if (data) {
-          document.title = `${data.title} — Ayuzee Blogs`;
+          const desc = (data.excerpt || data.body || "").toString().replace(/\s+/g, " ").slice(0, 158);
+          setSEO(
+            `${data.title} — Ayuzee Blogs`,
+            desc,
+            `/learning/blogs/${data.slug}`,
+            {
+              ogType: "article",
+              ogImage: data.cover_image_url ?? undefined,
+              jsonLd: {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                headline: data.title,
+                image: data.cover_image_url ?? undefined,
+                datePublished: data.published_at ?? undefined,
+                dateModified: data.updated_at ?? data.published_at ?? undefined,
+                author: { "@type": "Person", name: data.author_name },
+                publisher: { "@type": "Organization", name: "Ayuzee", logo: { "@type": "ImageObject", url: "https://ayuzee.com/favicon.ico" } },
+                mainEntityOfPage: `https://ayuzee.com/learning/blogs/${data.slug}`,
+                articleSection: data.category,
+                keywords: Array.isArray(data.tags) ? data.tags.join(", ") : undefined,
+              },
+            },
+          );
           supabase.from("health_blogs").update({ view_count: (data.view_count || 0) + 1 }).eq("id", data.id).then(() => {});
         }
       });

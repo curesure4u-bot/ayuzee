@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { BookingDialog } from "@/components/site/BookingDialog";
 import { ArrowLeft, MapPin, Star, Video, Building2, Languages, Stethoscope } from "lucide-react";
 import { toast } from "sonner";
+import { setSEO } from "@/lib/seo";
 
 interface Doctor {
   id: string;
@@ -46,9 +47,34 @@ const DoctorDetail = () => {
       .eq("id", id)
       .maybeSingle()
       .then(({ data }) => {
-        setDoctor(data as Doctor | null);
+        const d = data as Doctor | null;
+        setDoctor(d);
         setLoading(false);
-        if (data) document.title = `${(data as Doctor).full_name} — Ayuzee`;
+        if (d) {
+          const desc = (d.bio || `Book ${d.full_name}, ${d.specialization} in ${d.city}. ${d.experience_years}+ years experience on Ayuzee.`).slice(0, 158);
+          setSEO(
+            `${d.full_name} — ${d.specialization} | Ayuzee`,
+            desc,
+            `/doctors/${d.id}`,
+            {
+              ogType: "profile",
+              jsonLd: {
+                "@context": "https://schema.org",
+                "@type": "Physician",
+                name: d.full_name,
+                medicalSpecialty: d.specialization,
+                address: { "@type": "PostalAddress", addressLocality: d.city, addressCountry: "IN" },
+                ...(d.clinic_name ? { worksFor: { "@type": "MedicalBusiness", name: d.clinic_name } } : {}),
+                knowsLanguage: d.languages,
+                aggregateRating: d.total_reviews > 0 ? {
+                  "@type": "AggregateRating",
+                  ratingValue: d.rating,
+                  reviewCount: d.total_reviews,
+                } : undefined,
+              },
+            },
+          );
+        }
       });
     supabase
       .from("doctor_charity_pledges")

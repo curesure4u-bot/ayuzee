@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { setSEO } from "@/lib/seo";
 
 interface Product {
   id: string;
@@ -107,7 +108,38 @@ const ProductDetail = () => {
         setLoading(false);
         if (!p) return;
 
-        document.title = `${p.name} — Ayuzee`;
+        const priceVal = p.discount_price ?? p.price;
+        const desc = (p.description || `${p.name} by ${p.brand} — authentic ${p.ayush_system ?? "AYUSH"} medicine on Ayuzee.`).slice(0, 158);
+        setSEO(
+          `${p.name} — ${p.brand} | Ayuzee`,
+          desc,
+          `/shop/${p.id}`,
+          {
+            ogType: "product",
+            ogImage: p.image_url ?? undefined,
+            jsonLd: {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: p.name,
+              brand: { "@type": "Brand", name: p.brand },
+              category: p.category,
+              description: p.description ?? undefined,
+              image: p.image_url ?? undefined,
+              aggregateRating: p.total_reviews > 0 ? {
+                "@type": "AggregateRating",
+                ratingValue: p.rating,
+                reviewCount: p.total_reviews,
+              } : undefined,
+              offers: {
+                "@type": "Offer",
+                price: priceVal,
+                priceCurrency: "INR",
+                availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                url: `https://ayuzee.com/shop/${p.id}`,
+              },
+            },
+          },
+        );
 
         if (refCode) {
           try {
