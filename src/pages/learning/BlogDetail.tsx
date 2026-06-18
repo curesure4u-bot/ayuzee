@@ -16,7 +16,7 @@ const BlogDetail = () => {
       .then(({ data }) => {
         setBlog(data); setLoading(false);
         if (data) {
-          const desc = (data.excerpt || data.meta_description || data.body || "").toString().replace(/\s+/g, " ").slice(0, 158);
+          const desc = (data.excerpt || data.body || "").toString().replace(/\s+/g, " ").slice(0, 158);
           setSEO(
             `${data.title} — Ayuzee Blogs`,
             desc,
