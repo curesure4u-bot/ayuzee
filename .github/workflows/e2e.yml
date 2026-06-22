@@ -1,0 +1,54 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    name: Playwright E2E
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        env:
+          E2E_BASE_URL: ${{ secrets.E2E_BASE_URL || 'http://localhost:8080' }}
+          E2E_PATIENT_EMAIL: ${{ secrets.E2E_PATIENT_EMAIL }}
+          E2E_PATIENT_PASSWORD: ${{ secrets.E2E_PATIENT_PASSWORD }}
+          E2E_DOCTOR_EMAIL: ${{ secrets.E2E_DOCTOR_EMAIL }}
+          E2E_DOCTOR_PASSWORD: ${{ secrets.E2E_DOCTOR_PASSWORD }}
+          E2E_NEW_SIGNUP_EMAIL: ${{ secrets.E2E_NEW_SIGNUP_EMAIL }}
+        run: bunx playwright test
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test results (traces, videos, screenshots)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7
