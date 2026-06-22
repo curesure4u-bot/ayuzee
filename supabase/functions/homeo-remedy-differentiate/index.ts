@@ -1,4 +1,6 @@
 // Differentiate 2-4 homeopathic remedies using Lovable AI
+import { requireUser } from "../_shared/auth.ts";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -7,6 +9,9 @@ const corsHeaders = {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { remedies, case_summary } = await req.json();
     if (!Array.isArray(remedies) || remedies.length < 2) {
       return new Response(JSON.stringify({ error: "Provide 2-4 remedies" }), {
