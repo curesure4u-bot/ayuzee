@@ -133,4 +133,54 @@ Open the HTML report first — Playwright's trace viewer shows the exact step th
 
 If none of these match, download `test-results-<run-id>` and open the `.zip` trace in [trace.playwright.dev](https://trace.playwright.dev) — it almost always points straight at the failing assertion or network call.
 
+### Debugging locally: exact commands
+
+Run these from the project root. They assume `.env.e2e` is filled in and Playwright browsers are installed (one-time: `bunx playwright install --with-deps chromium`).
+
+```bash
+# 1. Full suite, headless — capture trace + screenshot + video on every failure
+#    and write an HTML report to ./playwright-report
+bunx playwright test \
+  --trace=retain-on-failure \
+  --screenshot=only-on-failure \
+  --video=retain-on-failure \
+  --reporter=html
+
+# 2. Open the HTML report from the last run (auto-opens in your browser)
+bunx playwright show-report
+
+# 3. Re-run only the failed tests from the last run
+bunx playwright test --last-failed
+
+# 4. Single spec, single project, force trace on every attempt (not just failures)
+bunx playwright test e2e/checkout.spec.ts --project=chromium --trace=on
+
+# 5. Step through a test interactively (Playwright Inspector pauses on each action)
+PWDEBUG=1 bunx playwright test e2e/auth.spec.ts --project=chromium
+
+# 6. Headed + slow-motion to watch the browser drive the app
+bunx playwright test e2e/booking.spec.ts --headed --project=chromium --workers=1
+
+# 7. UI mode — time-travel debugger with watch mode and per-step DOM snapshots
+bunx playwright test --ui
+
+# 8. Open a saved trace zip (local file or downloaded CI artifact)
+bunx playwright show-trace test-results/checkout-checkout-flow-chromium/trace.zip
+
+# 9. Record selectors against your running app
+bunx playwright codegen http://localhost:8080
+
+# 10. Verbose protocol/browser logs when a test hangs before any assertion runs
+DEBUG=pw:api bunx playwright test e2e/auth.spec.ts --project=chromium
+```
+
+Where output lands after a run:
+
+- `playwright-report/index.html` — the same HTML report uploaded by CI. Open with `bunx playwright show-report`.
+- `test-results/<test-name>/` — per-failure folder containing `trace.zip`, `test-failed-1.png`, and `video.webm`.
+- `test-results/.last-run.json` — used by `--last-failed`.
+
+If you prefer `npm`/`pnpm`, swap `bunx` for `npx`/`pnpm exec` — the Playwright flags are identical.
+
+
 
