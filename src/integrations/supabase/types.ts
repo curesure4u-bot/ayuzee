@@ -187,6 +187,13 @@ export type Database = {
             referencedRelation: "doctors"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       atmri_case_updates: {
@@ -287,6 +294,13 @@ export type Database = {
             referencedRelation: "doctors"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "atmri_doctor_signatures_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       atmri_partner_hospitals: {
@@ -356,6 +370,13 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atmri_partner_hospitals_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues_public"
             referencedColumns: ["id"]
           },
         ]
@@ -541,6 +562,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "atmri_sponsored_cases_assigned_doctor_id_fkey"
+            columns: ["assigned_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "atmri_sponsored_cases_medicine_order_id_fkey"
             columns: ["medicine_order_id"]
             isOneToOne: false
@@ -552,6 +580,13 @@ export type Database = {
             columns: ["partner_venue_id"]
             isOneToOne: false
             referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atmri_sponsored_cases_partner_venue_id_fkey"
+            columns: ["partner_venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues_public"
             referencedColumns: ["id"]
           },
         ]
@@ -819,6 +854,13 @@ export type Database = {
             referencedRelation: "doctor_clinics"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "clinic_media_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_clinics_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       clinic_services: {
@@ -849,6 +891,13 @@ export type Database = {
             columns: ["clinic_id"]
             isOneToOne: false
             referencedRelation: "doctor_clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clinic_services_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_clinics_public"
             referencedColumns: ["id"]
           },
         ]
@@ -1722,6 +1771,13 @@ export type Database = {
             columns: ["doctor_id"]
             isOneToOne: true
             referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "doctor_charity_pledges_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: true
+            referencedRelation: "doctors_public"
             referencedColumns: ["id"]
           },
         ]
@@ -6361,10 +6417,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "payout_requests_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "payout_requests_venue_id_fkey"
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_requests_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues_public"
             referencedColumns: ["id"]
           },
           {
@@ -7575,6 +7645,13 @@ export type Database = {
             referencedRelation: "therapy_venues"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "room_unavailability_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       seo_backlink_snapshots: {
@@ -8063,6 +8140,13 @@ export type Database = {
             referencedRelation: "therapists"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "therapist_location_pings_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       therapist_safety_flags: {
@@ -8112,6 +8196,13 @@ export type Database = {
             columns: ["therapist_id"]
             isOneToOne: false
             referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapist_safety_flags_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists_public"
             referencedColumns: ["id"]
           },
         ]
@@ -8331,6 +8422,13 @@ export type Database = {
             referencedRelation: "network_partners"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "therapy_plans_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "network_partners_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       therapy_sessions: {
@@ -8488,6 +8586,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "therapy_sessions_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "therapy_sessions_therapy_plan_id_fkey"
             columns: ["therapy_plan_id"]
             isOneToOne: false
@@ -8499,6 +8604,13 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "therapy_venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapy_sessions_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues_public"
             referencedColumns: ["id"]
           },
         ]
@@ -9727,6 +9839,13 @@ export type Database = {
             referencedRelation: "therapy_venues"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "venue_revenue_logs_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "therapy_venues_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       webinar_rsvps: {
@@ -10436,6 +10555,150 @@ export type Database = {
         }
         Relationships: []
       }
+      doctor_clinics_public: {
+        Row: {
+          about: string | null
+          address_line1: string | null
+          city: string | null
+          clinic_name: string | null
+          consultation_fee: number | null
+          consultation_settings: Json | null
+          country: string | null
+          cover_image_url: string | null
+          created_at: string | null
+          doctor_user_id: string | null
+          id: string | null
+          intro_video_url: string | null
+          is_active: boolean | null
+          legal_entity_name: string | null
+          locality: string | null
+          logo_url: string | null
+          pincode: string | null
+          services: string[] | null
+          show_legal_entity: boolean | null
+          state: string | null
+          timings: string | null
+        }
+        Insert: {
+          about?: string | null
+          address_line1?: string | null
+          city?: string | null
+          clinic_name?: string | null
+          consultation_fee?: number | null
+          consultation_settings?: Json | null
+          country?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          doctor_user_id?: string | null
+          id?: string | null
+          intro_video_url?: string | null
+          is_active?: boolean | null
+          legal_entity_name?: never
+          locality?: string | null
+          logo_url?: string | null
+          pincode?: string | null
+          services?: string[] | null
+          show_legal_entity?: boolean | null
+          state?: string | null
+          timings?: string | null
+        }
+        Update: {
+          about?: string | null
+          address_line1?: string | null
+          city?: string | null
+          clinic_name?: string | null
+          consultation_fee?: number | null
+          consultation_settings?: Json | null
+          country?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          doctor_user_id?: string | null
+          id?: string | null
+          intro_video_url?: string | null
+          is_active?: boolean | null
+          legal_entity_name?: never
+          locality?: string | null
+          logo_url?: string | null
+          pincode?: string | null
+          services?: string[] | null
+          show_legal_entity?: boolean | null
+          state?: string | null
+          timings?: string | null
+        }
+        Relationships: []
+      }
+      doctors_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          category: string | null
+          city: string | null
+          clinic_name: string | null
+          consultation_fee: number | null
+          created_at: string | null
+          experience_years: number | null
+          full_name: string | null
+          gender: string | null
+          id: string | null
+          in_clinic_available: boolean | null
+          is_approved: boolean | null
+          is_verified: boolean | null
+          languages: string[] | null
+          public_profile: boolean | null
+          rating: number | null
+          registration_number: string | null
+          specialization: string | null
+          total_reviews: number | null
+          video_available: boolean | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          category?: string | null
+          city?: string | null
+          clinic_name?: string | null
+          consultation_fee?: number | null
+          created_at?: string | null
+          experience_years?: number | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          in_clinic_available?: boolean | null
+          is_approved?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          public_profile?: boolean | null
+          rating?: number | null
+          registration_number?: string | null
+          specialization?: string | null
+          total_reviews?: number | null
+          video_available?: boolean | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          category?: string | null
+          city?: string | null
+          clinic_name?: string | null
+          consultation_fee?: number | null
+          created_at?: string | null
+          experience_years?: number | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          in_clinic_available?: boolean | null
+          is_approved?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          public_profile?: boolean | null
+          rating?: number | null
+          registration_number?: string | null
+          specialization?: string | null
+          total_reviews?: number | null
+          video_available?: boolean | null
+        }
+        Relationships: []
+      }
       gam_certificates_public: {
         Row: {
           certificate_no: string | null
@@ -10466,6 +10729,57 @@ export type Database = {
           role?: string | null
           subtitle?: string | null
           title?: string | null
+        }
+        Relationships: []
+      }
+      network_partners_public: {
+        Row: {
+          about: string | null
+          address: string | null
+          city: string | null
+          created_at: string | null
+          id: string | null
+          image_url: string | null
+          is_approved: boolean | null
+          name: string | null
+          partner_type: string | null
+          pincode: string | null
+          rating: number | null
+          services: string[] | null
+          specialities: string[] | null
+          state: string | null
+        }
+        Insert: {
+          about?: string | null
+          address?: string | null
+          city?: string | null
+          created_at?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_approved?: boolean | null
+          name?: string | null
+          partner_type?: string | null
+          pincode?: string | null
+          rating?: number | null
+          services?: string[] | null
+          specialities?: string[] | null
+          state?: string | null
+        }
+        Update: {
+          about?: string | null
+          address?: string | null
+          city?: string | null
+          created_at?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_approved?: boolean | null
+          name?: string | null
+          partner_type?: string | null
+          pincode?: string | null
+          rating?: number | null
+          services?: string[] | null
+          specialities?: string[] | null
+          state?: string | null
         }
         Relationships: []
       }
@@ -10562,6 +10876,60 @@ export type Database = {
         }
         Relationships: []
       }
+      service_providers_public: {
+        Row: {
+          about: string | null
+          address: string | null
+          business_name: string | null
+          city: string | null
+          cover_image_url: string | null
+          created_at: string | null
+          id: string | null
+          is_approved: boolean | null
+          is_verified: boolean | null
+          logo_url: string | null
+          pincode: string | null
+          provider_type: string | null
+          rating: number | null
+          state: string | null
+          total_reviews: number | null
+        }
+        Insert: {
+          about?: string | null
+          address?: string | null
+          business_name?: string | null
+          city?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_approved?: boolean | null
+          is_verified?: boolean | null
+          logo_url?: string | null
+          pincode?: string | null
+          provider_type?: string | null
+          rating?: number | null
+          state?: string | null
+          total_reviews?: number | null
+        }
+        Update: {
+          about?: string | null
+          address?: string | null
+          business_name?: string | null
+          city?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_approved?: boolean | null
+          is_verified?: boolean | null
+          logo_url?: string | null
+          pincode?: string | null
+          provider_type?: string | null
+          rating?: number | null
+          state?: string | null
+          total_reviews?: number | null
+        }
+        Relationships: []
+      }
       surgical_products: {
         Row: {
           ayush_system: string | null
@@ -10652,6 +11020,132 @@ export type Database = {
           total_reviews?: number | null
           treatment_use?: string | null
           unit?: string | null
+        }
+        Relationships: []
+      }
+      therapists_public: {
+        Row: {
+          allowed_therapies: string[] | null
+          certificate_number: string | null
+          certifying_body: string | null
+          city: string | null
+          created_at: string | null
+          full_name: string | null
+          gender: string | null
+          id: string | null
+          is_available: boolean | null
+          is_verified: boolean | null
+          photo_url: string | null
+          rating: number | null
+          state: string | null
+          total_sessions: number | null
+          verification_status: string | null
+          years_experience: number | null
+        }
+        Insert: {
+          allowed_therapies?: string[] | null
+          certificate_number?: string | null
+          certifying_body?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          is_available?: boolean | null
+          is_verified?: boolean | null
+          photo_url?: string | null
+          rating?: number | null
+          state?: string | null
+          total_sessions?: number | null
+          verification_status?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          allowed_therapies?: string[] | null
+          certificate_number?: string | null
+          certifying_body?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          is_available?: boolean | null
+          is_verified?: boolean | null
+          photo_url?: string | null
+          rating?: number | null
+          state?: string | null
+          total_sessions?: number | null
+          verification_status?: string | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
+      therapy_venues_public: {
+        Row: {
+          address_line1: string | null
+          available_therapies: string[] | null
+          city: string | null
+          created_at: string | null
+          hourly_rate: number | null
+          id: string | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          lat: number | null
+          latitude: number | null
+          lng: number | null
+          longitude: number | null
+          name: string | null
+          photo_urls: string[] | null
+          photos: Json | null
+          pincode: string | null
+          rating: number | null
+          rooms: Json | null
+          state: string | null
+          type: string | null
+        }
+        Insert: {
+          address_line1?: string | null
+          available_therapies?: string[] | null
+          city?: string | null
+          created_at?: string | null
+          hourly_rate?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          lat?: number | null
+          latitude?: number | null
+          lng?: number | null
+          longitude?: number | null
+          name?: string | null
+          photo_urls?: string[] | null
+          photos?: Json | null
+          pincode?: string | null
+          rating?: number | null
+          rooms?: Json | null
+          state?: string | null
+          type?: string | null
+        }
+        Update: {
+          address_line1?: string | null
+          available_therapies?: string[] | null
+          city?: string | null
+          created_at?: string | null
+          hourly_rate?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          lat?: number | null
+          latitude?: number | null
+          lng?: number | null
+          longitude?: number | null
+          name?: string | null
+          photo_urls?: string[] | null
+          photos?: Json | null
+          pincode?: string | null
+          rating?: number | null
+          rooms?: Json | null
+          state?: string | null
+          type?: string | null
         }
         Relationships: []
       }
