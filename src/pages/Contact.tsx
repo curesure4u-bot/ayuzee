@@ -6,13 +6,48 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100, "Name is too long"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email is too long"),
+  subject: z.string().trim().min(1, "Subject is required").max(200, "Subject is too long"),
+  message: z.string().trim().min(1, "Message is required").max(2000, "Message is too long"),
+});
 
 export default function Contact() {
   const [sending, setSending] = useState(false);
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => { setSending(false); toast.success("Thanks! We'll get back to you within 24 hours."); (e.target as HTMLFormElement).reset(); }, 600);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      subject: String(formData.get("subject") ?? ""),
+      message: String(formData.get("message") ?? ""),
+    };
+
+    const parsed = contactSchema.safeParse(payload);
+    if (!parsed.success) {
+      toast.error(parsed.error.errors[0].message);
+      setSending(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from("contact_submissions").insert([parsed.data]);
+      if (error) throw error;
+      toast.success("Thanks! We'll get back to you within 24 hours.");
+      form.reset();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send message. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
   return (
     <>
@@ -31,11 +66,11 @@ export default function Contact() {
 
           <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-6 md:col-span-2">
             <div className="grid gap-4 md:grid-cols-2">
-              <div><Label htmlFor="name">Name</Label><Input id="name" required /></div>
-              <div><Label htmlFor="email">Email</Label><Input id="email" type="email" required /></div>
+              <div><Label htmlFor="name">Name</Label><Input id="name" name="name" required /></div>
+              <div><Label htmlFor="email">Email</Label><Input id="email" name="email" type="email" required /></div>
             </div>
-            <div><Label htmlFor="subject">Subject</Label><Input id="subject" required /></div>
-            <div><Label htmlFor="msg">Message</Label><Textarea id="msg" rows={6} required /></div>
+            <div><Label htmlFor="subject">Subject</Label><Input id="subject" name="subject" required /></div>
+            <div><Label htmlFor="msg">Message</Label><Textarea id="msg" name="message" rows={6} required /></div>
             <Button type="submit" disabled={sending}>{sending ? "Sending…" : "Send Message"}</Button>
           </form>
         </section>
