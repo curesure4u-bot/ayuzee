@@ -104,10 +104,8 @@ const TherapistDetail = () => {
                 <Button className="w-full md:w-auto">
                   <CalendarCheck className="h-4 w-4 mr-2" />Book a session
                 </Button>
-                <Button variant="outline" className="w-full md:w-auto" asChild>
-                  <a href={`tel:${t.phone}`}><Phone className="h-4 w-4 mr-2" />Contact</a>
-                </Button>
               </div>
+
             </div>
           </div>
 
