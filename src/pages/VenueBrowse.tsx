@@ -58,12 +58,12 @@ const VenueBrowse = () => {
     (async () => {
       setLoading(true);
       const { data } = await supabase
-        .from("therapy_venues")
+        .from("therapy_venues_public" as any)
         .select("id, name, type, city, state, rating, rooms, available_therapies, photo_urls, photos, hourly_rate, latitude, longitude, lat, lng")
         .eq("is_verified", true)
         .eq("is_active", true)
         .order("rating", { ascending: false });
-      setVenues((data as Venue[]) ?? []);
+      setVenues(((data as unknown) as Venue[]) ?? []);
       setLoading(false);
     })();
   }, []);
