@@ -1,16 +1,22 @@
 // Credits 5% referral commission to the referrer's Ayuzee wallet
 // Called by a Postgres trigger via pg_net when an order's payment_status flips to "paid"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { requireInternalSecret } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-internal-secret",
 };
 
 const COMMISSION_PCT = 0.05; // 5%
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  // Only trusted internal callers (trigger / pg_net / other edge functions) may invoke.
+  const secretCheck = requireInternalSecret(req);
+  if (secretCheck) return secretCheck;
 
   try {
     const { order_id } = await req.json();
