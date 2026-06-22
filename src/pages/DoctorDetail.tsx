@@ -42,12 +42,12 @@ const DoctorDetail = () => {
   useEffect(() => {
     if (!id) return;
     supabase
-      .from("doctors")
+      .from("doctors_public" as any)
       .select("*")
       .eq("id", id)
       .maybeSingle()
       .then(({ data }) => {
-        const d = data as Doctor | null;
+        const d = (data as unknown) as Doctor | null;
         setDoctor(d);
         setLoading(false);
         if (d) {
