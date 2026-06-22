@@ -1,3 +1,4 @@
+import { requireUser } from "../_shared/auth.ts";
 // AI Clinical Decision Support — differentials, drug interactions, classical Ayurveda references
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,6 +9,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { chief_complaint, history, examination, assessment, prescription, prakriti } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");

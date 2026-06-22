@@ -1,3 +1,4 @@
+import { requireUser } from "../_shared/auth.ts";
 // Ayuzee Para-Surgical Therapy AI assistant
 // Suggests likely pain generator, ranked procedure options, candidate points,
 // risks, and a combined protocol. Decision support only — not auto-prescribing.
@@ -51,6 +52,11 @@ Deno.serve(async (req) => {
   }
 
   try {
+
+    const authResult = await requireUser(req);
+
+    if (authResult instanceof Response) return authResult;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 

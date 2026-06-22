@@ -1,3 +1,4 @@
+import { requireUser } from "../_shared/auth.ts";
 // AI Scribe — converts audio or raw text into a structured Ayurveda EMR (SOAP + Rx)
 // Multi-language: Hindi, Tamil, Telugu, Marathi, English
 
@@ -18,6 +19,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { mode, text, audioBase64, language = "en" } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");

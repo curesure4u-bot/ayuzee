@@ -1,4 +1,5 @@
 import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
+import { requireUser } from "../_shared/auth.ts";
 
 const THEMES = [
   "humiliation", "rejection", "grief", "fear", "betrayal", "anger",
@@ -10,6 +11,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { narrative } = await req.json();
     if (!narrative || typeof narrative !== "string") {
       return new Response(JSON.stringify({ error: "narrative is required" }), {

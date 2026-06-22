@@ -1,3 +1,4 @@
+import { requireUser } from "../_shared/auth.ts";
 // AI Panchakarma planner — generates a day-wise schedule based on indication, prakriti, vikriti, and primary procedure
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,6 +9,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { indication, prakriti, vikriti, primary_procedure, total_days, patient_age, patient_gender, notes } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
