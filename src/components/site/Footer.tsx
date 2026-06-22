@@ -109,6 +109,7 @@ export const Footer = () => {
         <FooterLinks title="Therapists & Venues" links={therapistLinks} />
         <FooterLinks title="Learn & Grow" links={learnLinks} />
         <FooterLinks title="Company" links={companyLinks} />
+        <FooterLinks title="Legal" links={legalLinks} />
       </section>
 
       <section className="bg-footer-panel py-6">
