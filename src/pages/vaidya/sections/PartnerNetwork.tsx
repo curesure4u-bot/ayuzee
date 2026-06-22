@@ -25,7 +25,7 @@ const PartnerNetwork = () => {
   useEffect(() => {
     (async () => {
       const { data } = await supabase
-        .from("network_partners")
+        .from("network_partners_public" as any)
         .select("*")
         .eq("is_approved", true)
         .order("rating", { ascending: false });
