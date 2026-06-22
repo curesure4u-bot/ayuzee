@@ -8,12 +8,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
-import { ArrowLeft, BadgeCheck, MapPin, Star, Phone, Award, CalendarCheck } from "lucide-react";
+import { ArrowLeft, BadgeCheck, MapPin, Star, Award, CalendarCheck } from "lucide-react";
 
 interface Therapist {
   id: string;
   full_name: string;
-  phone: string;
   gender: string | null;
   photo_url: string | null;
   certificate_number: string | null;
@@ -40,15 +39,15 @@ const TherapistDetail = () => {
     (async () => {
       setLoading(true);
       const { data } = await supabase
-        .from("therapists")
-        .select("id, full_name, phone, gender, photo_url, certificate_number, certifying_body, years_experience, allowed_therapies, is_verified, is_available, rating, total_sessions, city, state")
+        .from("therapists_public" as any)
+        .select("id, full_name, gender, photo_url, certificate_number, certifying_body, years_experience, allowed_therapies, is_verified, is_available, rating, total_sessions, city, state")
         .eq("id", id)
         .eq("verification_status", "approved")
         .maybeSingle();
-      setT(data as Therapist | null);
+      setT(((data as unknown) as Therapist | null));
       setLoading(false);
       if (data) {
-        document.title = `${(data as Therapist).full_name} — Therapist | Ayuzee`;
+        document.title = `${((data as unknown) as Therapist).full_name} — Therapist | Ayuzee`;
       }
     })();
   }, [id]);
@@ -105,10 +104,8 @@ const TherapistDetail = () => {
                 <Button className="w-full md:w-auto">
                   <CalendarCheck className="h-4 w-4 mr-2" />Book a session
                 </Button>
-                <Button variant="outline" className="w-full md:w-auto" asChild>
-                  <a href={`tel:${t.phone}`}><Phone className="h-4 w-4 mr-2" />Contact</a>
-                </Button>
               </div>
+
             </div>
           </div>
 

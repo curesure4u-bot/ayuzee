@@ -68,12 +68,12 @@ const Clinics = () => {
     document.title = "Find a Clinic — Ayuzee";
     supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
     supabase
-      .from("network_partners")
+      .from("network_partners_public" as any)
       .select("*")
       .eq("is_approved", true)
       .order("rating", { ascending: false })
       .then(({ data }) => {
-        setClinics((data as Clinic[]) ?? []);
+        setClinics(((data as unknown) as Clinic[]) ?? []);
         setLoading(false);
       });
   }, []);

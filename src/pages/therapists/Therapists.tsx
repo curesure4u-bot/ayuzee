@@ -48,11 +48,11 @@ const Therapists = () => {
     (async () => {
       setLoading(true);
       const { data } = await supabase
-        .from("therapists")
+        .from("therapists_public" as any)
         .select("id, full_name, photo_url, city, state, gender, years_experience, allowed_therapies, is_verified, is_available, rating, total_sessions")
         .eq("verification_status", "approved")
         .order("rating", { ascending: false });
-      setList((data as Therapist[]) ?? []);
+      setList(((data as unknown) as Therapist[]) ?? []);
       setLoading(false);
     })();
   }, []);
