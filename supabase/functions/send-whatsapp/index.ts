@@ -1,12 +1,24 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { requireUser, requireInternalSecret } from "../_shared/auth.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-internal-secret",
 };
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  // Allow either a logged-in user (called from the app) OR a trusted internal
+  // caller passing INTERNAL_WEBHOOK_SECRET (server-to-server invocations).
+  if (req.headers.get("x-internal-secret")) {
+    const secretCheck = requireInternalSecret(req);
+    if (secretCheck) return secretCheck;
+  } else {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+  }
 
   try {
     const INTERAKT_KEY = Deno.env.get("INTERAKT_API_KEY");
