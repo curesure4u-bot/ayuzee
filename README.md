@@ -113,3 +113,24 @@ Change the password in the app, update the GitHub secret (`Settings → Secrets 
 
 After a workflow run, open the run page in GitHub → **Artifacts** → download `playwright-report-<run-id>` and open `index.html`. Failed runs also upload `test-results-<run-id>` with traces, videos, and screenshots.
 
+### Troubleshooting common E2E failures
+
+Open the HTML report first — Playwright's trace viewer shows the exact step that failed, the DOM at that moment, and the network log. Then match the symptom below.
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| `auth.spec.ts` → "Invalid login credentials" | Wrong email/password, or secret not set in CI | Re-check `E2E_PATIENT_EMAIL` / `E2E_PATIENT_PASSWORD` locally, then in GitHub secrets. Log in manually at `/auth` to confirm. |
+| Login appears to succeed but test times out waiting for `/dashboard` | Email not confirmed → backend keeps the session unverified | Click the confirmation link in the inbox, or disable "Confirm email" in Lovable Cloud auth settings for the dev environment. |
+| Signup spec fails on "email already registered" | The randomised suffix collided, or a previous run wasn't cleaned up | Change `E2E_NEW_SIGNUP_EMAIL` to a fresh `+tag` alias. The spec appends a random suffix, but the base must be a mailbox that accepts `+tag` (Gmail, Fastmail, etc.). |
+| `doctor-prescription.spec.ts` redirects away from `/doctor/...` | The doctor user has no `doctor` row in `public.user_roles` | Run the SQL from the "Doctor account" section above. Verify with `select role from public.user_roles where user_id = '<uuid>';`. |
+| Doctor login works locally but fails in CI | CI is pointing at a different environment (e.g. prod) than where you seeded the role | Either set `E2E_BASE_URL` to the env you seeded, or seed the doctor role in the env CI targets. Roles do **not** sync between dev and prod. |
+| `checkout.spec.ts` → Razorpay modal never opens | `razorpay-create-order` edge function failing — keys missing or in the wrong mode | In Lovable Cloud → Secrets, confirm `RAZORPAY_KEY_ID` starts with `rzp_test_` and `RAZORPAY_KEY_SECRET` is the matching test secret. Live keys (`rzp_live_`) will be rejected by the test card. |
+| Razorpay modal opens but card `4111 1111 1111 1111` is declined | Account is in **live** mode, or the card/OTP values were edited | Use exactly: card `4111 1111 1111 1111`, expiry `12/30`, CVV `123`, OTP `1234`. Switch the Razorpay dashboard to Test Mode. |
+| `booking.spec.ts` → "no time slots available" | Doctor has no availability seeded for the test date | Add availability for the `E2E_DOCTOR_*` user covering today + 7 days, or relax the selector to pick the first enabled slot. |
+| All specs fail immediately with `ECONNREFUSED localhost:8080` | `E2E_BASE_URL` unset **and** the workflow's `webServer` couldn't start Vite | Check the "Run Playwright tests" step log for the Vite startup error. Usually a missing build secret or a TypeScript error. |
+| Tests pass locally, fail in CI only | Env-var mismatch between `.env.e2e` and GitHub secrets | Diff them. Common miss: setting `E2E_BASE_URL` locally to a preview URL but leaving it unset in CI (so CI tries `localhost:8080`). |
+| Flaky timeouts on first run after long idle | Cold-started edge functions or DB | Re-run the job once. If it persists, bump `expect`/`action` timeouts in `playwright.config.ts` to 15s. |
+
+If none of these match, download `test-results-<run-id>` and open the `.zip` trace in [trace.playwright.dev](https://trace.playwright.dev) — it almost always points straight at the failing assertion or network call.
+
+
