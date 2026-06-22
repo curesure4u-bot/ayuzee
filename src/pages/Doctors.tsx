@@ -104,7 +104,7 @@ const Doctors = () => {
     );
     supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
     supabase
-      .from("doctors")
+      .from("doctors_public" as any)
       .select("*")
       .order("rating", { ascending: false })
       .then(({ data }) => {
