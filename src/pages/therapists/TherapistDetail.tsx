@@ -40,12 +40,12 @@ const TherapistDetail = () => {
     (async () => {
       setLoading(true);
       const { data } = await supabase
-        .from("therapists")
-        .select("id, full_name, phone, gender, photo_url, certificate_number, certifying_body, years_experience, allowed_therapies, is_verified, is_available, rating, total_sessions, city, state")
+        .from("therapists_public" as any)
+        .select("id, full_name, gender, photo_url, certificate_number, certifying_body, years_experience, allowed_therapies, is_verified, is_available, rating, total_sessions, city, state")
         .eq("id", id)
         .eq("verification_status", "approved")
         .maybeSingle();
-      setT(data as Therapist | null);
+      setT(((data as unknown) as Therapist | null));
       setLoading(false);
       if (data) {
         document.title = `${(data as Therapist).full_name} — Therapist | Ayuzee`;
