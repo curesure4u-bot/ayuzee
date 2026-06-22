@@ -133,6 +133,46 @@ Open the HTML report first — Playwright's trace viewer shows the exact step th
 
 If none of these match, download `test-results-<run-id>` and open the `.zip` trace in [trace.playwright.dev](https://trace.playwright.dev) — it almost always points straight at the failing assertion or network call.
 
+### Pre-rerun parity checklist (local ↔ CI)
+
+Most "passes locally, fails in CI" issues are env drift. Walk this list before you push a rerun — every row must match on **both** sides.
+
+**1. Base URL**
+- [ ] `E2E_BASE_URL` is set in `.env.e2e` **and** in GitHub → Settings → Secrets → Actions
+- [ ] Both point at the **same environment** (preview vs prod vs `localhost:8080`) — not one local, one prod
+- [ ] URL has **no trailing slash** and uses `https://` for hosted envs
+- [ ] Quick check: `grep E2E_BASE_URL .env.e2e` locally, then GitHub → Secrets shows the same value (length/last-updated date is a useful tell)
+
+**2. Razorpay test mode**
+- [ ] Lovable Cloud → Secrets shows `RAZORPAY_KEY_ID` starting with `rzp_test_` (never `rzp_live_`) for the env CI targets
+- [ ] `RAZORPAY_KEY_SECRET` is the **matching** test secret from the same Razorpay account
+- [ ] Razorpay dashboard top-right toggle is on **Test Mode**
+- [ ] Quick check: hit `/checkout` manually, open DevTools → Network → `razorpay-create-order` response includes a `key` starting with `rzp_test_`
+
+**3. Mail verification**
+- [ ] "Confirm email" setting in Lovable Cloud → Auth is the **same** on the env you test locally and the env CI targets (both on, or both off)
+- [ ] `E2E_PATIENT_EMAIL` and `E2E_DOCTOR_EMAIL` users are **confirmed** in the CI-target env (not just locally)
+- [ ] `E2E_NEW_SIGNUP_EMAIL` mailbox accepts `+tag` aliases and is reachable from the env CI targets
+- [ ] Quick check: in the CI-target env, run `select email, email_confirmed_at from auth.users where email in ('<patient>','<doctor>');` — both `email_confirmed_at` must be non-null
+
+**4. Roles**
+- [ ] `public.user_roles` in the CI-target env has a `doctor` row for `E2E_DOCTOR_EMAIL`'s user id
+- [ ] Same env has **no extra** roles on the patient user (patient should have no `doctor`/`admin` rows)
+- [ ] Quick check: `select u.email, r.role from auth.users u join public.user_roles r on r.user_id = u.id where u.email in ('<patient>','<doctor>');`
+
+**5. Credentials**
+- [ ] `E2E_PATIENT_PASSWORD` / `E2E_DOCTOR_PASSWORD` in GitHub secrets match what you actually use locally (no stale rotation)
+- [ ] Quick check: sign in manually at `/auth` and `/doctor/auth` against the CI-target env using those exact values
+
+**6. Workflow scope**
+- [ ] `.github/workflows/e2e.yml` references the same secret names as `.env.e2e.example` (no typos: `E2E_PATIENT_EMAIL` not `E2E_PATIENT_MAIL`)
+- [ ] No required secret is missing from GitHub (workflow will silently pass `""` to Playwright)
+- [ ] Quick check: `diff <(grep -oE 'E2E_[A-Z_]+' .env.e2e.example | sort -u) <(grep -oE 'E2E_[A-Z_]+' .github/workflows/e2e.yml | sort -u)` — output should be empty
+
+If every box is ticked and the suite still fails in CI but not locally, the gap is almost certainly in **edge-function secrets** (Razorpay, mail) on the CI-target env, not in the workflow itself. Open the failing run's artifact and check the `razorpay-create-order` / auth network calls in the trace.
+
+
+
 ### Debugging locally: exact commands
 
 Run these from the project root. They assume `.env.e2e` is filled in and Playwright browsers are installed (one-time: `bunx playwright install --with-deps chromium`).
