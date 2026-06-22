@@ -39,7 +39,12 @@ export default function Contact() {
     }
 
     try {
-      const { error } = await supabase.from("contact_submissions").insert([parsed.data]);
+      const { error } = await supabase.from("contact_submissions").insert([{
+        name: parsed.data.name,
+        email: parsed.data.email,
+        subject: parsed.data.subject,
+        message: parsed.data.message,
+      }]);
       if (error) throw error;
       toast.success("Thanks! We'll get back to you within 24 hours.");
       form.reset();
