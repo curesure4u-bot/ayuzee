@@ -66,11 +66,11 @@ export default function Contact() {
 
           <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-6 md:col-span-2">
             <div className="grid gap-4 md:grid-cols-2">
-              <div><Label htmlFor="name">Name</Label><Input id="name" required /></div>
-              <div><Label htmlFor="email">Email</Label><Input id="email" type="email" required /></div>
+              <div><Label htmlFor="name">Name</Label><Input id="name" name="name" required /></div>
+              <div><Label htmlFor="email">Email</Label><Input id="email" name="email" type="email" required /></div>
             </div>
-            <div><Label htmlFor="subject">Subject</Label><Input id="subject" required /></div>
-            <div><Label htmlFor="msg">Message</Label><Textarea id="msg" rows={6} required /></div>
+            <div><Label htmlFor="subject">Subject</Label><Input id="subject" name="subject" required /></div>
+            <div><Label htmlFor="msg">Message</Label><Textarea id="msg" name="message" rows={6} required /></div>
             <Button type="submit" disabled={sending}>{sending ? "Sending…" : "Send Message"}</Button>
           </form>
         </section>
