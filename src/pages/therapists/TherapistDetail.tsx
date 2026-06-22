@@ -47,7 +47,7 @@ const TherapistDetail = () => {
       setT(((data as unknown) as Therapist | null));
       setLoading(false);
       if (data) {
-        document.title = `${(data as Therapist).full_name} — Therapist | Ayuzee`;
+        document.title = `${((data as unknown) as Therapist).full_name} — Therapist | Ayuzee`;
       }
     })();
   }, [id]);
