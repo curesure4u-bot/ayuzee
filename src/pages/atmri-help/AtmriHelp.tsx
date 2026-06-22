@@ -17,17 +17,8 @@ type Stats = {
 
 type Case = {
   id: string;
-  patient_name: string;
-  patient_city: string;
-  patient_state: string;
-  patient_story: string;
-  condition_name: string;
-  condition_category: string | null;
   status: string;
-  is_urgent: boolean;
-  patient_photo_url: string | null;
-  sessions_completed: number;
-  total_sessions_planned: number;
+  created_at: string;
 };
 
 const AtmriHelp = () => {
@@ -48,30 +39,24 @@ const AtmriHelp = () => {
 
     (async () => {
       const c = supabase as any;
-      const [inTx, completed, dispatched, hospitals, pledges] = await Promise.all([
-        c.from("atmri_sponsored_cases").select("id", { count: "exact", head: true }).eq("status", "in_treatment"),
-        c.from("atmri_sponsored_cases").select("id", { count: "exact", head: true }).eq("status", "completed"),
-        c.from("atmri_sponsored_cases").select("id", { count: "exact", head: true }).eq("medicines_dispatched", true),
-        c.from("atmri_partner_hospitals").select("id", { count: "exact", head: true }).eq("is_active", true),
+      const [inTx, completed, hospitals, pledges] = await Promise.all([
+        c.from("atmri_sponsored_cases_public").select("id", { count: "exact", head: true }).eq("status", "in_treatment"),
+        c.from("atmri_sponsored_cases_public").select("id", { count: "exact", head: true }).eq("status", "completed"),
+        c.from("atmri_partner_hospitals_public").select("id", { count: "exact", head: true }),
         c.from("doctor_charity_pledges").select("total_consultations_donated, is_active"),
       ]);
       const pledgeRows = (pledges.data ?? []) as { total_consultations_donated: number; is_active: boolean }[];
       setStats({
         inTreatment: inTx.count ?? 0,
         completed: completed.count ?? 0,
-        medicinesDispatched: dispatched.count ?? 0,
+        medicinesDispatched: 0, // PII-restricted field no longer publicly aggregated
         partnerHospitals: hospitals.count ?? 0,
         pledgeDoctors: pledgeRows.filter((p) => p.is_active).length,
         consultsDonated: pledgeRows.reduce((s, p) => s + (p.total_consultations_donated || 0), 0),
       });
 
-      const { data: urgentData } = await c
-        .from("atmri_sponsored_cases")
-        .select("id,patient_name,patient_city,patient_state,patient_story,condition_name,condition_category,status,is_urgent,patient_photo_url,sessions_completed,total_sessions_planned")
-        .in("status", ["in_treatment", "approved"])
-        .eq("is_urgent", true)
-        .limit(3);
-      setUrgent((urgentData ?? []) as Case[]);
+      // Patient names/stories are no longer publicly listed; urgent highlight removed.
+      setUrgent([]);
     })();
   }, []);
 
@@ -196,36 +181,12 @@ const AtmriHelp = () => {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="font-display text-3xl font-semibold">🌿 Patients Currently Being Helped</h2>
-            <p className="text-muted-foreground">With consent — sharing their journey to inspire others</p>
+            <p className="text-muted-foreground">Patient identities are private — see anonymised case progress on the cases page.</p>
           </div>
           <Button asChild variant="outline"><Link to="/atmri-help/cases">View All Cases →</Link></Button>
         </div>
-        <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {urgent.length === 0 && <p className="text-sm text-muted-foreground">No urgent active cases right now.</p>}
-          {urgent.map((c) => (
-            <Card key={c.id} className="overflow-hidden transition-all hover:-translate-y-1">
-              <div className="relative h-44 bg-gradient-to-br from-primary/20 to-accent">
-                {c.patient_photo_url ? (
-                  <img src={c.patient_photo_url} alt={c.patient_name} className="h-full w-full object-cover" />
-                ) : (
-                  <div className="grid h-full place-items-center font-display text-5xl text-primary">{c.patient_name.charAt(0)}</div>
-                )}
-                <span className="absolute left-3 top-3 rounded-full bg-green-500 px-3 py-1 text-xs text-white">🟢 In Treatment</span>
-                {c.is_urgent && <span className="absolute right-3 top-3 rounded-full bg-red-500 px-3 py-1 text-xs text-white">🔴 URGENT</span>}
-              </div>
-              <div className="p-5">
-                <span className="rounded-full bg-accent px-2 py-1 text-xs text-primary">{c.condition_name}</span>
-                <p className="mt-2 font-semibold text-lg">{c.patient_name}</p>
-                <p className="text-sm text-muted-foreground">{c.patient_city}, {c.patient_state}</p>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{c.patient_story}</p>
-                <Button asChild variant="outline" size="sm" className="mt-4 w-full">
-                  <Link to={`/atmri-help/cases/${c.id}`}>Read Story →</Link>
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
       </section>
+
 
       {/* HOW TO HELP */}
       <section className="bg-accent/30 py-16">

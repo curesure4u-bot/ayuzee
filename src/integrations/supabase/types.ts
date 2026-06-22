@@ -228,6 +228,13 @@ export type Database = {
             referencedRelation: "atmri_sponsored_cases"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "atmri_case_updates_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "atmri_sponsored_cases_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       atmri_doctor_signatures: {
@@ -264,6 +271,13 @@ export type Database = {
             columns: ["case_id"]
             isOneToOne: false
             referencedRelation: "atmri_sponsored_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atmri_doctor_signatures_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "atmri_sponsored_cases_public"
             referencedColumns: ["id"]
           },
           {
@@ -2893,6 +2907,13 @@ export type Database = {
             columns: ["certificate_id"]
             isOneToOne: false
             referencedRelation: "gam_certificates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gam_challenge_participants_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "gam_certificates_public"
             referencedColumns: ["id"]
           },
           {
@@ -10349,6 +10370,105 @@ export type Database = {
       }
     }
     Views: {
+      atmri_partner_hospitals_public: {
+        Row: {
+          address: string | null
+          beds_reserved_for_atmri: number | null
+          city: string | null
+          created_at: string | null
+          discount_percent: number | null
+          hospital_name: string | null
+          hospital_type: string | null
+          id: string | null
+          is_active: boolean | null
+          state: string | null
+        }
+        Insert: {
+          address?: string | null
+          beds_reserved_for_atmri?: number | null
+          city?: string | null
+          created_at?: string | null
+          discount_percent?: number | null
+          hospital_name?: string | null
+          hospital_type?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          state?: string | null
+        }
+        Update: {
+          address?: string | null
+          beds_reserved_for_atmri?: number | null
+          city?: string | null
+          created_at?: string | null
+          discount_percent?: number | null
+          hospital_name?: string | null
+          hospital_type?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          state?: string | null
+        }
+        Relationships: []
+      }
+      atmri_sponsored_cases_public: {
+        Row: {
+          assigned_doctor_user_id: string | null
+          created_at: string | null
+          doctor_countersigned: boolean | null
+          id: string | null
+          medicines_cost: number | null
+          status: string | null
+        }
+        Insert: {
+          assigned_doctor_user_id?: string | null
+          created_at?: string | null
+          doctor_countersigned?: boolean | null
+          id?: string | null
+          medicines_cost?: number | null
+          status?: string | null
+        }
+        Update: {
+          assigned_doctor_user_id?: string | null
+          created_at?: string | null
+          doctor_countersigned?: boolean | null
+          id?: string | null
+          medicines_cost?: number | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      gam_certificates_public: {
+        Row: {
+          certificate_no: string | null
+          certificate_type: string | null
+          id: string | null
+          issued_at: string | null
+          recipient_name: string | null
+          role: string | null
+          subtitle: string | null
+          title: string | null
+        }
+        Insert: {
+          certificate_no?: string | null
+          certificate_type?: string | null
+          id?: string | null
+          issued_at?: string | null
+          recipient_name?: string | null
+          role?: string | null
+          subtitle?: string | null
+          title?: string | null
+        }
+        Update: {
+          certificate_no?: string | null
+          certificate_type?: string | null
+          id?: string | null
+          issued_at?: string | null
+          recipient_name?: string | null
+          role?: string | null
+          subtitle?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
       panchakarma_medicines: {
         Row: {
           ayush_system: string | null

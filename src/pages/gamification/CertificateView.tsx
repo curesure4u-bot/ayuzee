@@ -17,7 +17,7 @@ const CertificateView = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("gam_certificates").select("*").eq("id", id).maybeSingle().then(({ data }) => {
+    supabase.from("gam_certificates_public" as any).select("*").eq("id", id).maybeSingle().then(({ data }: any) => {
       setCert(data);
       setLoading(false);
       if (data) document.title = `${data.certificate_no} — Ayuzee`;
