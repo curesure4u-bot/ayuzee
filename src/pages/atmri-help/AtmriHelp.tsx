@@ -17,17 +17,8 @@ type Stats = {
 
 type Case = {
   id: string;
-  patient_name: string;
-  patient_city: string;
-  patient_state: string;
-  patient_story: string;
-  condition_name: string;
-  condition_category: string | null;
   status: string;
-  is_urgent: boolean;
-  patient_photo_url: string | null;
-  sessions_completed: number;
-  total_sessions_planned: number;
+  created_at: string;
 };
 
 const AtmriHelp = () => {
