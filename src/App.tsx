@@ -11,6 +11,10 @@ import Contact from "./pages/Contact.tsx";
 import Careers from "./pages/Careers.tsx";
 import Blog from "./pages/Blog.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Press from "./pages/legal/Press.tsx";
+import RefundPolicy from "./pages/legal/RefundPolicy.tsx";
+import PrivacyPolicy from "./pages/legal/PrivacyPolicy.tsx";
+import TermsOfUse from "./pages/legal/TermsOfUse.tsx";
 import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
@@ -297,6 +301,10 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/press" element={<Press />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-use" element={<TermsOfUse />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<LoginPicker />} />
