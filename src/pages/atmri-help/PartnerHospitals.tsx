@@ -35,9 +35,8 @@ const PartnerHospitals = () => {
   useEffect(() => {
     (async () => {
       const { data } = await (supabase as any)
-        .from("atmri_partner_hospitals")
+        .from("atmri_partner_hospitals_public")
         .select("*")
-        .eq("is_active", true)
         .order("state", { ascending: true })
         .order("city", { ascending: true });
       setHospitals(data ?? []);

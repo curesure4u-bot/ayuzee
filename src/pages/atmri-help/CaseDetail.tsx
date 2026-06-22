@@ -27,7 +27,9 @@ const CaseDetail = () => {
     if (!id) return;
     (async () => {
       const sb = supabase as any;
-      const { data: caseData } = await sb.from("atmri_sponsored_cases").select("*").eq("id", id).maybeSingle();
+      // Public case detail uses the PII-free view; only the assigned doctor,
+      // submitter, or admin can read the full row via the base table.
+      const { data: caseData } = await sb.from("atmri_sponsored_cases_public").select("*").eq("id", id).maybeSingle();
       setC(caseData);
       if (caseData) {
         document.title = `${caseData.patient_name}'s Journey — ATMRI Trust`;

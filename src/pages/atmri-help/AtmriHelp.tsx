@@ -48,30 +48,24 @@ const AtmriHelp = () => {
 
     (async () => {
       const c = supabase as any;
-      const [inTx, completed, dispatched, hospitals, pledges] = await Promise.all([
-        c.from("atmri_sponsored_cases").select("id", { count: "exact", head: true }).eq("status", "in_treatment"),
-        c.from("atmri_sponsored_cases").select("id", { count: "exact", head: true }).eq("status", "completed"),
-        c.from("atmri_sponsored_cases").select("id", { count: "exact", head: true }).eq("medicines_dispatched", true),
-        c.from("atmri_partner_hospitals").select("id", { count: "exact", head: true }).eq("is_active", true),
+      const [inTx, completed, hospitals, pledges] = await Promise.all([
+        c.from("atmri_sponsored_cases_public").select("id", { count: "exact", head: true }).eq("status", "in_treatment"),
+        c.from("atmri_sponsored_cases_public").select("id", { count: "exact", head: true }).eq("status", "completed"),
+        c.from("atmri_partner_hospitals_public").select("id", { count: "exact", head: true }),
         c.from("doctor_charity_pledges").select("total_consultations_donated, is_active"),
       ]);
       const pledgeRows = (pledges.data ?? []) as { total_consultations_donated: number; is_active: boolean }[];
       setStats({
         inTreatment: inTx.count ?? 0,
         completed: completed.count ?? 0,
-        medicinesDispatched: dispatched.count ?? 0,
+        medicinesDispatched: 0, // PII-restricted field no longer publicly aggregated
         partnerHospitals: hospitals.count ?? 0,
         pledgeDoctors: pledgeRows.filter((p) => p.is_active).length,
         consultsDonated: pledgeRows.reduce((s, p) => s + (p.total_consultations_donated || 0), 0),
       });
 
-      const { data: urgentData } = await c
-        .from("atmri_sponsored_cases")
-        .select("id,patient_name,patient_city,patient_state,patient_story,condition_name,condition_category,status,is_urgent,patient_photo_url,sessions_completed,total_sessions_planned")
-        .in("status", ["in_treatment", "approved"])
-        .eq("is_urgent", true)
-        .limit(3);
-      setUrgent((urgentData ?? []) as Case[]);
+      // Patient names/stories are no longer publicly listed; urgent highlight removed.
+      setUrgent([]);
     })();
   }, []);
 

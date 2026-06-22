@@ -44,11 +44,11 @@ const CasesList = () => {
   useEffect(() => {
     document.title = "ATMRI Sponsored Cases — Real Patients, Real Healing";
     (async () => {
+      // Patient PII is no longer publicly readable. Public listing exposes only
+      // case status / cost / timestamps via the safe view.
       const { data } = await (supabase as any)
-        .from("atmri_sponsored_cases")
-        .select("id,patient_name,patient_city,patient_state,patient_story,condition_name,condition_category,status,is_urgent,patient_photo_url,treatment_location,sessions_completed,total_sessions_planned,assigned_doctor_id")
-        .in("status", ["approved", "in_treatment", "completed"])
-        .order("is_urgent", { ascending: false })
+        .from("atmri_sponsored_cases_public")
+        .select("id,status,medicines_cost,created_at,assigned_doctor_user_id")
         .order("created_at", { ascending: false });
       setCases((data ?? []) as Case[]);
     })();

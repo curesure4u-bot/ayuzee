@@ -151,7 +151,7 @@ const AyushHelpLiveStats = () => {
       try {
         const { supabase } = await import("@/integrations/supabase/client");
         const [{ count: inTreatment }, { count: doctorsPledged }] = await Promise.all([
-          supabase.from("atmri_sponsored_cases").select("*", { count: "exact", head: true }).eq("status", "in_treatment"),
+          supabase.from("atmri_sponsored_cases_public" as any).select("*", { count: "exact", head: true }).eq("status", "in_treatment"),
           supabase.from("doctor_charity_pledges").select("*", { count: "exact", head: true }).eq("is_active", true),
         ]);
         setStats({ inTreatment: inTreatment || 0, doctorsPledged: doctorsPledged || 0 });
