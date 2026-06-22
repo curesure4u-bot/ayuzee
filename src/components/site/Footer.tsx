@@ -126,9 +126,8 @@ export const Footer = () => {
       </section>
 
       <section className="container flex flex-wrap items-center justify-between gap-3 border-t border-footer-border py-4 text-xs text-footer-muted">
-        <p>© 2025 Ayuzee Health Pvt. Ltd. All rights reserved. | CIN: U85100DL2024PTC000000</p>
+        <p>© 2026 Ayuzee — Part of AL SHIFA AYUSH HEALTH CARE PVT LTD. All rights reserved. | CIN: U52310TN2015PTC100787 | GST: 33AANCA5650J1ZJ</p>
         <p>🌿 Made with care in Tamil Nadu, India</p>
-        <p>AYUSH Reg. No: XXXX | GST: XXXXXXXXX</p>
       </section>
     </footer>
   );
