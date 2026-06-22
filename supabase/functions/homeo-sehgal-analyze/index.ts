@@ -2,6 +2,7 @@
 // Input: free-text patient narrative + optional structured case fields
 // Output: detected emotional themes, ranked remedies, suggested similimum, follow-up questions
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { requireUser } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,6 +17,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const authResult = await requireUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { narrative, caseData } = await req.json();
     const text = String(narrative || "").trim();
     if (!text && !caseData) {
