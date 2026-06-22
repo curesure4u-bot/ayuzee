@@ -8,7 +8,8 @@ const patientLinks = [["Find AYUSH Doctor", "/doctors"], ["Book Panchakarma", "/
 const doctorLinks = [["Join as Doctor", "/doctor/auth"], ["Doctor Dashboard", "/doctor"], ["Bulk Purchase", "/bulk"], ["Vaidya HMS Tool", "/vaidya"], ["Learning Hub", "/learning/courses"], ["Payouts & Earnings", "/doctor/payouts"]];
 const therapistLinks = [["Join as Therapist", "/therapist/auth"], ["Therapist Dashboard", "/therapist"], ["Register Your Venue", "/venue/auth"], ["Venue Dashboard", "/venue"], ["Browse Therapists", "/therapist/browse"], ["Browse Venues", "/venue/browse"]];
 const learnLinks = [["Courses & CME", "/learning/courses"], ["Webinars", "/learning/webinars"], ["Health Blogs", "/learning/blogs"], ["Doctor Feed", "/feed"], ["Student Portal", "/student"], ["Jobs Board", "/jobs"]];
-const companyLinks = [["About Ayuzee", "/about-us"], ["Careers", "/jobs"], ["Partner With Us", "/partner"], ["Press & Media", "/press"], ["Contact Us", "/contact"], ["Refund Policy", "/refund-policy"], ["Privacy Policy", "/privacy-policy"], ["Terms of Use", "/terms-of-use"]];
+const companyLinks = [["About Ayuzee", "/about-us"], ["Careers", "/jobs"], ["Partner With Us", "/partner"], ["Press & Media", "/press"], ["Contact Us", "/contact"]];
+const legalLinks = [["Privacy Policy", "/privacy-policy"], ["Terms of Use", "/terms-of-use"], ["Refund Policy", "/refund-policy"]];
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -108,6 +109,7 @@ export const Footer = () => {
         <FooterLinks title="Therapists & Venues" links={therapistLinks} />
         <FooterLinks title="Learn & Grow" links={learnLinks} />
         <FooterLinks title="Company" links={companyLinks} />
+        <FooterLinks title="Legal" links={legalLinks} />
       </section>
 
       <section className="bg-footer-panel py-6">
