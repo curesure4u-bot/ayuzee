@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Package, Building2, Coins, Wallet,
-  Settings, PackageCheck, CreditCard,
+  Settings, PackageCheck, CreditCard, Link2,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -17,6 +17,7 @@ const items = [
   { title: "Commission Rules",       url: "/admin/commission-rules", icon: Coins },
   { title: "Payout Requests",        url: "/admin/payouts",   icon: CreditCard },
   { title: "Payments",               url: "/admin/payments",  icon: Wallet },
+  { title: "Backlink Monitor",       url: "/admin/backlinks", icon: Link2 },
   { title: "Platform Settings",      url: "/admin/settings",  icon: Settings },
 ];
 

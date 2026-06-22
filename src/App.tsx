@@ -66,6 +66,7 @@ import TherapyCatalog from "./pages/vaidya/sections/TherapyCatalog.tsx";
 import Therapies from "./pages/Therapies.tsx";
 import AdminTherapies from "./pages/admin/AdminTherapies.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
+import AdminBacklinks from "./pages/admin/AdminBacklinks.tsx";
 import AdminGamification from "./pages/admin/AdminGamification.tsx";
 import GamificationLayout from "./pages/gamification/GamificationLayout.tsx";
 import GamificationDashboard from "./pages/gamification/GamificationDashboard.tsx";
@@ -443,6 +444,7 @@ const App = () => (
               <Route path="essential-siddha-drugs" element={<AdminEssentialSiddhaDrugs />} />
               <Route path="essential-unani-drugs" element={<AdminEssentialUnaniDrugs />} />
               <Route path="essential-homeopathy-drugs" element={<AdminEssentialHomeopathyDrugs />} />
+              <Route path="backlinks" element={<AdminBacklinks />} />
             </Route>
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
