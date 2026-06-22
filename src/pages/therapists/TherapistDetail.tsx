@@ -8,12 +8,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
-import { ArrowLeft, BadgeCheck, MapPin, Star, Phone, Award, CalendarCheck } from "lucide-react";
+import { ArrowLeft, BadgeCheck, MapPin, Star, Award, CalendarCheck } from "lucide-react";
 
 interface Therapist {
   id: string;
   full_name: string;
-  phone: string;
   gender: string | null;
   photo_url: string | null;
   certificate_number: string | null;
