@@ -6,6 +6,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/contexts/CartContext";
 import { SiteNav } from "@/components/site/SiteNav";
 import Index from "./pages/Index.tsx";
+import AboutUs from "./pages/AboutUs.tsx";
+import Contact from "./pages/Contact.tsx";
+import Careers from "./pages/Careers.tsx";
+import Blog from "./pages/Blog.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
@@ -290,6 +294,10 @@ const App = () => (
           <AdminAwareNav />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<LoginPicker />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
