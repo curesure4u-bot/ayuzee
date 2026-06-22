@@ -76,6 +76,35 @@ bun run test:e2e -- --project=chromium
 
 All four specs should pass. If `auth.spec.ts` fails on login, the credentials are wrong or the email isn't confirmed. If `doctor-prescription.spec.ts` redirects away from the doctor portal, the role row is missing — re-run the SQL above.
 
+### Quick setup checklist
+
+Tick these off before your first CI run:
+
+**Patient account**
+- [ ] Signed up at `/auth` with a dedicated test email (e.g. `e2e-patient@yourdomain.com`)
+- [ ] Email confirmation link clicked (or auth confirmation disabled in dev)
+- [ ] Can sign in and land on `/dashboard` without redirect
+- [ ] Email + password saved as `E2E_PATIENT_EMAIL` / `E2E_PATIENT_PASSWORD`
+
+**Doctor account**
+- [ ] Signed up at `/doctor/auth` with a dedicated test email (e.g. `e2e-doctor@yourdomain.com`)
+- [ ] Email confirmed
+- [ ] `doctor` row exists in `public.user_roles` for this user (SQL above)
+- [ ] Can sign in and reach the doctor portal home without redirect
+- [ ] Email + password saved as `E2E_DOCTOR_EMAIL` / `E2E_DOCTOR_PASSWORD`
+
+**Signup mailbox**
+- [ ] `E2E_NEW_SIGNUP_EMAIL` is a mailbox you own that accepts `+tag` aliases
+
+**Other**
+- [ ] Razorpay keys are in **test mode** for the target environment
+- [ ] `.env.e2e` filled locally; `bun run test:e2e` passes all four specs
+- [ ] Same values added as GitHub Actions secrets
+
+If every box is ticked, the workflow will pass on the next PR.
+
+
+
 ### Rotating credentials
 
 Change the password in the app, update the GitHub secret (`Settings → Secrets and variables → Actions → <secret> → Update`), and update your local `.env.e2e`. The next workflow run picks it up automatically.
