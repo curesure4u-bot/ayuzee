@@ -108,7 +108,7 @@ const Doctors = () => {
       .select("*")
       .order("rating", { ascending: false })
       .then(({ data }) => {
-        setDoctors((data as Doctor[]) ?? []);
+        setDoctors(((data as unknown) as Doctor[]) ?? []);
         setLoading(false);
       });
   }, []);
