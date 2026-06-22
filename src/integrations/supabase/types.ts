@@ -7556,6 +7556,102 @@ export type Database = {
           },
         ]
       }
+      seo_backlink_snapshots: {
+        Row: {
+          authority_score: number | null
+          created_at: string
+          follow_count: number
+          id: string
+          lost_count: number
+          new_count: number
+          nofollow_count: number
+          referring_domains: number
+          snapshot_date: string
+          target_domain: string
+          total_backlinks: number
+        }
+        Insert: {
+          authority_score?: number | null
+          created_at?: string
+          follow_count?: number
+          id?: string
+          lost_count?: number
+          new_count?: number
+          nofollow_count?: number
+          referring_domains?: number
+          snapshot_date: string
+          target_domain: string
+          total_backlinks?: number
+        }
+        Update: {
+          authority_score?: number | null
+          created_at?: string
+          follow_count?: number
+          id?: string
+          lost_count?: number
+          new_count?: number
+          nofollow_count?: number
+          referring_domains?: number
+          snapshot_date?: string
+          target_domain?: string
+          total_backlinks?: number
+        }
+        Relationships: []
+      }
+      seo_backlinks: {
+        Row: {
+          anchor: string | null
+          first_detected_at: string
+          first_seen_at: string | null
+          id: string
+          is_nofollow: boolean
+          last_seen_at: string | null
+          lost_at: string | null
+          page_ascore: number | null
+          source_domain: string | null
+          source_title: string | null
+          source_url: string
+          status: string
+          target_domain: string
+          target_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          anchor?: string | null
+          first_detected_at?: string
+          first_seen_at?: string | null
+          id?: string
+          is_nofollow?: boolean
+          last_seen_at?: string | null
+          lost_at?: string | null
+          page_ascore?: number | null
+          source_domain?: string | null
+          source_title?: string | null
+          source_url: string
+          status?: string
+          target_domain: string
+          target_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          anchor?: string | null
+          first_detected_at?: string
+          first_seen_at?: string | null
+          id?: string
+          is_nofollow?: boolean
+          last_seen_at?: string | null
+          lost_at?: string | null
+          page_ascore?: number | null
+          source_domain?: string | null
+          source_title?: string | null
+          source_url?: string
+          status?: string
+          target_domain?: string
+          target_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_providers: {
         Row: {
           about: string | null
