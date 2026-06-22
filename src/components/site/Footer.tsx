@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { Apple, ExternalLink, Leaf, Play } from "lucide-react";
+import { Apple, Facebook, Instagram, Leaf, Linkedin, Play, Youtube } from "lucide-react";
 import { toast } from "sonner";
 
 const patientLinks = [["Find AYUSH Doctor", "/doctors"], ["Book Panchakarma", "/therapist/browse"], ["Buy Medicines", "/shop"], ["Upload Prescription", "/shop/prescription"], ["Track Order", "/shop/track"], ["Prakriti Quiz", "/diagnosis/prakriti"]];
@@ -8,7 +8,18 @@ const doctorLinks = [["Join as Doctor", "/doctor/auth"], ["Doctor Dashboard", "/
 const therapistLinks = [["Join as Therapist", "/therapist/auth"], ["Therapist Dashboard", "/therapist"], ["Register Your Venue", "/venue/auth"], ["Venue Dashboard", "/venue"], ["Browse Therapists", "/therapist/browse"], ["Browse Venues", "/venue/browse"]];
 const learnLinks = [["Courses & CME", "/learning/courses"], ["Webinars", "/learning/webinars"], ["Health Blogs", "/learning/blogs"], ["Doctor Feed", "/feed"], ["Student Portal", "/student"], ["Jobs Board", "/jobs"]];
 const companyLinks = [["About Ayuzee", "/about-us"], ["Careers", "/jobs"], ["Partner With Us", "/partner"], ["Press & Media", "/press"], ["Contact Us", "/contact"], ["Refund Policy", "/refund-policy"], ["Privacy Policy", "/privacy-policy"], ["Terms of Use", "/terms-of-use"]];
-const socialLinks = ["Facebook", "Twitter/X", "Instagram", "YouTube", "LinkedIn"];
+const XIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+const socialLinks = [
+  { label: "Facebook", href: "https://facebook.com/ayuzee", Icon: Facebook },
+  { label: "Twitter/X", href: "https://x.com/ayuzee", Icon: XIcon },
+  { label: "Instagram", href: "https://instagram.com/ayuzee", Icon: Instagram },
+  { label: "YouTube", href: "https://youtube.com/@ayuzee", Icon: Youtube },
+  { label: "LinkedIn", href: "https://linkedin.com/company/ayuzee", Icon: Linkedin },
+];
 
 const FooterLinks = ({ title, links }: { title: string; links: string[][] }) => (
   <div>
@@ -52,8 +63,10 @@ export const Footer = () => (
           {["🛡️ Verified by Ministry of AYUSH", "🔒 SSL Secured", "🇮🇳 Made in India"].map((badge) => <span key={badge} className="rounded-full bg-footer-pill px-3 py-1 text-xs text-footer-foreground">{badge}</span>)}
         </div>
         <div className="mt-4 flex gap-3">
-          {socialLinks.map((label) => (
-            <a key={label} href="#" aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-full bg-footer-pill text-footer-foreground transition-smooth hover:bg-primary hover:text-primary-foreground"><ExternalLink className="h-4 w-4" /></a>
+          {socialLinks.map(({ label, href, Icon }) => (
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-full bg-footer-pill text-footer-foreground transition-smooth hover:bg-primary hover:text-primary-foreground">
+              <Icon className="h-4 w-4" />
+            </a>
           ))}
         </div>
       </div>
