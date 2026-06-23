@@ -45,6 +45,7 @@ export default function AdminBacklinks() {
   const [activeCount, setActiveCount] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [lastError, setLastError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
