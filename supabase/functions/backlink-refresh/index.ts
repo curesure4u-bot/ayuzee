@@ -19,7 +19,12 @@ const GATEWAY = "https://connector-gateway.lovable.dev/semrush";
 function gatewayHeaders() {
   const lov = Deno.env.get("LOVABLE_API_KEY");
   const sem = Deno.env.get("SEMRUSH_API_KEY");
-  if (!lov || !sem) throw new Error("Missing LOVABLE_API_KEY or SEMRUSH_API_KEY");
+  if (!lov || !sem) {
+    const missing = [!lov && "LOVABLE_API_KEY", !sem && "SEMRUSH_API_KEY"].filter(Boolean).join(", ");
+    const err = new Error(`Missing required secret(s): ${missing}`);
+    (err as Error & { httpStatus?: number }).httpStatus = 500;
+    throw err;
+  }
   return {
     Authorization: `Bearer ${lov}`,
     "X-Connection-Api-Key": sem,

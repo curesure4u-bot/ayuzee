@@ -48,6 +48,7 @@ const ProductCard = ({ p }: { p: MiniProduct }) => (
           alt={p.name}
           className={cn("h-full w-full object-contain p-2", p.stock <= 0 && "opacity-40")}
           loading="lazy"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
         />
       ) : (
         <div className={cn("font-display text-4xl text-primary/25", p.stock <= 0 && "opacity-40")}>

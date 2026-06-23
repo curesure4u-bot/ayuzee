@@ -220,7 +220,6 @@ const ParaSurgicalCaseDetail = () => {
         .eq("id", caseRow.id);
       toast.success("AI analysis ready");
     } catch (e: any) {
-      console.error(e);
       toast.error(e?.message ?? "AI analysis failed");
     } finally {
       setAiLoading(false);

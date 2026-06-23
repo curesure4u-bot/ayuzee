@@ -88,7 +88,6 @@ const ParaSurgicalNewCase = () => {
       .single();
     setSaving(false);
     if (error) {
-      console.error(error);
       toast.error("Failed to save case");
       return;
     }
