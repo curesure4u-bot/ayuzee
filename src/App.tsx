@@ -141,6 +141,7 @@ import Jobs from "./pages/Jobs.tsx";
 import JobPost from "./pages/JobPost.tsx";
 import Search from "./pages/Search.tsx";
 import Referral from "./pages/Referral.tsx";
+import Colleges from "./pages/Colleges.tsx";
 import LoginPicker from "./pages/LoginPicker.tsx";
 import ProviderAuth from "./pages/provider/ProviderAuth.tsx";
 import ProviderHome from "./pages/provider/ProviderHome.tsx";
@@ -347,6 +348,7 @@ const App = () => (
             <Route path="/offers" element={<Offers />} />
             <Route path="/search" element={<Search />} />
             <Route path="/jobs" element={<Jobs />} />
+            <Route path="/colleges" element={<Colleges />} />
             <Route path="/jobs/post" element={<JobPost />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/shop/conditions" element={<ShopByCondition />} />
