@@ -10671,11 +10671,12 @@ export type Database = {
           is_approved: boolean | null
           is_verified: boolean | null
           languages: string[] | null
+          profile_completion: number | null
           public_profile: boolean | null
           rating: number | null
-          registration_number: string | null
           specialization: string | null
           total_reviews: number | null
+          verification_status: string | null
           video_available: boolean | null
         }
         Insert: {
@@ -10694,11 +10695,12 @@ export type Database = {
           is_approved?: boolean | null
           is_verified?: boolean | null
           languages?: string[] | null
+          profile_completion?: number | null
           public_profile?: boolean | null
           rating?: number | null
-          registration_number?: string | null
           specialization?: string | null
           total_reviews?: number | null
+          verification_status?: string | null
           video_available?: boolean | null
         }
         Update: {
@@ -10717,11 +10719,12 @@ export type Database = {
           is_approved?: boolean | null
           is_verified?: boolean | null
           languages?: string[] | null
+          profile_completion?: number | null
           public_profile?: boolean | null
           rating?: number | null
-          registration_number?: string | null
           specialization?: string | null
           total_reviews?: number | null
+          verification_status?: string | null
           video_available?: boolean | null
         }
         Relationships: []
@@ -10762,7 +10765,6 @@ export type Database = {
       network_partners_public: {
         Row: {
           about: string | null
-          address: string | null
           city: string | null
           created_at: string | null
           id: string | null
@@ -10770,7 +10772,6 @@ export type Database = {
           is_approved: boolean | null
           name: string | null
           partner_type: string | null
-          pincode: string | null
           rating: number | null
           services: string[] | null
           specialities: string[] | null
@@ -10778,7 +10779,6 @@ export type Database = {
         }
         Insert: {
           about?: string | null
-          address?: string | null
           city?: string | null
           created_at?: string | null
           id?: string | null
@@ -10786,7 +10786,6 @@ export type Database = {
           is_approved?: boolean | null
           name?: string | null
           partner_type?: string | null
-          pincode?: string | null
           rating?: number | null
           services?: string[] | null
           specialities?: string[] | null
@@ -10794,7 +10793,6 @@ export type Database = {
         }
         Update: {
           about?: string | null
-          address?: string | null
           city?: string | null
           created_at?: string | null
           id?: string | null
@@ -10802,7 +10800,6 @@ export type Database = {
           is_approved?: boolean | null
           name?: string | null
           partner_type?: string | null
-          pincode?: string | null
           rating?: number | null
           services?: string[] | null
           specialities?: string[] | null
@@ -11053,8 +11050,6 @@ export type Database = {
       therapists_public: {
         Row: {
           allowed_therapies: string[] | null
-          certificate_number: string | null
-          certifying_body: string | null
           city: string | null
           created_at: string | null
           full_name: string | null
@@ -11071,8 +11066,6 @@ export type Database = {
         }
         Insert: {
           allowed_therapies?: string[] | null
-          certificate_number?: string | null
-          certifying_body?: string | null
           city?: string | null
           created_at?: string | null
           full_name?: string | null
@@ -11089,8 +11082,6 @@ export type Database = {
         }
         Update: {
           allowed_therapies?: string[] | null
-          certificate_number?: string | null
-          certifying_body?: string | null
           city?: string | null
           created_at?: string | null
           full_name?: string | null
