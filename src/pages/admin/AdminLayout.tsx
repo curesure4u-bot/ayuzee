@@ -165,7 +165,7 @@ const AdminLayout = () => {
         </nav>
         <div className="border-t border-admin-sidebar-foreground/10">
           <Link to="/" className="block p-5 pb-2 text-sm text-admin-sidebar-muted hover:text-admin-sidebar-foreground">← Back to main site</Link>
-          <Link to="/login-picker" className="block px-5 pb-5 text-sm text-admin-sidebar-muted hover:text-admin-sidebar-foreground">⇄ Switch Portal</Link>
+          <Link to="/login" className="block px-5 pb-5 text-sm text-admin-sidebar-muted hover:text-admin-sidebar-foreground">⇄ Switch Portal</Link>
         </div>
       </aside>
       <main className="ml-64 min-h-screen p-6 lg:p-8"><Outlet /></main>
