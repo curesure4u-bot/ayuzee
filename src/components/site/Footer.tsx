@@ -145,9 +145,9 @@ export const Footer = () => {
 
       <section className="bg-footer-panel py-6">
         <div className="container flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-          <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <form onSubmit={handleAppWaitlistSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <span className="font-medium text-primary-foreground">📱 Ayuzee App coming soon — Get notified:</span>
-            <input type="email" required placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
+            <input name="email" type="email" required maxLength={255} placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
             <button type="submit" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-smooth hover:bg-primary/90">Notify Me</button>
           </form>
           <div className="flex flex-wrap items-center gap-3 text-sm text-footer-muted">
