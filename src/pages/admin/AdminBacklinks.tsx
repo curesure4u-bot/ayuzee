@@ -66,15 +66,18 @@ export default function AdminBacklinks() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
+    setLastError(null);
     try {
       const { data, error } = await supabase.functions.invoke("backlink-refresh", { body: {} });
       if (error) throw error;
       const d = data as { new?: number; lost?: number; total?: number; error?: string };
       if (d?.error) throw new Error(d.error);
+      setLastError(null);
       toast.success(`Refreshed — ${d?.new ?? 0} new, ${d?.lost ?? 0} lost, ${d?.total ?? 0} total`);
       await load();
     } catch (e) {
       const m = e instanceof Error ? e.message : String(e);
+      setLastError(m);
       toast.error(`Refresh failed: ${m}`);
     } finally {
       setRefreshing(false);
