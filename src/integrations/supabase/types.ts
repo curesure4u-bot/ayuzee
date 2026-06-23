@@ -10548,6 +10548,7 @@ export type Database = {
           hospital_type: string | null
           id: string | null
           is_active: boolean | null
+          notes: string | null
           state: string | null
         }
         Insert: {
@@ -10560,6 +10561,7 @@ export type Database = {
           hospital_type?: string | null
           id?: string | null
           is_active?: boolean | null
+          notes?: string | null
           state?: string | null
         }
         Update: {
@@ -10572,34 +10574,80 @@ export type Database = {
           hospital_type?: string | null
           id?: string | null
           is_active?: boolean | null
+          notes?: string | null
           state?: string | null
         }
         Relationships: []
       }
       atmri_sponsored_cases_public: {
         Row: {
-          assigned_doctor_user_id: string | null
+          completion_notes: string | null
+          condition_category: string | null
+          condition_name: string | null
           created_at: string | null
-          doctor_countersigned: boolean | null
           id: string | null
-          medicines_cost: number | null
+          is_urgent: boolean | null
+          patient_age: number | null
+          patient_city: string | null
+          patient_gender: string | null
+          patient_name: string | null
+          patient_outcome_photo_url: string | null
+          patient_photo_url: string | null
+          patient_state: string | null
+          patient_story: string | null
+          sessions_completed: number | null
           status: string | null
+          total_sessions_planned: number | null
+          treatment_duration_days: number | null
+          treatment_location: string | null
+          treatment_plan: string | null
+          updated_at: string | null
         }
         Insert: {
-          assigned_doctor_user_id?: string | null
+          completion_notes?: string | null
+          condition_category?: string | null
+          condition_name?: string | null
           created_at?: string | null
-          doctor_countersigned?: boolean | null
           id?: string | null
-          medicines_cost?: number | null
+          is_urgent?: boolean | null
+          patient_age?: number | null
+          patient_city?: string | null
+          patient_gender?: string | null
+          patient_name?: string | null
+          patient_outcome_photo_url?: string | null
+          patient_photo_url?: string | null
+          patient_state?: string | null
+          patient_story?: string | null
+          sessions_completed?: number | null
           status?: string | null
+          total_sessions_planned?: number | null
+          treatment_duration_days?: number | null
+          treatment_location?: string | null
+          treatment_plan?: string | null
+          updated_at?: string | null
         }
         Update: {
-          assigned_doctor_user_id?: string | null
+          completion_notes?: string | null
+          condition_category?: string | null
+          condition_name?: string | null
           created_at?: string | null
-          doctor_countersigned?: boolean | null
           id?: string | null
-          medicines_cost?: number | null
+          is_urgent?: boolean | null
+          patient_age?: number | null
+          patient_city?: string | null
+          patient_gender?: string | null
+          patient_name?: string | null
+          patient_outcome_photo_url?: string | null
+          patient_photo_url?: string | null
+          patient_state?: string | null
+          patient_story?: string | null
+          sessions_completed?: number | null
           status?: string | null
+          total_sessions_planned?: number | null
+          treatment_duration_days?: number | null
+          treatment_location?: string | null
+          treatment_plan?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -10754,9 +10802,13 @@ export type Database = {
         Row: {
           certificate_no: string | null
           certificate_type: string | null
+          created_at: string | null
           id: string | null
           issued_at: string | null
+          metadata: Json | null
           recipient_name: string | null
+          reference_id: string | null
+          reference_table: string | null
           role: string | null
           subtitle: string | null
           title: string | null
@@ -10764,9 +10816,13 @@ export type Database = {
         Insert: {
           certificate_no?: string | null
           certificate_type?: string | null
+          created_at?: string | null
           id?: string | null
           issued_at?: string | null
+          metadata?: Json | null
           recipient_name?: string | null
+          reference_id?: string | null
+          reference_table?: string | null
           role?: string | null
           subtitle?: string | null
           title?: string | null
@@ -10774,9 +10830,13 @@ export type Database = {
         Update: {
           certificate_no?: string | null
           certificate_type?: string | null
+          created_at?: string | null
           id?: string | null
           issued_at?: string | null
+          metadata?: Json | null
           recipient_name?: string | null
+          reference_id?: string | null
+          reference_table?: string | null
           role?: string | null
           subtitle?: string | null
           title?: string | null
