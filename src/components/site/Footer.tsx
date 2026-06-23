@@ -2,7 +2,32 @@ import { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Apple, Leaf, Play } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
+
+const emailSchema = z.string().trim().email("Enter a valid email").max(255);
+
+async function subscribeEmail(email: string, source: "footer" | "app_waitlist") {
+  const parsed = emailSchema.safeParse(email);
+  if (!parsed.success) {
+    toast.error(parsed.error.issues[0].message);
+    return false;
+  }
+  const { error } = await supabase
+    .from("newsletter_subscribers")
+    .insert({ email: parsed.data.toLowerCase(), source });
+  if (error) {
+    if (error.code === "23505") {
+      toast.success("You're already subscribed 🌿");
+      return true;
+    }
+    toast.error(error.message || "Could not subscribe. Please try again.");
+    return false;
+  }
+  toast.success(source === "app_waitlist" ? "We'll notify you when the app launches!" : "Subscribed! 🌿");
+  return true;
+}
 
 const patientLinks = [["Find AYUSH Doctor", "/doctors"], ["Book Panchakarma", "/therapist/browse"], ["Buy Medicines", "/shop"], ["Upload Prescription", "/shop/prescription"], ["Track Order", "/shop/track"], ["Prakriti Quiz", "/diagnosis/prakriti"]];
 const doctorLinks = [["Join as Doctor", "/doctor/auth"], ["Doctor Dashboard", "/doctor"], ["Bulk Purchase", "/bulk"], ["Vaidya HMS Tool", "/vaidya"], ["Learning Hub", "/learning/courses"], ["Payouts & Earnings", "/doctor/payouts"]];
@@ -60,11 +85,17 @@ const FooterLinks = ({ title, links }: { title: string; links: string[][] }) => 
   </div>
 );
 
-const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+const makeSubmitHandler = (source: "footer" | "app_waitlist") => async (event: FormEvent<HTMLFormElement>) => {
   event.preventDefault();
-  toast.success("Subscribed! 🌿");
-  event.currentTarget.reset();
+  const form = event.currentTarget;
+  const data = new FormData(form);
+  const email = String(data.get("email") ?? "");
+  const ok = await subscribeEmail(email, source);
+  if (ok) form.reset();
 };
+
+const handleNewsletterSubmit = makeSubmitHandler("footer");
+const handleAppWaitlistSubmit = makeSubmitHandler("app_waitlist");
 
 export const Footer = () => {
   const { role, loading } = useUserRole();
@@ -79,8 +110,8 @@ export const Footer = () => {
       <section className="bg-primary py-10 text-primary-foreground">
         <div className="container flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <p className="max-w-2xl text-lg font-semibold">🌿 Stay updated on Ayurvedic health tips, new doctors, and exclusive offers</p>
-          <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <input type="email" required placeholder="Enter your email" className="w-full rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-4 py-2 text-primary-foreground placeholder:text-primary-foreground/60 outline-none ring-offset-primary focus:ring-2 focus:ring-primary-foreground sm:w-64" />
+          <form onSubmit={handleNewsletterSubmit} className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <input name="email" type="email" required maxLength={255} placeholder="Enter your email" className="w-full rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-4 py-2 text-primary-foreground placeholder:text-primary-foreground/60 outline-none ring-offset-primary focus:ring-2 focus:ring-primary-foreground sm:w-64" />
             <button type="submit" className="rounded-full bg-primary-foreground px-6 py-2 font-semibold text-primary transition-smooth hover:opacity-90">Subscribe</button>
           </form>
         </div>
@@ -114,9 +145,9 @@ export const Footer = () => {
 
       <section className="bg-footer-panel py-6">
         <div className="container flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <form onSubmit={handleAppWaitlistSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <span className="font-medium text-primary-foreground">📱 Ayuzee App coming soon — Get notified:</span>
-            <input type="email" required placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
+            <input name="email" type="email" required maxLength={255} placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
             <button type="submit" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-smooth hover:bg-primary/90">Notify Me</button>
           </form>
           <div className="flex flex-wrap items-center gap-3 text-sm text-footer-muted">
