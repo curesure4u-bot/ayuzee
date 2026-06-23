@@ -111,7 +111,7 @@ export const Footer = () => {
         <div className="container flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <p className="max-w-2xl text-lg font-semibold">🌿 Stay updated on Ayurvedic health tips, new doctors, and exclusive offers</p>
           <form onSubmit={handleNewsletterSubmit} className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <input type="email" required placeholder="Enter your email" className="w-full rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-4 py-2 text-primary-foreground placeholder:text-primary-foreground/60 outline-none ring-offset-primary focus:ring-2 focus:ring-primary-foreground sm:w-64" />
+            <input name="email" type="email" required maxLength={255} placeholder="Enter your email" className="w-full rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-4 py-2 text-primary-foreground placeholder:text-primary-foreground/60 outline-none ring-offset-primary focus:ring-2 focus:ring-primary-foreground sm:w-64" />
             <button type="submit" className="rounded-full bg-primary-foreground px-6 py-2 font-semibold text-primary transition-smooth hover:opacity-90">Subscribe</button>
           </form>
         </div>
