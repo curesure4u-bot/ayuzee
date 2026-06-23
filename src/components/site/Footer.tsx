@@ -85,11 +85,17 @@ const FooterLinks = ({ title, links }: { title: string; links: string[][] }) => 
   </div>
 );
 
-const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+const makeSubmitHandler = (source: "footer" | "app_waitlist") => async (event: FormEvent<HTMLFormElement>) => {
   event.preventDefault();
-  toast.success("Subscribed! 🌿");
-  event.currentTarget.reset();
+  const form = event.currentTarget;
+  const data = new FormData(form);
+  const email = String(data.get("email") ?? "");
+  const ok = await subscribeEmail(email, source);
+  if (ok) form.reset();
 };
+
+const handleNewsletterSubmit = makeSubmitHandler("footer");
+const handleAppWaitlistSubmit = makeSubmitHandler("app_waitlist");
 
 export const Footer = () => {
   const { role, loading } = useUserRole();
