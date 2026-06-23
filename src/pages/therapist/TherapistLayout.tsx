@@ -109,7 +109,7 @@ const TherapistLayout = () => {
         </nav>
         <div className="p-3 border-t space-y-1">
           <Button variant="ghost" className="w-full justify-start text-muted-foreground" asChild>
-            <Link to="/login-picker">⇄ Switch Portal</Link>
+            <Link to="/login">⇄ Switch Portal</Link>
           </Button>
           <Button variant="ghost" className="w-full justify-start text-muted-foreground" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
             <LogOut className="h-4 w-4 mr-2" />Sign out
