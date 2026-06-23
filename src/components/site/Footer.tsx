@@ -2,7 +2,32 @@ import { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Apple, Leaf, Play } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
+
+const emailSchema = z.string().trim().email("Enter a valid email").max(255);
+
+async function subscribeEmail(email: string, source: "footer" | "app_waitlist") {
+  const parsed = emailSchema.safeParse(email);
+  if (!parsed.success) {
+    toast.error(parsed.error.issues[0].message);
+    return false;
+  }
+  const { error } = await supabase
+    .from("newsletter_subscribers")
+    .insert({ email: parsed.data.toLowerCase(), source });
+  if (error) {
+    if (error.code === "23505") {
+      toast.success("You're already subscribed 🌿");
+      return true;
+    }
+    toast.error(error.message || "Could not subscribe. Please try again.");
+    return false;
+  }
+  toast.success(source === "app_waitlist" ? "We'll notify you when the app launches!" : "Subscribed! 🌿");
+  return true;
+}
 
 const patientLinks = [["Find AYUSH Doctor", "/doctors"], ["Book Panchakarma", "/therapist/browse"], ["Buy Medicines", "/shop"], ["Upload Prescription", "/shop/prescription"], ["Track Order", "/shop/track"], ["Prakriti Quiz", "/diagnosis/prakriti"]];
 const doctorLinks = [["Join as Doctor", "/doctor/auth"], ["Doctor Dashboard", "/doctor"], ["Bulk Purchase", "/bulk"], ["Vaidya HMS Tool", "/vaidya"], ["Learning Hub", "/learning/courses"], ["Payouts & Earnings", "/doctor/payouts"]];
