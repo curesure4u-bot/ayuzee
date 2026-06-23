@@ -534,6 +534,7 @@ const ProductDetail = () => {
                             alt={r.name}
                             className="h-full w-full object-contain p-2"
                             loading="lazy"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
                           />
                         ) : (
                           <div className="font-display text-4xl text-primary/25">{r.name[0]}</div>
