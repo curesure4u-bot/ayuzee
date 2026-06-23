@@ -168,6 +168,7 @@ export const ProductApprovalCard = ({
                 alt={product.name}
                 className="h-full w-full cursor-zoom-in object-cover"
                 onClick={() => setLightbox(gallery[0])}
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
               />
             ) : (
               <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
