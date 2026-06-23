@@ -117,6 +117,12 @@ export default function AdminBacklinks() {
             ⚠️ Backlink sync requires SEMRUSH_API_KEY and LOVABLE_API_KEY to be set in Supabase Edge Function secrets. Contact your developer to configure these.
             <br />
             <span className="text-xs opacity-90">Error: {lastError}</span>
+            <div className="mt-3">
+              <Button onClick={handleRefresh} disabled={refreshing} size="sm" variant="outline">
+                <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+                {refreshing ? "Retrying…" : "Retry refresh"}
+              </Button>
+            </div>
           </AlertDescription>
         </Alert>
       )}
