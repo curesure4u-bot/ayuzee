@@ -103,11 +103,23 @@ export default function AdminBacklinks() {
           <h1 className="font-display text-2xl font-semibold">Backlink Monitor</h1>
           <p className="text-sm text-muted-foreground">Tracking inbound links to <span className="font-medium">ayuzee.com</span> — powered by Semrush.</p>
         </div>
-        <Button onClick={handleRefresh} disabled={refreshing}>
+      <Button onClick={handleRefresh} disabled={refreshing}>
           <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
           {refreshing ? "Pulling from Semrush…" : "Refresh now"}
         </Button>
       </header>
+
+      {lastError && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Backlink sync failed</AlertTitle>
+          <AlertDescription>
+            ⚠️ Backlink sync requires SEMRUSH_API_KEY and LOVABLE_API_KEY to be set in Supabase Edge Function secrets. Contact your developer to configure these.
+            <br />
+            <span className="text-xs opacity-90">Error: {lastError}</span>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <section className="grid gap-4 md:grid-cols-4">
         <StatCard title="Total backlinks" icon={<LinkIcon className="h-4 w-4" />} value={latest?.total_backlinks ?? activeCount} delta={totalDelta} />
