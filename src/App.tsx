@@ -568,6 +568,7 @@ const App = () => (
               <Route path="formulary/prescription/:id" element={<FormularyPrescription />} />
               <Route path="afi-formulary" element={<AfiFormulary />} />
               <Route path="afi-formulary/disease-index" element={<AfiDiseaseIndex />} />
+              <Route path="afi-formulary/ingredient/:botanical" element={<AfiIngredientFormulations />} />
               <Route path="afi-formulary/:id" element={<AfiFormulaDetail />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
