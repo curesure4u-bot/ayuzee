@@ -470,52 +470,98 @@ const MisReports = () => {
             {(() => {
               const visibleKeys = Object.keys(exportRows[0]).filter((k) => k !== "_drill");
               const hasDrill = exportRows.some((r) => r._drill);
+              const effectiveSortKey = sortKey && visibleKeys.includes(sortKey) ? sortKey : "";
+              const sortedRows = effectiveSortKey
+                ? [...exportRows].sort((a, b) => {
+                    const av = a[effectiveSortKey];
+                    const bv = b[effectiveSortKey];
+                    if (av == null && bv == null) return 0;
+                    if (av == null) return 1;
+                    if (bv == null) return -1;
+                    if (typeof av === "number" && typeof bv === "number") {
+                      return sortDir === "asc" ? av - bv : bv - av;
+                    }
+                    return sortDir === "asc"
+                      ? String(av).localeCompare(String(bv))
+                      : String(bv).localeCompare(String(av));
+                  })
+                : exportRows;
+              const totalPages = Math.max(1, Math.ceil(sortedRows.length / PAGE_SIZE));
+              const safePage = Math.min(page, totalPages);
+              const pageRows = sortedRows.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+              const toggleSort = (k: string) => {
+                if (sortKey === k) {
+                  setSortDir(sortDir === "asc" ? "desc" : "asc");
+                } else {
+                  setSortKey(k);
+                  setSortDir("desc");
+                }
+                setPage(1);
+              };
               return (
-                <table className="w-full text-sm">
-                  <thead className="text-left text-xs text-muted-foreground">
-                    <tr className="border-b">
-                      {visibleKeys.map((k) => (
-                        <th key={k} className="py-2 pr-3 font-medium uppercase tracking-wide">{k}</th>
-                      ))}
-                      {hasDrill && <th className="py-2 pr-3" />}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {exportRows.slice(0, 50).map((r, i) => {
-                      const filterQS = new URLSearchParams({
-                        preset, from, to, report: reportType, billType, paymentMode,
-                      }).toString();
-                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}?${filterQS}` : null;
-                      return (
-                        <tr
-                          key={i}
-                          className={`border-b last:border-0 ${drillTo ? "cursor-pointer hover:bg-muted/50" : ""}`}
-                          onClick={() => drillTo && navigate(drillTo)}
-                        >
-                          {visibleKeys.map((k) => (
-                            <td key={k} className="py-2 pr-3">
-                              {typeof r[k] === "number" && /revenue|total|fee|subtotal|discount/i.test(k)
-                                ? fmtINR(r[k])
-                                : String(r[k] ?? "—")}
-                            </td>
-                          ))}
-                          {hasDrill && (
-                            <td className="py-2 pr-3 text-right">
-                              {drillTo && <span className="text-xs text-primary">View →</span>}
-                            </td>
-                          )}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                <>
+                  <table className="w-full text-sm">
+                    <thead className="text-left text-xs text-muted-foreground">
+                      <tr className="border-b">
+                        {visibleKeys.map((k) => (
+                          <th
+                            key={k}
+                            onClick={() => toggleSort(k)}
+                            className="py-2 pr-3 font-medium uppercase tracking-wide cursor-pointer select-none hover:text-foreground"
+                          >
+                            {k}
+                            {effectiveSortKey === k && (
+                              <span className="ml-1">{sortDir === "asc" ? "▲" : "▼"}</span>
+                            )}
+                          </th>
+                        ))}
+                        {hasDrill && <th className="py-2 pr-3" />}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pageRows.map((r, i) => {
+                        const filterQS = new URLSearchParams({
+                          preset, from, to, report: reportType, billType, paymentMode,
+                          page: String(safePage),
+                          ...(effectiveSortKey ? { sortKey: effectiveSortKey, sortDir } : {}),
+                        }).toString();
+                        const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}?${filterQS}` : null;
+                        return (
+                          <tr
+                            key={i}
+                            className={`border-b last:border-0 ${drillTo ? "cursor-pointer hover:bg-muted/50" : ""}`}
+                            onClick={() => drillTo && navigate(drillTo)}
+                          >
+                            {visibleKeys.map((k) => (
+                              <td key={k} className="py-2 pr-3">
+                                {typeof r[k] === "number" && /revenue|total|fee|subtotal|discount/i.test(k)
+                                  ? fmtINR(r[k])
+                                  : String(r[k] ?? "—")}
+                              </td>
+                            ))}
+                            {hasDrill && (
+                              <td className="py-2 pr-3 text-right">
+                                {drillTo && <span className="text-xs text-primary">View →</span>}
+                              </td>
+                            )}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                    <span>
+                      Showing {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, sortedRows.length)} of {sortedRows.length} rows
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button size="sm" variant="outline" disabled={safePage <= 1} onClick={() => setPage(safePage - 1)}>Prev</Button>
+                      <span>Page {safePage} / {totalPages}</span>
+                      <Button size="sm" variant="outline" disabled={safePage >= totalPages} onClick={() => setPage(safePage + 1)}>Next</Button>
+                    </div>
+                  </div>
+                </>
               );
             })()}
-            {exportRows.length > 50 && (
-              <p className="mt-3 text-xs text-muted-foreground">
-                Showing first 50 of {exportRows.length} rows. Export to CSV for the full dataset.
-              </p>
-            )}
           </div>
         )}
       </Card>
