@@ -258,13 +258,16 @@ const MisReports = () => {
     }));
   }, [reportType, filteredBills, cons, appts, billItems, dailySeries]);
 
+  const stripInternal = (rows: Record<string, any>[]) =>
+    rows.map(({ _drill, ...rest }) => rest);
+
   const exportCSV = () => {
     if (!exportRows.length) {
       toast.error("Nothing to export for this filter");
       return;
     }
     const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
-    download(`mis-${reportType}-${from}_to_${to}-${ts}.csv`, toCSV(exportRows), "text/csv");
+    download(`mis-${reportType}-${from}_to_${to}-${ts}.csv`, toCSV(stripInternal(exportRows)), "text/csv");
     toast.success(`Exported ${exportRows.length} rows`);
   };
 
@@ -276,7 +279,7 @@ const MisReports = () => {
     const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
     download(
       `mis-${reportType}-${from}_to_${to}-${ts}.json`,
-      JSON.stringify({ report: reportType, from, to, rows: exportRows }, null, 2),
+      JSON.stringify({ report: reportType, from, to, rows: stripInternal(exportRows) }, null, 2),
       "application/json",
     );
     toast.success(`Exported ${exportRows.length} rows`);
