@@ -199,6 +199,26 @@ export function DoctorSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Clinical Tools</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/doctor/formulary"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <Pill className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>💊 Formulary</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
