@@ -119,6 +119,14 @@ import AdminBlogs from "./pages/admin/AdminBlogs.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import AdminTeam from "./pages/admin/AdminTeam.tsx";
 import AdminHmsAccess from "./pages/admin/AdminHmsAccess.tsx";
+import AdminMasterManagement from "./pages/admin/AdminMasterManagement.tsx";
+import TrustedIpMaster from "./pages/admin/masters/TrustedIpMaster.tsx";
+import LabelMaster from "./pages/admin/masters/LabelMaster.tsx";
+import PackageMaster from "./pages/admin/masters/PackageMaster.tsx";
+import DepartmentMaster from "./pages/admin/masters/DepartmentMaster.tsx";
+import SuggestionMaster from "./pages/admin/masters/SuggestionMaster.tsx";
+import FormMaster from "./pages/admin/masters/FormMaster.tsx";
+import StoreMaster from "./pages/admin/masters/StoreMaster.tsx";
 import HmsUltraDashboard from "./pages/vaidya/hms/HmsUltraDashboard.tsx";
 
 import Diagnosis from "./pages/Diagnosis.tsx";
@@ -477,7 +485,14 @@ const App = () => (
               <Route path="essential-homeopathy-drugs" element={<AdminEssentialHomeopathyDrugs />} />
               <Route path="backlinks" element={<AdminBacklinks />} />
               <Route path="hms-access" element={<AdminHmsAccess />} />
-              <Route path="master-management" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Master Management" description="Manage branches, services, and HMS masters." />} />
+              <Route path="master-management" element={<AdminMasterManagement />} />
+              <Route path="master-management/trusted-ip" element={<TrustedIpMaster />} />
+              <Route path="master-management/labels" element={<LabelMaster />} />
+              <Route path="master-management/packages" element={<PackageMaster />} />
+              <Route path="master-management/departments" element={<DepartmentMaster />} />
+              <Route path="master-management/suggestions" element={<SuggestionMaster />} />
+              <Route path="master-management/forms" element={<FormMaster />} />
+              <Route path="master-management/stores" element={<StoreMaster />} />
               <Route path="pharmacy-orders" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />} />
               <Route path="ip-admissions" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />} />
               <Route path="ward-status" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Ward Status" />} />
