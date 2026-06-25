@@ -159,7 +159,7 @@ const StoreMaster = () => {
                     <Button asChild size="icon" variant="ghost">
                       <Link to={`/vaidya/inventory?store_id=${s.id}`}><ExternalLink className="h-4 w-4" /></Link>
                     </Button>
-                    <Button size="icon" variant="ghost" onClick={() => setForm({ id: s.id, store_name: s.store_name, store_code: s.store_code, store_type: s.store_type, branch_id: s.branch_id || "all", incharge_name: s.incharge_name || "", phone: s.phone || "", address_in_hospital: s.address_in_hospital || "" }) || setOpen(true)}>
+                    <Button size="icon" variant="ghost" onClick={() => { setForm({ id: s.id, store_name: s.store_name, store_code: s.store_code, store_type: s.store_type, branch_id: s.branch_id || "all", incharge_name: s.incharge_name || "", phone: s.phone || "", address_in_hospital: s.address_in_hospital || "" }); setOpen(true); }}>
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button size="icon" variant="ghost" onClick={() => del(s.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
