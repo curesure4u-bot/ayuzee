@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Patients view own homeo patient record" ON public.homeo_patients;
