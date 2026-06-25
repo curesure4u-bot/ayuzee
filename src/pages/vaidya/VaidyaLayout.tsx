@@ -220,13 +220,17 @@ const VaidyaLayout = () => {
               <Stethoscope className="h-4 w-4 text-primary-foreground" />
             </span>
             <div>
-              <p className="font-display text-base font-semibold">Ayush HMS Tool</p>
-              <p className="text-[10px] text-muted-foreground">Hospital Mgmt System</p>
+              <p className="font-display text-base font-semibold">
+                {hasAccess ? "⚡ HMS Tools Ultra" : "Ayush HMS Tool"}
+              </p>
+              <p className="text-[10px] text-muted-foreground">
+                {hasAccess ? (branch ?? "HMS Tools Ultra") : "Hospital Mgmt System"}
+              </p>
             </div>
           </Link>
         </div>
         <nav className="flex-1 overflow-y-auto p-3">
-          {groups.map((g) => (
+          {[...(hasAccess ? hmsGroups : []), ...groups].map((g) => (
             <div key={g.label} className="mb-4">
               <div className="mb-1 flex items-center gap-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 <g.icon className="h-3.5 w-3.5" />
@@ -253,6 +257,7 @@ const VaidyaLayout = () => {
             </div>
           ))}
         </nav>
+
         <div className="border-t border-border p-3">
           <Button variant="outline" size="sm" className="w-full" asChild>
             <Link to="/doctor">← Back to Doctor</Link>
