@@ -2963,6 +2963,11 @@ export type Database = {
           experience_years: number
           full_name: string
           gender: string | null
+          hms_access: boolean
+          hms_access_granted_at: string | null
+          hms_access_granted_by: string | null
+          hms_branch: string | null
+          hms_center_type: string | null
           id: string
           in_clinic_available: boolean
           is_approved: boolean
@@ -2999,6 +3004,11 @@ export type Database = {
           experience_years?: number
           full_name: string
           gender?: string | null
+          hms_access?: boolean
+          hms_access_granted_at?: string | null
+          hms_access_granted_by?: string | null
+          hms_branch?: string | null
+          hms_center_type?: string | null
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
@@ -3035,6 +3045,11 @@ export type Database = {
           experience_years?: number
           full_name?: string
           gender?: string | null
+          hms_access?: boolean
+          hms_access_granted_at?: string | null
+          hms_access_granted_by?: string | null
+          hms_branch?: string | null
+          hms_center_type?: string | null
           id?: string
           in_clinic_available?: boolean
           is_approved?: boolean
@@ -4443,6 +4458,105 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hms_access_requests: {
+        Row: {
+          center_name: string
+          center_type: string | null
+          created_at: string
+          daily_patients: number | null
+          doctor_user_id: string
+          id: string
+          message: string | null
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          role: string | null
+          status: string
+        }
+        Insert: {
+          center_name: string
+          center_type?: string | null
+          created_at?: string
+          daily_patients?: number | null
+          doctor_user_id: string
+          id?: string
+          message?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role?: string | null
+          status?: string
+        }
+        Update: {
+          center_name?: string
+          center_type?: string | null
+          created_at?: string
+          daily_patients?: number | null
+          doctor_user_id?: string
+          id?: string
+          message?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      hms_branches: {
+        Row: {
+          address: string | null
+          bed_count: number | null
+          branch_code: string
+          branch_name: string
+          branch_type: string | null
+          city: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          manager_name: string | null
+          notes: string | null
+          opened_on: string | null
+          phone: string | null
+          pincode: string | null
+          state: string | null
+        }
+        Insert: {
+          address?: string | null
+          bed_count?: number | null
+          branch_code: string
+          branch_name: string
+          branch_type?: string | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          manager_name?: string | null
+          notes?: string | null
+          opened_on?: string | null
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+        }
+        Update: {
+          address?: string | null
+          bed_count?: number | null
+          branch_code?: string
+          branch_name?: string
+          branch_type?: string | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          manager_name?: string | null
+          notes?: string | null
+          opened_on?: string | null
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+        }
+        Relationships: []
       }
       homeo_cases: {
         Row: {

@@ -60,12 +60,22 @@ const allGroups = [
   { label: "❤️ AYUSH Help", roles: ["admin","ayush_admin"] as AdminRole[], items: [
     { title: "🌿 ATMRI Model 3", url: "/admin/atmri-help" },
   ]},
+  { label: "⚡ HMS Tools Ultra", roles: ["admin"] as AdminRole[], items: [
+    { title: "🛡️ HMS Access", url: "/admin/hms-access" },
+    { title: "⚙️ Master Management", url: "/admin/master-management" },
+    { title: "💊 Pharmacy Orders", url: "/admin/pharmacy-orders" },
+    { title: "🛏️ IP Admissions", url: "/admin/ip-admissions" },
+    { title: "🏥 Ward Status", url: "/admin/ward-status" },
+  ]},
   { label: "Safety & Config", roles: ["admin","ayush_admin"] as AdminRole[], items: [
     { title: "🚨 Safety Flags", url: "/admin/safety" },
     { title: "🔔 Notifications", url: "/admin/notifications" },
     { title: "⚙️ Settings", url: "/admin/settings" },
   ]},
 ];
+
+
+
 
 const AdminLayout = () => {
   const navigate = useNavigate();

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useHmsAccess } from "@/hooks/useHmsAccess";
 import {
   Stethoscope,
   LogOut,
@@ -19,8 +21,18 @@ import {
   Flower2,
   Activity,
   TrendingUp,
+  Home,
+  BarChart3,
+  Clock,
+  Banknote,
+  Building2,
+  CheckSquare,
+  Bell,
+  Syringe,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+
 
 const groups = [
   {
@@ -132,9 +144,44 @@ const groups = [
   },
 ];
 
+const hmsGroups = [
+  {
+    label: "⚡ HMS Tools Ultra",
+    icon: Zap,
+    items: [
+      { to: "/vaidya/hms", label: "HMS Dashboard", icon: Home },
+      { to: "/vaidya/reception", label: "OPD Queue", icon: Activity },
+      { to: "/vaidya/patients", label: "Patients", icon: Users },
+      { to: "/vaidya/consultations", label: "Consultations", icon: ClipboardList },
+      { to: "/vaidya/bills", label: "Billing", icon: ReceiptText },
+      { to: "/vaidya/analytics", label: "MIS Reports", icon: BarChart3 },
+      { to: "/vaidya/panchakarma", label: "Panchakarma", icon: Flower2 },
+      { to: "/vaidya/yoga", label: "Yoga", icon: Flower2 },
+      { to: "/vaidya/inventory", label: "Inventory", icon: Pill },
+      { to: "/vaidya/follow-up", label: "Follow-ups", icon: CalendarClock },
+    ],
+  },
+  {
+    label: "HMS Admin",
+    icon: BarChart3,
+    items: [
+      { to: "/vaidya/analytics?tab=attendance", label: "Attendance", icon: Clock },
+      { to: "/vaidya/analytics?tab=expenses", label: "Expenses", icon: Banknote },
+      { to: "/vaidya/analytics?tab=assets", label: "Assets", icon: Building2 },
+      { to: "/vaidya/analytics?tab=tasks", label: "Tasks", icon: CheckSquare },
+      { to: "/vaidya/analytics?tab=reminders", label: "Reminders", icon: Bell },
+      { to: "/vaidya/analytics?tab=vaccination", label: "Vaccination", icon: Syringe },
+    ],
+  },
+];
+
 const VaidyaLayout = () => {
+
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
+  const { hasAccess, branch } = useHmsAccess();
+
+
 
   useEffect(() => {
     let mounted = true;
@@ -173,13 +220,17 @@ const VaidyaLayout = () => {
               <Stethoscope className="h-4 w-4 text-primary-foreground" />
             </span>
             <div>
-              <p className="font-display text-base font-semibold">Ayush HMS Tool</p>
-              <p className="text-[10px] text-muted-foreground">Hospital Mgmt System</p>
+              <p className="font-display text-base font-semibold">
+                {hasAccess ? "⚡ HMS Tools Ultra" : "Ayush HMS Tool"}
+              </p>
+              <p className="text-[10px] text-muted-foreground">
+                {hasAccess ? (branch ?? "HMS Tools Ultra") : "Hospital Mgmt System"}
+              </p>
             </div>
           </Link>
         </div>
         <nav className="flex-1 overflow-y-auto p-3">
-          {groups.map((g) => (
+          {[...(hasAccess ? hmsGroups : []), ...groups].map((g) => (
             <div key={g.label} className="mb-4">
               <div className="mb-1 flex items-center gap-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 <g.icon className="h-3.5 w-3.5" />
@@ -206,6 +257,7 @@ const VaidyaLayout = () => {
             </div>
           ))}
         </nav>
+
         <div className="border-t border-border p-3">
           <Button variant="outline" size="sm" className="w-full" asChild>
             <Link to="/doctor">← Back to Doctor</Link>
@@ -215,11 +267,17 @@ const VaidyaLayout = () => {
 
       <div className="flex-1 flex flex-col">
         <header className="h-16 flex items-center justify-between border-b border-border bg-card px-4">
-          <p className="font-display text-lg font-semibold">Ayush HMS Tool</p>
+          <div className="flex items-center gap-2">
+            <p className="font-display text-lg font-semibold">Ayush HMS Tool</p>
+            {hasAccess && (
+              <Badge className="bg-primary/10 text-primary border-primary/30">⚡ HMS Tools Ultra</Badge>
+            )}
+          </div>
           <Button variant="outline" size="sm" onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" /> Sign out
           </Button>
         </header>
+
         <main className="flex-1 p-4 md:p-6">
           <Outlet />
         </main>
