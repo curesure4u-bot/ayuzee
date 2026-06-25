@@ -526,7 +526,13 @@ export default function ClassicalFormulary() {
                               <TableCell>{m.gmp && <BadgeCheck className="h-4 w-4 text-green-600" />}</TableCell>
                               <TableCell>{m.available ? <Badge className="bg-green-100 text-green-800 border-green-200" variant="outline">In stock</Badge> : <Badge variant="outline">Out</Badge>}</TableCell>
                               <TableCell>
-                                <Button size="sm" disabled={!m.available} onClick={() => toast.success("Order flow coming soon")}>
+                                <Button size="sm" disabled={!m.available} onClick={async () => {
+                                  const url = `/shop?search=${encodeURIComponent(selected.name)}`;
+                                  // Tag as prescription order context (read by shop page)
+                                  try { sessionStorage.setItem("ayuzee.rxOrderContext", JSON.stringify({ formula: selected.name, manufacturer: m.manufacturer, source: "formulary" })); } catch {/* ignore */}
+                                  window.open(url, "_blank");
+                                  toast.success(`Opening ${selected.name} from ${m.manufacturer}`);
+                                }}>
                                   <ShoppingCart className="h-3 w-3 mr-1" /> Order
                                 </Button>
                               </TableCell>
