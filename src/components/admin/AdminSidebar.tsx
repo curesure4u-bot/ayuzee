@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Package, Building2, Coins, Wallet,
-  Settings, PackageCheck, CreditCard, Link2, BookOpen,
+  Settings, PackageCheck, CreditCard, Link2, BookOpen, BarChart3,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
