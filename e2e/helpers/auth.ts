@@ -26,3 +26,12 @@ export function requireEnv(name: string): string {
   if (!v) throw new Error(`Missing env var ${name} — see playwright.config.ts header.`);
   return v;
 }
+
+/**
+ * Skip the current test when any of the given env vars are missing.
+ * Lets CI pass when E2E_* secrets are not configured on a branch.
+ */
+export function skipIfMissingEnv(test: { skip: (cond: boolean, reason?: string) => void }, names: string[]) {
+  const missing = names.filter((n) => !process.env[n]);
+  test.skip(missing.length > 0, `Missing E2E secrets: ${missing.join(", ")}`);
+}

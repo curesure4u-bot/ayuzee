@@ -1,8 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { login, requireEnv } from "./helpers/auth";
+import { login, requireEnv, skipIfMissingEnv } from "./helpers/auth";
 
 test.describe("Doctor prescription flow", () => {
   test.beforeEach(async ({ page }) => {
+    skipIfMissingEnv(test, ["E2E_DOCTOR_EMAIL", "E2E_DOCTOR_PASSWORD"]);
     await login(
       page,
       requireEnv("E2E_DOCTOR_EMAIL"),

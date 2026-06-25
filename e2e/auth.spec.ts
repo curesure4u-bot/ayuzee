@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { login, randomEmail, requireEnv } from "./helpers/auth";
+import { login, randomEmail, requireEnv, skipIfMissingEnv } from "./helpers/auth";
 
 test.describe("Authentication", () => {
   test("signup creates a new patient account", async ({ page }) => {
@@ -20,6 +20,7 @@ test.describe("Authentication", () => {
   });
 
   test("login with existing patient credentials succeeds", async ({ page }) => {
+    skipIfMissingEnv(test, ["E2E_PATIENT_EMAIL", "E2E_PATIENT_PASSWORD"]);
     await login(
       page,
       requireEnv("E2E_PATIENT_EMAIL"),
