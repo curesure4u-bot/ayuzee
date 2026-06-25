@@ -20,6 +20,7 @@ const items = [
   { title: "Backlink Monitor",       url: "/admin/backlinks", icon: Link2 },
   { title: "ASTG Content",           url: "/admin/astg-management", icon: BookOpen },
   { title: "Formulary Analytics",    url: "/admin/formulary-analytics", icon: BarChart3 },
+  { title: "AFI Management",         url: "/admin/afi-management", icon: BookOpen },
   { title: "Platform Settings",      url: "/admin/settings",  icon: Settings },
 ];
 

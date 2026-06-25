@@ -121,6 +121,266 @@ export type Database = {
         }
         Relationships: []
       }
+      afi_disease_formulation_map: {
+        Row: {
+          created_at: string
+          disease_modern: string | null
+          disease_name: string
+          formulation_id: string | null
+          formulation_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          disease_modern?: string | null
+          disease_name: string
+          formulation_id?: string | null
+          formulation_name?: string | null
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          disease_modern?: string | null
+          disease_name?: string
+          formulation_id?: string | null
+          formulation_name?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "afi_disease_formulation_map_formulation_id_fkey"
+            columns: ["formulation_id"]
+            isOneToOne: false
+            referencedRelation: "afi_formulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      afi_extraction_log: {
+        Row: {
+          action: string
+          created_at: string
+          formulation_id: string | null
+          id: string
+          notes: string | null
+          performed_by: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          formulation_id?: string | null
+          id?: string
+          notes?: string | null
+          performed_by?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          formulation_id?: string | null
+          id?: string
+          notes?: string | null
+          performed_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "afi_extraction_log_formulation_id_fkey"
+            columns: ["formulation_id"]
+            isOneToOne: false
+            referencedRelation: "afi_formulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      afi_formulation_types: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          name_sanskrit: string | null
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          name_sanskrit?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          name_sanskrit?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      afi_formulations: {
+        Row: {
+          afi_number: string | null
+          afi_part: number | null
+          chapter_reference: string | null
+          characteristics: string | null
+          classical_reference: string | null
+          classical_text: string | null
+          created_at: string
+          dose: string | null
+          dose_max: string | null
+          dose_min: string | null
+          dose_unit: string | null
+          extraction_status: string
+          formulation_type_id: string | null
+          id: string
+          indications: string[] | null
+          indications_modern: string[] | null
+          is_published: boolean
+          method_of_preparation: string | null
+          name: string
+          name_original: string | null
+          preservation: string | null
+          raw_text: string | null
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          special_notes: string | null
+          updated_at: string
+          verse_numbers: string | null
+        }
+        Insert: {
+          afi_number?: string | null
+          afi_part?: number | null
+          chapter_reference?: string | null
+          characteristics?: string | null
+          classical_reference?: string | null
+          classical_text?: string | null
+          created_at?: string
+          dose?: string | null
+          dose_max?: string | null
+          dose_min?: string | null
+          dose_unit?: string | null
+          extraction_status?: string
+          formulation_type_id?: string | null
+          id?: string
+          indications?: string[] | null
+          indications_modern?: string[] | null
+          is_published?: boolean
+          method_of_preparation?: string | null
+          name: string
+          name_original?: string | null
+          preservation?: string | null
+          raw_text?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          special_notes?: string | null
+          updated_at?: string
+          verse_numbers?: string | null
+        }
+        Update: {
+          afi_number?: string | null
+          afi_part?: number | null
+          chapter_reference?: string | null
+          characteristics?: string | null
+          classical_reference?: string | null
+          classical_text?: string | null
+          created_at?: string
+          dose?: string | null
+          dose_max?: string | null
+          dose_min?: string | null
+          dose_unit?: string | null
+          extraction_status?: string
+          formulation_type_id?: string | null
+          id?: string
+          indications?: string[] | null
+          indications_modern?: string[] | null
+          is_published?: boolean
+          method_of_preparation?: string | null
+          name?: string
+          name_original?: string | null
+          preservation?: string | null
+          raw_text?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          special_notes?: string | null
+          updated_at?: string
+          verse_numbers?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "afi_formulations_formulation_type_id_fkey"
+            columns: ["formulation_type_id"]
+            isOneToOne: false
+            referencedRelation: "afi_formulation_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      afi_ingredients: {
+        Row: {
+          common_name: string | null
+          created_at: string
+          formulation_id: string
+          id: string
+          is_prakshepa: boolean
+          name: string
+          name_sanskrit: string | null
+          notes: string | null
+          part_used: string | null
+          part_used_full: string | null
+          quantity: number | null
+          serial_number: number | null
+          unit: string | null
+        }
+        Insert: {
+          common_name?: string | null
+          created_at?: string
+          formulation_id: string
+          id?: string
+          is_prakshepa?: boolean
+          name: string
+          name_sanskrit?: string | null
+          notes?: string | null
+          part_used?: string | null
+          part_used_full?: string | null
+          quantity?: number | null
+          serial_number?: number | null
+          unit?: string | null
+        }
+        Update: {
+          common_name?: string | null
+          created_at?: string
+          formulation_id?: string
+          id?: string
+          is_prakshepa?: boolean
+          name?: string
+          name_sanskrit?: string | null
+          notes?: string | null
+          part_used?: string | null
+          part_used_full?: string | null
+          quantity?: number | null
+          serial_number?: number | null
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "afi_ingredients_formulation_id_fkey"
+            columns: ["formulation_id"]
+            isOneToOne: false
+            referencedRelation: "afi_formulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_date: string
