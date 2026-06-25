@@ -12,7 +12,13 @@ const fmtINR = (n: number) => `₹${(n ?? 0).toLocaleString("en-IN")}`;
 const MisDrillDown = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { userId, doctor } = useDoctor();
+  const misBackUrl = `/vaidya/mis${location.search || ""}`;
+  const reportLabel = (() => {
+    const r = new URLSearchParams(location.search).get("report");
+    return r ? r.charAt(0).toUpperCase() + r.slice(1) : "Reports";
+  })();
   const [loading, setLoading] = useState(true);
   const [record, setRecord] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
