@@ -36,11 +36,15 @@ import {
   XCircle,
   BookOpen,
   Printer,
+  Languages,
 } from "lucide-react";
 import { findDisease } from "@/data/astg";
 import { exportDiseasePDF } from "@/lib/astg-search";
 import ASTGClinicalAssistant from "@/components/astg/ASTGClinicalAssistant";
 import AddToPatientNotes from "@/components/astg/AddToPatientNotes";
+import MedicineTable from "@/components/astg/MedicineTable";
+import BookPanchakarmaButton from "@/components/astg/BookPanchakarmaButton";
+import PatientHandoutDialog from "@/components/astg/PatientHandoutDialog";
 import { pushRecent, cacheProtocol } from "@/lib/astg-history";
 import { toggleBookmark as toggleBookmarkLS, isBookmarked } from "./ASTGBookmarks";
 import { useEffect as useEffectReact } from "react";
@@ -49,6 +53,7 @@ export default function ASTGDiseaseDetail() {
   const { categoryKey = "", diseaseKey = "" } = useParams();
   const navigate = useNavigate();
   const [bookmarked, setBookmarked] = useState(() => isBookmarked(diseaseKey));
+  const [handoutOpen, setHandoutOpen] = useState(false);
 
   const match = useMemo(
     () => findDisease(categoryKey, diseaseKey),
@@ -144,6 +149,15 @@ export default function ASTGDiseaseDetail() {
           >
             <Printer className="h-4 w-4" />
             Export PDF
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => setHandoutOpen(true)}
+          >
+            <Languages className="h-4 w-4" />
+            Patient Handout
           </Button>
           <ASTGClinicalAssistant
             variant="inline"
@@ -282,60 +296,26 @@ export default function ASTGDiseaseDetail() {
                   </AccordionTrigger>
                   <AccordionContent className="space-y-4 pt-2">
                     {lvl.panchakarma && (
-                      <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm">
-                        <span className="font-semibold">Panchakarma: </span>
-                        {lvl.panchakarma}
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-primary/20 bg-primary/5 p-3 text-sm">
+                        <div>
+                          <span className="font-semibold">Panchakarma: </span>
+                          {lvl.panchakarma}
+                        </div>
+                        {lvl.level >= 3 && (
+                          <BookPanchakarmaButton
+                            diseaseName={`${disease.name} (${disease.modern})`}
+                            diseaseKey={`${category.key}/${disease.key}`}
+                            protocol={lvl.panchakarma}
+                          />
+                        )}
                       </div>
                     )}
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Medicine</TableHead>
-                            <TableHead>Form</TableHead>
-                            <TableHead>Dose</TableHead>
-                            <TableHead>Anupana</TableHead>
-                            <TableHead>Duration</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {lvl.medicines.map((m, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="font-medium">
-                                <div className="flex items-center gap-2">
-                                  {m.name}
-                                  {m.isCommon && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-[10px]"
-                                    >
-                                      Common
-                                    </Badge>
-                                  )}
-                                </div>
-                                {m.dosha && (
-                                  <div className="text-xs text-muted-foreground">
-                                    {m.dosha}
-                                  </div>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.formulation ?? "—"}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.dose ?? "—"}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.anupana ?? "—"}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.duration ?? "—"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
+                    <MedicineTable
+                      categoryKey={category.key}
+                      diseaseKey={disease.key}
+                      level={lvl.level}
+                      medicines={lvl.medicines}
+                    />
                   </AccordionContent>
                 </AccordionItem>
               ))}
@@ -397,6 +377,17 @@ export default function ASTGDiseaseDetail() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <PatientHandoutDialog
+        open={handoutOpen}
+        onOpenChange={setHandoutOpen}
+        categoryKey={category.key}
+        diseaseKey={disease.key}
+        diseaseName={disease.name}
+        diseaseModern={disease.modern}
+        pathya={disease.pathya}
+        apathya={disease.apathya}
+      />
     </div>
   );
 }

@@ -359,6 +359,109 @@ export type Database = {
           },
         ]
       }
+      astg_handouts: {
+        Row: {
+          apathya_translated: string | null
+          category_key: string
+          created_at: string
+          disease_key: string
+          disease_name_translated: string | null
+          id: string
+          language: string
+          lifestyle_notes: string | null
+          pathya_translated: string | null
+          updated_at: string
+        }
+        Insert: {
+          apathya_translated?: string | null
+          category_key: string
+          created_at?: string
+          disease_key: string
+          disease_name_translated?: string | null
+          id?: string
+          language: string
+          lifestyle_notes?: string | null
+          pathya_translated?: string | null
+          updated_at?: string
+        }
+        Update: {
+          apathya_translated?: string | null
+          category_key?: string
+          created_at?: string
+          disease_key?: string
+          disease_name_translated?: string | null
+          id?: string
+          language?: string
+          lifestyle_notes?: string | null
+          pathya_translated?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      astg_medicine_links: {
+        Row: {
+          category_key: string
+          created_at: string
+          disease_key: string
+          id: string
+          level_number: number
+          medicine_key: string
+          medicine_name: string
+          notes: string | null
+          product_id: string | null
+          supplier_sku: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_key: string
+          created_at?: string
+          disease_key: string
+          id?: string
+          level_number: number
+          medicine_key: string
+          medicine_name: string
+          notes?: string | null
+          product_id?: string | null
+          supplier_sku?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_key?: string
+          created_at?: string
+          disease_key?: string
+          id?: string
+          level_number?: number
+          medicine_key?: string
+          medicine_name?: string
+          notes?: string | null
+          product_id?: string | null
+          supplier_sku?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "astg_medicine_links_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "panchakarma_medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "astg_medicine_links_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "astg_medicine_links_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "surgical_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       astg_medicines: {
         Row: {
           anupana: string | null
