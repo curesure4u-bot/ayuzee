@@ -5,14 +5,14 @@ import { useDoctor } from "@/hooks/useDoctor";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FileText, Stethoscope, Pill, IndianRupee } from "lucide-react";
+import { ArrowLeft, FileText, Stethoscope, Pill, IndianRupee, CalendarClock } from "lucide-react";
 
 const fmtINR = (n: number) => `₹${(n ?? 0).toLocaleString("en-IN")}`;
 
 const MisDrillDown = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
   const navigate = useNavigate();
-  const { userId } = useDoctor();
+  const { userId, doctor } = useDoctor();
   const [loading, setLoading] = useState(true);
   const [record, setRecord] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
@@ -47,6 +47,15 @@ const MisDrillDown = () => {
           .eq("doctor_user_id", userId)
           .maybeSingle();
         if (!cancelled) setRecord(c);
+      } else if (type === "appointment") {
+        const query = supabase
+          .from("appointments")
+          .select("*")
+          .eq("id", decoded);
+        const { data: appt } = doctor?.id
+          ? await query.eq("doctor_id", doctor.id).maybeSingle()
+          : await query.maybeSingle();
+        if (!cancelled) setRecord(appt);
       } else if (type === "medicine") {
         // Decoded id IS the medicine name
         const { data: items } = await supabase
@@ -65,7 +74,7 @@ const MisDrillDown = () => {
     return () => {
       cancelled = true;
     };
-  }, [type, id, userId]);
+  }, [type, id, userId, doctor?.id]);
 
   if (loading) {
     return <div className="p-10 text-center text-sm text-muted-foreground">Loading…</div>;
@@ -199,6 +208,59 @@ const MisDrillDown = () => {
       </div>
     );
   }
+
+  if (type === "appointment") {
+    const paid = record.payment_status === "paid";
+    return (
+      <div className="mx-auto max-w-4xl space-y-5">
+        <Header
+          icon={CalendarClock}
+          title={`Appointment · ${record.patient_name || "Patient"}`}
+          subtitle={`${record.appointment_date || ""} ${record.appointment_time || ""}`.trim()}
+        />
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="p-4">
+            <p className="text-xs uppercase text-muted-foreground">Status</p>
+            <p className="mt-1 font-semibold capitalize">{record.status || "—"}</p>
+            <p className="text-xs text-muted-foreground capitalize">Mode: {record.mode || "—"}</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs uppercase text-muted-foreground">Payment</p>
+            <p className="mt-1 font-semibold capitalize">{record.payment_status || "—"}</p>
+            <p className="text-xs text-muted-foreground capitalize">{record.payment_mode || record.payment_method || ""}</p>
+          </Card>
+          <Card className={`p-4 ${paid ? "bg-gradient-to-br from-emerald-500/80 to-emerald-600 text-primary-foreground" : ""}`}>
+            <p className={`text-xs uppercase ${paid ? "opacity-90" : "text-muted-foreground"}`}>Fee</p>
+            <p className="mt-1 font-display text-2xl font-bold">{fmtINR(record.fee)}</p>
+          </Card>
+        </div>
+
+        <Card className="p-5 space-y-4">
+          {[
+            ["Patient name", record.patient_name],
+            ["Patient phone", record.patient_phone],
+            ["Patient email", record.patient_email],
+            ["Symptoms / Reason", record.symptoms || record.reason],
+            ["Notes", record.notes],
+            ["Cancellation reason", record.cancellation_reason],
+          ]
+            .filter(([, v]) => v)
+            .map(([label, val]) => (
+              <div key={label as string}>
+                <p className="text-xs uppercase text-muted-foreground">{label}</p>
+                <p className="mt-1 whitespace-pre-wrap text-sm">{val as string}</p>
+              </div>
+            ))}
+          <div className="grid gap-3 text-xs text-muted-foreground sm:grid-cols-3 border-t pt-3">
+            <div><span className="uppercase">Booked</span><br />{record.created_at?.slice(0, 16).replace("T", " ")}</div>
+            <div><span className="uppercase">Appointment ID</span><br /><span className="font-mono">{record.id?.slice(0, 8)}</span></div>
+            <div><span className="uppercase">Doctor ID</span><br /><span className="font-mono">{record.doctor_id?.slice(0, 8)}</span></div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
 
   // medicine
   const totals = related.reduce(

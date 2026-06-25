@@ -227,6 +227,7 @@ const MisReports = () => {
     }
     if (reportType === "appointments") {
       return appts.map((a) => ({
+        _drill: `appointment/${a.id}`,
         date: a.appointment_date,
         patient: a.patient_name,
         mode: a.mode,
