@@ -47,6 +47,15 @@ const MisDrillDown = () => {
           .eq("doctor_user_id", userId)
           .maybeSingle();
         if (!cancelled) setRecord(c);
+      } else if (type === "appointment") {
+        const query = supabase
+          .from("appointments")
+          .select("*")
+          .eq("id", decoded);
+        const { data: appt } = doctor?.id
+          ? await query.eq("doctor_id", doctor.id).maybeSingle()
+          : await query.maybeSingle();
+        if (!cancelled) setRecord(appt);
       } else if (type === "medicine") {
         // Decoded id IS the medicine name
         const { data: items } = await supabase
