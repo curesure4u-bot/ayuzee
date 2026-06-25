@@ -36,6 +36,7 @@ export default function AddToPatientNotes({ diseaseName, summary }: { diseaseNam
     setSaving(true);
     try {
       const { data: sess } = await supabase.auth.getUser();
+      const appt = appts.find(a => a.id === selected);
       const { data: cur } = await supabase
         .from("consultation_assessments")
         .select("id, advice")
@@ -47,7 +48,10 @@ export default function AddToPatientNotes({ diseaseName, summary }: { diseaseNam
         await supabase.from("consultation_assessments").update({ advice: merged }).eq("id", (cur as any).id);
       } else {
         await supabase.from("consultation_assessments").insert([{
-          appointment_id: selected, doctor_user_id: sess.user?.id ?? "", advice: text,
+          appointment_id: selected,
+          doctor_user_id: sess.user?.id ?? "",
+          patient_user_id: appt?.user_id ?? "",
+          advice: text,
         }]);
       }
       toast.success("Added to patient notes");
