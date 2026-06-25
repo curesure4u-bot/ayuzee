@@ -375,9 +375,9 @@ const Consultations = () => {
                     <div><Label>Visit date</Label><Input type="date" value={form.visit_date} onChange={(e) => setForm({ ...form, visit_date: e.target.value })} /></div>
                     <div><Label>Fee (₹)</Label><Input type="number" value={form.fee} onChange={(e) => setForm({ ...form, fee: e.target.value })} /></div>
                   </div>
-                  <div><Label>Chief complaint</Label><Input value={form.chief_complaint} onChange={(e) => setForm({ ...form, chief_complaint: e.target.value })} /></div>
-                  <div><Label>History of present illness</Label><Textarea rows={2} value={form.history} onChange={(e) => setForm({ ...form, history: e.target.value })} /></div>
-                  <div><Label>Examination</Label><Textarea rows={2} value={form.examination} onChange={(e) => setForm({ ...form, examination: e.target.value })} /></div>
+                  <div><Label>Chief complaint</Label><SuggestionField type="chief_complaint" value={form.chief_complaint} onChange={(v) => setForm({ ...form, chief_complaint: v })} placeholder="Start typing or use a short code (e.g. bkp + space)" /></div>
+                  <div><Label>History of present illness</Label><SuggestionField as="textarea" rows={2} type="chief_complaint" value={form.history} onChange={(v) => setForm({ ...form, history: v })} /></div>
+                  <div><Label>Examination</Label><SuggestionField as="textarea" rows={2} type="examination" value={form.examination} onChange={(v) => setForm({ ...form, examination: v })} /></div>
                   <div className="grid grid-cols-5 gap-2">
                     <div><Label className="text-xs">BP</Label><Input value={form.vitals_bp} onChange={(e) => setForm({ ...form, vitals_bp: e.target.value })} /></div>
                     <div><Label className="text-xs">Pulse</Label><Input value={form.vitals_pulse} onChange={(e) => setForm({ ...form, vitals_pulse: e.target.value })} /></div>
