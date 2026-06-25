@@ -86,12 +86,19 @@ const MisReports = () => {
   const [reportType, setReportType] = useState<ReportType>((sp.get("report") as ReportType) || "summary");
   const [paymentMode, setPaymentMode] = useState<string>(sp.get("paymentMode") || "all");
   const [billType, setBillType] = useState<string>(sp.get("billType") || "all");
+  const [page, setPage] = useState<number>(Math.max(1, parseInt(sp.get("page") || "1", 10) || 1));
+  const [sortKey, setSortKey] = useState<string>(sp.get("sortKey") || "");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">((sp.get("sortDir") as "asc" | "desc") || "desc");
+  const PAGE_SIZE = 50;
   const [loading, setLoading] = useState(true);
 
   const [bills, setBills] = useState<any[]>([]);
   const [billItems, setBillItems] = useState<any[]>([]);
   const [cons, setCons] = useState<any[]>([]);
   const [appts, setAppts] = useState<any[]>([]);
+
+  // Reset page when filters/report change
+  useEffect(() => { setPage(1); }, [reportType, from, to, billType, paymentMode]);
 
   useEffect(() => {
     if (preset === "custom") return;
