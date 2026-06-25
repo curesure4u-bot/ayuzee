@@ -296,60 +296,26 @@ export default function ASTGDiseaseDetail() {
                   </AccordionTrigger>
                   <AccordionContent className="space-y-4 pt-2">
                     {lvl.panchakarma && (
-                      <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm">
-                        <span className="font-semibold">Panchakarma: </span>
-                        {lvl.panchakarma}
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-primary/20 bg-primary/5 p-3 text-sm">
+                        <div>
+                          <span className="font-semibold">Panchakarma: </span>
+                          {lvl.panchakarma}
+                        </div>
+                        {lvl.level >= 3 && (
+                          <BookPanchakarmaButton
+                            diseaseName={`${disease.name} (${disease.modern})`}
+                            diseaseKey={`${category.key}/${disease.key}`}
+                            protocol={lvl.panchakarma}
+                          />
+                        )}
                       </div>
                     )}
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Medicine</TableHead>
-                            <TableHead>Form</TableHead>
-                            <TableHead>Dose</TableHead>
-                            <TableHead>Anupana</TableHead>
-                            <TableHead>Duration</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {lvl.medicines.map((m, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="font-medium">
-                                <div className="flex items-center gap-2">
-                                  {m.name}
-                                  {m.isCommon && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-[10px]"
-                                    >
-                                      Common
-                                    </Badge>
-                                  )}
-                                </div>
-                                {m.dosha && (
-                                  <div className="text-xs text-muted-foreground">
-                                    {m.dosha}
-                                  </div>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.formulation ?? "—"}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.dose ?? "—"}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.anupana ?? "—"}
-                              </TableCell>
-                              <TableCell className="text-sm">
-                                {m.duration ?? "—"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
+                    <MedicineTable
+                      categoryKey={category.key}
+                      diseaseKey={disease.key}
+                      level={lvl.level}
+                      medicines={lvl.medicines}
+                    />
                   </AccordionContent>
                 </AccordionItem>
               ))}
