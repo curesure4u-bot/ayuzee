@@ -20,6 +20,7 @@ test.describe("Authentication", () => {
   });
 
   test("login with existing patient credentials succeeds", async ({ page }) => {
+    skipIfMissingEnv(test, ["E2E_PATIENT_EMAIL", "E2E_PATIENT_PASSWORD"]);
     await login(
       page,
       requireEnv("E2E_PATIENT_EMAIL"),
