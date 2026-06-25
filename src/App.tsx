@@ -38,7 +38,9 @@ import ASTGDiseaseDetail from "./pages/doctor/ASTGDiseaseDetail.tsx";
 import ASTGBookmarks from "./pages/doctor/ASTGBookmarks.tsx";
 import ClassicalFormulary from "./pages/doctor/ClassicalFormulary.tsx";
 import IngredientEncyclopedia from "./pages/doctor/IngredientEncyclopedia.tsx";
+import FormularyPrescription from "./pages/doctor/FormularyPrescription.tsx";
 import ASTGManagement from "./pages/admin/ASTGManagement.tsx";
+import AdminFormularyAnalytics from "./pages/admin/AdminFormularyAnalytics.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
 import DoctorHome from "./pages/doctor/DoctorHome.tsx";
 import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
@@ -443,6 +445,7 @@ const App = () => (
               <Route path="safety" element={<AdminSafety />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="astg-management" element={<ASTGManagement />} />
+              <Route path="formulary-analytics" element={<AdminFormularyAnalytics />} />
               <Route path="team" element={<AdminTeam />} />
               <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
@@ -556,6 +559,7 @@ const App = () => (
               <Route path="astg-bookmarks" element={<ASTGBookmarks />} />
               <Route path="formulary" element={<ClassicalFormulary />} />
               <Route path="formulary/ingredients" element={<IngredientEncyclopedia />} />
+              <Route path="formulary/prescription/:id" element={<FormularyPrescription />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bookmark, BookmarkCheck, Search, ShoppingCart, ExternalLink, BadgeCheck, ArrowDownAZ, Activity, TrendingUp } from "lucide-react";
+import { Bookmark, BookmarkCheck, Search, ShoppingCart, ExternalLink, BadgeCheck, ArrowDownAZ, Activity, TrendingUp, FileSignature, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { toast } from "sonner";
+import { PrescribeFormulaDialog } from "@/components/doctor/PrescribeFormulaDialog";
+import { FormularyTray } from "@/components/doctor/FormularyTray";
+import { trayStore } from "@/lib/formulary-tray";
+import { supabase } from "@/integrations/supabase/client";
 
 type FormType =
   | "Kashayam" | "Churna" | "Arishta" | "Tailam" | "Ghritam"
@@ -304,6 +308,7 @@ export default function ClassicalFormulary() {
   const [sort, setSort] = useState<"az" | "category" | "used">("az");
   const [bookmarks, setBookmarks] = useState<string[]>(loadBookmarks);
   const [selected, setSelected] = useState<Formula | null>(null);
+  const [prescribeOpen, setPrescribeOpen] = useState(false);
 
   const toggleBookmark = (id: string) => {
     setBookmarks((prev) => {
@@ -422,6 +427,22 @@ export default function ClassicalFormulary() {
                   {selected.sanskrit} ·{" "}
                   <Badge variant="outline" className={TYPE_COLORS[selected.type]}>{selected.type}</Badge>
                 </SheetDescription>
+                <div className="flex flex-wrap gap-2 pt-3">
+                  <Button size="sm" onClick={() => setPrescribeOpen(true)}>
+                    <FileSignature className="h-4 w-4 mr-2" /> Prescribe
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => {
+                    const mfr = selected.manufacturers.find((m) => m.available) || selected.manufacturers[0];
+                    trayStore.add({
+                      formula_id: selected.id, name: selected.name, sanskrit: selected.sanskrit, type: selected.type,
+                      dose: selected.dose, frequency: "BD", duration: selected.duration || "4 weeks", anupana: selected.anupana,
+                      manufacturer: mfr?.manufacturer, manufacturer_pack: mfr?.pack, manufacturer_mrp: mfr?.mrp,
+                    });
+                    toast.success("Added to prescription tray");
+                  }}>
+                    <Plus className="h-4 w-4 mr-2" /> Add to tray
+                  </Button>
+                </div>
               </SheetHeader>
 
               <Tabs defaultValue="composition" className="mt-6">
@@ -505,7 +526,13 @@ export default function ClassicalFormulary() {
                               <TableCell>{m.gmp && <BadgeCheck className="h-4 w-4 text-green-600" />}</TableCell>
                               <TableCell>{m.available ? <Badge className="bg-green-100 text-green-800 border-green-200" variant="outline">In stock</Badge> : <Badge variant="outline">Out</Badge>}</TableCell>
                               <TableCell>
-                                <Button size="sm" disabled={!m.available} onClick={() => toast.success("Order flow coming soon")}>
+                                <Button size="sm" disabled={!m.available} onClick={async () => {
+                                  const url = `/shop?search=${encodeURIComponent(selected.name)}`;
+                                  // Tag as prescription order context (read by shop page)
+                                  try { sessionStorage.setItem("ayuzee.rxOrderContext", JSON.stringify({ formula: selected.name, manufacturer: m.manufacturer, source: "formulary" })); } catch {/* ignore */}
+                                  window.open(url, "_blank");
+                                  toast.success(`Opening ${selected.name} from ${m.manufacturer}`);
+                                }}>
                                   <ShoppingCart className="h-3 w-3 mr-1" /> Order
                                 </Button>
                               </TableCell>
@@ -565,6 +592,20 @@ export default function ClassicalFormulary() {
           )}
         </SheetContent>
       </Sheet>
+
+      {selected && (
+        <PrescribeFormulaDialog
+          open={prescribeOpen}
+          onOpenChange={setPrescribeOpen}
+          formula={{
+            id: selected.id, name: selected.name, sanskrit: selected.sanskrit, type: selected.type,
+            dose: selected.dose, anupana: selected.anupana, duration: selected.duration,
+            manufacturers: selected.manufacturers,
+          }}
+        />
+      )}
+
+      <FormularyTray />
     </div>
   );
 }
