@@ -427,6 +427,22 @@ export default function ClassicalFormulary() {
                   {selected.sanskrit} ·{" "}
                   <Badge variant="outline" className={TYPE_COLORS[selected.type]}>{selected.type}</Badge>
                 </SheetDescription>
+                <div className="flex flex-wrap gap-2 pt-3">
+                  <Button size="sm" onClick={() => setPrescribeOpen(true)}>
+                    <FileSignature className="h-4 w-4 mr-2" /> Prescribe
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => {
+                    const mfr = selected.manufacturers.find((m) => m.available) || selected.manufacturers[0];
+                    trayStore.add({
+                      formula_id: selected.id, name: selected.name, sanskrit: selected.sanskrit, type: selected.type,
+                      dose: selected.dose, frequency: "BD", duration: selected.duration || "4 weeks", anupana: selected.anupana,
+                      manufacturer: mfr?.manufacturer, manufacturer_pack: mfr?.pack, manufacturer_mrp: mfr?.mrp,
+                    });
+                    toast.success("Added to prescription tray");
+                  }}>
+                    <Plus className="h-4 w-4 mr-2" /> Add to tray
+                  </Button>
+                </div>
               </SheetHeader>
 
               <Tabs defaultValue="composition" className="mt-6">
