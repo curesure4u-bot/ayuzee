@@ -37,6 +37,7 @@ import ASTGReference from "./pages/doctor/ASTGReference.tsx";
 import ASTGDiseaseDetail from "./pages/doctor/ASTGDiseaseDetail.tsx";
 import ASTGBookmarks from "./pages/doctor/ASTGBookmarks.tsx";
 import ClassicalFormulary from "./pages/doctor/ClassicalFormulary.tsx";
+import IngredientEncyclopedia from "./pages/doctor/IngredientEncyclopedia.tsx";
 import ASTGManagement from "./pages/admin/ASTGManagement.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
 import DoctorHome from "./pages/doctor/DoctorHome.tsx";
@@ -554,6 +555,7 @@ const App = () => (
               <Route path="astg-reference/:categoryKey/:diseaseKey" element={<ASTGDiseaseDetail />} />
               <Route path="astg-bookmarks" element={<ASTGBookmarks />} />
               <Route path="formulary" element={<ClassicalFormulary />} />
+              <Route path="formulary/ingredients" element={<IngredientEncyclopedia />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
