@@ -445,6 +445,7 @@ const App = () => (
               <Route path="safety" element={<AdminSafety />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="astg-management" element={<ASTGManagement />} />
+              <Route path="formulary-analytics" element={<AdminFormularyAnalytics />} />
               <Route path="team" element={<AdminTeam />} />
               <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
