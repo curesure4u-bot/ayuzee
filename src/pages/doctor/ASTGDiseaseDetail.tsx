@@ -150,6 +150,15 @@ export default function ASTGDiseaseDetail() {
             <Printer className="h-4 w-4" />
             Export PDF
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => setHandoutOpen(true)}
+          >
+            <Languages className="h-4 w-4" />
+            Patient Handout
+          </Button>
           <ASTGClinicalAssistant
             variant="inline"
             diseaseContext={`${disease.name} (${disease.modern})`}
