@@ -3274,6 +3274,57 @@ export type Database = {
           },
         ]
       }
+      formulary_prescriptions: {
+        Row: {
+          apathya: string | null
+          appointment_id: string | null
+          created_at: string
+          diagnosis: string | null
+          doctor_user_id: string
+          id: string
+          items: Json
+          pathya: string | null
+          patient_name: string | null
+          patient_phone: string | null
+          patient_user_id: string | null
+          pdf_url: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          apathya?: string | null
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          doctor_user_id: string
+          id?: string
+          items?: Json
+          pathya?: string | null
+          patient_name?: string | null
+          patient_phone?: string | null
+          patient_user_id?: string | null
+          pdf_url?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          apathya?: string | null
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          doctor_user_id?: string
+          id?: string
+          items?: Json
+          pathya?: string | null
+          patient_name?: string | null
+          patient_phone?: string | null
+          patient_user_id?: string | null
+          pdf_url?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       formulation_types: {
         Row: {
           created_at: string
