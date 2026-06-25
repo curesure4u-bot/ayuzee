@@ -39,7 +39,7 @@ const LabelMaster = () => {
 
   const load = async () => {
     const { data } = await supabase.from("hms_labels").select("*").order("label_type").order("label_name");
-    setRows((data as Lbl[]) || []);
+    setRows(((data as any) ?? []) as Lbl[]);
   };
   useEffect(() => { load(); }, []);
 
@@ -47,7 +47,7 @@ const LabelMaster = () => {
 
   const save = async () => {
     if (!form.label_name) { toast.error("Name required"); return; }
-    const payload = {
+    const payload: any = {
       label_name: form.label_name, label_type: form.label_type,
       color_hex: form.color_hex, description: form.description || null,
     };

@@ -39,7 +39,7 @@ const TrustedIpMaster = () => {
     setLoading(true);
     const [r, b] = await Promise.all([
       supabase.from("hms_trusted_ips").select("*").order("created_at", { ascending: false }),
-      supabase.from("hms_branches").select("id, branch_name").order("name"),
+      supabase.from("hms_branches").select("id, branch_name").order("branch_name"),
     ]);
     setRows((r.data as IP[]) || []);
     setBranches(((b.data as any) ?? []) as Branch[]);

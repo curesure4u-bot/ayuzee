@@ -43,7 +43,7 @@ const PackageMaster = () => {
 
   const load = async () => {
     const { data } = await supabase.from("hms_packages").select("*").order("created_at", { ascending: false });
-    setRows((data as Pkg[]) || []);
+    setRows(((data as any) ?? []) as Pkg[]);
   };
   useEffect(() => { load(); }, []);
 
@@ -58,7 +58,7 @@ const PackageMaster = () => {
 
   const save = async () => {
     if (!form.package_name || !form.package_code) { toast.error("Name & code required"); return; }
-    const payload = {
+    const payload: any = {
       package_name: form.package_name, package_code: form.package_code,
       ayush_system: form.ayush_system, description: form.description || null,
       validity_days: form.validity_days, total_sessions: form.total_sessions,

@@ -53,7 +53,7 @@ const DepartmentMaster = () => {
   const load = async () => {
     const [d, b] = await Promise.all([
       supabase.from("hms_departments").select("*").order("sort_order"),
-      supabase.from("hms_branches").select("id, branch_name").order("name"),
+      supabase.from("hms_branches").select("id, branch_name").order("branch_name"),
     ]);
     setRows((d.data as Dept[]) || []);
     setBranches(((b.data as any) ?? []) as Branch[]);
@@ -64,7 +64,7 @@ const DepartmentMaster = () => {
 
   const save = async () => {
     if (!form.department_name || !form.department_code) { toast.error("Name & code required"); return; }
-    const payload = {
+    const payload: any = {
       department_name: form.department_name, department_code: form.department_code,
       ayush_system: form.ayush_system, head_doctor_name: form.head_doctor_name || null,
       floor_or_room: form.floor_or_room || null, phone_extension: form.phone_extension || null,

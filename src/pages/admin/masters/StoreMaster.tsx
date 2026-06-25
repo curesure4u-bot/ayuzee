@@ -52,7 +52,7 @@ const StoreMaster = () => {
   const load = async () => {
     const [s, b] = await Promise.all([
       supabase.from("hms_stores").select("*").order("store_name"),
-      supabase.from("hms_branches").select("id, branch_name").order("name"),
+      supabase.from("hms_branches").select("id, branch_name").order("branch_name"),
     ]);
     setRows((s.data as Store[]) || []);
     setBranches(((b.data as any) ?? []) as Branch[]);
@@ -61,7 +61,7 @@ const StoreMaster = () => {
 
   const save = async () => {
     if (!form.store_name || !form.store_code) { toast.error("Name & code required"); return; }
-    const payload = {
+    const payload: any = {
       store_name: form.store_name, store_code: form.store_code,
       store_type: form.store_type,
       branch_id: form.branch_id === "all" ? null : form.branch_id,

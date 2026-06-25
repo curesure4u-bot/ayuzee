@@ -46,7 +46,7 @@ const SuggestionMaster = () => {
 
   const load = async () => {
     const { data } = await supabase.from("hms_suggestions").select("*").order("usage_count", { ascending: false });
-    setRows((data as Sug[]) || []);
+    setRows(((data as any) ?? []) as Sug[]);
   };
   useEffect(() => { load(); }, []);
 
@@ -57,7 +57,7 @@ const SuggestionMaster = () => {
 
   const save = async () => {
     if (!form.suggestion_text) { toast.error("Text required"); return; }
-    const payload = {
+    const payload: any = {
       suggestion_type: form.suggestion_type, suggestion_text: form.suggestion_text,
       short_code: form.short_code || null, ayush_system: form.ayush_system,
     };

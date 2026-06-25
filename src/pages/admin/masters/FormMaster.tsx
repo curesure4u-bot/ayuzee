@@ -36,7 +36,7 @@ const FormMaster = () => {
 
   const load = async () => {
     const { data } = await supabase.from("hms_custom_forms").select("*").order("form_name");
-    setRows((data as Form[]) || []);
+    setRows(((data as any) ?? []) as Form[]);
   };
   useEffect(() => { load(); }, []);
 
@@ -52,7 +52,7 @@ const FormMaster = () => {
 
   const save = async () => {
     if (!editing || !editing.form_name) { toast.error("Name required"); return; }
-    const payload = { form_name: editing.form_name, form_type: editing.form_type, form_fields: editing.form_fields as any };
+    const payload: any = { form_name: editing.form_name, form_type: editing.form_type, form_fields: editing.form_fields };
     const q = editing.id
       ? supabase.from("hms_custom_forms").update(payload).eq("id", editing.id)
       : supabase.from("hms_custom_forms").insert(payload);
