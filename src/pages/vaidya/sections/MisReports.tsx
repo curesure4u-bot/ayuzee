@@ -202,6 +202,7 @@ const MisReports = () => {
   const exportRows = useMemo<Record<string, any>[]>(() => {
     if (reportType === "bills") {
       return filteredBills.map((b) => ({
+        _drill: `bill/${b.id}`,
         bill_no: b.bill_no,
         date: (b.bill_date || b.created_at)?.slice(0, 10),
         patient: b.patient_name,
@@ -215,6 +216,7 @@ const MisReports = () => {
     }
     if (reportType === "consultations") {
       return cons.map((c) => ({
+        _drill: `consultation/${c.id}`,
         date: c.visit_date,
         diagnosis: c.diagnosis,
         fee: c.fee,
@@ -241,7 +243,12 @@ const MisReports = () => {
       });
       return Object.entries(agg)
         .sort((a, b) => b[1].revenue - a[1].revenue)
-        .map(([medicine, v]) => ({ medicine, qty_sold: v.qty, revenue: v.revenue }));
+        .map(([medicine, v]) => ({
+          _drill: `medicine/${encodeURIComponent(medicine)}`,
+          medicine,
+          qty_sold: v.qty,
+          revenue: v.revenue,
+        }));
     }
     // summary
     return dailySeries.map((d) => ({
