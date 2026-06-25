@@ -517,10 +517,20 @@ const App = () => (
               <Route path="master-management/wards" element={<WardMaster />} />
               <Route path="master-management/ip-admission-types" element={<IpAdmissionMaster />} />
               <Route path="master-management/areas" element={<AreaMaster />} />
+              <Route path="master-management/templates" element={<TemplateMaster />} />
+              <Route path="master-management/whatsapp-templates" element={<WhatsAppMaster />} />
+              <Route path="master-management/email-templates" element={<EmailMaster />} />
+              <Route path="master-management/reports-config" element={<ReportMaster />} />
+              <Route path="master-management/token-display" element={<TokenDisplayMaster />} />
+              <Route path="master-management/currency" element={<CurrencyMaster />} />
+              <Route path="master-management/patient-config" element={<PatientMaster />} />
               <Route path="pharmacy-orders" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />} />
               <Route path="ip-admissions" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />} />
               <Route path="ward-status" element={<WardMaster />} />
             </Route>
+
+            <Route path="/queue-display/:branchId" element={<QueueDisplayScreen />} />
+
 
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
