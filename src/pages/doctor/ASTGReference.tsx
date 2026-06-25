@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -629,23 +629,17 @@ function ComparisonView({
             const vb = row.get(b.disease);
             const diff = va !== vb;
             return (
-              <>
-                <div key={`${row.label}-l`} className="text-xs font-medium uppercase text-muted-foreground">
+              <Fragment key={row.label}>
+                <div className="text-xs font-medium uppercase text-muted-foreground">
                   {row.label}
                 </div>
-                <div
-                  key={`${row.label}-a`}
-                  className={cn("rounded p-2", diff && "bg-amber-50 dark:bg-amber-950/30")}
-                >
+                <div className={cn("rounded p-2", diff && "bg-amber-50 dark:bg-amber-950/30")}>
                   {va}
                 </div>
-                <div
-                  key={`${row.label}-b`}
-                  className={cn("rounded p-2", diff && "bg-amber-50 dark:bg-amber-950/30")}
-                >
+                <div className={cn("rounded p-2", diff && "bg-amber-50 dark:bg-amber-950/30")}>
                   {vb}
                 </div>
-              </>
+              </Fragment>
             );
           })}
         </div>
