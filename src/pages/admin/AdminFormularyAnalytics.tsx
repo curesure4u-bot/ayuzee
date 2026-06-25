@@ -40,16 +40,18 @@ export default function AdminFormularyAnalytics() {
 
       // Gaps & prices from classical_formulas + manufacturer_products
       const { data: formulas } = await supabase.from("classical_formulas").select("id, name");
-      const { data: mps } = await supabase.from("manufacturer_products").select("formula_id, manufacturer_name, mrp, is_available");
+      const { data: mps } = await supabase.from("manufacturer_products").select("formula_id, brand_name, pack_sizes, is_available, manufacturer_id");
       const mpByFormula = new Map<string, { manufacturer: string; mrp: number }[]>();
-      (mps || []).forEach((m: { formula_id: string; manufacturer_name: string; mrp: number; is_available: boolean }) => {
-        if (!m.is_available) return;
+      ((mps as Array<{ formula_id: string | null; brand_name: string | null; pack_sizes: unknown; is_available: boolean; manufacturer_id: string | null }> | null) || []).forEach((m) => {
+        if (!m.is_available || !m.formula_id) return;
+        const packs = Array.isArray(m.pack_sizes) ? (m.pack_sizes as Array<{ mrp?: number; price?: number }>) : [];
+        const mrp = Number(packs[0]?.mrp ?? packs[0]?.price ?? 0);
         const arr = mpByFormula.get(m.formula_id) || [];
-        arr.push({ manufacturer: m.manufacturer_name, mrp: Number(m.mrp) });
+        arr.push({ manufacturer: m.brand_name || "Manufacturer", mrp });
         mpByFormula.set(m.formula_id, arr);
       });
-      setGaps((formulas || []).filter((f: { id: string }) => !mpByFormula.get(f.id)?.length).map((f: { name: string }) => f.name));
-      const priceRows: PriceRow[] = (formulas || []).slice(0, 20)
+      setGaps(((formulas as Array<{ id: string; name: string }> | null) || []).filter((f) => !mpByFormula.get(f.id)?.length).map((f) => f.name));
+      const priceRows: PriceRow[] = ((formulas as Array<{ id: string; name: string }> | null) || []).slice(0, 20)
         .map((f: { id: string; name: string }) => ({ name: f.name, manufacturers: mpByFormula.get(f.id) || [] }))
         .filter((r) => r.manufacturers.length > 0);
       setPrices(priceRows);
