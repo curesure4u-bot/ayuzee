@@ -19,6 +19,7 @@ import {
   startAyuzeePdf, addTitle, addPlainTable, addSectionTable, addParagraph,
   finalizeAyuzeePdf, safeFileName,
 } from "@/lib/pdf/ayuzeePdf";
+import SuggestionField from "@/components/hms/SuggestionField";
 
 const LANGS = [
   { v: "en", l: "English" }, { v: "hi", l: "Hindi" }, { v: "ta", l: "Tamil" },
@@ -374,9 +375,9 @@ const Consultations = () => {
                     <div><Label>Visit date</Label><Input type="date" value={form.visit_date} onChange={(e) => setForm({ ...form, visit_date: e.target.value })} /></div>
                     <div><Label>Fee (₹)</Label><Input type="number" value={form.fee} onChange={(e) => setForm({ ...form, fee: e.target.value })} /></div>
                   </div>
-                  <div><Label>Chief complaint</Label><Input value={form.chief_complaint} onChange={(e) => setForm({ ...form, chief_complaint: e.target.value })} /></div>
-                  <div><Label>History of present illness</Label><Textarea rows={2} value={form.history} onChange={(e) => setForm({ ...form, history: e.target.value })} /></div>
-                  <div><Label>Examination</Label><Textarea rows={2} value={form.examination} onChange={(e) => setForm({ ...form, examination: e.target.value })} /></div>
+                  <div><Label>Chief complaint</Label><SuggestionField type="chief_complaint" value={form.chief_complaint} onChange={(v) => setForm({ ...form, chief_complaint: v })} placeholder="Start typing or use a short code (e.g. bkp + space)" /></div>
+                  <div><Label>History of present illness</Label><SuggestionField as="textarea" rows={2} type="chief_complaint" value={form.history} onChange={(v) => setForm({ ...form, history: v })} /></div>
+                  <div><Label>Examination</Label><SuggestionField as="textarea" rows={2} type="examination" value={form.examination} onChange={(v) => setForm({ ...form, examination: v })} /></div>
                   <div className="grid grid-cols-5 gap-2">
                     <div><Label className="text-xs">BP</Label><Input value={form.vitals_bp} onChange={(e) => setForm({ ...form, vitals_bp: e.target.value })} /></div>
                     <div><Label className="text-xs">Pulse</Label><Input value={form.vitals_pulse} onChange={(e) => setForm({ ...form, vitals_pulse: e.target.value })} /></div>
@@ -384,10 +385,10 @@ const Consultations = () => {
                     <div><Label className="text-xs">Weight</Label><Input value={form.vitals_weight} onChange={(e) => setForm({ ...form, vitals_weight: e.target.value })} /></div>
                     <div><Label className="text-xs">SpO2</Label><Input value={form.vitals_spo2} onChange={(e) => setForm({ ...form, vitals_spo2: e.target.value })} /></div>
                   </div>
-                  <div><Label>Assessment / Diagnosis</Label><Textarea rows={2} value={form.assessment} onChange={(e) => setForm({ ...form, assessment: e.target.value, diagnosis: e.target.value })} /></div>
-                  <div><Label>Prescription (Rx)</Label><Textarea rows={4} value={form.prescription} onChange={(e) => setForm({ ...form, prescription: e.target.value })} /></div>
-                  <div><Label>Plan</Label><Textarea rows={2} value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })} /></div>
-                  <div><Label>Advice (pathya / lifestyle)</Label><Textarea rows={2} value={form.advice} onChange={(e) => setForm({ ...form, advice: e.target.value })} /></div>
+                  <div><Label>Assessment / Diagnosis</Label><SuggestionField as="textarea" rows={2} type="diagnosis" value={form.assessment} onChange={(v) => setForm({ ...form, assessment: v, diagnosis: v })} /></div>
+                  <div><Label>Prescription (Rx)</Label><SuggestionField as="textarea" rows={4} type="medicine_name" value={form.prescription} onChange={(v) => setForm({ ...form, prescription: v })} placeholder="Pick from suggestions or type a short code" /></div>
+                  <div><Label>Plan</Label><SuggestionField as="textarea" rows={2} type="treatment_advice" value={form.plan} onChange={(v) => setForm({ ...form, plan: v })} /></div>
+                  <div><Label>Advice (pathya / lifestyle)</Label><SuggestionField as="textarea" rows={2} type="diet_advice" value={form.advice} onChange={(v) => setForm({ ...form, advice: v })} /></div>
                   <div className="grid grid-cols-2 gap-3">
                     <div><Label>Follow-up date</Label><Input type="date" value={form.follow_up_date} onChange={(e) => setForm({ ...form, follow_up_date: e.target.value })} /></div>
                     <div><Label>Notes</Label><Input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
