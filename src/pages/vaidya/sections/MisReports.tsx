@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { Card } from "@/components/ui/card";
@@ -74,6 +75,7 @@ function download(filename: string, content: string, mime: string) {
 }
 
 const MisReports = () => {
+  const navigate = useNavigate();
   const { userId, doctor } = useDoctor();
   const [preset, setPreset] = useState<Preset>("30");
   const [from, setFrom] = useState(rangeFromPreset("30").from);
@@ -202,6 +204,7 @@ const MisReports = () => {
   const exportRows = useMemo<Record<string, any>[]>(() => {
     if (reportType === "bills") {
       return filteredBills.map((b) => ({
+        _drill: `bill/${b.id}`,
         bill_no: b.bill_no,
         date: (b.bill_date || b.created_at)?.slice(0, 10),
         patient: b.patient_name,
@@ -215,6 +218,7 @@ const MisReports = () => {
     }
     if (reportType === "consultations") {
       return cons.map((c) => ({
+        _drill: `consultation/${c.id}`,
         date: c.visit_date,
         diagnosis: c.diagnosis,
         fee: c.fee,
@@ -241,7 +245,12 @@ const MisReports = () => {
       });
       return Object.entries(agg)
         .sort((a, b) => b[1].revenue - a[1].revenue)
-        .map(([medicine, v]) => ({ medicine, qty_sold: v.qty, revenue: v.revenue }));
+        .map(([medicine, v]) => ({
+          _drill: `medicine/${encodeURIComponent(medicine)}`,
+          medicine,
+          qty_sold: v.qty,
+          revenue: v.revenue,
+        }));
     }
     // summary
     return dailySeries.map((d) => ({
@@ -251,13 +260,16 @@ const MisReports = () => {
     }));
   }, [reportType, filteredBills, cons, appts, billItems, dailySeries]);
 
+  const stripInternal = (rows: Record<string, any>[]) =>
+    rows.map(({ _drill, ...rest }) => rest);
+
   const exportCSV = () => {
     if (!exportRows.length) {
       toast.error("Nothing to export for this filter");
       return;
     }
     const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
-    download(`mis-${reportType}-${from}_to_${to}-${ts}.csv`, toCSV(exportRows), "text/csv");
+    download(`mis-${reportType}-${from}_to_${to}-${ts}.csv`, toCSV(stripInternal(exportRows)), "text/csv");
     toast.success(`Exported ${exportRows.length} rows`);
   };
 
@@ -269,7 +281,7 @@ const MisReports = () => {
     const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
     download(
       `mis-${reportType}-${from}_to_${to}-${ts}.json`,
-      JSON.stringify({ report: reportType, from, to, rows: exportRows }, null, 2),
+      JSON.stringify({ report: reportType, from, to, rows: stripInternal(exportRows) }, null, 2),
       "application/json",
     );
     toast.success(`Exported ${exportRows.length} rows`);
@@ -444,28 +456,47 @@ const MisReports = () => {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-left text-xs text-muted-foreground">
-                <tr className="border-b">
-                  {Object.keys(exportRows[0]).map((k) => (
-                    <th key={k} className="py-2 pr-3 font-medium uppercase tracking-wide">{k}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {exportRows.slice(0, 50).map((r, i) => (
-                  <tr key={i} className="border-b last:border-0">
-                    {Object.keys(exportRows[0]).map((k) => (
-                      <td key={k} className="py-2 pr-3">
-                        {typeof r[k] === "number" && /revenue|total|fee|subtotal|discount/i.test(k)
-                          ? fmtINR(r[k])
-                          : String(r[k] ?? "—")}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {(() => {
+              const visibleKeys = Object.keys(exportRows[0]).filter((k) => k !== "_drill");
+              const hasDrill = exportRows.some((r) => r._drill);
+              return (
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground">
+                    <tr className="border-b">
+                      {visibleKeys.map((k) => (
+                        <th key={k} className="py-2 pr-3 font-medium uppercase tracking-wide">{k}</th>
+                      ))}
+                      {hasDrill && <th className="py-2 pr-3" />}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {exportRows.slice(0, 50).map((r, i) => {
+                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}` : null;
+                      return (
+                        <tr
+                          key={i}
+                          className={`border-b last:border-0 ${drillTo ? "cursor-pointer hover:bg-muted/50" : ""}`}
+                          onClick={() => drillTo && navigate(drillTo)}
+                        >
+                          {visibleKeys.map((k) => (
+                            <td key={k} className="py-2 pr-3">
+                              {typeof r[k] === "number" && /revenue|total|fee|subtotal|discount/i.test(k)
+                                ? fmtINR(r[k])
+                                : String(r[k] ?? "—")}
+                            </td>
+                          ))}
+                          {hasDrill && (
+                            <td className="py-2 pr-3 text-right">
+                              {drillTo && <span className="text-xs text-primary">View →</span>}
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              );
+            })()}
             {exportRows.length > 50 && (
               <p className="mt-3 text-xs text-muted-foreground">
                 Showing first 50 of {exportRows.length} rows. Export to CSV for the full dataset.
