@@ -335,9 +335,12 @@ export default function ClassicalFormulary() {
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
-      <header className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Classical Ayurvedic Formulary</h1>
-        <p className="text-muted-foreground text-sm mt-1">2000+ formulations · All manufacturers · Manufacturer-neutral reference</p>
+      <header className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Classical Ayurvedic Formulary</h1>
+          <p className="text-muted-foreground text-sm mt-1">2000+ formulations · All manufacturers · Manufacturer-neutral reference</p>
+        </div>
+        <Button asChild variant="outline"><Link to="/doctor/formulary/ingredients">📖 Ingredient Encyclopedia</Link></Button>
       </header>
 
       {/* Formulation type tabs */}
