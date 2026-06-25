@@ -501,6 +501,14 @@ const App = () => (
               <Route path="master-management/suggestions" element={<SuggestionMaster />} />
               <Route path="master-management/forms" element={<FormMaster />} />
               <Route path="master-management/stores" element={<StoreMaster />} />
+              <Route path="master-management/rate-plans" element={<RatePlanMaster />} />
+              <Route path="master-management/tax" element={<TaxMaster />} />
+              <Route path="master-management/billing" element={<BillingMaster />} />
+              <Route path="master-management/settlement" element={<SettlementMaster />} />
+              <Route path="master-management/insurance" element={<InsuranceMaster />} />
+              <Route path="master-management/wards" element={<WardMaster />} />
+              <Route path="master-management/ip-admission-types" element={<IpAdmissionMaster />} />
+              <Route path="master-management/areas" element={<AreaMaster />} />
               <Route path="pharmacy-orders" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />} />
               <Route path="ip-admissions" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />} />
               <Route path="ward-status" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Ward Status" />} />
