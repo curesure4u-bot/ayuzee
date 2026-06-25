@@ -556,6 +556,7 @@ const App = () => (
               <Route path="astg-bookmarks" element={<ASTGBookmarks />} />
               <Route path="formulary" element={<ClassicalFormulary />} />
               <Route path="formulary/ingredients" element={<IngredientEncyclopedia />} />
+              <Route path="formulary/prescription/:id" element={<FormularyPrescription />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
