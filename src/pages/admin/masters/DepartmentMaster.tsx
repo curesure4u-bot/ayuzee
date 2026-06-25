@@ -26,7 +26,7 @@ type Dept = {
   sort_order: number;
 };
 
-type Branch = { id: string; name: string };
+type Branch = { id: string; branch_name: string };
 
 const SYSTEM_COLORS: Record<string, string> = {
   Ayurveda: "bg-emerald-100 text-emerald-700",
@@ -53,10 +53,10 @@ const DepartmentMaster = () => {
   const load = async () => {
     const [d, b] = await Promise.all([
       supabase.from("hms_departments").select("*").order("sort_order"),
-      supabase.from("hms_branches").select("id,name").order("name"),
+      supabase.from("hms_branches").select("id, branch_name").order("name"),
     ]);
     setRows((d.data as Dept[]) || []);
-    setBranches((b.data as Branch[]) || []);
+    setBranches(((b.data as any) ?? []) as Branch[]);
   };
   useEffect(() => { load(); }, []);
 
@@ -105,7 +105,7 @@ const DepartmentMaster = () => {
               <SelectTrigger className="w-48"><SelectValue placeholder="Filter branch" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All branches</SelectItem>
-                {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
+                {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.branch_name}</SelectItem>)}
               </SelectContent>
             </Select>
             <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setForm(empty); }}>
@@ -126,7 +126,7 @@ const DepartmentMaster = () => {
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All branches</SelectItem>
-                        {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
+                        {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.branch_name}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>

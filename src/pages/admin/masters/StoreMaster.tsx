@@ -27,7 +27,7 @@ type Store = {
   is_active: boolean;
 };
 
-type Branch = { id: string; name: string };
+type Branch = { id: string; branch_name: string };
 
 const TYPES = [
   { value: "main_pharmacy", label: "Main Pharmacy", color: "bg-emerald-100 text-emerald-700" },
@@ -52,10 +52,10 @@ const StoreMaster = () => {
   const load = async () => {
     const [s, b] = await Promise.all([
       supabase.from("hms_stores").select("*").order("store_name"),
-      supabase.from("hms_branches").select("id,name").order("name"),
+      supabase.from("hms_branches").select("id, branch_name").order("name"),
     ]);
     setRows((s.data as Store[]) || []);
-    setBranches((b.data as Branch[]) || []);
+    setBranches(((b.data as any) ?? []) as Branch[]);
   };
   useEffect(() => { load(); }, []);
 
@@ -116,7 +116,7 @@ const StoreMaster = () => {
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All branches</SelectItem>
-                      {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
+                      {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.branch_name}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>

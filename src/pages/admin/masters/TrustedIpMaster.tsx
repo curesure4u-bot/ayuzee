@@ -25,7 +25,7 @@ type IP = {
   created_at: string;
 };
 
-type Branch = { id: string; name: string };
+type Branch = { id: string; branch_name: string };
 
 const TrustedIpMaster = () => {
   const [rows, setRows] = useState<IP[]>([]);
@@ -39,10 +39,10 @@ const TrustedIpMaster = () => {
     setLoading(true);
     const [r, b] = await Promise.all([
       supabase.from("hms_trusted_ips").select("*").order("created_at", { ascending: false }),
-      supabase.from("hms_branches").select("id,name").order("name"),
+      supabase.from("hms_branches").select("id, branch_name").order("name"),
     ]);
     setRows((r.data as IP[]) || []);
-    setBranches((b.data as Branch[]) || []);
+    setBranches(((b.data as any) ?? []) as Branch[]);
     setLoading(false);
   };
   useEffect(() => { load(); }, []);
@@ -110,7 +110,7 @@ const TrustedIpMaster = () => {
                     <Select value={form.branch_id} onValueChange={(v) => setForm({ ...form, branch_id: v })}>
                       <SelectTrigger><SelectValue placeholder="All branches" /></SelectTrigger>
                       <SelectContent>
-                        {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
+                        {branches.map((b) => <SelectItem key={b.id} value={b.id}>{b.branch_name}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
