@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { login, requireEnv } from "./helpers/auth";
+import { login, requireEnv, skipIfMissingEnv } from "./helpers/auth";
 
 /**
  * End-to-end shop checkout against Razorpay TEST mode.
@@ -7,6 +7,7 @@ import { login, requireEnv } from "./helpers/auth";
  */
 test.describe("Shop checkout (Razorpay test mode)", () => {
   test.beforeEach(async ({ page }) => {
+    skipIfMissingEnv(test, ["E2E_PATIENT_EMAIL", "E2E_PATIENT_PASSWORD"]);
     await login(
       page,
       requireEnv("E2E_PATIENT_EMAIL"),
