@@ -1197,6 +1197,65 @@ export type Database = {
           },
         ]
       }
+      classical_formulas: {
+        Row: {
+          anupana: string | null
+          classical_reference: string | null
+          contra_indications: string | null
+          created_at: string
+          dose: string | null
+          formulation_type_id: string | null
+          id: string
+          indications: string[] | null
+          ingredients: Json | null
+          is_published: boolean
+          name: string
+          name_sanskrit: string | null
+          special_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          anupana?: string | null
+          classical_reference?: string | null
+          contra_indications?: string | null
+          created_at?: string
+          dose?: string | null
+          formulation_type_id?: string | null
+          id?: string
+          indications?: string[] | null
+          ingredients?: Json | null
+          is_published?: boolean
+          name: string
+          name_sanskrit?: string | null
+          special_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          anupana?: string | null
+          classical_reference?: string | null
+          contra_indications?: string | null
+          created_at?: string
+          dose?: string | null
+          formulation_type_id?: string | null
+          id?: string
+          indications?: string[] | null
+          ingredients?: Json | null
+          is_published?: boolean
+          name?: string
+          name_sanskrit?: string | null
+          special_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classical_formulas_formulation_type_id_fkey"
+            columns: ["formulation_type_id"]
+            isOneToOne: false
+            referencedRelation: "formulation_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clinic_media: {
         Row: {
           clinic_id: string
@@ -3176,6 +3235,71 @@ export type Database = {
           subtitle?: string | null
           suitable_doshas?: string[]
           system?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      formulary_bookmarks: {
+        Row: {
+          created_at: string
+          doctor_id: string
+          formula_id: string
+          id: string
+          personal_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_id: string
+          formula_id: string
+          id?: string
+          personal_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_id?: string
+          formula_id?: string
+          id?: string
+          personal_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formulary_bookmarks_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "classical_formulas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      formulation_types: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          name_sanskrit: string | null
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          name_sanskrit?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          name_sanskrit?: string | null
+          sort_order?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -5495,6 +5619,63 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "lms_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      manufacturer_products: {
+        Row: {
+          brand_name: string | null
+          composition_notes: string | null
+          created_at: string
+          formula_id: string | null
+          fssai_number: string | null
+          gmp_certified: boolean | null
+          id: string
+          is_available: boolean
+          manufacturer_id: string | null
+          pack_sizes: Json | null
+          updated_at: string
+        }
+        Insert: {
+          brand_name?: string | null
+          composition_notes?: string | null
+          created_at?: string
+          formula_id?: string | null
+          fssai_number?: string | null
+          gmp_certified?: boolean | null
+          id?: string
+          is_available?: boolean
+          manufacturer_id?: string | null
+          pack_sizes?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          brand_name?: string | null
+          composition_notes?: string | null
+          created_at?: string
+          formula_id?: string | null
+          fssai_number?: string | null
+          gmp_certified?: boolean | null
+          id?: string
+          is_available?: boolean
+          manufacturer_id?: string | null
+          pack_sizes?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manufacturer_products_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "classical_formulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "manufacturer_products_manufacturer_id_fkey"
+            columns: ["manufacturer_id"]
+            isOneToOne: false
+            referencedRelation: "manufacturers"
             referencedColumns: ["id"]
           },
         ]
