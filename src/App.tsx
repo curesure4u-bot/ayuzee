@@ -45,6 +45,7 @@ import AdminAfiManagement from "./pages/admin/AdminAfiManagement.tsx";
 import AfiFormulary from "./pages/doctor/AfiFormulary.tsx";
 import AfiFormulaDetail from "./pages/doctor/AfiFormulaDetail.tsx";
 import AfiDiseaseIndex from "./pages/doctor/AfiDiseaseIndex.tsx";
+import AfiIngredientFormulations from "./pages/doctor/AfiIngredientFormulations.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
 import DoctorHome from "./pages/doctor/DoctorHome.tsx";
 import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
