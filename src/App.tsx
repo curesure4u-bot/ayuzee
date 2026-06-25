@@ -474,7 +474,13 @@ const App = () => (
               <Route path="essential-unani-drugs" element={<AdminEssentialUnaniDrugs />} />
               <Route path="essential-homeopathy-drugs" element={<AdminEssentialHomeopathyDrugs />} />
               <Route path="backlinks" element={<AdminBacklinks />} />
+              <Route path="hms-access" element={<AdminHmsAccess />} />
+              <Route path="master-management" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Master Management" description="Manage branches, services, and HMS masters." />} />
+              <Route path="pharmacy-orders" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />} />
+              <Route path="ip-admissions" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />} />
+              <Route path="ward-status" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Ward Status" />} />
             </Route>
+
             <Route path="/diagnosis" element={<Diagnosis />} />
             <Route path="/diagnosis/symptoms" element={<SymptomChecker />} />
             <Route path="/diagnosis/prakriti" element={<PrakritiIntro />} />
