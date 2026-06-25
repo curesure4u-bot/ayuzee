@@ -526,6 +526,7 @@ const App = () => (
               <Route path="reception" element={<Reception />} />
               <Route path="patients/:source/:id" element={<VaidyaPatientProfile />} />
               <Route path="analytics" element={<VaidyaAnalytics />} />
+              <Route path="mis" element={<VaidyaAnalytics />} />
               <Route path="ashtavidha" element={<Ashtavidha />} />
               <Route path="panchakarma" element={<Panchakarma />} />
               <Route path="posture" element={<PosturePage />} />
