@@ -74,7 +74,7 @@ const MisDrillDown = () => {
     return () => {
       cancelled = true;
     };
-  }, [type, id, userId]);
+  }, [type, id, userId, doctor?.id]);
 
   if (loading) {
     return <div className="p-10 text-center text-sm text-muted-foreground">Loading…</div>;
