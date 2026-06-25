@@ -134,6 +134,7 @@ import DeveloperApi from "./pages/vaidya/sections/DeveloperApi.tsx";
 import Reception from "./pages/vaidya/sections/Reception.tsx";
 import VaidyaPatientProfile from "./pages/vaidya/sections/PatientProfile.tsx";
 import VaidyaAnalytics from "./pages/vaidya/sections/Analytics.tsx";
+import MisReports from "./pages/vaidya/sections/MisReports.tsx";
 import Ashtavidha from "./pages/vaidya/sections/Ashtavidha.tsx";
 import Panchakarma from "./pages/vaidya/sections/Panchakarma.tsx";
 import Feed from "./pages/Feed.tsx";
@@ -526,7 +527,7 @@ const App = () => (
               <Route path="reception" element={<Reception />} />
               <Route path="patients/:source/:id" element={<VaidyaPatientProfile />} />
               <Route path="analytics" element={<VaidyaAnalytics />} />
-              <Route path="mis" element={<VaidyaAnalytics />} />
+              <Route path="mis" element={<MisReports />} />
               <Route path="ashtavidha" element={<Ashtavidha />} />
               <Route path="panchakarma" element={<Panchakarma />} />
               <Route path="posture" element={<PosturePage />} />
