@@ -75,6 +75,7 @@ function download(filename: string, content: string, mime: string) {
 }
 
 const MisReports = () => {
+  const navigate = useNavigate();
   const { userId, doctor } = useDoctor();
   const [preset, setPreset] = useState<Preset>("30");
   const [from, setFrom] = useState(rangeFromPreset("30").from);
