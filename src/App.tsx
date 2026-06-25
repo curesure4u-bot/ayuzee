@@ -34,6 +34,7 @@ import FoodAsMedicine from "./pages/FoodAsMedicine.tsx";
 import DoctorAuth from "./pages/doctor/DoctorAuth.tsx";
 import DoctorLayout from "./pages/doctor/DoctorLayout.tsx";
 import ASTGReference from "./pages/doctor/ASTGReference.tsx";
+import ASTGDiseaseDetail from "./pages/doctor/ASTGDiseaseDetail.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
 import DoctorHome from "./pages/doctor/DoctorHome.tsx";
 import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
