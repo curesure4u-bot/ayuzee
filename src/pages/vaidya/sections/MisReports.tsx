@@ -454,28 +454,47 @@ const MisReports = () => {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-left text-xs text-muted-foreground">
-                <tr className="border-b">
-                  {Object.keys(exportRows[0]).map((k) => (
-                    <th key={k} className="py-2 pr-3 font-medium uppercase tracking-wide">{k}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {exportRows.slice(0, 50).map((r, i) => (
-                  <tr key={i} className="border-b last:border-0">
-                    {Object.keys(exportRows[0]).map((k) => (
-                      <td key={k} className="py-2 pr-3">
-                        {typeof r[k] === "number" && /revenue|total|fee|subtotal|discount/i.test(k)
-                          ? fmtINR(r[k])
-                          : String(r[k] ?? "—")}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {(() => {
+              const visibleKeys = Object.keys(exportRows[0]).filter((k) => k !== "_drill");
+              const hasDrill = exportRows.some((r) => r._drill);
+              return (
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground">
+                    <tr className="border-b">
+                      {visibleKeys.map((k) => (
+                        <th key={k} className="py-2 pr-3 font-medium uppercase tracking-wide">{k}</th>
+                      ))}
+                      {hasDrill && <th className="py-2 pr-3" />}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {exportRows.slice(0, 50).map((r, i) => {
+                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}` : null;
+                      return (
+                        <tr
+                          key={i}
+                          className={`border-b last:border-0 ${drillTo ? "cursor-pointer hover:bg-muted/50" : ""}`}
+                          onClick={() => drillTo && navigate(drillTo)}
+                        >
+                          {visibleKeys.map((k) => (
+                            <td key={k} className="py-2 pr-3">
+                              {typeof r[k] === "number" && /revenue|total|fee|subtotal|discount/i.test(k)
+                                ? fmtINR(r[k])
+                                : String(r[k] ?? "—")}
+                            </td>
+                          ))}
+                          {hasDrill && (
+                            <td className="py-2 pr-3 text-right">
+                              {drillTo && <span className="text-xs text-primary">View →</span>}
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              );
+            })()}
             {exportRows.length > 50 && (
               <p className="mt-3 text-xs text-muted-foreground">
                 Showing first 50 of {exportRows.length} rows. Export to CSV for the full dataset.
