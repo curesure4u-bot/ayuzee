@@ -12,7 +12,7 @@ const fmtINR = (n: number) => `₹${(n ?? 0).toLocaleString("en-IN")}`;
 const MisDrillDown = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
   const navigate = useNavigate();
-  const { userId } = useDoctor();
+  const { userId, doctor } = useDoctor();
   const [loading, setLoading] = useState(true);
   const [record, setRecord] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
