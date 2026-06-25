@@ -308,6 +308,7 @@ export default function ClassicalFormulary() {
   const [sort, setSort] = useState<"az" | "category" | "used">("az");
   const [bookmarks, setBookmarks] = useState<string[]>(loadBookmarks);
   const [selected, setSelected] = useState<Formula | null>(null);
+  const [prescribeOpen, setPrescribeOpen] = useState(false);
 
   const toggleBookmark = (id: string) => {
     setBookmarks((prev) => {
