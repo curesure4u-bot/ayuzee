@@ -72,6 +72,9 @@ const allGroups = [
     { title: "🔔 Notifications", url: "/admin/notifications" },
     { title: "⚙️ Settings", url: "/admin/settings" },
   ]},
+];
+
+
 
 
 const AdminLayout = () => {
