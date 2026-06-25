@@ -196,6 +196,255 @@ export type Database = {
           },
         ]
       }
+      astg_categories: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          modern_equivalent: string | null
+          name: string
+          name_sanskrit: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          modern_equivalent?: string | null
+          name: string
+          name_sanskrit?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          modern_equivalent?: string | null
+          name?: string
+          name_sanskrit?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      astg_diseases: {
+        Row: {
+          apathya: string | null
+          category_id: string | null
+          chapter_number: number | null
+          created_at: string
+          definition: string | null
+          diagnostic_criteria: string | null
+          id: string
+          is_published: boolean
+          lakshana: Json | null
+          name: string
+          name_modern: string | null
+          nidana: string | null
+          pathya: string | null
+          prognosis: string | null
+          reference_text: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          apathya?: string | null
+          category_id?: string | null
+          chapter_number?: number | null
+          created_at?: string
+          definition?: string | null
+          diagnostic_criteria?: string | null
+          id?: string
+          is_published?: boolean
+          lakshana?: Json | null
+          name: string
+          name_modern?: string | null
+          nidana?: string | null
+          pathya?: string | null
+          prognosis?: string | null
+          reference_text?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          apathya?: string | null
+          category_id?: string | null
+          chapter_number?: number | null
+          created_at?: string
+          definition?: string | null
+          diagnostic_criteria?: string | null
+          id?: string
+          is_published?: boolean
+          lakshana?: Json | null
+          name?: string
+          name_modern?: string | null
+          nidana?: string | null
+          pathya?: string | null
+          prognosis?: string | null
+          reference_text?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "astg_diseases_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "astg_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      astg_doctor_bookmarks: {
+        Row: {
+          created_at: string
+          disease_id: string
+          doctor_id: string
+          id: string
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          disease_id: string
+          doctor_id: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          disease_id?: string
+          doctor_id?: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "astg_doctor_bookmarks_disease_id_fkey"
+            columns: ["disease_id"]
+            isOneToOne: false
+            referencedRelation: "astg_diseases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      astg_medicines: {
+        Row: {
+          anupana: string | null
+          created_at: string
+          disease_id: string
+          dose: string | null
+          dosha_type: string | null
+          duration: string | null
+          formulation_type: string | null
+          id: string
+          is_common: boolean
+          medicine_name: string
+          notes: string | null
+          sort_order: number
+          treatment_level_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          anupana?: string | null
+          created_at?: string
+          disease_id: string
+          dose?: string | null
+          dosha_type?: string | null
+          duration?: string | null
+          formulation_type?: string | null
+          id?: string
+          is_common?: boolean
+          medicine_name: string
+          notes?: string | null
+          sort_order?: number
+          treatment_level_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          anupana?: string | null
+          created_at?: string
+          disease_id?: string
+          dose?: string | null
+          dosha_type?: string | null
+          duration?: string | null
+          formulation_type?: string | null
+          id?: string
+          is_common?: boolean
+          medicine_name?: string
+          notes?: string | null
+          sort_order?: number
+          treatment_level_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "astg_medicines_disease_id_fkey"
+            columns: ["disease_id"]
+            isOneToOne: false
+            referencedRelation: "astg_diseases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "astg_medicines_treatment_level_id_fkey"
+            columns: ["treatment_level_id"]
+            isOneToOne: false
+            referencedRelation: "astg_treatment_levels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      astg_treatment_levels: {
+        Row: {
+          created_at: string
+          description: string | null
+          disease_id: string
+          facility_type: string | null
+          id: string
+          level_label: string | null
+          level_number: number
+          panchakarma_details: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          disease_id: string
+          facility_type?: string | null
+          id?: string
+          level_label?: string | null
+          level_number: number
+          panchakarma_details?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          disease_id?: string
+          facility_type?: string | null
+          id?: string
+          level_label?: string | null
+          level_number?: number
+          panchakarma_details?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "astg_treatment_levels_disease_id_fkey"
+            columns: ["disease_id"]
+            isOneToOne: false
+            referencedRelation: "astg_diseases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       atmri_case_updates: {
         Row: {
           case_id: string | null
