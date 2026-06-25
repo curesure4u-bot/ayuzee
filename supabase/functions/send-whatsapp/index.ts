@@ -97,6 +97,17 @@ serve(async (req) => {
     const result = await resp.json().catch(() => ({}));
     console.log("[send-whatsapp]", { to: digits, template, status: resp.status });
 
+    try {
+      const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+      await admin.from("vaidya_whatsapp_log").insert({
+        patient_phone: digits,
+        message_preview: (message || "").slice(0, 280),
+        template_name: template_code || template || null,
+        status: resp.ok ? "sent" : "failed",
+        sent_at: new Date().toISOString(),
+      });
+    } catch (_) { /* best-effort */ }
+
     return new Response(JSON.stringify({ ok: resp.ok, result }),
       { status: resp.ok ? 200 : 502, headers: { ...cors, "Content-Type": "application/json" } });
 
