@@ -54,8 +54,10 @@ const TaxMaster = () => {
   const del = async (id: string) => { if (!confirm("Delete?")) return; await supabase.from("hms_tax_slabs").delete().eq("id", id); load(); };
 
   const setDefault = async (id: string, field: "is_default_for_services" | "is_default_for_medicines") => {
-    await supabase.from("hms_tax_slabs").update({ [field]: false }).neq("id", "00000000-0000-0000-0000-000000000000");
-    await supabase.from("hms_tax_slabs").update({ [field]: true }).eq("id", id);
+    const clearPayload: any = { [field]: false };
+    const setPayload: any = { [field]: true };
+    await supabase.from("hms_tax_slabs").update(clearPayload).neq("id", "00000000-0000-0000-0000-000000000000");
+    await supabase.from("hms_tax_slabs").update(setPayload).eq("id", id);
     toast.success("Default updated"); load();
   };
 
