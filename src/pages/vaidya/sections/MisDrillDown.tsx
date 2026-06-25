@@ -347,7 +347,7 @@ const MisDrillDown = () => {
                 return (
                   <tr key={it.id} className="border-b last:border-0">
                     <td className="py-2 pr-2">
-                      <Link to={`/vaidya/mis/drill/bill/${b.id}`} className="font-mono text-xs text-primary hover:underline">
+                      <Link to={`/vaidya/mis/drill/bill/${b.id}${location.search || ""}`} className="font-mono text-xs text-primary hover:underline">
                         {b.bill_no || b.id?.slice(0, 8)}
                       </Link>
                     </td>
