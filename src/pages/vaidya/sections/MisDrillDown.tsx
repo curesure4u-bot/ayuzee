@@ -209,6 +209,59 @@ const MisDrillDown = () => {
     );
   }
 
+  if (type === "appointment") {
+    const paid = record.payment_status === "paid";
+    return (
+      <div className="mx-auto max-w-4xl space-y-5">
+        <Header
+          icon={CalendarClock}
+          title={`Appointment · ${record.patient_name || "Patient"}`}
+          subtitle={`${record.appointment_date || ""} ${record.appointment_time || ""}`.trim()}
+        />
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="p-4">
+            <p className="text-xs uppercase text-muted-foreground">Status</p>
+            <p className="mt-1 font-semibold capitalize">{record.status || "—"}</p>
+            <p className="text-xs text-muted-foreground capitalize">Mode: {record.mode || "—"}</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs uppercase text-muted-foreground">Payment</p>
+            <p className="mt-1 font-semibold capitalize">{record.payment_status || "—"}</p>
+            <p className="text-xs text-muted-foreground capitalize">{record.payment_mode || record.payment_method || ""}</p>
+          </Card>
+          <Card className={`p-4 ${paid ? "bg-gradient-to-br from-emerald-500/80 to-emerald-600 text-primary-foreground" : ""}`}>
+            <p className={`text-xs uppercase ${paid ? "opacity-90" : "text-muted-foreground"}`}>Fee</p>
+            <p className="mt-1 font-display text-2xl font-bold">{fmtINR(record.fee)}</p>
+          </Card>
+        </div>
+
+        <Card className="p-5 space-y-4">
+          {[
+            ["Patient name", record.patient_name],
+            ["Patient phone", record.patient_phone],
+            ["Patient email", record.patient_email],
+            ["Symptoms / Reason", record.symptoms || record.reason],
+            ["Notes", record.notes],
+            ["Cancellation reason", record.cancellation_reason],
+          ]
+            .filter(([, v]) => v)
+            .map(([label, val]) => (
+              <div key={label as string}>
+                <p className="text-xs uppercase text-muted-foreground">{label}</p>
+                <p className="mt-1 whitespace-pre-wrap text-sm">{val as string}</p>
+              </div>
+            ))}
+          <div className="grid gap-3 text-xs text-muted-foreground sm:grid-cols-3 border-t pt-3">
+            <div><span className="uppercase">Booked</span><br />{record.created_at?.slice(0, 16).replace("T", " ")}</div>
+            <div><span className="uppercase">Appointment ID</span><br /><span className="font-mono">{record.id?.slice(0, 8)}</span></div>
+            <div><span className="uppercase">Doctor ID</span><br /><span className="font-mono">{record.doctor_id?.slice(0, 8)}</span></div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+
   // medicine
   const totals = related.reduce(
     (acc, it) => {
