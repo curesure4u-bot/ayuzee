@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Package, Building2, Coins, Wallet,
-  Settings, PackageCheck, CreditCard, Link2,
+  Settings, PackageCheck, CreditCard, Link2, BookOpen,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -18,6 +18,7 @@ const items = [
   { title: "Payout Requests",        url: "/admin/payouts",   icon: CreditCard },
   { title: "Payments",               url: "/admin/payments",  icon: Wallet },
   { title: "Backlink Monitor",       url: "/admin/backlinks", icon: Link2 },
+  { title: "ASTG Content",           url: "/admin/astg-management", icon: BookOpen },
   { title: "Platform Settings",      url: "/admin/settings",  icon: Settings },
 ];
 

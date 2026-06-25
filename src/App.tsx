@@ -440,6 +440,7 @@ const App = () => (
               <Route path="reports" element={<AdminReports />} />
               <Route path="safety" element={<AdminSafety />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="astg-management" element={<ASTGManagement />} />
               <Route path="team" element={<AdminTeam />} />
               <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
