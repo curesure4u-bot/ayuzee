@@ -89,28 +89,55 @@ const MisDrillDown = () => {
     return (
       <div className="mx-auto max-w-3xl space-y-4 p-6 text-center">
         <p className="text-muted-foreground">Record not found or you don't have access.</p>
-        <Button variant="outline" onClick={() => navigate(-1)}><ArrowLeft className="mr-2 h-4 w-4" />Back</Button>
+        <Button variant="outline" onClick={() => navigate(misBackUrl)}>
+          <ArrowLeft className="mr-2 h-4 w-4" />Back to MIS
+        </Button>
       </div>
     );
   }
 
+  const typeLabel: Record<string, string> = {
+    bill: "Bill",
+    consultation: "Consultation",
+    appointment: "Appointment",
+    medicine: "Medicine",
+  };
+
+  const Breadcrumbs = () => (
+    <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+      <Link to="/vaidya" className="inline-flex items-center gap-1 hover:text-primary">
+        <Home className="h-3 w-3" />Vaidya
+      </Link>
+      <ChevronRight className="h-3 w-3" />
+      <Link to={misBackUrl} className="hover:text-primary">MIS Reports</Link>
+      <ChevronRight className="h-3 w-3" />
+      <Link to={misBackUrl} className="hover:text-primary">{reportLabel}</Link>
+      <ChevronRight className="h-3 w-3" />
+      <span className="font-medium text-foreground">{typeLabel[type || ""] || "Detail"}</span>
+    </nav>
+  );
+
   const Header = ({ icon: Icon, title, subtitle }: any) => (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
-        <Button size="sm" variant="ghost" onClick={() => navigate(-1)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />Back to MIS
-        </Button>
-        <div className="flex items-center gap-2">
-          <Icon className="h-5 w-5 text-primary" />
-          <div>
-            <h1 className="font-display text-xl font-bold">{title}</h1>
-            {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+    <div className="space-y-3">
+      <Breadcrumbs />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Button size="sm" variant="ghost" onClick={() => navigate(misBackUrl)}>
+            <ArrowLeft className="mr-2 h-4 w-4" />Back to MIS
+          </Button>
+          <div className="flex items-center gap-2">
+            <Icon className="h-5 w-5 text-primary" />
+            <div>
+              <h1 className="font-display text-xl font-bold">{title}</h1>
+              {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+            </div>
           </div>
         </div>
+        <Badge variant="outline" className="text-xs">HMS Tools Ultra · Drill-down</Badge>
       </div>
-      <Badge variant="outline" className="text-xs">HMS Tools Ultra · Drill-down</Badge>
     </div>
   );
+
 
   if (type === "bill") {
     return (
