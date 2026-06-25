@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { findDisease } from "@/data/astg";
 import { exportDiseasePDF } from "@/lib/astg-search";
+import ASTGClinicalAssistant from "@/components/astg/ASTGClinicalAssistant";
 
 export default function ASTGDiseaseDetail() {
   const { categoryKey = "", diseaseKey = "" } = useParams();
@@ -127,8 +128,13 @@ export default function ASTGDiseaseDetail() {
             <Printer className="h-4 w-4" />
             Export PDF
           </Button>
+          <ASTGClinicalAssistant
+            variant="inline"
+            diseaseContext={`${disease.name} (${disease.modern})`}
+          />
         </div>
       </div>
+
 
       {/* Header */}
       <header className="mb-6 rounded-xl border bg-card p-6">
