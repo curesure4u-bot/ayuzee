@@ -5,7 +5,7 @@ import { useDoctor } from "@/hooks/useDoctor";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FileText, Stethoscope, Pill, IndianRupee } from "lucide-react";
+import { ArrowLeft, FileText, Stethoscope, Pill, IndianRupee, CalendarClock } from "lucide-react";
 
 const fmtINR = (n: number) => `₹${(n ?? 0).toLocaleString("en-IN")}`;
 
