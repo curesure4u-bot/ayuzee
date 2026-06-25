@@ -185,7 +185,7 @@ const MisDrillDown = () => {
                   <tr key={it.id} className="border-b last:border-0">
                     <td className="py-2 pr-2">
                       <Link
-                        to={`/vaidya/mis/drill/medicine/${encodeURIComponent(it.medicine_name || "")}`}
+                        to={`/vaidya/mis/drill/medicine/${encodeURIComponent(it.medicine_name || "")}${location.search || ""}`}
                         className="font-medium hover:text-primary hover:underline"
                       >
                         {it.medicine_name}
