@@ -472,7 +472,10 @@ const MisReports = () => {
                   </thead>
                   <tbody>
                     {exportRows.slice(0, 50).map((r, i) => {
-                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}` : null;
+                      const filterQS = new URLSearchParams({
+                        preset, from, to, report: reportType, billType, paymentMode,
+                      }).toString();
+                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}?${filterQS}` : null;
                       return (
                         <tr
                           key={i}
