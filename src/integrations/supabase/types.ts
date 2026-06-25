@@ -226,94 +226,154 @@ export type Database = {
       }
       afi_formulations: {
         Row: {
+          acid_insoluble_ash_max: number | null
           afi_number: string | null
           afi_part: number | null
+          alcohol_extractive_min: number | null
+          anupana: string | null
+          api_afi_crossref: string | null
+          api_volume: string | null
           chapter_reference: string | null
           characteristics: string | null
           classical_reference: string | null
           classical_text: string | null
           created_at: string
+          data_source: string | null
+          description_colour: string | null
+          description_odour: string | null
+          description_taste: string | null
+          description_texture: string | null
           dose: string | null
           dose_max: string | null
           dose_min: string | null
           dose_unit: string | null
           extraction_status: string
           formulation_type_id: string | null
+          has_microscopy_id: boolean | null
+          has_physicochemical_standards: boolean | null
+          has_tlc_profile: boolean | null
           id: string
           indications: string[] | null
           indications_modern: string[] | null
           is_published: boolean
+          loss_on_drying_max: number | null
           method_of_preparation: string | null
           name: string
           name_original: string | null
+          ph_max: number | null
+          ph_min: number | null
+          ph_solution_concentration: string | null
           preservation: string | null
           raw_text: string | null
           rejection_reason: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           special_notes: string | null
+          storage_conditions: string | null
+          total_ash_max: number | null
           updated_at: string
           verse_numbers: string | null
+          water_extractive_min: number | null
         }
         Insert: {
+          acid_insoluble_ash_max?: number | null
           afi_number?: string | null
           afi_part?: number | null
+          alcohol_extractive_min?: number | null
+          anupana?: string | null
+          api_afi_crossref?: string | null
+          api_volume?: string | null
           chapter_reference?: string | null
           characteristics?: string | null
           classical_reference?: string | null
           classical_text?: string | null
           created_at?: string
+          data_source?: string | null
+          description_colour?: string | null
+          description_odour?: string | null
+          description_taste?: string | null
+          description_texture?: string | null
           dose?: string | null
           dose_max?: string | null
           dose_min?: string | null
           dose_unit?: string | null
           extraction_status?: string
           formulation_type_id?: string | null
+          has_microscopy_id?: boolean | null
+          has_physicochemical_standards?: boolean | null
+          has_tlc_profile?: boolean | null
           id?: string
           indications?: string[] | null
           indications_modern?: string[] | null
           is_published?: boolean
+          loss_on_drying_max?: number | null
           method_of_preparation?: string | null
           name: string
           name_original?: string | null
+          ph_max?: number | null
+          ph_min?: number | null
+          ph_solution_concentration?: string | null
           preservation?: string | null
           raw_text?: string | null
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           special_notes?: string | null
+          storage_conditions?: string | null
+          total_ash_max?: number | null
           updated_at?: string
           verse_numbers?: string | null
+          water_extractive_min?: number | null
         }
         Update: {
+          acid_insoluble_ash_max?: number | null
           afi_number?: string | null
           afi_part?: number | null
+          alcohol_extractive_min?: number | null
+          anupana?: string | null
+          api_afi_crossref?: string | null
+          api_volume?: string | null
           chapter_reference?: string | null
           characteristics?: string | null
           classical_reference?: string | null
           classical_text?: string | null
           created_at?: string
+          data_source?: string | null
+          description_colour?: string | null
+          description_odour?: string | null
+          description_taste?: string | null
+          description_texture?: string | null
           dose?: string | null
           dose_max?: string | null
           dose_min?: string | null
           dose_unit?: string | null
           extraction_status?: string
           formulation_type_id?: string | null
+          has_microscopy_id?: boolean | null
+          has_physicochemical_standards?: boolean | null
+          has_tlc_profile?: boolean | null
           id?: string
           indications?: string[] | null
           indications_modern?: string[] | null
           is_published?: boolean
+          loss_on_drying_max?: number | null
           method_of_preparation?: string | null
           name?: string
           name_original?: string | null
+          ph_max?: number | null
+          ph_min?: number | null
+          ph_solution_concentration?: string | null
           preservation?: string | null
           raw_text?: string | null
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           special_notes?: string | null
+          storage_conditions?: string | null
+          total_ash_max?: number | null
           updated_at?: string
           verse_numbers?: string | null
+          water_extractive_min?: number | null
         }
         Relationships: [
           {
@@ -374,6 +434,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "afi_ingredients_formulation_id_fkey"
+            columns: ["formulation_id"]
+            isOneToOne: false
+            referencedRelation: "afi_formulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_botanical_names: {
+        Row: {
+          api_part_vol_ref: string | null
+          botanical_name: string | null
+          common_name: string | null
+          created_at: string
+          formulation_id: string
+          id: string
+          ingredient_serial: number | null
+          is_prakshepa: boolean | null
+          part_used: string | null
+          part_used_full: string | null
+          quantity_ratio: string | null
+          sanskrit_name: string | null
+        }
+        Insert: {
+          api_part_vol_ref?: string | null
+          botanical_name?: string | null
+          common_name?: string | null
+          created_at?: string
+          formulation_id: string
+          id?: string
+          ingredient_serial?: number | null
+          is_prakshepa?: boolean | null
+          part_used?: string | null
+          part_used_full?: string | null
+          quantity_ratio?: string | null
+          sanskrit_name?: string | null
+        }
+        Update: {
+          api_part_vol_ref?: string | null
+          botanical_name?: string | null
+          common_name?: string | null
+          created_at?: string
+          formulation_id?: string
+          id?: string
+          ingredient_serial?: number | null
+          is_prakshepa?: boolean | null
+          part_used?: string | null
+          part_used_full?: string | null
+          quantity_ratio?: string | null
+          sanskrit_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_botanical_names_formulation_id_fkey"
             columns: ["formulation_id"]
             isOneToOne: false
             referencedRelation: "afi_formulations"
