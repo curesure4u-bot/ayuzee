@@ -15,6 +15,7 @@ Required env vars (load with `set -a; source .env.e2e; set +a` before running):
 | `E2E_PATIENT_EMAIL` / `E2E_PATIENT_PASSWORD` | Existing confirmed patient account. |
 | `E2E_DOCTOR_EMAIL` / `E2E_DOCTOR_PASSWORD` | Existing confirmed doctor account. |
 | `E2E_NEW_SIGNUP_EMAIL` | Optional. Random throwaway address used by the signup spec. |
+| `E2E_SUPABASE_URL` / `E2E_SUPABASE_ANON_KEY` | Backend REST endpoint + anon key (used by the suggestion-autocomplete spec to verify `hms_suggestions.usage_count` increments). |
 
 Razorpay **must be in TEST mode**. The checkout spec uses:
 
@@ -38,6 +39,7 @@ when the dev server is already running.
 - `booking.spec.ts` — book a video consultation and reach Razorpay checkout.
 - `checkout.spec.ts` — add to cart → checkout → pay with Razorpay test card.
 - `doctor-prescription.spec.ts` — doctor logs in and issues a prescription.
+- `suggestion-autocomplete.spec.ts` — verifies the consultation form's Suggestion Master autocomplete: dropdown, keyboard selection (↓/Enter), short-code expansion, and that `usage_count` increments after save.
 
 ## Notes
 
