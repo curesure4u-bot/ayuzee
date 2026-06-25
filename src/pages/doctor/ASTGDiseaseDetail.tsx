@@ -38,6 +38,7 @@ import {
   Printer,
 } from "lucide-react";
 import { findDisease } from "@/data/astg";
+import { exportDiseasePDF } from "@/lib/astg-search";
 
 export default function ASTGDiseaseDetail() {
   const { categoryKey = "", diseaseKey = "" } = useParams();
@@ -116,6 +117,15 @@ export default function ASTGDiseaseDetail() {
           >
             <Printer className="h-4 w-4" />
             Print
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => exportDiseasePDF(match.category, match.disease)}
+          >
+            <Printer className="h-4 w-4" />
+            Export PDF
           </Button>
         </div>
       </div>
