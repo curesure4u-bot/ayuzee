@@ -154,7 +154,7 @@ const hmsGroups = [
       { to: "/vaidya/patients", label: "Patients", icon: Users },
       { to: "/vaidya/consultations", label: "Consultations", icon: ClipboardList },
       { to: "/vaidya/bills", label: "Billing", icon: ReceiptText },
-      { to: "/vaidya/analytics", label: "MIS Reports", icon: BarChart3 },
+      { to: "/vaidya/mis", label: "MIS Reports", icon: BarChart3 },
       { to: "/vaidya/panchakarma", label: "Panchakarma", icon: Flower2 },
       { to: "/vaidya/yoga", label: "Yoga", icon: Flower2 },
       { to: "/vaidya/inventory", label: "Inventory", icon: Pill },
