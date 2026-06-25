@@ -179,6 +179,9 @@ const VaidyaLayout = () => {
 
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
+  const { hasAccess, branch } = useHmsAccess();
+
+
 
   useEffect(() => {
     let mounted = true;
