@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useHmsAccess } from "@/hooks/useHmsAccess";
 import {
   Stethoscope,
   LogOut,
@@ -19,8 +21,18 @@ import {
   Flower2,
   Activity,
   TrendingUp,
+  Home,
+  BarChart3,
+  Clock,
+  Banknote,
+  Building2,
+  CheckSquare,
+  Bell,
+  Syringe,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+
 
 const groups = [
   {
