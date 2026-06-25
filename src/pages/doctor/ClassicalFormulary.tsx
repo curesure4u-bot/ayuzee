@@ -592,6 +592,20 @@ export default function ClassicalFormulary() {
           )}
         </SheetContent>
       </Sheet>
+
+      {selected && (
+        <PrescribeFormulaDialog
+          open={prescribeOpen}
+          onOpenChange={setPrescribeOpen}
+          formula={{
+            id: selected.id, name: selected.name, sanskrit: selected.sanskrit, type: selected.type,
+            dose: selected.dose, anupana: selected.anupana, duration: selected.duration,
+            manufacturers: selected.manufacturers,
+          }}
+        />
+      )}
+
+      <FormularyTray />
     </div>
   );
 }
