@@ -15,19 +15,19 @@ type Suggestion = {
 // Module-level cache so the dropdown opens instantly on every field
 const cache = new Map<string, Promise<Suggestion[]>>();
 
-const fetchSuggestions = (type: string) => {
+const fetchSuggestions = (type: string): Promise<Suggestion[]> => {
   if (!cache.has(type)) {
-    cache.set(
-      type,
-      supabase
+    const p = (async () => {
+      const { data } = await supabase
         .from("hms_suggestions" as any)
         .select("id, suggestion_text, short_code, suggestion_type, usage_count")
         .eq("suggestion_type", type)
         .eq("is_active", true)
         .order("usage_count", { ascending: false })
-        .limit(500)
-        .then(({ data }) => ((data as any) ?? []) as Suggestion[]),
-    );
+        .limit(500);
+      return ((data as any) ?? []) as Suggestion[];
+    })();
+    cache.set(type, p);
   }
   return cache.get(type)!;
 };
