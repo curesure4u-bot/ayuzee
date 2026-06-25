@@ -129,7 +129,6 @@ export default function ASTGManagement() {
 
   return (
     <div className="container py-6 space-y-6">
-      <Helmet><title>ASTG Content Management · Admin</title></Helmet>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">ASTG Content Management</h1>

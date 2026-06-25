@@ -61,7 +61,6 @@ export default function ASTGBookmarks() {
 
   return (
     <div className="container py-6 space-y-4">
-      <Helmet><title>My ASTG Bookmarks</title></Helmet>
       <div className="flex flex-col md:flex-row md:items-center gap-3 justify-between">
         <div>
           <h1 className="text-2xl font-semibold flex items-center gap-2"><Bookmark className="h-6 w-6" /> My Bookmarks</h1>

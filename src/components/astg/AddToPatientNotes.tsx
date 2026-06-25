@@ -46,9 +46,9 @@ export default function AddToPatientNotes({ diseaseName, summary }: { diseaseNam
       if ((cur as any)?.id) {
         await supabase.from("consultation_assessments").update({ advice: merged }).eq("id", (cur as any).id);
       } else {
-        await supabase.from("consultation_assessments").insert({
-          appointment_id: selected, doctor_user_id: sess.user?.id, advice: text,
-        });
+        await supabase.from("consultation_assessments").insert([{
+          appointment_id: selected, doctor_user_id: sess.user?.id ?? "", advice: text,
+        }]);
       }
       toast.success("Added to patient notes");
       setOpen(false); setSelected("");
