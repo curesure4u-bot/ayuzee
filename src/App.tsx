@@ -511,7 +511,7 @@ const App = () => (
               <Route path="master-management/areas" element={<AreaMaster />} />
               <Route path="pharmacy-orders" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />} />
               <Route path="ip-admissions" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />} />
-              <Route path="ward-status" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Ward Status" />} />
+              <Route path="ward-status" element={<WardMaster />} />
             </Route>
 
             <Route path="/diagnosis" element={<Diagnosis />} />
