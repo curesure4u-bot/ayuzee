@@ -53,6 +53,7 @@ export default function ASTGDiseaseDetail() {
   const { categoryKey = "", diseaseKey = "" } = useParams();
   const navigate = useNavigate();
   const [bookmarked, setBookmarked] = useState(() => isBookmarked(diseaseKey));
+  const [handoutOpen, setHandoutOpen] = useState(false);
 
   const match = useMemo(
     () => findDisease(categoryKey, diseaseKey),
