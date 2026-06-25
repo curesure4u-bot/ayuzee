@@ -38,6 +38,7 @@ import {
   type DoshaFilter,
   type LevelFilter,
 } from "@/lib/astg-search";
+import ASTGClinicalAssistant from "@/components/astg/ASTGClinicalAssistant";
 
 const DOSHAS: { value: DoshaFilter; label: string }[] = [
   { value: "all", label: "All" },
@@ -547,6 +548,9 @@ export default function ASTGReference() {
       >
         <Search className="h-5 w-5" />
       </Button>
+
+      <ASTGClinicalAssistant variant="floating" />
+
 
       <Dialog open={quickOpen} onOpenChange={setQuickOpen}>
         <DialogContent className="p-0 sm:max-w-lg">
