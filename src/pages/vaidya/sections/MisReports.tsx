@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { Card } from "@/components/ui/card";
@@ -76,13 +76,16 @@ function download(filename: string, content: string, mime: string) {
 
 const MisReports = () => {
   const navigate = useNavigate();
+  const [sp] = useSearchParams();
   const { userId, doctor } = useDoctor();
-  const [preset, setPreset] = useState<Preset>("30");
-  const [from, setFrom] = useState(rangeFromPreset("30").from);
-  const [to, setTo] = useState(rangeFromPreset("30").to);
-  const [reportType, setReportType] = useState<ReportType>("summary");
-  const [paymentMode, setPaymentMode] = useState<string>("all");
-  const [billType, setBillType] = useState<string>("all");
+  const initialPreset = (sp.get("preset") as Preset) || "30";
+  const initialRange = rangeFromPreset(initialPreset);
+  const [preset, setPreset] = useState<Preset>(initialPreset);
+  const [from, setFrom] = useState(sp.get("from") || initialRange.from);
+  const [to, setTo] = useState(sp.get("to") || initialRange.to);
+  const [reportType, setReportType] = useState<ReportType>((sp.get("report") as ReportType) || "summary");
+  const [paymentMode, setPaymentMode] = useState<string>(sp.get("paymentMode") || "all");
+  const [billType, setBillType] = useState<string>(sp.get("billType") || "all");
   const [loading, setLoading] = useState(true);
 
   const [bills, setBills] = useState<any[]>([]);
@@ -472,7 +475,10 @@ const MisReports = () => {
                   </thead>
                   <tbody>
                     {exportRows.slice(0, 50).map((r, i) => {
-                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}` : null;
+                      const filterQS = new URLSearchParams({
+                        preset, from, to, report: reportType, billType, paymentMode,
+                      }).toString();
+                      const drillTo = r._drill ? `/vaidya/mis/drill/${r._drill}?${filterQS}` : null;
                       return (
                         <tr
                           key={i}
