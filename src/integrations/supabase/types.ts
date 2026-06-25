@@ -12698,6 +12698,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      hms_increment_suggestion_usage: {
+        Args: { _id: string }
+        Returns: undefined
+      }
       homeo_repertorize: {
         Args: { _symptom_ids: string[] }
         Returns: {
