@@ -1,7 +1,7 @@
 // Settle a completed therapy session: credit therapist wallet, log venue revenue,
 // credit doctor referral, then mark payment_status = 'settled'. Idempotent.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.103.0";
-import { requireUser, requireInternalSecret } from "../_shared/auth.ts";
+import { requireInternalSecret } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -27,15 +27,11 @@ type SessionRow = {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  // Internal callers (cron/triggers) use INTERNAL_WEBHOOK_SECRET; UI callers
-  // must present a valid user JWT.
-  if (req.headers.get("x-internal-secret")) {
-    const secretCheck = requireInternalSecret(req);
-    if (secretCheck) return secretCheck;
-  } else {
-    const authResult = await requireUser(req);
-    if (authResult instanceof Response) return authResult;
-  }
+  // Internal-only: settlement credits real money to wallets and must only be
+  // triggered by trusted server-side callers (cron, triggers, admin tooling)
+  // presenting INTERNAL_WEBHOOK_SECRET. No end-user JWT path is accepted.
+  const secretCheck = requireInternalSecret(req);
+  if (secretCheck) return secretCheck;
 
   try {
     const { session_id } = await req.json().catch(() => ({}));

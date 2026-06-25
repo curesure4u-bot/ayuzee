@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { requireUser, requireInternalSecret } from "../_shared/auth.ts";
 
 const cors = {
@@ -10,14 +11,31 @@ const cors = {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
-  // Allow either a logged-in user (called from the app) OR a trusted internal
-  // caller passing INTERNAL_WEBHOOK_SECRET (server-to-server invocations).
+  // Allow either a trusted internal caller (server-to-server with INTERNAL_WEBHOOK_SECRET)
+  // OR an authenticated doctor/admin from the app. Patients/students cannot send.
   if (req.headers.get("x-internal-secret")) {
     const secretCheck = requireInternalSecret(req);
     if (secretCheck) return secretCheck;
   } else {
     const authResult = await requireUser(req);
     if (authResult instanceof Response) return authResult;
+    const { userId } = authResult;
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: req.headers.get("Authorization")! } } },
+    );
+    const [{ data: isDoctor }, { data: isAdmin }, { data: isSuper }] = await Promise.all([
+      authClient.rpc("has_role", { _user_id: userId, _role: "doctor" }),
+      authClient.rpc("has_role", { _user_id: userId, _role: "admin" }),
+      authClient.rpc("has_role", { _user_id: userId, _role: "super_admin" }),
+    ]);
+    if (!isDoctor && !isAdmin && !isSuper) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden — doctor or admin role required" }),
+        { status: 403, headers: { ...cors, "Content-Type": "application/json" } },
+      );
+    }
   }
 
   try {
