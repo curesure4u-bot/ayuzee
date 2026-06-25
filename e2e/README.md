@@ -15,6 +15,7 @@ Required env vars (load with `set -a; source .env.e2e; set +a` before running):
 | `E2E_PATIENT_EMAIL` / `E2E_PATIENT_PASSWORD` | Existing confirmed patient account. |
 | `E2E_DOCTOR_EMAIL` / `E2E_DOCTOR_PASSWORD` | Existing confirmed doctor account. |
 | `E2E_NEW_SIGNUP_EMAIL` | Optional. Random throwaway address used by the signup spec. |
+| `E2E_SUPABASE_URL` / `E2E_SUPABASE_ANON_KEY` | Backend REST endpoint + anon key (used by the suggestion-autocomplete spec to verify `hms_suggestions.usage_count` increments). |
 
 Razorpay **must be in TEST mode**. The checkout spec uses:
 
