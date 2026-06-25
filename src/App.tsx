@@ -118,6 +118,9 @@ import AdminPayouts from "./pages/admin/Payouts.tsx";
 import AdminBlogs from "./pages/admin/AdminBlogs.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import AdminTeam from "./pages/admin/AdminTeam.tsx";
+import AdminHmsAccess from "./pages/admin/AdminHmsAccess.tsx";
+import HmsUltraDashboard from "./pages/vaidya/hms/HmsUltraDashboard.tsx";
+
 import Diagnosis from "./pages/Diagnosis.tsx";
 import PrakritiIntro from "./pages/diagnosis/PrakritiIntro.tsx";
 import PrakritiRun from "./pages/diagnosis/PrakritiRun.tsx";
