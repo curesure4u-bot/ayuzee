@@ -144,7 +144,39 @@ const groups = [
   },
 ];
 
+const hmsGroups = [
+  {
+    label: "⚡ HMS Tools Ultra",
+    icon: Zap,
+    items: [
+      { to: "/vaidya/hms", label: "HMS Dashboard", icon: Home },
+      { to: "/vaidya/reception", label: "OPD Queue", icon: Activity },
+      { to: "/vaidya/patients", label: "Patients", icon: Users },
+      { to: "/vaidya/consultations", label: "Consultations", icon: ClipboardList },
+      { to: "/vaidya/bills", label: "Billing", icon: ReceiptText },
+      { to: "/vaidya/analytics", label: "MIS Reports", icon: BarChart3 },
+      { to: "/vaidya/panchakarma", label: "Panchakarma", icon: Flower2 },
+      { to: "/vaidya/yoga", label: "Yoga", icon: Flower2 },
+      { to: "/vaidya/inventory", label: "Inventory", icon: Pill },
+      { to: "/vaidya/follow-up", label: "Follow-ups", icon: CalendarClock },
+    ],
+  },
+  {
+    label: "HMS Admin",
+    icon: BarChart3,
+    items: [
+      { to: "/vaidya/analytics?tab=attendance", label: "Attendance", icon: Clock },
+      { to: "/vaidya/analytics?tab=expenses", label: "Expenses", icon: Banknote },
+      { to: "/vaidya/analytics?tab=assets", label: "Assets", icon: Building2 },
+      { to: "/vaidya/analytics?tab=tasks", label: "Tasks", icon: CheckSquare },
+      { to: "/vaidya/analytics?tab=reminders", label: "Reminders", icon: Bell },
+      { to: "/vaidya/analytics?tab=vaccination", label: "Vaccination", icon: Syringe },
+    ],
+  },
+];
+
 const VaidyaLayout = () => {
+
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
 
