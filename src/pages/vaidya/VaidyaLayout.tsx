@@ -267,11 +267,17 @@ const VaidyaLayout = () => {
 
       <div className="flex-1 flex flex-col">
         <header className="h-16 flex items-center justify-between border-b border-border bg-card px-4">
-          <p className="font-display text-lg font-semibold">Ayush HMS Tool</p>
+          <div className="flex items-center gap-2">
+            <p className="font-display text-lg font-semibold">Ayush HMS Tool</p>
+            {hasAccess && (
+              <Badge className="bg-primary/10 text-primary border-primary/30">⚡ HMS Tools Ultra</Badge>
+            )}
+          </div>
           <Button variant="outline" size="sm" onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" /> Sign out
           </Button>
         </header>
+
         <main className="flex-1 p-4 md:p-6">
           <Outlet />
         </main>
