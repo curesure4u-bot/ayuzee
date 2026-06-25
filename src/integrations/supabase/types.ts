@@ -4504,6 +4504,50 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_bill_series: {
+        Row: {
+          branch_id: string | null
+          created_at: string
+          current_number: number
+          financial_year_start: string | null
+          id: string
+          is_active: boolean
+          prefix: string
+          reset_on_financial_year: boolean
+          series_name: string
+        }
+        Insert: {
+          branch_id?: string | null
+          created_at?: string
+          current_number?: number
+          financial_year_start?: string | null
+          id?: string
+          is_active?: boolean
+          prefix: string
+          reset_on_financial_year?: boolean
+          series_name: string
+        }
+        Update: {
+          branch_id?: string | null
+          created_at?: string
+          current_number?: number
+          financial_year_start?: string | null
+          id?: string
+          is_active?: boolean
+          prefix?: string
+          reset_on_financial_year?: boolean
+          series_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_bill_series_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hms_branches: {
         Row: {
           address: string | null
@@ -4635,6 +4679,295 @@ export type Database = {
           },
         ]
       }
+      hms_discount_categories: {
+        Row: {
+          approval_threshold_percent: number
+          category_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          max_discount_percent: number
+          requires_approval: boolean
+        }
+        Insert: {
+          approval_threshold_percent?: number
+          category_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          max_discount_percent?: number
+          requires_approval?: boolean
+        }
+        Update: {
+          approval_threshold_percent?: number
+          category_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          max_discount_percent?: number
+          requires_approval?: boolean
+        }
+        Relationships: []
+      }
+      hms_discount_remarks: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          remark_text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          remark_text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          remark_text?: string
+        }
+        Relationships: []
+      }
+      hms_expense_categories: {
+        Row: {
+          category_code: string | null
+          category_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          parent_category_id: string | null
+        }
+        Insert: {
+          category_code?: string | null
+          category_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          parent_category_id?: string | null
+        }
+        Update: {
+          category_code?: string | null
+          category_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          parent_category_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_expense_categories_parent_category_id_fkey"
+            columns: ["parent_category_id"]
+            isOneToOne: false
+            referencedRelation: "hms_expense_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_insurance_partners: {
+        Row: {
+          address: string | null
+          contact_person: string | null
+          created_at: string
+          credit_days: number
+          credit_limit: number
+          email: string | null
+          empanelment_date: string | null
+          empanelment_no: string | null
+          id: string
+          is_active: boolean
+          partner_name: string
+          partner_type: string
+          phone: string | null
+          rate_plan_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          contact_person?: string | null
+          created_at?: string
+          credit_days?: number
+          credit_limit?: number
+          email?: string | null
+          empanelment_date?: string | null
+          empanelment_no?: string | null
+          id?: string
+          is_active?: boolean
+          partner_name: string
+          partner_type: string
+          phone?: string | null
+          rate_plan_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          contact_person?: string | null
+          created_at?: string
+          credit_days?: number
+          credit_limit?: number
+          email?: string | null
+          empanelment_date?: string | null
+          empanelment_no?: string | null
+          id?: string
+          is_active?: boolean
+          partner_name?: string
+          partner_type?: string
+          phone?: string | null
+          rate_plan_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_insurance_partners_rate_plan_id_fkey"
+            columns: ["rate_plan_id"]
+            isOneToOne: false
+            referencedRelation: "hms_rate_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_ip_admission_types: {
+        Row: {
+          admission_type_name: string
+          category: string
+          created_at: string
+          default_duration_days: number
+          default_ward_type: string | null
+          deposit_amount: number
+          id: string
+          is_active: boolean
+          notes: string | null
+          requires_deposit: boolean
+        }
+        Insert: {
+          admission_type_name: string
+          category: string
+          created_at?: string
+          default_duration_days?: number
+          default_ward_type?: string | null
+          deposit_amount?: number
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          requires_deposit?: boolean
+        }
+        Update: {
+          admission_type_name?: string
+          category?: string
+          created_at?: string
+          default_duration_days?: number
+          default_ward_type?: string | null
+          deposit_amount?: number
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          requires_deposit?: boolean
+        }
+        Relationships: []
+      }
+      hms_ip_admissions: {
+        Row: {
+          actual_discharge: string | null
+          admission_date: string
+          admission_reason: string | null
+          admission_type_id: string | null
+          admitting_doctor_name: string | null
+          bed_id: string | null
+          branch_id: string | null
+          created_at: string
+          deposit_collected: number
+          diagnosis_at_admission: string | null
+          discharge_notes: string | null
+          doctor_user_id: string
+          expected_discharge: string | null
+          id: string
+          patient_id: string | null
+          patient_name: string
+          patient_phone: string | null
+          status: string
+          treating_doctor_name: string | null
+          ward_id: string | null
+        }
+        Insert: {
+          actual_discharge?: string | null
+          admission_date?: string
+          admission_reason?: string | null
+          admission_type_id?: string | null
+          admitting_doctor_name?: string | null
+          bed_id?: string | null
+          branch_id?: string | null
+          created_at?: string
+          deposit_collected?: number
+          diagnosis_at_admission?: string | null
+          discharge_notes?: string | null
+          doctor_user_id?: string
+          expected_discharge?: string | null
+          id?: string
+          patient_id?: string | null
+          patient_name: string
+          patient_phone?: string | null
+          status?: string
+          treating_doctor_name?: string | null
+          ward_id?: string | null
+        }
+        Update: {
+          actual_discharge?: string | null
+          admission_date?: string
+          admission_reason?: string | null
+          admission_type_id?: string | null
+          admitting_doctor_name?: string | null
+          bed_id?: string | null
+          branch_id?: string | null
+          created_at?: string
+          deposit_collected?: number
+          diagnosis_at_admission?: string | null
+          discharge_notes?: string | null
+          doctor_user_id?: string
+          expected_discharge?: string | null
+          id?: string
+          patient_id?: string | null
+          patient_name?: string
+          patient_phone?: string | null
+          status?: string
+          treating_doctor_name?: string | null
+          ward_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_ip_admissions_admission_type_id_fkey"
+            columns: ["admission_type_id"]
+            isOneToOne: false
+            referencedRelation: "hms_ip_admission_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hms_ip_admissions_bed_id_fkey"
+            columns: ["bed_id"]
+            isOneToOne: false
+            referencedRelation: "hms_ward_beds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hms_ip_admissions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hms_ip_admissions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "vaidya_patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hms_ip_admissions_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "hms_wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hms_labels: {
         Row: {
           color_hex: string
@@ -4662,6 +4995,39 @@ export type Database = {
           is_active?: boolean
           label_name?: string
           label_type?: string
+        }
+        Relationships: []
+      }
+      hms_membership_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          discount_percent: number
+          id: string
+          is_active: boolean
+          plan_name: string
+          price: number
+          validity_days: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          plan_name: string
+          price?: number
+          validity_days?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          plan_name?: string
+          price?: number
+          validity_days?: number
         }
         Relationships: []
       }
@@ -4710,6 +5076,221 @@ export type Database = {
           savings_amount?: number | null
           total_sessions?: number | null
           validity_days?: number | null
+        }
+        Relationships: []
+      }
+      hms_patient_sources: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          source_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          source_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          source_name?: string
+        }
+        Relationships: []
+      }
+      hms_payment_types: {
+        Row: {
+          created_at: string
+          gateway: string
+          id: string
+          is_active: boolean
+          is_online: boolean
+          payment_type_code: string | null
+          payment_type_name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          gateway?: string
+          id?: string
+          is_active?: boolean
+          is_online?: boolean
+          payment_type_code?: string | null
+          payment_type_name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          gateway?: string
+          id?: string
+          is_active?: boolean
+          is_online?: boolean
+          payment_type_code?: string | null
+          payment_type_name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      hms_rate_plan_items: {
+        Row: {
+          created_at: string
+          custom_price: number
+          id: string
+          item_id: string | null
+          item_name: string
+          item_type: string
+          rate_plan_id: string
+        }
+        Insert: {
+          created_at?: string
+          custom_price?: number
+          id?: string
+          item_id?: string | null
+          item_name: string
+          item_type: string
+          rate_plan_id: string
+        }
+        Update: {
+          created_at?: string
+          custom_price?: number
+          id?: string
+          item_id?: string | null
+          item_name?: string
+          item_type?: string
+          rate_plan_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_rate_plan_items_rate_plan_id_fkey"
+            columns: ["rate_plan_id"]
+            isOneToOne: false
+            referencedRelation: "hms_rate_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_rate_plans: {
+        Row: {
+          applicable_to: string
+          created_at: string
+          description: string | null
+          discount_percent: number
+          id: string
+          is_active: boolean
+          is_default: boolean
+          plan_name: string
+          plan_type: string
+          updated_at: string
+        }
+        Insert: {
+          applicable_to?: string
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          plan_name: string
+          plan_type: string
+          updated_at?: string
+        }
+        Update: {
+          applicable_to?: string
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          plan_name?: string
+          plan_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hms_service_areas: {
+        Row: {
+          area_name: string
+          city: string | null
+          created_at: string
+          district: string | null
+          id: string
+          is_active: boolean
+          pincode: string | null
+          state: string
+          zone: string | null
+        }
+        Insert: {
+          area_name: string
+          city?: string | null
+          created_at?: string
+          district?: string | null
+          id?: string
+          is_active?: boolean
+          pincode?: string | null
+          state?: string
+          zone?: string | null
+        }
+        Update: {
+          area_name?: string
+          city?: string | null
+          created_at?: string
+          district?: string | null
+          id?: string
+          is_active?: boolean
+          pincode?: string | null
+          state?: string
+          zone?: string | null
+        }
+        Relationships: []
+      }
+      hms_settlement_rules: {
+        Row: {
+          contact_email: string | null
+          contact_person: string | null
+          contact_phone: string | null
+          created_at: string
+          credit_period_days: number
+          discount_percent: number
+          id: string
+          is_active: boolean
+          notes: string | null
+          partner_name: string | null
+          rule_name: string
+          settlement_day_of_month: number
+          settlement_type: string
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_person?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          credit_period_days?: number
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          partner_name?: string | null
+          rule_name: string
+          settlement_day_of_month?: number
+          settlement_type: string
+        }
+        Update: {
+          contact_email?: string | null
+          contact_person?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          credit_period_days?: number
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          partner_name?: string | null
+          rule_name?: string
+          settlement_day_of_month?: number
+          settlement_type?: string
         }
         Relationships: []
       }
@@ -4796,6 +5377,45 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_tax_slabs: {
+        Row: {
+          applicable_to: string
+          created_at: string
+          hsn_code_range: string | null
+          id: string
+          is_active: boolean
+          is_default_for_medicines: boolean
+          is_default_for_services: boolean
+          tax_name: string
+          tax_rate: number
+          tax_type: string
+        }
+        Insert: {
+          applicable_to: string
+          created_at?: string
+          hsn_code_range?: string | null
+          id?: string
+          is_active?: boolean
+          is_default_for_medicines?: boolean
+          is_default_for_services?: boolean
+          tax_name: string
+          tax_rate?: number
+          tax_type: string
+        }
+        Update: {
+          applicable_to?: string
+          created_at?: string
+          hsn_code_range?: string | null
+          id?: string
+          is_active?: boolean
+          is_default_for_medicines?: boolean
+          is_default_for_services?: boolean
+          tax_name?: string
+          tax_rate?: number
+          tax_type?: string
+        }
+        Relationships: []
+      }
       hms_trusted_ips: {
         Row: {
           added_by: string | null
@@ -4830,6 +5450,97 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "hms_trusted_ips_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_ward_beds: {
+        Row: {
+          bed_number: string
+          bed_type: string
+          created_at: string
+          current_patient_id: string | null
+          current_patient_name: string | null
+          daily_charge_override: number | null
+          id: string
+          is_active: boolean
+          status: string
+          ward_id: string
+        }
+        Insert: {
+          bed_number: string
+          bed_type?: string
+          created_at?: string
+          current_patient_id?: string | null
+          current_patient_name?: string | null
+          daily_charge_override?: number | null
+          id?: string
+          is_active?: boolean
+          status?: string
+          ward_id: string
+        }
+        Update: {
+          bed_number?: string
+          bed_type?: string
+          created_at?: string
+          current_patient_id?: string | null
+          current_patient_name?: string | null
+          daily_charge_override?: number | null
+          id?: string
+          is_active?: boolean
+          status?: string
+          ward_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_ward_beds_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "hms_wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_wards: {
+        Row: {
+          branch_id: string | null
+          created_at: string
+          daily_charge: number
+          floor: string | null
+          id: string
+          is_active: boolean
+          total_beds: number
+          ward_name: string
+          ward_type: string
+        }
+        Insert: {
+          branch_id?: string | null
+          created_at?: string
+          daily_charge?: number
+          floor?: string | null
+          id?: string
+          is_active?: boolean
+          total_beds?: number
+          ward_name: string
+          ward_type: string
+        }
+        Update: {
+          branch_id?: string | null
+          created_at?: string
+          daily_charge?: number
+          floor?: string | null
+          id?: string
+          is_active?: boolean
+          total_beds?: number
+          ward_name?: string
+          ward_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_wards_branch_id_fkey"
             columns: ["branch_id"]
             isOneToOne: false
             referencedRelation: "hms_branches"
@@ -10283,6 +10994,59 @@ export type Database = {
         }
         Relationships: []
       }
+      vaidya_assets: {
+        Row: {
+          asset_name: string
+          branch_id: string | null
+          category: string | null
+          condition: string | null
+          created_at: string
+          doctor_user_id: string
+          id: string
+          notes: string | null
+          purchase_date: string | null
+          purchase_price: number | null
+          vendor: string | null
+          warranty_until: string | null
+        }
+        Insert: {
+          asset_name: string
+          branch_id?: string | null
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          vendor?: string | null
+          warranty_until?: string | null
+        }
+        Update: {
+          asset_name?: string
+          branch_id?: string | null
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          vendor?: string | null
+          warranty_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_assets_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vaidya_bill_items: {
         Row: {
           bill_id: string
@@ -10337,12 +11101,16 @@ export type Database = {
         Row: {
           bill_date: string
           bill_no: string | null
+          bill_series_id: string | null
           bill_type: string
           cgst_amount: number
           clinic_address: string | null
           clinic_name: string | null
           created_at: string
+          currency_amount: number | null
+          currency_code: string | null
           discount: number
+          discount_category_id: string | null
           doctor_user_id: string
           gst_amount: number
           gst_rate: number
@@ -10357,6 +11125,7 @@ export type Database = {
           patient_phone: string | null
           payment_mode: string | null
           payment_reference: string | null
+          rate_plan_id: string | null
           sgst_amount: number
           status: string
           subtotal: number
@@ -10367,12 +11136,16 @@ export type Database = {
         Insert: {
           bill_date?: string
           bill_no?: string | null
+          bill_series_id?: string | null
           bill_type?: string
           cgst_amount?: number
           clinic_address?: string | null
           clinic_name?: string | null
           created_at?: string
+          currency_amount?: number | null
+          currency_code?: string | null
           discount?: number
+          discount_category_id?: string | null
           doctor_user_id: string
           gst_amount?: number
           gst_rate?: number
@@ -10387,6 +11160,7 @@ export type Database = {
           patient_phone?: string | null
           payment_mode?: string | null
           payment_reference?: string | null
+          rate_plan_id?: string | null
           sgst_amount?: number
           status?: string
           subtotal?: number
@@ -10397,12 +11171,16 @@ export type Database = {
         Update: {
           bill_date?: string
           bill_no?: string | null
+          bill_series_id?: string | null
           bill_type?: string
           cgst_amount?: number
           clinic_address?: string | null
           clinic_name?: string | null
           created_at?: string
+          currency_amount?: number | null
+          currency_code?: string | null
           discount?: number
+          discount_category_id?: string | null
           doctor_user_id?: string
           gst_amount?: number
           gst_rate?: number
@@ -10417,6 +11195,7 @@ export type Database = {
           patient_phone?: string | null
           payment_mode?: string | null
           payment_reference?: string | null
+          rate_plan_id?: string | null
           sgst_amount?: number
           status?: string
           subtotal?: number
@@ -10424,7 +11203,29 @@ export type Database = {
           updated_at?: string
           whatsapp_sent_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_bills_bill_series_id_fkey"
+            columns: ["bill_series_id"]
+            isOneToOne: false
+            referencedRelation: "hms_bill_series"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaidya_bills_discount_category_id_fkey"
+            columns: ["discount_category_id"]
+            isOneToOne: false
+            referencedRelation: "hms_discount_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaidya_bills_rate_plan_id_fkey"
+            columns: ["rate_plan_id"]
+            isOneToOne: false
+            referencedRelation: "hms_rate_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaidya_consultations: {
         Row: {
@@ -11002,8 +11803,13 @@ export type Database = {
           full_name: string
           gender: string | null
           id: string
+          id_proof_number: string | null
+          id_proof_type: string | null
+          membership_plan_id: string | null
           notes: string | null
+          patient_labels: string[] | null
           phone: string | null
+          source_id: string | null
           updated_at: string
         }
         Insert: {
@@ -11014,8 +11820,13 @@ export type Database = {
           full_name: string
           gender?: string | null
           id?: string
+          id_proof_number?: string | null
+          id_proof_type?: string | null
+          membership_plan_id?: string | null
           notes?: string | null
+          patient_labels?: string[] | null
           phone?: string | null
+          source_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -11026,11 +11837,31 @@ export type Database = {
           full_name?: string
           gender?: string | null
           id?: string
+          id_proof_number?: string | null
+          id_proof_type?: string | null
+          membership_plan_id?: string | null
           notes?: string | null
+          patient_labels?: string[] | null
           phone?: string | null
+          source_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_patients_membership_plan_id_fkey"
+            columns: ["membership_plan_id"]
+            isOneToOne: false
+            referencedRelation: "hms_membership_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaidya_patients_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "hms_patient_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaidya_posture_assessments: {
         Row: {
@@ -11232,6 +12063,203 @@ export type Database = {
           updated_at?: string
           vaidya_patient_id?: string | null
           visit_type?: string
+        }
+        Relationships: []
+      }
+      vaidya_reminders: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          message: string | null
+          patient_name: string | null
+          phone: string | null
+          reminder_date: string
+          reminder_type: string | null
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          message?: string | null
+          patient_name?: string | null
+          phone?: string | null
+          reminder_date?: string
+          reminder_type?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          message?: string | null
+          patient_name?: string | null
+          phone?: string | null
+          reminder_date?: string
+          reminder_type?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      vaidya_staff_attendance: {
+        Row: {
+          attendance_date: string
+          branch_id: string | null
+          check_in_time: string | null
+          check_out_time: string | null
+          created_at: string
+          doctor_user_id: string
+          id: string
+          notes: string | null
+          staff_name: string
+          staff_role: string | null
+          status: string
+        }
+        Insert: {
+          attendance_date?: string
+          branch_id?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          staff_name: string
+          staff_role?: string | null
+          status?: string
+        }
+        Update: {
+          attendance_date?: string
+          branch_id?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          notes?: string | null
+          staff_name?: string
+          staff_role?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_staff_attendance_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vaidya_tasks: {
+        Row: {
+          assigned_to_name: string | null
+          created_at: string
+          doctor_user_id: string
+          due_date: string | null
+          id: string
+          priority: string
+          status: string
+          title: string
+        }
+        Insert: {
+          assigned_to_name?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          due_date?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          assigned_to_name?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          due_date?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      vaidya_vaccinations: {
+        Row: {
+          batch_no: string | null
+          created_at: string
+          doctor_user_id: string
+          dose_number: number
+          id: string
+          next_due_date: string | null
+          notes: string | null
+          patient_name: string | null
+          phone: string | null
+          vaccination_date: string | null
+          vaccine_name: string
+        }
+        Insert: {
+          batch_no?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          dose_number?: number
+          id?: string
+          next_due_date?: string | null
+          notes?: string | null
+          patient_name?: string | null
+          phone?: string | null
+          vaccination_date?: string | null
+          vaccine_name: string
+        }
+        Update: {
+          batch_no?: string | null
+          created_at?: string
+          doctor_user_id?: string
+          dose_number?: number
+          id?: string
+          next_due_date?: string | null
+          notes?: string | null
+          patient_name?: string | null
+          phone?: string | null
+          vaccination_date?: string | null
+          vaccine_name?: string
+        }
+        Relationships: []
+      }
+      vaidya_whatsapp_log: {
+        Row: {
+          created_at: string
+          doctor_user_id: string
+          id: string
+          message_preview: string | null
+          patient_phone: string | null
+          sent_at: string
+          status: string
+          template_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          message_preview?: string | null
+          patient_phone?: string | null
+          sent_at?: string
+          status?: string
+          template_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          doctor_user_id?: string
+          id?: string
+          message_preview?: string | null
+          patient_phone?: string | null
+          sent_at?: string
+          status?: string
+          template_name?: string | null
         }
         Relationships: []
       }
