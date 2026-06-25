@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { login, randomEmail, requireEnv } from "./helpers/auth";
+import { login, randomEmail, requireEnv, skipIfMissingEnv } from "./helpers/auth";
 
 test.describe("Authentication", () => {
   test("signup creates a new patient account", async ({ page }) => {
