@@ -19,6 +19,7 @@ import {
   startAyuzeePdf, addTitle, addPlainTable, addSectionTable, addParagraph,
   finalizeAyuzeePdf, safeFileName,
 } from "@/lib/pdf/ayuzeePdf";
+import SuggestionField from "@/components/hms/SuggestionField";
 
 const LANGS = [
   { v: "en", l: "English" }, { v: "hi", l: "Hindi" }, { v: "ta", l: "Tamil" },
