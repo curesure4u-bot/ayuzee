@@ -377,6 +377,17 @@ export default function ASTGDiseaseDetail() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <PatientHandoutDialog
+        open={handoutOpen}
+        onOpenChange={setHandoutOpen}
+        categoryKey={category.key}
+        diseaseKey={disease.key}
+        diseaseName={disease.name}
+        diseaseModern={disease.modern}
+        pathya={disease.pathya}
+        apathya={disease.apathya}
+      />
     </div>
   );
 }
