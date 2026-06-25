@@ -1,27 +1,27 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 
-// ---- Mock supabase client BEFORE importing the component ----
-const rpcMock = vi.fn().mockResolvedValue({ data: null, error: null });
+
 const suggestions = [
   { id: "s1", suggestion_text: "Back pain", short_code: "bkp", suggestion_type: "chief_complaint", usage_count: 10 },
   { id: "s2", suggestion_text: "Headache", short_code: "hd", suggestion_type: "chief_complaint", usage_count: 5 },
   { id: "s3", suggestion_text: "Fever", short_code: "fv", suggestion_type: "chief_complaint", usage_count: 2 },
 ];
 
-const builder = () => {
-  const b: any = {};
-  ["select", "eq", "order", "limit"].forEach((k) => (b[k] = vi.fn().mockReturnValue(b)));
-  b.then = (resolve: any) => Promise.resolve({ data: suggestions }).then(resolve);
-  return b;
-};
+vi.mock("@/integrations/supabase/client", () => {
+  const builder: any = {};
+  ["select", "eq", "order", "limit"].forEach((k) => (builder[k] = vi.fn().mockReturnValue(builder)));
+  builder.then = (resolve: any) => Promise.resolve({ data: suggestions }).then(resolve);
+  return {
+    supabase: {
+      from: vi.fn(() => builder),
+      rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    },
+  };
+});
 
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: {
-    from: vi.fn(() => builder()),
-    rpc: rpcMock,
-  },
-}));
+import { supabase } from "@/integrations/supabase/client";
+const rpcMock = supabase.rpc as unknown as ReturnType<typeof vi.fn>;
 
 // Import AFTER mock
 import SuggestionField, { invalidateSuggestionCache } from "@/components/hms/SuggestionField";
