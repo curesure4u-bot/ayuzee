@@ -40,16 +40,33 @@ import {
 import { findDisease } from "@/data/astg";
 import { exportDiseasePDF } from "@/lib/astg-search";
 import ASTGClinicalAssistant from "@/components/astg/ASTGClinicalAssistant";
+import AddToPatientNotes from "@/components/astg/AddToPatientNotes";
+import { pushRecent, cacheProtocol } from "@/lib/astg-history";
+import { toggleBookmark as toggleBookmarkLS, isBookmarked } from "./ASTGBookmarks";
+import { useEffect as useEffectReact } from "react";
 
 export default function ASTGDiseaseDetail() {
   const { categoryKey = "", diseaseKey = "" } = useParams();
   const navigate = useNavigate();
-  const [bookmarked, setBookmarked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(() => isBookmarked(diseaseKey));
 
   const match = useMemo(
     () => findDisease(categoryKey, diseaseKey),
     [categoryKey, diseaseKey],
   );
+
+  useEffectReact(() => {
+    if (match) {
+      pushRecent({
+        categoryKey: match.category.key,
+        diseaseKey: match.disease.key,
+        name: match.disease.name,
+        modern: match.disease.modern,
+      });
+      cacheProtocol(`${match.category.key}/${match.disease.key}`, match.disease);
+    }
+  }, [match]);
+
 
   if (!match) {
     return (
@@ -96,7 +113,7 @@ export default function ASTGDiseaseDetail() {
             variant="outline"
             size="sm"
             className="gap-2"
-            onClick={() => setBookmarked((v) => !v)}
+            onClick={() => setBookmarked(toggleBookmarkLS(diseaseKey, categoryKey))}
           >
             {bookmarked ? (
               <>
@@ -131,6 +148,10 @@ export default function ASTGDiseaseDetail() {
           <ASTGClinicalAssistant
             variant="inline"
             diseaseContext={`${disease.name} (${disease.modern})`}
+          />
+          <AddToPatientNotes
+            diseaseName={`${disease.name} (${disease.modern})`}
+            summary={`${disease.definition ?? ""}\n\nLakshana: ${(disease.lakshana ?? []).join(", ")}\nPathya: ${disease.pathya ?? "—"}\nApathya: ${disease.apathya ?? "—"}`}
           />
         </div>
       </div>
