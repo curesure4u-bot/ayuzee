@@ -55,7 +55,7 @@ const DepartmentMaster = () => {
       supabase.from("hms_departments").select("*").order("sort_order"),
       supabase.from("hms_branches").select("id, branch_name").order("branch_name"),
     ]);
-    setRows((d.data as Dept[]) || []);
+    setRows(((d.data as any) ?? []) as Dept[]);
     setBranches(((b.data as any) ?? []) as Branch[]);
   };
   useEffect(() => { load(); }, []);

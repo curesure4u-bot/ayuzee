@@ -54,7 +54,7 @@ const StoreMaster = () => {
       supabase.from("hms_stores").select("*").order("store_name"),
       supabase.from("hms_branches").select("id, branch_name").order("branch_name"),
     ]);
-    setRows((s.data as Store[]) || []);
+    setRows(((s.data as any) ?? []) as Store[]);
     setBranches(((b.data as any) ?? []) as Branch[]);
   };
   useEffect(() => { load(); }, []);

@@ -41,7 +41,7 @@ const TrustedIpMaster = () => {
       supabase.from("hms_trusted_ips").select("*").order("created_at", { ascending: false }),
       supabase.from("hms_branches").select("id, branch_name").order("branch_name"),
     ]);
-    setRows((r.data as IP[]) || []);
+    setRows(((r.data as any) ?? []) as IP[]);
     setBranches(((b.data as any) ?? []) as Branch[]);
     setLoading(false);
   };
