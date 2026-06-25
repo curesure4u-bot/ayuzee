@@ -135,6 +135,14 @@ import InsuranceMaster from "./pages/admin/masters/InsuranceMaster.tsx";
 import WardMaster from "./pages/admin/masters/WardMaster.tsx";
 import IpAdmissionMaster from "./pages/admin/masters/IpAdmissionMaster.tsx";
 import AreaMaster from "./pages/admin/masters/AreaMaster.tsx";
+import TemplateMaster from "./pages/admin/masters/TemplateMaster.tsx";
+import WhatsAppMaster from "./pages/admin/masters/WhatsAppMaster.tsx";
+import EmailMaster from "./pages/admin/masters/EmailMaster.tsx";
+import ReportMaster from "./pages/admin/masters/ReportMaster.tsx";
+import TokenDisplayMaster from "./pages/admin/masters/TokenDisplayMaster.tsx";
+import CurrencyMaster from "./pages/admin/masters/CurrencyMaster.tsx";
+import PatientMaster from "./pages/admin/masters/PatientMaster.tsx";
+import QueueDisplayScreen from "./pages/public/QueueDisplayScreen.tsx";
 import HmsUltraDashboard from "./pages/vaidya/hms/HmsUltraDashboard.tsx";
 
 import Diagnosis from "./pages/Diagnosis.tsx";
