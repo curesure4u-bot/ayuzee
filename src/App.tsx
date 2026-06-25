@@ -507,6 +507,8 @@ const App = () => (
             
             <Route path="/vaidya" element={<VaidyaLayout />}>
               <Route index element={<VaidyaHome />} />
+              <Route path="hms" element={<HmsUltraDashboard />} />
+
               <Route path="patients" element={<AllPatients />} />
               <Route path="consultations" element={<Consultations />} />
               <Route path="follow-up" element={<FollowUps />} />
