@@ -127,6 +127,14 @@ import DepartmentMaster from "./pages/admin/masters/DepartmentMaster.tsx";
 import SuggestionMaster from "./pages/admin/masters/SuggestionMaster.tsx";
 import FormMaster from "./pages/admin/masters/FormMaster.tsx";
 import StoreMaster from "./pages/admin/masters/StoreMaster.tsx";
+import RatePlanMaster from "./pages/admin/masters/RatePlanMaster.tsx";
+import TaxMaster from "./pages/admin/masters/TaxMaster.tsx";
+import BillingMaster from "./pages/admin/masters/BillingMaster.tsx";
+import SettlementMaster from "./pages/admin/masters/SettlementMaster.tsx";
+import InsuranceMaster from "./pages/admin/masters/InsuranceMaster.tsx";
+import WardMaster from "./pages/admin/masters/WardMaster.tsx";
+import IpAdmissionMaster from "./pages/admin/masters/IpAdmissionMaster.tsx";
+import AreaMaster from "./pages/admin/masters/AreaMaster.tsx";
 import HmsUltraDashboard from "./pages/vaidya/hms/HmsUltraDashboard.tsx";
 
 import Diagnosis from "./pages/Diagnosis.tsx";
@@ -493,9 +501,17 @@ const App = () => (
               <Route path="master-management/suggestions" element={<SuggestionMaster />} />
               <Route path="master-management/forms" element={<FormMaster />} />
               <Route path="master-management/stores" element={<StoreMaster />} />
+              <Route path="master-management/rate-plans" element={<RatePlanMaster />} />
+              <Route path="master-management/tax" element={<TaxMaster />} />
+              <Route path="master-management/billing" element={<BillingMaster />} />
+              <Route path="master-management/settlement" element={<SettlementMaster />} />
+              <Route path="master-management/insurance" element={<InsuranceMaster />} />
+              <Route path="master-management/wards" element={<WardMaster />} />
+              <Route path="master-management/ip-admission-types" element={<IpAdmissionMaster />} />
+              <Route path="master-management/areas" element={<AreaMaster />} />
               <Route path="pharmacy-orders" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />} />
               <Route path="ip-admissions" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />} />
-              <Route path="ward-status" element={<AdminPlaceholder title="⚡ HMS Tools Ultra — Ward Status" />} />
+              <Route path="ward-status" element={<WardMaster />} />
             </Route>
 
             <Route path="/diagnosis" element={<Diagnosis />} />
