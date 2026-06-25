@@ -4602,6 +4602,42 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_currencies: {
+        Row: {
+          created_at: string | null
+          currency_code: string
+          currency_name: string
+          exchange_rate_to_inr: number | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          symbol: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          currency_code: string
+          currency_name: string
+          exchange_rate_to_inr?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          symbol?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          currency_code?: string
+          currency_name?: string
+          exchange_rate_to_inr?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          symbol?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       hms_custom_forms: {
         Row: {
           created_at: string
@@ -4730,6 +4766,90 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_document_templates: {
+        Row: {
+          ayush_system: string | null
+          content_html: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          language: string | null
+          placeholders_list: Json | null
+          template_name: string
+          template_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          ayush_system?: string | null
+          content_html?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          language?: string | null
+          placeholders_list?: Json | null
+          template_name: string
+          template_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          ayush_system?: string | null
+          content_html?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          language?: string | null
+          placeholders_list?: Json | null
+          template_name?: string
+          template_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hms_email_templates: {
+        Row: {
+          body_html: string | null
+          cc_emails: string[] | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          recipient_type: string | null
+          subject_line: string | null
+          template_code: string
+          template_name: string
+          trigger_event: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          body_html?: string | null
+          cc_emails?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          recipient_type?: string | null
+          subject_line?: string | null
+          template_code: string
+          template_name: string
+          trigger_event?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          body_html?: string | null
+          cc_emails?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          recipient_type?: string | null
+          subject_line?: string | null
+          template_code?: string
+          template_name?: string
+          trigger_event?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       hms_expense_categories: {
         Row: {
           category_code: string | null
@@ -4764,6 +4884,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hms_id_proof_types: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          proof_name: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          proof_name: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          proof_name?: string
+          sort_order?: number | null
+        }
+        Relationships: []
       }
       hms_insurance_partners: {
         Row: {
@@ -5210,6 +5354,88 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_report_configs: {
+        Row: {
+          branch_id: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_sent_at: string | null
+          recipient_emails: string[] | null
+          report_types: Json | null
+          send_time: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          branch_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sent_at?: string | null
+          recipient_emails?: string[] | null
+          report_types?: Json | null
+          send_time?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          branch_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sent_at?: string | null
+          recipient_emails?: string[] | null
+          report_types?: Json | null
+          send_time?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_report_configs_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_report_logs: {
+        Row: {
+          branch_id: string | null
+          created_at: string | null
+          error_msg: string | null
+          id: string
+          recipient_emails: string[] | null
+          sent_at: string | null
+          status: string | null
+        }
+        Insert: {
+          branch_id?: string | null
+          created_at?: string | null
+          error_msg?: string | null
+          id?: string
+          recipient_emails?: string[] | null
+          sent_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          branch_id?: string | null
+          created_at?: string | null
+          error_msg?: string | null
+          id?: string
+          recipient_emails?: string[] | null
+          sent_at?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_report_logs_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hms_service_areas: {
         Row: {
           area_name: string
@@ -5416,6 +5642,68 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_token_display_config: {
+        Row: {
+          accent_color: string | null
+          announcement_text: string | null
+          background_color: string | null
+          branch_id: string | null
+          clinic_logo_url: string | null
+          clinic_name_display: string | null
+          created_at: string | null
+          display_title: string | null
+          font_size_token: string | null
+          id: string
+          is_active: boolean | null
+          show_doctor_name: boolean | null
+          show_waiting_count: boolean | null
+          text_color: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          accent_color?: string | null
+          announcement_text?: string | null
+          background_color?: string | null
+          branch_id?: string | null
+          clinic_logo_url?: string | null
+          clinic_name_display?: string | null
+          created_at?: string | null
+          display_title?: string | null
+          font_size_token?: string | null
+          id?: string
+          is_active?: boolean | null
+          show_doctor_name?: boolean | null
+          show_waiting_count?: boolean | null
+          text_color?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          accent_color?: string | null
+          announcement_text?: string | null
+          background_color?: string | null
+          branch_id?: string | null
+          clinic_logo_url?: string | null
+          clinic_name_display?: string | null
+          created_at?: string | null
+          display_title?: string | null
+          font_size_token?: string | null
+          id?: string
+          is_active?: boolean | null
+          show_doctor_name?: boolean | null
+          show_waiting_count?: boolean | null
+          text_color?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_token_display_config_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: true
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hms_trusted_ips: {
         Row: {
           added_by: string | null
@@ -5547,6 +5835,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hms_whatsapp_templates: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          language: string | null
+          message_template: string
+          template_code: string
+          template_name: string
+          trigger_event: string | null
+          updated_at: string | null
+          variables_list: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          language?: string | null
+          message_template: string
+          template_code: string
+          template_name: string
+          trigger_event?: string | null
+          updated_at?: string | null
+          variables_list?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          language?: string | null
+          message_template?: string
+          template_code?: string
+          template_name?: string
+          trigger_event?: string | null
+          updated_at?: string | null
+          variables_list?: Json | null
+        }
+        Relationships: []
       }
       homeo_cases: {
         Row: {

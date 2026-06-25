@@ -41,10 +41,24 @@ serve(async (req) => {
   try {
     const INTERAKT_KEY = Deno.env.get("INTERAKT_API_KEY");
     const body = await req.json().catch(() => ({}));
-    const { to, template, params, message } = body ?? {};
+    let { to, template, params, message } = body ?? {};
+    const { template_code, variables } = body ?? {};
 
     if (!to) return new Response(JSON.stringify({ error: "to is required" }),
       { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
+
+    // If a template_code is provided, look up the saved message and fill {{vars}}
+    if (template_code) {
+      try {
+        const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+        const { data: tpl } = await admin.from("hms_whatsapp_templates")
+          .select("message_template").eq("template_code", template_code).maybeSingle();
+        if (tpl?.message_template) {
+          const vars: Record<string, string> = variables ?? {};
+          message = String(tpl.message_template).replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? `{{${k}}}`);
+        }
+      } catch (_) { /* fall through */ }
+    }
 
     // Clean phone to 10 digits
     const digits = String(to).replace(/\D/g, "").slice(-10);
@@ -82,6 +96,17 @@ serve(async (req) => {
 
     const result = await resp.json().catch(() => ({}));
     console.log("[send-whatsapp]", { to: digits, template, status: resp.status });
+
+    try {
+      const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+      await admin.from("vaidya_whatsapp_log").insert({
+        patient_phone: digits,
+        message_preview: (message || "").slice(0, 280),
+        template_name: template_code || template || null,
+        status: resp.ok ? "sent" : "failed",
+        sent_at: new Date().toISOString(),
+      });
+    } catch (_) { /* best-effort */ }
 
     return new Response(JSON.stringify({ ok: resp.ok, result }),
       { status: resp.ok ? 200 : 502, headers: { ...cors, "Content-Type": "application/json" } });
