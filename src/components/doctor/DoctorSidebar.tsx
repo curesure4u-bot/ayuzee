@@ -228,6 +228,30 @@ export function DoctorSidebar() {
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/doctor/afi-formulary"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <Pill className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>📚 AFI Formulary</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/doctor/afi-formulary/disease-index"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  >
+                    <Bookmark className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>🔎 Disease Index</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

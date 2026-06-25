@@ -41,6 +41,10 @@ import IngredientEncyclopedia from "./pages/doctor/IngredientEncyclopedia.tsx";
 import FormularyPrescription from "./pages/doctor/FormularyPrescription.tsx";
 import ASTGManagement from "./pages/admin/ASTGManagement.tsx";
 import AdminFormularyAnalytics from "./pages/admin/AdminFormularyAnalytics.tsx";
+import AdminAfiManagement from "./pages/admin/AdminAfiManagement.tsx";
+import AfiFormulary from "./pages/doctor/AfiFormulary.tsx";
+import AfiFormulaDetail from "./pages/doctor/AfiFormulaDetail.tsx";
+import AfiDiseaseIndex from "./pages/doctor/AfiDiseaseIndex.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
 import DoctorHome from "./pages/doctor/DoctorHome.tsx";
 import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
@@ -446,6 +450,7 @@ const App = () => (
               <Route path="settings" element={<AdminSettings />} />
               <Route path="astg-management" element={<ASTGManagement />} />
               <Route path="formulary-analytics" element={<AdminFormularyAnalytics />} />
+              <Route path="afi-management" element={<AdminAfiManagement />} />
               <Route path="team" element={<AdminTeam />} />
               <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
@@ -560,6 +565,9 @@ const App = () => (
               <Route path="formulary" element={<ClassicalFormulary />} />
               <Route path="formulary/ingredients" element={<IngredientEncyclopedia />} />
               <Route path="formulary/prescription/:id" element={<FormularyPrescription />} />
+              <Route path="afi-formulary" element={<AfiFormulary />} />
+              <Route path="afi-formulary/disease-index" element={<AfiDiseaseIndex />} />
+              <Route path="afi-formulary/:id" element={<AfiFormulaDetail />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
