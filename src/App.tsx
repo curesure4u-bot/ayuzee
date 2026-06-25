@@ -529,6 +529,7 @@ const App = () => (
               <Route path="patients/:source/:id" element={<VaidyaPatientProfile />} />
               <Route path="analytics" element={<VaidyaAnalytics />} />
               <Route path="mis" element={<MisReports />} />
+              <Route path="mis/drill/:type/:id" element={<MisDrillDown />} />
               <Route path="ashtavidha" element={<Ashtavidha />} />
               <Route path="panchakarma" element={<Panchakarma />} />
               <Route path="posture" element={<PosturePage />} />
