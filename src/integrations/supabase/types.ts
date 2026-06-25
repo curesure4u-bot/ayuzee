@@ -4558,6 +4558,285 @@ export type Database = {
         }
         Relationships: []
       }
+      hms_custom_forms: {
+        Row: {
+          created_at: string
+          form_fields: Json
+          form_name: string
+          form_type: string
+          id: string
+          is_active: boolean
+        }
+        Insert: {
+          created_at?: string
+          form_fields?: Json
+          form_name: string
+          form_type: string
+          id?: string
+          is_active?: boolean
+        }
+        Update: {
+          created_at?: string
+          form_fields?: Json
+          form_name?: string
+          form_type?: string
+          id?: string
+          is_active?: boolean
+        }
+        Relationships: []
+      }
+      hms_departments: {
+        Row: {
+          ayush_system: string | null
+          branch_id: string | null
+          created_at: string
+          department_code: string
+          department_name: string
+          floor_or_room: string | null
+          head_doctor_name: string | null
+          id: string
+          is_active: boolean
+          phone_extension: string | null
+          sort_order: number
+        }
+        Insert: {
+          ayush_system?: string | null
+          branch_id?: string | null
+          created_at?: string
+          department_code: string
+          department_name: string
+          floor_or_room?: string | null
+          head_doctor_name?: string | null
+          id?: string
+          is_active?: boolean
+          phone_extension?: string | null
+          sort_order?: number
+        }
+        Update: {
+          ayush_system?: string | null
+          branch_id?: string | null
+          created_at?: string
+          department_code?: string
+          department_name?: string
+          floor_or_room?: string | null
+          head_doctor_name?: string | null
+          id?: string
+          is_active?: boolean
+          phone_extension?: string | null
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_departments_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_labels: {
+        Row: {
+          color_hex: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          label_name: string
+          label_type: string
+        }
+        Insert: {
+          color_hex?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          label_name: string
+          label_type: string
+        }
+        Update: {
+          color_hex?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          label_name?: string
+          label_type?: string
+        }
+        Relationships: []
+      }
+      hms_packages: {
+        Row: {
+          ayush_system: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          package_code: string
+          package_items: Json
+          package_name: string
+          package_price: number
+          regular_price: number
+          savings_amount: number | null
+          total_sessions: number | null
+          validity_days: number | null
+        }
+        Insert: {
+          ayush_system?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          package_code: string
+          package_items?: Json
+          package_name: string
+          package_price?: number
+          regular_price?: number
+          savings_amount?: number | null
+          total_sessions?: number | null
+          validity_days?: number | null
+        }
+        Update: {
+          ayush_system?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          package_code?: string
+          package_items?: Json
+          package_name?: string
+          package_price?: number
+          regular_price?: number
+          savings_amount?: number | null
+          total_sessions?: number | null
+          validity_days?: number | null
+        }
+        Relationships: []
+      }
+      hms_stores: {
+        Row: {
+          address_in_hospital: string | null
+          branch_id: string | null
+          created_at: string
+          id: string
+          incharge_name: string | null
+          is_active: boolean
+          phone: string | null
+          store_code: string
+          store_name: string
+          store_type: string
+        }
+        Insert: {
+          address_in_hospital?: string | null
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          incharge_name?: string | null
+          is_active?: boolean
+          phone?: string | null
+          store_code: string
+          store_name: string
+          store_type: string
+        }
+        Update: {
+          address_in_hospital?: string | null
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          incharge_name?: string | null
+          is_active?: boolean
+          phone?: string | null
+          store_code?: string
+          store_name?: string
+          store_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_stores_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hms_suggestions: {
+        Row: {
+          ayush_system: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          language: string
+          short_code: string | null
+          suggestion_text: string
+          suggestion_type: string
+          usage_count: number
+        }
+        Insert: {
+          ayush_system?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          language?: string
+          short_code?: string | null
+          suggestion_text: string
+          suggestion_type: string
+          usage_count?: number
+        }
+        Update: {
+          ayush_system?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          language?: string
+          short_code?: string | null
+          suggestion_text?: string
+          suggestion_type?: string
+          usage_count?: number
+        }
+        Relationships: []
+      }
+      hms_trusted_ips: {
+        Row: {
+          added_by: string | null
+          branch_id: string | null
+          created_at: string
+          id: string
+          ip_address: string
+          is_active: boolean
+          label: string
+          notes: string | null
+        }
+        Insert: {
+          added_by?: string | null
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address: string
+          is_active?: boolean
+          label: string
+          notes?: string | null
+        }
+        Update: {
+          added_by?: string | null
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string
+          is_active?: boolean
+          label?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_trusted_ips_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       homeo_cases: {
         Row: {
           aversions: string | null
@@ -10510,6 +10789,7 @@ export type Database = {
           mrp: number
           purchase_price: number
           quantity: number
+          store_id: string | null
           unit: string | null
           updated_at: string
         }
@@ -10525,6 +10805,7 @@ export type Database = {
           mrp?: number
           purchase_price?: number
           quantity?: number
+          store_id?: string | null
           unit?: string | null
           updated_at?: string
         }
@@ -10540,10 +10821,19 @@ export type Database = {
           mrp?: number
           purchase_price?: number
           quantity?: number
+          store_id?: string | null
           unit?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_inventory_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "hms_stores"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaidya_leads: {
         Row: {
