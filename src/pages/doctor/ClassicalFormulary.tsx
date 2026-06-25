@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bookmark, BookmarkCheck, Search, ShoppingCart, ExternalLink, BadgeCheck, ArrowDownAZ, Activity, TrendingUp } from "lucide-react";
+import { Bookmark, BookmarkCheck, Search, ShoppingCart, ExternalLink, BadgeCheck, ArrowDownAZ, Activity, TrendingUp, FileSignature, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { toast } from "sonner";
+import { PrescribeFormulaDialog } from "@/components/doctor/PrescribeFormulaDialog";
+import { FormularyTray } from "@/components/doctor/FormularyTray";
+import { trayStore } from "@/lib/formulary-tray";
+import { supabase } from "@/integrations/supabase/client";
 
 type FormType =
   | "Kashayam" | "Churna" | "Arishta" | "Tailam" | "Ghritam"
