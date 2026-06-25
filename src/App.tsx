@@ -127,6 +127,14 @@ import DepartmentMaster from "./pages/admin/masters/DepartmentMaster.tsx";
 import SuggestionMaster from "./pages/admin/masters/SuggestionMaster.tsx";
 import FormMaster from "./pages/admin/masters/FormMaster.tsx";
 import StoreMaster from "./pages/admin/masters/StoreMaster.tsx";
+import RatePlanMaster from "./pages/admin/masters/RatePlanMaster.tsx";
+import TaxMaster from "./pages/admin/masters/TaxMaster.tsx";
+import BillingMaster from "./pages/admin/masters/BillingMaster.tsx";
+import SettlementMaster from "./pages/admin/masters/SettlementMaster.tsx";
+import InsuranceMaster from "./pages/admin/masters/InsuranceMaster.tsx";
+import WardMaster from "./pages/admin/masters/WardMaster.tsx";
+import IpAdmissionMaster from "./pages/admin/masters/IpAdmissionMaster.tsx";
+import AreaMaster from "./pages/admin/masters/AreaMaster.tsx";
 import HmsUltraDashboard from "./pages/vaidya/hms/HmsUltraDashboard.tsx";
 
 import Diagnosis from "./pages/Diagnosis.tsx";
