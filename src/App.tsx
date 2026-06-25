@@ -547,6 +547,7 @@ const App = () => (
               <Route path="about-partner" element={<AboutAyuzeePartner />} />
               <Route path="support" element={<DoctorSupport />} />
               <Route path="astg-reference" element={<ASTGReference />} />
+              <Route path="astg-reference/:categoryKey/:diseaseKey" element={<ASTGDiseaseDetail />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
