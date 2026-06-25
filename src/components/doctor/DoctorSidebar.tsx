@@ -51,6 +51,7 @@ const items = [
   { title: "Ayush HMS Tool", url: "/vaidya", icon: Stethoscope },
   { title: "Para-Surgical AI", url: "/vaidya/parasurgical", icon: Sparkles },
   { title: "ASTG Reference", url: "/doctor/astg-reference", icon: ClipboardList },
+  { title: "ASTG Bookmarks", url: "/doctor/astg-bookmarks", icon: Bookmark },
   { title: "My Orders", url: "/doctor/orders", icon: ShoppingCart },
   { title: "My Medicine List", url: "/doctor/medicines", icon: ListChecks },
   { title: "Saved Posts", url: "/doctor/saved", icon: Bookmark },

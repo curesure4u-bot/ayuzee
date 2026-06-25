@@ -39,6 +39,26 @@ import {
   type LevelFilter,
 } from "@/lib/astg-search";
 import ASTGClinicalAssistant from "@/components/astg/ASTGClinicalAssistant";
+import { getRecent } from "@/lib/astg-history";
+
+function RecentlyViewedStrip() {
+  const items = getRecent();
+  if (!items.length) return null;
+  return (
+    <div className="mb-4 rounded-lg border bg-muted/30 p-3">
+      <div className="mb-2 text-xs font-semibold uppercase text-muted-foreground">Recently Viewed</div>
+      <div className="flex flex-wrap gap-2">
+        {items.map((r) => (
+          <a key={r.diseaseKey} href={`/doctor/astg-reference/${r.categoryKey}/${r.diseaseKey}`}
+             className="rounded-md border bg-background px-3 py-1.5 text-sm hover:bg-muted">
+            <span className="font-medium">{r.name}</span>
+            <span className="ml-2 text-xs text-muted-foreground">{new Date(r.viewedAt).toLocaleDateString()}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const DOSHAS: { value: DoshaFilter; label: string }[] = [
   { value: "all", label: "All" },
@@ -263,6 +283,8 @@ export default function ASTGReference() {
           </Button>
         </div>
       </header>
+
+      <RecentlyViewedStrip />
 
       <Tabs defaultValue="browse">
         <TabsList>

@@ -196,6 +196,33 @@ export type Database = {
           },
         ]
       }
+      astg_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json | null
+          disease_id: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          disease_id?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          disease_id?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       astg_categories: {
         Row: {
           created_at: string

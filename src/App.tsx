@@ -35,6 +35,8 @@ import DoctorAuth from "./pages/doctor/DoctorAuth.tsx";
 import DoctorLayout from "./pages/doctor/DoctorLayout.tsx";
 import ASTGReference from "./pages/doctor/ASTGReference.tsx";
 import ASTGDiseaseDetail from "./pages/doctor/ASTGDiseaseDetail.tsx";
+import ASTGBookmarks from "./pages/doctor/ASTGBookmarks.tsx";
+import ASTGManagement from "./pages/admin/ASTGManagement.tsx";
 import DoctorProfile from "./pages/doctor/sections/DoctorProfile.tsx";
 import DoctorHome from "./pages/doctor/DoctorHome.tsx";
 import DoctorOrders from "./pages/doctor/sections/DoctorOrders.tsx";
@@ -438,6 +440,7 @@ const App = () => (
               <Route path="reports" element={<AdminReports />} />
               <Route path="safety" element={<AdminSafety />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="astg-management" element={<ASTGManagement />} />
               <Route path="team" element={<AdminTeam />} />
               <Route path="gamification" element={<AdminGamification />} />
               <Route path="therapies" element={<AdminTherapies />} />
@@ -548,6 +551,7 @@ const App = () => (
               <Route path="support" element={<DoctorSupport />} />
               <Route path="astg-reference" element={<ASTGReference />} />
               <Route path="astg-reference/:categoryKey/:diseaseKey" element={<ASTGDiseaseDetail />} />
+              <Route path="astg-bookmarks" element={<ASTGBookmarks />} />
             </Route>
             <Route path="/atmri-help" element={<AtmriHelp />} />
             <Route path="/atmri-help/cases" element={<AtmriCasesList />} />
