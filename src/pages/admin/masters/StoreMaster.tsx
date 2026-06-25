@@ -79,7 +79,7 @@ const StoreMaster = () => {
   };
 
   const updateField = async (id: string, field: string, val: any) => {
-    await supabase.from("hms_stores").update({ [field]: val }).eq("id", id);
+    await supabase.from("hms_stores").update({ [field]: val } as any).eq("id", id);
     load();
   };
   const del = async (id: string) => {
@@ -88,7 +88,7 @@ const StoreMaster = () => {
     load();
   };
 
-  const branchName = (id: string | null) => branches.find((b) => b.id === id)?.name ?? "All branches";
+  const branchName = (id: string | null) => branches.find((b) => b.id === id)?.branch_name ?? "All branches";
 
   return (
     <div className="mx-auto max-w-6xl">

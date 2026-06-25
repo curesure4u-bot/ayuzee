@@ -81,7 +81,7 @@ const DepartmentMaster = () => {
   };
 
   const updateField = async (id: string, field: string, val: any) => {
-    await supabase.from("hms_departments").update({ [field]: val }).eq("id", id);
+    await supabase.from("hms_departments").update({ [field]: val } as any).eq("id", id);
     load();
   };
   const del = async (id: string) => {

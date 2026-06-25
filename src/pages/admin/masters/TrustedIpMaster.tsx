@@ -84,7 +84,7 @@ const TrustedIpMaster = () => {
     load();
   };
 
-  const branchName = (id: string | null) => branches.find((b) => b.id === id)?.name ?? "All branches";
+  const branchName = (id: string | null) => branches.find((b) => b.id === id)?.branch_name ?? "All branches";
 
   return (
     <div className="mx-auto max-w-6xl">
