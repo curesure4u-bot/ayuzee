@@ -119,6 +119,14 @@ import AdminBlogs from "./pages/admin/AdminBlogs.tsx";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder.tsx";
 import AdminTeam from "./pages/admin/AdminTeam.tsx";
 import AdminHmsAccess from "./pages/admin/AdminHmsAccess.tsx";
+import AdminMasterManagement from "./pages/admin/AdminMasterManagement.tsx";
+import TrustedIpMaster from "./pages/admin/masters/TrustedIpMaster.tsx";
+import LabelMaster from "./pages/admin/masters/LabelMaster.tsx";
+import PackageMaster from "./pages/admin/masters/PackageMaster.tsx";
+import DepartmentMaster from "./pages/admin/masters/DepartmentMaster.tsx";
+import SuggestionMaster from "./pages/admin/masters/SuggestionMaster.tsx";
+import FormMaster from "./pages/admin/masters/FormMaster.tsx";
+import StoreMaster from "./pages/admin/masters/StoreMaster.tsx";
 import HmsUltraDashboard from "./pages/vaidya/hms/HmsUltraDashboard.tsx";
 
 import Diagnosis from "./pages/Diagnosis.tsx";
