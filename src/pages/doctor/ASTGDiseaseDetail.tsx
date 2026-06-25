@@ -36,11 +36,15 @@ import {
   XCircle,
   BookOpen,
   Printer,
+  Languages,
 } from "lucide-react";
 import { findDisease } from "@/data/astg";
 import { exportDiseasePDF } from "@/lib/astg-search";
 import ASTGClinicalAssistant from "@/components/astg/ASTGClinicalAssistant";
 import AddToPatientNotes from "@/components/astg/AddToPatientNotes";
+import MedicineTable from "@/components/astg/MedicineTable";
+import BookPanchakarmaButton from "@/components/astg/BookPanchakarmaButton";
+import PatientHandoutDialog from "@/components/astg/PatientHandoutDialog";
 import { pushRecent, cacheProtocol } from "@/lib/astg-history";
 import { toggleBookmark as toggleBookmarkLS, isBookmarked } from "./ASTGBookmarks";
 import { useEffect as useEffectReact } from "react";
