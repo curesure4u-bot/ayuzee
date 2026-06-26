@@ -14028,6 +14028,15 @@ export type Database = {
       }
       gam_check_badges: { Args: { _user_id: string }; Returns: undefined }
       gam_compute_level: { Args: { _points: number }; Returns: number }
+      gam_get_leaderboard: {
+        Args: { _limit?: number }
+        Returns: {
+          display_name: string
+          level_number: number
+          rank: number
+          total_points: number
+        }[]
+      }
       gam_issue_certificate: {
         Args: {
           _metadata?: Json
