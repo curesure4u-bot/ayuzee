@@ -18,32 +18,19 @@ const Leaderboard = () => {
   useEffect(() => {
     (async () => {
       if (period === "all") {
-        const { data } = await (supabase as any).from("gam_user_stats")
-          .select("user_id, total_points").order("total_points", { ascending: false }).limit(50);
-        const ids = (data ?? []).map((r: any) => r.user_id);
-        const profiles = ids.length
-          ? await (supabase as any).from("profiles").select("user_id, full_name").in("user_id", ids)
-          : { data: [] };
-        const nameMap = new Map((profiles.data ?? []).map((p: any) => [p.user_id, p.full_name]));
-        setRows((data ?? []).map((r: any) => ({ user_id: r.user_id, full_name: (nameMap.get(r.user_id) as any) ?? null, total: r.total_points })));
+        const { data } = await (supabase as any).rpc("gam_get_leaderboard", { _limit: 50 });
+        setRows((data ?? []).map((r: any, i: number) => ({
+          user_id: `rank-${r.rank ?? i + 1}`,
+          full_name: r.display_name ?? null,
+          total: r.total_points,
+        })));
       } else {
-        const since = new Date();
-        if (period === "weekly") since.setDate(since.getDate() - 7);
-        else since.setMonth(since.getMonth() - 1);
-        const { data } = await (supabase as any).from("gam_points_transactions")
-          .select("user_id, points").gte("created_at", since.toISOString()).limit(5000);
-        const totals = new Map<string, number>();
-        (data ?? []).forEach((t: any) => totals.set(t.user_id, (totals.get(t.user_id) ?? 0) + t.points));
-        const sorted = [...totals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 50);
-        const ids = sorted.map(([id]) => id);
-        const profiles = ids.length
-          ? await (supabase as any).from("profiles").select("user_id, full_name").in("user_id", ids)
-          : { data: [] };
-        const nameMap = new Map((profiles.data ?? []).map((p: any) => [p.user_id, p.full_name]));
-        setRows(sorted.map(([id, total]) => ({ user_id: id, full_name: (nameMap.get(id) as any) ?? null, total })));
+        // Weekly/monthly leaderboard is disabled for privacy (no per-user breakdown).
+        setRows([]);
       }
     })();
   }, [period]);
+
 
   const medal = useMemo(() => ["🥇", "🥈", "🥉"], []);
 
