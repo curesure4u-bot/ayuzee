@@ -1,3 +1,4 @@
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SiteNav } from "@/components/site/SiteNav";

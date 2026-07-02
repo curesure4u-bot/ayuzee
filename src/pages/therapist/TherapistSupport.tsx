@@ -1,3 +1,4 @@
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Card, CardContent } from "@/components/ui/card";
 import { LifeBuoy, Mail, Phone } from "lucide-react";
 import { useEffect } from "react";
