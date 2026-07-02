@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { toast } from "sonner";
 const slugify = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
 
 const AdminLearning = () => {
+  usePageSEO({ title: "Admin · Learning — Ayuzee", noIndex: true });
   const [tab, setTab] = useState<"courses" | "webinars">("courses");
 
   // courses state
@@ -25,9 +27,7 @@ const AdminLearning = () => {
   const [webinars, setWebinars] = useState<any[]>([]);
   const [editingWebinar, setEditingWebinar] = useState<any | null>(null);
 
-  useEffect(() => {
-    document.title = "Admin · Learning — Ayuzee";
-    loadAll();
+  useEffect(() => { loadAll();
   }, []);
 
   const loadAll = async () => {

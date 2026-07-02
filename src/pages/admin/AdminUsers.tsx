@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ type ProfileRow = { id: string; user_id: string; full_name: string | null; email
 const PAGE_SIZE = 20;
 
 const AdminUsers = () => {
+  usePageSEO({ title: "Admin · Users — Ayuzee", noIndex: true });
   const [rows, setRows] = useState<ProfileRow[]>([]);
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState("all");
@@ -36,7 +38,7 @@ const AdminUsers = () => {
     setRows(((profiles.data ?? []) as ProfileRow[]).map((row) => ({ ...row, is_active: row.is_active ?? true, role: roleMap.get(row.user_id) ?? "patient" })));
   };
 
-  useEffect(() => { document.title = "Admin · Users — Ayuzee"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase();

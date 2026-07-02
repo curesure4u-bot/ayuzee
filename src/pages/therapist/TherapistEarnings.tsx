@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useOutletContext } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +33,7 @@ interface PayoutRow {
 }
 
 const weekKey = (d: Date) => {
+  usePageSEO({ title: "Earnings | Therapist | Ayuzee", noIndex: true });
   const onejan = new Date(d.getFullYear(), 0, 1);
   const week = Math.ceil(((d.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7);
   return `${d.getFullYear()}-W${week.toString().padStart(2, "0")}`;
@@ -69,9 +71,7 @@ const TherapistEarnings = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    document.title = "Earnings | Therapist | Ayuzee";
-    reload();
+  useEffect(() => { reload();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [therapist.id]);
 

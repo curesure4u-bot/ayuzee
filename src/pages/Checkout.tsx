@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Footer } from "@/components/site/Footer";
@@ -61,6 +62,7 @@ const schema = z.object({
 });
 
 const Checkout = () => {
+  usePageSEO({ title: "Checkout — Ayuzee" });
   const { items, subtotal, clear } = useCart();
   const navigate = useNavigate();
   const { pincode: savedPincode, checkPincode } = usePincode();
@@ -89,9 +91,7 @@ const Checkout = () => {
   const [saveAddress, setSaveAddress] = useState(true);
   const [showForm, setShowForm] = useState(true);
 
-  useEffect(() => {
-    document.title = "Checkout — Ayuzee";
-    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
+  useEffect(() => { supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setAuthed(!!s));
     return () => sub.subscription.unsubscribe();
   }, []);

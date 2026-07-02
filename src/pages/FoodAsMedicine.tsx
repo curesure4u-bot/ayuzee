@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -18,6 +19,7 @@ type Recipe = {
 const CATEGORIES = ["All", "Drink", "Soup", "Side", "Sweet", "Chutney"];
 
 const FoodAsMedicine = () => {
+  usePageSEO({ title: "Food as Medicine — AYUSH Traditional Recipes | Ayuzee" });
   const { slug } = useParams();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,9 +27,7 @@ const FoodAsMedicine = () => {
   const [cat, setCat] = useState("All");
   const [active, setActive] = useState<Recipe | null>(null);
 
-  useEffect(() => {
-    document.title = "Food as Medicine — AYUSH Traditional Recipes | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data } = await supabase
         .from("food_recipes" as any)
         .select("*")

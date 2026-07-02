@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ type VenueType = "hospital" | "clinic" | "resort" | "wellness_center";
 interface RoomDraft { room_name: string; capacity: number; hourly_rate: number }
 
 const VenueAuth = () => {
+  usePageSEO({ title: "Venue Owner Portal | Ayuzee", noIndex: true });
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("auth");
   const [loading, setLoading] = useState(false);
@@ -38,9 +40,7 @@ const VenueAuth = () => {
   const [selectedTherapies, setSelectedTherapies] = useState<string[]>([]);
   const [rooms, setRooms] = useState<RoomDraft[]>([{ room_name: "Room 1 - Panchakarma", capacity: 1, hourly_rate: 500 }]);
 
-  useEffect(() => {
-    document.title = "Venue Owner Portal | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       setUserId(session.user.id);

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,10 +15,11 @@ const money = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency",
 const monthStart = () => new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
 
 const AdminPayments = () => {
+  usePageSEO({ title: "Payments — Admin", noIndex: true });
   const [rows, setRows] = useState<Payment[]>([]); const [loading, setLoading] = useState(true);
   const [from, setFrom] = useState(""); const [to, setTo] = useState(""); const [status, setStatus] = useState("all"); const [min, setMin] = useState(""); const [max, setMax] = useState("");
   const load = async () => { setLoading(true); const { data, error } = await supabase.from("orders").select("id,razorpay_payment_id,full_name,total,created_at,payment_status,order_status").order("created_at", { ascending: false }).limit(500); if (error) toast.error(error.message); setRows((data ?? []) as Payment[]); setLoading(false); };
-  useEffect(() => { document.title = "Payments — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
   const filtered = useMemo(() => rows.filter((r) => { const day = r.created_at.slice(0, 10); if (from && day < from) return false; if (to && day > to) return false; if (status !== "all" && r.payment_status !== status) return false; if (min && r.total < Number(min)) return false; if (max && r.total > Number(max)) return false; return true; }), [rows, from, to, status, min, max]);
   const refund = async (r: Payment) => { await supabase.functions.invoke("razorpay-refund", { body: { payment_id: r.razorpay_payment_id, order_id: r.id, amount: r.total } }); const { error } = await supabase.from("orders").update({ payment_status: "refunded" }).eq("id", r.id); if (error) return toast.error(error.message); toast.success("Refund requested"); load(); };
   const exportCsv = () => { const csv = [["Payment ID","Order ID","Patient","Amount","Date","Status"], ...filtered.map(r => [r.razorpay_payment_id || "", r.id, r.full_name, r.total, r.created_at, r.payment_status])].map(row => row.map(x => `"${String(x).replace(/"/g, '""')}"`).join(",")).join("\n"); const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); const a = document.createElement("a"); a.href = url; a.download = "payments.csv"; a.click(); URL.revokeObjectURL(url); };

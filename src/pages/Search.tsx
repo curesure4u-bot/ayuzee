@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useSearchParams } from "react-router-dom";
 import { Search as SearchIcon } from "lucide-react";
 import { GlobalSearch, GlobalSearchResult, runGlobalSearch, searchTabs, SearchType } from "@/components/site/GlobalSearch";
@@ -14,8 +15,11 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
 
+  usePageSEO({
+    title: query ? `Search ${query} — Ayuzee` : "Search",
+  });
+
   useEffect(() => {
-    document.title = query ? `Search ${query} — Ayuzee` : "Search — Ayuzee";
     if (!query.trim()) {
       setResults([]);
       return;

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -28,6 +29,10 @@ const TreatmentSystem = () => {
   const [items, setItems] = useState<ConditionCard[]>([]);
   const [loading, setLoading] = useState(true);
 
+  usePageSEO({
+    title: system?.name ? `${system.name} — Ayuzee` : "Treatments",
+  });
+
   useEffect(() => {
     if (!slug) return;
     (async () => {
@@ -38,7 +43,6 @@ const TreatmentSystem = () => {
         .eq("slug", slug)
         .maybeSingle();
       setSystem(sys as SystemRow | null);
-      document.title = `${(sys as SystemRow | null)?.name ?? "Treatments"} — Ayuzee`;
 
       if (sys) {
         const { data } = await supabase

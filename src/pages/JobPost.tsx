@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
+import {  FormEvent, useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,15 +29,14 @@ const initialForm = {
 };
 
 const JobPost = () => {
+  usePageSEO({ title: "Post a Job — Ayuzee" });
   const navigate = useNavigate();
   const [userId, setUserId] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState(initialForm);
 
-  useEffect(() => {
-    document.title = "Post a Job — Ayuzee";
-    supabase.auth.getSession().then(({ data }) => {
+  useEffect(() => { supabase.auth.getSession().then(({ data }) => {
       if (!data.session) {
         navigate("/auth", { replace: true });
         return;

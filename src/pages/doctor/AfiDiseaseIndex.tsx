@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,7 +25,7 @@ export default function AfiDiseaseIndex() {
   const [rows, setRows] = useState<Row[]>([]);
   const [openDisease, setOpenDisease] = useState<string | null>(null);
 
-  useEffect(() => { document.title = "Disease-wise Formula Index — AFI"; fetchAll(""); }, []);
+  useEffect(() => { fetchAll(""); }, []);
 
   const fetchAll = async (q: string) => {
     let query = supabase.from("afi_disease_formulation_map")

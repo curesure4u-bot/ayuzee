@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,13 +16,12 @@ interface HealthCondition {
 }
 
 const ShopByCondition = () => {
+  usePageSEO({ title: "Shop by Health Condition — Ayuzee" });
   const [conditions, setConditions] = useState<HealthCondition[]>([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    document.title = "Shop by Health Condition — Ayuzee";
-    supabase
+  useEffect(() => { supabase
       .from("health_conditions")
       .select("id,name,slug,system_category,icon")
       .eq("is_active", true)

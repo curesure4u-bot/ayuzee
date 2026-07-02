@@ -1,4 +1,5 @@
-import { Component, ReactNode, useEffect, useState } from "react";
+import {  Component, ReactNode, useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
@@ -24,12 +25,11 @@ class DashboardErrorBoundary extends Component<{ children: ReactNode }, { hasErr
 }
 
 const SuperAdminDashboard = () => {
+  usePageSEO({ title: "Super Admin Dashboard — Ayuzee", noIndex: true });
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
 
-  useEffect(() => {
-    document.title = "Super Admin Dashboard — Ayuzee";
-    let active = true;
+  useEffect(() => { let active = true;
     (async () => {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {

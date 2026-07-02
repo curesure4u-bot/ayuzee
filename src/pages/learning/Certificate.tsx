@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,10 +10,14 @@ const Certificate = () => {
   const [cert, setCert] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  usePageSEO({
+    title: cert ? `Certificate ${cert.certificate_no} — Ayuzee` : "Certificate",
+  });
+
   useEffect(() => {
     supabase.from("lms_certificates").select("*").eq("id", id).maybeSingle().then(({ data }) => {
-      setCert(data); setLoading(false);
-      if (data) document.title = `Certificate ${data.certificate_no} — Ayuzee`;
+      setCert(data);
+      setLoading(false);
     });
   }, [id]);
 

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight, Heart, Share2, ShieldAlert, ShoppingCart, Stethoscope } from "lucide-react";
 import { toast } from "sonner";
@@ -37,15 +38,14 @@ const SURGICAL_CATEGORIES = [
 ];
 
 const AyushSurgicals = () => {
+  usePageSEO({ title: "AYUSH Surgical Instruments & Disposables — Ayuzee" });
   const { addItem } = useCart();
   const { isSaved, toggle: toggleWishlist } = useWishlist();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("All");
 
-  useEffect(() => {
-    document.title = "AYUSH Surgical Instruments & Disposables — Ayuzee";
-    supabase
+  useEffect(() => { supabase
       .from("products")
       .select("id,name,brand,category,price,discount_price,stock,unit,image_url,surgical_category,is_prescription_required,bulk_brand")
       .or("is_surgical.eq.true,product_type.eq.surgical")

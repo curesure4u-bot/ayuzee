@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +20,7 @@ const labels: Record<string, string> = { therapist_percent: "Therapist %", venue
 const money = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n || 0);
 
 const AdminCommissions = () => {
+  usePageSEO({ title: "Commissions — Admin", noIndex: true });
   const [splits, setSplits] = useState<Record<string, string>>({});
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [payouts, setPayouts] = useState<Payout[]>([]);
@@ -48,7 +50,7 @@ const AdminCommissions = () => {
     setLoading(false);
   };
 
-  useEffect(() => { document.title = "Commissions — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
   const total = useMemo(() => splitKeys.reduce((sum, k) => sum + Number(splits[k] || 0), 0), [splits]);
 
   const saveSplits = async () => {

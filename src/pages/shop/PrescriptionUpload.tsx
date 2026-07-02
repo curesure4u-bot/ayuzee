@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight, FileText, ImageIcon, Upload, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
@@ -24,6 +25,7 @@ const deliverySchema = z.object({
 type DeliveryForm = z.infer<typeof deliverySchema>;
 
 const PrescriptionUpload = () => {
+  usePageSEO({ title: "Upload Prescription — Ayuzee" });
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
@@ -31,9 +33,7 @@ const PrescriptionUpload = () => {
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<DeliveryForm>({ name: "", phone: "", address: "", pincode: "", city: "", state: "", notes: "" });
 
-  useEffect(() => {
-    document.title = "Upload Prescription — Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data } = await supabase.auth.getSession();
       const uid = data.session?.user.id ?? null;
       setUserId(uid);

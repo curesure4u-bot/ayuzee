@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 type Tx = { id: string; action_type: string; points: number; description: string | null; created_at: string; role: string | null };
 
 const MyPoints = () => {
+  usePageSEO({ title: "My Points — Ayuzee", noIndex: true });
   const [txs, setTxs] = useState<Tx[]>([]);
-  useEffect(() => {
-    document.title = "My Points — Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       const { data } = await (supabase as any).from("gam_points_transactions")

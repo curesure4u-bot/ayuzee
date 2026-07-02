@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,10 @@ const CaseDetail = () => {
   const { id } = useParams();
   const [c, setC] = useState<Case | null>(null);
 
+  usePageSEO({
+    title: c ? `ATMRI Case ${c.id.slice(0, 8)} — ATMRI Trust` : "ATMRI Case",
+  });
+
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -34,7 +39,6 @@ const CaseDetail = () => {
         .eq("id", id)
         .maybeSingle();
       setC(caseData as Case | null);
-      if (caseData) document.title = `ATMRI Case ${caseData.id.slice(0, 8)} — ATMRI Trust`;
     })();
   }, [id]);
 

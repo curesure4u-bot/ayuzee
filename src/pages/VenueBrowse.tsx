@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/site/Footer";
@@ -37,6 +38,7 @@ const therapyOptions = AYUSH_THERAPIES.filter((therapy) => therapy.group === "Pa
 
 const normalizeRooms = (rooms: unknown): Room[] => Array.isArray(rooms) ? rooms as Room[] : [];
 const firstPhoto = (venue: Venue) => {
+  usePageSEO({ title: "Panchakarma Therapy Venues | Ayuzee" });
   if (venue.photo_urls?.[0]) return venue.photo_urls[0];
   if (Array.isArray(venue.photos) && typeof venue.photos[0] === "string") return venue.photos[0];
   return null;
@@ -53,9 +55,7 @@ const VenueBrowse = () => {
   const [mapView, setMapView] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  useEffect(() => {
-    document.title = "Panchakarma Therapy Venues | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       setLoading(true);
       const { data } = await supabase
         .from("therapy_venues_public" as any)

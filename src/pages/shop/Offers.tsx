@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { BadgePercent, ChevronRight, Heart, Package, ShoppingCart, Star, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -33,6 +34,7 @@ const WISHLIST_KEY = "ayuzee_offer_wishlist_v1";
 const formatINR = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value || 0);
 const discountPercent = (p: Product) => p.discount_price ? Math.max(0, Math.round(((p.price - p.discount_price) / p.price) * 100)) : 0;
 const timeToMidnight = () => {
+  usePageSEO({ title: "Today's Deals — Ayuzee" });
   const now = new Date();
   const end = new Date(now);
   end.setHours(24, 0, 0, 0);
@@ -55,9 +57,7 @@ const Offers = () => {
     try { return JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]"); } catch { return []; }
   });
 
-  useEffect(() => {
-    document.title = "Today's Deals — Ayuzee";
-    const timer = window.setInterval(() => setCountdown(timeToMidnight()), 1000);
+  useEffect(() => { const timer = window.setInterval(() => setCountdown(timeToMidnight()), 1000);
     (async () => {
       const { data } = await supabase
         .from("products")

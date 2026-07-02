@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import {  useEffect  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { Pill, Sparkles, BookOpen, Stethoscope, ShieldCheck, GitCompareArrows, Activity, Brain, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,9 +19,8 @@ const tools = [
 ];
 
 const Homeopathy = () => {
-  useEffect(() => {
-    document.title = "Homeopathy on Ayuzee — AI-Assisted Classical Practice";
-    const meta = document.querySelector('meta[name="description"]') ?? (() => {
+  usePageSEO({ title: "Homeopathy on Ayuzee — AI-Assisted Classical Practice" });
+  useEffect(() => { const meta = document.querySelector('meta[name="description"]') ?? (() => {
       const m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); return m;
     })();
     meta.setAttribute("content", "Classical homeopathy backed by AI: constitutional case-taking, repertorisation, and a 200-remedy Materia Medica for verified doctors and patients in India.");

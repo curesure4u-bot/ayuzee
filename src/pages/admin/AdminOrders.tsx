@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,10 +19,11 @@ const money=(n:number)=>new Intl.NumberFormat("en-IN",{style:"currency",currency
 const today=()=>new Date().toISOString().slice(0,10);
 
 const AdminOrders=()=>{
+  usePageSEO({ title: "Orders — Admin", noIndex: true });
  const [rows,setRows]=useState<Order[]>([]); const [loading,setLoading]=useState(true); const [expanded,setExpanded]=useState<string|null>(null);
  const [status,setStatus]=useState("all"); const [payment,setPayment]=useState("all"); const [from,setFrom]=useState(""); const [to,setTo]=useState(""); const [search,setSearch]=useState(""); const [cancelFor,setCancelFor]=useState<Order|null>(null); const [reason,setReason]=useState("");
  const load=async()=>{setLoading(true); const {data,error}=await (supabase as any).from("orders").select("id,user_id,full_name,phone,subtotal,total,payment_status,order_status,delhivery_waybill,created_at,razorpay_payment_id,order_items(id,product_name,quantity,unit_price)").order("created_at",{ascending:false}).limit(300); if(error)toast.error(error.message); const orders=(data??[]) as Order[]; const ids=[...new Set(orders.map(o=>o.user_id).filter(Boolean))]; const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,full_name,phone").in("user_id",ids):{data:[]} as any; const map=new Map((profiles??[]).map((p:any)=>[p.user_id,p])); setRows(orders.map(o=>({...o,patient:map.get(o.user_id)??null}))); setLoading(false);};
- useEffect(()=>{document.title="Orders — Admin";load();},[]);
+ useEffect(() => { load();},[]);
  const filtered=useMemo(()=>rows.filter(o=>{if(status!=="all"&&o.order_status!==status)return false; if(payment!=="all"&&o.payment_status!==payment)return false; const day=o.created_at.slice(0,10); if(from&&day<from)return false; if(to&&day>to)return false; if(search&&!`${o.id} ${o.full_name} ${o.patient?.full_name??""}`.toLowerCase().includes(search.toLowerCase()))return false; return true;}),[rows,status,payment,from,to,search]);
  const updateStatus=async(o:Order,next:string)=>{let patch:Record<string,unknown>={order_status:next}; if(next==="shipped"&&!o.delhivery_waybill){const {data}=await supabase.functions.invoke("create-delhivery-shipment",{body:{order_id:o.id}}); if((data as any)?.waybill) patch.delhivery_waybill=(data as any).waybill; else toast.info("Shipment requested; waybill not returned yet");} const {error}=await (supabase as any).from("orders").update(patch).eq("id",o.id); if(error)return toast.error(error.message); toast.success("Order updated"); load();};
  const cancel=async()=>{if(!cancelFor)return; const {error}=await (supabase as any).from("orders").update({order_status:"cancelled",payment_status:cancelFor.payment_status==="paid"?"refund_pending":cancelFor.payment_status}).eq("id",cancelFor.id); if(error)return toast.error(error.message); toast.success("Order cancelled; refund queued if applicable"); setCancelFor(null); setReason(""); load();};

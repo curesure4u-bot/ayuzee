@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Award,
@@ -60,6 +61,7 @@ type Certificate = {
 };
 
 const StudentDashboard = () => {
+  usePageSEO({ title: "Student Dashboard — Ayuzee", noIndex: true });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
@@ -72,9 +74,7 @@ const StudentDashboard = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [rsvps, setRsvps] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    document.title = "Student Dashboard — Ayuzee";
-    loadDashboard();
+  useEffect(() => { loadDashboard();
   }, []);
 
   const displayName = useMemo(() => profile?.full_name || "Student", [profile]);

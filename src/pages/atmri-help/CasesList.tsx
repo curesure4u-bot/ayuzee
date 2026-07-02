@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,12 +26,11 @@ const statusBadge: Record<string, { label: string; cls: string }> = {
 };
 
 const CasesList = () => {
+  usePageSEO({ title: "ATMRI Sponsored Cases — Real Patients, Real Healing" });
   const [cases, setCases] = useState<Case[]>([]);
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    document.title = "ATMRI Sponsored Cases — Real Patients, Real Healing";
-    (async () => {
+  useEffect(() => { (async () => {
       // Patient PII is no longer publicly readable. Public listing exposes only
       // case status / cost / timestamps via the safe view.
       const { data } = await (supabase as any)

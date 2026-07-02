@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import { Sparkles, Upload, ShieldCheck, Loader2, CheckCircle2 } from "lucide-rea
 type Mode = "auth" | "onboarding" | "review";
 
 const TherapistAuth = () => {
+  usePageSEO({ title: "Therapist Portal | Ayuzee", noIndex: true });
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("auth");
   const [loading, setLoading] = useState(false);
@@ -36,9 +38,7 @@ const TherapistAuth = () => {
   const [years, setYears] = useState("0");
   const [selectedTherapies, setSelectedTherapies] = useState<string[]>([]);
 
-  useEffect(() => {
-    document.title = "Therapist Portal | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       setUserId(session.user.id);

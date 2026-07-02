@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,8 +13,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Textarea } from "@/components/ui/textarea";
 
 type Flag = { id:string; therapist_id:string|null; session_id:string|null; flagged_by:string|null; reason:string; severity:string|null; resolved:boolean|null; created_at:string; therapists?:{full_name:string; phone:string}|null };
-const AdminSafety = () => { const [rows,setRows]=useState<Flag[]>([]); const [severity,setSeverity]=useState("all"); const [resolved,setResolved]=useState("all"); const [search,setSearch]=useState(""); const [noteFor,setNoteFor]=useState<Flag|null>(null); const [note,setNote]=useState("");
- const load=async()=>{const {data,error}=await supabase.from("therapist_safety_flags").select("id,therapist_id,session_id,flagged_by,reason,severity,resolved,created_at,therapists(full_name,phone)").order("created_at",{ascending:false}); if(error)toast.error(error.message); setRows((data??[]) as Flag[]);}; useEffect(()=>{document.title="Safety Flags — Admin";load();},[]);
+const AdminSafety = () => {
+  usePageSEO({ title: "Safety Flags — Admin", noIndex: true }); const [rows,setRows]=useState<Flag[]>([]); const [severity,setSeverity]=useState("all"); const [resolved,setResolved]=useState("all"); const [search,setSearch]=useState(""); const [noteFor,setNoteFor]=useState<Flag|null>(null); const [note,setNote]=useState("");
+ const load=async()=>{const {data,error}=await supabase.from("therapist_safety_flags").select("id,therapist_id,session_id,flagged_by,reason,severity,resolved,created_at,therapists(full_name,phone)").order("created_at",{ascending:false}); if(error)toast.error(error.message); setRows((data??[]) as Flag[]);}; useEffect(() => { load();},[]);
  const filtered=useMemo(()=>rows.filter(r=>{if(severity!=="all"&&r.severity!==severity)return false; if(resolved!=="all"&&String(!!r.resolved)!==resolved)return false; if(search&&!(r.therapists?.full_name??"").toLowerCase().includes(search.toLowerCase()))return false; return true;}),[rows,severity,resolved,search]);
  const warn=async(f:Flag)=>{await supabase.from("therapist_safety_flags").update({severity:"warning"}).eq("id",f.id); if(f.therapists?.phone) await supabase.functions.invoke("send-whatsapp",{body:{to:f.therapists.phone,message:`You have received a warning on Ayuzee. Reason: ${f.reason}`}}); toast.success("Warning issued"); load();};
  const suspend=async(f:Flag)=>{if(f.therapist_id) await supabase.from("therapists").update({verification_status:"suspended",is_suspended:true}).eq("id",f.therapist_id); if(f.therapists?.phone) await supabase.functions.invoke("send-whatsapp",{body:{to:f.therapists.phone,message:`Your Ayuzee therapist account has been suspended. Reason: ${f.reason}`}}); toast.success("Therapist suspended"); load();};

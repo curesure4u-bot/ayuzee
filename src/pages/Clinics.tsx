@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -53,6 +54,7 @@ const EXP = [
 ];
 
 const Clinics = () => {
+  usePageSEO({ title: "Find a Clinic — Ayuzee" });
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAuthed, setIsAuthed] = useState(false);
@@ -64,9 +66,7 @@ const Clinics = () => {
 
   const [lead, setLead] = useState({ phone: "", patient: "", pincode: "", concern: "" });
 
-  useEffect(() => {
-    document.title = "Find a Clinic — Ayuzee";
-    supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
+  useEffect(() => { supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
     supabase
       .from("network_partners_public" as any)
       .select("*")

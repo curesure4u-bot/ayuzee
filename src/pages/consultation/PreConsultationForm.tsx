@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -82,6 +83,7 @@ const Chip = ({ label, active, onClick }: { label: string; active: boolean; onCl
 );
 
 const PreConsultationForm = () => {
+  usePageSEO({ title: "Pre-Consultation Form — Ayuzee", noIndex: true });
   const { id: appointmentId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -98,9 +100,7 @@ const PreConsultationForm = () => {
   const totalSteps = 4;
   const progress = (step / totalSteps) * 100;
 
-  useEffect(() => {
-    document.title = "Pre-Consultation Form — Ayuzee";
-    if (!appointmentId) return;
+  useEffect(() => { if (!appointmentId) return;
     (async () => {
       const { data: sess } = await supabase.auth.getSession();
       const uid = sess.session?.user.id;

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ interface TherapistOpt { id: string; full_name: string; allowed_therapies: strin
 const STATUSES = ["scheduled", "therapist_assigned", "in_progress", "completed", "cancelled"];
 
 const AdminTherapySessions = () => {
+  usePageSEO({ title: "Therapy Sessions — Admin", noIndex: true });
   const [list, setList] = useState<Session[]>([]);
   const [therapists, setTherapists] = useState<TherapistOpt[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,7 @@ const AdminTherapySessions = () => {
     setTherapists((ts ?? []) as TherapistOpt[]);
     setLoading(false);
   };
-  useEffect(() => { document.title = "Therapy Sessions — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const filtered = useMemo(() => list.filter(s => {
     if (statusFilter !== "all" && s.status !== statusFilter) return false;

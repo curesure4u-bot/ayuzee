@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useOutletContext } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,6 +37,7 @@ const TABS = [
 ] as const;
 
 const privacyName = (n: string) => {
+  usePageSEO({ title: "My Sessions | Therapist | Ayuzee", noIndex: true });
   const parts = n.trim().split(" ");
   if (parts.length === 1) return parts[0];
   return `${parts[0]} ${parts[parts.length - 1][0]}.`;
@@ -59,9 +61,7 @@ const TherapistSessions = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    document.title = "My Sessions | Therapist | Ayuzee";
-    load();
+  useEffect(() => { load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [therapist.id]);
 

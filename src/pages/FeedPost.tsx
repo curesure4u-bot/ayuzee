@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -20,6 +21,10 @@ const FeedPost = () => {
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState(false);
 
+  usePageSEO({
+    title: post ? `${post.title || "Post"} — Ayuzee Feed` : "Feed Post",
+  });
+
   useEffect(() => { load(); }, [id]);
 
   const load = async () => {
@@ -27,7 +32,6 @@ const FeedPost = () => {
     setLoading(true);
     const { data: p } = await supabase.from("feed_posts").select("*").eq("id", id).maybeSingle();
     setPost(p);
-    if (p) document.title = `${p.title || "Post"} — Ayuzee Feed`;
     const { data: c } = await supabase.from("feed_comments").select("*").eq("post_id", id).order("created_at");
     setComments(c ?? []);
     const { data: sess } = await supabase.auth.getSession();

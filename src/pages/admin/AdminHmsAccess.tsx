@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -46,6 +47,7 @@ type Req = {
 };
 
 const AdminHmsAccess = () => {
+  usePageSEO({ title: "Admin · HMS Tools Ultra", noIndex: true });
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [requests, setRequests] = useState<Req[]>([]);
   const [editFor, setEditFor] = useState<Doctor | null>(null);
@@ -76,9 +78,7 @@ const AdminHmsAccess = () => {
     setRequests(reqs);
   };
 
-  useEffect(() => {
-    document.title = "Admin · HMS Tools Ultra";
-    load();
+  useEffect(() => { load();
   }, []);
 
   const active = useMemo(() => doctors.filter((d) => d.hms_access), [doctors]);

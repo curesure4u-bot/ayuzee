@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -10,14 +11,13 @@ type Level = { level_number: number; level_name: string; min_points: number; max
 type BadgeRow = { id: string; awarded_at: string; gam_badges: { code: string; name: string; icon: string; description: string } | null };
 
 const GamificationDashboard = () => {
+  usePageSEO({ title: "Gamification — Ayuzee", noIndex: true });
   const [stats, setStats] = useState<Stats | null>(null);
   const [levels, setLevels] = useState<Level[]>([]);
   const [badges, setBadges] = useState<BadgeRow[]>([]);
   const [recent, setRecent] = useState<{ id: string; action_type: string; points: number; description: string | null; created_at: string }[]>([]);
 
-  useEffect(() => {
-    document.title = "Gamification — Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       const uid = session?.user.id;
       if (!uid) return;

@@ -47,9 +47,7 @@ const Users = () => {
   const [confirmToggle, setConfirmToggle] = useState<{ user: AdminUserRow; next: boolean } | null>(null);
   const [bulkRole, setBulkRole] = useState("");
 
-  useEffect(() => {
-    document.title = "Admin · User Management — Ayuzee";
-  }, []);
+  usePageSEO({ title: "Admin · User Management — Ayuzee", noIndex: true });
 
   useEffect(() => {
     setPage(1);

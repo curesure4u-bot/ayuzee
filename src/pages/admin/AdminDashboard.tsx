@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ type SafetyFlag = { id: string; reason: string; severity: string | null; created
 
 const formatINR = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
 const timeAgo = (iso: string) => {
+  usePageSEO({ title: "Admin Dashboard — Ayuzee", noIndex: true });
   const minutes = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
   if (minutes < 60) return `${minutes}m ago`;
   const hours = Math.round(minutes / 60);
@@ -27,9 +29,7 @@ const AdminDashboard = () => {
   const [approvals, setApprovals] = useState({ doctors: 0, therapists: 0, venues: 0, students: 0 });
   const [alerts, setAlerts] = useState<SafetyFlag[]>([]);
 
-  useEffect(() => {
-    document.title = "Admin Dashboard — Ayuzee";
-    const load = async () => {
+  useEffect(() => { const load = async () => {
       const today = new Date();
       const todayKey = today.toISOString().slice(0, 10);
       const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);

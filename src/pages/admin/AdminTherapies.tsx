@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,14 +36,13 @@ const empty = {
 };
 
 const AdminTherapies = () => {
+  usePageSEO({ title: "Admin · Therapies — Ayuzee", noIndex: true });
   const [items, setItems] = useState<Therapy[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(empty);
   const [editing, setEditing] = useState<Therapy | null>(null);
 
-  useEffect(() => {
-    document.title = "Admin · Therapies — Ayuzee";
-    load();
+  useEffect(() => { load();
   }, []);
 
   const load = async () => {

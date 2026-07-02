@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { toast } from "sonner";
 import { Briefcase, CheckCircle2, Trash2, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +22,7 @@ type AdminJob = {
 };
 
 const AdminJobs = () => {
+  usePageSEO({ title: "Admin Jobs — Ayuzee", noIndex: true });
   const [jobs, setJobs] = useState<AdminJob[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,9 +34,7 @@ const AdminJobs = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    document.title = "Admin Jobs — Ayuzee";
-    load();
+  useEffect(() => { load();
   }, []);
 
   const updateJob = async (id: string, patch: Partial<AdminJob>, message: string) => {

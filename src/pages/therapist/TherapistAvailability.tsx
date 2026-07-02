@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 const TherapistAvailability = () => {
   const { therapist, reload } = useOutletContext<TherapistContext>();
-  useEffect(() => { document.title = "Availability | Therapist | Ayuzee"; }, []);
+  usePageSEO({ title: "Availability | Therapist | Ayuzee", noIndex: true });
 
   const toggle = async (next: boolean) => {
     const { error } = await supabase.from("therapists").update({ is_available: next }).eq("id", therapist.id);

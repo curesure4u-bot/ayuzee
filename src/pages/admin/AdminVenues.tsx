@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +18,7 @@ const statusOf = (v: Venue) => v.is_suspended || v.is_active === false && v.is_v
 const roomCount = (rooms: any) => Array.isArray(rooms) ? rooms.length : Array.isArray(rooms?.rooms) ? rooms.rooms.length : 0;
 
 const AdminVenues = () => {
+  usePageSEO({ title: "Admin · Venues — Ayuzee", noIndex: true });
   const [rows, setRows] = useState<Venue[]>([]);
   const [tab, setTab] = useState("all");
   const [query, setQuery] = useState("");
@@ -35,7 +37,7 @@ const AdminVenues = () => {
     (logs.data ?? []).forEach((log: { venue_id: string | null; amount: number }) => { if (log.venue_id) next[log.venue_id] = (next[log.venue_id] ?? 0) + Number(log.amount || 0); });
     setRevenue(next);
   };
-  useEffect(() => { document.title = "Admin · Venues — Ayuzee"; load(); }, []);
+  useEffect(() => { load(); }, []);
   const filtered = useMemo(() => rows.filter((v) => (tab === "all" || statusOf(v) === tab) && (!query || `${v.name} ${v.city} ${v.state}`.toLowerCase().includes(query.toLowerCase()))), [rows, tab, query]);
   const notify = (v: Venue, message: string) => v.phone ? supabase.functions.invoke("send-whatsapp", { body: { to: v.phone, message } }) : Promise.resolve();
   const approve = async (v: Venue) => { const { error } = await (supabase as any).from("therapy_venues").update({ is_verified: true, is_active: true, is_suspended: false }).eq("id", v.id); if (error) return toast.error(error.message); if (v.owner_user_id) await supabase.from("user_roles").upsert({ user_id: v.owner_user_id, role: "venue_owner" as any }, { onConflict: "user_id,role" }); await notify(v, `Your venue ${v.name} is approved on Ayuzee`); toast.success("Venue approved"); load(); };

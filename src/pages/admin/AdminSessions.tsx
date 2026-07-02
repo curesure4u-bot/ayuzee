@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Loader2, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,11 +19,12 @@ type Ping = { id:string; pinged_at:string; lat:number; lng:number };
 const money = (n:number) => new Intl.NumberFormat("en-IN", { style:"currency", currency:"INR", maximumFractionDigits:0 }).format(n||0);
 
 const AdminSessions = () => {
+  usePageSEO({ title: "Therapy Sessions — Admin", noIndex: true });
   const [rows,setRows]=useState<Session[]>([]); const [therapists,setTherapists]=useState<Therapist[]>([]); const [venues,setVenues]=useState<Venue[]>([]); const [loading,setLoading]=useState(true);
   const [status,setStatus]=useState("all"); const [therapist,setTherapist]=useState("all"); const [venue,setVenue]=useState("all"); const [therapy,setTherapy]=useState("all"); const [from,setFrom]=useState(""); const [to,setTo]=useState("");
   const [cancelFor,setCancelFor]=useState<Session|null>(null); const [reason,setReason]=useState(""); const [reassignFor,setReassignFor]=useState<Session|null>(null); const [newTherapist,setNewTherapist]=useState(""); const [pingFor,setPingFor]=useState<Session|null>(null); const [pings,setPings]=useState<Ping[]>([]);
   const load=async()=>{setLoading(true); const [{data,error},{data:ts},{data:vs}]=await Promise.all([(supabase as any).from("therapy_sessions").select("id,patient_name,therapy_name,therapy_code,scheduled_date,scheduled_start,scheduled_duration_minutes,actual_duration_minutes,status,payment_status,total_amount,patient_user_id,razorpay_payment_id,therapists(id,full_name),therapy_venues(id,name)").order("scheduled_date",{ascending:false}).limit(300), supabase.from("therapists").select("id,full_name,allowed_therapies").eq("is_verified",true), supabase.from("therapy_venues").select("id,name").eq("is_verified",true)]); if(error) toast.error(error.message); setRows((data??[]) as Session[]); setTherapists((ts??[]) as Therapist[]); setVenues((vs??[]) as Venue[]); setLoading(false);};
-  useEffect(()=>{document.title="Therapy Sessions — Admin"; load();},[]);
+  useEffect(() => { load();},[]);
   const therapies=[...new Set(rows.map(r=>r.therapy_name).filter(Boolean))];
   const filtered=useMemo(()=>rows.filter(s=>{ if(status!=="all"&&s.status!==status)return false; if(therapist!=="all"&&s.therapists?.id!==therapist)return false; if(venue!=="all"&&s.therapy_venues?.id!==venue)return false; if(therapy!=="all"&&s.therapy_name!==therapy)return false; if(from&&s.scheduled_date<from)return false; if(to&&s.scheduled_date>to)return false; return true;}),[rows,status,therapist,venue,therapy,from,to]);
   const update=async(id:string,patch:Record<string,unknown>)=>{const {error}=await (supabase as any).from("therapy_sessions").update(patch).eq("id",id); if(error)return toast.error(error.message); toast.success("Session updated"); load();};

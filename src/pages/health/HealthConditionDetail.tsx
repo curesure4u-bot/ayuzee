@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -81,6 +82,10 @@ const HealthConditionDetail = () => {
   const [callOpen, setCallOpen] = useState(false);
   const [selectedPkg, setSelectedPkg] = useState<string | undefined>();
 
+  usePageSEO({
+    title: c?.name ? `${c.name} — Ayuzee` : "Health Condition",
+  });
+
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
@@ -88,7 +93,6 @@ const HealthConditionDetail = () => {
       .then(({ data }) => {
         setC(data as unknown as Condition | null);
         setLoading(false);
-        if (data) document.title = `${(data as { name: string }).name} — Ayuzee`;
       });
     supabase.from("health_conditions")
       .select("slug,name,tagline,product_name,product_image_url,hero_image_url,price,discount_price")

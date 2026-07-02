@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,14 +12,13 @@ const formatINR = (n: number) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
 
 const Referral = () => {
+  usePageSEO({ title: "Refer & Earn — Ayuzee" });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [code, setCode] = useState<string>("");
   const [stats, setStats] = useState({ invites: 0, purchases: 0, earnings: 0 });
 
-  useEffect(() => {
-    document.title = "Refer & Earn — Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: sessionData } = await supabase.auth.getSession();
       if (!sessionData.session) {
         navigate("/auth", { replace: true });

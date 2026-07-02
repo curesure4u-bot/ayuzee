@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -52,6 +53,11 @@ export default function AfiFormulaDetail() {
   const [related, setRelated] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
+  usePageSEO({
+    title: f ? `${f.name} — Classical Formulary` : "Formula",
+    noIndex: true,
+  });
+
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -73,7 +79,6 @@ export default function AfiFormulaDetail() {
         setRelated((rel as { id: string; name: string }[]) || []);
       }
       setLoading(false);
-      document.title = `${row?.name || "Formula"} — Classical Formulary`;
     })();
   }, [id]);
 

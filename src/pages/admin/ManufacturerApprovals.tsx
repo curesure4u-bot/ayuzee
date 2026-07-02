@@ -61,9 +61,7 @@ const ManufacturerApprovals = () => {
   const [scheduleAt, setScheduleAt] = useState("");
   const [scheduleNotes, setScheduleNotes] = useState("");
 
-  useEffect(() => {
-    document.title = "Admin · Manufacturer Approvals — Ayuzee";
-  }, []);
+  usePageSEO({ title: "Admin · Manufacturer Approvals — Ayuzee", noIndex: true });
 
   useEffect(() => setSelected(new Set()), [tab]);
 

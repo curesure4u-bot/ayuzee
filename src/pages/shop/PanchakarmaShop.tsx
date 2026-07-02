@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight, Heart, Package, Share2, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
@@ -37,15 +38,14 @@ const PANCHAKARMA_CATEGORIES = [
 ];
 
 const PanchakarmaShop = () => {
+  usePageSEO({ title: "Panchakarma Medicines & Therapy Oils — Ayuzee" });
   const { addItem } = useCart();
   const { isSaved, toggle: toggleWishlist } = useWishlist();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("All");
 
-  useEffect(() => {
-    document.title = "Panchakarma Medicines & Therapy Oils — Ayuzee";
-    supabase
+  useEffect(() => { supabase
       .from("products")
       .select("id,name,brand,category,price,discount_price,stock,unit,image_url,treatment_use,dosage_form,bulk_brand")
       .or("product_type.eq.panchakarma,tags.cs.{panchakarma}")

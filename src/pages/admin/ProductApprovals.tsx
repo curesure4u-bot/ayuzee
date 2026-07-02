@@ -45,9 +45,7 @@ const ProductApprovals = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
 
-  useEffect(() => {
-    document.title = "Admin · Product Approvals — Ayuzee";
-  }, []);
+  usePageSEO({ title: "Admin · Product Approvals — Ayuzee", noIndex: true });
 
   useEffect(() => {
     setSelected(new Set());

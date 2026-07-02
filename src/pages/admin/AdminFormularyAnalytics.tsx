@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
@@ -15,9 +16,7 @@ export default function AdminFormularyAnalytics() {
   const [gaps, setGaps] = useState<string[]>([]);
   const [prices, setPrices] = useState<PriceRow[]>([]);
 
-  useEffect(() => {
-    document.title = "Formulary Analytics — Admin";
-    (async () => {
+  useEffect(() => { (async () => {
       // Prescribed counts: aggregate from items jsonb
       const { data: rxs } = await supabase
         .from("formulary_prescriptions")

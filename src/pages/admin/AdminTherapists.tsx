@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,7 @@ const tabs = ["all", "pending", "approved", "suspended", "banned"];
 const statusOf = (t: Therapist) => t.is_banned ? "banned" : t.is_suspended ? "suspended" : t.is_verified || t.verification_status === "approved" ? "approved" : "pending";
 
 const AdminTherapists = () => {
+  usePageSEO({ title: "Admin · Therapists — Ayuzee", noIndex: true });
   const [rows, setRows] = useState<Therapist[]>([]);
   const [tab, setTab] = useState("all");
   const [query, setQuery] = useState("");
@@ -35,7 +37,7 @@ const AdminTherapists = () => {
     (flags.data ?? []).forEach((flag: { therapist_id: string | null }) => { if (flag.therapist_id) counts[flag.therapist_id] = (counts[flag.therapist_id] ?? 0) + 1; });
     setFlagCounts(counts);
   };
-  useEffect(() => { document.title = "Admin · Therapists — Ayuzee"; load(); }, []);
+  useEffect(() => { load(); }, []);
   const filtered = useMemo(() => rows.filter((t) => (tab === "all" || statusOf(t) === tab) && (!query || `${t.full_name} ${t.city ?? ""} ${t.certifying_body ?? ""}`.toLowerCase().includes(query.toLowerCase()))), [rows, tab, query]);
   const notify = (phone: string, message: string) => supabase.functions.invoke("send-whatsapp", { body: { to: phone, message } });
   const approve = async (t: Therapist) => { const { error } = await (supabase as any).from("therapists").update({ is_verified: true, verification_status: "approved", is_suspended: false, is_banned: false, rejection_reason: null }).eq("id", t.id); if (error) return toast.error(error.message); if (t.user_id) await supabase.from("user_roles").upsert({ user_id: t.user_id, role: "therapist" as any }, { onConflict: "user_id,role" }); await notify(t.phone, "Your Ayuzee therapist account is approved"); toast.success("Therapist approved"); load(); };

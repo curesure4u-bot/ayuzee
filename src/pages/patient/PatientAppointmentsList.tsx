@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -27,15 +28,14 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 const PatientAppointmentsList = () => {
+  usePageSEO({ title: "My Appointments — Ayuzee", noIndex: true });
   const [appts, setAppts] = useState<Appt[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("date_desc");
 
-  useEffect(() => {
-    document.title = "My Appointments — Ayuzee";
-    supabase.auth.getSession().then(async ({ data }) => {
+  useEffect(() => { supabase.auth.getSession().then(async ({ data }) => {
       const uid = data.session?.user.id;
       if (!uid) return;
       const { data: rows } = await supabase

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ type BadgeDef = { id: string; code: string; name: string; description: string | 
 type LevelDef = { id: string; level_number: number; level_name: string; min_points: number; max_points: number | null; icon: string | null };
 
 const AdminGamification = () => {
+  usePageSEO({ title: "Gamification — Admin", noIndex: true });
   const [badges, setBadges] = useState<BadgeDef[]>([]);
   const [levels, setLevels] = useState<LevelDef[]>([]);
   const [topUsers, setTopUsers] = useState<{ user_id: string; full_name: string | null; total_points: number; level_number: number }[]>([]);
@@ -33,7 +35,7 @@ const AdminGamification = () => {
     setTopUsers((s.data ?? []).map((r: any) => ({ ...r, full_name: (nameMap.get(r.user_id) as any) ?? null })));
   };
 
-  useEffect(() => { document.title = "Gamification — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const saveBadge = async (b: BadgeDef) => {
     const { error } = await (supabase as any).from("gam_badges").update({

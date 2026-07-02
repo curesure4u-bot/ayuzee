@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ interface Appointment {
 }
 
 const Dashboard = () => {
+  usePageSEO({ title: "Dashboard — Ayuzee" });
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
@@ -32,9 +34,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  useEffect(() => {
-    document.title = "Dashboard — Ayuzee";
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+  useEffect(() => { const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) { navigate("/auth", { replace: true }); return; }
       setEmail(session.user.email ?? "");
       setUserId(session.user.id);

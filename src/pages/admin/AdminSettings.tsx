@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ type Info = { id: string; brand_name: string; support_email: string; phone: stri
 type Admin = { id: string; user_id: string; profiles?: { email: string | null; full_name: string | null } | null };
 
 const AdminSettings = () => {
+  usePageSEO({ title: "Settings — Admin", noIndex: true });
   const [splits, setSplits] = useState<Record<string, string>>({});
   const [info, setInfo] = useState<Partial<Info>>({});
   const [flags, setFlags] = useState<Flag[]>([]);
@@ -36,7 +38,7 @@ const AdminSettings = () => {
     setProductAdmins(pa.data ?? []);
   };
 
-  useEffect(() => { document.title = "Settings — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const saveSplits = async () => {
     const total = Object.values(splits).reduce((a, v) => a + Number(v || 0), 0);

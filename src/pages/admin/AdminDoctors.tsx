@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ const CENTER_TYPES = [
 const statusOf = (d: Doctor) => d.is_suspended ? "suspended" : d.verification_status === "approved" || d.is_verified ? "approved" : d.verification_status === "rejected" ? "rejected" : "pending";
 
 const AdminDoctors = () => {
+  usePageSEO({ title: "Admin · Doctors — Ayuzee", noIndex: true });
   const [rows, setRows] = useState<Doctor[]>([]);
   const [tab, setTab] = useState("all");
   const [query, setQuery] = useState("");
@@ -40,7 +42,7 @@ const AdminDoctors = () => {
     setRows((data ?? []) as Doctor[]);
     setCommissions(Object.fromEntries(((data ?? []) as Doctor[]).map((d) => [d.id, String(d.commission_rate ?? 0)])));
   };
-  useEffect(() => { document.title = "Admin · Doctors — Ayuzee"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const filtered = useMemo(() => rows.filter((d) => (tab === "all" || statusOf(d) === tab) && (!query || `${d.full_name} ${d.specialization} ${d.city} ${d.state ?? ""}`.toLowerCase().includes(query.toLowerCase()))), [rows, tab, query]);
   const counts = { total: rows.length, pending: rows.filter((d) => statusOf(d) === "pending").length, approved: rows.filter((d) => statusOf(d) === "approved").length, rejected: rows.filter((d) => statusOf(d) === "rejected").length };

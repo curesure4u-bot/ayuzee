@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge as UiBadge } from "@/components/ui/badge";
@@ -6,12 +7,11 @@ import { Badge as UiBadge } from "@/components/ui/badge";
 type BadgeDef = { id: string; code: string; name: string; description: string | null; icon: string; criteria_type: string; criteria_value: number };
 
 const MyBadges = () => {
+  usePageSEO({ title: "My Badges — Ayuzee", noIndex: true });
   const [all, setAll] = useState<BadgeDef[]>([]);
   const [earned, setEarned] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    document.title = "My Badges — Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       const [a, e] = await Promise.all([
         (supabase as any).from("gam_badges").select("*").order("criteria_value"),

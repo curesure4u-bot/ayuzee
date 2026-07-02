@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight, Heart, PackageCheck, Share2, ShoppingCart, Stethoscope } from "lucide-react";
 import { toast } from "sonner";
@@ -30,15 +31,14 @@ interface KitProduct {
 const GROUPS = ["All Kits", "Panchakarma Kits", "Disease Kits", "Wellness Kits", "Seasonal Kits"];
 
 const TreatmentKits = () => {
+  usePageSEO({ title: "Ayurvedic Treatment Kits — Ayuzee" });
   const { addItem } = useCart();
   const { isSaved, toggle: toggleWishlist } = useWishlist();
   const [kits, setKits] = useState<KitProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeGroup, setActiveGroup] = useState("All Kits");
 
-  useEffect(() => {
-    document.title = "Ayurvedic Treatment Kits — Ayuzee";
-    supabase
+  useEffect(() => { supabase
       .from("products")
       .select("id,name,brand,category,description,price,discount_price,stock,image_url,unit,health_conditions,rating,total_reviews")
       .eq("product_type", "treatment_kit")

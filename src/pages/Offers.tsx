@@ -69,9 +69,7 @@ const FAQS = [
 ];
 
 const Offers = () => {
-  useEffect(() => {
-    document.title = "Offers — Ayuzee";
-  }, []);
+  usePageSEO({ title: "Offers — Ayuzee" });
 
   return (
     <div className="min-h-screen bg-background">

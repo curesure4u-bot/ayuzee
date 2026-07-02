@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ const tabs = ["all", "pending", "verified", "rejected"];
 const statusOf = (s: Student) => s.is_verified ? "verified" : s.rejection_note ? "rejected" : "pending";
 
 const AdminStudents = () => {
+  usePageSEO({ title: "Admin · Students — Ayuzee", noIndex: true });
   const [rows, setRows] = useState<Student[]>([]);
   const [tab, setTab] = useState("all");
   const [query, setQuery] = useState("");
@@ -32,7 +34,7 @@ const AdminStudents = () => {
     setRows((students.data ?? []) as Student[]);
     setStats({ enrolled: progress.count ?? 0, certificates: certs.count ?? 0 });
   };
-  useEffect(() => { document.title = "Admin · Students — Ayuzee"; load(); }, []);
+  useEffect(() => { load(); }, []);
   const filtered = useMemo(() => rows.filter((s) => (tab === "all" || statusOf(s) === tab) && (!query || `${s.full_name} ${s.course ?? ""} ${s.college_name ?? ""}`.toLowerCase().includes(query.toLowerCase()))), [rows, tab, query]);
   const verify = async (s: Student) => { const { error } = await (supabase as any).from("student_profiles").update({ is_verified: true, rejection_note: null }).eq("id", s.id); if (error) return toast.error(error.message); await supabase.from("user_roles").upsert({ user_id: s.user_id, role: "student" as any }, { onConflict: "user_id,role" }); if (s.phone) await supabase.functions.invoke("send-whatsapp", { body: { to: s.phone, message: "Your Ayuzee student account is verified" } }); toast.success("Student verified"); load(); };
   const reject = async () => { if (!rejectFor) return; const { error } = await (supabase as any).from("student_profiles").update({ is_verified: false, rejection_note: reason }).eq("id", rejectFor.id); if (error) return toast.error(error.message); if (rejectFor.phone) await supabase.functions.invoke("send-whatsapp", { body: { to: rejectFor.phone, message: `Your Ayuzee student verification was rejected. Reason: ${reason}` } }); toast.success("Student rejected"); setRejectFor(null); setReason(""); load(); };

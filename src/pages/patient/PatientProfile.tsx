@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -68,6 +69,7 @@ interface Member {
 }
 
 const PatientProfile = () => {
+  usePageSEO({ title: "My Profile — Ayuzee", noIndex: true });
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -102,9 +104,7 @@ const PatientProfile = () => {
     marital_status: "",
   });
 
-  useEffect(() => {
-    document.title = "My Profile — Ayuzee";
-    supabase.auth.getSession().then(async ({ data }) => {
+  useEffect(() => { supabase.auth.getSession().then(async ({ data }) => {
       const uid = data.session?.user.id;
       if (!uid) return;
       setUserId(uid);

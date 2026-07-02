@@ -77,7 +77,7 @@ export default function AdminAfiManagement() {
   const [editIngs, setEditIngs] = useState<Ingredient[]>([]);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => { document.title = "AFI Management — Admin"; }, []);
+  usePageSEO({ title: "AFI Management — Admin", noIndex: true });
 
   const fetchAll = async () => {
     setLoading(true);

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +21,7 @@ type Appointment = {
 const statuses = ["scheduled", "confirmed", "completed", "cancelled"];
 const todayIso = () => new Date().toISOString().slice(0, 10);
 const inThisWeek = (date: string) => {
+  usePageSEO({ title: "Appointments — Admin", noIndex: true });
   const d = new Date(date); const now = new Date(); const start = new Date(now); start.setDate(now.getDate() - now.getDay()); start.setHours(0,0,0,0);
   const end = new Date(start); end.setDate(start.getDate() + 7); return d >= start && d < end;
 };
@@ -41,7 +43,7 @@ const AdminAppointments = () => {
     setRows(appts.map((a) => ({ ...a, patient: map.get(a.user_id) ?? null })));
     setLoading(false);
   };
-  useEffect(() => { document.title = "Appointments — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const filtered = useMemo(() => rows.filter((a) => {
     if (status !== "all" && a.status !== status) return false;

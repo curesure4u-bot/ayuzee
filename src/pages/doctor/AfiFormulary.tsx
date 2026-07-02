@@ -29,7 +29,7 @@ export default function AfiFormulary() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { document.title = "Classical Formulary (AFI + API) — Ayuzee"; }, []);
+  usePageSEO({ title: "Classical Formulary (AFI + API) — Ayuzee", noIndex: true });
 
   useEffect(() => {
     (async () => {

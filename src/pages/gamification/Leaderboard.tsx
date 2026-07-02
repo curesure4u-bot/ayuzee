@@ -11,9 +11,7 @@ const Leaderboard = () => {
   const [period, setPeriod] = useState<Period>("all");
   const [rows, setRows] = useState<{ user_id: string; full_name: string | null; total: number }[]>([]);
 
-  useEffect(() => {
-    document.title = "Leaderboard — Ayuzee";
-  }, []);
+  usePageSEO({ title: "Leaderboard — Ayuzee", noIndex: true });
 
   useEffect(() => {
     (async () => {

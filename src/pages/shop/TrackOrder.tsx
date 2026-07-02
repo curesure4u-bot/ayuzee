@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight, ExternalLink, HelpCircle, Loader2, MapPin, PackageCheck, Search, ShoppingBag, Truck } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
@@ -52,6 +53,7 @@ interface ScanEvent { date: string; status: string; location: string; instructio
 interface LiveTracking { waybill: string; status: string; current_location?: string; expected_delivery?: string; scans: ScanEvent[]; simulated: boolean; }
 
 const LiveTrackingPanel = ({ waybill }: { waybill: string }) => {
+  usePageSEO({ title: "Track Medicine Order — Ayuzee" });
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<LiveTracking | null>(null);
 
@@ -155,9 +157,7 @@ const TrackOrder = () => {
   const [guestOrderId, setGuestOrderId] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
 
-  useEffect(() => {
-    document.title = "Track Medicine Order — Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data } = await supabase.auth.getSession();
       const userId = data.session?.user.id;
       setIsLoggedIn(!!userId);

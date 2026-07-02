@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useOutletContext } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,14 +21,13 @@ interface SessionRow {
 }
 
 const TherapistDashboard = () => {
+  usePageSEO({ title: "Therapist Dashboard | Ayuzee", noIndex: true });
   const { therapist, reload } = useOutletContext<TherapistContext>();
   const [stats, setStats] = useState({ today: 0, weekEarn: 0, rating: 0, total: 0 });
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    document.title = "Therapist Dashboard | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const today = new Date().toISOString().slice(0, 10);
       const weekAgo = new Date(Date.now() - 7 * 86400000).toISOString();
 

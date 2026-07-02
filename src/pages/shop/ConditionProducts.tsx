@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight, Heart, Search, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
@@ -54,6 +55,12 @@ const ConditionProducts = () => {
   const [maxPrice, setMaxPrice] = useState(5000);
   const [sort, setSort] = useState("Newest");
 
+  usePageSEO({
+    title: condition
+      ? `${condition.name} Medicines — Ayuzee`
+      : "Health Condition Medicines",
+  });
+
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
@@ -65,7 +72,6 @@ const ConditionProducts = () => {
       .then(async ({ data }) => {
         const nextCondition = data as HealthCondition | null;
         setCondition(nextCondition);
-        document.title = `${nextCondition?.name ?? "Health Condition"} Medicines — Ayuzee`;
 
         if (!nextCondition) {
           setProducts([]);

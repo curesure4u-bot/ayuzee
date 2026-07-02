@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { Briefcase, CalendarDays, IndianRupee, MapPin, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,6 +39,7 @@ const jobTypeLabels: Record<string, string> = {
 const formatINR = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
 
 const daysAgo = (iso: string) => {
+  usePageSEO({ title: "Ayurveda Jobs Board — Ayuzee" });
   const days = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000));
   if (days === 0) return "Posted today";
   if (days === 1) return "Posted 1 day ago";
@@ -52,9 +54,7 @@ const Jobs = () => {
   const [state, setState] = useState("all");
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    document.title = "Ayurveda Jobs Board — Ayuzee";
-    const today = new Date().toISOString().slice(0, 10);
+  useEffect(() => { const today = new Date().toISOString().slice(0, 10);
     (supabase as any)
       .from("job_listings")
       .select("*")

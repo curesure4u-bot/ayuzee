@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/site/Header";
@@ -34,6 +35,10 @@ const TherapistDetail = () => {
   const [t, setT] = useState<Therapist | null>(null);
   const [loading, setLoading] = useState(true);
 
+  usePageSEO({
+    title: t ? `${t.full_name} — Therapist | Ayuzee` : "Therapist",
+  });
+
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -46,9 +51,7 @@ const TherapistDetail = () => {
         .maybeSingle();
       setT(((data as unknown) as Therapist | null));
       setLoading(false);
-      if (data) {
-        document.title = `${((data as unknown) as Therapist).full_name} — Therapist | Ayuzee`;
-      }
+      if (data) {}
     })();
   }, [id]);
 

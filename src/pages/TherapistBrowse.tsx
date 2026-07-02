@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Footer } from "@/components/site/Footer";
@@ -30,6 +31,7 @@ const therapyMap = new Map(AYUSH_THERAPIES.map((therapy) => [therapy.code, thera
 const therapyGroups = Array.from(new Set(AYUSH_THERAPIES.map((therapy) => therapy.group))).sort();
 
 const TherapistBrowse = () => {
+  usePageSEO({ title: "Certified Panchakarma Therapists | Ayuzee" });
   const navigate = useNavigate();
   const [therapists, setTherapists] = useState<Therapist[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,9 +42,7 @@ const TherapistBrowse = () => {
   const [rating, setRating] = useState("any");
   const [sort, setSort] = useState("rating");
 
-  useEffect(() => {
-    document.title = "Certified Panchakarma Therapists | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       setLoading(true);
       const { data } = await supabase
         .from("therapists_public" as any)

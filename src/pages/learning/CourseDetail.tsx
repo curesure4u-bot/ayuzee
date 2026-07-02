@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -29,6 +30,10 @@ const CourseDetail = () => {
   const [attempt, setAttempt] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  usePageSEO({
+    title: course ? `${course.title} — Ayuzee Learning` : "Course",
+  });
+
   useEffect(() => { load(); }, [slug]);
 
   const load = async () => {
@@ -36,7 +41,6 @@ const CourseDetail = () => {
     const { data: c } = await supabase.from("lms_courses").select("*").eq("slug", slug).eq("is_published", true).maybeSingle();
     if (!c) { setLoading(false); return; }
     setCourse(c);
-    document.title = `${c.title} — Ayuzee Learning`;
     const { data: l } = await supabase.from("lms_lessons").select("*").eq("course_id", c.id).order("sort_order");
     setLessons(l ?? []);
     const { data: q } = await supabase.from("lms_quizzes").select("*").eq("course_id", c.id).eq("is_published", true).maybeSingle();

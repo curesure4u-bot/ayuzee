@@ -12,7 +12,7 @@ const tabs = [
 ];
 
 const LearningLayout = () => {
-  useEffect(() => { document.title = "Learning — Ayuzee"; }, []);
+  usePageSEO({ title: "Learning — Ayuzee" });
   return (
     <div className="min-h-screen bg-background">
       <SiteNav />

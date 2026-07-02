@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +58,7 @@ const CSV_HEADERS = "name,brand,category,product_type,ayush_system,price,discoun
 const CSV_EXAMPLE = "Triphala Churna 200g,Dabur,Churna,medicine,Ayurveda,180,150,200,500,200g,Powder/Churna,Classical three-fruit formulation,Digestive|Constipation,,,false";
 
 const AdminProducts = () => {
+  usePageSEO({ title: "Products — Admin", noIndex: true });
   const [rows, setRows] = useState<Product[]>([]);
   const [typeF, setTypeF] = useState("all");
   const [systemF, setSystemF] = useState("all");
@@ -71,7 +73,7 @@ const AdminProducts = () => {
     if (error) toast.error(error.message);
     setRows((data ?? []) as Product[]);
   };
-  useEffect(() => { document.title = "Products — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const stats = useMemo(() => ({
     total: rows.filter(p => p.stock !== -1).length,

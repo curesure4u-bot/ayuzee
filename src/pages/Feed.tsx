@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -90,6 +91,7 @@ const TRENDING_TAGS = [
 ];
 
 const Feed = () => {
+  usePageSEO({ title: "Feed — Ayuzee" });
   const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,9 +112,7 @@ const Feed = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [posting, setPosting] = useState(false);
 
-  useEffect(() => {
-    document.title = "Feed — Ayuzee";
-    load();
+  useEffect(() => { load();
   }, []);
 
   const load = async () => {

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useOutletContext } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,15 +20,14 @@ interface Bank {
 }
 
 const TherapistProfile = () => {
+  usePageSEO({ title: "Profile | Therapist | Ayuzee", noIndex: true });
   const { therapist } = useOutletContext<TherapistContext>();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState({ full_name: therapist.full_name, phone: "", city: "", state: "", years_experience: 0 });
   const [bank, setBank] = useState<Bank>({ account_holder_name: "", account_number: "", ifsc_code: "", bank_name: "", upi_id: "" });
 
-  useEffect(() => {
-    document.title = "Profile | Therapist | Ayuzee";
-    (async () => {
+  useEffect(() => { (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       const { data: t } = await supabase.from("therapists").select("full_name, phone, city, state, years_experience").eq("id", therapist.id).maybeSingle();

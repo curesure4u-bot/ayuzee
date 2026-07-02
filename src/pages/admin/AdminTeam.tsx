@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +28,7 @@ type TeamMember = {
 };
 
 const AdminTeam = () => {
+  usePageSEO({ title: "Team Management — Admin", noIndex: true });
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [emailInputs, setEmailInputs] = useState<Record<string, string>>({});
@@ -43,9 +45,7 @@ const AdminTeam = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    document.title = "Team Management — Admin";
-    load();
+  useEffect(() => { load();
   }, []);
 
   const grant = async (role: string) => {

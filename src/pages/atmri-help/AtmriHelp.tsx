@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ type Case = {
 };
 
 const AtmriHelp = () => {
+  usePageSEO({ title: "Free Ayurvedic Treatment — ATMRI Trust × Ayuzee" });
   const [stats, setStats] = useState<Stats>({
     inTreatment: 0,
     pledgeDoctors: 0,
@@ -32,9 +34,7 @@ const AtmriHelp = () => {
   });
   const [urgent, setUrgent] = useState<Case[]>([]);
 
-  useEffect(() => {
-    document.title = "Free Ayurvedic Treatment — ATMRI Trust × Ayuzee";
-    const meta = document.querySelector('meta[name="description"]') || document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" }));
+  useEffect(() => { const meta = document.querySelector('meta[name="description"]') || document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" }));
     (meta as HTMLMetaElement).content = "ATMRI Trust funds free AYUSH treatment for underprivileged patients. Zero crowdfunding. 80G-compliant.";
 
     (async () => {

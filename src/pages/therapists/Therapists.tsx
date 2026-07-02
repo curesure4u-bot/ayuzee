@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -30,6 +31,7 @@ interface Therapist {
 }
 
 const Therapists = () => {
+  usePageSEO({ title: "Find Certified Therapists | Ayuzee" });
   const [list, setList] = useState<Therapist[]>([]);
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState("");
@@ -38,9 +40,7 @@ const Therapists = () => {
   const [availableOnly, setAvailableOnly] = useState(false);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    document.title = "Find Certified Therapists | Ayuzee";
-    const meta = document.querySelector('meta[name="description"]');
+  useEffect(() => { const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", "Browse verified Panchakarma & Ayurveda therapists near you. Filter by city, therapy and availability.");
   }, []);
 

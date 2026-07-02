@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ interface Row { key: string; value: number; description: string | null; }
 const KEYS = ["therapist_pct", "venue_pct", "doctor_pct", "platform_pct"] as const;
 
 const AdminRevenueSplit = () => {
+  usePageSEO({ title: "Revenue Split — Admin", noIndex: true });
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -25,7 +27,7 @@ const AdminRevenueSplit = () => {
     setDraft(Object.fromEntries(list.map(r => [r.key, String(r.value)])));
     setLoading(false);
   };
-  useEffect(() => { document.title = "Revenue Split — Admin"; load(); }, []);
+  useEffect(() => { load(); }, []);
 
   const total = KEYS.reduce((s, k) => s + Number(draft[k] ?? 0), 0);
 

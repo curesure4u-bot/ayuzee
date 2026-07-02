@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,11 +17,15 @@ const CertificateView = () => {
   const [cert, setCert] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  usePageSEO({
+    title: cert ? `${cert.certificate_no} — Ayuzee` : "Certificate",
+    noIndex: true,
+  });
+
   useEffect(() => {
     supabase.from("gam_certificates_public" as any).select("*").eq("id", id).maybeSingle().then(({ data }: any) => {
       setCert(data);
       setLoading(false);
-      if (data) document.title = `${data.certificate_no} — Ayuzee`;
     });
   }, [id]);
 

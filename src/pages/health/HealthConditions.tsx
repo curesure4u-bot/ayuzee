@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -18,12 +19,11 @@ interface ConditionCard {
 }
 
 const HealthConditions = () => {
+  usePageSEO({ title: "Health Conditions — Ayuzee" });
   const [items, setItems] = useState<ConditionCard[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    document.title = "Health Conditions — Ayuzee";
-    supabase
+  useEffect(() => { supabase
       .from("health_conditions")
       .select("id,slug,name,tagline,product_name,product_image_url,hero_image_url,price,discount_price")
       .eq("is_published", true)

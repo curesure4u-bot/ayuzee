@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,9 +35,12 @@ export default function AfiIngredientFormulations() {
   const [loading, setLoading] = useState(true);
   const [typeNames, setTypeNames] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    document.title = `${decoded} — Formulations | Ayuzee`;
-    (async () => {
+  usePageSEO({
+    title: `${decoded} — Formulations | Ayuzee`,
+    noIndex: true,
+  });
+
+  useEffect(() => { (async () => {
       setLoading(true);
       const { data } = await supabase
         .from("api_botanical_names")

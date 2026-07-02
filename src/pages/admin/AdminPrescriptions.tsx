@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState  } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,9 +16,10 @@ type Rx={id:string;user_id:string|null;guest_name:string|null;guest_phone:string
 const tabs=["all","pending_review","quoted","confirmed","dispatched","delivered","cancelled"];
 const money=(n:number)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n||0);
 
-const AdminPrescriptions=()=>{const [rows,setRows]=useState<Rx[]>([]);const [loading,setLoading]=useState(true);const [tab,setTab]=useState("all");const [quoteFor,setQuoteFor]=useState<Rx|null>(null);const [amount,setAmount]=useState("");const [waybillFor,setWaybillFor]=useState<Rx|null>(null);const [waybill,setWaybill]=useState("");
+const AdminPrescriptions=()=>{
+  usePageSEO({ title: "Prescription Orders — Admin", noIndex: true });const [rows,setRows]=useState<Rx[]>([]);const [loading,setLoading]=useState(true);const [tab,setTab]=useState("all");const [quoteFor,setQuoteFor]=useState<Rx|null>(null);const [amount,setAmount]=useState("");const [waybillFor,setWaybillFor]=useState<Rx|null>(null);const [waybill,setWaybill]=useState("");
  const load=async()=>{setLoading(true);const {data,error}=await (supabase as any).from("prescription_orders").select("*").order("created_at",{ascending:false}).limit(300);if(error)toast.error(error.message);const list=(data??[]) as Rx[];const ids=[...new Set(list.map(r=>r.user_id).filter(Boolean))];const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,full_name,phone").in("user_id",ids):{data:[]} as any;const map=new Map((profiles??[]).map((p:any)=>[p.user_id,p]));setRows(list.map(r=>({...r,patient:r.user_id?map.get(r.user_id)??null:null})));setLoading(false);};
- useEffect(()=>{document.title="Prescription Orders — Admin";load();},[]); const filtered=useMemo(()=>tab==="all"?rows:rows.filter(r=>(r.status??"pending_review")===tab),[rows,tab]);
+ useEffect(() => { load();},[]); const filtered=useMemo(()=>tab==="all"?rows:rows.filter(r=>(r.status??"pending_review")===tab),[rows,tab]);
  const signed=async(path:string)=>{const {data,error}=await supabase.storage.from("prescriptions").createSignedUrl(path,900);if(error)return toast.error(error.message);window.open(data.signedUrl,"_blank","noreferrer");};
  const update=async(id:string,patch:Record<string,unknown>)=>{const {error}=await (supabase as any).from("prescription_orders").update(patch).eq("id",id);if(error)return toast.error(error.message);toast.success("Prescription order updated");load();};
  const sendQuote=async()=>{if(!quoteFor||!amount)return;await update(quoteFor.id,{quoted_amount:Number(amount),status:"quoted"});const phone=quoteFor.patient?.phone||quoteFor.guest_phone; if(phone)await supabase.functions.invoke("send-whatsapp",{body:{to:phone,message:`Your prescription quote is ready: ₹${Number(amount).toLocaleString("en-IN")}. Tap to confirm your order.`}});setQuoteFor(null);setAmount("");};

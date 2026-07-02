@@ -3,7 +3,7 @@ import { LifeBuoy, Mail, Phone } from "lucide-react";
 import { useEffect } from "react";
 
 const TherapistSupport = () => {
-  useEffect(() => { document.title = "Support | Therapist | Ayuzee"; }, []);
+  usePageSEO({ title: "Support | Therapist | Ayuzee", noIndex: true });
   return (
     <div className="space-y-6 max-w-2xl">
       <h1 className="text-2xl font-bold">Support</h1>
