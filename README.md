@@ -1,8 +1,39 @@
-# Welcome to your Lovable project
+# Ayuzee — India's AYUSH Healthcare Super-App
 
 [![E2E Tests](../../actions/workflows/e2e.yml/badge.svg)](../../actions/workflows/e2e.yml)
 
-TODO: Document your project here
+Vite + React SPA for Ayurveda doctors, medicines, therapies, and patient dashboards. Backend: Supabase.
+
+## Quick start (local dev)
+
+```bash
+git clone https://github.com/curesure4u-bot/ayuzee.git
+cd ayuzee
+git checkout main
+npm install
+cp .env.e2e.example .env   # then add your Supabase keys (see below)
+npm run dev
+```
+
+Open **http://localhost:8080**
+
+### Required environment variables
+
+Create `.env` in the project root:
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+```
+
+Get these from your Supabase project → Settings → API.
+
+### Production build
+
+```bash
+npm run build              # standard SPA build
+npm run build:prerender    # build + prerender top pages for SEO (needs Playwright)
+```
 
 ## E2E tests in GitHub Actions
 

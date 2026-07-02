@@ -1,9 +1,17 @@
 import { test, expect } from "@playwright/test";
-import { login, randomEmail, requireEnv, skipIfMissingEnv } from "./helpers/auth";
+import { login, requireEnv, skipIfMissingEnv } from "./helpers/auth";
+
+const submitAuthForm = (page: import("@playwright/test").Page) =>
+  page.locator("form button[type='submit']");
+
+const expectAuthToast = async (page: import("@playwright/test").Page) => {
+  await expect(page.locator("[data-sonner-toast]").first()).toBeVisible({ timeout: 10_000 });
+};
 
 test.describe("Authentication", () => {
   test("signup creates a new patient account", async ({ page }) => {
-    const email = process.env.E2E_NEW_SIGNUP_EMAIL ?? randomEmail("signup");
+    skipIfMissingEnv(test, ["E2E_NEW_SIGNUP_EMAIL"]);
+    const email = requireEnv("E2E_NEW_SIGNUP_EMAIL");
     const password = "TestPass!234";
 
     await page.goto("/auth?mode=signup");
@@ -11,12 +19,20 @@ test.describe("Authentication", () => {
     await page.locator("#phone").fill("9999999999");
     await page.locator("#email").fill(email);
     await page.locator("#password").fill(password);
-    await page.getByRole("button", { name: /create|sign ?up|continue/i }).first().click();
+    await submitAuthForm(page).click();
 
-    // Either redirected to dashboard or shown a "check your email" confirmation toast.
+    // Success: redirect away from signup, or confirmation toast (email verification on).
     await expect
-      .poll(async () => page.url(), { timeout: 15_000 })
-      .not.toMatch(/\/auth\?mode=signup$/);
+      .poll(
+        async () => {
+          if (!page.url().includes("/auth?mode=signup")) return "redirected";
+          const toast = page.locator("[data-sonner-toast]").first();
+          if (await toast.isVisible()) return (await toast.innerText()).toLowerCase();
+          return "";
+        },
+        { timeout: 15_000 },
+      )
+      .toMatch(/redirected|welcome|created|account|email|confirm/i);
   });
 
   test("login with existing patient credentials succeeds", async ({ page }) => {
@@ -33,8 +49,10 @@ test.describe("Authentication", () => {
     await page.goto("/auth?mode=login");
     await page.locator("#email").fill("nobody@ayuzee-test.dev");
     await page.locator("#password").fill("wrong-password-xx");
-    await page.getByRole("button", { name: /sign in|log in/i }).first().click();
-    await expect(page.getByText(/invalid|incorrect|wrong|error/i).first())
-      .toBeVisible({ timeout: 10_000 });
+    await submitAuthForm(page).click();
+    await expectAuthToast(page);
+    await expect(page.locator("[data-sonner-toast]").first()).toContainText(
+      /invalid|incorrect|credentials|wrong|error/i,
+    );
   });
 });

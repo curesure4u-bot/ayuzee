@@ -4,7 +4,7 @@ export async function login(page: Page, email: string, password: string) {
   await page.goto("/auth?mode=login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(password);
-  await page.getByRole("button", { name: /sign in|log in|continue/i }).first().click();
+  await page.locator("form button[type='submit']").click();
   // App redirects to a role-specific dashboard on success.
   await expect(page).not.toHaveURL(/\/auth/, { timeout: 15_000 });
 }
