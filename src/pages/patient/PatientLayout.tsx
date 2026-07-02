@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { PatientHeader } from "@/components/patient/PatientHeader";
 import { PatientSidebar } from "@/components/patient/PatientSidebar";
+import { AuthLoadingScreen } from "@/components/common/AuthLoadingScreen";
 
 const PatientLayout = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const PatientLayout = () => {
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
 
-  if (!ready) return null;
+  if (!ready) return <AuthLoadingScreen />;
 
   return (
     <div className="min-h-screen bg-muted/30">

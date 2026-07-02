@@ -1,9 +1,12 @@
+import { DEFAULT_OG_IMAGE, SITE_URL } from "@/lib/seo.constants";
+
 type JsonLd = Record<string, unknown> | Record<string, unknown>[];
 
-interface SEOOptions {
+export interface SEOOptions {
   ogType?: "website" | "article" | "product" | "profile";
   ogImage?: string;
   jsonLd?: JsonLd;
+  noIndex?: boolean;
 }
 
 const JSONLD_ID = "route-jsonld";
@@ -38,17 +41,23 @@ export const setSEO = (
     upsertMeta('meta[property="og:type"]', "property", "og:type", "website");
   }
 
-  if (options.ogImage) {
-    upsertMeta('meta[property="og:image"]', "property", "og:image", options.ogImage);
-    upsertMeta('meta[name="twitter:image"]', "name", "twitter:image", options.ogImage);
+  const ogImage = options.ogImage ?? DEFAULT_OG_IMAGE;
+  upsertMeta('meta[property="og:image"]', "property", "og:image", ogImage);
+  upsertMeta('meta[name="twitter:image"]', "name", "twitter:image", ogImage);
+
+  if (options.noIndex) {
+    upsertMeta('meta[name="robots"]', "name", "robots", "noindex, nofollow");
+  } else {
+    const robots = document.querySelector('meta[name="robots"]');
+    robots?.remove();
   }
 
   // Self-referencing canonical + og:url for the current route
   const href = canonicalPath
-    ? `https://ayuzee.com${canonicalPath.startsWith("/") ? "" : "/"}${canonicalPath}`
+    ? `${SITE_URL}${canonicalPath.startsWith("/") ? "" : "/"}${canonicalPath}`
     : (typeof window !== "undefined"
-        ? `https://ayuzee.com${window.location.pathname}`
-        : "https://ayuzee.com/");
+        ? `${SITE_URL}${window.location.pathname}`
+        : `${SITE_URL}/`);
 
   let canonical = document.querySelector('link[rel="canonical"]');
   if (!canonical) {
