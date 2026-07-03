@@ -40,6 +40,10 @@ jobs:
           grep -q '<meta name="description"' dist/index.html
           test -f dist/sitemap.xml
           grep -q '<urlset' dist/sitemap.xml
+          test -f dist/_headers
+
+      - name: Run Lighthouse CI
+        run: npx lhci autorun
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4

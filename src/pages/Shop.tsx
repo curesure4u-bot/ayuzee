@@ -13,6 +13,7 @@ import { Search, ShoppingCart, Heart, Share2, ChevronRight, Leaf, Sparkles, Flas
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { setSEO } from "@/lib/seo";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
 
 interface Product {
   id: string;
@@ -367,7 +368,16 @@ const Shop = () => {
 
                     <Link to={`/shop/${p.id}`} className="relative mb-3 grid aspect-square place-items-center overflow-hidden rounded-lg bg-muted/40">
                       {p.image_url ? (
-                        <img src={p.image_url} alt={p.name} className={cn("h-full w-full object-contain p-3", p.stock <= 0 && "opacity-40")} loading="lazy" />
+                        <OptimizedImage
+                          src={p.image_url}
+                          alt={p.name}
+                          optimizedWidth={400}
+                          srcWidths={[200, 400, 600]}
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          width={400}
+                          height={400}
+                          className={cn("h-full w-full object-contain p-3", p.stock <= 0 && "opacity-40")}
+                        />
                       ) : (
                         <div className={cn("font-display text-5xl text-primary/25", p.stock <= 0 && "opacity-40")}>{p.name[0]}</div>
                       )}

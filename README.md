@@ -45,6 +45,20 @@ Optional GitHub Actions secrets for dynamic sitemap/prerender URLs:
 | `VITE_SUPABASE_URL` | Supabase project URL for doctor/product/condition URLs |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Anon key for read-only public tables |
 
+### Performance & monitoring
+
+```bash
+npm run lighthouse   # Lighthouse CI against preview server (after build)
+```
+
+Production deploy uses `public/_headers` for long-lived cache on hashed `/assets/*`.
+
+Optional `.env` key:
+
+| Variable | Purpose |
+| --- | --- |
+| `VITE_SENTRY_DSN` | Error reporting in production (optional) |
+
 ## E2E tests in GitHub Actions
 
 The Playwright suite (`.github/workflows/e2e.yml`) runs on every PR and push to `main`. It reads its config from repository secrets.

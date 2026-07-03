@@ -145,7 +145,7 @@ export default function ASTGDiseaseDetail() {
             variant="outline"
             size="sm"
             className="gap-2"
-            onClick={() => exportDiseasePDF(match.category, match.disease)}
+            onClick={() => void exportDiseasePDF(match.category, match.disease)}
           >
             <Printer className="h-4 w-4" />
             Export PDF

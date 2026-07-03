@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
 
 interface MiniProduct {
   id: string;
@@ -43,11 +44,15 @@ const ProductCard = ({ p }: { p: MiniProduct }) => (
   >
     <div className="relative mb-2 grid aspect-square place-items-center overflow-hidden rounded-lg bg-muted/40">
       {p.image_url ? (
-        <img
+        <OptimizedImage
           src={p.image_url}
           alt={p.name}
+          optimizedWidth={176}
+          srcWidths={[88, 176, 352]}
+          sizes="176px"
+          width={176}
+          height={176}
           className={cn("h-full w-full object-contain p-2", p.stock <= 0 && "opacity-40")}
-          loading="lazy"
           onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
         />
       ) : (

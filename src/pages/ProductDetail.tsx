@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { setSEO } from "@/lib/seo";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
 
 interface Product {
   id: string;
@@ -256,9 +257,14 @@ const ProductDetail = () => {
             <div className="space-y-4">
               <div className="relative grid aspect-square place-items-center overflow-hidden rounded-3xl gradient-soft">
                 {product.image_url && !imgError ? (
-                  <img
+                  <OptimizedImage
                     src={product.image_url}
                     alt={product.name}
+                    optimizedWidth={800}
+                    srcWidths={[400, 800, 1200]}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    width={800}
+                    height={800}
                     className="h-full w-full object-contain p-8"
                     onError={() => setImgError(true)}
                   />
@@ -529,11 +535,15 @@ const ProductDetail = () => {
                     >
                       <div className="mb-2 grid aspect-square place-items-center overflow-hidden rounded-lg bg-muted/40">
                         {r.image_url ? (
-                          <img
+                          <OptimizedImage
                             src={r.image_url}
                             alt={r.name}
+                            optimizedWidth={200}
+                            srcWidths={[100, 200, 400]}
+                            sizes="(max-width: 640px) 50vw, 16vw"
+                            width={200}
+                            height={200}
                             className="h-full w-full object-contain p-2"
-                            loading="lazy"
                             onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
                           />
                         ) : (

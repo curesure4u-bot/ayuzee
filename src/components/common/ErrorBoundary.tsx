@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { captureError } from "@/lib/monitoring";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -20,7 +21,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("Unhandled application error:", error, info.componentStack);
+    captureError(error, { componentStack: info.componentStack });
   }
 
   private handleRetry = () => {

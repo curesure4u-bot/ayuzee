@@ -1,6 +1,4 @@
 import { CATEGORIES, type Category, type Disease, type Medicine } from "@/data/astg";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 
 export type DiseaseHit = {
   type: "disease";
@@ -115,7 +113,12 @@ export function diseaseMatchesLevel(disease: Disease, level: LevelFilter): boole
 }
 
 // ----- PDF Export -----
-export function exportDiseasePDF(category: Category, disease: Disease) {
+export async function exportDiseasePDF(category: Category, disease: Disease) {
+  const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable"),
+  ]);
+
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 40;

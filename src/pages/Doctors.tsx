@@ -19,6 +19,7 @@ import {
 import { ArrowUpDown, BadgeCheck, Calendar, ChevronRight, Eye, MapPin, Star, Stethoscope, Video } from "lucide-react";
 import { toast } from "sonner";
 import { setSEO } from "@/lib/seo";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
 
 interface Doctor {
   id: string;
@@ -249,7 +250,20 @@ const Doctors = () => {
                         <div className="flex flex-col items-center gap-2 md:w-32">
                           <div className="relative">
                             <div className="grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-full gradient-leaf font-display text-2xl text-primary-foreground">
-                              {d.avatar_url ? <img src={d.avatar_url} alt={d.full_name} className="h-full w-full object-cover" /> : initials(d.full_name)}
+                              {d.avatar_url ? (
+                                <OptimizedImage
+                                  src={d.avatar_url}
+                                  alt={d.full_name}
+                                  optimizedWidth={192}
+                                  srcWidths={[96, 192]}
+                                  sizes="96px"
+                                  width={96}
+                                  height={96}
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                initials(d.full_name)
+                              )}
                             </div>
                             {d.video_available && (
                               <span className="absolute bottom-0 right-0 grid h-7 w-7 place-items-center rounded-full bg-primary text-primary-foreground ring-2 ring-card">

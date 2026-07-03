@@ -12,6 +12,8 @@
     "src/integrations/**/*",
     "src/hooks/useAuth.ts",
     "src/hooks/useRole.ts",
-    "src/hooks/useUserRole.ts"
+    "src/hooks/useUserRole.ts",
+    "src/lib/image.ts",
+    "src/lib/monitoring.ts"
   ]
 }
