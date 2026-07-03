@@ -5,18 +5,30 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
+import { POLICY_VERSION, recordConsent } from "@/lib/consent";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
 
-async function subscribeEmail(email: string, source: "footer" | "app_waitlist") {
+async function subscribeEmail(email: string, source: "footer" | "app_waitlist", marketingConsent: boolean) {
   const parsed = emailSchema.safeParse(email);
   if (!parsed.success) {
     toast.error(parsed.error.issues[0].message);
     return false;
   }
+  if (!marketingConsent) {
+    toast.error("Please agree to receive marketing emails.");
+    return false;
+  }
+  const normalized = parsed.data.toLowerCase();
   const { error } = await supabase
     .from("newsletter_subscribers")
-    .insert({ email: parsed.data.toLowerCase(), source });
+    .insert({
+      email: normalized,
+      source,
+      marketing_consent: true,
+      consent_version: POLICY_VERSION,
+    });
   if (error) {
     if (error.code === "23505") {
       toast.success("You're already subscribed 🌿");
@@ -25,6 +37,7 @@ async function subscribeEmail(email: string, source: "footer" | "app_waitlist") 
     toast.error(error.message || "Could not subscribe. Please try again.");
     return false;
   }
+  await recordConsent({ purpose: "marketing", granted: true, email: normalized });
   toast.success(source === "app_waitlist" ? "We'll notify you when the app launches!" : "Subscribed! 🌿");
   return true;
 }
@@ -90,7 +103,8 @@ const makeSubmitHandler = (source: "footer" | "app_waitlist") => async (event: F
   const form = event.currentTarget;
   const data = new FormData(form);
   const email = String(data.get("email") ?? "");
-  const ok = await subscribeEmail(email, source);
+  const marketingConsent = data.get("marketing_consent") === "on";
+  const ok = await subscribeEmail(email, source, marketingConsent);
   if (ok) form.reset();
 };
 
@@ -110,9 +124,13 @@ export const Footer = () => {
       <section className="bg-primary py-10 text-primary-foreground">
         <div className="container flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <p className="max-w-2xl text-lg font-semibold">🌿 Stay updated on Ayurvedic health tips, new doctors, and exclusive offers</p>
-          <form onSubmit={handleNewsletterSubmit} className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <form onSubmit={handleNewsletterSubmit} className="flex w-full flex-col gap-3 sm:w-auto">
             <input name="email" type="email" required maxLength={255} placeholder="Enter your email" className="w-full rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-4 py-2 text-primary-foreground placeholder:text-primary-foreground/60 outline-none ring-offset-primary focus:ring-2 focus:ring-primary-foreground sm:w-64" />
-            <button type="submit" className="rounded-full bg-primary-foreground px-6 py-2 font-semibold text-primary transition-smooth hover:opacity-90">Subscribe</button>
+            <label className="flex items-start gap-2 text-xs text-primary-foreground/90">
+              <input name="marketing_consent" type="checkbox" required className="mt-0.5" />
+              <span>I agree to receive health tips and offers per the <Link to="/privacy-policy" className="underline">Privacy Policy</Link>.</span>
+            </label>
+            <button type="submit" className="rounded-full bg-primary-foreground px-6 py-2 font-semibold text-primary transition-smooth hover:opacity-90 sm:self-start">Subscribe</button>
           </form>
         </div>
       </section>
@@ -145,9 +163,13 @@ export const Footer = () => {
 
       <section className="bg-footer-panel py-6">
         <div className="container flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-          <form onSubmit={handleAppWaitlistSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <form onSubmit={handleAppWaitlistSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
             <span className="font-medium text-primary-foreground">📱 Ayuzee App coming soon — Get notified:</span>
             <input name="email" type="email" required maxLength={255} placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
+            <label className="flex items-center gap-2 text-xs text-footer-muted">
+              <input name="marketing_consent" type="checkbox" required />
+              <span>Marketing consent</span>
+            </label>
             <button type="submit" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-smooth hover:bg-primary/90">Notify Me</button>
           </form>
           <div className="flex flex-wrap items-center gap-3 text-sm text-footer-muted">

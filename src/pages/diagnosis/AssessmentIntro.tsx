@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, ListChecks, ShieldCheck } from "lucide-react";
 import { ASSESSMENT_MODULES } from "@/data/assessmentModules";
+import { ClinicalDisclaimer } from "@/components/legal/ClinicalDisclaimer";
 
 const AssessmentIntro = () => {
   const { slug = "" } = useParams();
@@ -38,6 +39,7 @@ const AssessmentIntro = () => {
         </section>
 
         <section className="container py-12 max-w-3xl">
+          <ClinicalDisclaimer variant="wellness" className="mb-6" />
           <Card className="p-6 md:p-8">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex items-start gap-3">
@@ -79,7 +81,7 @@ const AssessmentIntro = () => {
           </Card>
 
           <p className="mt-6 text-xs text-muted-foreground">
-            This assessment is for wellness education only. It does not replace medical diagnosis, emergency care, or personal consultation with a qualified doctor.
+            Answers stay in your browser unless you are signed in and choose to save results.
           </p>
         </section>
       </main>

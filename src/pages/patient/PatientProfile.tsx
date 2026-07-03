@@ -40,6 +40,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { downloadUserDataExport } from "@/lib/dataExport";
+import { fetchCompanyLegal } from "@/lib/legal";
 import {
   ArrowLeft,
   ChevronDown,
@@ -91,6 +93,8 @@ const PatientProfile = () => {
     preferred_languages: [] as string[],
   });
   const [langPickerOpen, setLangPickerOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [grievanceEmail, setGrievanceEmail] = useState("complaints@ayuzee.com");
 
   const [members, setMembers] = useState<Member[]>([]);
   const [memberOpen, setMemberOpen] = useState(false);
@@ -131,6 +135,9 @@ const PatientProfile = () => {
         setForm((f) => ({ ...f, email: sessionEmail }));
       }
       loadMembers(uid);
+    });
+    fetchCompanyLegal("privacy").then(({ info }) => {
+      if (info?.grievance_email) setGrievanceEmail(info.grievance_email);
     });
   }, []);
 
@@ -202,7 +209,42 @@ const PatientProfile = () => {
   };
 
   const requestDelete = async () => {
-    toast.success("Account deletion request submitted. Our team will reach out within 48 hours.");
+    const { data: existing } = await (supabase as any)
+      .from("deletion_requests")
+      .select("id, status")
+      .eq("user_id", userId)
+      .in("status", ["pending", "in_progress"])
+      .maybeSingle();
+
+    if (existing) {
+      toast.info("You already have a pending deletion request. Our team will contact you within 30 days.");
+      return;
+    }
+
+    const { error } = await (supabase as any).from("deletion_requests").insert({
+      user_id: userId,
+      email: form.email || null,
+    });
+
+    if (error) {
+      toast.error(error.message || "Could not submit deletion request.");
+      return;
+    }
+    toast.success("Account deletion request submitted. We will respond within 30 days per DPDP requirements.");
+  };
+
+  const handleExportData = async () => {
+    if (!userId) return;
+    setExporting(true);
+    try {
+      await downloadUserDataExport(userId);
+      toast.success("Your data export has been downloaded.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Export failed";
+      toast.error(msg);
+    } finally {
+      setExporting(false);
+    }
   };
 
   const addMember = async () => {
@@ -440,6 +482,25 @@ const PatientProfile = () => {
               </Collapsible>
             </div>
 
+            {/* Data rights (DPDP) */}
+            <div className="border-t border-border bg-muted/30 px-5 py-6">
+              <h3 className="font-display text-base font-semibold">Your data rights</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Under India&apos;s DPDP Act you can download your data or request account deletion.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button variant="outline" size="sm" disabled={exporting} onClick={handleExportData}>
+                  {exporting ? "Preparing…" : "Download my data"}
+                </Button>
+              </div>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Grievance Officer:{" "}
+                <a href={`mailto:${grievanceEmail}`} className="text-primary hover:underline">
+                  {grievanceEmail}
+                </a>
+              </p>
+            </div>
+
             {/* Delete account */}
             <div className="border-t border-border bg-background px-5 py-4 text-center">
               <AlertDialog>
@@ -452,8 +513,8 @@ const PatientProfile = () => {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete your account?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This will submit a request to permanently delete your Ayuzee account and all
-                      related data. Our team will reach out within 48 hours to confirm.
+                      This submits a request to permanently delete your Ayuzee account and related data.
+                      We will respond within 30 days as required under the DPDP Act.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

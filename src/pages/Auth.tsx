@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { Leaf, ShieldCheck, Stethoscope, HeartPulse, Sparkles } from "lucide-react";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 import { getDashboardPathForUser } from "@/hooks/useUserRole";
+import { Checkbox } from "@/components/ui/checkbox";
+import { recordSignupConsents } from "@/lib/consent";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [acceptedLegal, setAcceptedLegal] = useState(false);
 
   const redirectForUser = async (userId: string) => {
     navigate(await getDashboardPathForUser(userId), { replace: true });
@@ -37,10 +40,14 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (mode === "signup" && !acceptedLegal) {
+      toast.error("Please accept the Terms of Use and Privacy Policy to continue.");
+      return;
+    }
     setLoading(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -49,6 +56,9 @@ const Auth = () => {
           },
         });
         if (error) throw error;
+        if (data.user) {
+          await recordSignupConsents(data.user.id, email);
+        }
         toast.success(refCode ? "Account created via referral! Welcome 🌿" : "Account created! Welcome to Ayuzee 🌿");
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -239,15 +249,42 @@ const Auth = () => {
                     className="h-11"
                   />
                 </div>
-                <Button type="submit" variant="hero" size="lg" className="h-12 w-full text-base" disabled={loading}>
+                {mode === "signup" && (
+                  <label className="flex items-start gap-3 text-left text-sm text-muted-foreground">
+                    <Checkbox
+                      id="legal-consent"
+                      checked={acceptedLegal}
+                      onCheckedChange={(v) => setAcceptedLegal(v === true)}
+                      className="mt-0.5"
+                    />
+                    <span>
+                      I agree to Ayuzee&apos;s{" "}
+                      <Link to="/terms-of-use" className="text-primary hover:underline" target="_blank">
+                        Terms of Use
+                      </Link>{" "}
+                      and{" "}
+                      <Link to="/privacy-policy" className="text-primary hover:underline" target="_blank">
+                        Privacy Policy
+                      </Link>
+                      , and consent to processing of my personal data as described therein.
+                    </span>
+                  </label>
+                )}
+                <Button type="submit" variant="hero" size="lg" className="h-12 w-full text-base" disabled={loading || (mode === "signup" && !acceptedLegal)}>
                   {loading ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}
                 </Button>
               </form>
 
               <p className="mt-6 text-center text-xs text-muted-foreground">
-                By continuing you agree to Ayuzee's{" "}
-                <Link to="/" className="text-primary hover:underline">Terms</Link> &{" "}
-                <Link to="/" className="text-primary hover:underline">Privacy Policy</Link>.
+                {mode === "login" ? (
+                  <>
+                    By signing in you agree to Ayuzee&apos;s{" "}
+                    <Link to="/terms-of-use" className="text-primary hover:underline">Terms</Link> &{" "}
+                    <Link to="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link>.
+                  </>
+                ) : (
+                  <>Your consent is recorded for DPDP compliance when you create an account.</>
+                )}
               </p>
 
               <p className="mt-4 text-center text-sm text-muted-foreground">

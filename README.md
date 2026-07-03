@@ -61,6 +61,8 @@ Optional `.env` key:
 
 See [docs/SUPABASE_SECURITY.md](docs/SUPABASE_SECURITY.md) for staging, RLS audits, and edge function secrets.
 
+See [docs/DPDP_COMPLIANCE.md](docs/DPDP_COMPLIANCE.md) for consent flows, data-principal rights, and DPDP alignment.
+
 ## E2E tests in GitHub Actions
 
 The Playwright suite (`.github/workflows/e2e.yml`) runs on every PR and push to `main`. It reads its config from repository secrets.

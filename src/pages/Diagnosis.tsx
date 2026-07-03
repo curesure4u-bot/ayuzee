@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Stethoscope, ArrowRight } from "lucide-react";
 import { ASSESSMENT_LIST } from "@/data/assessmentModules";
+import { ClinicalDisclaimer } from "@/components/legal/ClinicalDisclaimer";
 
 const featured = {
   slug: "prakriti",
@@ -34,6 +35,10 @@ const Diagnosis = () => {
               operating procedures — guided by qualified Vaidyas and therapists, or self-administered.
             </p>
           </div>
+        </section>
+
+        <section className="container max-w-3xl pt-8">
+          <ClinicalDisclaimer variant="wellness" />
         </section>
 
         {/* Featured: Prakriti */}
@@ -105,7 +110,7 @@ const Diagnosis = () => {
             <Button asChild variant="hero"><Link to="/doctors">Find a Doctor</Link></Button>
           </Card>
           <p className="mt-4 text-xs text-muted-foreground">
-            These assessments are for wellness education only. They do not replace medical diagnosis, emergency care, or personal consultation with a qualified doctor.
+            Complete assessments at your own pace. Signed-in users may save results to their account.
           </p>
         </section>
       </main>

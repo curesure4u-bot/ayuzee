@@ -23,6 +23,8 @@ const PHI_TABLES = [
   "patient_vitals",
   "posture_assessments",
   "orders",
+  "user_consent_records",
+  "deletion_requests",
 ];
 
 const PRIVATE_BUCKETS = [
