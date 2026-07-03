@@ -6,6 +6,8 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import { LayoutDashboard, ListChecks, Wallet, User, LifeBuoy, Loader2, ShieldCheck, LogOut, CalendarClock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/providers/ProtectedRoute";
 
 interface TherapistRow {
   id: string;
@@ -24,29 +26,26 @@ const navItems = [
   { to: "/therapist/support", icon: LifeBuoy, label: "Support" },
 ];
 
-const TherapistLayout = () => {
+const TherapistLayoutContent = () => {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const [loading, setLoading] = useState(true);
   const [therapist, setTherapist] = useState<TherapistRow | null>(null);
 
   const load = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { navigate("/therapist/auth", { replace: true }); return; }
+    if (!user) return;
     const { data } = await supabase.from("therapists")
       .select("id, user_id, full_name, verification_status, is_available")
-      .eq("user_id", session.user.id).maybeSingle();
+      .eq("user_id", user.id).maybeSingle();
     setTherapist((data as TherapistRow) ?? null);
     setLoading(false);
   };
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate("/therapist/auth", { replace: true });
-    });
-    load();
-    return () => sub.subscription.unsubscribe();
+    if (!user) return;
+    void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const toggleAvailable = async (next: boolean) => {
     if (!therapist) return;
@@ -57,25 +56,28 @@ const TherapistLayout = () => {
   };
 
   if (loading) return <div className="min-h-screen grid place-items-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
-  if (!therapist) return (
-    <div className="min-h-screen grid place-items-center bg-gradient-to-br from-primary/5 via-background to-background px-4">
-      <Card className="max-w-lg w-full text-center">
-        <CardContent className="p-10">
-          <div className="mx-auto text-5xl">🤲</div>
-          <h1 className="mt-4 text-2xl font-bold">Setting up your profile…</h1>
-          <p className="mt-2 text-muted-foreground">
-            Your therapist profile is being created. If this persists, please sign out and sign in again.
-          </p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
-              <LogOut className="mr-2 h-4 w-4" /> Sign Out
-            </Button>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+
+  if (!therapist) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-gradient-to-br from-primary/5 via-background to-background px-4">
+        <Card className="max-w-lg w-full text-center">
+          <CardContent className="p-10">
+            <div className="mx-auto text-5xl">🤲</div>
+            <h1 className="mt-4 text-2xl font-bold">Setting up your profile…</h1>
+            <p className="mt-2 text-muted-foreground">
+              Your therapist profile is being created. If this persists, please sign out and sign in again.
+            </p>
+            <div className="mt-6 flex justify-center gap-3">
+              <Button variant="outline" onClick={async () => { await signOut(); navigate("/"); }}>
+                <LogOut className="mr-2 h-4 w-4" /> Sign Out
+              </Button>
+              <Button onClick={() => window.location.reload()}>Retry</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (therapist.verification_status !== "approved") {
     return (
@@ -84,8 +86,8 @@ const TherapistLayout = () => {
           <CardContent className="p-10">
             <div className="h-16 w-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center"><ShieldCheck className="h-8 w-8 text-primary" /></div>
             <h1 className="text-2xl font-bold mt-4">Account under review</h1>
-            <p className="text-muted-foreground mt-2">Your therapist profile is currently <span className="font-medium capitalize">{therapist.verification_status}</span>. You'll be able to access the dashboard once an admin approves your verification.</p>
-            <Button className="mt-6" variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>Sign out</Button>
+            <p className="text-muted-foreground mt-2">Your therapist profile is currently <span className="font-medium capitalize">{therapist.verification_status}</span>. You&apos;ll be able to access the dashboard once an admin approves your verification.</p>
+            <Button className="mt-6" variant="outline" onClick={async () => { await signOut(); navigate("/"); }}>Sign out</Button>
           </CardContent>
         </Card>
       </div>
@@ -111,7 +113,7 @@ const TherapistLayout = () => {
           <Button variant="ghost" className="w-full justify-start text-muted-foreground" asChild>
             <Link to="/login">⇄ Switch Portal</Link>
           </Button>
-          <Button variant="ghost" className="w-full justify-start text-muted-foreground" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
+          <Button variant="ghost" className="w-full justify-start text-muted-foreground" onClick={async () => { await signOut(); navigate("/"); }}>
             <LogOut className="h-4 w-4 mr-2" />Sign out
           </Button>
         </div>
@@ -142,6 +144,12 @@ const TherapistLayout = () => {
     </div>
   );
 };
+
+const TherapistLayout = () => (
+  <ProtectedRoute redirectTo="/therapist/auth" requireRoles={["therapist"]}>
+    <TherapistLayoutContent />
+  </ProtectedRoute>
+);
 
 export default TherapistLayout;
 export type TherapistContext = { therapist: TherapistRow; reload: () => Promise<void> };

@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { DoctorProfileMenu } from "@/components/doctor/DoctorProfileMenu";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthLoadingScreen } from "@/components/common/AuthLoadingScreen";
 
 type DoctorVerification = {
   is_verified: boolean;
@@ -20,19 +22,22 @@ type DoctorVerification = {
 
 const DoctorLayout = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading, signOut } = useAuth();
   const [checking, setChecking] = useState(true);
   const [doctor, setDoctor] = useState<DoctorVerification | null>(null);
   const [isAdminPreview, setIsAdminPreview] = useState(false);
 
   useEffect(() => {
+    if (authLoading) return;
+
+    if (!user) {
+      navigate("/doctor/auth", { replace: true });
+      return;
+    }
+
     let mounted = true;
-    const check = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        navigate("/doctor/auth", { replace: true });
-        return;
-      }
-      const uid = data.session.user.id;
+    const loadDoctor = async () => {
+      const uid = user.id;
       const [{ data: doc }, { data: roleRows }] = await Promise.all([
         supabase
           .from("doctors")
@@ -57,24 +62,21 @@ const DoctorLayout = () => {
         setChecking(false);
       }
     };
-    check();
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate("/doctor/auth", { replace: true });
-    });
+
+    void loadDoctor();
     return () => {
       mounted = false;
-      sub.subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, [authLoading, navigate, user]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     toast.success("Signed out");
     navigate("/doctor/auth");
   };
 
-  if (checking) {
-    return <div className="min-h-screen grid place-items-center text-muted-foreground">Loading…</div>;
+  if (authLoading || checking) {
+    return <AuthLoadingScreen label="Loading doctor workspace…" />;
   }
 
   // Block access until verified

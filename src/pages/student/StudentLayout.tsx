@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useRole } from "@/hooks/useRole";
 import { NavLink } from "@/components/NavLink";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -50,41 +52,33 @@ const initials = (name?: string) =>
 
 const StudentLayout = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { hasRole, loading: roleLoading } = useRole();
   const [loading, setLoading] = useState(true);
   const [accessDenied, setAccessDenied] = useState(false);
   const [profile, setProfile] = useState<StudentProfile | null>(null);
 
   useEffect(() => {
+    if (authLoading || roleLoading) return;
+
+    if (!user) {
+      navigate("/student/auth", { replace: true });
+      return;
+    }
+
+    if (!hasRole("student")) {
+      toast.error("Please sign in as a student");
+      navigate("/student/auth", { replace: true });
+      return;
+    }
+
     let active = true;
 
     const loadStudent = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const userId = sessionData.session?.user.id;
-
-      if (!userId) {
-        navigate("/student/auth", { replace: true });
-        return;
-      }
-
-      const { data: roleRow, error: roleError } = await (supabase as any)
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "student")
-        .maybeSingle();
-
-      if (!active) return;
-
-      if (roleError || !roleRow) {
-        toast.error("Please sign in as a student");
-        navigate("/student/auth", { replace: true });
-        return;
-      }
-
-      const { data: studentProfile } = await (supabase as any)
+      const { data: studentProfile } = await supabase
         .from("student_profiles")
         .select("full_name, course, year_of_study, college_name")
-        .eq("user_id", userId)
+        .eq("user_id", user.id)
         .maybeSingle();
 
       if (!active) return;
@@ -92,19 +86,14 @@ const StudentLayout = () => {
       setLoading(false);
     };
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) navigate("/student/auth", { replace: true });
-    });
-
-    loadStudent();
+    void loadStudent();
 
     return () => {
       active = false;
-      authListener.subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, [authLoading, hasRole, navigate, roleLoading, user]);
 
-  if (loading) {
+  if (authLoading || roleLoading || loading) {
     return (
       <div className="grid min-h-screen place-items-center bg-muted/30">
         <Loader2 className="h-7 w-7 animate-spin text-primary" />

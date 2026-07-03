@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "types": ["vite/client"]
+  },
+  "include": [
+    "src/vite-env.d.ts",
+    "src/providers/**/*",
+    "src/integrations/**/*",
+    "src/hooks/useAuth.ts",
+    "src/hooks/useRole.ts",
+    "src/hooks/useUserRole.ts"
+  ]
+}

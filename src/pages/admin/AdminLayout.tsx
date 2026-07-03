@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { useRole } from "@/hooks/useRole";
 
 const ADMIN_ROLES = [
   "admin", "product_admin", "orders_admin", "accounts_admin",
@@ -79,45 +80,35 @@ const allGroups = [
 
 const AdminLayout = () => {
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
-  const [email, setEmail] = useState("");
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useRole();
+  const [ready, setReady] = useState(false);
   const [adminRole, setAdminRole] = useState<AdminRole>("admin");
 
   useEffect(() => {
-    let active = true;
-    const verify = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        toast.error("Sign in required");
-        navigate("/admin/auth", { replace: true });
-        return;
-      }
-      const uid = data.session.user.id;
-      const roleChecks = await Promise.all(
-        ADMIN_ROLES.map(r =>
-          supabase.rpc("has_role", { _user_id: uid, _role: r as any })
-            .then(({ data }) => (data ? r : null))
-        )
-      );
-      const userAdminRole = roleChecks.find((r): r is AdminRole => r !== null);
-      if (!userAdminRole) {
-        toast.error("Access denied");
-        navigate("/admin/auth", { replace: true });
-        return;
-      }
-      if (active) {
-        setAdminRole(userAdminRole);
-        setEmail(data.session.user.email ?? "Admin user");
-        setChecking(false);
-      }
-    };
-    verify();
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) navigate("/admin/auth", { replace: true });
-    });
-    return () => { active = false; sub.subscription.unsubscribe(); };
-  }, [navigate]);
+    if (authLoading || roleLoading) return;
 
+    if (!user) {
+      toast.error("Sign in required");
+      navigate("/admin/auth", { replace: true });
+      return;
+    }
+
+    const userAdminRole =
+      ADMIN_ROLES.find((role) => roles.includes(role)) ??
+      (roles.includes("super_admin") ? "admin" : null);
+
+    if (!userAdminRole) {
+      toast.error("Access denied");
+      navigate("/admin/auth", { replace: true });
+      return;
+    }
+
+    setAdminRole(userAdminRole);
+    setReady(true);
+  }, [authLoading, navigate, roleLoading, roles, user]);
+
+  const email = user?.email ?? "Admin user";
   const initials = useMemo(() => email.slice(0, 2).toUpperCase(), [email]);
 
   const groups = useMemo(() => {
@@ -136,7 +127,7 @@ const AdminLayout = () => {
       .filter(g => g.items.length > 0);
   }, [adminRole]);
 
-  if (checking) return <div className="grid min-h-screen place-items-center bg-background"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div>;
+  if (!ready) return <div className="grid min-h-screen place-items-center bg-background"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div>;
 
   return (
     <div className="min-h-screen bg-muted/30">

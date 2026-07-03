@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/contexts/CartContext";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { queryClient } from "@/lib/queryClient";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { RoleProvider } from "@/providers/RoleProvider";
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -14,13 +16,17 @@ interface AppProvidersProps {
 export const AppProviders = ({ children }: AppProvidersProps) => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <CartProvider>
-          <Toaster />
-          <Sonner />
-          {children}
-        </CartProvider>
-      </TooltipProvider>
+      <AuthProvider>
+        <RoleProvider>
+          <TooltipProvider>
+            <CartProvider>
+              <Toaster />
+              <Sonner />
+              {children}
+            </CartProvider>
+          </TooltipProvider>
+        </RoleProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>
 );

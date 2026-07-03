@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, LogOut, LayoutDashboard, UserPlus, ClipboardList, Search, BookOpen, CalendarCheck, FileText, Sparkles, Pill, FolderOpen, Brain, Heart, FileEdit, Trophy } from "lucide-react";
-import { toast } from "sonner";
+import { LogOut, LayoutDashboard, UserPlus, ClipboardList, Search, BookOpen, CalendarCheck, FileText, Sparkles, Pill, FolderOpen, Brain, Heart, FileEdit, Trophy } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRole } from "@/hooks/useRole";
+import { ProtectedRoute } from "@/providers/ProtectedRoute";
 
 const nav = [
   { to: "/homeo", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -21,61 +21,18 @@ const nav = [
   { to: "/homeo/reports", label: "Reports", icon: FileText },
 ];
 
-const HomeoLayout = () => {
+const HomeoLayoutContent = () => {
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"doctor" | "admin" | null>(null);
+  const { user, signOut } = useAuth();
+  const { hasRole } = useRole();
 
-  useEffect(() => {
-    let active = true;
-    const verify = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        toast.error("Sign in to access Ayuzee Homeo AI");
-        navigate("/doctor/auth", { replace: true });
-        return;
-      }
-      const uid = data.session.user.id;
-      const [doc, adm] = await Promise.all([
-        supabase.rpc("has_role", { _user_id: uid, _role: "doctor" }),
-        supabase.rpc("has_role", { _user_id: uid, _role: "admin" }),
-      ]);
-      const isDoctor = !!doc.data;
-      const isAdmin = !!adm.data;
-      if (!isDoctor && !isAdmin) {
-        toast.error("Doctors only — please sign in with a doctor account");
-        navigate("/doctor/auth", { replace: true });
-        return;
-      }
-      if (active) {
-        setEmail(data.session.user.email ?? "");
-        setRole(isAdmin ? "admin" : "doctor");
-        setChecking(false);
-      }
-    };
-    verify();
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate("/doctor/auth", { replace: true });
-    });
-    return () => {
-      active = false;
-      sub.subscription.unsubscribe();
-    };
-  }, [navigate]);
+  const email = user?.email ?? "";
+  const role = hasRole("admin") || hasRole("super_admin") ? "admin" : "doctor";
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const handleSignOut = async () => {
+    await signOut();
     navigate("/");
   };
-
-  if (checking) {
-    return (
-      <div className="grid min-h-screen place-items-center bg-[hsl(160_25%_6%)]">
-        <Loader2 className="h-7 w-7 animate-spin text-[hsl(45_85%_60%)]" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[hsl(160_25%_6%)] text-[hsl(45_30%_94%)]">
@@ -123,7 +80,7 @@ const HomeoLayout = () => {
             <Link to="/doctor" className="block text-[hsl(45_40%_55%/0.7)] hover:text-[hsl(45_85%_70%)]">
               ← Doctor portal
             </Link>
-            <button onClick={signOut} className="flex items-center gap-2 text-[hsl(45_40%_55%/0.7)] hover:text-[hsl(45_85%_70%)]">
+            <button onClick={handleSignOut} className="flex items-center gap-2 text-[hsl(45_40%_55%/0.7)] hover:text-[hsl(45_85%_70%)]">
               <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
           </div>
@@ -151,5 +108,15 @@ const HomeoLayout = () => {
     </div>
   );
 };
+
+const HomeoLayout = () => (
+  <ProtectedRoute
+    redirectTo="/doctor/auth"
+    requireRoles={["doctor", "admin", "super_admin"]}
+    loadingLabel="Loading Homeo AI workspace…"
+  >
+    <HomeoLayoutContent />
+  </ProtectedRoute>
+);
 
 export default HomeoLayout;

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useHmsAccess } from "@/hooks/useHmsAccess";
+import { useAuth } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/providers/ProtectedRoute";
 import {
   Stethoscope,
   LogOut,
@@ -176,43 +176,23 @@ const hmsGroups = [
 ];
 
 const VaidyaLayout = () => {
-
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
+  const { signOut } = useAuth();
   const { hasAccess, branch } = useHmsAccess();
 
-
-
-  useEffect(() => {
-    let mounted = true;
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) {
-        navigate("/doctor/auth", { replace: true });
-        return;
-      }
-      if (mounted) setChecking(false);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate("/doctor/auth", { replace: true });
-    });
-    return () => {
-      mounted = false;
-      sub.subscription.unsubscribe();
-    };
-  }, [navigate]);
-
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     toast.success("Signed out");
     navigate("/doctor/auth");
   };
 
-  if (checking) {
-    return <div className="min-h-screen grid place-items-center text-muted-foreground">Loading…</div>;
-  }
-
   return (
-    <div className="min-h-screen flex w-full bg-muted/30">
+    <ProtectedRoute
+      redirectTo="/doctor/auth"
+      requireRoles={["doctor", "admin", "super_admin"]}
+      loadingLabel="Loading HMS workspace…"
+    >
+      <div className="min-h-screen flex w-full bg-muted/30">
       <aside className="hidden md:flex w-64 flex-col border-r border-border bg-card">
         <div className="border-b border-border px-4 py-4">
           <Link to="/" className="flex items-center gap-2">
@@ -283,6 +263,7 @@ const VaidyaLayout = () => {
         </main>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

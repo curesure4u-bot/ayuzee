@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LayoutDashboard, DoorOpen, CalendarRange, Wallet, User, Loader2, ShieldCheck, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/providers/ProtectedRoute";
 
 export interface VenueRow {
   id: string;
@@ -22,50 +24,50 @@ const navItems = [
   { to: "/venue/profile", icon: User, label: "Profile" },
 ];
 
-const VenueLayout = () => {
+const VenueLayoutContent = () => {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const [loading, setLoading] = useState(true);
   const [venue, setVenue] = useState<VenueRow | null>(null);
 
   const load = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { navigate("/venue/auth", { replace: true }); return; }
+    if (!user) return;
     const { data } = await supabase.from("therapy_venues")
       .select("id, owner_user_id, name, type, is_verified, is_active")
-      .eq("owner_user_id", session.user.id).maybeSingle();
+      .eq("owner_user_id", user.id).maybeSingle();
     setVenue((data as VenueRow) ?? null);
     setLoading(false);
   };
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate("/venue/auth", { replace: true });
-    });
-    load();
-    return () => sub.subscription.unsubscribe();
+    if (!user) return;
+    void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   if (loading) return <div className="min-h-screen grid place-items-center"><Loader2 className="h-6 w-6 animate-spin" /></div>;
-  if (!venue) return (
-    <div className="min-h-screen grid place-items-center bg-gradient-to-br from-primary/5 via-background to-background px-4">
-      <Card className="max-w-lg w-full text-center">
-        <CardContent className="p-10">
-          <div className="mx-auto text-5xl">🏥</div>
-          <h1 className="mt-4 text-2xl font-bold">Setting up your venue profile…</h1>
-          <p className="mt-2 text-muted-foreground">
-            Your venue profile is being created. If this persists, please sign out and sign in again.
-          </p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
-              <LogOut className="mr-2 h-4 w-4" /> Sign Out
-            </Button>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+
+  if (!venue) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-gradient-to-br from-primary/5 via-background to-background px-4">
+        <Card className="max-w-lg w-full text-center">
+          <CardContent className="p-10">
+            <div className="mx-auto text-5xl">🏥</div>
+            <h1 className="mt-4 text-2xl font-bold">Setting up your venue profile…</h1>
+            <p className="mt-2 text-muted-foreground">
+              Your venue profile is being created. If this persists, please sign out and sign in again.
+            </p>
+            <div className="mt-6 flex justify-center gap-3">
+              <Button variant="outline" onClick={async () => { await signOut(); navigate("/"); }}>
+                <LogOut className="mr-2 h-4 w-4" /> Sign Out
+              </Button>
+              <Button onClick={() => window.location.reload()}>Retry</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (!venue.is_verified) {
     return (
@@ -74,8 +76,8 @@ const VenueLayout = () => {
           <CardContent className="p-10">
             <div className="h-16 w-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center"><ShieldCheck className="h-8 w-8 text-primary" /></div>
             <h1 className="text-2xl font-bold mt-4">Your venue is under review</h1>
-            <p className="text-muted-foreground mt-2">Our team is verifying <span className="font-medium">{venue.name}</span>. You'll get full dashboard access once approved.</p>
-            <Button className="mt-6" variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>Sign out</Button>
+            <p className="text-muted-foreground mt-2">Our team is verifying <span className="font-medium">{venue.name}</span>. You&apos;ll get full dashboard access once approved.</p>
+            <Button className="mt-6" variant="outline" onClick={async () => { await signOut(); navigate("/"); }}>Sign out</Button>
           </CardContent>
         </Card>
       </div>
@@ -98,7 +100,7 @@ const VenueLayout = () => {
           ))}
         </nav>
         <div className="p-3 border-t">
-          <Button variant="ghost" className="w-full justify-start text-muted-foreground" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>
+          <Button variant="ghost" className="w-full justify-start text-muted-foreground" onClick={async () => { await signOut(); navigate("/"); }}>
             <LogOut className="h-4 w-4 mr-2" />Sign out
           </Button>
         </div>
@@ -119,6 +121,12 @@ const VenueLayout = () => {
     </div>
   );
 };
+
+const VenueLayout = () => (
+  <ProtectedRoute redirectTo="/venue/auth" requireRoles={["venue_owner"]}>
+    <VenueLayoutContent />
+  </ProtectedRoute>
+);
 
 export default VenueLayout;
 export type VenueContext = { venue: VenueRow; reload: () => Promise<void> };

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { Trophy, Sparkles, Award, BarChart3, Home, ScrollText, Target, Heart, Gift } from "lucide-react";
+import { ProtectedRoute } from "@/providers/ProtectedRoute";
 
 const tabs = [
   { to: "/gamification", end: true, label: "Dashboard", icon: Home },
@@ -14,20 +13,8 @@ const tabs = [
   { to: "/gamification/rewards", end: false, label: "Rewards", icon: Gift },
 ];
 
-const GamificationLayout = () => {
-  const navigate = useNavigate();
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) navigate("/auth", { replace: true });
-      else setReady(true);
-    });
-  }, [navigate]);
-
-  if (!ready) return <div className="min-h-screen grid place-items-center text-muted-foreground">Loading…</div>;
-
-  return (
+const GamificationLayout = () => (
+  <ProtectedRoute redirectTo="/auth">
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <header className="border-b border-border bg-card/60 backdrop-blur">
         <div className="container flex flex-col gap-3 py-6 md:flex-row md:items-end md:justify-between">
@@ -38,27 +25,28 @@ const GamificationLayout = () => {
             <div>
               <h1 className="font-display text-2xl md:text-3xl">Ayuzee Growth & Appreciation Engine</h1>
               <p className="text-sm text-muted-foreground">
-                Recognize learning, healing, service, and excellence across the AYUSH ecosystem.
+                Earn points, badges, and certificates for learning and community participation.
               </p>
             </div>
           </div>
-          <Link to="/dashboard" className="text-xs text-muted-foreground hover:text-primary">← Back to dashboard</Link>
+          <Link to="/dashboard" className="text-sm text-primary hover:underline">
+            ← Back to Dashboard
+          </Link>
         </div>
-        <nav className="container flex gap-1 overflow-x-auto pb-2">
-          {tabs.map((t) => (
+        <nav className="container flex gap-1 overflow-x-auto pb-3">
+          {tabs.map((tab) => (
             <NavLink
-              key={t.to}
-              to={t.to}
-              end={t.end}
+              key={tab.to}
+              to={tab.to}
+              end={tab.end}
               className={({ isActive }) =>
-                `flex items-center gap-2 rounded-full px-4 py-2 text-sm transition ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-soft"
-                    : "text-muted-foreground hover:bg-muted/50"
+                `flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm transition ${
+                  isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
                 }`
               }
             >
-              <t.icon className="h-4 w-4" /> {t.label}
+              <tab.icon className="h-4 w-4" />
+              {tab.label}
             </NavLink>
           ))}
         </nav>
@@ -67,7 +55,7 @@ const GamificationLayout = () => {
         <Outlet />
       </main>
     </div>
-  );
-};
+  </ProtectedRoute>
+);
 
 export default GamificationLayout;

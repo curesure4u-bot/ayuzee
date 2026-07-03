@@ -11,7 +11,7 @@ git clone https://github.com/curesure4u-bot/ayuzee.git
 cd ayuzee
 git checkout main
 npm install
-cp .env.e2e.example .env   # then add your Supabase keys (see below)
+cp .env.example .env   # then add your Supabase keys (see below)
 npm run dev
 ```
 
