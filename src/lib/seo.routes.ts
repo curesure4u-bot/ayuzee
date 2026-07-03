@@ -68,6 +68,11 @@ const PUBLIC_ROUTE_SEO: Record<string, RouteSEOEntry> = {
     title: "AI Health Diagnosis",
     description: "Discover your Prakriti constitution and explore AI-assisted AYUSH health assessments on Ayuzee.",
   },
+  "/diagnosis/symptoms": {
+    title: "Symptom Checker",
+    description: "Guided AYUSH symptom triage — coming soon on Ayuzee.",
+    noIndex: true,
+  },
   "/privacy-policy": {
     title: "Privacy Policy",
     description: "How Ayuzee collects, uses, and protects your personal and health information.",

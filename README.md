@@ -32,8 +32,18 @@ Get these from your Supabase project → Settings → API.
 
 ```bash
 npm run build              # standard SPA build
-npm run build:prerender    # build + prerender top pages for SEO (needs Playwright)
+npm run generate:sitemap   # regenerate public/sitemap.xml (static + Supabase URLs)
+npm run build:prerender    # sitemap → build → prerender top pages for SEO (needs Playwright)
 ```
+
+`build:prerender` is the recommended production deploy command. It writes `public/sitemap.xml` before build, copies it to `dist/`, then snapshots rendered HTML for crawlers.
+
+Optional GitHub Actions secrets for dynamic sitemap/prerender URLs:
+
+| Secret | Purpose |
+| --- | --- |
+| `VITE_SUPABASE_URL` | Supabase project URL for doctor/product/condition URLs |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Anon key for read-only public tables |
 
 ## E2E tests in GitHub Actions
 

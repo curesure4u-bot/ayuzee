@@ -26,4 +26,6 @@ Disallow: /auth
 Disallow: /login
 Disallow: /reset-password
 
+Disallow: /diagnosis/symptoms
+
 Sitemap: https://ayuzee.com/sitemap.xml

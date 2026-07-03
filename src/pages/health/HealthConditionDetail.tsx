@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import { RequestCallDialog } from "@/components/health/RequestCallDialog";
 import { ContentSections, type ContentSection } from "@/components/health/ContentSections";
 import { toast } from "sonner";
+import { DEFAULT_DESCRIPTION, SITE_URL } from "@/lib/seo.constants";
 import { Check, ChevronRight, Phone, MessageCircle, Calendar, ShieldCheck, Truck, Headphones, Award, Pill, Stethoscope, HeartPulse, Users, ClipboardList, Sparkles, ArrowRight, PlayCircle, Truck as TruckIcon, Leaf } from "lucide-react";
 
 interface PackageOpt { label: string; units?: string; price: number; discount_price?: number; in_stock?: boolean }
@@ -84,6 +85,22 @@ const HealthConditionDetail = () => {
 
   usePageSEO({
     title: c?.name ? `${c.name} — Ayuzee` : "Health Condition",
+    description: (c?.tagline || c?.hero_subtitle || DEFAULT_DESCRIPTION).slice(0, 158),
+    canonicalPath: slug ? `/health-conditions/${slug}` : undefined,
+    ogImage: c?.hero_image_url ?? c?.product_image_url ?? undefined,
+    jsonLd: c
+      ? {
+          "@context": "https://schema.org",
+          "@type": "MedicalWebPage",
+          name: c.name,
+          description: c.tagline || c.hero_subtitle || undefined,
+          url: `${SITE_URL}/health-conditions/${c.slug}`,
+          image: c.hero_image_url || c.product_image_url || undefined,
+          ...(c.product_name
+            ? { mainEntity: { "@type": "Product", name: c.product_name } }
+            : {}),
+        }
+      : undefined,
   });
 
   useEffect(() => {

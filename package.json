@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:prerender": "vite build && npm run prerender",
-    "prerender": "node --env-file=.env scripts/prerender.mjs",
+    "build:prerender": "npm run generate:sitemap && vite build && npm run generate:sitemap -- --dist && npm run prerender",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
+    "prerender": "node scripts/prerender.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",

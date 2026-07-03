@@ -25,17 +25,11 @@ export const publicRoutes = (
     <Route path="/health-conditions" element={withSuspense(<P.HealthConditions />)} />
     <Route path="/health-conditions/:slug" element={withSuspense(<P.HealthConditionDetail />)} />
     <Route path="/treatments/acupuncture" element={withSuspense(<P.AcupunctureHub />)} />
-    <Route path="/acupuncture" element={withSuspense(<P.AcupunctureHub />)} />
     <Route path="/treatments/tung-points" element={withSuspense(<P.TungPoints />)} />
-    <Route path="/tung-points" element={withSuspense(<P.TungPoints />)} />
     <Route path="/treatments/acupuncture-300-diseases" element={withSuspense(<P.Acupuncture300Diseases />)} />
     <Route path="/treatments/acupuncture-50-diseases" element={withSuspense(<P.Acupuncture50Diseases />)} />
     <Route path="/treatments/acupuncture-homeopathy" element={withSuspense(<P.AcupunctureHomeopathy />)} />
     <Route path="/treatments/acupoints-uses" element={withSuspense(<P.AcupointsAndUses />)} />
-    <Route path="/acupuncture/points" element={withSuspense(<P.AcupointsAndUses />)} />
-    <Route path="/acupuncture/homeopathy" element={withSuspense(<P.AcupunctureHomeopathy />)} />
-    <Route path="/acupuncture/50-diseases" element={withSuspense(<P.Acupuncture50Diseases />)} />
-    <Route path="/acupuncture/300-diseases" element={withSuspense(<P.Acupuncture300Diseases />)} />
     <Route path="/treatments/:slug" element={withSuspense(<P.TreatmentSystem />)} />
     <Route path="/homeopathy" element={withSuspense(<P.HomeopathyHub />)} />
     <Route path="/homeopathy/repertory" element={withSuspense(<P.HomeopathyRepertory />)} />

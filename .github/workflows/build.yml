@@ -1,0 +1,49 @@
+name: Production Build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-prerender:
+    name: Build + Sitemap + Prerender
+    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium (for prerender)
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate sitemap, build, and prerender
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build:prerender
+
+      - name: Verify prerendered HTML has meta tags
+        run: |
+          test -f dist/index.html
+          grep -q '<meta name="description"' dist/index.html
+          test -f dist/sitemap.xml
+          grep -q '<urlset' dist/sitemap.xml
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.run_id }}
+          path: dist/
+          retention-days: 7

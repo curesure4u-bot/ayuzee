@@ -1,4 +1,5 @@
 import { Routes } from "react-router-dom";
+import { redirectRoutes } from "@/routes/redirects.routes";
 import { adminRoutes } from "@/routes/admin.routes";
 import { atmriRoutes } from "@/routes/atmri.routes";
 import { authRoutes } from "@/routes/auth.routes";
@@ -18,6 +19,7 @@ import { venueRoutes } from "@/routes/venue.routes";
 
 export const AppRoutes = () => (
   <Routes>
+    {redirectRoutes}
     {authRoutes}
     {studentRoutes}
     {patientRoutes}
