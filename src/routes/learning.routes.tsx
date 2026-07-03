@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import * as P from "@/routes/lazyPages";
+import * as P from "@/routes/lazy/learning";
 import { withSuspense } from "@/routes/routeUtils";
 
 export const learningRoutes = (

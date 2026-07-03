@@ -1,40 +1,51 @@
-import { Routes } from "react-router-dom";
+import { useEffect, useState, type ReactNode } from "react";
+import { Route, Routes } from "react-router-dom";
+import { RouteFallback } from "@/components/common/PageLoader";
 import { redirectRoutes } from "@/routes/redirects.routes";
-import { adminRoutes } from "@/routes/admin.routes";
-import { atmriRoutes } from "@/routes/atmri.routes";
 import { authRoutes } from "@/routes/auth.routes";
-import { consultationRoutes } from "@/routes/consultation.routes";
-import { diagnosisRoutes } from "@/routes/diagnosis.routes";
-import { doctorRoutes } from "@/routes/doctor.routes";
-import { gamificationRoutes } from "@/routes/gamification.routes";
-import { homeoRoutes } from "@/routes/homeo.routes";
-import { learningRoutes } from "@/routes/learning.routes";
-import { patientRoutes } from "@/routes/patient.routes";
-import { publicRoutes } from "@/routes/public.routes";
 import { shopRoutes } from "@/routes/shop.routes";
-import { studentRoutes } from "@/routes/student.routes";
-import { therapistRoutes } from "@/routes/therapist.routes";
-import { vaidyaRoutes } from "@/routes/vaidya.routes";
-import { venueRoutes } from "@/routes/venue.routes";
+import { diagnosisRoutes } from "@/routes/diagnosis.routes";
+import { publicRoutes, notFoundRoute } from "@/routes/public.routes";
 
-export const AppRoutes = () => (
-  <Routes>
-    {redirectRoutes}
-    {authRoutes}
-    {studentRoutes}
-    {patientRoutes}
-    {consultationRoutes}
-    {shopRoutes}
-    {diagnosisRoutes}
-    {therapistRoutes}
-    {venueRoutes}
-    {adminRoutes}
-    {learningRoutes}
-    {vaidyaRoutes}
-    {doctorRoutes}
-    {atmriRoutes}
-    {homeoRoutes}
-    {gamificationRoutes}
-    {publicRoutes}
-  </Routes>
-);
+/** Portal route trees loaded after first paint to shrink the initial bundle. */
+const PORTAL_ROUTE_LOADERS: Array<() => Promise<ReactNode>> = [
+  () => import("@/routes/student.routes").then((m) => m.studentRoutes),
+  () => import("@/routes/patient.routes").then((m) => m.patientRoutes),
+  () => import("@/routes/consultation.routes").then((m) => m.consultationRoutes),
+  () => import("@/routes/therapist.routes").then((m) => m.therapistRoutes),
+  () => import("@/routes/venue.routes").then((m) => m.venueRoutes),
+  () => import("@/routes/admin.routes").then((m) => m.adminRoutes),
+  () => import("@/routes/learning.routes").then((m) => m.learningRoutes),
+  () => import("@/routes/vaidya.routes").then((m) => m.vaidyaRoutes),
+  () => import("@/routes/doctor.routes").then((m) => m.doctorRoutes),
+  () => import("@/routes/atmri.routes").then((m) => m.atmriRoutes),
+  () => import("@/routes/homeo.routes").then((m) => m.homeoRoutes),
+  () => import("@/routes/gamification.routes").then((m) => m.gamificationRoutes),
+];
+
+export const AppRoutes = () => {
+  const [portalRoutes, setPortalRoutes] = useState<ReactNode>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all(PORTAL_ROUTE_LOADERS.map((load) => load())).then((chunks) => {
+      if (cancelled) return;
+      setPortalRoutes(<>{chunks}</>);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <Routes>
+      {redirectRoutes}
+      {authRoutes}
+      {shopRoutes}
+      {diagnosisRoutes}
+      {publicRoutes}
+      {portalRoutes}
+      {portalRoutes ? notFoundRoute : <Route path="*" element={<RouteFallback />} />}
+    </Routes>
+  );
+};

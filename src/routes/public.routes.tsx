@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import * as P from "@/routes/lazyPages";
+import * as P from "@/routes/lazy/public";
 import { withSuspense } from "@/routes/routeUtils";
 
 export const publicRoutes = (
@@ -63,6 +63,9 @@ export const publicRoutes = (
     <Route path="/essential-unani-drugs/:slug" element={withSuspense(<P.EssentialUnaniDrugDetail />)} />
     <Route path="/essential-homeopathy-drugs" element={withSuspense(<P.EssentialHomeopathyDrugs />)} />
     <Route path="/essential-homeopathy-drugs/:slug" element={withSuspense(<P.EssentialHomeopathyDrugDetail />)} />
-    <Route path="*" element={withSuspense(<P.NotFound />)} />
   </>
+);
+
+export const notFoundRoute = (
+  <Route path="*" element={withSuspense(<P.NotFound />)} />
 );

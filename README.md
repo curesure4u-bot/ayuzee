@@ -63,6 +63,8 @@ See [docs/SUPABASE_SECURITY.md](docs/SUPABASE_SECURITY.md) for staging, RLS audi
 
 See [docs/DPDP_COMPLIANCE.md](docs/DPDP_COMPLIANCE.md) for consent flows, data-principal rights, and DPDP alignment.
 
+See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for portal route splitting and bundle chunk strategy.
+
 ## E2E tests in GitHub Actions
 
 The Playwright suite (`.github/workflows/e2e.yml`) runs on every PR and push to `main`. It reads its config from repository secrets.

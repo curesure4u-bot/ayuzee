@@ -26,6 +26,14 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (id.includes("/src/routes/lazy/")) {
+            const match = id.match(/\/src\/routes\/lazy\/([^/.]+)/);
+            if (match?.[1] && match[1] !== "lazyPage") return `portal-${match[1]}`;
+          }
+          if (id.includes("/src/routes/") && id.endsWith(".routes.tsx")) {
+            const match = id.match(/\/([^/]+)\.routes\.tsx$/);
+            if (match?.[1] && match[1] !== "redirects") return `routes-${match[1]}`;
+          }
           if (!id.includes("node_modules")) return;
           if (id.includes("@supabase")) return "vendor-supabase";
           if (id.includes("@tanstack")) return "vendor-query";
