@@ -1,11 +1,7 @@
-import { requireUser } from "../_shared/auth.ts";
+import { requireUser, getCorsHeaders } from "../_shared/auth.ts";
 // AI Scribe — converts audio or raw text into a structured Ayurveda EMR (SOAP + Rx)
 // Multi-language: Hindi, Tamil, Telugu, Marathi, English
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { getAiProviderName } from "../_shared/ai.ts";
 
 const LANG_MAP: Record<string, string> = {
   en: "English",
@@ -16,15 +12,16 @@ const LANG_MAP: Record<string, string> = {
 };
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
 
   try {
     const authResult = await requireUser(req);
     if (authResult instanceof Response) return authResult;
 
     const { mode, text, audioBase64, language = "en" } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    const openAiKey = Deno.env.get("OPENAI_API_KEY");
+    if (!lovableKey && !openAiKey) throw new Error("No AI provider configured");
 
     const langName = LANG_MAP[language] ?? "English";
     let userContent: any;
@@ -90,14 +87,20 @@ Be concise, factual, never invent details not present in the input. If a field i
       },
     ];
 
-    const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const model = mode === "audio" ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
+    const aiUrl = openAiKey && mode !== "audio"
+      ? "https://api.openai.com/v1/chat/completions"
+      : "https://ai.gateway.lovable.dev/v1/chat/completions";
+    const aiKey = openAiKey && mode !== "audio" ? openAiKey : lovableKey!;
+
+    const aiResp = await fetch(aiUrl, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${aiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: mode === "audio" ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash",
+        model: openAiKey && mode !== "audio" ? "gpt-4o-mini" : model,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userContent },
@@ -110,16 +113,16 @@ Be concise, factual, never invent details not present in the input. If a field i
     if (!aiResp.ok) {
       if (aiResp.status === 429)
         return new Response(JSON.stringify({ error: "AI rate limit exceeded. Try again in a moment." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
       if (aiResp.status === 402)
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Add funds in Lovable workspace." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        return new Response(JSON.stringify({ error: "AI credits exhausted." }), {
+          status: 402, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
       const t = await aiResp.text();
-      console.error("AI gateway error:", aiResp.status, t);
-      return new Response(JSON.stringify({ error: "AI gateway error" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      console.error("AI provider error:", aiResp.status, t, "provider=", getAiProviderName());
+      return new Response(JSON.stringify({ error: "AI provider error" }), {
+        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -129,13 +132,13 @@ Be concise, factual, never invent details not present in the input. If a field i
     const emr = JSON.parse(toolCall.function.arguments);
 
     return new Response(
-      JSON.stringify({ emr, model: mode === "audio" ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash" }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      JSON.stringify({ emr, model, provider: getAiProviderName() }),
+      { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } },
     );
   } catch (e) {
     console.error("ai-scribe error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
 });

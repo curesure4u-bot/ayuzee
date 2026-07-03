@@ -59,6 +59,8 @@ Optional `.env` key:
 | --- | --- |
 | `VITE_SENTRY_DSN` | Error reporting in production (optional) |
 
+See [docs/SUPABASE_SECURITY.md](docs/SUPABASE_SECURITY.md) for staging, RLS audits, and edge function secrets.
+
 ## E2E tests in GitHub Actions
 
 The Playwright suite (`.github/workflows/e2e.yml`) runs on every PR and push to `main`. It reads its config from repository secrets.

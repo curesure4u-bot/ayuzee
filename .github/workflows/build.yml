@@ -42,6 +42,9 @@ jobs:
           grep -q '<urlset' dist/sitemap.xml
           test -f dist/_headers
 
+      - name: Run security audit
+        run: npm run audit:security
+
       - name: Run Lighthouse CI
         run: npx lhci autorun
 

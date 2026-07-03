@@ -1,16 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { requireUser } from "../_shared/auth.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { requireUser, getCorsHeaders } from "../_shared/auth.ts";
 
 // AI natural-language → list of likely rubric IDs from the DB.
 // Strategy: keyword extract via AI → trigram search rubrics → return matches.
 serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
 
   try {
     const authResult = await requireUser(req);
@@ -18,7 +13,7 @@ serve(async (req) => {
 
     const { query } = await req.json();
     if (!query || typeof query !== "string") {
-      return new Response(JSON.stringify({ error: "query required" }), { status: 400, headers: corsHeaders });
+      return new Response(JSON.stringify({ error: "query required" }), { status: 400, headers: getCorsHeaders(req) });
     }
 
     const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
@@ -50,9 +45,9 @@ Extract 4-10 short homeopathic rubric-style phrases (2-5 words each) capturing d
       }),
     });
     if (!aiResp.ok) {
-      if (aiResp.status === 429) return new Response(JSON.stringify({ error: "Rate limit, try again shortly." }), { status: 429, headers: corsHeaders });
-      if (aiResp.status === 402) return new Response(JSON.stringify({ error: "Lovable AI credits exhausted." }), { status: 402, headers: corsHeaders });
-      return new Response(JSON.stringify({ error: "AI error" }), { status: 500, headers: corsHeaders });
+      if (aiResp.status === 429) return new Response(JSON.stringify({ error: "Rate limit, try again shortly." }), { status: 429, headers: getCorsHeaders(req) });
+      if (aiResp.status === 402) return new Response(JSON.stringify({ error: "Lovable AI credits exhausted." }), { status: 402, headers: getCorsHeaders(req) });
+      return new Response(JSON.stringify({ error: "AI error" }), { status: 500, headers: getCorsHeaders(req) });
     }
     const aiJson = await aiResp.json();
     const phrases: string[] = JSON.parse(aiJson.choices[0].message.tool_calls[0].function.arguments).phrases ?? [];
@@ -86,10 +81,10 @@ Extract 4-10 short homeopathic rubric-style phrases (2-5 words each) capturing d
     }
 
     return new Response(JSON.stringify({ phrases, rubrics: matches, ranked }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("homeo-rubric-finder error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : String(e) }), { status: 500, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : String(e) }), { status: 500, headers: getCorsHeaders(req) });
   }
 });

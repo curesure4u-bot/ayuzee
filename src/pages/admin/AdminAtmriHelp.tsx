@@ -16,6 +16,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Loader2, X, AlertTriangle, CheckCircle2, Circle } from "lucide-react";
+import { openSignedStorageUrl } from "@/lib/storage";
 
 type Corpus = {
   id: string;
@@ -418,7 +419,18 @@ function CaseSlidePanel({ caseData, onClose, onSaved }: { caseData: Case; onClos
               {c.medical_report_urls?.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                   {c.medical_report_urls.map((u: string, i: number) => (
-                    <a key={i} href={u} target="_blank" rel="noreferrer" className="text-xs text-primary underline">📄 Report {i + 1}</a>
+                    <button
+                      key={i}
+                      type="button"
+                      className="text-xs text-primary underline"
+                      onClick={() => {
+                        void openSignedStorageUrl("prescriptions", u).catch((err) => {
+                          toast.error(err instanceof Error ? err.message : "Could not open report");
+                        });
+                      }}
+                    >
+                      📄 Report {i + 1}
+                    </button>
                   ))}
                 </div>
               )}

@@ -16,6 +16,7 @@ import {
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, Upload, X } from "lucide-react";
 import { setSEO } from "@/lib/seo";
+import { uploadPrivateFile } from "@/lib/storage";
 
 type Relation = "patient" | "family" | "doctor" | "social_worker" | "other";
 
@@ -122,18 +123,17 @@ const AtmriApply = () => {
 
   const uploadReports = async (): Promise<string[]> => {
     if (!userId || reportFiles.length === 0) return [];
-    const urls: string[] = [];
+    const paths: string[] = [];
     for (const f of reportFiles) {
       const path = `${userId}/reports/${Date.now()}-${f.name}`;
-      const { error } = await supabase.storage
-        .from("prescriptions")
-        .upload(path, f, { upsert: false });
-      if (!error) {
-        const { data } = supabase.storage.from("prescriptions").getPublicUrl(path);
-        urls.push(data.publicUrl);
+      try {
+        await uploadPrivateFile("prescriptions", path, f);
+        paths.push(path);
+      } catch {
+        toast.error(`Could not upload ${f.name}`);
       }
     }
-    return urls;
+    return paths;
   };
 
   const handleSubmit = async () => {

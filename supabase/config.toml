@@ -1,19 +1,28 @@
 project_id = "saphetdusyfrcduzsouk"
 
 [functions]
+  # Supabase Auth email webhook — must stay open at gateway; verified via Lovable signature.
   [functions.auth-email-hook]
     verify_jwt = false
+
+  # Partner API — authenticates via x-api-key, not JWT.
   [functions.dev-api]
     verify_jwt = false
+
   [functions.process-email-queue]
     verify_jwt = true
+
+  # JWT enforced at gateway + requireUser() in function body.
   [functions.homeo-materia-ai]
-    verify_jwt = false
+    verify_jwt = true
+
+  # Seed endpoints — admin/doctor only; JWT required at gateway.
   [functions.homeo-seed]
-    verify_jwt = false
+    verify_jwt = true
   [functions.homeo-seed-1000]
-    verify_jwt = false
-  [functions.homeo-rubric-finder]
-    verify_jwt = false
+    verify_jwt = true
   [functions.homeo-seed-mm200]
-    verify_jwt = false
+    verify_jwt = true
+
+  [functions.homeo-rubric-finder]
+    verify_jwt = true
