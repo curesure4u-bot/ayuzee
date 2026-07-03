@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
 import { POLICY_VERSION, recordConsent } from "@/lib/consent";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FeatureGate } from "@/components/common/FeatureGate";
+import { FEATURES } from "@/lib/features";
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
 
@@ -162,22 +164,24 @@ export const Footer = () => {
       </section>
 
       <section className="bg-footer-panel py-6">
-        <div className="container flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-          <form onSubmit={handleAppWaitlistSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
-            <span className="font-medium text-primary-foreground">📱 Ayuzee App coming soon — Get notified:</span>
-            <input name="email" type="email" required maxLength={255} placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
-            <label className="flex items-center gap-2 text-xs text-footer-muted">
-              <input name="marketing_consent" type="checkbox" required />
-              <span>Marketing consent</span>
-            </label>
-            <button type="submit" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-smooth hover:bg-primary/90">Notify Me</button>
-          </form>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-footer-muted">
-            <span>Available on</span>
-            <span className="flex items-center gap-2 rounded-md bg-footer-pill px-4 py-2 text-footer-foreground"><Apple className="h-4 w-4" /> App Store</span>
-            <span className="flex items-center gap-2 rounded-md bg-footer-pill px-4 py-2 text-footer-foreground"><Play className="h-4 w-4" /> Play Store</span>
+        <FeatureGate flag={FEATURES.APP_WAITLIST}>
+          <div className="container flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+            <form onSubmit={handleAppWaitlistSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+              <span className="font-medium text-primary-foreground">📱 Ayuzee App coming soon — Get notified:</span>
+              <input name="email" type="email" required maxLength={255} placeholder="Email" className="w-full rounded-full border border-footer-border bg-footer/70 px-4 py-2 text-sm text-primary-foreground placeholder:text-footer-muted outline-none focus:ring-2 focus:ring-primary sm:w-48" />
+              <label className="flex items-center gap-2 text-xs text-footer-muted">
+                <input name="marketing_consent" type="checkbox" required />
+                <span>Marketing consent</span>
+              </label>
+              <button type="submit" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-smooth hover:bg-primary/90">Notify Me</button>
+            </form>
+            <div className="flex flex-wrap items-center gap-3 text-sm text-footer-muted">
+              <span>Available on</span>
+              <span className="flex items-center gap-2 rounded-md bg-footer-pill px-4 py-2 text-footer-foreground"><Apple className="h-4 w-4" /> App Store</span>
+              <span className="flex items-center gap-2 rounded-md bg-footer-pill px-4 py-2 text-footer-foreground"><Play className="h-4 w-4" /> Play Store</span>
+            </div>
           </div>
-        </div>
+        </FeatureGate>
       </section>
 
       <section className="container flex flex-wrap items-center justify-between gap-3 border-t border-footer-border py-4 text-xs text-footer-muted">

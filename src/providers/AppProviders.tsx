@@ -8,6 +8,7 @@ import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { queryClient } from "@/lib/queryClient";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { RoleProvider } from "@/providers/RoleProvider";
+import { FeatureFlagsProvider } from "@/providers/FeatureFlagsProvider";
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -17,7 +18,8 @@ export const AppProviders = ({ children }: AppProvidersProps) => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RoleProvider>
+        <FeatureFlagsProvider>
+          <RoleProvider>
           <TooltipProvider>
             <CartProvider>
               <Toaster />
@@ -25,7 +27,8 @@ export const AppProviders = ({ children }: AppProvidersProps) => (
               {children}
             </CartProvider>
           </TooltipProvider>
-        </RoleProvider>
+          </RoleProvider>
+        </FeatureFlagsProvider>
       </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>

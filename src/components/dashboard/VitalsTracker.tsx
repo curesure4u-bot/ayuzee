@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useFeatureFlags } from "@/providers/FeatureFlagsProvider";
+import { FEATURES } from "@/lib/features";
 
 // Run in Supabase: CREATE TABLE IF NOT EXISTS patient_vitals (
 //   id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid REFERENCES auth.users(id), recorded_date date DEFAULT CURRENT_DATE,
@@ -17,6 +19,7 @@ const tone = (status: "green" | "amber" | "red") => status === "green" ? "border
 const toNumber = (value: string) => value ? Number(value) : null;
 
 export const VitalsTracker = ({ userId }: { userId: string }) => {
+  const { isEnabled } = useFeatureFlags();
   const [vitals, setVitals] = useState<Vital[]>([]);
   const [loading, setLoading] = useState(true);
   const [comingSoon, setComingSoon] = useState(false);
@@ -29,6 +32,8 @@ export const VitalsTracker = ({ userId }: { userId: string }) => {
   };
 
   useEffect(loadVitals, [userId]);
+
+  if (!isEnabled(FEATURES.VITALS_TRACKING)) return null;
 
   const latest = vitals[0];
   const chartData = useMemo(() => [...vitals].reverse().map((v) => ({ date: v.recorded_date, weight: Number(v.weight_kg ?? 0) })), [vitals]);

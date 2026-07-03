@@ -65,6 +65,8 @@ See [docs/DPDP_COMPLIANCE.md](docs/DPDP_COMPLIANCE.md) for consent flows, data-p
 
 See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for portal route splitting and bundle chunk strategy.
 
+See [docs/FEATURE_FLAGS.md](docs/FEATURE_FLAGS.md) for hiding incomplete/placeholder features in production.
+
 ## E2E tests in GitHub Actions
 
 The Playwright suite (`.github/workflows/e2e.yml`) runs on every PR and push to `main`. It reads its config from repository secrets.

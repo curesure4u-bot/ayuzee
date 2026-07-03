@@ -6,6 +6,7 @@ import { authRoutes } from "@/routes/auth.routes";
 import { shopRoutes } from "@/routes/shop.routes";
 import { diagnosisRoutes } from "@/routes/diagnosis.routes";
 import { publicRoutes, notFoundRoute } from "@/routes/public.routes";
+import { useGamificationRoutes } from "@/routes/gamification.routes";
 
 /** Portal route trees loaded after first paint to shrink the initial bundle. */
 const PORTAL_ROUTE_LOADERS: Array<() => Promise<ReactNode>> = [
@@ -20,11 +21,11 @@ const PORTAL_ROUTE_LOADERS: Array<() => Promise<ReactNode>> = [
   () => import("@/routes/doctor.routes").then((m) => m.doctorRoutes),
   () => import("@/routes/atmri.routes").then((m) => m.atmriRoutes),
   () => import("@/routes/homeo.routes").then((m) => m.homeoRoutes),
-  () => import("@/routes/gamification.routes").then((m) => m.gamificationRoutes),
 ];
 
 export const AppRoutes = () => {
   const [portalRoutes, setPortalRoutes] = useState<ReactNode>(null);
+  const gamificationRoutes = useGamificationRoutes();
 
   useEffect(() => {
     let cancelled = false;
@@ -45,6 +46,7 @@ export const AppRoutes = () => {
       {diagnosisRoutes}
       {publicRoutes}
       {portalRoutes}
+      {gamificationRoutes}
       {portalRoutes ? notFoundRoute : <Route path="*" element={<RouteFallback />} />}
     </Routes>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Bell, ChevronDown, Leaf, LogOut, Menu, Search, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,9 +15,11 @@ import { PincodeWidget } from "@/components/site/PincodeWidget";
 import { dashboardPathForRole, labelForRole, useUserRole } from "@/hooks/useUserRole";
 import { BULK_BRANDS, CLASSICAL_TYPES, PATENTED_TYPES } from "@/data/bulkCatalog";
 import { AyushHelpMenu } from "@/components/site/AyushHelpMenu";
+import { useFeatureFlags } from "@/providers/FeatureFlagsProvider";
+import { FEATURES, type FeatureKey } from "@/lib/features";
 
 const utilityLinks = ["About Us", "Careers", "Blog", "Contact"];
-type MegaLink = { label: string; to: string };
+type MegaLink = { label: string; to: string; flag?: FeatureKey };
 type MegaColumn = { title: string; links?: MegaLink[]; card?: { title: string; body?: string; cta: string; to: string } };
 type MegaMenu = { label: string; columns: MegaColumn[] };
 type ConditionMenuLink = { icon: string; name: string; slug: string; system_category?: string | null };
@@ -81,7 +83,7 @@ const megaMenus: MegaMenu[] = [
     { title: "Job Alerts", card: { title: "Get AYUSH role alerts", body: "Save searches and stay ahead of new openings.", cta: "Create Alert", to: "/jobs" } },
   ] },
   { label: "Diagnosis", columns: [
-    { title: "Assessments", links: [{ label: "🧬 Prakriti Assessment (Dosha Quiz)", to: "/diagnosis/prakriti" }, { label: "🔍 Symptom Checker", to: "/diagnosis/symptoms" }, { label: "📋 Health Risk Assessment", to: "/diagnosis" }] },
+    { title: "Assessments", links: [{ label: "🧬 Prakriti Assessment (Dosha Quiz)", to: "/diagnosis/prakriti" }, { label: "🔍 Symptom Checker", to: "/diagnosis/symptoms", flag: FEATURES.SYMPTOM_CHECKER }, { label: "📋 Health Risk Assessment", to: "/diagnosis" }] },
     { title: "Reports", links: [{ label: "My Past Assessments", to: "/dashboard?tab=assessments" }, { label: "Share Report with Doctor", to: "/doctors" }] },
     { title: "Wellness", links: [{ label: "🍲 Food as Medicine (AYUSH)", to: "/food-as-medicine" }] },
   ] },
@@ -140,6 +142,20 @@ const roleBadgeClass = (role: string | null) => {
   if (role === "therapist") return "border-accent bg-accent text-accent-foreground";
   return "border-primary/30 bg-primary/10 text-primary";
 };
+
+const filterMegaMenus = (
+  menus: MegaMenu[],
+  isEnabled: (key: FeatureKey) => boolean,
+): MegaMenu[] =>
+  menus.map((menu) => ({
+    ...menu,
+    columns: menu.columns
+      .map((column) => ({
+        ...column,
+        links: column.links?.filter((link) => !link.flag || isEnabled(link.flag)),
+      }))
+      .filter((column) => (column.links?.length ?? 0) > 0 || column.card),
+  }));
 
 const MegaPanel = ({ menu, close }: { menu: MegaMenu; close: () => void }) => (
   <div className="absolute left-0 top-full z-[60] w-screen border-b border-border bg-background shadow-lg animate-in fade-in-0 slide-in-from-top-2" onMouseLeave={close}>
@@ -214,6 +230,8 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
   const { count } = useCart();
   const navigate = useNavigate();
   const { role } = useUserRole();
+  const { isEnabled } = useFeatureFlags();
+  const filteredMegaMenus = useMemo(() => filterMegaMenus(megaMenus, isEnabled), [isEnabled]);
   const navRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
@@ -311,7 +329,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
                 </div>
                 <div className="space-y-2">
                   <Collapsible><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">Medicines<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3"><MedicineSection title="🛒 Bulk Purchase" subtitle="Doctor & clinic discounts"><div className="grid gap-1"><MedicineLink to="/bulk?tab=brands" close={() => setMobileOpen(false)}>By Brand</MedicineLink><MedicineLink to="/bulk?tab=classical" close={() => setMobileOpen(false)}>Shastriya / Classical Medicines</MedicineLink><MedicineLink to="/bulk?tab=patented" close={() => setMobileOpen(false)}>Patented Medicines</MedicineLink><MedicineLink to="/bulk" close={() => setMobileOpen(false)}>All Bulk Medicines →</MedicineLink></div></MedicineSection><MedicineSection title="🩺 By Health Condition"><div className="grid gap-1">{conditions.map((c) => <MedicineLink key={c.slug} to={`/shop/conditions/${c.slug}`} close={() => setMobileOpen(false)}>{c.icon} {c.name}</MedicineLink>)}<MedicineLink to="/shop/conditions" close={() => setMobileOpen(false)}>View all 30 conditions →</MedicineLink></div></MedicineSection><MedicineSection title="🌿 By AYUSH System"><div className="grid gap-1"><MedicineLink to="/shop?system=Ayurveda" close={() => setMobileOpen(false)}>🌱 Ayurveda Medicines</MedicineLink><MedicineLink to="/homeopathy" close={() => setMobileOpen(false)}>💊 Homeopathy</MedicineLink><MedicineLink to="/shop?system=Unani" close={() => setMobileOpen(false)}>🌙 Unani</MedicineLink><MedicineLink to="/shop?system=Siddha" close={() => setMobileOpen(false)}>🔵 Siddha</MedicineLink></div></MedicineSection><MedicineSection title="📘 Essential Drugs (Govt. AYUSH)"><div className="grid gap-1"><MedicineLink to="/essential-drugs" close={() => setMobileOpen(false)}>💊 Ayurveda Essential Drugs</MedicineLink><MedicineLink to="/essential-homeopathy-drugs" close={() => setMobileOpen(false)}>💧 Homeopathy Essential Drugs</MedicineLink><MedicineLink to="/essential-siddha-drugs" close={() => setMobileOpen(false)}>🌿 Siddha Essential Drugs</MedicineLink><MedicineLink to="/essential-unani-drugs" close={() => setMobileOpen(false)}>🔵 Unani Essential Drugs</MedicineLink></div></MedicineSection><MedicineSection title="🎁 Special Categories"><div className="grid gap-1"><MedicineLink to="/shop/treatment-kits" close={() => setMobileOpen(false)}>📦 Treatment Kits</MedicineLink><MedicineLink to="/shop/panchakarma" close={() => setMobileOpen(false)}>🫙 Panchakarma Medicines</MedicineLink><MedicineLink to="/shop/surgicals" close={() => setMobileOpen(false)}>🔪 AYUSH Surgicals</MedicineLink><MedicineLink to="/shop/prescription" close={() => setMobileOpen(false)}>💊 Upload Prescription</MedicineLink></div></MedicineSection><MedicineSection title="📦 Track & Manage"><div className="grid gap-1"><MedicineLink to="/shop/track" close={() => setMobileOpen(false)}>🚚 Track My Medicine Order</MedicineLink><MedicineLink to="/dashboard?tab=orders" close={() => setMobileOpen(false)}>📋 My Order History</MedicineLink><MedicineLink to="/offers" close={() => setMobileOpen(false)}>⚡ Flash Sale</MedicineLink></div></MedicineSection></CollapsibleContent></Collapsible>
-                  {megaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}
+                  {filteredMegaMenus.map((menu) => <Collapsible key={menu.label}><CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-3 text-sm font-semibold">{menu.label}<ChevronDown className="h-4 w-4" /></CollapsibleTrigger><CollapsibleContent className="space-y-3 px-2 py-3">{menu.columns.flatMap((c) => c.links ?? []).map((l) => <Link key={`${menu.label}-${l.label}`} to={l.to} className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary">{l.label}</Link>)}</CollapsibleContent></Collapsible>)}
                 </div>
                 {email ? (
                   <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
@@ -392,9 +410,9 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
 
       <div className="relative hidden h-11 border-b border-border bg-background md:block" onMouseLeave={() => setActive(null)}>
         <nav className="container flex h-full items-center justify-center gap-1">
-          {megaMenus.slice(0, 2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
+          {filteredMegaMenus.slice(0, 2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
           <button onMouseEnter={() => setActive("Medicines")} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">Medicines<ChevronDown className="h-3.5 w-3.5" /></button>
-         {megaMenus.slice(2).map((menu) => (
+         {filteredMegaMenus.slice(2).map((menu) => (
            <button
              key={menu.label}
              onMouseEnter={() => setActive(menu.label)}
@@ -410,7 +428,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
          ))}
           <div onMouseEnter={() => setActive(null)}><AyushHelpMenu /></div>
         </nav>
-        {active === "Medicines" ? <MedicinesMegaMenu conditions={conditions} close={() => setActive(null)} /> : active && <MegaPanel menu={megaMenus.find((m) => m.label === active)!} close={() => setActive(null)} />}
+        {active === "Medicines" ? <MedicinesMegaMenu conditions={conditions} close={() => setActive(null)} /> : active && <MegaPanel menu={filteredMegaMenus.find((m) => m.label === active)!} close={() => setActive(null)} />}
       </div>
     </header>
   );

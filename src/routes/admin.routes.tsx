@@ -1,6 +1,8 @@
 import { Route } from "react-router-dom";
 import * as P from "@/routes/lazy/admin";
 import { withSuspense } from "@/routes/routeUtils";
+import { FeatureRoute } from "@/components/common/FeatureRoute";
+import { FEATURES } from "@/lib/features";
 
 export const adminRoutes = (
   <>
@@ -44,7 +46,7 @@ export const adminRoutes = (
       <Route path="revenue-split" element={withSuspense(<P.AdminRevenueSplit />)} />
       <Route path="jobs" element={withSuspense(<P.AdminJobs />)} />
       <Route path="atmri-help" element={withSuspense(<P.AdminAtmriHelp />)} />
-      <Route path="roadmap" element={withSuspense(<P.AdminRoadmap />)} />
+      <FeatureRoute flag={FEATURES.ADMIN_ROADMAP} path="roadmap" element={withSuspense(<P.AdminRoadmap />)} />
       <Route path="essential-drugs" element={withSuspense(<P.AdminEssentialDrugs />)} />
       <Route path="essential-siddha-drugs" element={withSuspense(<P.AdminEssentialSiddhaDrugs />)} />
       <Route path="essential-unani-drugs" element={withSuspense(<P.AdminEssentialUnaniDrugs />)} />
@@ -74,8 +76,16 @@ export const adminRoutes = (
       <Route path="master-management/token-display" element={withSuspense(<P.TokenDisplayMaster />)} />
       <Route path="master-management/currency" element={withSuspense(<P.CurrencyMaster />)} />
       <Route path="master-management/patient-config" element={withSuspense(<P.PatientMaster />)} />
-      <Route path="pharmacy-orders" element={withSuspense(<P.AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />)} />
-      <Route path="ip-admissions" element={withSuspense(<P.AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />)} />
+      <FeatureRoute
+        flag={FEATURES.HMS_PHARMACY_ORDERS}
+        path="pharmacy-orders"
+        element={withSuspense(<P.AdminPlaceholder title="⚡ HMS Tools Ultra — Pharmacy Orders" description="Central pharmacy order routing." />)}
+      />
+      <FeatureRoute
+        flag={FEATURES.HMS_IP_ADMISSIONS}
+        path="ip-admissions"
+        element={withSuspense(<P.AdminPlaceholder title="⚡ HMS Tools Ultra — IP Admissions" />)}
+      />
       <Route path="ward-status" element={withSuspense(<P.WardMaster />)} />
     </Route>
   </>

@@ -5,6 +5,8 @@ import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useRole } from "@/hooks/useRole";
+import { useFeatureFlags } from "@/providers/FeatureFlagsProvider";
+import { FEATURES } from "@/lib/features";
 
 const ADMIN_ROLES = [
   "admin", "product_admin", "orders_admin", "accounts_admin",
@@ -75,13 +77,16 @@ const allGroups = [
   ]},
 ];
 
-
-
-
+const NAV_FLAG_BY_URL: Record<string, string> = {
+  "/admin/roadmap": FEATURES.ADMIN_ROADMAP,
+  "/admin/pharmacy-orders": FEATURES.HMS_PHARMACY_ORDERS,
+  "/admin/ip-admissions": FEATURES.HMS_IP_ADMISSIONS,
+};
 const AdminLayout = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading } = useRole();
+  const { isEnabled } = useFeatureFlags();
   const [ready, setReady] = useState(false);
   const [adminRole, setAdminRole] = useState<AdminRole>("admin");
 
@@ -116,16 +121,20 @@ const AdminLayout = () => {
       .filter(g => g.roles.includes(adminRole))
       .map(g => ({
         label: g.label,
-        items: adminRole === "admin"
+        items: (adminRole === "admin"
           ? g.items
           : g.items.filter(item => {
               if (adminRole === "support_admin") return ["/admin/users"].includes(item.url);
               if (adminRole === "doctor_admin") return ["/admin/doctors","/admin/therapists","/admin/venues","/admin/appointments"].includes(item.url);
               return true;
-            }),
+            }))
+          .filter((item) => {
+            const flag = NAV_FLAG_BY_URL[item.url];
+            return !flag || isEnabled(flag as typeof FEATURES.ADMIN_ROADMAP);
+          }),
       }))
       .filter(g => g.items.length > 0);
-  }, [adminRole]);
+  }, [adminRole, isEnabled]);
 
   if (!ready) return <div className="grid min-h-screen place-items-center bg-background"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div>;
 

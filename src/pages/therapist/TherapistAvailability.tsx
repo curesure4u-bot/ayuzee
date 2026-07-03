@@ -6,7 +6,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import type { TherapistContext } from "./TherapistLayout";
-import { useEffect } from "react";
+import { FeatureGate } from "@/components/common/FeatureGate";
+import { FEATURES } from "@/lib/features";
 
 const TherapistAvailability = () => {
   const { therapist, reload } = useOutletContext<TherapistContext>();
@@ -30,10 +31,12 @@ const TherapistAvailability = () => {
           <Switch checked={therapist.is_available} onCheckedChange={toggle} />
         </div>
       </CardContent></Card>
-      <Card><CardContent className="p-6">
-        <h2 className="font-semibold mb-2">Weekly schedule</h2>
-        <p className="text-sm text-muted-foreground">Custom schedules and time-off planning are coming soon.</p>
-      </CardContent></Card>
+      <FeatureGate flag={FEATURES.THERAPIST_SCHEDULE}>
+        <Card><CardContent className="p-6">
+          <h2 className="font-semibold mb-2">Weekly schedule</h2>
+          <p className="text-sm text-muted-foreground">Custom schedules and time-off planning are coming soon.</p>
+        </CardContent></Card>
+      </FeatureGate>
     </div>
   );
 };

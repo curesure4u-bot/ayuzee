@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, FileText, Users, Building2, Stethoscope, Sparkles, Trophy, BarChart3, Megaphone, HandHeart } from "lucide-react";
+import { useFeatureFlags } from "@/providers/FeatureFlagsProvider";
+import { FEATURES, type FeatureKey } from "@/lib/features";
 
 type TabKey = "patients" | "doctors" | "donors" | "hospitals";
-type Item = { icon: React.ReactNode; title: string; sub: string; to: string };
+type Item = { icon: React.ReactNode; title: string; sub: string; to: string; flag?: FeatureKey };
 
 const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "patients", label: "For Patients", icon: <Heart className="h-4 w-4" /> },
@@ -16,18 +18,18 @@ const itemsByTab: Record<TabKey, Item[]> = {
   patients: [
     { icon: <FileText className="h-4 w-4 text-primary" />, title: "Apply for Free Treatment", sub: "ATMRI Trust pays the hospital directly", to: "/atmri-help/apply" },
     { icon: <Users className="h-4 w-4 text-primary" />, title: "Live Sponsored Cases", sub: "Browse patients receiving treatment now", to: "/atmri-help/cases" },
-    { icon: <Megaphone className="h-4 w-4 text-primary" />, title: "Active Campaigns", sub: "Trust-led healing campaigns this month", to: "/atmri-help/campaigns" },
-    { icon: <BarChart3 className="h-4 w-4 text-primary" />, title: "Impact Dashboard", sub: "How donations are spent — full transparency", to: "/atmri-help/impact" },
+    { icon: <Megaphone className="h-4 w-4 text-primary" />, title: "Active Campaigns", sub: "Trust-led healing campaigns this month", to: "/atmri-help/campaigns", flag: FEATURES.ATMRI_CAMPAIGNS },
+    { icon: <BarChart3 className="h-4 w-4 text-primary" />, title: "Impact Dashboard", sub: "How donations are spent — full transparency", to: "/atmri-help/impact", flag: FEATURES.ATMRI_IMPACT },
   ],
   doctors: [
     { icon: <Trophy className="h-4 w-4 text-amber-600" />, title: "Take the Healing Pledge", sub: "Donate consults · earn the gold badge", to: "/atmri-help/pledge" },
     { icon: <Stethoscope className="h-4 w-4 text-primary" />, title: "Sign Patient Cases", sub: "Countersign assigned ATMRI cases", to: "/atmri-help/cases" },
-    { icon: <Trophy className="h-4 w-4 text-primary" />, title: "Doctor Leaderboard", sub: "Top contributing AYUSH doctors", to: "/atmri-help/leaderboard" },
+    { icon: <Trophy className="h-4 w-4 text-primary" />, title: "Doctor Leaderboard", sub: "Top contributing AYUSH doctors", to: "/atmri-help/leaderboard", flag: FEATURES.ATMRI_LEADERBOARD },
   ],
   donors: [
     { icon: <Heart className="h-4 w-4 text-primary" />, title: "Donate to Trust Corpus", sub: "80G receipt · FCRA compliant", to: "/atmri-help" },
-    { icon: <Sparkles className="h-4 w-4 text-primary" />, title: "CSR Partnership", sub: "Corporate sponsorship & MOU options", to: "/atmri-help/csr" },
-    { icon: <BarChart3 className="h-4 w-4 text-primary" />, title: "Impact Reports", sub: "See exactly where your money went", to: "/atmri-help/impact" },
+    { icon: <Sparkles className="h-4 w-4 text-primary" />, title: "CSR Partnership", sub: "Corporate sponsorship & MOU options", to: "/atmri-help/csr", flag: FEATURES.ATMRI_CSR },
+    { icon: <BarChart3 className="h-4 w-4 text-primary" />, title: "Impact Reports", sub: "See exactly where your money went", to: "/atmri-help/impact", flag: FEATURES.ATMRI_IMPACT },
   ],
   hospitals: [
     { icon: <Building2 className="h-4 w-4 text-primary" />, title: "Partner Hospitals", sub: "AYUSH hospitals hosting Trust patients", to: "/atmri-help/hospitals" },
@@ -38,7 +40,8 @@ const itemsByTab: Record<TabKey, Item[]> = {
 export const AyushHelpMenu = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabKey>("patients");
-  const activeItems = itemsByTab[activeTab];
+  const { isEnabled } = useFeatureFlags();
+  const activeItems = itemsByTab[activeTab].filter((item) => !item.flag || isEnabled(item.flag));
 
   return (
     <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>

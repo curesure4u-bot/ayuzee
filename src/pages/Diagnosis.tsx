@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Stethoscope, ArrowRight } from "lucide-react";
 import { ASSESSMENT_LIST } from "@/data/assessmentModules";
 import { ClinicalDisclaimer } from "@/components/legal/ClinicalDisclaimer";
+import { FeatureGate } from "@/components/common/FeatureGate";
+import { FEATURES } from "@/lib/features";
 
 const featured = {
   slug: "prakriti",
@@ -87,13 +89,15 @@ const Diagnosis = () => {
             ))}
 
             {upcoming.map((t) => (
-              <Card key={t.slug} className="flex flex-col p-6 opacity-80">
-                <div className="text-3xl" aria-hidden>{t.emoji}</div>
-                <h3 className="mt-3 font-display text-xl font-semibold">{t.title}</h3>
-                <p className="text-sm text-primary/80">{t.subtitle}</p>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.desc}</p>
-                <Button disabled className="mt-4 w-fit" variant="outline">Coming soon</Button>
-              </Card>
+              <FeatureGate key={t.slug} flag={FEATURES.NADI_PAREEKSHA}>
+                <Card className="flex flex-col p-6 opacity-80">
+                  <div className="text-3xl" aria-hidden>{t.emoji}</div>
+                  <h3 className="mt-3 font-display text-xl font-semibold">{t.title}</h3>
+                  <p className="text-sm text-primary/80">{t.subtitle}</p>
+                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.desc}</p>
+                  <Button disabled className="mt-4 w-fit" variant="outline">Coming soon</Button>
+                </Card>
+              </FeatureGate>
             ))}
           </div>
         </section>
