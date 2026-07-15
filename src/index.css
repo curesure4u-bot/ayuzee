@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ayuzee — Ayurvedic wellness design system. All HSL. */
+
+@layer base {
+  :root {
+    /* Core palette */
+    --background: 40 33% 98%;
+    --foreground: 140 30% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 140 30% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 140 30% 12%;
+
+    /* Ayurvedic leaf green */
+    --primary: 142 48% 28%;
+    --primary-foreground: 40 33% 98%;
+    --primary-glow: 142 55% 42%;
+
+    /* Warm turmeric orange */
+    --secondary: 28 85% 55%;
+    --secondary-foreground: 40 33% 98%;
+
+    --muted: 40 20% 94%;
+    --muted-foreground: 140 14% 30%;
+
+    --accent: 38 85% 94%;
+    --accent-foreground: 142 48% 28%;
+
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 90%;
+    --ring: 142 48% 28%;
+
+    --radius: 0.75rem;
+
+    /* Gradients & shadows */
+    --gradient-hero: linear-gradient(135deg, hsl(142 48% 28% / 0.95) 0%, hsl(142 55% 22% / 0.92) 100%);
+    --gradient-leaf: linear-gradient(135deg, hsl(142 48% 28%), hsl(142 55% 42%));
+    --gradient-warm: linear-gradient(135deg, hsl(28 85% 55%), hsl(38 90% 62%));
+    --gradient-soft: linear-gradient(180deg, hsl(40 33% 98%), hsl(38 40% 95%));
+
+    --shadow-soft: 0 4px 20px -4px hsl(142 30% 20% / 0.08);
+    --shadow-elegant: 0 20px 60px -20px hsl(142 48% 28% / 0.25);
+    --shadow-warm: 0 10px 40px -10px hsl(28 85% 55% / 0.35);
+
+    --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 40 33% 98%;
+    --sidebar-foreground: 140 30% 12%;
+    --sidebar-primary: 142 48% 28%;
+    --sidebar-primary-foreground: 40 33% 98%;
+    --sidebar-accent: 40 20% 94%;
+    --sidebar-accent-foreground: 142 48% 28%;
+    --sidebar-border: 40 20% 88%;
+    --sidebar-ring: 142 48% 28%;
+
+    --admin-sidebar: 220 32% 10%;
+    --admin-sidebar-foreground: 40 33% 98%;
+    --admin-sidebar-muted: 215 18% 72%;
+    --admin-sidebar-accent: 142 55% 42%;
+    --admin-danger: 0 72% 50%;
+    --admin-warning: 38 90% 52%;
+    --admin-success: 142 55% 42%;
+
+    --success: 142 55% 42%;
+    --info: 207 80% 50%;
+    --warning: 38 90% 52%;
+    --mystic: 265 58% 58%;
+    --earth: 172 58% 38%;
+    --indigo: 236 58% 58%;
+
+    --footer: 222 47% 11%;
+    --footer-foreground: 215 20% 78%;
+    --footer-muted: 215 20% 72%;
+    --footer-panel: 217 33% 17%;
+    --footer-border: 215 25% 27%;
+    --footer-pill: 215 25% 22%;
+  }
+
+  .dark {
+    --background: 140 20% 8%;
+    --foreground: 40 33% 96%;
+    --card: 140 20% 10%;
+    --card-foreground: 40 33% 96%;
+    --popover: 140 20% 10%;
+    --popover-foreground: 40 33% 96%;
+    --primary: 142 55% 55%;
+    --primary-foreground: 140 30% 10%;
+    --primary-glow: 142 60% 65%;
+    --secondary: 28 85% 60%;
+    --secondary-foreground: 140 30% 10%;
+    --muted: 140 15% 16%;
+    --muted-foreground: 40 15% 65%;
+    --accent: 140 15% 16%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 140 15% 18%;
+    --input: 140 15% 18%;
+    --ring: 142 55% 55%;
+    --sidebar-background: 140 20% 8%;
+    --sidebar-foreground: 40 33% 96%;
+    --sidebar-primary: 142 55% 55%;
+    --sidebar-primary-foreground: 140 30% 10%;
+    --sidebar-accent: 140 15% 16%;
+    --sidebar-accent-foreground: 40 33% 96%;
+    --sidebar-border: 140 15% 18%;
+    --sidebar-ring: 142 55% 55%;
+    --admin-sidebar: 220 32% 10%;
+    --admin-sidebar-foreground: 40 33% 98%;
+    --admin-sidebar-muted: 215 18% 72%;
+    --admin-sidebar-accent: 142 55% 55%;
+    --admin-danger: 0 72% 50%;
+    --admin-warning: 38 90% 52%;
+    --admin-success: 142 55% 55%;
+
+    --success: 142 55% 55%;
+    --info: 207 80% 62%;
+    --warning: 38 90% 58%;
+    --mystic: 265 58% 66%;
+    --earth: 172 58% 46%;
+    --indigo: 236 58% 66%;
+
+    --footer: 222 47% 11%;
+    --footer-foreground: 215 20% 78%;
+    --footer-muted: 215 16% 57%;
+    --footer-panel: 217 33% 17%;
+    --footer-border: 215 25% 27%;
+    --footer-pill: 215 25% 22%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .gradient-hero { background: var(--gradient-hero); }
+  .gradient-leaf { background: var(--gradient-leaf); }
+  .gradient-warm { background: var(--gradient-warm); }
+  .gradient-soft { background: var(--gradient-soft); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-warm { box-shadow: var(--shadow-warm); }
+  .transition-smooth { transition: var(--transition-smooth); }
+  .text-balance { text-wrap: balance; }
+}

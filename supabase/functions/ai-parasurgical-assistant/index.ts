@@ -1,0 +1,209 @@
+import { requireUser } from "../_shared/auth.ts";
+// Ayuzee Para-Surgical Therapy AI assistant
+// Suggests likely pain generator, ranked procedure options, candidate points,
+// risks, and a combined protocol. Decision support only — not auto-prescribing.
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
+
+interface CaseInput {
+  patient_name?: string;
+  age?: number;
+  gender?: string;
+  chief_complaint?: string;
+  pain_location?: string;
+  duration?: string;
+  pain_severity?: number;
+  radiation?: string;
+  numbness?: boolean;
+  stiffness?: boolean;
+  swelling?: boolean;
+  rom_restriction?: string;
+  previous_treatment?: string;
+  diabetes?: boolean;
+  hypertension?: boolean;
+  bleeding_history?: boolean;
+  surgery_history?: string;
+  posture_issues?: string;
+  lifestyle_factors?: string;
+  doctor_notes?: string;
+  contraindications?: string[];
+}
+
+const PROCEDURES = [
+  "Agni Karma",
+  "Viddha Karma",
+  "Marma Therapy",
+  "Varmam Therapy",
+  "Acupuncture Therapy",
+  "Tung's Acupuncture Therapy",
+  "Dry Needling Therapy",
+  "Cupping / Hijama Support",
+  "Manual Therapy",
+  "Conservative Rehab / Yoga",
+];
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+
+    const authResult = await requireUser(req);
+
+    if (authResult instanceof Response) return authResult;
+
+    const body = (await req.json()) as { case: CaseInput };
+    const c = body?.case ?? {};
+
+    const sysPrompt = `You are an AYUSH para-surgical clinical decision support assistant.
+You assist qualified doctors only. You DO NOT auto-prescribe and you DO NOT rank
+or score therapies. The final decision rests with the licensed clinician.
+You only suggest which therapies from the list are SUITABLE options for this
+case. Doctors will pick one or combine multiple.
+
+Available procedures: ${PROCEDURES.join(", ")}.`;
+
+    const userPrompt = `Patient case (decision support):
+${JSON.stringify(c, null, 2)}
+
+Tasks:
+1. Identify likely pain generator(s) (1-2 lines).
+2. From the available procedures list, return ONLY the ones that are clinically
+   suitable for this case (no ranking, no percentages). For each suitable
+   therapy include a one-line "use" describing why it fits this case.
+3. Suggest candidate point names (Marma/Acu/Tung/TrP) relevant to the location.
+4. List safety risks / contraindication red flags.
+5. Suggest a combined protocol idea (1-2 sentences) the doctor may consider.`;
+
+    const responseSchema = {
+      name: "parasurgical_recommendation",
+      description:
+        "Structured procedural recommendation for AYUSH para-surgical therapy.",
+      parameters: {
+        type: "object",
+        properties: {
+          likely_pain_generator: { type: "string" },
+          suggestions: {
+            type: "array",
+            description:
+              "Suitable therapy options for this case (no ranking).",
+            items: {
+              type: "object",
+              properties: {
+                procedure: { type: "string", enum: PROCEDURES },
+                use: {
+                  type: "string",
+                  description:
+                    "One-line clinical use / why suitable for this case.",
+                },
+              },
+              required: ["procedure", "use"],
+            },
+          },
+          candidate_points: {
+            type: "array",
+            items: { type: "string" },
+          },
+          risks: { type: "array", items: { type: "string" } },
+          combined_protocol: { type: "string" },
+          disclaimer: { type: "string" },
+        },
+        required: [
+          "likely_pain_generator",
+          "suggestions",
+          "candidate_points",
+          "risks",
+          "combined_protocol",
+          "disclaimer",
+        ],
+        additionalProperties: false,
+      },
+    };
+
+    const resp = await fetch(
+      `${Deno.env.get("SUPABASE_URL")}/functions/v1/ai-gateway`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: req.headers.get("Authorization")!,
+          apikey: Deno.env.get("SUPABASE_ANON_KEY")!,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          feature: "ai-parasurgical-assistant",
+          system: sysPrompt,
+          prompt: userPrompt,
+          response_schema: responseSchema,
+        }),
+      },
+    );
+
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Rate limit exceeded. Try again shortly." }),
+          {
+            status: 429,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          },
+        );
+      }
+      if (resp.status === 402) {
+        return new Response(
+          JSON.stringify({
+            error: "AI credits exhausted. Add funds in Workspace settings.",
+          }),
+          {
+            status: 402,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          },
+        );
+      }
+      const t = await resp.text();
+      console.error("AI gateway error", resp.status, t);
+      return new Response(JSON.stringify({ error: "AI gateway error" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const data = await resp.json();
+    const parsed = data?.result ?? null;
+
+    return new Response(
+      JSON.stringify({
+        result:
+          parsed ??
+          {
+            likely_pain_generator: "Unavailable",
+            suggestions: [],
+            candidate_points: [],
+            risks: [],
+            combined_protocol: "",
+            disclaimer:
+              "Decision support only. A licensed clinician must approve.",
+          },
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  } catch (e) {
+    console.error("ai-parasurgical-assistant error", e);
+    return new Response(
+      JSON.stringify({
+        error: e instanceof Error ? e.message : "Unknown error",
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  }
+});

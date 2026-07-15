@@ -1,0 +1,5 @@
+ALTER TABLE public.products
+  ADD COLUMN IF NOT EXISTS mrp NUMERIC,
+  ADD COLUMN IF NOT EXISTS approval_status TEXT DEFAULT 'approved',
+  ADD COLUMN IF NOT EXISTS is_approved BOOLEAN DEFAULT true,
+  ADD COLUMN IF NOT EXISTS rejection_reason TEXT;

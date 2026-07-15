@@ -1,0 +1,1 @@
+ALTER TABLE public.homeopathy_cases ADD COLUMN IF NOT EXISTS constitutional_summary TEXT;

@@ -1,0 +1,33 @@
+# Ayuzee
+
+> Ayuzee is an AYUSH super-app for authentic Ayurveda and holistic wellness — book verified doctors, buy authentic medicines, and access homeopathy, Siddha, Unani, Yoga and Naturopathy services online.
+
+## Pages
+
+- [Home](/): Overview of Ayuzee — doctors, medicines, therapies, and wellness tools.
+- [Doctors](/doctors): Search verified AYUSH doctors and book video or in-clinic consultations.
+- [Shop](/shop): Authentic Ayurvedic and AYUSH medicines, with prescription upload and tracking.
+- [Shop by Condition](/shop/conditions): Browse medicines organized by health condition.
+- [Panchakarma Shop](/shop/panchakarma): Panchakarma-related products and kits.
+- [AYUSH Surgicals](/shop/surgicals): Surgical and clinical supplies for AYUSH practice.
+- [Treatment Kits](/shop/treatment-kits): Curated condition-specific treatment kits.
+- [Offers](/offers): Current discounts and promotions.
+- [Clinics](/clinics): Discover AYUSH clinics across India.
+- [Therapies](/therapies): Catalog of Ayurvedic and holistic therapies.
+- [Therapists](/therapists): Find certified therapists for in-person sessions.
+- [Health Conditions](/health-conditions): Condition library with AYUSH approaches.
+- [Homeopathy](/homeopathy): Homeopathy hub — repertory, materia medica, and cases.
+- [Acupuncture](/treatments/acupuncture): Acupuncture references and protocol guides.
+- [Diagnosis](/diagnosis): Self-assessments including Prakriti and symptom checker.
+- [Prakriti Test](/diagnosis/prakriti): Discover your Ayurvedic body constitution.
+- [Learning](/learning): Courses, webinars, library, and blogs for AYUSH education.
+- [Blogs](/learning/blogs): Articles on Ayurveda, wellness, and AYUSH practice.
+- [Feed](/feed): Community feed of posts from doctors and patients.
+- [Jobs](/jobs): AYUSH career and job listings.
+- [Atmri Help](/atmri-help): Free treatment initiative for underprivileged patients.
+- [Partner](/partner): Partnership opportunities with Ayuzee.
+
+## Optional
+
+- [Bulk](/bulk): Bulk medicine purchase for clinics and institutions.
+- [Referral](/referral): Refer Ayuzee and earn rewards.
