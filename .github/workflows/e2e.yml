@@ -1,0 +1,207 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    # Skip the pipeline for doc/asset/config-only pushes that cannot affect
+    # runtime behaviour.  The negated pattern ensures changes to this very file
+    # still trigger a run.
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
+      - "public/**"
+      - "scripts/**"
+      - ".lovable/**"
+      - "supabase/migrations/**"
+      - "e2e/README.md"
+  workflow_dispatch:
+
+# Cancel any in-progress run for the same ref so rapid pushes don't queue up
+# multiple failing jobs — and multiple failure notification emails.
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    name: Playwright E2E
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      E2E_BASE_URL: http://127.0.0.1:4173
+      E2E_PORT: "4173"
+      E2E_PREVIEW_URL: http://127.0.0.1:4173
+      E2E_STARTUP_TIMEOUT_MS: "300000"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Print E2E server configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'Current URL: %s\n' "$E2E_BASE_URL"
+          printf 'Current Port: %s\n' "$E2E_PORT"
+          printf 'Current baseURL: %s\n' "$E2E_BASE_URL"
+          printf 'Current Preview URL: %s\n' "$E2E_PREVIEW_URL"
+
+      - name: Prepare Vite environment
+        shell: bash
+        env:
+          SECRET_VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SECRET_VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          SECRET_VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+          VAR_VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VAR_VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VAR_VITE_SUPABASE_PROJECT_ID: ${{ vars.VITE_SUPABASE_PROJECT_ID }}
+        run: |
+          set -euo pipefail
+
+          read_dotenv() {
+            local key="$1"
+            if [ ! -f .env ]; then
+              return 0
+            fi
+            grep -E "^${key}=" .env | head -n1 | cut -d= -f2- | sed -e 's/^"//' -e 's/"$//' || true
+          }
+
+          first_non_empty() {
+            local value
+            for value in "$@"; do
+              if [ -n "$value" ]; then
+                printf '%s' "$value"
+                return 0
+              fi
+            done
+          }
+
+          vite_supabase_url="$(first_non_empty "$SECRET_VITE_SUPABASE_URL" "$VAR_VITE_SUPABASE_URL" "$(read_dotenv VITE_SUPABASE_URL)")"
+          vite_supabase_publishable_key="$(first_non_empty "$SECRET_VITE_SUPABASE_PUBLISHABLE_KEY" "$VAR_VITE_SUPABASE_PUBLISHABLE_KEY" "$(read_dotenv VITE_SUPABASE_PUBLISHABLE_KEY)")"
+          vite_supabase_project_id="$(first_non_empty "$SECRET_VITE_SUPABASE_PROJECT_ID" "$VAR_VITE_SUPABASE_PROJECT_ID" "$(read_dotenv VITE_SUPABASE_PROJECT_ID)")"
+
+          missing=()
+          [ -n "$vite_supabase_url" ] || missing+=(VITE_SUPABASE_URL)
+          [ -n "$vite_supabase_publishable_key" ] || missing+=(VITE_SUPABASE_PUBLISHABLE_KEY)
+          [ -n "$vite_supabase_project_id" ] || missing+=(VITE_SUPABASE_PROJECT_ID)
+
+          if [ "${#missing[@]}" -gt 0 ]; then
+            printf 'Missing required Vite auth environment values: %s\n' "${missing[*]}" >&2
+            printf 'Set them as GitHub secrets or variables, or keep the generated .env available in CI.\n' >&2
+            exit 1
+          fi
+
+          {
+            printf 'VITE_SUPABASE_URL=%s\n' "$vite_supabase_url"
+            printf 'VITE_SUPABASE_PUBLISHABLE_KEY=%s\n' "$vite_supabase_publishable_key"
+            printf 'VITE_SUPABASE_PROJECT_ID=%s\n' "$vite_supabase_project_id"
+          } >> "$GITHUB_ENV"
+
+      - name: Build production app
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build
+
+      - name: Start preview, verify routes, and run Playwright tests
+        shell: bash
+        env:
+          E2E_PATIENT_EMAIL: ${{ secrets.E2E_PATIENT_EMAIL }}
+          E2E_PATIENT_PASSWORD: ${{ secrets.E2E_PATIENT_PASSWORD }}
+          E2E_DOCTOR_EMAIL: ${{ secrets.E2E_DOCTOR_EMAIL }}
+          E2E_DOCTOR_PASSWORD: ${{ secrets.E2E_DOCTOR_PASSWORD }}
+          E2E_NEW_SIGNUP_EMAIL: ${{ secrets.E2E_NEW_SIGNUP_EMAIL }}
+          E2E_SUPABASE_URL: ${{ secrets.E2E_SUPABASE_URL }}
+          E2E_SUPABASE_ANON_KEY: ${{ secrets.E2E_SUPABASE_ANON_KEY }}
+          E2E_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.E2E_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+
+          npx vite preview --host 127.0.0.1 --port "$E2E_PORT" > /tmp/vite-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          printf 'Started Vite preview with PID %s\n' "$preview_pid"
+
+          deadline=$((SECONDS + E2E_STARTUP_TIMEOUT_MS / 1000))
+          attempt=1
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            status="$(curl --silent --show-error --output /tmp/e2e-preview.html --write-out '%{http_code}' "$E2E_PREVIEW_URL" || true)"
+            if [ "$status" = "200" ]; then
+              printf 'Preview is ready at %s with HTTP %s\n' "$E2E_PREVIEW_URL" "$status"
+              break
+            fi
+
+            if ! kill -0 "$preview_pid" 2>/dev/null; then
+              printf 'Vite preview exited before becoming ready. Logs:\n' >&2
+              cat /tmp/vite-preview.log >&2
+              exit 1
+            fi
+
+            printf 'Waiting for preview HTTP 200 at %s (attempt %s, last status: %s)\n' "$E2E_PREVIEW_URL" "$attempt" "$status"
+            attempt=$((attempt + 1))
+            sleep 2
+          done
+
+          if [ "${status:-}" != "200" ]; then
+            printf 'Timed out after %sms waiting for preview HTTP 200 at %s. Logs:\n' "$E2E_STARTUP_TIMEOUT_MS" "$E2E_PREVIEW_URL" >&2
+            cat /tmp/vite-preview.log >&2
+            exit 1
+          fi
+
+          if ! curl --verbose --fail "$E2E_PREVIEW_URL"; then
+            printf 'curl failed for %s. Vite preview logs:\n' "$E2E_PREVIEW_URL" >&2
+            cat /tmp/vite-preview.log >&2
+            exit 1
+          fi
+
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+
+          const baseURL = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:4173';
+          const browser = await chromium.launch();
+          const page = await browser.newPage();
+          const response = await page.goto(`${baseURL}/auth`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+          const currentURL = page.url();
+          const currentPath = new URL(currentURL).pathname;
+          const bodyText = (await page.locator('body').innerText({ timeout: 10000 })).trim();
+
+          console.log(`Auth route URL: ${currentURL}`);
+          console.log(`Auth route status: ${response?.status() ?? 'no response'}`);
+
+          await browser.close();
+
+          if (!response?.ok() || currentPath !== '/auth' || bodyText.length === 0) {
+            throw new Error(`AppRoutes /auth verification failed: status=${response?.status() ?? 'no response'} path=${currentPath} bodyLength=${bodyText.length}`);
+          }
+          NODE
+
+          npm run test:e2e
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test results (traces, videos, screenshots)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7

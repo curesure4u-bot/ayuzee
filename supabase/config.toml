@@ -1,0 +1,19 @@
+project_id = "saphetdusyfrcduzsouk"
+
+[functions]
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.dev-api]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true
+  [functions.homeo-materia-ai]
+    verify_jwt = false
+  [functions.homeo-seed]
+    verify_jwt = false
+  [functions.homeo-seed-1000]
+    verify_jwt = false
+  [functions.homeo-rubric-finder]
+    verify_jwt = false
+  [functions.homeo-seed-mm200]
+    verify_jwt = false

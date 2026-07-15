@@ -1,0 +1,1 @@
+CREATE POLICY "Patients view own ashtavidha exams" ON public.vaidya_ashtavidha_exams FOR SELECT USING (auth.uid() = patient_user_id);
