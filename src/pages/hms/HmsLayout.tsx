@@ -212,7 +212,8 @@ const HmsLayout = () => {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { hasAccess, branch } = useHmsAccess();
+  const { hasAccess, branch, loading: accessLoading } = useHmsAccess();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -221,10 +222,14 @@ const HmsLayout = () => {
         navigate("/hms/auth", { replace: true });
         return;
       }
-      if (mounted) setChecking(false);
+      if (mounted) {
+        setUserEmail(data.session.user.email?.toLowerCase() ?? null);
+        setChecking(false);
+      }
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) navigate("/hms/auth", { replace: true });
+      else if (mounted) setUserEmail(session.user.email?.toLowerCase() ?? null);
     });
     return () => {
       mounted = false;
@@ -242,6 +247,45 @@ const HmsLayout = () => {
     return (
       <div className="min-h-screen grid place-items-center text-muted-foreground">
         Loading...
+      </div>
+    );
+  }
+
+  // Superadmin always gets through
+  const isSuperAdmin = userEmail === "curesure4u@gmail.com";
+
+  // For non-superadmin: wait for access check, then gate if not approved
+  if (!isSuperAdmin && accessLoading) {
+    return (
+      <div className="min-h-screen grid place-items-center text-muted-foreground">
+        Checking access...
+      </div>
+    );
+  }
+
+  if (!isSuperAdmin && hasAccess === false) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-muted/30 p-4">
+        <div className="w-full max-w-md text-center space-y-6">
+          <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-amber-100">
+            <Building2 className="h-8 w-8 text-amber-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">Access Pending Approval</h1>
+            <p className="text-muted-foreground mt-2">
+              Your HMS access has not been approved yet. The administrator needs to grant you access before you can use the Hospital Management System.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg border border-blue-200 bg-blue-50/50 text-left text-sm text-blue-800 space-y-2">
+            <p className="font-medium">What to do next:</p>
+            <p>1. Contact your hospital administrator</p>
+            <p>2. Ask them to approve your HMS access</p>
+            <p>3. Once approved, log in again to use HMS</p>
+          </div>
+          <Button variant="outline" onClick={handleSignOut} className="mt-4">
+            <LogOut className="mr-2 h-4 w-4" /> Sign Out
+          </Button>
+        </div>
       </div>
     );
   }
