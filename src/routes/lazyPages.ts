@@ -13,10 +13,12 @@ export const AcupunctureHomeopathy = lazyPage(() => import("@/pages/treatments/A
 export const AcupunctureHub = lazyPage(() => import("@/pages/treatments/AcupunctureHub"));
 export const AdminAfiManagement = lazyPage(() => import("@/pages/admin/AdminAfiManagement"));
 export const AdminAppointments = lazyPage(() => import("@/pages/admin/AdminAppointments"));
+export const AdminArticleApproval = lazyPage(() => import("@/pages/admin/AdminArticleApproval"));
 export const AdminAtmriHelp = lazyPage(() => import("@/pages/admin/AdminAtmriHelp"));
 export const AdminAuth = lazyPage(() => import("@/pages/admin/AdminAuth"));
 export const AdminBacklinks = lazyPage(() => import("@/pages/admin/AdminBacklinks"));
 export const AdminBlogs = lazyPage(() => import("@/pages/admin/AdminBlogs"));
+export const AdminClinicCertification = lazyPage(() => import("@/pages/admin/AdminClinicCertification"));
 export const AdminCommissions = lazyPage(() => import("@/pages/admin/AdminCommissions"));
 export const AdminConditionLeads = lazyPage(() => import("@/pages/admin/AdminConditionLeads"));
 export const AdminDashboard = lazyPage(() => import("@/pages/admin/AdminDashboard"));
@@ -41,7 +43,9 @@ export const AdminPayouts = lazyPage(() => import("@/pages/admin/Payouts"));
 export const AdminPlaceholder = lazyPage(() => import("@/pages/admin/AdminPlaceholder"));
 export const AdminPrescriptions = lazyPage(() => import("@/pages/admin/AdminPrescriptions"));
 export const AdminProducts = lazyPage(() => import("@/pages/admin/AdminProducts"));
+export const AdminProductBuilder = lazyPage(() => import("@/pages/admin/AdminProductBuilder"));
 export const AdminReports = lazyPage(() => import("@/pages/admin/AdminReports"));
+export const AdminReviewModeration = lazyPage(() => import("@/pages/admin/AdminReviewModeration"));
 export const AdminRevenueSplit = lazyPage(() => import("@/pages/admin/AdminRevenueSplit"));
 export const AdminRoadmap = lazyPage(() => import("@/pages/admin/AdminRoadmap"));
 export const AdminSafety = lazyPage(() => import("@/pages/admin/AdminSafety"));
@@ -55,6 +59,7 @@ export const AdminTreatmentSystems = lazyPage(() => import("@/pages/admin/AdminT
 export const AdminUsers = lazyPage(() => import("@/pages/admin/AdminUsers"));
 export const AdminUsersV2 = lazyPage(() => import("@/pages/admin/Users"));
 export const AdminVenues = lazyPage(() => import("@/pages/admin/AdminVenues"));
+export const AdminVerificationQueue = lazyPage(() => import("@/pages/admin/AdminVerificationQueue"));
 export const AdminPanchakarmaVenueReview = lazyPage(() => import("@/pages/admin/AdminPanchakarmaVenueReview"));
 export const AdminPanchakarmaDashboard = lazyPage(() => import("@/pages/admin/AdminPanchakarmaDashboard"));
 export const AfiDiseaseIndex = lazyPage(() => import("@/pages/doctor/AfiDiseaseIndex"));
@@ -121,21 +126,33 @@ export const DepartmentMaster = lazyPage(() => import("@/pages/admin/masters/Dep
 export const DeveloperApi = lazyPage(() => import("@/pages/vaidya/sections/DeveloperApi"));
 export const Diagnosis = lazyPage(() => import("@/pages/Diagnosis"));
 export const DoctorAddresses = lazyPage(() => import("@/pages/doctor/sections/DoctorAddresses"));
+export const DoctorArticles = lazyPage(() => import("@/pages/doctor/sections/DoctorArticles"));
+export const DoctorActivityFeed = lazyPage(() => import("@/pages/doctor/sections/DoctorActivityFeed"));
 export const DoctorAuth = lazyPage(() => import("@/pages/doctor/DoctorAuth"));
 export const DoctorBank = lazyPage(() => import("@/pages/doctor/sections/DoctorBank"));
 export const DoctorBlogs = lazyPage(() => import("@/pages/doctor/sections/DoctorBlogs"));
+export const DoctorCaseReferrals = lazyPage(() => import("@/pages/doctor/sections/CaseReferrals"));
 export const DoctorCategory = lazyPage(() => import("@/pages/doctor/sections/DoctorCategory"));
 export const DoctorClinic = lazyPage(() => import("@/pages/doctor/sections/DoctorClinic"));
+export const DoctorClinicCertification = lazyPage(() => import("@/pages/doctor/sections/ClinicCertification"));
+export const DoctorCMECredits = lazyPage(() => import("@/pages/doctor/sections/CMECredits"));
 export const DoctorCompany = lazyPage(() => import("@/pages/doctor/sections/DoctorCompany"));
 export const DoctorDetail = lazyPage(() => import("@/pages/DoctorDetail"));
+export const DoctorDispensingDashboard = lazyPage(() => import("@/pages/doctor/sections/DispensingDashboard"));
 export const DoctorFeed = lazyPage(() => import("@/pages/doctor/sections/DoctorFeed"));
+export const DoctorEarnings = lazyPage(() => import("@/pages/doctor/sections/EarningsSummary"));
 export const DoctorHome = lazyPage(() => import("@/pages/doctor/DoctorHome"));
 export const DoctorLayout = lazyPage(() => import("@/pages/doctor/DoctorLayout"));
 export const DoctorMedicines = lazyPage(() => import("@/pages/doctor/sections/DoctorMedicines"));
+export const DoctorNotificationPreferences = lazyPage(() => import("@/pages/doctor/sections/NotificationPreferences"));
+export const DoctorOnboardingChecklist = lazyPage(() => import("@/pages/doctor/sections/DoctorOnboardingChecklist"));
 export const DoctorOrders = lazyPage(() => import("@/pages/doctor/sections/DoctorOrders"));
+export const DoctorPatientReviews = lazyPage(() => import("@/pages/doctor/sections/PatientReviews"));
 export const DoctorPayouts = lazyPage(() => import("@/pages/doctor/sections/DoctorPayouts"));
 export const DoctorProfile = lazyPage(() => import("@/pages/doctor/sections/DoctorProfile"));
 export const DoctorRewards = lazyPage(() => import("@/pages/doctor/sections/DoctorRewards"));
+export const DoctorTreatmentOutcomes = lazyPage(() => import("@/pages/doctor/sections/TreatmentOutcomes"));
+export const DoctorVerification = lazyPage(() => import("@/pages/doctor/sections/DoctorVerification"));
 export const Doctors = lazyPage(() => import("@/pages/Doctors"));
 export const DoctorSavedPosts = lazyPage(() => import("@/pages/doctor/sections/DoctorSavedPosts"));
 export const DoctorSupport = lazyPage(() =>
@@ -199,13 +216,119 @@ export const HmsPortalDashboard = lazyPage(() => import("@/pages/hms/HmsDashboar
 export const HmsPortalOpd = lazyPage(() => import("@/pages/hms/HmsOpd"));
 export const HmsPortalIpd = lazyPage(() => import("@/pages/hms/HmsIpd"));
 export const HmsPortalPatients = lazyPage(() => import("@/pages/hms/HmsPatients"));
+
+// HMS Patient Module (AI-Integrated)
+export const HmsPatientRegistration = lazyPage(() => import("@/pages/hms/patient/PatientRegistration"));
+export const HmsPatientFind = lazyPage(() => import("@/pages/hms/patient/PatientFind"));
+export const HmsManageOP = lazyPage(() => import("@/pages/hms/patient/ManageOP"));
+export const HmsPatientDashboard = lazyPage(() => import("@/pages/hms/patient/PatientDashboard"));
+export const HmsPatientVitals = lazyPage(() => import("@/pages/hms/patient/PatientVitals"));
+export const HmsAyurvedaCaseSheet = lazyPage(() => import("@/pages/hms/patient/AyurvedaCaseSheet"));
+export const HmsPatientPrescription = lazyPage(() => import("@/pages/hms/patient/PatientPrescription"));
+export const HmsPatientBills = lazyPage(() => import("@/pages/hms/patient/PatientBills"));
+export const HmsPatientProfile = lazyPage(() => import("@/pages/hms/patient/PatientProfile"));
+export const HmsPatientMRD = lazyPage(() => import("@/pages/hms/patient/PatientMRD"));
+export const HmsPatientMessages = lazyPage(() => import("@/pages/hms/patient/PatientMessages"));
+export const HmsPatientAppointments = lazyPage(() => import("@/pages/hms/patient/PatientAppointments"));
+export const HmsPatientIPSummary = lazyPage(() => import("@/pages/hms/patient/PatientIPSummary"));
+
 export const HmsPortalAppointments = lazyPage(() => import("@/pages/hms/HmsAppointments"));
 export const HmsPortalBilling = lazyPage(() => import("@/pages/hms/HmsBilling"));
+export const HmsPortalAccounts = lazyPage(() => import("@/pages/hms/accounts/HmsAccounts"));
+export const HmsPortalMIS = lazyPage(() => import("@/pages/hms/mis/HmsMIS"));
+export const HmsPortalSnaFormulary = lazyPage(() => import("@/pages/hms/sna/HmsSnaFormulary"));
+export const HmsClassicalPrescriptions = lazyPage(() => import("@/pages/hms/sna/HmsClassicalPrescriptions"));
+export const HmsMisAI = lazyPage(() => import("@/pages/hms/mis/MisAIInterpretation"));
+export const HmsMisFilters = lazyPage(() => import("@/pages/hms/mis/MisAdvancedFilters"));
+export const HmsMisCollection = lazyPage(() => import("@/pages/hms/mis/MisCollection"));
+export const HmsMisAccounts = lazyPage(() => import("@/pages/hms/mis/MisAccountsReports"));
+export const HmsMisTestOrders = lazyPage(() => import("@/pages/hms/mis/MisTestOrders"));
+export const HmsMisStocks = lazyPage(() => import("@/pages/hms/mis/MisStocks"));
+export const HmsMisOperational = lazyPage(() => import("@/pages/hms/mis/MisOperational"));
+export const HmsMisOrg = lazyPage(() => import("@/pages/hms/mis/MisOrgReporting"));
 export const HmsPortalPharmacy = lazyPage(() => import("@/pages/hms/HmsPharmacy"));
 export const HmsPortalLab = lazyPage(() => import("@/pages/hms/HmsLab"));
 export const HmsPortalConsultations = lazyPage(() => import("@/pages/hms/HmsConsultations"));
 export const HmsPortalProcedures = lazyPage(() => import("@/pages/hms/HmsProcedures"));
+// HMS Patient Module Extensions
+export const HmsPatientTimeline = lazyPage(() => import("@/pages/hms/patient/PatientTimeline"));
+export const HmsPatientPrakritiProfile = lazyPage(() => import("@/pages/hms/patient/PrakritiProfile"));
+export const HmsPatientFamily = lazyPage(() => import("@/pages/hms/patient/FamilyRecords"));
+export const HmsPatientABHA = lazyPage(() => import("@/pages/hms/patient/ABHAIntegration"));
+export const HmsPatientAIBrief = lazyPage(() => import("@/pages/hms/patient/AIPatientBrief"));
+export const HmsPatientAllergies = lazyPage(() => import("@/pages/hms/patient/AllergiesAlerts"));
+export const HmsPatientTreatmentPlan = lazyPage(() => import("@/pages/hms/patient/TreatmentPlanner"));
+export const HmsPatientPhotos = lazyPage(() => import("@/pages/hms/patient/ClinicalPhotography"));
+export const HmsPatientDischarge = lazyPage(() => import("@/pages/hms/patient/DischargeSummary"));
+export const HmsPatientCompliance = lazyPage(() => import("@/pages/hms/patient/ComplianceScore"));
+export const HmsPatientJourney = lazyPage(() => import("@/pages/hms/patient/PatientJourneyMap"));
+export const HmsPatientRiskScore = lazyPage(() => import("@/pages/hms/patient/PatientRiskScore"));
+export const HmsPatientMentalHealth = lazyPage(() => import("@/pages/hms/patient/MentalHealthScreening"));
+export const HmsPatientRemoteMonitor = lazyPage(() => import("@/pages/hms/patient/RemoteMonitoring"));
+export const HmsPatientAICoach = lazyPage(() => import("@/pages/hms/patient/AIHealthCoach"));
+export const HmsPatientGenomic = lazyPage(() => import("@/pages/hms/patient/GenomicProfile"));
+
+// HMS Doctor Module Extensions
+export const HmsDoctorAIScribe = lazyPage(() => import("@/pages/hms/doctor/AIScribe"));
+export const HmsDoctorProtocols = lazyPage(() => import("@/pages/hms/doctor/TreatmentProtocols"));
+export const HmsDoctorRevenueExt = lazyPage(() => import("@/pages/hms/doctor/DoctorRevenue"));
+export const HmsDoctorQueueAnalytics = lazyPage(() => import("@/pages/hms/doctor/QueueAnalytics"));
+export const HmsDoctorCDSS = lazyPage(() => import("@/pages/hms/doctor/CDSSAlerts"));
+export const HmsDoctorQuickTemplates = lazyPage(() => import("@/pages/hms/doctor/QuickTemplates"));
+export const HmsDoctorCertificates = lazyPage(() => import("@/pages/hms/doctor/CertificateGenerator"));
+export const HmsDoctorProcedureNotes = lazyPage(() => import("@/pages/hms/doctor/ProcedureNotes"));
+export const HmsDoctorSecondOpinion = lazyPage(() => import("@/pages/hms/doctor/SecondOpinion"));
+export const HmsDoctorCME = lazyPage(() => import("@/pages/hms/doctor/CMECredits"));
+export const HmsDoctorHandoff = lazyPage(() => import("@/pages/hms/doctor/ShiftHandoff"));
+export const HmsDoctorConsentBuilder = lazyPage(() => import("@/pages/hms/doctor/ConsentBuilder"));
+export const HmsDoctorAIDx = lazyPage(() => import("@/pages/hms/doctor/AIDifferentialDx"));
+export const HmsDoctorCalendar = lazyPage(() => import("@/pages/hms/doctor/DoctorCalendar"));
+export const HmsDoctorAnnotation = lazyPage(() => import("@/pages/hms/doctor/ImageAnnotation"));
+
+// AYUSH-Specific Doctor Tools
+export const HmsDoctorRogaNidana = lazyPage(() => import("@/pages/hms/doctor/RogaNidanaWorksheet"));
+export const HmsDoctorPKPrescription = lazyPage(() => import("@/pages/hms/doctor/PanchakarmaPrescription"));
+export const HmsDoctorYogaRx = lazyPage(() => import("@/pages/hms/doctor/YogaPrescription"));
+export const HmsDoctorDravyaGuna = lazyPage(() => import("@/pages/hms/doctor/DravyaGunaSearch"));
+export const HmsDoctorPrakritiRx = lazyPage(() => import("@/pages/hms/doctor/PrakritiAwarePrescription"));
+export const HmsPatientDailyLogger = lazyPage(() => import("@/pages/hms/patient/DailyLogger"));
+export const HmsPatientGoals = lazyPage(() => import("@/pages/hms/patient/WellnessGoals"));
+export const HmsPatientCommunity = lazyPage(() => import("@/pages/hms/patient/WellnessCommunity"));
+export const HmsPatientSubscription = lazyPage(() => import("@/pages/hms/patient/SubscriptionPlans"));
+export const HmsPatientLeadCapture = lazyPage(() => import("@/pages/hms/patient/LeadCapture"));
+export const HmsPatientCallCenter = lazyPage(() => import("@/pages/hms/patient/CallCenter"));
+export const HmsDoctorPostOp = lazyPage(() => import("@/pages/hms/doctor/PostOpWorkflow"));
+
 export const HmsPortalHr = lazyPage(() => import("@/pages/hms/HmsHr"));
+
+// HMS Accounts & Finance Module
+export const HmsAccRevenueDashboard = lazyPage(() => import("@/pages/hms/accounts/RevenueDashboard"));
+export const HmsAccPaymentCollection = lazyPage(() => import("@/pages/hms/accounts/PaymentCollection"));
+export const HmsAccExpenses = lazyPage(() => import("@/pages/hms/accounts/ExpenseManagement"));
+export const HmsAccPayroll = lazyPage(() => import("@/pages/hms/accounts/PayrollSalary"));
+export const HmsAccGST = lazyPage(() => import("@/pages/hms/accounts/GSTManagement"));
+export const HmsAccTDS = lazyPage(() => import("@/pages/hms/accounts/TDSManagement"));
+export const HmsAccInsurance = lazyPage(() => import("@/pages/hms/accounts/InsuranceTPA"));
+export const HmsAccDayEnd = lazyPage(() => import("@/pages/hms/accounts/DayEndClose"));
+export const HmsAccRefundAdvance = lazyPage(() => import("@/pages/hms/accounts/RefundAdvance"));
+export const HmsAccFinancialReports = lazyPage(() => import("@/pages/hms/accounts/FinancialReports"));
+export const HmsAccBankAI = lazyPage(() => import("@/pages/hms/accounts/BankStatementAI"));
+export const HmsAccReconciliation = lazyPage(() => import("@/pages/hms/accounts/Reconciliation"));
+export const HmsAccCashFlow = lazyPage(() => import("@/pages/hms/accounts/CashFlowManager"));
+export const HmsAccCashier = lazyPage(() => import("@/pages/hms/accounts/CashierRole"));
+export const HmsAccSalesAnalytics = lazyPage(() => import("@/pages/hms/accounts/SalesAnalytics"));
+export const HmsAccTargetAchieved = lazyPage(() => import("@/pages/hms/accounts/TargetVsAchieved"));
+export const HmsAccIncentive = lazyPage(() => import("@/pages/hms/accounts/IncentiveGamification"));
+export const HmsAccStaffCredits = lazyPage(() => import("@/pages/hms/accounts/StaffCredits"));
+export const HmsAccSupplierFranchise = lazyPage(() => import("@/pages/hms/accounts/SupplierFranchise"));
+export const HmsAccFollowUp = lazyPage(() => import("@/pages/hms/accounts/FollowUpManager"));
+export const HmsAccCRM = lazyPage(() => import("@/pages/hms/accounts/CrmAccounts"));
+export const HmsAccDashboard = lazyPage(() => import("@/pages/hms/accounts/AccountsDashboard"));
+export const HmsAccStateFund = lazyPage(() => import("@/pages/hms/accounts/StateFundDocs"));
+export const HmsAccTallyExport = lazyPage(() => import("@/pages/hms/accounts/TallyExport"));
+export const HmsPatientVoiceAgent = lazyPage(() => import("@/pages/hms/patient/AIVoiceAgent"));
+export const HmsPatientNoshowAnalytics = lazyPage(() => import("@/pages/hms/patient/NoshowAnalytics"));
+export const HmsOwnerDashboard = lazyPage(() => import("@/pages/hms/OwnerDashboard"));
 export const HmsPortalReports = lazyPage(() => import("@/pages/hms/HmsReports"));
 export const HmsPortalSettings = lazyPage(() => import("@/pages/hms/HmsSettings"));
 
@@ -241,6 +364,27 @@ export const HmsPortalProductMaster = lazyPage(() => import("@/pages/hms/masters
 export const HmsPortalWardBedMaster = lazyPage(() => import("@/pages/hms/masters/WardBedMaster"));
 export const HmsPortalBillingTaxMaster = lazyPage(() => import("@/pages/hms/masters/BillingTaxMaster"));
 export const HmsPortalTemplateMaster = lazyPage(() => import("@/pages/hms/masters/TemplateMaster"));
+export const HmsPortalMachineMaster = lazyPage(() => import("@/pages/hms/masters/MachineMaster"));
+export const HmsPortalRatePlanMaster = lazyPage(() => import("@/pages/hms/masters/RatePlanMaster"));
+export const HmsPortalB2BInsuranceMaster = lazyPage(() => import("@/pages/hms/masters/B2BInsuranceMaster"));
+export const HmsPortalSettlementMaster = lazyPage(() => import("@/pages/hms/masters/SettlementMaster"));
+export const HmsPortalPatientMaster = lazyPage(() => import("@/pages/hms/masters/PatientMaster"));
+export const HmsPortalAreaMaster = lazyPage(() => import("@/pages/hms/masters/AreaMaster"));
+export const HmsPortalContentMaster = lazyPage(() => import("@/pages/hms/masters/ContentMaster"));
+export const HmsPortalFormMaster = lazyPage(() => import("@/pages/hms/masters/FormMaster"));
+export const HmsPortalCounterMaster = lazyPage(() => import("@/pages/hms/masters/CounterMaster"));
+export const HmsPortalTaxMaster = lazyPage(() => import("@/pages/hms/masters/TaxMaster"));
+export const HmsPortalSuggestionMaster = lazyPage(() => import("@/pages/hms/masters/SuggestionMaster"));
+export const HmsPortalTokenDisplayMaster = lazyPage(() => import("@/pages/hms/masters/TokenDisplayMaster"));
+export const HmsPortalEmailContentMaster = lazyPage(() => import("@/pages/hms/masters/EmailContentMaster"));
+export const HmsPortalLabelMaster = lazyPage(() => import("@/pages/hms/masters/LabelMaster"));
+export const HmsPortalServiceProviderMaster = lazyPage(() => import("@/pages/hms/masters/ServiceProviderMaster"));
+export const HmsPortalDataImportMigration = lazyPage(() => import("@/pages/hms/masters/DataImportMigration"));
+export const HmsPortalIpAdmissionMaster = lazyPage(() => import("@/pages/hms/masters/IpAdmissionMaster"));
+export const HmsPortalReportMaster = lazyPage(() => import("@/pages/hms/masters/ReportMaster"));
+export const HmsPortalTrustedIpMaster = lazyPage(() => import("@/pages/hms/masters/TrustedIpMaster"));
+export const HmsPortalWhatsappContentMaster = lazyPage(() => import("@/pages/hms/masters/WhatsappContentMaster"));
+export const HmsPortalCurrencyMaster = lazyPage(() => import("@/pages/hms/masters/CurrencyMaster"));
 export const HmsPortalAiScribe = lazyPage(() => import("@/pages/hms/HmsAiScribe"));
 export const HmsPortalAbdm = lazyPage(() => import("@/pages/hms/HmsAbdm"));
 export const HmsPortalCdss = lazyPage(() => import("@/pages/hms/HmsCdss"));
@@ -249,6 +393,15 @@ export const HmsPortalDevPortal = lazyPage(() => import("@/pages/hms/HmsDevPorta
 export const HmsPortalWhatsapp = lazyPage(() => import("@/pages/hms/HmsWhatsapp"));
 export const HmsPortalCommandCenter = lazyPage(() => import("@/pages/hms/HmsCommandCenter"));
 export const HmsPortalRecordsAnalyser = lazyPage(() => import("@/pages/hms/HmsRecordsAnalyser"));
+
+// HMS Print Configuration
+export const HmsPortalPrintConfiguration = lazyPage(() => import("@/pages/hms/HmsPrintConfiguration"));
+export const HmsPortalWidgetGenerator = lazyPage(() => import("@/pages/hms/HmsWidgetGenerator"));
+export const HmsPortalSwitchEntity = lazyPage(() => import("@/pages/hms/HmsSwitchEntity"));
+export const HmsPortalDoctorManagement = lazyPage(() => import("@/pages/hms/HmsDoctorManagement"));
+export const HmsPortalTherapistManagement = lazyPage(() => import("@/pages/hms/HmsTherapistManagement"));
+export const HmsPortalTherapyAppointments = lazyPage(() => import("@/pages/hms/HmsTherapyAppointments"));
+export const HmsPortalConsultationHub = lazyPage(() => import("@/pages/hms/HmsConsultationHub"));
 
 // HMS MocDoc-style modules
 export const HmsPortalBloodBank = lazyPage(() => import("@/pages/hms/HmsBloodBank"));
@@ -283,12 +436,313 @@ export const HmsPortalConflictDetection = lazyPage(() => import("@/pages/hms/Hms
 export const HmsPortalWaitlist = lazyPage(() => import("@/pages/hms/HmsWaitlist"));
 export const HmsPortalTreatmentView = lazyPage(() => import("@/pages/hms/HmsTreatmentView"));
 
+// HMS Enhanced Modules (Gamification, KPI, Checklists, AI, Analytics, Integrative, Chatbot)
+export const HmsPortalGamificationKpi = lazyPage(() => import("@/pages/hms/HmsGamificationKpi"));
+export const HmsPortalChecklist = lazyPage(() => import("@/pages/hms/HmsChecklist"));
+export const HmsPortalAiHub = lazyPage(() => import("@/pages/hms/HmsAiHub"));
+export const HmsPortalDrugInteractions = lazyPage(() => import("@/pages/hms/HmsDrugInteractions"));
+export const HmsPortalClassicalReferences = lazyPage(() => import("@/pages/hms/HmsClassicalReferences"));
+export const HmsPortalDataAnalytics = lazyPage(() => import("@/pages/hms/HmsDataAnalytics"));
+export const HmsPortalIntegrativeMedicine = lazyPage(() => import("@/pages/hms/HmsIntegrativeMedicine"));
+export const HmsPortalChatbot = lazyPage(() => import("@/pages/hms/HmsChatbot"));
+export const HmsPortalBranchPerformance = lazyPage(() => import("@/pages/hms/HmsBranchPerformance"));
+
+// HMS Doctor Module (AI-powered clinical tools)
+export const HmsDoctorFollowups = lazyPage(() => import("@/pages/hms/doctor/DoctorFollowups"));
+export const HmsDoctorInbox = lazyPage(() => import("@/pages/hms/doctor/DoctorInbox"));
+export const HmsDoctorDiet = lazyPage(() => import("@/pages/hms/doctor/DoctorDiet"));
+export const HmsDoctorYoga = lazyPage(() => import("@/pages/hms/doctor/DoctorYoga"));
+export const HmsDoctorEducation = lazyPage(() => import("@/pages/hms/doctor/DoctorEducation"));
+export const HmsDoctorReferral = lazyPage(() => import("@/pages/hms/doctor/DoctorReferral"));
+export const HmsDoctorPrakriti = lazyPage(() => import("@/pages/hms/doctor/DoctorPrakriti"));
+export const HmsDoctorGutHealth = lazyPage(() => import("@/pages/hms/doctor/DoctorGutHealth"));
+export const HmsDoctorSpine = lazyPage(() => import("@/pages/hms/doctor/DoctorSpine"));
+export const HmsDoctorJihva = lazyPage(() => import("@/pages/hms/doctor/DoctorJihva"));
+export const HmsDoctorFormulary = lazyPage(() => import("@/pages/hms/doctor/DoctorFormulary"));
+export const HmsDoctorAstg = lazyPage(() => import("@/pages/hms/doctor/DoctorAstg"));
+export const HmsDoctorKpi = lazyPage(() => import("@/pages/hms/doctor/DoctorKpi"));
+export const HmsDoctorRevenue = lazyPage(() => import("@/pages/hms/doctor/DoctorRevenue"));
+export const HmsDoctorLabOrder = lazyPage(() => import("@/pages/hms/doctor/DoctorLabOrder"));
+export const HmsDoctorProcedures = lazyPage(() => import("@/pages/hms/doctor/DoctorProcedures"));
+export const HmsDoctorTemplates = lazyPage(() => import("@/pages/hms/doctor/DoctorTemplates"));
+export const HmsDoctorRxFavorites = lazyPage(() => import("@/pages/hms/doctor/DoctorRxFavorites"));
+export const HmsDoctorDrugAlert = lazyPage(() => import("@/pages/hms/doctor/DoctorDrugAlert"));
+export const HmsDoctorPatientBrief = lazyPage(() => import("@/pages/hms/doctor/DoctorPatientBrief"));
+export const HmsDoctorConsent = lazyPage(() => import("@/pages/hms/doctor/DoctorConsent"));
+export const HmsDoctorRegionalRx = lazyPage(() => import("@/pages/hms/doctor/DoctorRegionalRx"));
+export const HmsDoctorCalculators = lazyPage(() => import("@/pages/hms/doctor/DoctorCalculators"));
+export const HmsDoctorSoapNotes = lazyPage(() => import("@/pages/hms/doctor/DoctorSoapNotes"));
+export const HmsDoctorDischarge = lazyPage(() => import("@/pages/hms/doctor/DoctorDischarge"));
+export const HmsDoctorVoiceRx = lazyPage(() => import("@/pages/hms/doctor/DoctorVoiceRx"));
+export const HmsDoctorCme = lazyPage(() => import("@/pages/hms/doctor/DoctorCme"));
+export const HmsDoctorFeedbackView = lazyPage(() => import("@/pages/hms/doctor/DoctorFeedbackView"));
+export const HmsDoctorCaseDiscussion = lazyPage(() => import("@/pages/hms/doctor/DoctorCaseDiscussion"));
+export const HmsDoctorChat = lazyPage(() => import("@/pages/hms/doctor/DoctorChat"));
+export const HmsDoctorRetention = lazyPage(() => import("@/pages/hms/doctor/DoctorRetention"));
+export const HmsDoctorResearch = lazyPage(() => import("@/pages/hms/doctor/DoctorResearch"));
+export const HmsDoctorProcedureNotesNew = lazyPage(() => import("@/pages/hms/doctor/DoctorProcedureNotes"));
+export const HmsDoctorTimeline = lazyPage(() => import("@/pages/hms/doctor/DoctorTimeline"));
+export const HmsDoctorLeave = lazyPage(() => import("@/pages/hms/doctor/DoctorLeave"));
+export const HmsSpineAyush = lazyPage(() => import("@/pages/hms/HmsSpineAyush"));
+export const HmsSpineAyushModules = lazyPage(() => import("@/pages/hms/spine/SpineAyushModules"));
+export const HmsSpineAyushModuleDetail = lazyPage(() => import("@/pages/hms/spine/SpineAyushModuleDetail"));
+export const HmsNadiTarangini = lazyPage(() => import("@/pages/hms/HmsNadiTarangini"));
+export const HmsIridology = lazyPage(() => import("@/pages/hms/HmsIridology"));
+export const HmsDarkfieldMicroscopy = lazyPage(() => import("@/pages/hms/HmsDarkfieldMicroscopy"));
+export const HmsThermography = lazyPage(() => import("@/pages/hms/HmsThermography"));
+export const HmsHrvAnalysis = lazyPage(() => import("@/pages/hms/HmsHrvAnalysis"));
+export const HmsGutMicrobiome = lazyPage(() => import("@/pages/hms/HmsGutMicrobiome"));
+export const HmsAppointmentSlotConfig = lazyPage(() => import("@/pages/hms/HmsAppointmentSlotConfig"));
+export const HmsOpIpTransfer = lazyPage(() => import("@/pages/hms/HmsOpIpTransfer"));
+export const HmsDischargeWorkflow = lazyPage(() => import("@/pages/hms/HmsDischargeWorkflow"));
+export const HmsInsurancePreauth = lazyPage(() => import("@/pages/hms/HmsInsurancePreauth"));
+export const HmsPostVisitSummary = lazyPage(() => import("@/pages/hms/HmsPostVisitSummary"));
+export const HmsOpTherapyTransfer = lazyPage(() => import("@/pages/hms/HmsOpTherapyTransfer"));
+export const HmsRevenueCycle = lazyPage(() => import("@/pages/hms/HmsRevenueCycle"));
+export const HmsDepartmentPL = lazyPage(() => import("@/pages/hms/HmsDepartmentPL"));
+export const HmsDigitalCheckin = lazyPage(() => import("@/pages/hms/HmsDigitalCheckin"));
+export const HmsPatientApp = lazyPage(() => import("@/pages/hms/HmsPatientApp"));
+export const HmsLanguageConfig = lazyPage(() => import("@/pages/hms/HmsLanguageConfig"));
+export const HmsAiCopilot = lazyPage(() => import("@/pages/hms/HmsAiCopilot"));
+export const HmsAbdmUhi = lazyPage(() => import("@/pages/hms/HmsAbdmUhi"));
+export const HmsIotVitals = lazyPage(() => import("@/pages/hms/HmsIotVitals"));
+export const HmsPopulationHealth = lazyPage(() => import("@/pages/hms/HmsPopulationHealth"));
+export const HmsVoiceInterface = lazyPage(() => import("@/pages/hms/HmsVoiceInterface"));
+export const HmsAccessControl = lazyPage(() => import("@/pages/hms/HmsAccessControl"));
+export const HmsPartnerPortal = lazyPage(() => import("@/pages/hms/HmsPartnerPortal"));
+
+// HMS Stock — Advanced Operations
+export const HmsStockInterBranch = lazyPage(() => import("@/pages/hms/stock/operations/InterBranchTransfer"));
+export const HmsStockBatchTracking = lazyPage(() => import("@/pages/hms/stock/operations/BatchTracking"));
+export const HmsStockEcommerce = lazyPage(() => import("@/pages/hms/stock/operations/EcommerceSync"));
+export const HmsStockDeadStock = lazyPage(() => import("@/pages/hms/stock/operations/DeadStock"));
+export const HmsStockRackLocation = lazyPage(() => import("@/pages/hms/stock/operations/RackLocation"));
+
+// HMS Stock — Priority 2 (Competitive Advantage)
+export const HmsStockPhysicalVerification = lazyPage(() => import("@/pages/hms/stock/operations/PhysicalVerification"));
+export const HmsStockDrugSchedule = lazyPage(() => import("@/pages/hms/stock/operations/DrugSchedule"));
+export const HmsStockAbcAnalysis = lazyPage(() => import("@/pages/hms/stock/operations/AbcAnalysis"));
+export const HmsStockSubstituteSuggestion = lazyPage(() => import("@/pages/hms/stock/operations/SubstituteSuggestion"));
+export const HmsStockOrderFulfillment = lazyPage(() => import("@/pages/hms/stock/operations/OrderFulfillment"));
+
+// HMS Stock — Priority 3 (AYUSH-specific)
+export const HmsStockPkOilTracker = lazyPage(() => import("@/pages/hms/stock/ayush/PanchakarmaOilTracker"));
+export const HmsStockSeasonalDemand = lazyPage(() => import("@/pages/hms/stock/ayush/SeasonalDemandAI"));
+export const HmsStockManufacturingBatch = lazyPage(() => import("@/pages/hms/stock/ayush/ManufacturingBatch"));
+export const HmsStockCentralStore = lazyPage(() => import("@/pages/hms/stock/ayush/CentralStore"));
+
+// HMS Stock — Priority A (Compliance)
+export const HmsStockDrugLicense = lazyPage(() => import("@/pages/hms/stock/compliance/DrugLicense"));
+export const HmsStockExpiryReturn = lazyPage(() => import("@/pages/hms/stock/compliance/ExpiryReturn"));
+export const HmsStockGstReturns = lazyPage(() => import("@/pages/hms/stock/compliance/GstReturns"));
+export const HmsStockBarcodeManager = lazyPage(() => import("@/pages/hms/stock/compliance/BarcodeManager"));
+export const HmsStockReorderLevel = lazyPage(() => import("@/pages/hms/stock/compliance/ReorderLevel"));
+
+// HMS Stock — Priority B (Competitive Edge)
+export const HmsStockPurchaseRate = lazyPage(() => import("@/pages/hms/stock/competitive/PurchaseRateCompare"));
+export const HmsStockShortBook = lazyPage(() => import("@/pages/hms/stock/competitive/ShortBook"));
+export const HmsStockAuditTrail = lazyPage(() => import("@/pages/hms/stock/competitive/StockAuditTrail"));
+export const HmsStockNearExpiry = lazyPage(() => import("@/pages/hms/stock/competitive/NearExpiryFefo"));
+export const HmsStockVendorRating = lazyPage(() => import("@/pages/hms/stock/competitive/VendorRating"));
+
+// HMS Stock — Priority C (AYUSH Differentiators)
+export const HmsStockHerbProcurement = lazyPage(() => import("@/pages/hms/stock/ayush-specific/HerbProcurement"));
+export const HmsStockYogaKshema = lazyPage(() => import("@/pages/hms/stock/ayush-specific/YogaKshema"));
+export const HmsStockPatientDispensing = lazyPage(() => import("@/pages/hms/stock/ayush-specific/PatientDispensing"));
+
+// HMS Stock — Scale (Tier 1-3)
+export const HmsStockPurchaseReturn = lazyPage(() => import("@/pages/hms/stock/scale/PurchaseReturn"));
+export const HmsStockWastage = lazyPage(() => import("@/pages/hms/stock/scale/StockWastage"));
+export const HmsStockIndentApproval = lazyPage(() => import("@/pages/hms/stock/scale/IndentApproval"));
+export const HmsStockRateContract = lazyPage(() => import("@/pages/hms/stock/scale/RateContract"));
+export const HmsStockEwayBill = lazyPage(() => import("@/pages/hms/stock/scale/EwayBill"));
+export const HmsStockInsurance = lazyPage(() => import("@/pages/hms/stock/scale/StockInsurance"));
+export const HmsStockSupplierPayment = lazyPage(() => import("@/pages/hms/stock/scale/SupplierPayment"));
+export const HmsStockKitAssembly = lazyPage(() => import("@/pages/hms/stock/scale/KitAssembly"));
+export const HmsStockDrugInteraction = lazyPage(() => import("@/pages/hms/stock/scale/DrugInteractionDispensing"));
+export const HmsStockTempHumidity = lazyPage(() => import("@/pages/hms/stock/scale/TempHumidityLog"));
+export const HmsStockCourierDispatch = lazyPage(() => import("@/pages/hms/stock/scale/CourierDispatch"));
+export const HmsStockMedicineMixing = lazyPage(() => import("@/pages/hms/stock/scale/MedicineMixing"));
+export const HmsStockDoseCalculator = lazyPage(() => import("@/pages/hms/stock/scale/DoseCalculator"));
+export const HmsStockHomeopathy = lazyPage(() => import("@/pages/hms/stock/scale/HomeopathyStock"));
+
+// HMS Stock — Daily Operations
+export const HmsStockQuickDispensing = lazyPage(() => import("@/pages/hms/stock/daily/QuickDispensing"));
+export const HmsStockBranchTransfer = lazyPage(() => import("@/pages/hms/stock/daily/BranchTransferRequest"));
+export const HmsStockPatientReturn = lazyPage(() => import("@/pages/hms/stock/daily/PatientReturn"));
+export const HmsStockDailySummary = lazyPage(() => import("@/pages/hms/stock/daily/DailyStockSummary"));
+
+// HMS Stock — Multi-Branch Intelligence
+export const HmsStockRedistribution = lazyPage(() => import("@/pages/hms/stock/daily/StockRedistribution"));
+export const HmsStockFranchisePortal = lazyPage(() => import("@/pages/hms/stock/daily/FranchiseOrderPortal"));
+export const HmsStockConsumption = lazyPage(() => import("@/pages/hms/stock/daily/ConsumptionDashboard"));
+export const HmsStockSupplierSLA = lazyPage(() => import("@/pages/hms/stock/daily/SupplierSLA"));
+
+// HMS Stock — Patient-Centric (Tier 3)
+export const HmsStockRxSync = lazyPage(() => import("@/pages/hms/stock/daily/RxStockSync"));
+export const HmsStockSubscription = lazyPage(() => import("@/pages/hms/stock/daily/MedicineSubscription"));
+export const HmsStockReturnPolicy = lazyPage(() => import("@/pages/hms/stock/daily/ReturnPolicyEngine"));
+
+// HMS Stock — Future-Ready (Tier 4)
+export const HmsStockOndc = lazyPage(() => import("@/pages/hms/stock/daily/OndcIntegration"));
+export const HmsStockEpharmacy = lazyPage(() => import("@/pages/hms/stock/daily/EpharmacyLicense"));
+export const HmsStockNdps = lazyPage(() => import("@/pages/hms/stock/daily/NdpsRegister"));
+
+// HMS MocDoc-style Operations modules
+export const HmsPortalTaskManagement = lazyPage(() => import("@/pages/hms/HmsTaskManagement"));
+export const HmsPortalAddressBook = lazyPage(() => import("@/pages/hms/HmsAddressBook"));
+export const HmsPortalStaffAttendance = lazyPage(() => import("@/pages/hms/HmsStaffAttendance"));
+export const HmsPortalCssdLinen = lazyPage(() => import("@/pages/hms/HmsCssdLinen"));
+export const HmsPortalMarketing = lazyPage(() => import("@/pages/hms/HmsMarketing"));
+export const HmsPortalCreditSettlement = lazyPage(() => import("@/pages/hms/HmsCreditSettlement"));
+export const HmsPortalEntityLog = lazyPage(() => import("@/pages/hms/HmsEntityLog"));
+export const HmsPortalWorkSchedule = lazyPage(() => import("@/pages/hms/HmsWorkSchedule"));
+export const HmsPortalInviteFriends = lazyPage(() => import("@/pages/hms/HmsInviteFriends"));
+
+// HMS Stock Module (DocDoc-style)
+export const HmsStockLayout = lazyPage(() => import("@/pages/hms/stock/HmsStockLayout"));
+export const HmsStockDashboard = lazyPage(() => import("@/pages/hms/stock/StockDashboard"));
+export const HmsStockManufacturer = lazyPage(() => import("@/pages/hms/stock/master/ManufacturerMaster"));
+export const HmsStockMarketedBy = lazyPage(() => import("@/pages/hms/stock/master/MarketedByMaster"));
+export const HmsStockCategory = lazyPage(() => import("@/pages/hms/stock/master/CategoryMaster"));
+export const HmsStockSubCategory = lazyPage(() => import("@/pages/hms/stock/master/SubCategoryMaster"));
+export const HmsStockPharmName = lazyPage(() => import("@/pages/hms/stock/master/PharmacologicalNameMaster"));
+export const HmsStockIndication = lazyPage(() => import("@/pages/hms/stock/master/IndicationMaster"));
+export const HmsStockFrames = lazyPage(() => import("@/pages/hms/stock/master/FramesMaster"));
+export const HmsStockLens = lazyPage(() => import("@/pages/hms/stock/master/LensMaster"));
+export const HmsStockProductList = lazyPage(() => import("@/pages/hms/stock/product/ProductList"));
+export const HmsStockProductBuilder = lazyPage(() => import("@/pages/hms/stock/HmsProductBuilder"));
+export const HmsStockProductForm = lazyPage(() => import("@/pages/hms/stock/product/ProductForm"));
+export const HmsStockQuotationNew = lazyPage(() => import("@/pages/hms/stock/purchase/QuotationNew"));
+export const HmsStockQuotationManage = lazyPage(() => import("@/pages/hms/stock/purchase/QuotationManage"));
+export const HmsStockPONew = lazyPage(() => import("@/pages/hms/stock/purchase/PurchaseOrderNew"));
+export const HmsStockPOManage = lazyPage(() => import("@/pages/hms/stock/purchase/PurchaseOrderManage"));
+export const HmsStockPOFind = lazyPage(() => import("@/pages/hms/stock/purchase/PurchaseOrderFind"));
+export const HmsStockGRNNew = lazyPage(() => import("@/pages/hms/stock/purchase/GRNNew"));
+export const HmsStockGRNManage = lazyPage(() => import("@/pages/hms/stock/purchase/GRNManage"));
+export const HmsStockGoodsReturnNew = lazyPage(() => import("@/pages/hms/stock/purchase/GoodsReturnNew"));
+export const HmsStockGoodsReturnManage = lazyPage(() => import("@/pages/hms/stock/purchase/GoodsReturnManage"));
+export const HmsStockSaleNew = lazyPage(() => import("@/pages/hms/stock/sale/SaleBillNew"));
+export const HmsStockSaleManage = lazyPage(() => import("@/pages/hms/stock/sale/SaleManage"));
+export const HmsStockSaleReturnNew = lazyPage(() => import("@/pages/hms/stock/sale/SaleReturnNew"));
+export const HmsStockSaleReturnManage = lazyPage(() => import("@/pages/hms/stock/sale/SaleReturnManage"));
+export const HmsStockManagePrescription = lazyPage(() => import("@/pages/hms/stock/sale/ManagePrescription"));
+export const HmsStockIndentNew = lazyPage(() => import("@/pages/hms/stock/indent/IndentNew"));
+export const HmsStockIndentManage = lazyPage(() => import("@/pages/hms/stock/indent/IndentManage"));
+export const HmsStockGDNNew = lazyPage(() => import("@/pages/hms/stock/indent/GDNNew"));
+export const HmsStockGDNManage = lazyPage(() => import("@/pages/hms/stock/indent/GDNManage"));
+export const HmsStockReturnIndentNew = lazyPage(() => import("@/pages/hms/stock/indent/ReturnIndentNew"));
+export const HmsStockReturnIndentManage = lazyPage(() => import("@/pages/hms/stock/indent/ReturnIndentManage"));
+export const HmsStockIssueNew = lazyPage(() => import("@/pages/hms/stock/indent/IssueNew"));
+export const HmsStockIssueManage = lazyPage(() => import("@/pages/hms/stock/indent/IssueManage"));
+export const HmsStockAdjustment = lazyPage(() => import("@/pages/hms/stock/operations/StockAdjustment"));
+export const HmsStockProductFlow = lazyPage(() => import("@/pages/hms/stock/operations/ProductFlowAnalysis"));
+export const HmsStockExpense = lazyPage(() => import("@/pages/hms/stock/operations/ManageExpense"));
+export const HmsStockDue = lazyPage(() => import("@/pages/hms/stock/operations/ManageDue"));
+export const HmsStockPharmacyInvoice = lazyPage(() => import("@/pages/hms/stock/operations/PharmacyInvoice"));
+export const HmsStockCreditSupplier = lazyPage(() => import("@/pages/hms/stock/operations/CreditSupplier"));
+export const HmsStockCreditPatient = lazyPage(() => import("@/pages/hms/stock/operations/CreditPatient"));
+export const HmsStockCancelOperations = lazyPage(() => import("@/pages/hms/stock/operations/CancelOperations"));
+export const HmsStockAISmartReorder = lazyPage(() => import("@/pages/hms/stock/ai/AISmartReorder"));
+export const HmsStockAIExpiry = lazyPage(() => import("@/pages/hms/stock/ai/AIExpiryManagement"));
+export const HmsStockQRTools = lazyPage(() => import("@/pages/hms/stock/ai/QRToolsPage"));
+
+// HMS Lab & Diagnostics Module
+export const HmsLabLayout = lazyPage(() => import("@/pages/hms/lab/LabLayout"));
+export const HmsLabDashboard = lazyPage(() => import("@/pages/hms/lab/LabDashboard"));
+export const HmsLabGroupMaster = lazyPage(() => import("@/pages/hms/lab/master/GroupMaster"));
+export const HmsLabMedicineMaster = lazyPage(() => import("@/pages/hms/lab/master/MedicineMaster"));
+export const HmsLabOrganismMaster = lazyPage(() => import("@/pages/hms/lab/master/OrganismMaster"));
+export const HmsLabSmearMaster = lazyPage(() => import("@/pages/hms/lab/master/SmearMaster"));
+export const HmsLabDepartmentMaster = lazyPage(() => import("@/pages/hms/lab/master/DepartmentMaster"));
+export const HmsLabSampleMaster = lazyPage(() => import("@/pages/hms/lab/master/SampleMaster"));
+export const HmsLabAccession = lazyPage(() => import("@/pages/hms/lab/operations/AccessionConfig"));
+export const HmsLabTestManagement = lazyPage(() => import("@/pages/hms/lab/operations/TestManagement"));
+export const HmsLabProfileManagement = lazyPage(() => import("@/pages/hms/lab/operations/ProfileManagement"));
+export const HmsLabManageOrder = lazyPage(() => import("@/pages/hms/lab/orders/ManageOrder"));
+export const HmsLabOrderStatus = lazyPage(() => import("@/pages/hms/lab/orders/OrderStatus"));
+export const HmsLabHomeCollection = lazyPage(() => import("@/pages/hms/lab/operations/HomeCollection"));
+export const HmsLabOutsource = lazyPage(() => import("@/pages/hms/lab/operations/OutsourceManagement"));
+export const HmsLabRefout = lazyPage(() => import("@/pages/hms/lab/operations/RefoutManagement"));
+export const HmsLabQC = lazyPage(() => import("@/pages/hms/lab/operations/QualityControl"));
+export const HmsLabBarcode = lazyPage(() => import("@/pages/hms/lab/operations/AutoGenerateBarcode"));
+export const HmsLabWorklist = lazyPage(() => import("@/pages/hms/lab/operations/PrintWorklist"));
+export const HmsLabCamp = lazyPage(() => import("@/pages/hms/lab/operations/CampManagement"));
+export const HmsLabAI = lazyPage(() => import("@/pages/hms/lab/ai/AILabIntelligence"));
+export const HmsLabResultEntry = lazyPage(() => import("@/pages/hms/lab/orders/ResultEntry"));
+export const HmsLabReportGeneration = lazyPage(() => import("@/pages/hms/lab/orders/ReportGeneration"));
+export const HmsLabMachineInterface = lazyPage(() => import("@/pages/hms/lab/operations/MachineInterface"));
+export const HmsLabTATMonitoring = lazyPage(() => import("@/pages/hms/lab/operations/TATMonitoring"));
+export const HmsLabBilling = lazyPage(() => import("@/pages/hms/lab/operations/LabBilling"));
+export const HmsLabReferralCommission = lazyPage(() => import("@/pages/hms/lab/operations/ReferralCommission"));
+export const HmsLabPatientPortal = lazyPage(() => import("@/pages/hms/lab/operations/PatientPortal"));
+export const HmsLabAuditTrail = lazyPage(() => import("@/pages/hms/lab/operations/AuditTrail"));
+export const HmsLabNABLCompliance = lazyPage(() => import("@/pages/hms/lab/operations/NABLCompliance"));
+export const HmsLabReagentInventory = lazyPage(() => import("@/pages/hms/lab/operations/ReagentInventory"));
+export const HmsLabRadiology = lazyPage(() => import("@/pages/hms/lab/operations/RadiologyModule"));
+export const HmsLabMultiLocation = lazyPage(() => import("@/pages/hms/lab/operations/MultiLocationReports"));
+export const HmsLabABDM = lazyPage(() => import("@/pages/hms/lab/operations/ABDMLabIntegration"));
+export const HmsLabB2BPortal = lazyPage(() => import("@/pages/hms/lab/operations/B2BClientPortal"));
+export const HmsLabSmartReports = lazyPage(() => import("@/pages/hms/lab/operations/SmartReports"));
+export const HmsLabAutoComms = lazyPage(() => import("@/pages/hms/lab/operations/AutomatedComms"));
+export const HmsLabExceptions = lazyPage(() => import("@/pages/hms/lab/operations/ExceptionDashboard"));
+export const HmsLabAppointments = lazyPage(() => import("@/pages/hms/lab/operations/AppointmentBooking"));
+export const HmsLabPackages = lazyPage(() => import("@/pages/hms/lab/operations/HealthPackages"));
+export const HmsLabDoctorPortal = lazyPage(() => import("@/pages/hms/lab/operations/DoctorPortal"));
+export const HmsLabNadiPariksha = lazyPage(() => import("@/pages/hms/lab/operations/NadiPariksha"));
+export const HmsLabAyushHub = lazyPage(() => import("@/pages/hms/lab/operations/AyushDiagnosticsHub"));
+
+// HMS AYUSH Therapy & Wellness Modules
+export const HmsAyushPanchakarmaTherapy = lazyPage(() => import("@/pages/hms/ayush/PanchakarmaTherapy"));
+export const HmsAyushDietPathya = lazyPage(() => import("@/pages/hms/ayush/DietPathya"));
+export const HmsAyushWellnessScore = lazyPage(() => import("@/pages/hms/ayush/WellnessScore"));
+export const HmsAyushRitucharya = lazyPage(() => import("@/pages/hms/ayush/RitucharyaDinacharya"));
+export const HmsAyushFormulations = lazyPage(() => import("@/pages/hms/ayush/AyushFormulations"));
+export const HmsLabSampleTracking = lazyPage(() => import("@/pages/hms/lab/operations/SampleTracking"));
+export const HmsLabRatePlans = lazyPage(() => import("@/pages/hms/lab/operations/RatePlanManagement"));
+export const HmsLabOnlinePayment = lazyPage(() => import("@/pages/hms/lab/operations/OnlinePayment"));
+export const HmsLabReportTemplates = lazyPage(() => import("@/pages/hms/lab/operations/ReportTemplateBuilder"));
+export const HmsLabMIS = lazyPage(() => import("@/pages/hms/lab/operations/MISReports"));
+export const HmsLabPatientCRM = lazyPage(() => import("@/pages/hms/lab/operations/PatientCRM"));
+
 // HMS Resort/Wellness modules
 export const HmsPortalHousekeeping = lazyPage(() => import("@/pages/hms/HmsHousekeeping"));
 export const HmsPortalReservation = lazyPage(() => import("@/pages/hms/HmsReservation"));
 export const HmsPortalCanteen = lazyPage(() => import("@/pages/hms/HmsCanteen"));
 export const HmsPortalMaintenance = lazyPage(() => import("@/pages/hms/HmsMaintenance"));
 export const HmsPortalMultiCurrency = lazyPage(() => import("@/pages/hms/HmsMultiCurrency"));
+export const HmsPortalBranchDashboard = lazyPage(() => import("@/pages/hms/HmsBranchDashboard"));
+export const HmsPortalBranchManagement = lazyPage(() => import("@/pages/hms/HmsBranchManagement"));
+export const HmsPortalBridge = lazyPage(() => import("@/pages/hms/HmsBridge"));
+
+// MocDoc-inspired Feature Enhancements
+export const HmsPortalTriage = lazyPage(() => import("@/pages/hms/HmsTriage"));
+export const HmsPortalPatientMerge = lazyPage(() => import("@/pages/hms/HmsPatientMerge"));
+export const HmsPortalWardStore = lazyPage(() => import("@/pages/hms/HmsWardStore"));
+export const HmsPortalEodReports = lazyPage(() => import("@/pages/hms/HmsEodReports"));
+export const HmsPortalSecurityControls = lazyPage(() => import("@/pages/hms/HmsSecurityControls"));
+
+// MocDoc Micro-Gap Features
+export const HmsPortalPatientCard = lazyPage(() => import("@/pages/hms/HmsPatientCard"));
+export const HmsPortalNotificationHistory = lazyPage(() => import("@/pages/hms/HmsNotificationHistory"));
+export const HmsPortalAppointmentCalendar = lazyPage(() => import("@/pages/hms/HmsAppointmentCalendar"));
+export const HmsPortalCopayCalculator = lazyPage(() => import("@/pages/hms/HmsCopayCalculator"));
+
+// MocDoc Effectiveness Enhancements
+export const HmsPortalQrAttendance = lazyPage(() => import("@/pages/hms/HmsQrAttendance"));
+export const HmsPortalPanValidation = lazyPage(() => import("@/pages/hms/HmsPanValidation"));
+export const HmsPortalLabCriticalResults = lazyPage(() => import("@/pages/hms/HmsLabCriticalResults"));
+export const HmsPortalEstimateApproval = lazyPage(() => import("@/pages/hms/HmsEstimateApproval"));
+export const HmsPortalGeoSeoPages = lazyPage(() => import("@/pages/hms/HmsGeoSeoPages"));
+
+// Eka.care-Inspired Features
+export const HmsPortalDocumentParser = lazyPage(() => import("@/pages/hms/HmsDocumentParser"));
+export const HmsPortalMedAssist = lazyPage(() => import("@/pages/hms/HmsMedAssist"));
+export const HmsPortalOpenApi = lazyPage(() => import("@/pages/hms/HmsOpenApi"));
+export const HmsPortalWearableSync = lazyPage(() => import("@/pages/hms/HmsWearableSync"));
+export const HmsPortalMcpServer = lazyPage(() => import("@/pages/hms/HmsMcpServer"));
+export const HmsPortalVoiceAgent = lazyPage(() => import("@/pages/hms/HmsVoiceAgent"));
+export const PatientHealthLocker = lazyPage(() => import("@/pages/patient/PatientHealthLocker"));
 
 export const HomeoCaseTaking = lazyPage(() => import("@/pages/homeo/CaseTaking"));
 export const HomeoCaseTakingForm = lazyPage(() => import("@/pages/homeo/CaseTakingForm"));
@@ -315,11 +769,23 @@ export const Inventory = lazyPage(() => import("@/pages/vaidya/sections/Inventor
 export const IpAdmissionMaster = lazyPage(() => import("@/pages/admin/masters/IpAdmissionMaster"));
 export const JobPost = lazyPage(() => import("@/pages/JobPost"));
 export const Jobs = lazyPage(() => import("@/pages/Jobs"));
+export const JobAlerts = lazyPage(() => import("@/pages/JobAlerts"));
+export const JobAIMatch = lazyPage(() => import("@/pages/JobAIMatch"));
+export const JobsGovernment = lazyPage(() => import("@/pages/JobsGovernment"));
+export const JobsAggregated = lazyPage(() => import("@/pages/JobsAggregated"));
+export const JobSalaryInsights = lazyPage(() => import("@/pages/JobSalaryInsights"));
+export const JobCareerRoadmap = lazyPage(() => import("@/pages/JobCareerRoadmap"));
+export const JobSeekerProfile = lazyPage(() => import("@/pages/JobSeekerProfile"));
+export const JobEmployerATS = lazyPage(() => import("@/pages/JobEmployerATS"));
+export const JobCandidateSearch = lazyPage(() => import("@/pages/JobCandidateSearch"));
+export const JobDetail = lazyPage(() => import("@/pages/JobDetail"));
+export const JobMyApplications = lazyPage(() => import("@/pages/JobMyApplications"));
 export const LabelMaster = lazyPage(() => import("@/pages/admin/masters/LabelMaster"));
 export const Leaderboard = lazyPage(() => import("@/pages/gamification/Leaderboard"));
 export const Leads = lazyPage(() => import("@/pages/vaidya/sections/Leads"));
 export const LearningLayout = lazyPage(() => import("@/pages/Learning"));
 export const Library = lazyPage(() => import("@/pages/learning/Library"));
+export const EBookLibrary = lazyPage(() => import("@/pages/learning/EBookLibrary"));
 export const LoginPicker = lazyPage(() => import("@/pages/LoginPicker"));
 export const ManufacturerApprovals = lazyPage(() => import("@/pages/admin/ManufacturerApprovals"));
 export const MateriaMedica = lazyPage(() => import("@/pages/homeopathy/MateriaMedica"));
@@ -335,6 +801,7 @@ export const MisReports = lazyPage(() => import("@/pages/vaidya/sections/MisRepo
 export const MyBadges = lazyPage(() => import("@/pages/gamification/MyBadges"));
 export const MyCertificates = lazyPage(() => import("@/pages/gamification/MyCertificates"));
 export const MyOrders = lazyPage(() => import("@/pages/patient/PatientOrders"));
+export const MedicineAdherence = lazyPage(() => import("@/pages/patient/MedicineAdherence"));
 export const MyPatients = lazyPage(() => import("@/pages/doctor/sections/MyPatients"));
 export const MyPoints = lazyPage(() => import("@/pages/gamification/MyPoints"));
 export const NetraPariksha = lazyPage(() => import("@/pages/patient/NetraPariksha"));
@@ -381,6 +848,10 @@ export const PrakritiResult = lazyPage(() => import("@/pages/diagnosis/PrakritiR
 export const PrakritiRun = lazyPage(() => import("@/pages/diagnosis/PrakritiRun"));
 export const PreConsultationForm = lazyPage(() => import("@/pages/consultation/PreConsultationForm"));
 export const PrescriptionUpload = lazyPage(() => import("@/pages/shop/PrescriptionUpload"));
+export const PrescriptionCart = lazyPage(() => import("@/pages/shop/PrescriptionCart"));
+export const PriceCompare = lazyPage(() => import("@/pages/shop/PriceCompare"));
+export const DrugInteractionChecker = lazyPage(() => import("@/pages/shop/DrugInteractionChecker"));
+export const MedicineSubscriptionPage = lazyPage(() => import("@/pages/shop/MedicineSubscription"));
 export const Press = lazyPage(() => import("@/pages/Press"));
 export const PrivacyPolicy = lazyPage(() => import("@/pages/PrivacyPolicy"));
 export const ProductApprovals = lazyPage(() => import("@/pages/admin/ProductApprovals"));
@@ -410,6 +881,34 @@ export const StudentLayout = lazyPage(() => import("@/pages/student/StudentLayou
 export const StudentProfilePage = lazyPage(() => import("@/pages/student/StudentProfile"));
 export const StudentResearch = lazyPage(() => import("@/pages/student/StudentResearch"));
 export const StudentWebinars = lazyPage(() => import("@/pages/student/StudentWebinars"));
+export const StudentDailyQuiz = lazyPage(() => import("@/pages/student/DailyQuiz"));
+export const StudentGamification = lazyPage(() => import("@/pages/student/StudentGamification"));
+export const StudentSubjectQuiz = lazyPage(() => import("@/pages/student/SubjectQuiz"));
+export const StudentCollegeDirectory = lazyPage(() => import("@/pages/student/CollegeDirectory"));
+export const StudentCollegeChapters = lazyPage(() => import("@/pages/student/CollegeChapters"));
+export const StudentChapterDetail = lazyPage(() => import("@/pages/student/ChapterDetail"));
+export const StudentQuizCompetitions = lazyPage(() => import("@/pages/student/QuizCompetitions"));
+export const StudentCompetitionArena = lazyPage(() => import("@/pages/student/CompetitionArena"));
+export const StudentCaseStudyLibrary = lazyPage(() => import("@/pages/student/CaseStudyLibrary"));
+export const StudentCaseStudyDetail = lazyPage(() => import("@/pages/student/CaseStudyDetail"));
+export const StudentCoinStore = lazyPage(() => import("@/pages/student/CoinStore"));
+export const StudentStudyPlanner = lazyPage(() => import("@/pages/student/StudyPlanner"));
+export const StudentMentorConnect = lazyPage(() => import("@/pages/student/MentorConnect"));
+export const StudentStudyGroups = lazyPage(() => import("@/pages/student/StudyGroups"));
+export const StudentAskVaidya = lazyPage(() => import("@/pages/student/AskVaidya"));
+export const StudentInternshipJournal = lazyPage(() => import("@/pages/student/InternshipJournal"));
+export const StudentInternshipMarketplace = lazyPage(() => import("@/pages/student/InternshipMarketplace"));
+export const StudentResearchCollaboration = lazyPage(() => import("@/pages/student/ResearchCollaboration"));
+export const StudentStartupIncubator = lazyPage(() => import("@/pages/student/StartupIncubator"));
+export const StudentFreelanceGigs = lazyPage(() => import("@/pages/student/FreelanceGigs"));
+export const StudentMarmaExplorer = lazyPage(() => import("@/pages/student/MarmaExplorer"));
+export const StudentDrugInteractionChecker = lazyPage(() => import("@/pages/student/DrugInteractionChecker"));
+export const StudentPanchakarmaSimulator = lazyPage(() => import("@/pages/student/PanchakarmaSimulator"));
+export const StudentHerbIdentifier = lazyPage(() => import("@/pages/student/HerbIdentifier"));
+export const StudentPulseReadingPractice = lazyPage(() => import("@/pages/student/PulseReadingPractice"));
+export const StudentQuestionBankManager = lazyPage(() => import("@/pages/student/QuestionBankManager"));
+export const StudentAdminPanel = lazyPage(() => import("@/pages/student/StudentAdminPanel"));
+export const StudentWeeklyChallenge = lazyPage(() => import("@/pages/student/WeeklyChallenge"));
 export const SuggestionMaster = lazyPage(() => import("@/pages/admin/masters/SuggestionMaster"));
 export const SuperAdminDashboard = lazyPage(() => import("@/pages/admin/Dashboard"));
 export const SpineAssessment = lazyPage(() => import("@/pages/diagnosis/SpineAssessment"));
@@ -437,6 +936,7 @@ export const TherapyPlans = lazyPage(() => import("@/pages/vaidya/sections/Thera
 export const TokenDisplayMaster = lazyPage(() => import("@/pages/admin/masters/TokenDisplayMaster"));
 export const TrackOrder = lazyPage(() => import("@/pages/shop/TrackOrder"));
 export const TreatmentKits = lazyPage(() => import("@/pages/shop/TreatmentKits"));
+export const VerifyMedicine = lazyPage(() => import("@/pages/shop/VerifyMedicine"));
 export const TreatmentSystem = lazyPage(() => import("@/pages/treatments/TreatmentSystem"));
 export const TrustedIpMaster = lazyPage(() => import("@/pages/admin/masters/TrustedIpMaster"));
 export const TungPoints = lazyPage(() => import("@/pages/treatments/TungPoints"));
