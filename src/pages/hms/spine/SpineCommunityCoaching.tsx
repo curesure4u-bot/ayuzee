@@ -17,17 +17,17 @@ export default function SpineCommunityCoaching() {
 
   // ─── Journey Stages (Pain → Purpose) ───
   const journeyStages = [
-    { stage: "Pain", icon: Activity, color: "red", desc: "Assessment + First Relief", duration: "Week 1-2", action: "Free Assessment → Trial Package" },
-    { stage: "Progress", icon: TrendingUp, color: "orange", desc: "Active Treatment + Learning", duration: "Month 1-3", action: "Treatment Modules + Community Entry" },
-    { stage: "Power", icon: Zap, color: "blue", desc: "Strength + Self-Management", duration: "Month 3-6", action: "Corrective Exercise + Self-Therapy Mastery" },
-    { stage: "Purpose", icon: Star, color: "green", desc: "Advocate + Community Leader", duration: "Month 6-12", action: "Help Others + Earn Rewards" },
-    { stage: "Legacy", icon: Crown, color: "purple", desc: "Team Leader + Revenue Share", duration: "Year 2+", action: "Build Team + Transform Lives" },
+    { stage: "Pain", icon: Activity, colorClass: "text-red-600", desc: "Assessment + First Relief", duration: "Week 1-2", action: "Free Assessment → Trial Package" },
+    { stage: "Progress", icon: TrendingUp, colorClass: "text-orange-600", desc: "Active Treatment + Learning", duration: "Month 1-3", action: "Treatment Modules + Community Entry" },
+    { stage: "Power", icon: Zap, colorClass: "text-blue-600", desc: "Strength + Self-Management", duration: "Month 3-6", action: "Corrective Exercise + Self-Therapy Mastery" },
+    { stage: "Purpose", icon: Star, colorClass: "text-green-600", desc: "Advocate + Community Leader", duration: "Month 6-12", action: "Help Others + Earn Rewards" },
+    { stage: "Legacy", icon: Crown, colorClass: "text-purple-600", desc: "Team Leader + Revenue Share", duration: "Year 2+", action: "Build Team + Transform Lives" },
   ];
 
   // ─── Flexible Subscription Tiers ───
   const tiers = [
     {
-      id: "silver", name: "Silver", icon: Shield, color: "slate",
+      id: "silver", name: "Silver", icon: Shield, iconClass: "text-slate-600",
       tagline: "Start Your Healing Journey",
       duration: "3 Months Program", priceRange: "₹15,000 – ₹25,000",
       note: "Flexible — depends on condition severity",
@@ -44,7 +44,7 @@ export default function SpineCommunityCoaching() {
       idealFor: "Mild spine issues, prevention, desk workers, first-timers",
     },
     {
-      id: "gold", name: "Gold", icon: Award, color: "amber",
+      id: "gold", name: "Gold", icon: Award, iconClass: "text-amber-600",
       tagline: "Serious Healing + Community",
       duration: "6 Months Program", priceRange: "₹50,000 – ₹1,20,000",
       note: "Based on treatment plan (Panchakarma + therapies included)",
@@ -63,7 +63,7 @@ export default function SpineCommunityCoaching() {
       idealFor: "Moderate-severe conditions, disc problems, chronic pain, committed patients",
     },
     {
-      id: "diamond", name: "Diamond", icon: Crown, color: "blue",
+      id: "diamond", name: "Diamond", icon: Crown, iconClass: "text-blue-600",
       tagline: "Total Transformation + Leadership",
       duration: "12 Months Program", priceRange: "₹2,50,000 – ₹3,50,000",
       note: "Premium all-inclusive — feel free to invest in your health",
@@ -84,7 +84,7 @@ export default function SpineCommunityCoaching() {
       idealFor: "Severe/complex conditions, those wanting transformation + leadership role",
     },
     {
-      id: "quantum", name: "Quantum", icon: Sparkles, color: "purple",
+      id: "quantum", name: "Quantum", icon: Sparkles, iconClass: "text-purple-600",
       tagline: "Become the Healer — Build Your Legacy",
       duration: "Lifetime / Annual Renewal", priceRange: "₹5,00,000+",
       note: "For those who want to LEAD spine wellness in their area",
@@ -129,11 +129,11 @@ export default function SpineCommunityCoaching() {
     spineScore: {
       factors: ["Module completion (20%)", "Daily exercise done (25%)", "Pain reduction (25%)", "Community engagement (15%)", "Therapy attendance (15%)"],
       levels: [
-        { range: "0-20", label: "Critical", color: "red" },
-        { range: "21-40", label: "Needs Attention", color: "orange" },
-        { range: "41-60", label: "Improving", color: "amber" },
-        { range: "61-80", label: "Good", color: "blue" },
-        { range: "81-100", label: "Excellent", color: "green" },
+        { range: "0-20", label: "Critical", bgClass: "bg-red-100", textClass: "text-red-700" },
+        { range: "21-40", label: "Needs Attention", bgClass: "bg-orange-100", textClass: "text-orange-700" },
+        { range: "41-60", label: "Improving", bgClass: "bg-amber-100", textClass: "text-amber-700" },
+        { range: "61-80", label: "Good", bgClass: "bg-blue-100", textClass: "text-blue-700" },
+        { range: "81-100", label: "Excellent", bgClass: "bg-green-100", textClass: "text-green-700" },
       ],
     },
   };
@@ -211,7 +211,7 @@ export default function SpineCommunityCoaching() {
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
             {journeyStages.map((s, i) => (
               <div key={s.stage} className="relative p-3 bg-white rounded-lg border text-center">
-                <s.icon className={`h-6 w-6 mx-auto text-${s.color}-600 mb-1`} />
+                <s.icon className={`h-6 w-6 mx-auto ${s.colorClass} mb-1`} />
                 <p className="text-sm font-bold">{s.stage}</p>
                 <p className="text-[10px] text-muted-foreground">{s.desc}</p>
                 <p className="text-[9px] mt-1 text-indigo-600 font-medium">{s.duration}</p>
@@ -251,7 +251,7 @@ export default function SpineCommunityCoaching() {
               onClick={() => setSelectedTier(tier.id === selectedTier ? null : tier.id)}
             >
               <CardHeader className="pb-2 text-center">
-                <tier.icon className={`h-8 w-8 mx-auto text-${tier.color}-600`} />
+                <tier.icon className={`h-8 w-8 mx-auto ${tier.iconClass}`} />
                 <CardTitle className="text-sm">{tier.name}</CardTitle>
                 <p className="text-[10px] text-muted-foreground italic">{tier.tagline}</p>
               </CardHeader>
@@ -338,8 +338,8 @@ export default function SpineCommunityCoaching() {
             <CardContent className="space-y-2">
               <div className="flex gap-1">
                 {gamification.spineScore.levels.map((l) => (
-                  <div key={l.range} className={`flex-1 text-center p-1 bg-${l.color}-100 rounded`}>
-                    <p className={`text-[9px] font-bold text-${l.color}-700`}>{l.label}</p>
+                  <div key={l.range} className={`flex-1 text-center p-1 ${l.bgClass} rounded`}>
+                    <p className={`text-[9px] font-bold ${l.textClass}`}>{l.label}</p>
                     <p className="text-[8px] text-muted-foreground">{l.range}</p>
                   </div>
                 ))}
