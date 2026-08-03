@@ -12,7 +12,7 @@ import {
   Moon, Dumbbell, Sparkles, FileText, Package, Factory, Warehouse, Wallet,
   GraduationCap, Globe, Smartphone, Brain, Stethoscope, ScanLine, CreditCard,
   QrCode, AlertTriangle, Target, Truck, RotateCcw, Lock, Calculator, Clock,
-  Calendar, RefreshCw, ArrowRight, CheckCircle2, Send,
+  Calendar, RefreshCw, ArrowRight, CheckCircle2, Send, Crown,
 } from "lucide-react";
 
 // 10 Primary Tabs
