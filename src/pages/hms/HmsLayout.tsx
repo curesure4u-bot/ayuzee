@@ -392,6 +392,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-therapies/13", label: "T13: Sujok Therapy", icon: Activity },
     { to: "/hms/spine-therapies/14", label: "T14: Marma Therapy", icon: Leaf },
     { to: "/hms/spine-therapies/15", label: "T15: Pranic Healing", icon: Sparkles },
+    { divider: "Community Coaching", to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
     { divider: "Operations", to: "/hms/spine-ayush?tab=community", label: "Community & Gamification", icon: Users },
     { to: "/hms/spine-ayush?tab=franchise", label: "Franchise Operations", icon: Building2 },
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },
@@ -503,7 +504,7 @@ const HmsLayout = () => {
     else if (p.includes("/hms/accounts") || p.includes("/hms/credit-settlement")) setActiveTab("accounts");
     else if (p.includes("/hms/mis") || p.includes("/hms/reports") || p.includes("/hms/governance")) setActiveTab("mis");
     else if (p.includes("/hms/ayurveda") || p.includes("/hms/siddha") || p.includes("/hms/homeopathy") || p.includes("/hms/unani") || p.includes("/hms/yoga") || p.includes("/hms/panchakarma") || p.includes("/hms/pk-") || p.includes("/hms/icd-") || p.includes("/hms/namaste") || p.includes("/hms/sna-") || p.includes("/hms/classical") || p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments")) setActiveTab("ayush");
-    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies")) setActiveTab("spine");
+    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies") || p.includes("/hms/spine-community")) setActiveTab("spine");
     else setActiveTab("dashboard");
   }, [location.pathname]);
 
