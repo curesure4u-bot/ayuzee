@@ -376,6 +376,22 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-modules/11", label: "M11: Pronation Distortion", icon: Activity },
     { to: "/hms/spine-modules/12", label: "M12: Flat Back", icon: Activity },
     { to: "/hms/spine-modules/13", label: "M13: Sway Back", icon: Activity },
+    { divider: "Integrative Therapies", to: "/hms/spine-therapies", label: "All Therapies (15)", icon: Globe },
+    { to: "/hms/spine-therapies/1", label: "T1: Acupuncture (TCM)", icon: Zap },
+    { to: "/hms/spine-therapies/2", label: "T2: Acupressure", icon: Heart },
+    { to: "/hms/spine-therapies/3", label: "T3: Dry Needling", icon: Zap },
+    { to: "/hms/spine-therapies/4", label: "T4: Trigger Points", icon: Target },
+    { to: "/hms/spine-therapies/5", label: "T5: Auriculotherapy", icon: Activity },
+    { to: "/hms/spine-therapies/6", label: "T6: Kampo & Shiatsu", icon: Leaf },
+    { to: "/hms/spine-therapies/7", label: "T7: Korean Hand (KHT)", icon: Activity },
+    { to: "/hms/spine-therapies/8", label: "T8: Reflexology", icon: Activity },
+    { to: "/hms/spine-therapies/9", label: "T9: Cupping (Hijama)", icon: Sparkles },
+    { to: "/hms/spine-therapies/10", label: "T10: Moxibustion", icon: Zap },
+    { to: "/hms/spine-therapies/11", label: "T11: Thai Massage", icon: Heart },
+    { to: "/hms/spine-therapies/12", label: "T12: Osteopathic/MET", icon: Activity },
+    { to: "/hms/spine-therapies/13", label: "T13: Sujok Therapy", icon: Activity },
+    { to: "/hms/spine-therapies/14", label: "T14: Marma Therapy", icon: Leaf },
+    { to: "/hms/spine-therapies/15", label: "T15: Pranic Healing", icon: Sparkles },
     { divider: "Operations", to: "/hms/spine-ayush?tab=community", label: "Community & Gamification", icon: Users },
     { to: "/hms/spine-ayush?tab=franchise", label: "Franchise Operations", icon: Building2 },
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },
@@ -487,7 +503,7 @@ const HmsLayout = () => {
     else if (p.includes("/hms/accounts") || p.includes("/hms/credit-settlement")) setActiveTab("accounts");
     else if (p.includes("/hms/mis") || p.includes("/hms/reports") || p.includes("/hms/governance")) setActiveTab("mis");
     else if (p.includes("/hms/ayurveda") || p.includes("/hms/siddha") || p.includes("/hms/homeopathy") || p.includes("/hms/unani") || p.includes("/hms/yoga") || p.includes("/hms/panchakarma") || p.includes("/hms/pk-") || p.includes("/hms/icd-") || p.includes("/hms/namaste") || p.includes("/hms/sna-") || p.includes("/hms/classical") || p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments")) setActiveTab("ayush");
-    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules")) setActiveTab("spine");
+    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies")) setActiveTab("spine");
     else setActiveTab("dashboard");
   }, [location.pathname]);
 
