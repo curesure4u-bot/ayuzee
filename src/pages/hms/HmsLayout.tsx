@@ -369,6 +369,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-therapy-session", label: "Record Therapy Session", icon: Stethoscope },
     { to: "/hms/spine-patient-recovery", label: "Patient Recovery Score", icon: Target },
     { divider: "Community Coaching", to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
+    { to: "/hms/spine-community-pipeline", label: "Engagement Pipeline", icon: Users },
     { divider: "Operations", to: "/hms/spine-ayush?tab=community", label: "Community & Gamification", icon: Users },
     { to: "/hms/spine-ayush?tab=franchise", label: "Franchise Operations", icon: Building2 },
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },

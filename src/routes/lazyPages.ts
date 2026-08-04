@@ -493,6 +493,7 @@ export const HmsSpineTherapySession = lazyPage(() => import("@/pages/hms/spine/S
 export const HmsSpinePatientRecovery = lazyPage(() => import("@/pages/hms/spine/SpinePatientRecovery"));
 export const HmsSpineLevel1Session = lazyPage(() => import("@/pages/hms/spine/SpineLevel1Session"));
 export const HmsSpineLevel2Session = lazyPage(() => import("@/pages/hms/spine/SpineLevel2Session"));
+export const HmsSpineCommunityPipeline = lazyPage(() => import("@/pages/hms/spine/SpineCommunityPipeline"));
 export const HmsNadiTarangini = lazyPage(() => import("@/pages/hms/HmsNadiTarangini"));
 export const HmsIridology = lazyPage(() => import("@/pages/hms/HmsIridology"));
 export const HmsDarkfieldMicroscopy = lazyPage(() => import("@/pages/hms/HmsDarkfieldMicroscopy"));
