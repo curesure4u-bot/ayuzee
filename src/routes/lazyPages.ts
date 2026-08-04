@@ -494,6 +494,8 @@ export const HmsSpinePatientRecovery = lazyPage(() => import("@/pages/hms/spine/
 export const HmsSpineLevel1Session = lazyPage(() => import("@/pages/hms/spine/SpineLevel1Session"));
 export const HmsSpineLevel2Session = lazyPage(() => import("@/pages/hms/spine/SpineLevel2Session"));
 export const HmsSpineCommunityPipeline = lazyPage(() => import("@/pages/hms/spine/SpineCommunityPipeline"));
+export const HmsSpineAyushNativeModules = lazyPage(() => import("@/pages/hms/spine/SpineAyushNativeModules"));
+export const HmsSpineQuickProtocol = lazyPage(() => import("@/pages/hms/spine/SpineQuickProtocol"));
 export const HmsNadiTarangini = lazyPage(() => import("@/pages/hms/HmsNadiTarangini"));
 export const HmsIridology = lazyPage(() => import("@/pages/hms/HmsIridology"));
 export const HmsDarkfieldMicroscopy = lazyPage(() => import("@/pages/hms/HmsDarkfieldMicroscopy"));

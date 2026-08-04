@@ -646,6 +646,8 @@ export const AppRoutes = () => (
               <Route path="spine-level1-session" element={withSuspense(<P.HmsSpineLevel1Session />)} />
               <Route path="spine-level2-session" element={withSuspense(<P.HmsSpineLevel2Session />)} />
               <Route path="spine-community-pipeline" element={withSuspense(<P.HmsSpineCommunityPipeline />)} />
+              <Route path="spine-ayush-native" element={withSuspense(<P.HmsSpineAyushNativeModules />)} />
+              <Route path="spine-quick-protocol" element={withSuspense(<P.HmsSpineQuickProtocol />)} />
               <Route path="nadi-tarangini" element={withSuspense(<P.HmsNadiTarangini />)} />
               <Route path="iridology" element={withSuspense(<P.HmsIridology />)} />
               <Route path="darkfield-microscopy" element={withSuspense(<P.HmsDarkfieldMicroscopy />)} />
