@@ -915,6 +915,7 @@ export const StudentWeeklyChallenge = lazyPage(() => import("@/pages/student/Wee
 export const SuggestionMaster = lazyPage(() => import("@/pages/admin/masters/SuggestionMaster"));
 export const SuperAdminDashboard = lazyPage(() => import("@/pages/admin/Dashboard"));
 export const SpineAssessment = lazyPage(() => import("@/pages/diagnosis/SpineAssessment"));
+export const SpineAyushLanding = lazyPage(() => import("@/pages/SpineAyushLanding"));
 export const SymptomChecker = lazyPage(() => import("@/pages/diagnosis/SymptomChecker"));
 export const AyurvedaAdvisor = lazyPage(() => import("@/pages/AyurvedaAdvisor"));
 export const TaxMaster = lazyPage(() => import("@/pages/admin/masters/TaxMaster"));

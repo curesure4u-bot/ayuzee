@@ -280,6 +280,7 @@ export const AppRoutes = () => (
             <Route path="/diagnosis/jihva" element={withSuspense(<P.JihvaPariksha />)} />
             <Route path="/diagnosis/netra" element={withSuspense(<P.NetraPariksha />)} />
             <Route path="/diagnosis/spine" element={withSuspense(<P.SpineAssessment />)} />
+            <Route path="/spine" element={withSuspense(<P.SpineAyushLanding />)} />
             <Route path="/ayurveda-advisor" element={withSuspense(<P.AyurvedaAdvisor />)} />
             <Route path="/diagnosis/prakriti" element={withSuspense(<P.PrakritiIntro />)} />
             <Route path="/diagnosis/prakriti/run" element={withSuspense(<P.PrakritiRun />)} />
