@@ -643,6 +643,7 @@ export const AppRoutes = () => (
               <Route path="spine-community" element={withSuspense(<P.HmsSpineCommunityCoaching />)} />
               <Route path="spine-therapy-session" element={withSuspense(<P.HmsSpineTherapySession />)} />
               <Route path="spine-patient-recovery" element={withSuspense(<P.HmsSpinePatientRecovery />)} />
+              <Route path="spine-level1-session" element={withSuspense(<P.HmsSpineLevel1Session />)} />
               <Route path="nadi-tarangini" element={withSuspense(<P.HmsNadiTarangini />)} />
               <Route path="iridology" element={withSuspense(<P.HmsIridology />)} />
               <Route path="darkfield-microscopy" element={withSuspense(<P.HmsDarkfieldMicroscopy />)} />

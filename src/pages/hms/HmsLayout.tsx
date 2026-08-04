@@ -364,7 +364,8 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-ayush?tab=connections", label: "Disease Connection Map", icon: Activity },
     { divider: "Spine AYUSH Modules", to: "/hms/spine-modules", label: "All Modules (13)", icon: GraduationCap },
     { divider: "Integrative Therapies", to: "/hms/spine-therapies", label: "All Therapies (15)", icon: Globe },
-    { divider: "Doctor Tools", to: "/hms/spine-therapy-session", label: "Record Therapy Session", icon: Stethoscope },
+    { divider: "Doctor Tools", to: "/hms/spine-level1-session", label: "Level 1 Session (OPD)", icon: Zap },
+    { to: "/hms/spine-therapy-session", label: "Record Therapy Session", icon: Stethoscope },
     { to: "/hms/spine-patient-recovery", label: "Patient Recovery Score", icon: Target },
     { divider: "Community Coaching", to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
     { divider: "Operations", to: "/hms/spine-ayush?tab=community", label: "Community & Gamification", icon: Users },
@@ -478,7 +479,7 @@ const HmsLayout = () => {
     else if (p.includes("/hms/accounts") || p.includes("/hms/credit-settlement")) setActiveTab("accounts");
     else if (p.includes("/hms/mis") || p.includes("/hms/reports") || p.includes("/hms/governance")) setActiveTab("mis");
     else if (p.includes("/hms/ayurveda") || p.includes("/hms/siddha") || p.includes("/hms/homeopathy") || p.includes("/hms/unani") || p.includes("/hms/yoga") || p.includes("/hms/panchakarma") || p.includes("/hms/pk-") || p.includes("/hms/icd-") || p.includes("/hms/namaste") || p.includes("/hms/sna-") || p.includes("/hms/classical") || p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments")) setActiveTab("ayush");
-    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies") || p.includes("/hms/spine-community") || p.includes("/hms/spine-therapy-session") || p.includes("/hms/spine-patient-recovery")) setActiveTab("spine");
+    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies") || p.includes("/hms/spine-community") || p.includes("/hms/spine-therapy-session") || p.includes("/hms/spine-patient-recovery") || p.includes("/hms/spine-level1")) setActiveTab("spine");
     else setActiveTab("dashboard");
   }, [location.pathname]);
 
