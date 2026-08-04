@@ -33,7 +33,35 @@ export default function SpineLevel2Session() {
     { id: 8, name: "Spine Yoga Therapy", desc: "Therapeutic yoga protocol specific to spine condition", duration: "45 min", days: "21 days", price: "₹6,000", indication: "Maintenance, Prevention, Mild chronic pain" },
     { id: 9, name: "Abhyanga + Swedana", desc: "Full body oil massage followed by steam/sudation therapy", duration: "60 min", days: "7 days", price: "₹7,000", indication: "Generalized Vata, Stiffness, Pre-Basti preparation" },
     { id: 10, name: "Pizhichil (Sarvanga Dhara)", desc: "Continuous warm oil pouring over entire body", duration: "60 min", days: "7 days", price: "₹14,000", indication: "Severe degeneration, Paralysis, Neurological spine" },
+    { id: 11, name: "Shirodhara", desc: "Continuous oil stream on forehead for neuro-calming", duration: "45 min", days: "7 days", price: "₹7,000", indication: "Stress spine, Insomnia from pain, Cervical tension" },
+    { id: 12, name: "Nadi Sweda (Local Steam)", desc: "Targeted steam application on spine using herbal decoction", duration: "15 min", days: "7-14 days", price: "₹3,000", indication: "Post-Basti, Stiffness, Morning rigidity" },
+    { id: 13, name: "Choorna Pinda Sweda", desc: "Herbal powder bolus massage (dry heat therapy)", duration: "45 min", days: "7 days", price: "₹6,000", indication: "Kapha-Vata conditions, Obesity + spine, Swelling" },
+    { id: 14, name: "Upanaha Sweda (Poultice)", desc: "Warm herbal paste application + bandage overnight", duration: "Apply 30 min", days: "7 nights", price: "₹4,000", indication: "Severe joint stiffness, Osteoarthritis spine, Frozen segments" },
+    { id: 15, name: "Lepa (Herbal Paste Application)", desc: "Cold/warm medicated paste on affected spine area", duration: "30 min", days: "7-14 days", price: "₹3,500", indication: "Inflammation, Acute flare, Pitta-type spine pain" },
+    { id: 16, name: "Raktamokshana (Jalaukavacharana)", desc: "Leech therapy / controlled bloodletting for inflammatory spine", duration: "30 min", days: "1-3 sessions", price: "₹2,000", indication: "Pitta-Rakta disorders, Inflammatory spine, Nerve root inflammation" },
+    { id: 17, name: "Katee Dhara", desc: "Continuous medicated liquid stream on lumbar region", duration: "30 min", days: "7 days", price: "₹6,000", indication: "Degenerative lumbar, Post-surgery rehab, Chronic inflammation" },
+    { id: 18, name: "Virechana (Therapeutic Purgation)", desc: "Controlled purgation for Pitta-dominant spine disorders", duration: "1 day procedure", days: "1 day + 7 days prep", price: "₹5,000", indication: "Pitta-type sciatica, Inflammatory radiculopathy" },
+    { id: 19, name: "Matra Basti (Daily Oil Enema)", desc: "Small quantity oil enema given daily for Vata pacification", duration: "15 min", days: "7-30 days", price: "₹5,000", indication: "Chronic Vata, Elderly spine, Post-Panchakarma maintenance" },
+    { id: 20, name: "Taila Dhara (Oil Stream)", desc: "Continuous warm oil stream on specific spine segment", duration: "30 min", days: "7 days", price: "₹7,000", indication: "Nerve root compression, Disc bulge, Radiculopathy" },
   ];
+  const [customTherapies, setCustomTherapies] = useState<{id: number; name: string; desc: string; duration: string; days: string; price: string; indication: string}[]>([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newTherapy, setNewTherapy] = useState({ name: "", desc: "", duration: "", days: "", price: "", indication: "" });
+  const [dailySchedule, setDailySchedule] = useState<number[]>([]);
+
+  const allTherapies = [...level2Therapies, ...customTherapies];
+
+  const addCustomTherapy = () => {
+    if (!newTherapy.name) return;
+    setCustomTherapies(prev => [...prev, { id: 100 + prev.length, ...newTherapy }]);
+    setNewTherapy({ name: "", desc: "", duration: "", days: "", price: "", indication: "" });
+    setShowAddForm(false);
+    toast.success("Custom therapy added!");
+  };
+
+  const toggleDailySchedule = (id: number) => {
+    setDailySchedule(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
 
   const level2Checkpoints: Record<number, { name: string; category: string }[]> = {
     1: [ // Kati Basti
@@ -215,18 +243,48 @@ export default function SpineLevel2Session() {
           </Card>
 
           <Card className="border-purple-200">
-            <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Sparkles className="h-4 w-4 text-purple-600" /> Level 2 Panchakarma (10)</CardTitle></CardHeader>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm flex items-center gap-2"><Sparkles className="h-4 w-4 text-purple-600" /> Level 2 Panchakarma ({allTherapies.length})</CardTitle>
+                <Button variant="outline" size="sm" className="text-[10px] h-6" onClick={() => setShowAddForm(!showAddForm)}>+ Add Custom</Button>
+              </div>
+            </CardHeader>
             <CardContent>
+              {showAddForm && (
+                <div className="mb-3 p-3 bg-purple-50 rounded border border-purple-200 space-y-2">
+                  <p className="text-xs font-medium">Add New Treatment:</p>
+                  <Input placeholder="Therapy name" value={newTherapy.name} onChange={e => setNewTherapy({...newTherapy, name: e.target.value})} className="h-8 text-xs" />
+                  <Input placeholder="Description" value={newTherapy.desc} onChange={e => setNewTherapy({...newTherapy, desc: e.target.value})} className="h-8 text-xs" />
+                  <div className="grid grid-cols-3 gap-1">
+                    <Input placeholder="Duration" value={newTherapy.duration} onChange={e => setNewTherapy({...newTherapy, duration: e.target.value})} className="h-8 text-xs" />
+                    <Input placeholder="Days" value={newTherapy.days} onChange={e => setNewTherapy({...newTherapy, days: e.target.value})} className="h-8 text-xs" />
+                    <Input placeholder="Price" value={newTherapy.price} onChange={e => setNewTherapy({...newTherapy, price: e.target.value})} className="h-8 text-xs" />
+                  </div>
+                  <Button size="sm" className="w-full h-7 text-xs bg-purple-600" onClick={addCustomTherapy}>Add Therapy</Button>
+                </div>
+              )}
+              {/* Daily Schedule Toggle */}
+              {dailySchedule.length > 0 && (
+                <div className="mb-3 p-2 bg-green-50 rounded border border-green-200">
+                  <p className="text-[10px] font-medium text-green-700 mb-1">Today's Schedule ({dailySchedule.length} therapies):</p>
+                  <div className="flex flex-wrap gap-1">
+                    {dailySchedule.map(id => {
+                      const t = allTherapies.find(x => x.id === id);
+                      return t ? <Badge key={id} className="bg-green-100 text-green-700 text-[9px]">{t.name}</Badge> : null;
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="space-y-1.5 max-h-[400px] overflow-y-auto">
-                {level2Therapies.map(t => (
-                  <button key={t.id} onClick={() => { setSelectedTherapy(t.id); setCheckedItems(new Set()); }}
-                    className={`w-full flex items-center justify-between p-2.5 rounded text-left text-sm transition ${selectedTherapy === t.id ? "bg-purple-100 border border-purple-300" : "hover:bg-muted border border-transparent"}`}>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate">{t.name}</p>
-                      <p className="text-[10px] text-muted-foreground truncate">{t.desc}</p>
-                      <p className="text-[9px] text-muted-foreground"><Clock className="h-2.5 w-2.5 inline mr-0.5" />{t.duration} · {t.days} · {t.price}</p>
-                    </div>
-                  </button>
+                {allTherapies.map(t => (
+                  <div key={t.id} className={`flex items-center gap-2 p-2 rounded text-sm transition border ${selectedTherapy === t.id ? "bg-purple-100 border-purple-300" : "hover:bg-muted border-transparent"}`}>
+                    <input type="checkbox" checked={dailySchedule.includes(t.id)} onChange={() => toggleDailySchedule(t.id)} className="h-3.5 w-3.5 rounded shrink-0" title="Add to today's schedule" />
+                    <button className="flex-1 text-left" onClick={() => { setSelectedTherapy(t.id); setCheckedItems(new Set()); }}>
+                      <p className="font-medium text-xs">{t.name}</p>
+                      <p className="text-[9px] text-muted-foreground">{t.duration} · {t.days} · {t.price}</p>
+                    </button>
+                    {selectedTherapy === t.id && <CheckCircle2 className="h-4 w-4 text-purple-600 shrink-0" />}
+                  </div>
                 ))}
               </div>
             </CardContent>
