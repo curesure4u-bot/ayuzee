@@ -52,6 +52,8 @@ export default function SpineCommunityPipeline() {
         { id: "M3", name: "Anterior View", status: "unlocked", note: "Self-observation skill" },
         { id: "M4", name: "Lateral View", status: "unlocked", note: "Plumb line self-check" },
         { id: "M5", name: "Practical Skills", status: "unlocked", note: "Assessment at home" },
+        { id: "M14", name: "Ayurvedic Spine Assessment", status: "unlocked", note: "Ashtavidha Pareeksha for spine" },
+        { id: "M18", name: "Dr. Saleem's 5-Step", status: "unlocked", note: "Simple LOOK-TOUCH-MOVE-DIAGNOSE-TREAT" },
       ],
       therapies: [
         { id: "T2", name: "Acupressure (Self-points taught)", note: "GB20, BL40 — immediate self-help" },
@@ -123,6 +125,11 @@ export default function SpineCommunityPipeline() {
         { id: "M11", name: "Pronation Distortion", status: "unlocked", note: "If foot/knee chain" },
         { id: "M12", name: "Flat Back", status: "unlocked", note: "If loss of lordosis" },
         { id: "M13", name: "Sway Back", status: "unlocked", note: "If pelvis displacement" },
+        { id: "M14", name: "Ayurvedic Spine Assessment", status: "unlocked", note: "Doctor uses Ashtavidha for diagnosis" },
+        { id: "M15", name: "Siddha Varma Evaluation", status: "unlocked", note: "Varma point-based nerve assessment" },
+        { id: "M16", name: "Yoga-Based Assessment", status: "unlocked", note: "Chakra + Kosha + Asana evaluation" },
+        { id: "M17", name: "TCM Meridian Assessment", status: "unlocked", note: "BL channel + pattern diagnosis" },
+        { id: "M18", name: "Dr. Saleem's 5-Step", status: "active", note: "LOOK-TOUCH-MOVE-DIAGNOSE-TREAT daily" },
       ],
       therapies: [
         { id: "T1", name: "Acupuncture (TCM)", note: "Doctor applies — needle points for condition" },
@@ -133,6 +140,9 @@ export default function SpineCommunityPipeline() {
         { id: "T11", name: "Thai Stretching", note: "Assisted stretches for flexibility" },
         { id: "T12", name: "MET / Osteopathic", note: "Joint mobilization + correction" },
         { id: "T14", name: "Marma Therapy (advanced)", note: "Full spine Marma protocol" },
+        { id: "Naturo", name: "GH Pack + Mud Pack", note: "Detox + anti-inflammatory naturopathy" },
+        { id: "Naturo", name: "Hip Bath + Spine Bath", note: "Hydrotherapy for circulation + nerve toning" },
+        { id: "Naturo", name: "Diet Therapy (spine-specific)", note: "Anti-inflammatory + bone-nourishing foods" },
       ],
       community: [
         "Daily progress sharing in group (pain score + photo optional)",
