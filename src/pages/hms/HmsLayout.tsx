@@ -365,6 +365,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { divider: "Spine AYUSH Modules", to: "/hms/spine-modules", label: "All Modules (13)", icon: GraduationCap },
     { to: "/hms/spine-ayush-native", label: "AYUSH Native (M14-M18)", icon: Leaf },
     { to: "/hms/spine-quick-protocol", label: "Quick Protocol Builder", icon: Zap },
+    { to: "/hms/spine-ai-tools", label: "AI Tools (Intelligence)", icon: Brain },
     { divider: "Integrative Therapies", to: "/hms/spine-therapies", label: "All Therapies (15)", icon: Globe },
     { divider: "Doctor Tools", to: "/hms/spine-level1-session", label: "Level 1 Session (OPD)", icon: Zap },
     { to: "/hms/spine-level2-session", label: "Level 2 Session (Panchakarma)", icon: Sparkles },

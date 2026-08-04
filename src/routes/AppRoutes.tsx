@@ -648,6 +648,7 @@ export const AppRoutes = () => (
               <Route path="spine-community-pipeline" element={withSuspense(<P.HmsSpineCommunityPipeline />)} />
               <Route path="spine-ayush-native" element={withSuspense(<P.HmsSpineAyushNativeModules />)} />
               <Route path="spine-quick-protocol" element={withSuspense(<P.HmsSpineQuickProtocol />)} />
+              <Route path="spine-ai-tools" element={withSuspense(<P.HmsSpineAITools />)} />
               <Route path="nadi-tarangini" element={withSuspense(<P.HmsNadiTarangini />)} />
               <Route path="iridology" element={withSuspense(<P.HmsIridology />)} />
               <Route path="darkfield-microscopy" element={withSuspense(<P.HmsDarkfieldMicroscopy />)} />
