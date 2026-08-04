@@ -641,6 +641,8 @@ export const AppRoutes = () => (
               <Route path="spine-therapies" element={withSuspense(<P.HmsSpineIntegrativeTherapies />)} />
               <Route path="spine-therapies/:therapyId" element={withSuspense(<P.HmsSpineTherapyDetail />)} />
               <Route path="spine-community" element={withSuspense(<P.HmsSpineCommunityCoaching />)} />
+              <Route path="spine-therapy-session" element={withSuspense(<P.HmsSpineTherapySession />)} />
+              <Route path="spine-patient-recovery" element={withSuspense(<P.HmsSpinePatientRecovery />)} />
               <Route path="nadi-tarangini" element={withSuspense(<P.HmsNadiTarangini />)} />
               <Route path="iridology" element={withSuspense(<P.HmsIridology />)} />
               <Route path="darkfield-microscopy" element={withSuspense(<P.HmsDarkfieldMicroscopy />)} />
