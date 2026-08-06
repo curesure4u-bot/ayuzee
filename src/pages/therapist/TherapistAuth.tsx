@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
+import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 import { Sparkles, Upload, ShieldCheck, Loader2, CheckCircle2 } from "lucide-react";
 
 type Mode = "auth" | "onboarding" | "review";
@@ -85,6 +86,9 @@ const TherapistAuth = () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
     setUserId(session.user.id);
+    // Super admin bypasses therapist verification
+    const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: session.user.id, _role: "super_admin" as any });
+    if (isAdmin) { navigate("/therapist", { replace: true }); return; }
     const { data: existing } = await supabase
       .from("therapists")
       .select("verification_status")
@@ -216,7 +220,13 @@ const TherapistAuth = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignin} className="space-y-4 mt-4">
                 <div><Label>Email</Label><Input type="email" required value={signin.email} onChange={(e) => setSignin({ ...signin, email: e.target.value })} /></div>
-                <div><Label>Password</Label><Input type="password" required value={signin.password} onChange={(e) => setSignin({ ...signin, password: e.target.value })} /></div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Label>Password</Label>
+                    <ForgotPasswordDialog defaultEmail={signin.email} trigger={<button type="button" className="text-xs font-medium text-primary hover:underline">Forgot password?</button>} />
+                  </div>
+                  <Input type="password" required value={signin.password} onChange={(e) => setSignin({ ...signin, password: e.target.value })} />
+                </div>
                 <Button type="submit" disabled={loading} className="w-full">{loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Sign in</Button>
               </form>
             </TabsContent>

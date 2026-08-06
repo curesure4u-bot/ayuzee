@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import { toast } from "sonner";
 import {
   FileText, Save, Mic, MicOff, Camera, Upload, History,
   TrendingUp, Pen, Pill, FlaskConical, Calendar, Printer, Plus,
+  Leaf, Brain, ArrowRight,
 } from "lucide-react";
 
 type Prescription = {
@@ -56,6 +58,7 @@ const mockHistory: VisitHistory[] = [
 ];
 
 const HmsEmr = () => {
+  const navigate = useNavigate();
   const [patientName, setPatientName] = useState("");
   const [isRecording, setIsRecording] = useState(false);
 
@@ -111,6 +114,12 @@ const HmsEmr = () => {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigate("/hms/patient/casesheet")}>
+            <Leaf className="mr-1 h-4 w-4 text-green-600" /> Ayurveda Case Sheet
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => navigate("/hms/patient/prescription")}>
+            <Brain className="mr-1 h-4 w-4 text-violet-600" /> AI Prescription
+          </Button>
           <Button variant="outline" onClick={() => toast.info("Printing EMR...")}>
             <Printer className="mr-1 h-4 w-4" /> Print
           </Button>

@@ -62,14 +62,18 @@ interface Post {
   created_at: string;
   visibility: string;
   post_type: string;
+  author_specialization: string | null;
+  poll_options: { text: string; votes: number }[] | null;
+  mentions: string[];
 }
 
-type TabKey = "doctor_post" | "public_post" | "patient_question";
+type TabKey = "doctor_post" | "public_post" | "patient_question" | "poll";
 
 const TABS: { key: TabKey; label: string; icon: React.ElementType; helper: string }[] = [
   { key: "doctor_post", label: "Doctor Posts", icon: Stethoscope, helper: "Clinical pearls & case notes from approved Ayurveda doctors." },
   { key: "public_post", label: "Public Posts", icon: Globe, helper: "Wellness wisdom shared with the wider community." },
   { key: "patient_question", label: "Patient Questions", icon: HelpCircle, helper: "Ask doctors anything — they'll respond in the comments." },
+  { key: "poll", label: "Polls", icon: Users, helper: "Clinical polls — vote and see what the community thinks." },
 ];
 
 const VISIBILITY_OPTIONS = [
@@ -88,6 +92,21 @@ const TRENDING_TAGS = [
   "Panchakarma",
   "General Query",
   "Ayurveda Success Story",
+];
+
+const LANGUAGES = [
+  { value: "all", label: "All Languages", native: "" },
+  { value: "en", label: "English", native: "English" },
+  { value: "hi", label: "Hindi", native: "हिन्दी" },
+  { value: "sa", label: "Sanskrit", native: "संस्कृतम्" },
+  { value: "ta", label: "Tamil", native: "தமிழ்" },
+  { value: "te", label: "Telugu", native: "తెలుగు" },
+  { value: "kn", label: "Kannada", native: "ಕನ್ನಡ" },
+  { value: "ml", label: "Malayalam", native: "മലയാളം" },
+  { value: "mr", label: "Marathi", native: "मराठी" },
+  { value: "gu", label: "Gujarati", native: "ગુજરાતી" },
+  { value: "bn", label: "Bengali", native: "বাংলা" },
+  { value: "pa", label: "Punjabi", native: "ਪੰਜਾਬੀ" },
 ];
 
 const Feed = () => {
@@ -111,6 +130,8 @@ const Feed = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [posting, setPosting] = useState(false);
+  const [pollOptions, setPollOptions] = useState<string[]>(["", ""]);
+  const [doctorSpecMap, setDoctorSpecMap] = useState<Record<string, string>>({});
 
   useEffect(() => { load();
   }, []);
@@ -128,6 +149,17 @@ const Feed = () => {
       .order("created_at", { ascending: false })
       .limit(100);
     setPosts((postsData as Post[]) ?? []);
+
+    // Load doctor specializations for feed author display
+    if (postsData && postsData.length > 0) {
+      const authorIds = [...new Set((postsData as any[]).filter((p) => p.post_type === "doctor_post" || p.post_type === "poll").map((p) => p.author_user_id))];
+      if (authorIds.length > 0) {
+        const { data: docs } = await supabase.from("doctors").select("user_id, specialization").in("user_id", authorIds);
+        const map: Record<string, string> = {};
+        (docs ?? []).forEach((d: any) => { if (d.specialization) map[d.user_id] = d.specialization; });
+        setDoctorSpecMap(map);
+      }
+    }
 
     if (uid) {
       const { data: doc } = await supabase
@@ -197,6 +229,9 @@ const Feed = () => {
       tags: selectedTags,
       post_type: postType,
       visibility,
+      author_specialization: isDoctor ? doctorInfo?.name ?? null : null,
+      poll_options: postType === "poll" ? pollOptions.filter((o) => o.trim()).map((text) => ({ text, votes: 0 })) : null,
+      mentions: (body.match(/@(\w[\w\s]*\w)/g) ?? []).map((m) => m.slice(1)),
     });
     setPosting(false);
     if (error) {
@@ -204,7 +239,7 @@ const Feed = () => {
       return;
     }
     toast.success("Posted to feed");
-    setTitle(""); setBody(""); setImageUrl(""); setSelectedTags([]); setOpen(false);
+    setTitle(""); setBody(""); setImageUrl(""); setSelectedTags([]); setPollOptions(["", ""]); setOpen(false);
     setActiveTab(postType);
     load();
   };
@@ -233,10 +268,11 @@ const Feed = () => {
   const filteredPosts = posts.filter((p) => p.post_type === activeTab);
 
   const availablePostTypes: TabKey[] = isDoctor
-    ? ["doctor_post", "public_post"]
+    ? ["doctor_post", "public_post", "poll"]
     : ["patient_question"];
 
   const [search, setSearch] = useState("");
+  const [langFilter, setLangFilter] = useState("all");
   const visiblePosts = posts
     .filter((p) => p.post_type === activeTab)
     .filter((p) =>
@@ -245,6 +281,9 @@ const Feed = () => {
           p.body.toLowerCase().includes(search.toLowerCase()) ||
           p.author_name.toLowerCase().includes(search.toLowerCase())
         : true
+    )
+    .filter((p) =>
+      langFilter === "all" ? true : (p as any).language === langFilter
     );
 
   return (
@@ -276,6 +315,19 @@ const Feed = () => {
             <Button variant="outline" size="icon" className="h-12 w-12 rounded-xl border-border bg-card" aria-label="Filter">
               <SlidersHorizontal className="h-4 w-4" />
             </Button>
+            <Select value={langFilter} onValueChange={setLangFilter}>
+              <SelectTrigger className="h-12 w-[160px] rounded-xl border-border bg-card">
+                <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
+                <SelectValue placeholder="Language" />
+              </SelectTrigger>
+              <SelectContent>
+                {LANGUAGES.map((lang) => (
+                  <SelectItem key={lang.value} value={lang.value}>
+                    {lang.label} {lang.native && <span className="text-muted-foreground ml-1">({lang.native})</span>}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Button onClick={openComposer} size="lg" className="h-12 gap-2 rounded-full bg-[hsl(202_88%_53%)] px-6 text-white hover:bg-[hsl(202_88%_46%)]">
               <HelpCircle className="h-4 w-4" /> Ask a Question
             </Button>
@@ -385,7 +437,7 @@ const Feed = () => {
                               </div>
                               {isDoctorPost && (
                                 <p className="mt-0.5 inline-flex items-center gap-1 text-xs text-primary">
-                                  <Stethoscope className="h-3 w-3" /> Gynaecology <span className="text-muted-foreground">+4 more</span>
+                                  <Stethoscope className="h-3 w-3" /> {post.author_specialization || doctorSpecMap[post.author_user_id] || "Ayurveda"}
                                 </p>
                               )}
                               <p className="mt-1 inline-flex items-center gap-2 text-xs text-muted-foreground">
@@ -408,7 +460,37 @@ const Feed = () => {
                             {post.title} <span className="text-xs font-normal text-muted-foreground">(edited)</span>
                           </h3>
                         )}
-                        <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{post.body}</p>
+                        <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                          {post.body.split(/(@\w[\w\s]*\w)/g).map((part, idx) =>
+                            part.startsWith("@") ? (
+                              <span key={idx} className="font-semibold text-primary cursor-pointer hover:underline">{part}</span>
+                            ) : (
+                              <span key={idx}>{part}</span>
+                            )
+                          )}
+                        </p>
+
+                        {/* Poll Display */}
+                        {post.poll_options && post.poll_options.length > 0 && (
+                          <div className="mt-3 space-y-2 rounded-lg border border-border bg-muted/30 p-4">
+                            <p className="text-xs font-semibold uppercase text-muted-foreground">Poll</p>
+                            {post.poll_options.map((opt, idx) => {
+                              const totalVotes = post.poll_options!.reduce((s, o) => s + (o.votes ?? 0), 0);
+                              const pct = totalVotes > 0 ? Math.round(((opt.votes ?? 0) / totalVotes) * 100) : 0;
+                              return (
+                                <div key={idx} className="relative overflow-hidden rounded-md border bg-card p-2.5">
+                                  <div className="absolute inset-0 bg-primary/10 transition-all" style={{ width: `${pct}%` }} />
+                                  <div className="relative flex items-center justify-between">
+                                    <span className="text-sm font-medium">{opt.text}</span>
+                                    <span className="text-xs text-muted-foreground">{pct}% ({opt.votes ?? 0})</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                            <p className="text-[10px] text-muted-foreground">{post.poll_options.reduce((s, o) => s + (o.votes ?? 0), 0)} total votes</p>
+                          </div>
+                        )}
+
                         {post.tags.length > 0 && (
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {post.tags.map((tag) => (
@@ -605,6 +687,47 @@ const Feed = () => {
                 <img src={imageUrl} alt="preview" className="mt-2 max-h-48 rounded-lg border border-border object-cover"  loading="lazy" decoding="async" />
               )}
             </div>
+
+            {/* Poll Options (only for poll post type) */}
+            {postType === "poll" && (
+              <div>
+                <label className="mb-2 block text-sm font-semibold">Poll Options (2–5 choices)</label>
+                <div className="space-y-2">
+                  {pollOptions.map((opt, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Input
+                        placeholder={`Option ${idx + 1}`}
+                        value={opt}
+                        onChange={(e) => {
+                          const next = [...pollOptions];
+                          next[idx] = e.target.value;
+                          setPollOptions(next);
+                        }}
+                      />
+                      {pollOptions.length > 2 && (
+                        <button
+                          type="button"
+                          onClick={() => setPollOptions(pollOptions.filter((_, i) => i !== idx))}
+                          className="text-xs text-destructive hover:underline"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {pollOptions.length < 5 && (
+                  <Button type="button" variant="ghost" size="sm" className="mt-2 text-xs" onClick={() => setPollOptions([...pollOptions, ""])}>
+                    + Add option
+                  </Button>
+                )}
+              </div>
+            )}
+
+            {/* @Mention hint */}
+            <p className="text-[10px] text-muted-foreground">
+              Tip: Type <span className="font-mono bg-muted px-1 rounded">@DoctorName</span> in the body to tag a doctor for their expert opinion.
+            </p>
           </div>
 
           <DialogFooter>

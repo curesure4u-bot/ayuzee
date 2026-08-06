@@ -310,9 +310,14 @@ const HealthConditionDetail = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-6 text-center">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Button variant="hero" size="lg" onClick={() => { setSelectedPkg(undefined); setCallOpen(true); }}>
                 <Phone className="mr-2 h-4 w-4" /> {c.consult_banner_text ?? "Consult a Doctor"}
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link to={`/doctors?q=${encodeURIComponent(c.name)}`}>
+                  <Stethoscope className="mr-2 h-4 w-4" /> Find Doctor for {c.name}
+                </Link>
               </Button>
             </div>
           </section>
@@ -603,9 +608,16 @@ const HealthConditionDetail = () => {
           <div className="rounded-3xl bg-gradient-to-r from-primary to-primary/80 p-8 text-center text-primary-foreground">
             <h2 className="font-display text-3xl">Ready to start your {c.name} journey?</h2>
             <p className="mt-2 opacity-90">Get a free consultation with our Ayurvedic doctor.</p>
-            <Button variant="secondary" size="lg" className="mt-5" onClick={() => { setSelectedPkg(undefined); setCallOpen(true); }}>
-              <Phone className="mr-2 h-4 w-4" /> Request a Call
-            </Button>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              <Button variant="secondary" size="lg" onClick={() => { setSelectedPkg(undefined); setCallOpen(true); }}>
+                <Phone className="mr-2 h-4 w-4" /> Request a Call
+              </Button>
+              <Button asChild variant="outline" size="lg" className="border-white/40 bg-white/10 text-white hover:bg-white/20">
+                <Link to={`/doctors?q=${encodeURIComponent(c.name)}`}>
+                  <Stethoscope className="mr-2 h-4 w-4" /> Find Specialist Doctor
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
       </main>

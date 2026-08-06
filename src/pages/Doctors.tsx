@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowUpDown, BadgeCheck, Calendar, ChevronRight, Eye, MapPin, Star, Stethoscope, Video } from "lucide-react";
+import { ArrowUpDown, BadgeCheck, Calendar, ChevronRight, Eye, MapPin, Navigation, Star, Stethoscope, Video } from "lucide-react";
 import { toast } from "sonner";
 import { setSEO } from "@/lib/seo";
 
@@ -94,9 +94,46 @@ const Doctors = () => {
   const [gender, setGender] = useState("any");
   const [minExp, setMinExp] = useState("any");
   const [language, setLanguage] = useState("any");
-  const [sort, setSort] = useState<"rating" | "fee_low" | "fee_high" | "experience">("rating");
+  const [sort, setSort] = useState<"rating" | "fee_low" | "fee_high" | "experience" | "near_me">("rating");
 
   const [lead, setLead] = useState({ phone: "", patient: "", pincode: "", concern: "" });
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [detectedCity, setDetectedCity] = useState("");
+
+  const handleNearMe = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation not supported by your browser");
+      return;
+    }
+    setGeoLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        // Reverse geocode to get city name (using free Nominatim API)
+        try {
+          const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`);
+          const data = await resp.json();
+          const cityName = data.address?.city || data.address?.town || data.address?.district || data.address?.state_district || "";
+          setDetectedCity(cityName);
+          if (cityName) {
+            setCity(cityName);
+            toast.success(`Location detected: ${cityName}`);
+          }
+        } catch {
+          toast.info("Location detected — showing nearest doctors");
+        }
+        setSort("near_me");
+        setGeoLoading(false);
+      },
+      () => {
+        toast.error("Location access denied. Please allow location permission.");
+        setGeoLoading(false);
+      },
+      { timeout: 10000 }
+    );
+  };
 
   const loadDoctors = useCallback(async () => {
     setLoading(true);
@@ -147,8 +184,16 @@ const Doctors = () => {
     if (sort === "fee_low") sorted.sort((a, b) => a.consultation_fee - b.consultation_fee);
     if (sort === "fee_high") sorted.sort((a, b) => b.consultation_fee - a.consultation_fee);
     if (sort === "experience") sorted.sort((a, b) => b.experience_years - a.experience_years);
+    if (sort === "near_me" && userLocation) {
+      // Sort by city match first (simple geo proximity approximation)
+      sorted.sort((a, b) => {
+        const aMatch = a.city?.toLowerCase() === detectedCity.toLowerCase() ? 0 : 1;
+        const bMatch = b.city?.toLowerCase() === detectedCity.toLowerCase() ? 0 : 1;
+        return aMatch - bMatch || b.rating - a.rating;
+      });
+    }
     return sorted;
-  }, [doctors, speciality, city, mode, maxFee, gender, minExp, language, query, sort]);
+  }, [doctors, speciality, city, mode, maxFee, gender, minExp, language, query, sort, userLocation]);
 
   const submitLead = (e: React.FormEvent) => {
     e.preventDefault();
@@ -215,6 +260,21 @@ const Doctors = () => {
         <section className="py-8">
           <div className="container grid gap-8 lg:grid-cols-[1fr_360px]">
             <div>
+              {/* 24/7 Availability Indicator */}
+              <div className="mb-4 flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
+                </span>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-green-800">Doctors Available Now — Consult 24/7</p>
+                  <p className="text-xs text-green-600">Video, In-Clinic, or Text Chat · Free follow-up within 7 days</p>
+                </div>
+                <span className="rounded-full bg-green-100 px-2.5 py-1 text-[10px] font-bold text-green-700">
+                  {loading ? "…" : filtered.filter((d) => d.video_available).length}+ online
+                </span>
+              </div>
+
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h1 className="font-display text-2xl md:text-3xl font-bold">
@@ -234,8 +294,19 @@ const Doctors = () => {
                     <SelectItem value="experience">Most experienced</SelectItem>
                     <SelectItem value="fee_low">Fee: low to high</SelectItem>
                     <SelectItem value="fee_high">Fee: high to low</SelectItem>
+                    <SelectItem value="near_me">Near me</SelectItem>
                   </SelectContent>
                 </Select>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  onClick={handleNearMe}
+                  disabled={geoLoading}
+                >
+                  <Navigation className={`h-4 w-4 ${geoLoading ? "animate-pulse" : ""}`} />
+                  {geoLoading ? "Detecting…" : userLocation ? `📍 ${detectedCity || "Near Me"}` : "Near Me"}
+                </Button>
               </div>
 
               {!loading && error && (

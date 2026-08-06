@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { BriefcaseBusiness, IndianRupee, Loader2, MapPin, Search } from "lucide-react";
+import { BriefcaseBusiness, ExternalLink, IndianRupee, Landmark, Loader2, MapPin, Search, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -18,11 +18,19 @@ type Job = {
   job_title: string;
   job_type: string | null;
   specialization: string | null;
+  department: string | null;
   location_city: string | null;
   location_state: string | null;
   salary_min: number | null;
   salary_max: number | null;
   experience_years_min: number | null;
+  is_direct_employer: boolean | null;
+  agency_name: string | null;
+  is_verified_employer: boolean | null;
+  is_government: boolean | null;
+  government_body: string | null;
+  source: string | null;
+  vacancies: number | null;
 };
 
 const StudentJobs = () => {
@@ -124,7 +132,7 @@ const StudentJobs = () => {
   );
 };
 
-const JobCard = ({ job, applied, onApply }: { job: Job; applied: boolean; onApply: () => void }) => <Card><CardContent className="p-5"><div className="flex flex-wrap gap-2"><Badge>{job.job_type || "Full-time"}</Badge>{job.specialization && <Badge variant="outline">{job.specialization}</Badge>}</div><h3 className="mt-3 font-display text-xl">{job.job_title}</h3><p className="mt-1 font-medium">{job.organization_name}</p><div className="mt-4 grid gap-2 text-sm text-muted-foreground"><span className="flex items-center gap-2"><MapPin className="h-4 w-4" />{[job.location_city, job.location_state].filter(Boolean).join(", ") || "India"}</span><span className="flex items-center gap-2"><IndianRupee className="h-4 w-4" />{job.salary_min || job.salary_max ? `${job.salary_min || 0} - ${job.salary_max || "Open"}` : "Salary not disclosed"}</span><span>{job.experience_years_min || 0}+ years experience</span></div><Button className="mt-5" disabled={applied} onClick={onApply}>{applied ? "Applied" : "Apply Now"}</Button></CardContent></Card>;
+const JobCard = ({ job, applied, onApply }: { job: Job; applied: boolean; onApply: () => void }) => <Card><CardContent className="p-5"><div className="flex flex-wrap gap-2"><Badge>{job.job_type || "Full-time"}</Badge>{job.specialization && <Badge variant="outline">{job.specialization}</Badge>}{job.is_direct_employer === true && <Badge variant="outline" className="border-green-300 bg-green-50 text-green-700">Direct Hire</Badge>}{job.is_direct_employer === false && <Badge variant="outline" className="border-orange-300 bg-orange-50 text-orange-700">Via Agency{job.agency_name ? `: ${job.agency_name}` : ""}</Badge>}{job.is_verified_employer && <Badge variant="outline" className="border-blue-300 bg-blue-50 text-blue-700 gap-1"><ShieldCheck className="h-3 w-3" />Verified</Badge>}{job.is_government && <Badge variant="outline" className="border-purple-300 bg-purple-50 text-purple-700 gap-1"><Landmark className="h-3 w-3" />Govt</Badge>}{job.source && job.source !== "direct" && <Badge variant="outline" className="border-slate-300 bg-slate-50 text-slate-600 gap-1"><ExternalLink className="h-3 w-3" />{job.source.replace("_", " ")}</Badge>}</div><h3 className="mt-3 font-display text-xl">{job.job_title}</h3><p className="mt-1 font-medium">{job.organization_name}</p>{job.department && <p className="mt-1 text-xs text-primary/80">{job.department}</p>}<div className="mt-4 grid gap-2 text-sm text-muted-foreground"><span className="flex items-center gap-2"><MapPin className="h-4 w-4" />{[job.location_city, job.location_state].filter(Boolean).join(", ") || "India"}</span><span className="flex items-center gap-2"><IndianRupee className="h-4 w-4" />{job.salary_min || job.salary_max ? `${job.salary_min || 0} - ${job.salary_max || "Open"}` : "Salary not disclosed"}</span><span>{job.experience_years_min || 0}+ years experience{job.vacancies && job.vacancies > 1 ? ` · ${job.vacancies} vacancies` : ""}</span></div><Button className="mt-5" disabled={applied} onClick={onApply}>{applied ? "Applied" : "Apply Now"}</Button></CardContent></Card>;
 const ApplicationCard = ({ app }: { app: any }) => <Card><CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="font-semibold">{app.job_listings?.job_title || "Job application"}</h3><p className="text-sm text-muted-foreground">{app.job_listings?.organization_name || "Ayuzee employer"} · {new Date(app.created_at).toLocaleDateString("en-IN")}</p></div><Badge variant={app.status === "rejected" ? "destructive" : app.status === "shortlisted" ? "default" : "outline"}>{app.status}</Badge></CardContent></Card>;
 const Empty = ({ text }: { text: string }) => <div className="rounded-2xl border border-dashed border-border bg-muted/40 p-10 text-center text-muted-foreground"><BriefcaseBusiness className="mx-auto mb-3 h-8 w-8 text-primary/50" />{text}</div>;
 const Loading = () => <div className="grid min-h-[60vh] place-items-center"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div>;

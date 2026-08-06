@@ -147,6 +147,20 @@ const PostConsultationFeedback = () => {
       await (supabase as any).from("appointments")
         .update({ post_feedback_submitted: true }).eq("id", appt.id);
 
+      // Auto-schedule follow-up reminder (7 days from now)
+      const reminderDate = new Date();
+      reminderDate.setDate(reminderDate.getDate() + 7);
+      await (supabase as any).from("follow_up_reminders").insert({
+        patient_id: appt.user_id,
+        doctor_id: appt.doctor_id,
+        appointment_id: appt.id,
+        reminder_date: reminderDate.toISOString().slice(0, 10),
+        reminder_days: 7,
+        reason: "Follow-up consultation after your recent visit",
+        status: "scheduled",
+        notification_channel: "app",
+      });
+
       toast.success("Thank you! Your feedback was submitted.");
       navigate(`/consultation/${appt.id}/summary`);
     } catch (e: any) {

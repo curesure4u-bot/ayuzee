@@ -152,6 +152,7 @@ export const PatientHeader = () => {
               <DropdownMenuItem asChild><Link to="/dashboard/profile"><User className="mr-2 h-4 w-4" />My Profile</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/dashboard/appointments"><Calendar className="mr-2 h-4 w-4" />My Appointments</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/dashboard/saved-medicines"><Pill className="mr-2 h-4 w-4" />Saved Medicines</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/dashboard/health-locker"><FileText className="mr-2 h-4 w-4" />Health Locker</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/dashboard/saved-posts"><BookmarkCheck className="mr-2 h-4 w-4" />Saved Posts</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/dashboard/orders"><FileText className="mr-2 h-4 w-4" />My Orders</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/dashboard/addresses"><MapPin className="mr-2 h-4 w-4" />My Addresses</Link></DropdownMenuItem>

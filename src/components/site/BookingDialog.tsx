@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Video, Building2 } from "lucide-react";
+import { Video, Building2, MessageSquare, Gift } from "lucide-react";
 
 declare global {
   interface Window { Razorpay: new (opts: Record<string, unknown>) => { open: () => void } }
@@ -27,6 +27,7 @@ interface Doctor {
   consultation_fee: number;
   video_available: boolean;
   in_clinic_available: boolean;
+  chat_available?: boolean;
 }
 
 interface Props {
@@ -46,11 +47,34 @@ const maxDate = () => {
 
 export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"video" | "in_clinic">(doctor.video_available ? "video" : "in_clinic");
+  const [mode, setMode] = useState<"video" | "in_clinic" | "chat">(doctor.video_available ? "video" : "in_clinic");
   const [date, setDate] = useState(today());
   const [slot, setSlot] = useState(SLOTS[0]);
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
+  const [isFreeFollowUp, setIsFreeFollowUp] = useState(false);
+
+  // Check if this is a free follow-up (within 7 days of last paid consultation with same doctor)
+  useEffect(() => {
+    (async () => {
+      const { data: sess } = await supabase.auth.getSession();
+      if (!sess.session) return;
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      const { data: recent } = await supabase
+        .from("appointments")
+        .select("id")
+        .eq("user_id", sess.session.user.id)
+        .eq("doctor_id", doctor.id)
+        .eq("status", "completed")
+        .eq("payment_status", "paid")
+        .gte("appointment_date", sevenDaysAgo.toISOString().slice(0, 10))
+        .limit(1);
+      setIsFreeFollowUp((recent ?? []).length > 0);
+    })();
+  }, [doctor.id, open]);
+
+  const effectiveFee = isFreeFollowUp ? 0 : (mode === "chat" ? Math.round(doctor.consultation_fee * 0.4) : doctor.consultation_fee);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,12 +92,20 @@ export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
         appointment_date: date,
         time_slot: slot,
         mode,
-        fee: doctor.consultation_fee,
+        fee: effectiveFee,
         notes: notes || null,
-        status: "pending",
-        payment_status: "pending",
+        status: isFreeFollowUp ? "confirmed" : "pending",
+        payment_status: isFreeFollowUp ? "paid" : "pending",
       }).select("id").single();
       if (error) throw error;
+
+      // If free follow-up, skip payment
+      if (isFreeFollowUp) {
+        toast.success("Free follow-up booked! 🌿");
+        onOpenChange(false);
+        navigate("/dashboard");
+        return;
+      }
 
       const ok = await loadRazorpay();
       if (!ok) throw new Error("Could not load Razorpay");
@@ -130,14 +162,14 @@ export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <Label className="mb-2 block">Consultation mode</Label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <ModeCard
                 active={mode === "video"}
                 disabled={!doctor.video_available}
                 onClick={() => setMode("video")}
                 icon={Video}
                 label="Video"
-                desc="Zoom call"
+                desc="Live call"
               />
               <ModeCard
                 active={mode === "in_clinic"}
@@ -146,6 +178,14 @@ export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
                 icon={Building2}
                 label="In-clinic"
                 desc="Visit doctor"
+              />
+              <ModeCard
+                active={mode === "chat"}
+                disabled={false}
+                onClick={() => setMode("chat")}
+                icon={MessageSquare}
+                label="Text Chat"
+                desc="Reply in 4h"
               />
             </div>
           </div>
@@ -188,8 +228,24 @@ export const BookingDialog = ({ open, onOpenChange, doctor }: Props) => {
           </div>
 
           <div className="flex items-center justify-between rounded-xl bg-accent/60 p-4">
-            <span className="text-sm font-medium">Consultation fee</span>
-            <span className="font-display text-2xl">₹{doctor.consultation_fee}</span>
+            <div>
+              <span className="text-sm font-medium">Consultation fee</span>
+              {isFreeFollowUp && (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+                  <Gift className="h-3 w-3" /> Free Follow-Up
+                </span>
+              )}
+              {mode === "chat" && !isFreeFollowUp && (
+                <span className="ml-2 text-xs text-muted-foreground">(Text consultation — 60% off)</span>
+              )}
+            </div>
+            <span className="font-display text-2xl">
+              {isFreeFollowUp ? (
+                <><span className="line-through text-muted-foreground text-lg mr-1">₹{doctor.consultation_fee}</span> <span className="text-green-600">FREE</span></>
+              ) : (
+                `₹${effectiveFee}`
+              )}
+            </span>
           </div>
 
           <div className="flex gap-3">

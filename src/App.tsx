@@ -6,6 +6,7 @@ import { AppRoutes } from "@/routes/AppRoutes";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
 import { FAQChatbot } from "@/components/site/FAQChatbot";
 import { VoiceAssistant } from "@/components/site/VoiceAssistant";
+import TelegramFloat from "@/components/common/TelegramFloat";
 
 const AdminAwareNav = () => {
   const location = useLocation();
@@ -26,6 +27,7 @@ const App = () => (
       <AppRoutes />
       <FAQChatbot />
       <VoiceAssistant />
+      <TelegramFloat />
     </BrowserRouter>
   </AppProviders>
 );

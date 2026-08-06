@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Plus, Activity, Clock, CheckCircle, XCircle, RefreshCw } from "lucide-react";
+import { Plus, Activity, Clock, CheckCircle, XCircle, RefreshCw, ArrowRight } from "lucide-react";
 
 type Token = {
   id: string;
@@ -24,6 +25,7 @@ type Token = {
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
 const HmsOpd = () => {
+  const navigate = useNavigate();
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(true);
   const [addOpen, setAddOpen] = useState(false);
@@ -103,6 +105,12 @@ const HmsOpd = () => {
           <Button size="sm" variant="outline" onClick={loadTokens}>
             <RefreshCw className="mr-1 h-4 w-4" /> Refresh
           </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate("/hms/patient/manage-op")}>
+            <Activity className="mr-1 h-4 w-4" /> Manage OP
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate("/hms/triage")}>
+            <Activity className="mr-1 h-4 w-4" /> Triage Station
+          </Button>
           <Button size="sm" onClick={() => setAddOpen(true)}>
             <Plus className="mr-1 h-4 w-4" /> New Token
           </Button>
@@ -167,6 +175,9 @@ const HmsOpd = () => {
                         <XCircle className="h-4 w-4 text-red-500" />
                       </Button>
                     )}
+                    <Button size="sm" variant="ghost" onClick={() => navigate("/hms/patient/dashboard")} title="Patient Dashboard">
+                      <ArrowRight className="h-4 w-4 text-orange-500" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -184,11 +195,15 @@ const HmsOpd = () => {
           <div className="space-y-3">
             <div>
               <Label>Patient Name *</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter patient name" />
+              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter patient name or search existing..." />
+              <p className="text-xs text-orange-600 mt-1 cursor-pointer hover:underline" onClick={() => { setAddOpen(false); navigate("/hms/patient/find"); }}>
+                Search existing patient (AI) →
+              </p>
             </div>
             <div>
               <Label>Phone</Label>
               <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Mobile number" />
+              <p className="text-xs text-muted-foreground mt-0.5">Enter 10-digit mobile to auto-find registered patient</p>
             </div>
             <div>
               <Label>Department</Label>

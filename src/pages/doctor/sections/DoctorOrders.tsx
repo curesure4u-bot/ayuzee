@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { useDoctor } from "@/hooks/useDoctor";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Stethoscope, Sparkles } from "lucide-react";
+import { Calendar, Stethoscope, Sparkles, RefreshCw } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 interface AppointmentRow {
   id: string;
@@ -21,6 +24,7 @@ interface OrderRow {
   order_status: string;
   payment_status: string;
   created_at: string;
+  items: { id: string; name: string; brand: string; unit: string | null; price: number; quantity: number }[] | null;
 }
 interface TherapyRow {
   id: string;
@@ -34,6 +38,7 @@ interface TherapyRow {
 
 const DoctorOrders = () => {
   const { userId } = useDoctor();
+  const { addItem } = useCart();
   const [appts, setAppts] = useState<AppointmentRow[]>([]);
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [therapies, setTherapies] = useState<TherapyRow[]>([]);
@@ -43,7 +48,7 @@ const DoctorOrders = () => {
     (async () => {
       const [a, o, t] = await Promise.all([
         supabase.from("appointments").select("*").order("appointment_date", { ascending: false }),
-        supabase.from("orders").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+        supabase.from("orders").select("id, total, order_status, payment_status, created_at, items").eq("user_id", userId).order("created_at", { ascending: false }),
         supabase.from("therapy_bookings").select("*").eq("user_id", userId).order("booking_date", { ascending: false }),
       ]);
       setAppts((a.data ?? []) as AppointmentRow[]);
@@ -51,6 +56,24 @@ const DoctorOrders = () => {
       setTherapies((t.data ?? []) as TherapyRow[]);
     })();
   }, [userId]);
+
+  const handleReorder = (order: OrderRow) => {
+    const items = order.items ?? [];
+    if (items.length === 0) {
+      toast.error("No items found in this order to reorder");
+      return;
+    }
+    items.forEach((item) => {
+      addItem({
+        id: item.id,
+        name: item.name,
+        brand: item.brand ?? "",
+        unit: item.unit ?? null,
+        price: item.price,
+      }, item.quantity ?? 1);
+    });
+    toast.success(`${items.length} item(s) added to cart — Reorder ready!`);
+  };
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -92,8 +115,17 @@ const DoctorOrders = () => {
                   <div>
                     <p className="font-mono text-sm text-primary">AYZ-{o.id.slice(0, 8).toUpperCase()}</p>
                     <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</p>
+                    {o.items && o.items.length > 0 && (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {o.items.slice(0, 2).map((i) => i.name).join(", ")}
+                        {o.items.length > 2 && ` +${o.items.length - 2} more`}
+                      </p>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
+                    <Button size="sm" variant="outline" className="gap-1 text-xs" onClick={() => handleReorder(o)}>
+                      <RefreshCw className="h-3.5 w-3.5" /> Reorder
+                    </Button>
                     <Badge>{o.order_status}</Badge>
                     <Badge variant={o.payment_status === "paid" ? "default" : "outline"}>{o.payment_status}</Badge>
                     <span className="font-semibold">₹{o.total}</span>

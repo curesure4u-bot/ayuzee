@@ -70,8 +70,9 @@ Deno.serve(async (req) => {
     const userId = userData.user.id;
 
     const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
-    if (!ANTHROPIC_API_KEY) {
-      return json({ error: "ANTHROPIC_API_KEY not configured. Add it in Backend → Secrets." }, 500);
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!ANTHROPIC_API_KEY && !GEMINI_API_KEY) {
+      return json({ error: "ANTHROPIC_API_KEY or GEMINI_API_KEY not configured. Add one in Backend → Secrets." }, 500);
     }
 
     const body = await req.json().catch(() => ({}));
@@ -124,6 +125,11 @@ Deno.serve(async (req) => {
         input_schema: responseSchema.parameters,
       }];
       requestPayload.tool_choice = { type: "tool", name: responseSchema.name };
+    }
+
+    // ═══════════ Route: Gemini fallback when no Anthropic key ═══════════
+    if (!ANTHROPIC_API_KEY && GEMINI_API_KEY) {
+      return await callGemini(GEMINI_API_KEY, feature, system, prompt, messages, maxTokens, responseSchema, userId);
     }
 
     const anthropicResp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -202,5 +208,131 @@ function json(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Gemini fallback — uses Google Generative AI API directly
+// ═══════════════════════════════════════════════════════════════════════════
+async function callGemini(
+  apiKey: string,
+  feature: string,
+  system: string | undefined,
+  prompt: string,
+  messages: Array<Record<string, unknown>>,
+  maxTokens: number,
+  responseSchema: { name: string; description?: string; parameters: Record<string, unknown> } | null,
+  userId: string,
+): Promise<Response> {
+  // Use Pro model for vision tasks (has image input), Flash for text-only
+  const hasImages = messages.some((m: any) =>
+    Array.isArray(m.content) && m.content.some((b: any) => b.type === "image" || b.type === "document")
+  );
+  const model = hasImages ? "gemini-2.5-pro-preview-06-05" : "gemini-2.5-flash-preview-05-20";
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  // Convert messages to Gemini format (handle image/PDF attachments)
+  const contents = messages.map((m: any) => {
+    const role = m.role === "assistant" ? "model" : "user";
+    if (typeof m.content === "string") {
+      return { role, parts: [{ text: m.content }] };
+    }
+    // Content is an array of blocks (text, image, document) — convert to Gemini format
+    if (Array.isArray(m.content)) {
+      const parts: any[] = [];
+      for (const block of m.content) {
+        if (block.type === "text") {
+          parts.push({ text: block.text });
+        } else if (block.type === "image" && block.source?.data) {
+          parts.push({
+            inlineData: { mimeType: block.source.media_type, data: block.source.data },
+          });
+        } else if (block.type === "document" && block.source?.data) {
+          parts.push({
+            inlineData: { mimeType: block.source.media_type || "application/pdf", data: block.source.data },
+          });
+        }
+      }
+      if (parts.length === 0) parts.push({ text: JSON.stringify(m.content) });
+      return { role, parts };
+    }
+    return { role, parts: [{ text: JSON.stringify(m.content) }] };
+  });
+
+  const requestBody: Record<string, any> = {
+    contents,
+    generationConfig: { maxOutputTokens: maxTokens },
+  };
+
+  if (system) {
+    requestBody.system_instruction = { parts: [{ text: system }] };
+  }
+
+  if (responseSchema) {
+    requestBody.tools = [{
+      functionDeclarations: [{
+        name: responseSchema.name,
+        description: responseSchema.description ?? "",
+        parameters: responseSchema.parameters,
+      }],
+    }];
+    requestBody.toolConfig = {
+      functionCallingConfig: { mode: "ANY", allowedFunctionNames: [responseSchema.name] },
+    };
+  }
+
+  const geminiResp = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!geminiResp.ok) {
+    const errText = await geminiResp.text();
+    console.error("Gemini error", geminiResp.status, errText);
+    return json({ error: "Gemini API error", status: geminiResp.status, detail: errText }, 502);
+  }
+
+  const data = await geminiResp.json();
+  const candidate = data.candidates?.[0];
+  const parts = candidate?.content?.parts ?? [];
+
+  let responseText = "";
+  let result: Record<string, unknown> | undefined;
+
+  for (const part of parts) {
+    if (part.text) responseText += part.text;
+    if (part.functionCall && responseSchema) {
+      result = part.functionCall.args;
+    }
+  }
+
+  const inputTokens = data.usageMetadata?.promptTokenCount ?? 0;
+  const outputTokens = data.usageMetadata?.candidatesTokenCount ?? 0;
+  const totalTokens = inputTokens + outputTokens;
+
+  // Log usage (best-effort)
+  try {
+    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+    const admin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+    await admin.from("ai_usage_logs").insert({
+      user_id: userId,
+      feature_name: feature,
+      tokens_used: totalTokens,
+      input_tokens: inputTokens,
+      output_tokens: outputTokens,
+      model,
+    });
+  } catch (logErr) {
+    console.error("ai_usage_logs insert failed (gemini)", logErr);
+  }
+
+  return json({
+    response: responseText.trim(),
+    ...(result !== undefined ? { result } : {}),
+    usage: { input_tokens: inputTokens, output_tokens: outputTokens, total_tokens: totalTokens, model },
   });
 }

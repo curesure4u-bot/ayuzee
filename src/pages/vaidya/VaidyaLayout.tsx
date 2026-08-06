@@ -30,6 +30,7 @@ import {
   Bell,
   Syringe,
   Zap,
+  Leaf,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -58,6 +59,8 @@ const groups = [
       { to: "/vaidya/siddha-prescription", label: "Siddha Prescription", icon: Pill },
       { to: "/vaidya/unani-prescription", label: "Unani Prescription", icon: Pill },
       { to: "/vaidya/homeopathy-prescription", label: "Homeopathy Prescription", icon: Pill },
+      { to: "/vaidya/ayuzee-formulary", label: "Ayuzee Formulary", icon: Leaf },
+      { to: "/vaidya/classical-prescriptions", label: "Classical Prescriptions", icon: Leaf },
       { to: "/vaidya/patients", label: "All Patients", icon: Users },
       { to: "/vaidya/follow-up", label: "Follow up list", icon: CalendarClock },
       { to: "/vaidya/guidance", label: "Follow-up Guidance", icon: Sparkles },

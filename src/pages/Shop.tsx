@@ -431,6 +431,42 @@ const Shop = () => {
         </div>
       </main>
 
+      {/* Request a Product Section */}
+      <section className="border-t border-border bg-muted/30">
+        <div className="container py-10">
+          <div className="mx-auto max-w-xl text-center">
+            <h2 className="font-display text-2xl font-bold">Can't find your medicine?</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Request any Ayurvedic, Siddha, Homeopathy, or Unani medicine and we'll source it for you.
+            </p>
+            <form
+              className="mt-6 flex flex-col gap-3 sm:flex-row"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.target as HTMLFormElement;
+                const name = (form.elements.namedItem("med_name") as HTMLInputElement).value.trim();
+                const brand = (form.elements.namedItem("med_brand") as HTMLInputElement).value.trim();
+                if (!name) return;
+                const { data: sess } = await supabase.auth.getSession();
+                await supabase.from("product_requests").insert({
+                  user_id: sess.session?.user.id ?? null,
+                  product_name: name,
+                  brand: brand || null,
+                  status: "pending",
+                });
+                form.reset();
+                toast.success("Request submitted! We'll notify you when it's available.");
+              }}
+            >
+              <Input name="med_name" placeholder="Medicine name *" required className="flex-1" />
+              <Input name="med_brand" placeholder="Brand (optional)" className="w-40" />
+              <Button type="submit" variant="hero">Request</Button>
+            </form>
+            <p className="mt-3 text-xs text-muted-foreground">We source from 500+ verified AYUSH manufacturers across India.</p>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

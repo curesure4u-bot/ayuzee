@@ -17,6 +17,8 @@ interface CartContextValue {
   clear: () => void;
   subtotal: number;
   count: number;
+  rewardDiscount: number;
+  setRewardDiscount: (amount: number) => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -54,7 +56,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setItems((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const clear = () => setItems([]);
+  const clear = () => { setItems([]); setRewardDiscount(0); };
+
+  const [rewardDiscount, setRewardDiscount] = useState(0);
 
   const { subtotal, count } = useMemo(() => {
     const sub = items.reduce((s, i) => s + i.price * i.quantity, 0);
@@ -63,7 +67,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [items]);
 
   return (
-    <CartContext.Provider value={{ items, addItem, updateQty, removeItem, clear, subtotal, count }}>
+    <CartContext.Provider value={{ items, addItem, updateQty, removeItem, clear, subtotal, count, rewardDiscount, setRewardDiscount }}>
       {children}
     </CartContext.Provider>
   );

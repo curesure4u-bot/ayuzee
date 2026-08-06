@@ -9,13 +9,65 @@ import {
   Brain, Clock, Zap, Phone, MapPin, Target, TrendingUp,
   Sparkles, ChevronRight, Eye, Shield, Leaf, Play, Send,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 export default function SpineAyushLanding() {
   const navigate = useNavigate();
+
+  usePageSEO({
+    title: "Spine AYUSH — India's First Integrative Spine Wellness Platform",
+    description: "Get permanent relief from back pain, sciatica, neck pain & disc problems using 15 global therapy systems. Ayurveda + Acupuncture + Yoga + Panchakarma. 83% success rate. Free consultation available.",
+    canonicalPath: "/spine",
+    ogType: "website",
+    ogImage: "/og-image.png",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "MedicalBusiness",
+      name: "Spine AYUSH by Ayuzee",
+      description: "Integrative spine wellness platform combining Ayurveda, Panchakarma, Acupuncture and 15 global therapy systems for back pain, sciatica and disc problems.",
+      url: "https://ayuzee.com/spine",
+      medicalSpecialty: "Spine Care, Ayurveda, AYUSH",
+      areaServed: "India",
+      founder: { "@type": "Person", name: "Dr. Mohamad Saleem" },
+    },
+  });
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [leadForm, setLeadForm] = useState({ name: "", age: "", sex: "", place: "", email: "", whatsapp: "" });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleLeadSubmit = async () => {
+    // Basic validation
+    if (!leadForm.name || !leadForm.email || !leadForm.whatsapp) {
+      toast.error("Please fill Name, Email, and WhatsApp number");
+      return;
+    }
+
+    setSubmitting(true);
+    const { error } = await supabase.from("spine_leads").insert({
+      name: leadForm.name,
+      age: leadForm.age ? parseInt(leadForm.age) : null,
+      sex: leadForm.sex || null,
+      place: leadForm.place || null,
+      email: leadForm.email,
+      whatsapp: leadForm.whatsapp,
+      entry_path: selectedPath || null,
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      console.error("Lead form error:", error);
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
+
+    setFormSubmitted(true);
+    toast.success("Thank you! Our team will contact you within 24 hours.");
+  };
 
   // Entry paths — not just pain, but many reasons people come
   const entryPaths = [
@@ -419,8 +471,8 @@ export default function SpineAyushLanding() {
                     <Input placeholder="+91 XXXXX XXXXX" value={leadForm.whatsapp} onChange={(e) => setLeadForm({...leadForm, whatsapp: e.target.value})} className="mt-1" />
                   </div>
                 </div>
-                <Button className="w-full bg-green-600 hover:bg-green-700 h-12 text-base" onClick={() => setFormSubmitted(true)}>
-                  <Send className="h-4 w-4 mr-2" /> Get My Free Spine Consultation
+                <Button className="w-full bg-green-600 hover:bg-green-700 h-12 text-base" onClick={handleLeadSubmit} disabled={submitting}>
+                  <Send className="h-4 w-4 mr-2" /> {submitting ? "Submitting..." : "Get My Free Spine Consultation"}
                 </Button>
                 <p className="text-[10px] text-center text-muted-foreground">Your information is 100% secure. We will never spam you. Our team calls within 24 hours.</p>
               </CardContent>

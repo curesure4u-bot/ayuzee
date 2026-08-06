@@ -506,6 +506,44 @@ const ProductDetail = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Ingredient Traceability & Source */}
+              <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Leaf className="h-5 w-5 text-emerald-700" />
+                  <h3 className="text-sm font-bold text-emerald-900">Ingredient Traceability</h3>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div className="flex items-center gap-2 rounded-md border bg-white p-2.5">
+                    <ShieldCheck className="h-4 w-4 text-green-600 shrink-0" />
+                    <div>
+                      <p className="text-xs font-semibold">GMP Certified</p>
+                      <p className="text-[10px] text-muted-foreground">Manufacturing follows WHO-GMP norms</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-md border bg-white p-2.5">
+                    <Leaf className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <div>
+                      <p className="text-xs font-semibold">Herb Source Verified</p>
+                      <p className="text-[10px] text-muted-foreground">Raw materials from certified farms</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-md border bg-white p-2.5">
+                    <FlaskConical className="h-4 w-4 text-blue-600 shrink-0" />
+                    <div>
+                      <p className="text-xs font-semibold">Lab Tested</p>
+                      <p className="text-[10px] text-muted-foreground">Heavy metals, microbial & pesticide free</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-md border bg-white p-2.5">
+                    <Package className="h-4 w-4 text-violet-600 shrink-0" />
+                    <div>
+                      <p className="text-xs font-semibold">Batch Traceable</p>
+                      <p className="text-[10px] text-muted-foreground"><Link to="/verify-medicine" className="text-primary hover:underline">Scan QR / enter batch to verify</Link></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
