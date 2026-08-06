@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 
 const indianStates = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana",
@@ -106,6 +107,9 @@ const StudentAuth = () => {
       const { data, error } = await supabase.auth.signInWithPassword(signin);
       if (error) throw error;
       const userId = data.user?.id;
+      // Super admin bypasses student role check
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: userId!, _role: "super_admin" as any });
+      if (isAdmin) { navigate("/student", { replace: true }); return; }
       const { data: roleRows, error: roleError } = await (supabase as any)
         .from("user_roles")
         .select("role")
@@ -210,7 +214,10 @@ const StudentAuth = () => {
               <TabsContent value="signin">
                 <form onSubmit={handleSignin} className="mt-6 space-y-4">
                   <div className="space-y-1.5"><Label>Email</Label><Input type="email" required value={signin.email} onChange={(e) => setSignin({ ...signin, email: e.target.value })} /></div>
-                  <div className="space-y-1.5"><Label>Password</Label><Input type="password" required value={signin.password} onChange={(e) => setSignin({ ...signin, password: e.target.value })} /></div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between"><Label>Password</Label><ForgotPasswordDialog defaultEmail={signin.email} trigger={<button type="button" className="text-xs font-medium text-primary hover:underline">Forgot password?</button>} /></div>
+                    <Input type="password" required value={signin.password} onChange={(e) => setSignin({ ...signin, password: e.target.value })} />
+                  </div>
                   <Button type="submit" variant="hero" className="w-full" disabled={loading}>{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Sign In</Button>
                 </form>
               </TabsContent>

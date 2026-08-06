@@ -38,6 +38,7 @@ import {
   HeartHandshake,
   Pill,
   Sparkles,
+  Briefcase,
 } from "lucide-react";
 
 const items = [
@@ -49,6 +50,7 @@ const items = [
   { title: "Patient Orders", url: "/doctor/patient-orders", icon: ClipboardList },
   { title: "Bulk Purchase", url: "/bulk", icon: Package },
   { title: "Ayush HMS Tool", url: "/vaidya", icon: Stethoscope },
+  { title: "HMS ↔ Ayuzee Bridge", url: "/hms/bridge", icon: Stethoscope },
   { title: "Gut Health Queue", url: "/doctor/gut-health-queue", icon: HeartHandshake },
   { title: "Self-Assessment Reviews", url: "/doctor/self-assessment-queue", icon: ClipboardList },
   { title: "Para-Surgical AI", url: "/vaidya/parasurgical", icon: Sparkles },
@@ -68,6 +70,8 @@ const items = [
   { title: "Company", url: "/doctor/company", icon: Building2 },
   { title: "Payouts", url: "/doctor/payouts", icon: HandCoins },
   { title: "About Ayuzee Partner", url: "/doctor/about-partner", icon: Handshake },
+  { title: "AYUSH Jobs Board", url: "/jobs", icon: Briefcase },
+  { title: "Post a Job / Hire Staff", url: "/jobs/post", icon: Briefcase },
   { title: "Support", url: "/doctor/support", icon: Headphones },
 ];
 

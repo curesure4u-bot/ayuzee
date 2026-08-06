@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
+import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 import { Building2, Upload, ShieldCheck, Loader2, MapPin, Plus, Trash2, ImagePlus } from "lucide-react";
 
 type Mode = "auth" | "onboarding" | "review";
@@ -44,6 +45,9 @@ const VenueAuth = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       setUserId(session.user.id);
+      // Super admin bypasses venue check
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: session.user.id, _role: "super_admin" as any });
+      if (isAdmin) { navigate("/venue", { replace: true }); return; }
       const { data: existing } = await supabase
         .from("therapy_venues")
         .select("id, is_verified")
@@ -349,7 +353,20 @@ const VenueAuth = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignin} className="space-y-3 mt-4">
                 <div><Label>Email</Label><Input type="email" required value={signin.email} onChange={e => setSignin({ ...signin, email: e.target.value })} /></div>
-                <div><Label>Password</Label><Input type="password" required value={signin.password} onChange={e => setSignin({ ...signin, password: e.target.value })} /></div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Label>Password</Label>
+                    <ForgotPasswordDialog
+                      defaultEmail={signin.email}
+                      trigger={
+                        <button type="button" className="text-xs font-medium text-primary hover:underline">
+                          Forgot password?
+                        </button>
+                      }
+                    />
+                  </div>
+                  <Input type="password" required value={signin.password} onChange={e => setSignin({ ...signin, password: e.target.value })} />
+                </div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}Sign in</Button>
               </form>
             </TabsContent>

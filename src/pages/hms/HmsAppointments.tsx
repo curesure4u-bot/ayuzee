@@ -88,7 +88,10 @@ const HmsAppointments = () => {
           <h1 className="font-display text-2xl font-bold">Appointments</h1>
           <p className="text-sm text-muted-foreground">{todayAppts.length} appointments today</p>
         </div>
-        <Button size="sm"><Plus className="mr-1 h-4 w-4" /> Book Appointment</Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={() => window.location.href = "/hms/appointment-calendar"}>Calendar View</Button>
+          <Button size="sm"><Plus className="mr-1 h-4 w-4" /> Book Appointment</Button>
+        </div>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>

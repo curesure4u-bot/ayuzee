@@ -6,7 +6,9 @@ import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import { BookingDialog } from "@/components/site/BookingDialog";
 import { StickyBookBar } from "@/components/site/StickyBookBar";
-import { ArrowLeft, MapPin, Star, Video, Building2, Languages, Stethoscope } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, MapPin, Star, Video, Building2, Languages, Stethoscope, BadgeCheck, FileText, TrendingUp, GraduationCap, Activity, UserPlus, UserCheck, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { setSEO } from "@/lib/seo";
 
@@ -37,6 +39,19 @@ const DoctorDetail = () => {
   const [loading, setLoading] = useState(true);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [healingPledge, setHealingPledge] = useState<{ total_consultations_donated: number; total_fee_value_donated: number } | null>(null);
+  const [trustMetrics, setTrustMetrics] = useState<{
+    isVerified: boolean;
+    badgeLevel: string;
+    articlesCount: number;
+    outcomesResolved: number;
+    outcomesTotal: number;
+    successRate: number;
+    cmeCredits: number;
+  } | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followCount, setFollowCount] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [onlineStatus, setOnlineStatus] = useState<{ is_online: boolean; last_active_at: string | null; status_text: string } | null>(null);
 
   const shouldOpenOnLoad = useMemo(() => params.get("book") === "1", [params]);
 
@@ -98,6 +113,49 @@ const DoctorDetail = () => {
           setHealingPledge(data as { total_consultations_donated: number; total_fee_value_donated: number });
         }
       });
+
+    // Load trust metrics from new tables
+    (async () => {
+      const [verRes, artRes, outcomeRes, cmeRes] = await Promise.all([
+        supabase.from("doctor_verifications").select("status, badge_level").eq("doctor_id", id).eq("status", "verified").limit(1).maybeSingle(),
+        supabase.from("doctor_articles").select("id", { count: "exact", head: true }).eq("author_id", id).eq("status", "published"),
+        supabase.from("treatment_outcomes").select("outcome_status").eq("doctor_id", id).eq("is_published", true),
+        supabase.from("cme_credits").select("credits_earned").eq("doctor_id", id).eq("status", "active"),
+      ]);
+
+      const outcomes = (outcomeRes.data ?? []) as { outcome_status: string }[];
+      const resolved = outcomes.filter((o) => o.outcome_status === "resolved" || o.outcome_status === "improved").length;
+      const cmeTotal = ((cmeRes.data ?? []) as { credits_earned: number }[]).reduce((s, c) => s + c.credits_earned, 0);
+
+      setTrustMetrics({
+        isVerified: !!verRes.data,
+        badgeLevel: verRes.data?.badge_level ?? "none",
+        articlesCount: artRes.count ?? 0,
+        outcomesResolved: resolved,
+        outcomesTotal: outcomes.length,
+        successRate: outcomes.length > 0 ? Math.round((resolved / outcomes.length) * 100) : 0,
+        cmeCredits: cmeTotal,
+      });
+    })();
+
+    // Load follow state
+    (async () => {
+      const { data: sess } = await supabase.auth.getSession();
+      const uid = sess.session?.user.id ?? null;
+      setCurrentUserId(uid);
+
+      const { count } = await supabase.from("doctor_follows").select("id", { count: "exact", head: true }).eq("following_id", id);
+      setFollowCount(count ?? 0);
+
+      if (uid) {
+        const { data: followRow } = await supabase.from("doctor_follows").select("id").eq("follower_id", uid).eq("following_id", id).maybeSingle();
+        setIsFollowing(!!followRow);
+      }
+
+      // Load online status
+      const { data: statusRow } = await supabase.from("doctor_online_status").select("is_online, last_active_at, status_text").eq("doctor_id", id).maybeSingle();
+      if (statusRow) setOnlineStatus(statusRow as any);
+    })();
   }, [id]);
 
   const handleBookClick = async () => {
@@ -119,6 +177,39 @@ const DoctorDetail = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldOpenOnLoad, doctor]);
+
+  const handleFollow = async () => {
+    if (!currentUserId) {
+      toast.info("Please sign in to follow doctors");
+      navigate("/auth");
+      return;
+    }
+    if (currentUserId === id) return;
+    if (isFollowing) {
+      await supabase.from("doctor_follows").delete().eq("follower_id", currentUserId).eq("following_id", id);
+      setIsFollowing(false);
+      setFollowCount((c) => Math.max(0, c - 1));
+      toast.success("Unfollowed");
+    } else {
+      await supabase.from("doctor_follows").insert({ follower_id: currentUserId, following_id: id });
+      setIsFollowing(true);
+      setFollowCount((c) => c + 1);
+      toast.success("Following! You'll see their posts in your feed.");
+    }
+  };
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/doctors/${id}`;
+    const text = `Consult ${doctor?.full_name} — ${doctor?.specialization} on Ayuzee`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: doctor?.full_name, text, url });
+      } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard?.writeText(url);
+      toast.success("Profile link copied to clipboard!");
+    }
+  };
 
   if (loading) {
     return (
@@ -161,7 +252,18 @@ const DoctorDetail = () => {
                 </div>
                 <div className="flex-1">
                   <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-primary">{doctor.category}</span>
-                  <h1 className="mt-3 font-display text-4xl">{doctor.full_name}</h1>
+                  {onlineStatus && (
+                    <span className={`ml-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-semibold ${onlineStatus.is_online ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
+                      <span className={`h-2 w-2 rounded-full ${onlineStatus.is_online ? "bg-green-500 animate-pulse" : "bg-gray-400"}`} />
+                      {onlineStatus.is_online ? (onlineStatus.status_text || "Online") : "Offline"}
+                    </span>
+                  )}
+                  <h1 className="mt-3 font-display text-4xl">
+                    {doctor.full_name}
+                    {trustMetrics?.isVerified && (
+                      <BadgeCheck className="ml-2 inline h-6 w-6 text-green-600" aria-label="Verified Doctor" />
+                    )}
+                  </h1>
                   <p className="mt-1 text-lg text-muted-foreground">{doctor.specialization}</p>
                   {healingPledge && (
                     <div className="mt-2 inline-flex items-center gap-2 rounded-full border-2 border-amber-400 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
@@ -174,6 +276,21 @@ const DoctorDetail = () => {
                   <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1.5"><Star className="h-4 w-4 fill-secondary text-secondary" /> {doctor.rating} ({doctor.total_reviews} reviews)</span>
                     <span>{doctor.experience_years} years of experience</span>
+                    <span>{followCount} followers</span>
+                  </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant={isFollowing ? "secondary" : "outline"}
+                      className="gap-1.5 rounded-full"
+                      onClick={handleFollow}
+                    >
+                      {isFollowing ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+                      {isFollowing ? "Following" : "Follow"}
+                    </Button>
+                    <Button size="sm" variant="outline" className="gap-1.5 rounded-full" onClick={handleShare}>
+                      <Share2 className="h-4 w-4" /> Share
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -185,10 +302,71 @@ const DoctorDetail = () => {
                 <InfoRow icon={Languages} label="Languages" value={doctor.languages.join(", ")} />
               </div>
 
+              {/* Trust Badges */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700">
+                  🌿 100% Synthetic-Free Treatment
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+                  🎯 Root Cause Approach
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700">
+                  🔒 Private & Secured
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">
+                  🔄 Free Follow-Up within 7 days
+                </span>
+              </div>
+
               {doctor.bio && (
                 <div className="mt-10">
                   <h2 className="font-display text-2xl">About</h2>
                   <p className="mt-3 leading-relaxed text-muted-foreground">{doctor.bio}</p>
+                </div>
+              )}
+
+              {/* Trust Metrics & Credentials */}
+              {trustMetrics && (trustMetrics.isVerified || trustMetrics.articlesCount > 0 || trustMetrics.outcomesTotal > 0 || trustMetrics.cmeCredits > 0) && (
+                <div className="mt-10">
+                  <h2 className="font-display text-2xl">Credentials & Track Record</h2>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    {trustMetrics.isVerified && (
+                      <Card className="flex items-center gap-3 p-4 border-green-200 bg-green-50/50">
+                        <BadgeCheck className="h-8 w-8 text-green-600 shrink-0" />
+                        <div>
+                          <p className="text-sm font-semibold text-green-700">Verified Doctor</p>
+                          <p className="text-xs text-muted-foreground capitalize">{trustMetrics.badgeLevel} badge</p>
+                        </div>
+                      </Card>
+                    )}
+                    {trustMetrics.articlesCount > 0 && (
+                      <Card className="flex items-center gap-3 p-4">
+                        <FileText className="h-8 w-8 text-blue-600 shrink-0" />
+                        <div>
+                          <p className="text-sm font-semibold">{trustMetrics.articlesCount} Publications</p>
+                          <p className="text-xs text-muted-foreground">Published articles</p>
+                        </div>
+                      </Card>
+                    )}
+                    {trustMetrics.outcomesTotal > 0 && (
+                      <Card className="flex items-center gap-3 p-4">
+                        <TrendingUp className="h-8 w-8 text-emerald-600 shrink-0" />
+                        <div>
+                          <p className="text-sm font-semibold">{trustMetrics.successRate}% Success Rate</p>
+                          <p className="text-xs text-muted-foreground">{trustMetrics.outcomesResolved}/{trustMetrics.outcomesTotal} cases improved</p>
+                        </div>
+                      </Card>
+                    )}
+                    {trustMetrics.cmeCredits > 0 && (
+                      <Card className="flex items-center gap-3 p-4">
+                        <GraduationCap className="h-8 w-8 text-violet-600 shrink-0" />
+                        <div>
+                          <p className="text-sm font-semibold">{trustMetrics.cmeCredits} CME Credits</p>
+                          <p className="text-xs text-muted-foreground">Continuing education</p>
+                        </div>
+                      </Card>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

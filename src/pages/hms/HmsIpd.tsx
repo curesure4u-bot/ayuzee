@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BedDouble, Plus, Users, AlertTriangle } from "lucide-react";
+import { BedDouble, Plus, Users, AlertTriangle, Heart, Leaf, Warehouse, Package } from "lucide-react";
 
 const WARDS = [
   { id: "general-male", name: "General Male", beds: 20, occupied: 12 },
@@ -36,6 +37,14 @@ const HmsIpd = () => {
           </p>
         </div>
         <Button size="sm"><Plus className="mr-1 h-4 w-4" /> New Admission</Button>
+      </div>
+
+      {/* Quick Links to Related Modules */}
+      <div className="flex gap-2 flex-wrap">
+        <Button asChild size="sm" variant="outline"><Link to="/hms/nursing"><Heart className="mr-1 h-3 w-3" /> Nursing Station</Link></Button>
+        <Button asChild size="sm" variant="outline"><Link to="/hms/diet-kitchen"><Leaf className="mr-1 h-3 w-3" /> Diet & Kitchen</Link></Button>
+        <Button asChild size="sm" variant="outline"><Link to="/hms/ward-store"><Warehouse className="mr-1 h-3 w-3" /> Ward Consumables</Link></Button>
+        <Button asChild size="sm" variant="outline"><Link to="/hms/cssd-linen"><Package className="mr-1 h-3 w-3" /> CSSD & Linen</Link></Button>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>

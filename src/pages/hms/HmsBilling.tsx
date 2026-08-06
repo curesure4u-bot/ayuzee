@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { ReceiptText, Plus, Search, IndianRupee, Download } from "lucide-react";
+import { ReceiptText, Plus, Search, IndianRupee, Download, Pill, Shield, Calculator, Wallet } from "lucide-react";
 
 type Bill = {
   id: string;
@@ -58,7 +59,29 @@ const HmsBilling = () => {
           <h1 className="font-display text-2xl font-bold">Billing & Invoices</h1>
           <p className="text-sm text-muted-foreground">{bills.length} bills generated</p>
         </div>
-        <Button size="sm"><Plus className="mr-1 h-4 w-4" /> New Bill</Button>
+        <div className="flex gap-2">
+          <Link to="/hms/stock/sale/new">
+            <Button size="sm" variant="outline" className="border-orange-300 text-orange-600">
+              <Pill className="mr-1 h-4 w-4" /> Pharmacy Sale
+            </Button>
+          </Link>
+          <Link to="/hms/copay-calculator">
+            <Button size="sm" variant="outline" className="border-blue-300 text-blue-600">
+              <Calculator className="mr-1 h-4 w-4" /> Copay Calculator
+            </Button>
+          </Link>
+          <Link to="/hms/billing/insurance">
+            <Button size="sm" variant="outline" className="border-green-300 text-green-600">
+              <Shield className="mr-1 h-4 w-4" /> Insurance Claims
+            </Button>
+          </Link>
+          <Link to="/hms/accounts">
+            <Button size="sm" variant="outline" className="border-purple-300 text-purple-600">
+              <Wallet className="mr-1 h-4 w-4" /> Accounts
+            </Button>
+          </Link>
+          <Button size="sm"><Plus className="mr-1 h-4 w-4" /> New Bill</Button>
+        </div>
       </div>
 
       {/* Summary */}

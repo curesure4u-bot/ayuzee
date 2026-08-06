@@ -4,180 +4,511 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { IndianRupee, Plus, Edit, Trash2, CreditCard, Receipt, Percent } from "lucide-react";
+import { Pencil, X, IndianRupee } from "lucide-react";
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+type PaymentType = {
+  id: string;
+  name: string;
+  isPaymentInfoRequired: boolean;
+  isPosPaymentRequired: boolean;
+  status: "active" | "inactive";
+};
+
+type DiscountRemark = {
+  id: string;
+  remark: string;
+};
+
+type ExpenseItem = {
+  id: string;
+  expenseType: string;
+  accountHead: string;
+  expenseTarget: "pl" | "balancesheet";
+  status: "active" | "inactive";
+};
+
+// ─── Mock Data ───────────────────────────────────────────────────────────────
+const mockPaymentTypes: PaymentType[] = [
+  { id: "1", name: "GooglePay", isPaymentInfoRequired: false, isPosPaymentRequired: false, status: "active" },
+  { id: "2", name: "Net_banking", isPaymentInfoRequired: false, isPosPaymentRequired: false, status: "active" },
+  { id: "3", name: "phonepe", isPaymentInfoRequired: false, isPosPaymentRequired: false, status: "active" },
+  { id: "4", name: "UPI", isPaymentInfoRequired: false, isPosPaymentRequired: false, status: "active" },
+  { id: "5", name: "Credit Card", isPaymentInfoRequired: true, isPosPaymentRequired: true, status: "active" },
+  { id: "6", name: "Debit Card", isPaymentInfoRequired: true, isPosPaymentRequired: true, status: "active" },
+];
+
+const mockDiscountRemarks: DiscountRemark[] = [
+  { id: "1", remark: "Camp Patient" },
+  { id: "2", remark: "Staff" },
+];
+
+const mockExpenses: ExpenseItem[] = [
+  { id: "1", expenseType: "ADVERTISEMENT", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "2", expenseType: "agreement renewal", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "3", expenseType: "AMC (LIFT)", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "4", expenseType: "ASSET PURCHASE", accountHead: "balancesheet.", expenseTarget: "balancesheet", status: "active" },
+  { id: "5", expenseType: "AUDITOR - MAZ GLOBAL.", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "6", expenseType: "bank deposit", accountHead: "balancesheet.", expenseTarget: "balancesheet", status: "active" },
+  { id: "7", expenseType: "BUILDING ADVANCE", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "8", expenseType: "building advance", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "9", expenseType: "camp expenses", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "10", expenseType: "cleaning material", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "11", expenseType: "courier and freight charges", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "12", expenseType: "DONATION", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "13", expenseType: "EB BILL", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "14", expenseType: "Egg", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "15", expenseType: "ELECTRICAL ITEMS PURCHASE", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "16", expenseType: "ELECTRONIC ITEMS PURCHASE", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "17", expenseType: "EQUIPMENT PURCHASE", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "18", expenseType: "FOOD EXPENSE", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "19", expenseType: "gift", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "20", expenseType: "house keeping", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "21", expenseType: "insurance", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "22", expenseType: "INTERNET AND PHONE RECHARGE", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "23", expenseType: "ip food expenses", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "24", expenseType: "kitchen expenses", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "25", expenseType: "license renewal", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "26", expenseType: "loan payment", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "27", expenseType: "MARKETING EXPENSES", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "28", expenseType: "Newspaper", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "29", expenseType: "other branch transfer", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "30", expenseType: "petrol", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "31", expenseType: "Petty cash Clearing Balance", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "32", expenseType: "petty cash received", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "33", expenseType: "PF AND ESI", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "34", expenseType: "PROFESSIONAL CHARGES", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "35", expenseType: "raw container purchase", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "36", expenseType: "software renewal", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "37", expenseType: "staffs salary", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "38", expenseType: "tea and snacks", accountHead: "pl", expenseTarget: "pl", status: "inactive" },
+  { id: "39", expenseType: "TRAVEL EXPENSES", accountHead: "pl", expenseTarget: "pl", status: "active" },
+  { id: "40", expenseType: "TREATMENT EXPENSES", accountHead: "pl", expenseTarget: "pl", status: "active" },
+];
+
+// ─── Component ───────────────────────────────────────────────────────────────
 const BillingTaxMaster = () => {
-  const [addTaxOpen, setAddTaxOpen] = useState(false);
-  const [addPaymentOpen, setAddPaymentOpen] = useState(false);
+  // Master setting section: "payment-type", "discount-remarks", "expense"
+  const [section, setSection] = useState<"payment-type" | "discount-remarks" | "expense">("payment-type");
 
+  // Payment Type form
+  const [ptName, setPtName] = useState("");
+  const [ptInfoRequired, setPtInfoRequired] = useState(false);
+  const [ptPosRequired, setPtPosRequired] = useState(false);
+  const [ptSearch, setPtSearch] = useState("");
+  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>(mockPaymentTypes);
+
+  // Discount Remarks form
+  const [drRemark, setDrRemark] = useState("");
+  const [drSearch, setDrSearch] = useState("");
+  const [discountRemarks, setDiscountRemarks] = useState<DiscountRemark[]>(mockDiscountRemarks);
+
+  // Expense form
+  const [expType, setExpType] = useState("");
+  const [expAccountHead, setExpAccountHead] = useState("");
+  const [expTarget, setExpTarget] = useState<"pl" | "balancesheet">("pl");
+  const [expSearch, setExpSearch] = useState("");
+  const [expenses, setExpenses] = useState<ExpenseItem[]>(mockExpenses);
+
+  // ─── Payment Type Handlers ─────────────────────────────────────────────────
+  const handleCreatePaymentType = () => {
+    if (!ptName.trim()) return toast.error("Payment Type Name is required");
+    const newPt: PaymentType = {
+      id: Date.now().toString(),
+      name: ptName.trim(),
+      isPaymentInfoRequired: ptInfoRequired,
+      isPosPaymentRequired: ptPosRequired,
+      status: "active",
+    };
+    setPaymentTypes([...paymentTypes, newPt]);
+    toast.success(`Payment Type "${ptName}" created successfully!`);
+    setPtName(""); setPtInfoRequired(false); setPtPosRequired(false);
+  };
+
+  // ─── Discount Remarks Handlers ────────────────────────────────────────────
+  const handleCreateDiscountRemark = () => {
+    if (!drRemark.trim()) return toast.error("Discount Remark is required");
+    const newDr: DiscountRemark = { id: Date.now().toString(), remark: drRemark.trim() };
+    setDiscountRemarks([...discountRemarks, newDr]);
+    toast.success(`Discount Remark "${drRemark}" created!`);
+    setDrRemark("");
+  };
+
+  const handleDeleteDiscountRemark = (id: string) => {
+    setDiscountRemarks(discountRemarks.filter(d => d.id !== id));
+    toast.success("Discount Remark deleted");
+  };
+
+  // ─── Expense Handlers ──────────────────────────────────────────────────────
+  const handleCreateExpense = () => {
+    if (!expType.trim()) return toast.error("Expense Type is required");
+    const newExp: ExpenseItem = {
+      id: Date.now().toString(),
+      expenseType: expType.trim(),
+      accountHead: expAccountHead || "pl",
+      expenseTarget: expTarget,
+      status: "active",
+    };
+    setExpenses([...expenses, newExp]);
+    toast.success(`Expense "${expType}" created!`);
+    setExpType(""); setExpAccountHead(""); setExpTarget("pl");
+  };
+
+  const filteredPaymentTypes = paymentTypes.filter(p =>
+    p.name.toLowerCase().includes(ptSearch.toLowerCase())
+  );
+  const filteredDiscountRemarks = discountRemarks.filter(d =>
+    d.remark.toLowerCase().includes(drSearch.toLowerCase())
+  );
+  const filteredExpenses = expenses.filter(e =>
+    e.expenseType.toLowerCase().includes(expSearch.toLowerCase())
+  );
+
+  // ─── Render Payment Type Section ───────────────────────────────────────────
+  const renderPaymentType = () => (
+    <Card>
+      <CardHeader className="pb-2 border-b bg-primary/5">
+        <CardTitle className="text-base text-center text-primary">Manage Payment Type</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 space-y-4">
+        {/* Create Form */}
+        <div className="flex items-end gap-4 flex-wrap">
+          <div>
+            <Label className="font-semibold">Payment Type Name :</Label>
+            <Input
+              value={ptName}
+              onChange={e => setPtName(e.target.value)}
+              className="w-56 mt-1"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Label className="font-semibold text-sm">Is Payment Info Required :</Label>
+            <Checkbox
+              checked={ptInfoRequired}
+              onCheckedChange={c => setPtInfoRequired(!!c)}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Label className="font-semibold text-sm">Is POS Payment Required :</Label>
+            <Checkbox
+              checked={ptPosRequired}
+              onCheckedChange={c => setPtPosRequired(!!c)}
+            />
+          </div>
+          <Button onClick={handleCreatePaymentType} className="bg-teal-600 hover:bg-teal-700 text-white">
+            Create
+          </Button>
+        </div>
+
+        {/* Table */}
+        <div className="flex items-center justify-between border-t pt-3">
+          <div className="flex items-center gap-2 text-sm">
+            Show <select className="border rounded px-2 py-1 text-xs"><option>100</option><option>50</option><option>25</option></select> entries
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs">Search:</span>
+            <Input className="h-7 text-xs w-40" value={ptSearch} onChange={e => setPtSearch(e.target.value)} />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border">
+            <thead className="bg-muted/50 border-b">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Payment Type</th>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Is Payment Info Required</th>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Is POS Payment Required</th>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPaymentTypes.length === 0 ? (
+                <tr><td colSpan={4} className="px-4 py-4 text-center text-muted-foreground">No data available</td></tr>
+              ) : (
+                filteredPaymentTypes.map(pt => (
+                  <tr key={pt.id} className="border-b hover:bg-muted/30">
+                    <td className="px-4 py-2">{pt.name}</td>
+                    <td className="px-4 py-2">
+                      {pt.isPaymentInfoRequired ? "true" : "false"}
+                      <Pencil className="h-3 w-3 inline text-orange-500 ml-1 cursor-pointer" />
+                    </td>
+                    <td className="px-4 py-2">
+                      {pt.isPosPaymentRequired ? "yes" : "no"}
+                      <Pencil className="h-3 w-3 inline text-orange-500 ml-1 cursor-pointer" />
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className={pt.status === "active" ? "text-emerald-600" : "text-orange-600"}>
+                        {pt.status}
+                      </span>
+                      <Pencil className="h-3 w-3 inline text-orange-500 ml-1 cursor-pointer" />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="text-xs text-muted-foreground">
+          Showing 1 to {filteredPaymentTypes.length} of {filteredPaymentTypes.length} entries
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  // ─── Render Discount Remarks Section ───────────────────────────────────────
+  const renderDiscountRemarks = () => (
+    <Card>
+      <CardHeader className="pb-2 border-b bg-primary/5">
+        <CardTitle className="text-base text-center text-primary">Manage Discount Remark</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 space-y-4">
+        {/* Create Form */}
+        <div className="flex items-end gap-4">
+          <div className="flex-1 max-w-md">
+            <Label className="font-semibold">Discount Remark :</Label>
+            <Input
+              value={drRemark}
+              onChange={e => setDrRemark(e.target.value)}
+              className="mt-1"
+            />
+          </div>
+          <Button onClick={handleCreateDiscountRemark} className="bg-teal-600 hover:bg-teal-700 text-white">
+            Create
+          </Button>
+        </div>
+
+        {/* Table */}
+        <div className="flex items-center justify-between border-t pt-3">
+          <div className="flex items-center gap-2 text-sm">
+            Show <select className="border rounded px-2 py-1 text-xs"><option>100</option><option>50</option><option>25</option></select> entries
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs">Search:</span>
+            <Input className="h-7 text-xs w-40" value={drSearch} onChange={e => setDrSearch(e.target.value)} />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border">
+            <thead className="bg-muted/50 border-b">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600 flex-1">Discount Remarks</th>
+                <th className="px-4 py-2 text-center font-semibold text-orange-600 w-20"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredDiscountRemarks.length === 0 ? (
+                <tr><td colSpan={2} className="px-4 py-4 text-center text-muted-foreground">No data available</td></tr>
+              ) : (
+                filteredDiscountRemarks.map(dr => (
+                  <tr key={dr.id} className="border-b hover:bg-muted/30">
+                    <td className="px-4 py-2">{dr.remark}</td>
+                    <td className="px-4 py-2 text-center">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-6 w-6 p-0 bg-red-500 hover:bg-red-600 text-white rounded"
+                        onClick={() => handleDeleteDiscountRemark(dr.id)}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>Showing 1 to {filteredDiscountRemarks.length} of {filteredDiscountRemarks.length} entries</span>
+          <div className="flex gap-1">
+            <Button size="sm" variant="outline" className="h-6 text-xs" disabled>Previous</Button>
+            <Badge variant="outline" className="text-xs">1</Badge>
+            <Button size="sm" variant="outline" className="h-6 text-xs" disabled>Next</Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  // ─── Render Expense Section ────────────────────────────────────────────────
+  const renderExpense = () => (
+    <Card>
+      <CardHeader className="pb-2 border-b bg-primary/5">
+        <CardTitle className="text-base text-center text-primary">Manage Expense</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 space-y-4">
+        {/* Create Form */}
+        <div className="space-y-3 max-w-lg">
+          <div>
+            <Label className="font-semibold">Expense Type:</Label>
+            <Input
+              value={expType}
+              onChange={e => setExpType(e.target.value)}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label className="font-semibold">Account Head:</Label>
+            <Input
+              value={expAccountHead}
+              onChange={e => setExpAccountHead(e.target.value)}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label className="font-semibold">Expense Target:</Label>
+            <div className="flex items-center gap-4 mt-1">
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="radio"
+                  name="expTarget"
+                  value="pl"
+                  checked={expTarget === "pl"}
+                  onChange={() => setExpTarget("pl")}
+                  className="accent-orange-500"
+                />
+                <span className="text-sm">P&L</span>
+              </label>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="radio"
+                  name="expTarget"
+                  value="balancesheet"
+                  checked={expTarget === "balancesheet"}
+                  onChange={() => setExpTarget("balancesheet")}
+                  className="accent-orange-500"
+                />
+                <span className="text-sm">Balance Sheet</span>
+              </label>
+            </div>
+          </div>
+          <Button onClick={handleCreateExpense} className="bg-orange-500 hover:bg-orange-600 text-white">
+            Create
+          </Button>
+        </div>
+
+        {/* Table */}
+        <div className="flex items-center justify-between border-t pt-3">
+          <div className="flex items-center gap-2 text-sm">
+            Show <select className="border rounded px-2 py-1 text-xs"><option>100</option><option>50</option><option>25</option></select> entries
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs">Search:</span>
+            <Input className="h-7 text-xs w-40" value={expSearch} onChange={e => setExpSearch(e.target.value)} />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border">
+            <thead className="bg-muted/50 border-b">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Expense Type</th>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Account Head</th>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Expense Target</th>
+                <th className="px-4 py-2 text-left font-semibold text-orange-600">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredExpenses.length === 0 ? (
+                <tr><td colSpan={4} className="px-4 py-4 text-center text-muted-foreground">No data available</td></tr>
+              ) : (
+                filteredExpenses.map(exp => (
+                  <tr key={exp.id} className="border-b hover:bg-muted/30">
+                    <td className="px-4 py-2">{exp.expenseType}</td>
+                    <td className="px-4 py-2 text-xs">{exp.accountHead}</td>
+                    <td className="px-4 py-2 text-xs">{exp.expenseTarget === "pl" ? "pl" : "balancesheet."}</td>
+                    <td className="px-4 py-2">
+                      <span className={exp.status === "active" ? "text-emerald-600" : "text-orange-600"}>
+                        {exp.status}
+                      </span>
+                      <Pencil className="h-3 w-3 inline text-orange-500 ml-1 cursor-pointer" />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>Showing 1 to {filteredExpenses.length} of {filteredExpenses.length} entries</span>
+          <div className="flex gap-1">
+            <Button size="sm" variant="outline" className="h-6 text-xs" disabled>Previous</Button>
+            <Badge variant="outline" className="text-xs">1</Badge>
+            <Button size="sm" variant="outline" className="h-6 text-xs" disabled>Next</Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  // ─── Main Render ───────────────────────────────────────────────────────────
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold flex items-center gap-2">
-            <IndianRupee className="h-6 w-6 text-green-600" /> Billing & Tax Master
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <IndianRupee className="h-6 w-6 text-green-600" /> Billing Master
           </h1>
-          <p className="text-sm text-muted-foreground">Payment modes, discount rules, tax slabs, invoice numbering & expense categories</p>
+          <p className="text-sm text-muted-foreground">
+            Create new payment types, discount remarks, discount categories, and expense categories.
+          </p>
         </div>
+        <Badge variant="secondary">
+          Payments: {paymentTypes.length} | Expenses: {expenses.length}
+        </Badge>
       </div>
 
-      <Tabs defaultValue="tax">
-        <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full">
-          <TabsTrigger value="tax">Tax Rates (GST)</TabsTrigger>
-          <TabsTrigger value="payment">Payment Modes</TabsTrigger>
-          <TabsTrigger value="discount">Discount Rules</TabsTrigger>
-          <TabsTrigger value="invoice">Invoice Settings</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="tax" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2"><Percent className="h-4 w-4" /> GST Tax Slabs</CardTitle>
-                <Button size="sm" onClick={() => setAddTaxOpen(true)}><Plus className="mr-1 h-3 w-3" /> Add Tax</Button>
-              </div>
+      {/* Master Setting Layout: Sidebar + Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-4">
+        {/* Sidebar */}
+        <div className="space-y-1">
+          <Card className="p-0">
+            <CardHeader className="pb-2 pt-3 px-3">
+              <CardTitle className="text-sm font-semibold">Billing Master</CardTitle>
             </CardHeader>
-            <CardContent>
-              <table className="w-full text-sm">
-                <thead className="border-b bg-muted/50"><tr><th className="px-3 py-2 text-left font-medium">#</th><th className="px-3 py-2 text-left font-medium">Tax Name</th><th className="px-3 py-2 text-left font-medium">CGST</th><th className="px-3 py-2 text-left font-medium">SGST</th><th className="px-3 py-2 text-left font-medium">Total</th><th className="px-3 py-2 text-left font-medium">Applicable To</th><th className="px-3 py-2 text-left font-medium">Status</th><th className="px-3 py-2 text-left font-medium">Actions</th></tr></thead>
-                <tbody>
-                  {[
-                    { name: "GST Exempt", cgst: 0, sgst: 0, applicable: "Consultation, Govt. scheme patients", active: true },
-                    { name: "GST 5%", cgst: 2.5, sgst: 2.5, applicable: "Ayurveda medicines (classical)", active: true },
-                    { name: "GST 12%", cgst: 6, sgst: 6, applicable: "Proprietary medicines, Lab consumables", active: true },
-                    { name: "GST 18%", cgst: 9, sgst: 9, applicable: "Therapy services, Panchakarma, Room rent", active: true },
-                    { name: "GST 28%", cgst: 14, sgst: 14, applicable: "Luxury items (if any)", active: false },
-                  ].map((t, i) => (
-                    <tr key={i} className="border-b"><td className="px-3 py-2">{i + 1}</td><td className="px-3 py-2 font-medium">{t.name}</td><td className="px-3 py-2">{t.cgst}%</td><td className="px-3 py-2">{t.sgst}%</td><td className="px-3 py-2 font-bold">{t.cgst + t.sgst}%</td><td className="px-3 py-2 text-xs text-muted-foreground">{t.applicable}</td><td className="px-3 py-2"><Badge variant={t.active ? "outline" : "secondary"} className={`text-[10px] ${t.active ? "text-green-600" : ""}`}>{t.active ? "Active" : "Inactive"}</Badge></td><td className="px-3 py-2"><Button size="sm" variant="ghost" className="h-7 w-7 p-0"><Edit className="h-3 w-3" /></Button></td></tr>
-                  ))}
-                </tbody>
-              </table>
+            <CardContent className="p-1 space-y-0.5">
+              <Button
+                variant={section === "payment-type" ? "default" : "ghost"}
+                size="sm"
+                className={`w-full justify-start text-xs h-8 ${section === "payment-type" ? "bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200" : ""}`}
+                onClick={() => setSection("payment-type")}
+              >
+                <span className="mr-2">💳</span> Payment Type
+              </Button>
+              <Button
+                variant={section === "discount-remarks" ? "default" : "ghost"}
+                size="sm"
+                className={`w-full justify-start text-xs h-8 ${section === "discount-remarks" ? "bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200" : ""}`}
+                onClick={() => setSection("discount-remarks")}
+              >
+                <span className="mr-2">✏️</span> Discount Remarks
+              </Button>
+              <Button
+                variant={section === "expense" ? "default" : "ghost"}
+                size="sm"
+                className={`w-full justify-start text-xs h-8 ${section === "expense" ? "bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200" : ""}`}
+                onClick={() => setSection("expense")}
+              >
+                <span className="mr-2">💰</span> Expense
+              </Button>
             </CardContent>
           </Card>
-        </TabsContent>
+        </div>
 
-        <TabsContent value="payment" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2"><CreditCard className="h-4 w-4" /> Payment Modes</CardTitle>
-                <Button size="sm" onClick={() => setAddPaymentOpen(true)}><Plus className="mr-1 h-3 w-3" /> Add Mode</Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {[
-                  { name: "Cash", code: "CASH", enabled: true, default: true },
-                  { name: "UPI (PhonePe/GPay)", code: "UPI", enabled: true, default: false },
-                  { name: "Credit/Debit Card", code: "CARD", enabled: true, default: false },
-                  { name: "Net Banking", code: "NEFT", enabled: true, default: false },
-                  { name: "Insurance/TPA", code: "INS", enabled: true, default: false },
-                  { name: "Credit (Due)", code: "CREDIT", enabled: true, default: false },
-                  { name: "Corporate Billing", code: "CORP", enabled: true, default: false },
-                  { name: "Cheque", code: "CHQ", enabled: false, default: false },
-                  { name: "Ayushman Bharat (PMJAY)", code: "PMJAY", enabled: true, default: false },
-                  { name: "CGHS/ECHS", code: "CGHS", enabled: true, default: false },
-                ].map((pm) => (
-                  <div key={pm.code} className="flex items-center justify-between p-3 rounded-lg border">
-                    <div>
-                      <p className="text-sm font-medium">{pm.name}</p>
-                      <p className="text-[10px] text-muted-foreground font-mono">{pm.code}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {pm.default && <Badge className="text-[9px]">Default</Badge>}
-                      <Switch defaultChecked={pm.enabled} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="discount" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2"><CardTitle className="text-base">Discount Categories & Rules</CardTitle></CardHeader>
-            <CardContent>
-              <table className="w-full text-sm">
-                <thead className="border-b bg-muted/50"><tr><th className="px-3 py-2 text-left font-medium">Category</th><th className="px-3 py-2 text-left font-medium">Max %</th><th className="px-3 py-2 text-left font-medium">Max ₹</th><th className="px-3 py-2 text-left font-medium">Needs Approval</th><th className="px-3 py-2 text-left font-medium">Applicable</th><th className="px-3 py-2 text-left font-medium">Status</th></tr></thead>
-                <tbody>
-                  {[
-                    { cat: "Staff Discount", maxPct: 20, maxAmt: 5000, approval: false, applicable: "Hospital staff & family" },
-                    { cat: "Senior Citizen", maxPct: 10, maxAmt: 2000, approval: false, applicable: "Age > 60 years" },
-                    { cat: "Corporate Discount", maxPct: 15, maxAmt: 10000, approval: true, applicable: "Tied-up corporates" },
-                    { cat: "Loyalty Discount", maxPct: 5, maxAmt: 1000, approval: false, applicable: "Repeat patients > 5 visits" },
-                    { cat: "Package Discount", maxPct: 25, maxAmt: 20000, approval: true, applicable: "Long-term Panchakarma" },
-                    { cat: "Charitable/Free", maxPct: 100, maxAmt: 0, approval: true, applicable: "ATMRI/Ayush Help cases" },
-                  ].map((d, i) => (
-                    <tr key={i} className="border-b"><td className="px-3 py-2 font-medium">{d.cat}</td><td className="px-3 py-2">{d.maxPct}%</td><td className="px-3 py-2">{d.maxAmt > 0 ? `₹${d.maxAmt.toLocaleString("en-IN")}` : "No limit"}</td><td className="px-3 py-2">{d.approval ? <Badge variant="secondary" className="text-[10px]">Yes</Badge> : "No"}</td><td className="px-3 py-2 text-xs text-muted-foreground">{d.applicable}</td><td className="px-3 py-2"><Badge variant="outline" className="text-[10px] text-green-600">Active</Badge></td></tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="invoice" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><Receipt className="h-4 w-4" /> Invoice Numbering & Settings</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { type: "OP Bill", prefix: "AYZ/OP/", current: "AYZ/OP/2026-27/1245", resetOn: "April 1 (FY start)" },
-                  { type: "IP Bill", prefix: "AYZ/IP/", current: "AYZ/IP/2026-27/089", resetOn: "April 1 (FY start)" },
-                  { type: "Pharmacy Sale", prefix: "AYZ/PH/", current: "AYZ/PH/2026-27/3456", resetOn: "April 1 (FY start)" },
-                  { type: "Lab Receipt", prefix: "AYZ/LB/", current: "AYZ/LB/2026-27/678", resetOn: "April 1 (FY start)" },
-                  { type: "Advance Receipt", prefix: "AYZ/ADV/", current: "AYZ/ADV/2026-27/234", resetOn: "April 1 (FY start)" },
-                  { type: "Refund Voucher", prefix: "AYZ/REF/", current: "AYZ/REF/2026-27/012", resetOn: "April 1 (FY start)" },
-                ].map((inv) => (
-                  <div key={inv.type} className="p-3 rounded-lg border">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-medium">{inv.type}</p>
-                      <Button size="sm" variant="ghost" className="h-6"><Edit className="h-3 w-3" /></Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Prefix: <span className="font-mono">{inv.prefix}</span></p>
-                    <p className="text-xs text-muted-foreground">Current: <span className="font-mono font-medium">{inv.current}</span></p>
-                    <p className="text-xs text-muted-foreground">Resets: {inv.resetOn}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex gap-4 pt-3 border-t">
-                <div className="flex items-center gap-2"><Switch defaultChecked /><Label>Auto-number bills</Label></div>
-                <div className="flex items-center gap-2"><Switch defaultChecked /><Label>Include GST on invoice</Label></div>
-                <div className="flex items-center gap-2"><Switch /><Label>E-Invoice (GST Portal)</Label></div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      <Dialog open={addTaxOpen} onOpenChange={setAddTaxOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Add Tax Rate</DialogTitle></DialogHeader>
-          <div className="space-y-3">
-            <div><Label>Tax Name</Label><Input placeholder="e.g., GST 5%" /></div>
-            <div className="grid grid-cols-2 gap-3"><div><Label>CGST %</Label><Input type="number" placeholder="2.5" /></div><div><Label>SGST %</Label><Input type="number" placeholder="2.5" /></div></div>
-            <div><Label>Applicable To</Label><Input placeholder="Description of applicable items" /></div>
-          </div>
-          <DialogFooter><Button variant="outline" onClick={() => setAddTaxOpen(false)}>Cancel</Button><Button onClick={() => { toast.success("Tax added"); setAddTaxOpen(false); }}>Save</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={addPaymentOpen} onOpenChange={setAddPaymentOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Add Payment Mode</DialogTitle></DialogHeader>
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3"><div><Label>Name</Label><Input placeholder="Payment mode name" /></div><div><Label>Code</Label><Input placeholder="Short code" /></div></div>
-            <div className="flex items-center gap-2"><Switch defaultChecked /><Label>Enabled</Label></div>
-          </div>
-          <DialogFooter><Button variant="outline" onClick={() => setAddPaymentOpen(false)}>Cancel</Button><Button onClick={() => { toast.success("Payment mode added"); setAddPaymentOpen(false); }}>Save</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+        {/* Content */}
+        <div>
+          {section === "payment-type" && renderPaymentType()}
+          {section === "discount-remarks" && renderDiscountRemarks()}
+          {section === "expense" && renderExpense()}
+        </div>
+      </div>
     </div>
   );
 };

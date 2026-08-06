@@ -274,28 +274,144 @@ const PERMISSION_SECTIONS: Record<string, string[]> = {
     "Google Business Analytics", "Franchisee Management",
     "Revenue Comparison", "Cross-Branch Patient Search",
   ],
+  "Blood Bank": [
+    "View Register Blood Donor", "Create Blood Donor", "Update Blood Donor",
+    "Search Donor by Name/ID/Mobile", "Search Donor by Blood Group", "Take Blood Sample",
+    "Blood Sample Approval List", "Blood Sample Approved List", "Blood Sample Disposal List",
+    "Blood Sample Disposed List", "Approve Blood Sample", "Test Blood Sample",
+    "Screen Blood Sample", "Edit Screened Blood Sample", "Dispatch Blood Sample",
+    "Separate Sample Blood Component", "Reject Blood Sample",
+    "Blood Bank Store Dispatched List", "Blood Request List", "Request Blood",
+    "External Blood Request", "External Blood Request List", "Blood Request Action",
+    "Dispatch Blood Request", "Blood Request Select Blood", "Blood Request Cross Match",
+    "Blood Request Receive", "Dispose Blood Sample", "Blood Request Initiate Transfusion",
+    "Transfusion Record Vitals", "Create Transfusion Record Vitals", "Blood Request Complete Transfusion",
+    "Barcode Print Component Separation", "Barcode Print Sample Collection", "Print Cross Matching Report",
+  ],
+  "Ambulance / EMS": [
+    "Update EMS Status", "View EMS", "Create EMS",
+    "Edit EMS", "Update EMS", "Track EMS",
+    "Update EMS Dispatch", "Update EMS Enroute", "Update EMS Status",
+    "Initiate EMS Patient Delivery", "View EMS Observation", "View EMS Administer Medicine",
+    "View EMS Print",
+  ],
+  "Linen & Laundry": [
+    "List Linen Master", "Inspected Linen", "Linen Status Changed",
+    "Sorted Linen", "List Linen", "Create Linen",
+    "Update Linen", "Linen Menu", "Show Received Form",
+    "Show Sorting", "Show Disinfection", "Show Washing",
+    "Show Drying", "Show Inspection", "Show Ironing",
+    "Create Received Linen",
+  ],
+  "Biomedical Waste (BWM)": [
+    "View BWM", "Create Waste", "Approve Waste", "Dispose Waste",
+  ],
+  "Infection Management": [
+    "Infection Management View", "Create Incident", "Update Incident",
+  ],
+  "Counseling": [
+    "Create Counseling", "List Counseling", "Perform Counseling",
+    "View All Counseling", "Add/Remove Treatment and Investigation",
+  ],
+  "Diet & Kitchen": [
+    "Diet Plan", "Diet WorkOrder", "Diet Delivery List",
+    "Diet Delivered List", "Diet Delivery", "Diet Delivery Update Status",
+    "Diet Delivery Print", "Diet Delivery Barcode Print", "Create Diet Plan",
+    "Add Diet Plan to Bill",
+  ],
+  "MIS OT": [
+    "Surgeries Unplanned", "Surgeries Planned", "List All",
+    "List By Consultant", "List By Credit Provider", "Cancelled",
+  ],
+  "MIS BloodBank": [
+    "Donor Registration", "Blood Collection", "Component Separation",
+    "Blood Requests", "Current Blood Stock", "Expired Report",
+    "Disposed Report", "Blood Sample By Type",
+  ],
+  "MIS Assets": [
+    "Goods Received Note", "Goods Received Note Detailed", "Asset Value",
+    "Consolidated Asset Value", "Transferred Assets", "Received Assets",
+    "Assigned Assets", "Calibration Request", "Upcoming Calibrations",
+    "Upcoming AMCs", "Maintenance Request", "Purchase Order",
+    "Request Maintenance",
+  ],
+  "MIS Attendance": [
+    "Staff Attendance", "Doctor Attendance",
+  ],
+  "MIS Miscellaneous": [
+    "View Tasks", "View Reminder", "Rescheduled Reminder",
+    "Remove Reminder", "Reminder Notes", "Reminder Status",
+    "Reminder Priority", "Reminder Appointment", "Create Tasks",
+    "Edit Tasks", "Search Tasks by Patient", "Search Task by Status",
+    "Patient Feedback", "Patient Vaccination", "EMS List",
+    "First Aid Report", "View Whatsapp Message", "View SMS",
+    "Dental Order By Date", "By Marketing Executive", "Certificates By Patients",
+    "Franchise List By Location", "Franchise List By Country",
+    "Infection Incident Report", "Counseling Report", "Counseling By User Report",
+    "Duplicate Print List", "Approve Shift", "BWM Report",
+  ],
+  "Embedded Doctor Login": [
+    "View My IP List", "View My Emergency List", "View My IP List Detailed",
+    "View My Appointment", "View My OT", "View My OPList",
+  ],
+  "MIS Embedded Doctor": [
+    "Doctor Specific Income By Consultant", "Doctor Specific Income By Referral",
+    "Doctor Specific Bill Value As Treating Consultant",
+    "Doctor Specific Incentive", "Bill Value IP Patientwise",
+    "Doctor Specific OP Casesheet Summary", "Doctor Specific Checked In",
+    "Doctor Specific I/P Admission", "Doctor Specific Appointment",
+    "Doctor Specific Tele Consultation", "Doctor Specific OT",
+  ],
+  "Employee Self-Service": [
+    "Employee Self View", "Employee Download Payslip", "Department Clearance Approval",
+    "Apply Leave", "Approve Leave", "Employee Leave",
+    "Self Employee Update", "Manage Appraisal", "Record Appraisal",
+    "Update Appraisal", "Appraisal Approvals",
+  ],
 };
 
 type Role = {
   id: string;
   name: string;
   description: string;
+  department: string;
   usersCount: number;
   createdAt: string;
+  createdBy: string;
   isSystem: boolean;
+  status: "active" | "inactive";
 };
 
 const mockRoles: Role[] = [
-  { id: "1", name: "SuperAdmin", description: "Full access to all modules", usersCount: 1, createdAt: "2024-01-01", isSystem: true },
-  { id: "2", name: "Admin", description: "Administrative access without system settings", usersCount: 2, createdAt: "2024-01-01", isSystem: true },
-  { id: "3", name: "Doctor", description: "Clinical access - EMR, Prescriptions, AYUSH modules", usersCount: 5, createdAt: "2024-01-01", isSystem: true },
-  { id: "4", name: "FrontOffice", description: "Registration, Appointments, Queue, Billing", usersCount: 3, createdAt: "2024-01-01", isSystem: true },
-  { id: "5", name: "Pharmacist", description: "Pharmacy, Stock management, Dispensing", usersCount: 2, createdAt: "2024-01-01", isSystem: true },
-  { id: "6", name: "LabTechnician", description: "Lab orders, Results, Reports", usersCount: 2, createdAt: "2024-01-01", isSystem: true },
-  { id: "7", name: "Therapist", description: "Panchakarma sessions, Treatment records", usersCount: 4, createdAt: "2024-01-01", isSystem: true },
-  { id: "8", name: "Nurse", description: "IPD, Medication administration, Vitals", usersCount: 3, createdAt: "2024-02-01", isSystem: false },
-  { id: "9", name: "Accounts", description: "Billing, Collections, Expenses, MIS Accounts", usersCount: 2, createdAt: "2024-03-01", isSystem: false },
-  { id: "10", name: "MIS Viewer", description: "Read-only access to all MIS reports", usersCount: 3, createdAt: "2024-06-01", isSystem: false },
+  { id: "1", name: "SuperAdmin", description: "Full access to all modules", department: "Admin", usersCount: 1, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "2", name: "Admin", description: "Administrative access without system settings", department: "Admin", usersCount: 2, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "3", name: "Doctor", description: "Clinical access - EMR, Prescriptions, AYUSH modules", department: "Clinical", usersCount: 5, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "4", name: "FrontOffice", description: "Registration, Appointments, Queue, Billing", department: "Front Office", usersCount: 3, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "5", name: "Pharmacist", description: "Pharmacy, Stock management, Dispensing", department: "Pharmacy", usersCount: 2, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "6", name: "LabTechnician", description: "Lab orders, Results, Reports", department: "Laboratory", usersCount: 2, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "7", name: "Therapist", description: "Panchakarma sessions, Treatment records", department: "Panchakarma", usersCount: 4, createdAt: "2024-01-01", createdBy: "System", isSystem: true, status: "active" },
+  { id: "8", name: "Nurse", description: "IPD, Medication administration, Vitals", department: "NursingStation", usersCount: 3, createdAt: "2024-02-01", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "9", name: "Accounts", description: "Billing, Collections, Expenses, MIS Accounts", department: "Accounts", usersCount: 2, createdAt: "2024-03-01", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "10", name: "MIS Viewer", description: "Read-only access to all MIS reports", department: "", usersCount: 3, createdAt: "2024-06-01", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "11", name: "AYUSH OP IP", description: "AYUSH outpatient and inpatient access", department: "", usersCount: 0, createdAt: "2024-07-01", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "12", name: "Pharmacy new", description: "New pharmacy staff role", department: "Pharmacy", usersCount: 1, createdAt: "2025-01-01", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "active" },
+  { id: "13", name: "Pharmcy stock edit only", description: "Stock edit permission only", department: "Pharmacy", usersCount: 1, createdAt: "2025-02-01", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "active" },
+  { id: "14", name: "AYUSH PHARMACY", description: "Full AYUSH pharmacy access", department: "", usersCount: 2, createdAt: "2025-02-15", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "15", name: "pharmacy staff", description: "Basic pharmacy staff", department: "PharmacySales", usersCount: 1, createdAt: "2025-03-01", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "active" },
+  { id: "16", name: "LAB GRN", description: "Lab GRN operations", department: "Accounts,Lab,FrontOfficeOP", usersCount: 1, createdAt: "2025-03-15", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "17", name: "mis", description: "MIS reporting role", department: "Accounts,Lab,FrontOfficeOP", usersCount: 2, createdAt: "2025-04-01", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "18", name: "AYUSH STORE", description: "Ayush store management", department: "", usersCount: 1, createdAt: "2025-04-15", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "19", name: "ADMIN1", description: "Secondary admin role", department: "Admin", usersCount: 1, createdAt: "2025-05-01", createdBy: "safeek", isSystem: false, status: "active" },
+  { id: "20", name: "AYUSH LAB ASST", description: "Lab assistant role", department: "", usersCount: 1, createdAt: "2025-05-15", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "21", name: "Indent", description: "Indent management only", department: "Pharmacy", usersCount: 1, createdAt: "2025-06-01", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "active" },
+  { id: "22", name: "central store", description: "Central store billing", department: "Billing", usersCount: 1, createdAt: "2025-06-15", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "active" },
+  { id: "23", name: "AYUSH DOCTORS", description: "Ayush doctors role", department: "", usersCount: 3, createdAt: "2025-07-01", createdBy: "admin", isSystem: false, status: "active" },
+  { id: "24", name: "only stock edit", description: "Stock edit only permission", department: "Pharmacy", usersCount: 1, createdAt: "2025-07-10", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "active" },
+  { id: "25", name: "report", description: "Report generation access", department: "", usersCount: 1, createdAt: "2025-08-01", createdBy: "rajamani", isSystem: false, status: "active" },
+  // Inactive roles
+  { id: "50", name: "Admin - Mani", description: "Old admin role for Mani", department: "Admin", usersCount: 0, createdAt: "2023-06-01", createdBy: "Al Shifa Ayush Hospital", isSystem: false, status: "inactive" },
+  { id: "51", name: "Old Reception", description: "Deprecated reception role", department: "Front Office", usersCount: 0, createdAt: "2023-01-01", createdBy: "admin", isSystem: false, status: "inactive" },
+  { id: "52", name: "Temp Billing", description: "Temporary billing role - expired", department: "Billing", usersCount: 0, createdAt: "2024-01-01", createdBy: "admin", isSystem: false, status: "inactive" },
 ];
 
 const RoleMaster = () => {
@@ -387,6 +503,7 @@ const RoleMaster = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="list">All Roles</TabsTrigger>
+          <TabsTrigger value="inactive">Manage Inactive</TabsTrigger>
           <TabsTrigger value="create">{editingRole ? "Edit Role" : "Create Role"}</TabsTrigger>
         </TabsList>
 
@@ -398,28 +515,24 @@ const RoleMaster = () => {
                 <table className="w-full text-sm">
                   <thead className="border-b bg-muted/50">
                     <tr>
-                      <th className="px-4 py-3 text-left font-medium">#</th>
-                      <th className="px-4 py-3 text-left font-medium">Role Name</th>
-                      <th className="px-4 py-3 text-left font-medium">Description</th>
-                      <th className="px-4 py-3 text-left font-medium">Users</th>
-                      <th className="px-4 py-3 text-left font-medium">Type</th>
-                      <th className="px-4 py-3 text-left font-medium">Created</th>
+                      <th className="px-4 py-3 text-left font-medium">Sl.No</th>
+                      <th className="px-4 py-3 text-left font-medium">Role</th>
+                      <th className="px-4 py-3 text-left font-medium">Department</th>
+                      <th className="px-4 py-3 text-left font-medium">Status</th>
+                      <th className="px-4 py-3 text-left font-medium">Created By</th>
                       <th className="px-4 py-3 text-left font-medium">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {roles.map((role, i) => (
+                    {roles.filter(r => r.status === "active").map((role, i) => (
                       <tr key={role.id} className="border-b hover:bg-muted/30">
                         <td className="px-4 py-3">{i + 1}</td>
                         <td className="px-4 py-3 font-medium text-primary">{role.name}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{role.description}</td>
-                        <td className="px-4 py-3"><Badge variant="secondary">{role.usersCount}</Badge></td>
+                        <td className="px-4 py-3 text-muted-foreground">{role.department || "—"}</td>
                         <td className="px-4 py-3">
-                          <Badge variant={role.isSystem ? "outline" : "default"} className="text-xs">
-                            {role.isSystem ? "System" : "Custom"}
-                          </Badge>
+                          <Badge className="bg-emerald-100 text-emerald-700 text-xs">Active ✓</Badge>
                         </td>
-                        <td className="px-4 py-3 text-xs text-muted-foreground">{role.createdAt}</td>
+                        <td className="px-4 py-3 text-xs text-muted-foreground">{role.createdBy}</td>
                         <td className="px-4 py-3">
                           <Button size="sm" variant="outline" onClick={() => editRole(role)}>
                             Edit Permissions
@@ -429,6 +542,58 @@ const RoleMaster = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="p-3 text-xs text-muted-foreground border-t">
+                Showing 1 to {roles.filter(r => r.status === "active").length} of {roles.filter(r => r.status === "active").length} entries
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* MANAGE INACTIVE ROLES */}
+        <TabsContent value="inactive" className="space-y-4">
+          <Card>
+            <CardHeader className="pb-2 border-b bg-orange-50/50">
+              <CardTitle className="text-base text-center text-orange-600">Manage Inactive Roles</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="border-b bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium">Sl.No</th>
+                      <th className="px-4 py-3 text-left font-medium">Role</th>
+                      <th className="px-4 py-3 text-left font-medium">Department</th>
+                      <th className="px-4 py-3 text-left font-medium">Status</th>
+                      <th className="px-4 py-3 text-left font-medium">Created By</th>
+                      <th className="px-4 py-3 text-left font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {roles.filter(r => r.status === "inactive").map((role, i) => (
+                      <tr key={role.id} className="border-b hover:bg-muted/30">
+                        <td className="px-4 py-3">{i + 1}</td>
+                        <td className="px-4 py-3 font-medium text-orange-600">{role.name}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{role.department || "—"}</td>
+                        <td className="px-4 py-3">
+                          <Badge className="bg-orange-100 text-orange-700 text-xs">Inactive ✎</Badge>
+                        </td>
+                        <td className="px-4 py-3 text-xs text-muted-foreground">{role.createdBy}</td>
+                        <td className="px-4 py-3">
+                          <Button size="sm" variant="outline" className="text-emerald-600 border-emerald-300 hover:bg-emerald-50" onClick={() => toast.success(`Role "${role.name}" reactivated!`)}>
+                            Reactivate
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                    {roles.filter(r => r.status === "inactive").length === 0 && (
+                      <tr><td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">No inactive roles found.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="p-3 text-xs text-muted-foreground border-t">
+                Showing 1 to {roles.filter(r => r.status === "inactive").length} of {roles.filter(r => r.status === "inactive").length} entries
               </div>
             </CardContent>
           </Card>

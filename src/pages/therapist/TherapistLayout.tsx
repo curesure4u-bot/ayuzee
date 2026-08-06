@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
-import { LayoutDashboard, ListChecks, Wallet, User, LifeBuoy, Loader2, ShieldCheck, LogOut, CalendarClock } from "lucide-react";
+import { LayoutDashboard, ListChecks, Wallet, User, LifeBuoy, Loader2, ShieldCheck, LogOut, CalendarClock, Briefcase } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface TherapistRow {
@@ -20,6 +20,7 @@ const navItems = [
   { to: "/therapist/sessions", icon: ListChecks, label: "My Sessions" },
   { to: "/therapist/availability", icon: CalendarClock, label: "Availability" },
   { to: "/therapist/earnings", icon: Wallet, label: "Earnings" },
+  { to: "/jobs?type=therapist", icon: Briefcase, label: "Therapist Jobs" },
   { to: "/therapist/profile", icon: User, label: "Profile" },
   { to: "/therapist/support", icon: LifeBuoy, label: "Support" },
 ];

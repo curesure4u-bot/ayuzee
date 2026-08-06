@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -59,6 +60,11 @@ const HmsInventory = () => {
           </p>
         </div>
         <div className="flex gap-2">
+          <Link to="/hms/stock">
+            <Button variant="outline" className="border-orange-300 text-orange-600">
+              Advanced Stock Module
+            </Button>
+          </Link>
           <Button variant="outline" onClick={() => setTransferOpen(true)}>
             <ArrowRightLeft className="mr-1 h-4 w-4" /> Transfer
           </Button>

@@ -167,6 +167,27 @@ export const ReportSummaryButton = ({
         tokens_used: aiRes?.usage?.total_tokens ?? null,
       });
       if (insErr) console.error("report_summaries insert failed", insErr);
+
+      // 4. Also persist to parsed_medical_documents for OCR pipeline (best-effort)
+      try {
+        await (supabase as any).from("parsed_medical_documents").insert({
+          patient_id: patientId || session.session.user.id,
+          original_file_name: fileName || path.split("/").pop() || "report",
+          file_url: path,
+          file_type: mime === "application/pdf" ? "pdf" : mime.includes("png") ? "png" : "jpg",
+          file_size_bytes: blob.size,
+          upload_source: "manual",
+          document_type: documentKind === "lab_report" ? "lab_report" : documentKind === "prescription" ? "prescription" : "consultation_note",
+          parse_status: "parsed",
+          parse_completed_at: new Date().toISOString(),
+          confidence_score: 85,
+          extracted_text: text,
+          ai_model_used: aiRes?.usage?.model ?? "gemini",
+          tokens_used: aiRes?.usage?.total_tokens ?? 0,
+        });
+      } catch (ocrErr) {
+        console.error("parsed_medical_documents insert failed (non-blocking)", ocrErr);
+      }
     } catch (e) {
       console.error(e);
       toast.error(e instanceof Error ? e.message : "Failed to summarise");

@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ShoppingCart, Search, Star, Tag } from "lucide-react";
+import { ShoppingCart, Search, Star, Tag, TrendingUp, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
@@ -28,12 +28,14 @@ interface BulkProduct {
   rating: number;
 }
 interface Tier { product_id: string; min_qty: number; unit_price: number }
+interface VolumeSlab { id: string; slab_name: string; min_order_value: number; max_order_value: number | null; margin_percentage: number; bonus_reward_points: number; description: string | null }
 
 const Bulk = () => {
   const [params, setParams] = useSearchParams();
   const { addItem } = useCart();
   const [products, setProducts] = useState<BulkProduct[]>([]);
   const [tiers, setTiers] = useState<Record<string, Tier[]>>({});
+  const [slabs, setSlabs] = useState<VolumeSlab[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -67,6 +69,9 @@ const Bulk = () => {
         (t ?? []).forEach((row: Tier) => { (map[row.product_id] ||= []).push(row); });
         setTiers(map);
       }
+      // Load volume discount slabs
+      const { data: slabData } = await supabase.from("volume_discount_slabs").select("*").eq("is_active", true).order("sort_order");
+      setSlabs((slabData ?? []) as VolumeSlab[]);
       setLoading(false);
     };
     load();
@@ -169,6 +174,34 @@ const Bulk = () => {
               />
             </div>
           </div>
+
+          {/* Volume Discount Slabs Widget */}
+          {slabs.length > 0 && (
+            <Card className="mb-6 overflow-hidden border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 p-0">
+              <div className="flex items-center gap-3 border-b border-emerald-200 bg-emerald-100/50 px-5 py-3">
+                <TrendingUp className="h-5 w-5 text-emerald-700" />
+                <div>
+                  <h3 className="font-display text-sm font-bold text-emerald-900">Volume-Based Margins — Order More, Earn More!</h3>
+                  <p className="text-xs text-emerald-700">Your margin increases automatically based on order value</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-px bg-emerald-200 sm:grid-cols-5">
+                {slabs.map((slab, i) => (
+                  <div key={slab.id} className="flex flex-col items-center justify-center bg-white p-4 text-center">
+                    <Award className={`h-5 w-5 mb-1 ${i === 0 ? "text-gray-400" : i === 1 ? "text-gray-500" : i === 2 ? "text-amber-500" : i === 3 ? "text-violet-500" : "text-cyan-500"}`} />
+                    <p className="text-xs font-bold text-foreground">{slab.slab_name}</p>
+                    <p className="mt-1 font-display text-lg font-bold text-emerald-700">{slab.margin_percentage}%</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {slab.max_order_value ? `₹${slab.min_order_value.toLocaleString()} – ₹${slab.max_order_value.toLocaleString()}` : `₹${slab.min_order_value.toLocaleString()}+`}
+                    </p>
+                    {slab.bonus_reward_points > 0 && (
+                      <Badge variant="secondary" className="mt-1 text-[9px]">+{slab.bonus_reward_points} pts</Badge>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
 
           {loading ? (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

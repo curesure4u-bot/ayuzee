@@ -14,6 +14,9 @@ import {
   Sparkles,
   Stethoscope,
   Eye,
+  Flower2,
+  ClipboardCheck,
+  FolderOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +28,9 @@ const groups: Group[] = [
     items: [
       { to: "/dashboard/profile", label: "My Profile", icon: User },
       { to: "/dashboard/appointments", label: "My Appointments", icon: Calendar },
+      { to: "/dashboard/health-locker", label: "Health Locker", icon: FolderOpen },
+      { to: "/dashboard/panchakarma", label: "My Therapy Sessions", icon: Flower2 },
+      { to: "/dashboard/medicine-diary", label: "Medicine Diary", icon: ClipboardCheck },
       { to: "/dashboard/guidance", label: "My Guidance", icon: Sparkles },
       { to: "/diagnosis/gut-health", label: "Gut Health Check", icon: Sparkles },
     ],

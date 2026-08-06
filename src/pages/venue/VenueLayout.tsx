@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { LayoutDashboard, DoorOpen, CalendarRange, Wallet, User, Loader2, ShieldCheck, LogOut } from "lucide-react";
+import { LayoutDashboard, DoorOpen, CalendarRange, Wallet, User, Loader2, ShieldCheck, LogOut, Briefcase } from "lucide-react";
 
 export interface VenueRow {
   id: string;
@@ -19,6 +19,8 @@ const navItems = [
   { to: "/venue/rooms", icon: DoorOpen, label: "My Rooms" },
   { to: "/venue/bookings", icon: CalendarRange, label: "Bookings" },
   { to: "/venue/revenue", icon: Wallet, label: "Revenue" },
+  { to: "/jobs/post", icon: Briefcase, label: "Post a Job / Hire" },
+  { to: "/jobs?type=therapist", icon: Briefcase, label: "Find Therapists" },
   { to: "/venue/profile", icon: User, label: "Profile" },
 ];
 

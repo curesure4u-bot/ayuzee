@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { ClipboardList, Plus, Search } from "lucide-react";
+import { ClipboardList, Plus, Search, ArrowRight } from "lucide-react";
 
 type Consultation = {
   id: string;
@@ -16,6 +17,7 @@ type Consultation = {
 };
 
 const HmsConsultations = () => {
+  const navigate = useNavigate();
   const [consults, setConsults] = useState<Consultation[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -54,6 +56,15 @@ const HmsConsultations = () => {
           <p className="text-sm text-muted-foreground">{consults.length} consultations recorded</p>
         </div>
         <Button size="sm"><Plus className="mr-1 h-4 w-4" /> New Consultation</Button>
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        <Button size="sm" variant="outline" onClick={() => navigate("/hms/patient/casesheet")}>
+          <ClipboardList className="mr-1 h-3 w-3" /> Ayurveda Case Sheet
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => navigate("/hms/patient/prescription")}>
+          <ArrowRight className="mr-1 h-3 w-3" /> AI Prescription
+        </Button>
       </div>
 
       <div className="relative max-w-md">

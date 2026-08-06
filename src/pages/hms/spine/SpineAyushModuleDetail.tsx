@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Activity, BookOpen, ArrowLeft, CheckCircle2, Clock, Play,
   ChevronDown, ChevronUp, Leaf, Brain, Stethoscope, Heart,
@@ -259,6 +260,77 @@ export default function SpineAyushModuleDetail() {
   const id = parseInt(moduleId || "1");
   const moduleData = allModuleData[id];
 
+  // Load saved progress from Supabase
+  useEffect(() => {
+    const loadProgress = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Get the module UUID from spine_ayush_modules
+        const { data: moduleRow } = await supabase
+          .from("spine_ayush_modules")
+          .select("id")
+          .eq("module_number", id)
+          .maybeSingle();
+
+        if (!moduleRow) return;
+
+        const { data } = await supabase
+          .from("spine_ayush_user_progress")
+          .select("notes, progress_pct")
+          .eq("user_id", user.id)
+          .eq("module_id", moduleRow.id)
+          .is("topic_id", null)
+          .maybeSingle();
+
+        if (data?.notes) {
+          try {
+            const savedTopics = JSON.parse(data.notes);
+            if (Array.isArray(savedTopics)) {
+              setExpandedTopics(new Set(savedTopics));
+            }
+          } catch {}
+        }
+      } catch (err) {
+        // Silent fail — progress just won't be pre-loaded
+      }
+    };
+    loadProgress();
+  }, [id]);
+
+  // Save progress when topics change
+  const saveProgress = async (topicIndices: Set<number>) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || topicIndices.size === 0) return;
+
+      const totalTopics = moduleData?.topics?.length || 0;
+      const completionPct = totalTopics > 0 ? Math.round((topicIndices.size / totalTopics) * 100) : 0;
+
+      // Get module UUID
+      const { data: moduleRow } = await supabase
+        .from("spine_ayush_modules")
+        .select("id")
+        .eq("module_number", id)
+        .maybeSingle();
+
+      if (!moduleRow) return;
+
+      await supabase.from("spine_ayush_user_progress").upsert({
+        user_id: user.id,
+        module_id: moduleRow.id,
+        topic_id: null,
+        status: completionPct >= 100 ? "completed" : completionPct > 0 ? "in_progress" : "not_started",
+        progress_pct: completionPct,
+        notes: JSON.stringify(Array.from(topicIndices)),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id,module_id,topic_id" });
+    } catch (err) {
+      // Silent fail
+    }
+  };
+
   if (!moduleData) {
     return (
       <div className="text-center py-12">
@@ -277,12 +349,15 @@ export default function SpineAyushModuleDetail() {
       const next = new Set(prev);
       if (next.has(index)) next.delete(index);
       else next.add(index);
+      saveProgress(next);
       return next;
     });
   };
 
   const expandAll = () => {
-    setExpandedTopics(new Set(moduleData.topics.map((_, i) => i)));
+    const all = new Set(moduleData.topics.map((_, i) => i));
+    setExpandedTopics(all);
+    saveProgress(all);
   };
 
   const collapseAll = () => {

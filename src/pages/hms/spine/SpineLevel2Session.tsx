@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Activity, CheckCircle2, Clock, Stethoscope, Target,
   Save, ClipboardList, Sparkles, Heart, Calendar,
@@ -203,6 +204,58 @@ export default function SpineLevel2Session() {
     ],
   };
 
+  const [saving, setSaving] = useState(false);
+
+  const handleSaveLevel2 = async () => {
+    if (!selectedTherapy) { toast.error("Please select a therapy"); return; }
+    if (!formData.patientName) { toast.error("Please enter patient name/ID"); return; }
+
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("You must be logged in"); setSaving(false); return; }
+
+      const therapy = allTherapies.find(t => t.id === selectedTherapy);
+      const completedCheckpoints = Array.from(checkedItems).map(name => {
+        const cp = currentCPs.find(c => c.name === name);
+        return { name, category: cp?.category || "execution", completed: true };
+      });
+
+      const { error } = await supabase.from("spine_therapy_sessions").insert({
+        patient_id: user.id,
+        doctor_id: user.id,
+        session_number: parseInt(formData.sessionNumber) || 1,
+        therapy_id: selectedTherapy <= 15 ? selectedTherapy : 1,
+        therapy_name: therapy?.name || "",
+        duration_minutes: parseInt(formData.duration) || 45,
+        intensity: formData.intensity || null,
+        body_area: formData.bodyArea || null,
+        spinal_level: formData.spinalLevel || null,
+        checkpoints_completed: completedCheckpoints,
+        total_checkpoints: currentCPs.length,
+        checkpoints_done: checkedItems.size,
+        pain_before: formData.painBefore ? parseInt(formData.painBefore) : null,
+        pain_after: formData.painAfter ? parseInt(formData.painAfter) : null,
+        immediate_response: formData.immediateResponse || null,
+        doctor_notes: formData.doctorNotes || null,
+        next_session_plan: formData.nextPlan || null,
+        home_exercise_given: formData.homeAdvice || null,
+        status: "completed",
+      });
+
+      if (error) {
+        console.error("Save error:", error);
+        toast.error("Failed to save: " + error.message);
+      } else {
+        toast.success(`Day ${formData.dayOfCourse} session saved! Recovery score updated.`);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    }
+    setSaving(false);
+  };
+
   const toggleCheck = (item: string) => {
     setCheckedItems(prev => { const n = new Set(prev); if (n.has(item)) n.delete(item); else n.add(item); return n; });
   };
@@ -390,8 +443,8 @@ export default function SpineLevel2Session() {
             </CardContent>
           </Card>
 
-          <Button className="w-full bg-purple-600 hover:bg-purple-700 h-12" onClick={() => toast.success(`Day ${formData.dayOfCourse} session saved! Recovery score updated.`)}>
-            <Save className="h-4 w-4 mr-2" /> Save Day {formData.dayOfCourse} Session
+          <Button className="w-full bg-purple-600 hover:bg-purple-700 h-12" onClick={handleSaveLevel2} disabled={saving}>
+            <Save className="h-4 w-4 mr-2" /> {saving ? "Saving..." : `Save Day ${formData.dayOfCourse} Session`}
           </Button>
 
           {selectedTherapy && (

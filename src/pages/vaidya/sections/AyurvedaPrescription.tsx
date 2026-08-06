@@ -7,9 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Pill, Plus, Trash2, Search, Save, Printer, FileText, Download } from "lucide-react";
+import { Pill, Plus, Trash2, Search, Save, Printer, FileText, Download, Leaf, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import PrescriptionPrintable from "@/components/vaidya/PrescriptionPrintable";
+import { ALL_SNA_MEDICINES } from "@/pages/hms/sna/snaData";
+import { CLASSICAL_PRESCRIPTIONS } from "@/pages/hms/sna/classicalPrescriptionsData";
+import { findDietChart, type DietChart, type Language } from "@/data/dietChartData";
+import DietChartPrintable from "@/components/vaidya/DietChartPrintable";
 import {
   startAyuzeePdf, addTitle, addPlainTable, addSectionTable, addParagraph,
   finalizeAyuzeePdf, safeFileName,
@@ -46,6 +50,9 @@ const AyurvedaPrescription = () => {
   const [search, setSearch] = useState("");
   const [lines, setLines] = useState<Line[]>([]);
   const [saving, setSaving] = useState(false);
+  const [dietChart, setDietChart] = useState<DietChart | null>(null);
+  const [dietLang, setDietLang] = useState<Language>("en");
+  const [showDietPrint, setShowDietPrint] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -68,6 +75,32 @@ const AyurvedaPrescription = () => {
     }).slice(0, 8);
   }, [allDrugs, search]);
 
+  // SNA Formulary (Sahasrayoga) matches - search by symptom/indication/ingredient
+  const snaMatches = useMemo(() => {
+    const t = search.trim().toLowerCase();
+    if (!t) return [];
+    return ALL_SNA_MEDICINES.filter((m) => {
+      const hay = `${m.name} ${m.category} ${m.indication} ${m.ingredients}`.toLowerCase();
+      return hay.includes(t);
+    }).slice(0, 6);
+  }, [search]);
+
+  // CCRAS Classical Prescriptions - match by disease name (Ayurvedic or modern)
+  const ccrasMatches = useMemo(() => {
+    const t = search.trim().toLowerCase();
+    if (!t) return [] as { disease: string; formulation: typeof CLASSICAL_PRESCRIPTIONS[0]["compoundFormulations"][0] }[];
+    const results: { disease: string; formulation: typeof CLASSICAL_PRESCRIPTIONS[0]["compoundFormulations"][0] }[] = [];
+    for (const disease of CLASSICAL_PRESCRIPTIONS) {
+      const hay = `${disease.name} ${disease.modernName} ${disease.ayurvedicName}`.toLowerCase();
+      if (hay.includes(t)) {
+        for (const f of [...disease.compoundFormulations, ...disease.singleFormulations].slice(0, 4)) {
+          results.push({ disease: `${disease.ayurvedicName} (${disease.modernName})`, formulation: f });
+        }
+      }
+    }
+    return results.slice(0, 5);
+  }, [search]);
+
   const addDrug = (d: Drug) => {
     if (lines.find((l) => l.drug.id === d.id)) {
       toast.info("Already in prescription");
@@ -78,6 +111,63 @@ const AyurvedaPrescription = () => {
       duration: "7 days", anupana: "Warm water", instructions: "",
     }]);
     setSearch("");
+  };
+
+  // Add SNA medicine to prescription (convert to Drug-like format)
+  const addSnaDrug = (m: typeof ALL_SNA_MEDICINES[0]) => {
+    const syntheticId = `sna-${m.category}-${m.id}`;
+    if (lines.find((l) => l.drug.id === syntheticId)) {
+      toast.info("Already in prescription");
+      return;
+    }
+    const drug: Drug = {
+      id: syntheticId,
+      name: m.name,
+      category: m.category,
+      indications: m.indication.split(",").map(s => s.trim()),
+      dose: m.dose,
+      precautions: null,
+      mode_of_administration: null,
+    };
+    setLines((prev) => [...prev, {
+      drug,
+      dose_override: m.dose,
+      frequency: "BD (twice)",
+      duration: "14 days",
+      anupana: m.anupana || "Warm water",
+      instructions: m.reference ? `Ref: ${m.reference}` : "",
+    }]);
+    setSearch("");
+    toast.success(`Added ${m.name} (Sahasrayoga)`);
+  };
+
+  // Add CCRAS classical formulation to prescription
+  const addCcrasDrug = (item: typeof ccrasMatches[0]) => {
+    const f = item.formulation;
+    const syntheticId = `ccras-${f.name}-${f.dose}`;
+    if (lines.find((l) => l.drug.id === syntheticId)) {
+      toast.info("Already in prescription");
+      return;
+    }
+    const drug: Drug = {
+      id: syntheticId,
+      name: f.name,
+      category: "CCRAS Classical",
+      indications: [item.disease],
+      dose: f.dose,
+      precautions: null,
+      mode_of_administration: f.dosageForm,
+    };
+    setLines((prev) => [...prev, {
+      drug,
+      dose_override: f.dose,
+      frequency: "BD (twice)",
+      duration: "14 days",
+      anupana: f.anupana || "Warm water",
+      instructions: `CCRAS Ref: ${f.reference}`,
+    }]);
+    setSearch("");
+    toast.success(`Added ${f.name} (CCRAS Classical)`);
   };
 
   const updateLine = (i: number, patch: Partial<Line>) =>
@@ -142,6 +232,17 @@ const AyurvedaPrescription = () => {
       columnStyles: { 0: { cellWidth: 8 } },
     });
     if (advice.trim()) y = addParagraph(doc, y, "Pathya / Lifestyle advice", advice);
+
+    // Auto-add Pathyapathya from diet chart if available
+    const chart = findDietChart(diagnosis);
+    if (chart) {
+      y = addParagraph(doc, y, "Pathya (Do's)", chart.pathya.en.join(", "));
+      y = addParagraph(doc, y, "Apathya (Don'ts)", chart.apathya.en.join(", "));
+      y = addParagraph(doc, y, "Lifestyle - Do's", chart.lifestylePathya.en.join(", "));
+      y = addParagraph(doc, y, "Lifestyle - Don'ts", chart.lifestyleApathya.en.join(", "));
+      y = addParagraph(doc, y, "Diet Note", chart.notes.en);
+    }
+
     finalizeAyuzeePdf(
       doc,
       `Ayurveda-Rx-${safeFileName(selectedPatient?.full_name)}-${Date.now()}.pdf`,
@@ -161,7 +262,7 @@ const AyurvedaPrescription = () => {
           <div>
             <h1 className="font-display text-xl">Ayurveda Prescription Writer</h1>
             <p className="text-xs text-muted-foreground">
-              Powered by AYUSH Essential Drugs List ({allDrugs.length} formulations) — auto-fills dose, anupana, precautions.
+              Powered by AYUSH Essential Drugs List ({allDrugs.length} formulations) + Ayuzee Formulary ({ALL_SNA_MEDICINES.length} Sahasrayoga classics) + CCRAS Classical Prescriptions ({CLASSICAL_PRESCRIPTIONS.length} diseases) — auto-fills dose, anupana, precautions.
             </p>
           </div>
         </div>
@@ -206,8 +307,11 @@ const AyurvedaPrescription = () => {
           <Input className="pl-9" placeholder="Type name or indication: triphala, jwara, arsha…"
             value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
-        {matches.length > 0 && (
-          <div className="mt-2 space-y-1 rounded-md border border-border bg-popover p-2">
+        {(matches.length > 0 || snaMatches.length > 0 || ccrasMatches.length > 0) && (
+          <div className="mt-2 space-y-1 rounded-md border border-border bg-popover p-2 max-h-[300px] overflow-y-auto">
+            {matches.length > 0 && (
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-2 pt-1">Essential Drugs List</div>
+            )}
             {matches.map((d) => (
               <button key={d.id} type="button" onClick={() => addDrug(d)}
                 className="flex w-full items-start justify-between gap-2 rounded p-2 text-left hover:bg-accent">
@@ -219,6 +323,48 @@ const AyurvedaPrescription = () => {
                   </p>
                 </div>
                 <Plus className="h-4 w-4 text-primary" />
+              </button>
+            ))}
+            {snaMatches.length > 0 && (
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-2 pt-2 border-t mt-1 flex items-center gap-1">
+                <Leaf className="h-3 w-3" /> Ayuzee Formulary (Sahasrayoga)
+              </div>
+            )}
+            {snaMatches.map((m) => (
+              <button key={`sna-${m.category}-${m.id}`} type="button" onClick={() => addSnaDrug(m)}
+                className="flex w-full items-start justify-between gap-2 rounded p-2 text-left hover:bg-green-50 dark:hover:bg-green-950/20">
+                <div className="flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium">{m.name}</p>
+                    <Badge className="text-[9px] h-4 bg-green-600 text-white">{m.category}</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {m.dose} · {m.indication.split(",").slice(0, 3).join(", ")}
+                  </p>
+                  {m.anupana && <p className="text-[10px] text-green-700">Anupana: {m.anupana}</p>}
+                </div>
+                <Plus className="h-4 w-4 text-green-600" />
+              </button>
+            ))}
+            {ccrasMatches.length > 0 && (
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-2 pt-2 border-t mt-1 flex items-center gap-1">
+                <BookOpen className="h-3 w-3" /> CCRAS Classical Prescriptions (Govt. of India)
+              </div>
+            )}
+            {ccrasMatches.map((item, idx) => (
+              <button key={`ccras-${idx}`} type="button" onClick={() => addCcrasDrug(item)}
+                className="flex w-full items-start justify-between gap-2 rounded p-2 text-left hover:bg-blue-50 dark:hover:bg-blue-950/20">
+                <div className="flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium">{item.formulation.name}</p>
+                    <Badge className="text-[9px] h-4 bg-blue-600 text-white">{item.formulation.dosageForm}</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {item.formulation.dose} · For: {item.disease}
+                  </p>
+                  {item.formulation.anupana && <p className="text-[10px] text-blue-700">Anupana: {item.formulation.anupana}</p>}
+                </div>
+                <Plus className="h-4 w-4 text-blue-600" />
               </button>
             ))}
           </div>
@@ -300,8 +446,43 @@ const AyurvedaPrescription = () => {
         <Button variant="outline" onClick={downloadPDF} disabled={lines.length === 0}>
           <Download className="mr-1 h-4 w-4" /> Download PDF
         </Button>
+        <Button variant="outline" onClick={() => {
+          const chart = findDietChart(diagnosis);
+          if (chart) { setDietChart(chart); setShowDietPrint(true); }
+          else toast.info("No diet chart available for this diagnosis. Try: fever, amavata, diabetes, acidity, cough, sciatica, piles");
+        }}>
+          <Leaf className="mr-1 h-4 w-4" /> Diet Chart
+        </Button>
       </div>
       </div>
+
+      {/* Diet Chart Print View */}
+      {showDietPrint && dietChart && (
+        <div className="print:block">
+          <Card className="p-4 print:shadow-none print:border-0">
+            <div className="flex items-center justify-between mb-3 print:hidden">
+              <div className="flex gap-1 flex-wrap">
+                <Button size="sm" variant={dietLang === "en" ? "default" : "outline"} className="text-xs h-7" onClick={() => setDietLang("en")}>English</Button>
+                <Button size="sm" variant={dietLang === "hi" ? "default" : "outline"} className="text-xs h-7" onClick={() => setDietLang("hi")}>हिन्दी</Button>
+                <Button size="sm" variant={dietLang === "ta" ? "default" : "outline"} className="text-xs h-7" onClick={() => setDietLang("ta")}>தமிழ்</Button>
+                <Button size="sm" variant={dietLang === "ml" ? "default" : "outline"} className="text-xs h-7" onClick={() => setDietLang("ml")}>മലയാളം</Button>
+                <Button size="sm" variant={dietLang === "kn" ? "default" : "outline"} className="text-xs h-7" onClick={() => setDietLang("kn")}>ಕನ್ನಡ</Button>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" onClick={() => window.print()}><Printer className="mr-1 h-3 w-3" /> Print Diet Chart</Button>
+                <Button size="sm" variant="ghost" onClick={() => setShowDietPrint(false)}>Close</Button>
+              </div>
+            </div>
+            <DietChartPrintable
+              chart={dietChart}
+              lang={dietLang}
+              patientName={selectedPatient?.full_name}
+              doctorName=""
+              date={new Date(visitDate).toLocaleDateString()}
+            />
+          </Card>
+        </div>
+      )}
 
       <PrescriptionPrintable
         system="Ayurveda"
