@@ -855,13 +855,8 @@ CREATE TRIGGER on_mentorship_request_accepted
   AFTER UPDATE ON mentorship_requests
   FOR EACH ROW EXECUTE FUNCTION on_mentorship_accepted();
 
--- 6. Seed sample mentors
-INSERT INTO student_mentors (user_id, full_name, college_name, specialization, year_of_study, bio, subjects, is_available)
-VALUES
-  ('00000000-0000-0000-0000-000000000001', 'Dr. Arjun Nair', 'SDM College of Ayurveda, Udupi', 'Kayachikitsa', 4, 'Final year BAMS student with research interest in metabolic disorders. Happy to guide juniors on exam prep and clinical postings.', ARRAY['Kayachikitsa', 'Dravyaguna', 'Panchakarma'], true),
-  ('00000000-0000-0000-0000-000000000002', 'Priya Sharma', 'VPSV Ayurveda College, Kottakkal', 'Panchakarma', 3, 'Third year student passionate about Panchakarma procedures. Can help with practical skills and viva preparation.', ARRAY['Panchakarma', 'Rachana Sharir', 'Kriya Sharir'], true),
-  ('00000000-0000-0000-0000-000000000003', 'Rahul Verma', 'Faculty of Ayurveda, BHU, Varanasi', 'Research', 5, 'MD scholar focusing on clinical research methodology. Available to mentor on thesis writing and publication.', ARRAY['Research Methodology', 'Samhita & Siddhant', 'Kayachikitsa'], true)
-ON CONFLICT (user_id) DO NOTHING;
+-- 6. Seed sample mentors (skipped — fake user IDs not in auth.users)
+-- Mentors will be created when real users register as mentors via the app.
 
 -- Done! Mentorship tables created with sample data.
 -- ═══════════════════════════════════════════════════════════
