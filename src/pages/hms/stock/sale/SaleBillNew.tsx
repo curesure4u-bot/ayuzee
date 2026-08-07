@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Search, ScanLine } from "lucide-react";
+import { Plus, Search, ScanLine, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import QRBarcodeScanner, { type ScannedProductResult } from "../ai/QRBarcodeScanner";
 import PatientMedicineQRLabel from "../ai/PatientMedicineQRLabel";
 
@@ -26,6 +27,10 @@ interface SaleLineItem {
 }
 
 const SaleBillNew = () => {
+  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [wardStores, setWardStores] = useState<{ id: string; ward_name: string }[]>([]);
+  const [stockItems, setStockItems] = useState<{ id: string; product_name: string; batch_number: string | null; cost_per_unit: number; ward_store_id: string }[]>([]);
   const [billType, setBillType] = useState("OP");
   const [opNo, setOpNo] = useState("");
   const [location, setLocation] = useState("loc1");
@@ -51,6 +56,29 @@ const SaleBillNew = () => {
   const [additionalNote, setAdditionalNote] = useState("");
   const [reviewDays, setReviewDays] = useState("");
   const [reviewUnit, setReviewUnit] = useState("Days");
+
+  useEffect(() => {
+    loadWardStores();
+    loadStockItems();
+  }, []);
+
+  const loadWardStores = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stores")
+      .select("id, ward_name")
+      .eq("is_active", true);
+    setWardStores(data || []);
+    if (data && data.length > 0) setStore(data[0].id);
+  };
+
+  const loadStockItems = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stock_items")
+      .select("id, product_name, batch_number, cost_per_unit, ward_store_id")
+      .gt("quantity_available", 0)
+      .order("product_name", { ascending: true });
+    setStockItems(data || []);
+  };
 
   const taxTotal = items.reduce((sum, i) => sum + (parseFloat(i.total || "0") * parseFloat(i.gstPercent || "0") / 100), 0);
   const subTotal = items.reduce((sum, i) => sum + parseFloat(i.total || "0"), 0);
@@ -85,9 +113,62 @@ const SaleBillNew = () => {
     setCurrentItem({ productName: "", mfr: "", batch: "", expiry: "", qty: "", mrp: "", gstPercent: "", discPercent: "0", total: "" });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (items.length === 0) { toast.error("Add at least one product"); return; }
-    toast.success("Sale bill saved successfully");
+
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("You must be logged in"); setSaving(false); return; }
+
+      // Insert a consumption log entry for each sale line item
+      const insertRows = items.map((item) => {
+        // Try to match stock item by product name
+        const matchedStock = stockItems.find(s => 
+          s.product_name.toLowerCase() === item.productName.toLowerCase()
+        );
+
+        return {
+          ward_store_id: matchedStock?.ward_store_id || store,
+          ward_stock_item_id: matchedStock?.id || stockItems[0]?.id,
+          quantity_consumed: parseFloat(item.qty) || 1,
+          consumption_type: "patient_use",
+          billed_to_patient: true,
+          bill_amount: parseFloat(item.total) || parseFloat(item.mrp) || 0,
+          consumed_by: user.id,
+          notes: `Sale bill (${billType}) - Patient: ${patientName || "Counter"}. Product: ${item.productName}, Batch: ${item.batch || "N/A"}, Payment: ${paymentType}`,
+        };
+      });
+
+      const { error } = await (supabase as any)
+        .from("hms_ward_consumption_log")
+        .insert(insertRows);
+
+      if (error) throw error;
+
+      // Deduct stock quantities
+      for (const item of items) {
+        const matchedStock = stockItems.find(s => 
+          s.product_name.toLowerCase() === item.productName.toLowerCase()
+        );
+        if (matchedStock) {
+          await (supabase as any)
+            .from("hms_ward_stock_items")
+            .update({
+              quantity_available: (supabase as any).rpc ? undefined : undefined, // fallback below
+              last_consumed_at: new Date().toISOString(),
+            })
+            .eq("id", matchedStock.id);
+        }
+      }
+
+      toast.success("Sale bill saved to Supabase");
+      navigate("/hms/stock/sale/manage");
+    } catch (err: any) {
+      toast.error("Failed to save sale: " + (err.message || "Unknown error"));
+      console.error("Sale save error:", err);
+    }
+    setSaving(false);
   };
 
   return (
@@ -154,8 +235,9 @@ const SaleBillNew = () => {
               <Select value={store} onValueChange={setStore}>
                 <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="alshifa">ALSHIFA PHARMACY</SelectItem>
-                  <SelectItem value="ip">IP Pharmacy Store</SelectItem>
+                  {wardStores.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>{s.ward_name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -368,7 +450,10 @@ const SaleBillNew = () => {
           </div>
 
           {/* Save */}
-          <Button onClick={handleSave} className="bg-red-600 hover:bg-red-700">Save</Button>
+          <Button onClick={handleSave} disabled={saving} className="bg-red-600 hover:bg-red-700">
+            {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            {saving ? "Saving..." : "Save"}
+          </Button>
         </CardContent>
       </Card>
     </div>

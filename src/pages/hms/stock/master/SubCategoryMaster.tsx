@@ -29,6 +29,7 @@ const SubCategoryMaster = () => {
       title="Sub-Category"
       entityName="Sub-Category"
       initialItems={mockSubCategories}
+      storageKey="hms_master_sub_category"
     />
   );
 };

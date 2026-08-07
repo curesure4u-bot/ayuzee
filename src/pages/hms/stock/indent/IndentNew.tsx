@@ -1,18 +1,68 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const IndentNew = () => {
+  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [wardStores, setWardStores] = useState<{ id: string; ward_name: string }[]>([]);
   const [location, setLocation] = useState("loc1");
-  const [store, setStore] = useState("");
+  const [fromStore, setFromStore] = useState("");
+  const [toStore, setToStore] = useState("");
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState("");
 
-  const handleSave = () => {
-    if (!store) { toast.error("Store is required"); return; }
-    toast.success("Indent created - add products in next screen");
+  useEffect(() => {
+    loadWardStores();
+  }, []);
+
+  const loadWardStores = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stores")
+      .select("id, ward_name")
+      .eq("is_active", true);
+    setWardStores(data || []);
+  };
+
+  const handleSave = async () => {
+    if (!toStore) { toast.error("To Store is required"); return; }
+    if (!productName.trim()) { toast.error("Product name is required"); return; }
+    if (!quantity || parseFloat(quantity) <= 0) { toast.error("Quantity must be > 0"); return; }
+
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("You must be logged in"); setSaving(false); return; }
+
+      const fromStoreId = fromStore || (wardStores.length > 0 ? wardStores[0].id : toStore);
+
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .insert({
+          from_store_id: fromStoreId,
+          to_store_id: toStore,
+          product_name: productName.trim(),
+          quantity: parseFloat(quantity),
+          transfer_reason: "Indent request",
+          status: "pending",
+          requested_by: user.id,
+        });
+
+      if (error) throw error;
+      toast.success("Indent created in Supabase");
+      navigate("/hms/stock/indent/manage");
+    } catch (err: any) {
+      toast.error("Failed to create indent: " + (err.message || "Unknown error"));
+      console.error(err);
+    }
+    setSaving(false);
   };
 
   return (
@@ -50,17 +100,39 @@ const IndentNew = () => {
               </Select>
             </div>
             <div>
-              <Label className="text-sm font-semibold">Store * :</Label>
-              <Select value={store} onValueChange={setStore}>
-                <SelectTrigger><SelectValue placeholder="" /></SelectTrigger>
+              <Label className="text-sm font-semibold">From Store :</Label>
+              <Select value={fromStore} onValueChange={setFromStore}>
+                <SelectTrigger><SelectValue placeholder="Select source store" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="alshifa">ALSHIFA PHARMACY</SelectItem>
-                  <SelectItem value="ip">IP Pharmacy Store</SelectItem>
+                  {wardStores.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>{s.ward_name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <Label className="text-sm font-semibold">To Store * :</Label>
+              <Select value={toStore} onValueChange={setToStore}>
+                <SelectTrigger><SelectValue placeholder="Select destination store" /></SelectTrigger>
+                <SelectContent>
+                  {wardStores.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>{s.ward_name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-sm font-semibold">Product Name * :</Label>
+              <Input placeholder="Enter product name" value={productName} onChange={(e) => setProductName(e.target.value)} />
+            </div>
+            <div>
+              <Label className="text-sm font-semibold">Quantity * :</Label>
+              <Input type="number" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+            </div>
             <div className="text-center pt-4">
-              <Button onClick={handleSave} className="bg-amber-700 hover:bg-amber-800 px-8">Save</Button>
+              <Button onClick={handleSave} disabled={saving} className="bg-amber-700 hover:bg-amber-800 px-8">
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
+              </Button>
             </div>
           </div>
         </CardContent>

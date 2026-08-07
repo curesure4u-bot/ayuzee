@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -6,11 +6,53 @@ import { Badge } from "@/components/ui/badge";
 import {
   IndianRupee, TrendingUp, TrendingDown, Users, Calendar,
   CreditCard, Wallet, BarChart3, ArrowUpRight, ArrowDownRight,
-  Building2, Stethoscope, FlaskConical, Pill, Download,
+  Building2, Stethoscope, FlaskConical, Pill, Download, Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const RevenueDashboard = () => {
   const [period, setPeriod] = useState("this-month");
+  const [loading, setLoading] = useState(true);
+  const [revenue, setRevenue] = useState({ total: 0, pharmacy: 0, advances: 0, wastage: 0, patientsBilled: 0 });
+  const [byStore, setByStore] = useState<{ store: string; amount: number }[]>([]);
+
+  useEffect(() => { loadRevenue(); }, []);
+
+  const loadRevenue = async () => {
+    setLoading(true);
+    try {
+      const [{ data: sales }, { data: advances }, { data: wastage }] = await Promise.all([
+        (supabase as any).from("hms_ward_consumption_log").select("bill_amount, ward_store_id, hms_ward_stores(ward_name)").eq("billed_to_patient", true),
+        (supabase as any).from("hms_patient_advances").select("amount, payment_mode"),
+        (supabase as any).from("hms_ward_consumption_log").select("bill_amount").in("consumption_type", ["wastage", "expired"]),
+      ]);
+
+      const pharmacyTotal = (sales || []).reduce((s: number, r: any) => s + (r.bill_amount || 0), 0);
+      const advanceTotal = (advances || []).reduce((s: number, a: any) => s + (a.amount || 0), 0);
+      const wastageTotal = (wastage || []).reduce((s: number, w: any) => s + (w.bill_amount || 0), 0);
+
+      setRevenue({
+        total: pharmacyTotal + advanceTotal,
+        pharmacy: pharmacyTotal,
+        advances: advanceTotal,
+        wastage: wastageTotal,
+        patientsBilled: (sales || []).length,
+      });
+
+      // Group by store
+      const storeMap: Record<string, number> = {};
+      (sales || []).forEach((s: any) => {
+        const name = s.hms_ward_stores?.ward_name || "Unknown";
+        storeMap[name] = (storeMap[name] || 0) + (s.bill_amount || 0);
+      });
+      setByStore(Object.entries(storeMap).map(([store, amount]) => ({ store, amount })).sort((a, b) => b.amount - a.amount));
+    } catch (err: any) {
+      toast.error("Failed to load revenue");
+      console.error(err);
+    }
+    setLoading(false);
+  };
 
   const kpis = [
     { label: "Total Revenue", value: "₹12,45,000", change: 14.2, trend: "up", icon: IndianRupee, color: "text-green-600" },

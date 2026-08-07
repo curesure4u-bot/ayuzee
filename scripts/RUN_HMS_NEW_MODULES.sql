@@ -1,0 +1,49 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- AYUZEE HMS — NEW MODULES: Tables + Seed Data
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- This is a convenience script that runs BOTH:
+--   1. create_hms_new_modules.sql (19 tables)
+--   2. seed_hms_new_modules.sql (sample data)
+--
+-- TABLES CREATED:
+--   1.  hms_radiology_orders
+--   2.  hms_teleconsult_sessions
+--   3.  hms_online_bookings
+--   4.  hms_patient_feedback
+--   5.  hms_shift_roster
+--   6.  hms_maintenance_jobs
+--   7.  hms_appointments
+--   8.  hms_ambulance_vehicles
+--   9.  hms_ambulance_trips
+--   10. hms_diet_orders
+--   11. hms_referrals
+--   12. hms_loyalty_members
+--   13. hms_insurance_claims (may already exist — skipped if so)
+--   14. hms_blood_stock
+--   15. hms_blood_requests
+--   16. hms_marketing_campaigns
+--   17. hms_indents
+--   18. hms_queue_tokens
+--   19. hms_access_roles
+--
+-- SAFE TO RUN MULTIPLE TIMES (uses CREATE TABLE IF NOT EXISTS)
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- Step 1: Run create_hms_new_modules.sql first
+-- Step 2: Run seed_hms_new_modules.sql after
+
+-- NOTE: In Supabase SQL Editor, copy and paste the contents of:
+--   scripts/create_hms_new_modules.sql
+-- Then separately run:
+--   scripts/seed_hms_new_modules.sql
+--
+-- If you get "column does not exist" errors, it means a table was
+-- previously created with a different schema. Check the specific table
+-- in Supabase Table Editor and compare columns.
+--
+-- Connected React Hooks (src/hooks/):
+--   useRadiology, useTeleconsult, useOnlineBooking, useFeedback,
+--   useShiftRoster, useMaintenance, usePatientAppointments, useAmbulance,
+--   useDietKitchen, useReferral, useLoyalty, useBloodBank, useMarketing,
+--   useIndent, useQueueDisplay, useAccessControl
+-- ═══════════════════════════════════════════════════════════════════════════════

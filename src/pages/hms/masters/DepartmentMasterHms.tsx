@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Building2, Plus, Search, Edit, Trash2, Users, IndianRupee, MoreHorizontal, Stethoscope, FlaskConical, Recycle } from "lucide-react";
+import { Building2, Plus, Search, Edit, Trash2, Users, IndianRupee, MoreHorizontal, Stethoscope, FlaskConical, Recycle, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type Department = {
   id: string;
@@ -46,8 +47,43 @@ const mockDepts: Department[] = [
 ];
 
 const DepartmentMasterHms = () => {
-  const [departments] = useState<Department[]>(mockDepts);
+  const [departments, setDepartments] = useState<Department[]>(mockDepts);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+
+  useEffect(() => { loadDepartments(); }, []);
+
+  const loadDepartments = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_departments")
+        .select("*")
+        .order("sort_order", { ascending: true });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setDepartments(data.map((d: any) => ({
+          id: d.id,
+          code: d.department_code || "—",
+          name: d.department_name,
+          type: d.ayush_system || "General",
+          hod: d.head_doctor_name || "—",
+          location: d.floor_or_room || "—",
+          consultFee: 0,
+          followUpFee: 0,
+          doctors: 0,
+          staff: 0,
+          timing: "Mon-Sat",
+          status: d.is_active ? "active" : "inactive",
+        })));
+      }
+    } catch (err: any) {
+      console.error("Dept load error:", err);
+    }
+    setLoading(false);
+  };
   const [filterType, setFilterType] = useState("all");
   const [addOpen, setAddOpen] = useState(false);
   const [tab, setTab] = useState("dr-dept");

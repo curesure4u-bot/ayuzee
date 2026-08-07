@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +11,9 @@ import { toast } from "sonner";
 import {
   FileBarChart, Clock, Mail, MessageSquare, Send, Settings,
   TrendingUp, Users, IndianRupee, AlertTriangle, Calendar,
-  CheckCircle, Plus
+  CheckCircle, Plus, Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type ReportSchedule = {
   id: string;
@@ -62,6 +63,19 @@ const channelIcons: Record<string, typeof Mail> = {
 const HmsEodReports = () => {
   const [schedules] = useState<ReportSchedule[]>(mockSchedules);
   const [history] = useState<ReportHistory[]>(mockHistory);
+  const [templates, setTemplates] = useState<any[]>([]);
+
+  useEffect(() => { loadTemplates(); }, []);
+
+  const loadTemplates = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_eod_report_templates")
+        .select("*")
+        .eq("is_active", true);
+      setTemplates(data || []);
+    } catch (err) { console.error(err); }
+  };
 
   const handleSendNow = () => {
     toast.success("EOD report generated and sent via WhatsApp!");

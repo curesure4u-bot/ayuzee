@@ -19,6 +19,7 @@ const MarketedByMaster = () => {
       title="Marketed By"
       entityName="Marketed By"
       initialItems={mockMarketedBy}
+      storageKey="hms_master_marketed_by"
     />
   );
 };

@@ -272,6 +272,7 @@ export const HmsPatientGenomic = lazyPage(() => import("@/pages/hms/patient/Geno
 export const HmsDoctorAIScribe = lazyPage(() => import("@/pages/hms/doctor/AIScribe"));
 export const HmsDoctorProtocols = lazyPage(() => import("@/pages/hms/doctor/TreatmentProtocols"));
 export const HmsDoctorRevenueExt = lazyPage(() => import("@/pages/hms/doctor/DoctorRevenue"));
+export const HmsDoctorEarnings = lazyPage(() => import("@/pages/hms/doctor/DoctorRevenueEarnings"));
 export const HmsDoctorQueueAnalytics = lazyPage(() => import("@/pages/hms/doctor/QueueAnalytics"));
 export const HmsDoctorCDSS = lazyPage(() => import("@/pages/hms/doctor/CDSSAlerts"));
 export const HmsDoctorQuickTemplates = lazyPage(() => import("@/pages/hms/doctor/QuickTemplates"));
@@ -335,11 +336,15 @@ export const HmsPortalSettings = lazyPage(() => import("@/pages/hms/HmsSettings"
 // HMS AYUSH Modules
 export const HmsPortalEmr = lazyPage(() => import("@/pages/hms/HmsEmr"));
 export const HmsPortalRadiology = lazyPage(() => import("@/pages/hms/HmsRadiology"));
+export const HmsRadiologyWorklist = lazyPage(() => import("@/pages/hms/radiology/RadiologyWorklist"));
+export const HmsRadiologyReporting = lazyPage(() => import("@/pages/hms/radiology/RadiologyReporting"));
+export const HmsRadiologyPACS = lazyPage(() => import("@/pages/hms/radiology/RadiologyPACS"));
 export const HmsPortalAyurveda = lazyPage(() => import("@/pages/hms/HmsAyurveda"));
 export const HmsPortalSiddha = lazyPage(() => import("@/pages/hms/HmsSiddha"));
 export const HmsPortalHomeopathy = lazyPage(() => import("@/pages/hms/HmsHomeopathy"));
 export const HmsPortalUnani = lazyPage(() => import("@/pages/hms/HmsUnani"));
 export const HmsPortalYoga = lazyPage(() => import("@/pages/hms/HmsYoga"));
+export const HmsPortalNaturopathy = lazyPage(() => import("@/pages/hms/HmsNaturopathy"));
 export const HmsPortalPanchakarma = lazyPage(() => import("@/pages/hms/HmsPanchakarma"));
 export const HmsPortalPanchakarmaSchedule = lazyPage(() => import("@/pages/hms/HmsPanchakarmaSchedule"));
 export const HmsPortalPanchakarmaPackages = lazyPage(() => import("@/pages/hms/HmsPanchakarmaPackages"));

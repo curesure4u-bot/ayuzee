@@ -6,9 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Users, CalendarClock, Heart, CreditCard, Warehouse, Clock,
   FileSpreadsheet, Printer, Brain, Building2, Sparkles, Zap,
-  Bell, ClipboardList, MessageSquare, Syringe, Activity
+  Bell, ClipboardList, MessageSquare, Syringe, Activity, Loader2
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useMisAppointments, generateAiOperationsSummary, type MisAppointmentFilters } from "@/hooks/useMisAppointments";
 
 /* ---------- PATIENT REPORTS ---------- */
 const patientReports = [
@@ -104,16 +105,21 @@ const miscReports = [
 /* ---------- REMINDERS ---------- */
 const reminderReports = [{ label: "Reminders", color: "bg-amber-600" }];
 
-const visitsPerDrData = [
-  { doctor: "Dr. Sivarama", visits: 85 },
-  { doctor: "Dr. Priya", visits: 62 },
-  { doctor: "Dr. Kumar", visits: 48 },
-  { doctor: "Dr. Anitha", visits: 35 },
-  { doctor: "Dr. Lakshmi", visits: 28 },
-];
+interface MisOperationalProps {
+  dateFrom?: string;
+  dateTo?: string;
+}
 
-const MisOperational = () => {
+const MisOperational = ({ dateFrom, dateTo }: MisOperationalProps) => {
   const [activeTab, setActiveTab] = useState("patients");
+
+  const today = new Date().toISOString().split("T")[0];
+  const filters: MisAppointmentFilters = {
+    dateFrom: dateFrom || today,
+    dateTo: dateTo || today,
+  };
+
+  const { visitsPerDoctor, summary, recentPatients, loading, error } = useMisAppointments(filters);
 
   const renderSection = (title: string, icon: React.ReactNode, reports: { label: string; items?: string[]; color: string }[]) => (
     <Card>
@@ -139,13 +145,28 @@ const MisOperational = () => {
             <Brain className="h-4 w-4 text-primary mt-0.5" />
             <div className="text-xs text-muted-foreground">
               <span className="font-medium text-primary">AI Operations Summary: </span>
-              32 OPD visits today (12 new, 20 repeat). Avg waiting time: 18 min. Dr. Sivarama busiest (85 visits/month).
-              2 IP discharges pending. Room occupancy: 65%. 5 appointments cancelled (follow-up needed).
-              Staff attendance: 95%. 3 pending therapy sessions.
+              {loading ? "Analyzing operational data..." : generateAiOperationsSummary(summary, visitsPerDoctor)}
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Loading indicator */}
+      {loading && (
+        <div className="flex items-center justify-center py-4 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Loading operational data...</span>
+        </div>
+      )}
+
+      {/* Error banner */}
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">
+            ⚠ Could not load live data (showing cached/demo). {error}
+          </CardContent>
+        </Card>
+      )}
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="flex-wrap">
@@ -195,38 +216,28 @@ const MisOperational = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b hover:bg-muted/30">
-                      <td className="px-2 py-2">1</td>
-                      <td className="px-2 py-2">P001</td>
-                      <td className="px-2 py-2">EXT-2145</td>
-                      <td className="px-2 py-2 font-medium">Rajesh Kumar</td>
-                      <td className="px-2 py-2">Male</td>
-                      <td className="px-2 py-2">15/03/1981</td>
-                      <td className="px-2 py-2">45</td>
-                      <td className="px-2 py-2">10/01/2026</td>
-                      <td className="px-2 py-2">98xxx12345</td>
-                      <td className="px-2 py-2">B+</td>
-                      <td className="px-2 py-2">Kadayanallur</td>
-                      <td className="px-2 py-2">Walk-in</td>
-                    </tr>
-                    <tr className="border-b hover:bg-muted/30">
-                      <td className="px-2 py-2">2</td>
-                      <td className="px-2 py-2">P002</td>
-                      <td className="px-2 py-2">—</td>
-                      <td className="px-2 py-2 font-medium">Sunita Devi</td>
-                      <td className="px-2 py-2">Female</td>
-                      <td className="px-2 py-2">22/08/1988</td>
-                      <td className="px-2 py-2">38</td>
-                      <td className="px-2 py-2">15/03/2026</td>
-                      <td className="px-2 py-2">97xxx45678</td>
-                      <td className="px-2 py-2">O+</td>
-                      <td className="px-2 py-2">Rajapalayam</td>
-                      <td className="px-2 py-2">Rajesh Kumar</td>
-                    </tr>
+                    {recentPatients.map((p, i) => (
+                      <tr key={p.id} className="border-b hover:bg-muted/30">
+                        <td className="px-2 py-2">{i + 1}</td>
+                        <td className="px-2 py-2">{p.id}</td>
+                        <td className="px-2 py-2">{p.externalId}</td>
+                        <td className="px-2 py-2 font-medium">{p.name}</td>
+                        <td className="px-2 py-2">{p.gender}</td>
+                        <td className="px-2 py-2">{p.dob}</td>
+                        <td className="px-2 py-2">{p.age}</td>
+                        <td className="px-2 py-2">{p.regDate}</td>
+                        <td className="px-2 py-2">{p.mobile}</td>
+                        <td className="px-2 py-2">{p.bloodGroup}</td>
+                        <td className="px-2 py-2">{p.area}</td>
+                        <td className="px-2 py-2">{p.referredBy}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
-              <div className="p-2 border-t bg-amber-50 text-xs text-amber-700 font-medium">Total Registrations: 2</div>
+              <div className="p-2 border-t bg-amber-50 text-xs text-amber-700 font-medium">
+                Total Registrations: {recentPatients.length}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -251,7 +262,7 @@ const MisOperational = () => {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={visitsPerDrData}>
+                <BarChart data={visitsPerDoctor}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="doctor" tick={{ fontSize: 10 }} />
                   <YAxis tick={{ fontSize: 10 }} />
@@ -261,6 +272,34 @@ const MisOperational = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+
+          {/* Summary stats cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-lg font-bold text-primary">{summary.totalVisits}</p>
+                <p className="text-[10px] text-muted-foreground">Total Visits</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-lg font-bold text-green-600">{summary.newPatients}</p>
+                <p className="text-[10px] text-muted-foreground">New Patients</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-lg font-bold text-blue-600">{summary.repeatPatients}</p>
+                <p className="text-[10px] text-muted-foreground">Repeat Patients</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-3 text-center">
+                <p className="text-lg font-bold text-red-600">{summary.cancelled}</p>
+                <p className="text-[10px] text-muted-foreground">Cancelled</p>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         {/* APPOINTMENTS */}

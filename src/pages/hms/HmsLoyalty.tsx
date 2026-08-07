@@ -5,21 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Award, Users, IndianRupee, Gift, Star, TrendingUp, Crown, Heart } from "lucide-react";
+import { Award, Users, IndianRupee, Gift, Star, TrendingUp, Crown, Heart, History, Share2, Search, Loader2 } from "lucide-react";
+import { useLoyalty } from "@/hooks/useLoyalty";
 
-type Member = { id: string; name: string; tier: "silver" | "gold" | "platinum"; points: number; totalSpent: number; visits: number; joinDate: string; nextReward: string };
 type Tier = { name: string; icon: React.ReactNode; minSpend: number; discount: number; benefits: string[]; members: number; color: string };
-
-const mockMembers: Member[] = [
-  { id: "1", name: "Ramesh Kumar", tier: "platinum", points: 4500, totalSpent: 185000, visits: 28, joinDate: "2024-06-01", nextReward: "Free Abhyanga session" },
-  { id: "2", name: "Lakshmi Devi", tier: "gold", points: 2200, totalSpent: 85000, visits: 15, joinDate: "2025-01-15", nextReward: "10% off next package" },
-  { id: "3", name: "Priya Menon", tier: "gold", points: 1800, totalSpent: 72000, visits: 12, joinDate: "2025-03-20", nextReward: "Free consultation" },
-  { id: "4", name: "Sunil Menon", tier: "silver", points: 900, totalSpent: 35000, visits: 8, joinDate: "2025-08-01", nextReward: "5% off medicines" },
-  { id: "5", name: "Anand Sharma", tier: "silver", points: 450, totalSpent: 18000, visits: 4, joinDate: "2026-02-10", nextReward: "Welcome reward pending" },
-  { id: "6", name: "Kavitha R.", tier: "platinum", points: 5200, totalSpent: 220000, visits: 35, joinDate: "2023-11-01", nextReward: "Complimentary health checkup" },
-];
 
 const tiers: Tier[] = [
   { name: "Silver", icon: <Star className="h-5 w-5" />, minSpend: 0, discount: 5, benefits: ["5% on medicines", "Birthday greeting", "Priority booking"], members: 2, color: "text-slate-500 bg-slate-100" },
@@ -27,10 +19,44 @@ const tiers: Tier[] = [
   { name: "Platinum", icon: <Crown className="h-5 w-5" />, minSpend: 150000, discount: 15, benefits: ["15% on all services", "Free annual checkup", "Complimentary therapy/year", "VIP lounge", "Home visit priority"], members: 2, color: "text-purple-600 bg-purple-100" },
 ];
 
+type Redemption = { id: string; patient: string; date: string; pointsUsed: number; reward: string; value: string };
+type Referral = { id: string; referrer: string; referred: string; date: string; status: "visited" | "pending" | "expired"; pointsAwarded: number };
+type PointsActivity = { id: string; patient: string; date: string; action: string; points: number; type: "earned" | "redeemed" };
+
+const mockRedemptions: Redemption[] = [
+  { id: "RD-1", patient: "Ramesh Kumar", date: "2026-08-05", pointsUsed: 1000, reward: "Free Abhyanga Massage", value: "₹1,500" },
+  { id: "RD-2", patient: "Kavitha R.", date: "2026-08-02", pointsUsed: 500, reward: "₹50 off consultation", value: "₹50" },
+  { id: "RD-3", patient: "Lakshmi Devi", date: "2026-07-28", pointsUsed: 2000, reward: "10% off PK package", value: "₹2,400" },
+  { id: "RD-4", patient: "Priya Menon", date: "2026-07-20", pointsUsed: 800, reward: "Free medicine delivery", value: "₹80" },
+];
+
+const mockReferrals: Referral[] = [
+  { id: "RF-1", referrer: "Ramesh Kumar", referred: "Anil Krishnan", date: "2026-08-03", status: "visited", pointsAwarded: 500 },
+  { id: "RF-2", referrer: "Kavitha R.", referred: "Meena Nair", date: "2026-08-05", status: "visited", pointsAwarded: 500 },
+  { id: "RF-3", referrer: "Priya Menon", referred: "Suresh B.", date: "2026-08-06", status: "pending", pointsAwarded: 0 },
+  { id: "RF-4", referrer: "Lakshmi Devi", referred: "Ravi Kumar", date: "2026-07-15", status: "expired", pointsAwarded: 0 },
+];
+
+const mockActivity: PointsActivity[] = [
+  { id: "PA-1", patient: "Ramesh Kumar", date: "2026-08-07", action: "Consultation visit", points: 50, type: "earned" },
+  { id: "PA-2", patient: "Kavitha R.", date: "2026-08-07", action: "Panchakarma session", points: 150, type: "earned" },
+  { id: "PA-3", patient: "Ramesh Kumar", date: "2026-08-05", action: "Redeemed: Free Abhyanga", points: -1000, type: "redeemed" },
+  { id: "PA-4", patient: "Priya Menon", date: "2026-08-06", action: "Google review bonus", points: 200, type: "earned" },
+  { id: "PA-5", patient: "Lakshmi Devi", date: "2026-08-05", action: "Online booking bonus", points: 25, type: "earned" },
+  { id: "PA-6", patient: "Ramesh Kumar", date: "2026-08-03", action: "Referral: Anil Krishnan visited", points: 500, type: "earned" },
+  { id: "PA-7", patient: "Sunil Menon", date: "2026-08-04", action: "Pharmacy purchase", points: 35, type: "earned" },
+];
+
 const HmsLoyalty = () => {
-  const [members] = useState<Member[]>(mockMembers);
-  const totalPoints = members.reduce((s, m) => s + m.points, 0);
-  const totalLifetimeValue = members.reduce((s, m) => s + m.totalSpent, 0);
+  const { members, loading, error, totalPoints, totalLifetimeValue } = useLoyalty();
+  const [search, setSearch] = useState("");
+  const [filterTier, setFilterTier] = useState("all");
+
+  const filteredMembers = members.filter(m => {
+    if (filterTier !== "all" && m.tier !== filterTier) return false;
+    if (search && !m.name.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
 
   return (
     <div className="space-y-6">
@@ -52,13 +78,32 @@ const HmsLoyalty = () => {
       </div>
 
       <Tabs defaultValue="members">
-        <TabsList className="grid grid-cols-2 sm:grid-cols-3 w-full">
+        <TabsList className="grid grid-cols-3 sm:grid-cols-6 w-full">
           <TabsTrigger value="members">Members</TabsTrigger>
-          <TabsTrigger value="tiers">Tier Benefits</TabsTrigger>
+          <TabsTrigger value="tiers">Tiers</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger value="redemptions">Redemptions</TabsTrigger>
+          <TabsTrigger value="referrals">Referrals</TabsTrigger>
           <TabsTrigger value="rules">Points Rules</TabsTrigger>
         </TabsList>
 
         <TabsContent value="members" className="space-y-4">
+          {/* Filters */}
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1 max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input className="pl-9" placeholder="Search member..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            </div>
+            <Select value={filterTier} onValueChange={setFilterTier}>
+              <SelectTrigger className="w-[140px]"><SelectValue placeholder="All Tiers" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Tiers</SelectItem>
+                <SelectItem value="silver">Silver</SelectItem>
+                <SelectItem value="gold">Gold</SelectItem>
+                <SelectItem value="platinum">Platinum</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <Card><CardContent className="p-0"><div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="border-b bg-muted/50"><tr>
@@ -70,7 +115,7 @@ const HmsLoyalty = () => {
                 <th className="px-3 py-2 text-left font-medium">Next Reward</th>
               </tr></thead>
               <tbody>
-                {members.map((m) => (
+                {filteredMembers.map((m) => (
                   <tr key={m.id} className="border-b hover:bg-muted/30">
                     <td className="px-3 py-2 font-medium">{m.name}</td>
                     <td className="px-3 py-2"><Badge className={`text-[10px] capitalize ${tiers.find(t => t.name.toLowerCase() === m.tier)?.color}`}>{m.tier === "platinum" ? <Crown className="h-3 w-3 mr-0.5" /> : m.tier === "gold" ? <Award className="h-3 w-3 mr-0.5" /> : <Star className="h-3 w-3 mr-0.5" />}{m.tier}</Badge></td>
@@ -80,6 +125,7 @@ const HmsLoyalty = () => {
                     <td className="px-3 py-2 text-xs text-muted-foreground">{m.nextReward}</td>
                   </tr>
                 ))}
+                {filteredMembers.length === 0 && <tr><td colSpan={6} className="px-3 py-6 text-center text-muted-foreground">No members match filters</td></tr>}
               </tbody>
             </table>
           </div></CardContent></Card>
@@ -104,6 +150,92 @@ const HmsLoyalty = () => {
               </Card>
             ))}
           </div>
+        </TabsContent>
+
+        <TabsContent value="activity" className="space-y-4">
+          <Card>
+            <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><History className="h-4 w-4" /> Recent Points Activity</CardTitle></CardHeader>
+            <CardContent className="p-0">
+              <table className="w-full text-sm">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-2 text-left font-medium">Date</th>
+                    <th className="px-3 py-2 text-left font-medium">Patient</th>
+                    <th className="px-3 py-2 text-left font-medium">Action</th>
+                    <th className="px-3 py-2 text-right font-medium">Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockActivity.map(a => (
+                    <tr key={a.id} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 text-xs text-muted-foreground">{a.date}</td>
+                      <td className="px-3 py-2 font-medium">{a.patient}</td>
+                      <td className="px-3 py-2 text-xs">{a.action}</td>
+                      <td className={`px-3 py-2 text-right font-bold ${a.type === "earned" ? "text-green-600" : "text-red-600"}`}>
+                        {a.type === "earned" ? "+" : ""}{a.points}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="redemptions" className="space-y-4">
+          <Card>
+            <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><Gift className="h-4 w-4" /> Redemption History</CardTitle></CardHeader>
+            <CardContent className="p-0">
+              <table className="w-full text-sm">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-2 text-left font-medium">Date</th>
+                    <th className="px-3 py-2 text-left font-medium">Patient</th>
+                    <th className="px-3 py-2 text-left font-medium">Reward</th>
+                    <th className="px-3 py-2 text-right font-medium">Points Used</th>
+                    <th className="px-3 py-2 text-right font-medium">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockRedemptions.map(r => (
+                    <tr key={r.id} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 text-xs text-muted-foreground">{r.date}</td>
+                      <td className="px-3 py-2 font-medium">{r.patient}</td>
+                      <td className="px-3 py-2 text-xs">{r.reward}</td>
+                      <td className="px-3 py-2 text-right font-bold text-red-600">-{r.pointsUsed}</td>
+                      <td className="px-3 py-2 text-right text-xs">{r.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="referrals" className="space-y-4">
+          <Card>
+            <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><Share2 className="h-4 w-4" /> Referral Tracking</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {mockReferrals.map(ref => (
+                  <div key={ref.id} className="p-3 rounded-lg border flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium">{ref.referrer} → {ref.referred}</p>
+                      <p className="text-xs text-muted-foreground">{ref.date}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={ref.status === "visited" ? "outline" : ref.status === "pending" ? "secondary" : "destructive"} className={`text-xs capitalize ${ref.status === "visited" ? "text-green-600" : ""}`}>{ref.status}</Badge>
+                      {ref.pointsAwarded > 0 && <Badge variant="outline" className="text-xs text-green-600">+{ref.pointsAwarded} pts</Badge>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 p-3 rounded-lg bg-blue-50 border border-blue-200">
+                <p className="text-sm font-medium text-blue-700">Referral Program</p>
+                <p className="text-xs text-blue-600 mt-0.5">Both referrer and new patient get 500 points when the referred patient completes their first visit.</p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="rules" className="space-y-4">

@@ -8,6 +8,7 @@ import {
   Search, Brain, Sparkles, UserPlus, Loader2,
   Receipt, CheckCircle, MoreHorizontal, Calendar,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { aiSmartSearch } from "@/services/patientAiService";
 import type { PatientSearchResult } from "@/types/patient-hms";
 
@@ -43,20 +44,45 @@ const PatientFind = () => {
     const aiResult = await aiSmartSearch(query);
     setAiHint(aiResult.suggestion);
 
-    // Simulate search
-    await new Promise((r) => setTimeout(r, 600));
+    try {
+      // Search hms_patient_cards by name, phone, or uhid
+      const { data: dbResults } = await (supabase as any)
+        .from("hms_patient_cards")
+        .select("*")
+        .or(`patient_name.ilike.%${query}%,phone.ilike.%${query}%,uhid.ilike.%${query}%`)
+        .limit(20);
 
-    const filtered = mockPatients.filter((p) => {
+      if (dbResults && dbResults.length > 0) {
+        const mapped: PatientSearchResult[] = dbResults.map((r: any, idx: number) => ({
+          sNo: idx + 1,
+          id: r.uhid || r.card_number || "—",
+          name: r.patient_name || "Patient",
+          dobAge: "— / —",
+          phone: r.phone || "—",
+          registrationDate: r.created_at ? new Date(r.created_at).toLocaleDateString() : "—",
+          address: "",
+          groupTag: r.blood_group || "",
+        }));
+        setResults(mapped);
+      } else {
+        // Fallback to mock filter
+        const q = query.toLowerCase();
+        const filtered = mockPatients.filter((p) =>
+          p.id.toLowerCase().includes(q) ||
+          p.name.toLowerCase().includes(q) ||
+          p.phone.includes(q) ||
+          (p.address ?? "").toLowerCase().includes(q)
+        );
+        setResults(filtered.length > 0 ? filtered : mockPatients.slice(0, 5));
+      }
+    } catch (err) {
+      // Fallback to mock
       const q = query.toLowerCase();
-      return (
-        p.id.toLowerCase().includes(q) ||
-        p.name.toLowerCase().includes(q) ||
-        p.phone.includes(q) ||
-        (p.address ?? "").toLowerCase().includes(q)
+      const filtered = mockPatients.filter((p) =>
+        p.id.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.phone.includes(q)
       );
-    });
-
-    setResults(filtered.length > 0 ? filtered : mockPatients.slice(0, 5));
+      setResults(filtered.length > 0 ? filtered : mockPatients.slice(0, 5));
+    }
     setLoading(false);
   };
 

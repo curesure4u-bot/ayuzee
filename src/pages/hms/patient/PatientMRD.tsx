@@ -84,8 +84,70 @@ const PatientMRD = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="list" className="mt-4">
-          <Card><CardContent className="p-8 text-center text-muted-foreground">No MRD is available.</CardContent></Card>
+        <TabsContent value="list" className="mt-4 space-y-4">
+          <Card>
+            <CardContent className="p-0">
+              <table className="w-full text-sm">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-2 text-left font-medium">File No</th>
+                    <th className="px-3 py-2 text-left font-medium">Date</th>
+                    <th className="px-3 py-2 text-left font-medium">Type</th>
+                    <th className="px-3 py-2 text-left font-medium">Diagnosis (ICD-10)</th>
+                    <th className="px-3 py-2 text-left font-medium">Location</th>
+                    <th className="px-3 py-2 text-left font-medium">Tag</th>
+                    <th className="px-3 py-2 text-left font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { fileNo: "MRD-2026-001", date: "2026-07-10", type: "IP", diagnosis: "M54.5 - Low Back Pain", location: "Rack A-3", tag: "Spine", status: "Filed" },
+                    { fileNo: "MRD-2026-002", date: "2026-06-15", type: "OP", diagnosis: "M06.9 - Rheumatoid Arthritis", location: "Rack B-1", tag: "Amavata", status: "Filed" },
+                    { fileNo: "MRD-2025-045", date: "2025-12-20", type: "IP", diagnosis: "K29.7 - Gastritis", location: "Rack C-2", tag: "GI", status: "Archived" },
+                    { fileNo: "MRD-2025-032", date: "2025-09-05", type: "OP", diagnosis: "G43.9 - Migraine", location: "Rack A-1", tag: "Neuro", status: "Filed" },
+                  ].map((r) => (
+                    <tr key={r.fileNo} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 font-mono text-xs font-bold">{r.fileNo}</td>
+                      <td className="px-3 py-2 text-xs">{r.date}</td>
+                      <td className="px-3 py-2"><Badge variant="outline" className="text-[10px]">{r.type}</Badge></td>
+                      <td className="px-3 py-2 text-xs">{r.diagnosis}</td>
+                      <td className="px-3 py-2 text-xs">{r.location}</td>
+                      <td className="px-3 py-2"><Badge variant="secondary" className="text-[10px]">{r.tag}</Badge></td>
+                      <td className="px-3 py-2"><Badge variant="outline" className="text-[10px] text-green-600">{r.status}</Badge></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
+
+          {/* Document Archive */}
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-semibold text-sm mb-3">Uploaded Documents</h3>
+              <div className="space-y-2">
+                {[
+                  { name: "Lab Report - CBC + ESR (Jul 2026)", type: "Lab", date: "2026-07-12", size: "245 KB" },
+                  { name: "X-Ray Lumbar Spine AP/Lat", type: "Radiology", date: "2026-07-10", size: "1.2 MB" },
+                  { name: "Discharge Summary - PK Stay", type: "Clinical", date: "2026-07-17", size: "180 KB" },
+                  { name: "Consent Form - Virechana", type: "Consent", date: "2026-07-13", size: "95 KB" },
+                  { name: "Previous Treatment Records (External)", type: "External", date: "2026-06-01", size: "3.4 MB" },
+                ].map((doc) => (
+                  <div key={doc.name} className="flex items-center justify-between p-2 rounded border hover:bg-muted/30">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-blue-600" />
+                      <div>
+                        <p className="text-xs font-medium">{doc.name}</p>
+                        <p className="text-[10px] text-muted-foreground">{doc.type} · {doc.date} · {doc.size}</p>
+                      </div>
+                    </div>
+                    <Button size="sm" variant="ghost" className="text-xs h-6">View</Button>
+                  </div>
+                ))}
+              </div>
+              <Button size="sm" variant="outline" className="mt-3"><Plus className="h-3 w-3 mr-1" /> Upload Document</Button>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

@@ -1,77 +1,186 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Brain, ArrowRight, CheckCircle, Clock, AlertTriangle, Building2 } from "lucide-react";
+import { Brain, ArrowRight, CheckCircle, Clock, Loader2, Building2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const requests = [
-  { id: "BTR-301", from: "Branch - HSR Layout", to: "Branch - Koramangala", item: "Rasnasaptakam Kashayam 200ml", qty: 10, reason: "Stock-out imminent (2 days left)", status: "pending", date: "22 Jul 2026", urgency: "urgent" },
-  { id: "BTR-300", from: "Branch - Indiranagar", to: "Branch - HSR Layout", item: "Kottamchukkadi Taila 200ml", qty: 5, reason: "PK room demand spike", status: "approved", date: "22 Jul 2026", urgency: "normal" },
-  { id: "BTR-299", from: "Branch - Koramangala", to: "Branch - Indiranagar", item: "Simhanada Guggulu 60t", qty: 20, reason: "Excess stock (167 days) — redistribute", status: "in_transit", date: "21 Jul 2026", urgency: "normal" },
-  { id: "BTR-298", from: "Branch - HSR Layout", to: "Branch - Koramangala", item: "Ashwagandha Churna 100g", qty: 8, reason: "Near-expiry batch — move to high-demand branch", status: "received", date: "20 Jul 2026", urgency: "normal" },
-  { id: "BTR-297", from: "Branch - Koramangala", to: "Branch - HSR Layout", item: "Dashamoolarishtam 450ml", qty: 6, reason: "Monsoon demand higher at HSR", status: "received", date: "19 Jul 2026", urgency: "normal" },
-];
+type TransferRequest = {
+  id: string;
+  product_name: string;
+  quantity: number;
+  batch_number: string | null;
+  transfer_reason: string | null;
+  status: string;
+  created_at: string;
+  from_store_name?: string;
+  to_store_name?: string;
+};
 
-const statusColors: Record<string, string> = { pending: "bg-amber-100 text-amber-700", approved: "bg-blue-100 text-blue-700", in_transit: "bg-purple-100 text-purple-700", received: "bg-green-100 text-green-700" };
-
-const stockComparison = [
-  { item: "Rasnasaptakam 200ml", koramangala: 85, hsr: 12, indiranagar: 45, suggestion: "Move 20 from Koramangala → HSR" },
-  { item: "Kottamchukkadi Taila 200ml", koramangala: 18, hsr: 5, indiranagar: 32, suggestion: "Move 10 from Indiranagar → HSR" },
-  { item: "Simhanada Guggulu 60t", koramangala: 180, hsr: 35, indiranagar: 22, suggestion: "Koramangala overstocked — distribute 50 each to HSR & Indiranagar" },
-];
+const statusColors: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-700",
+  approved: "bg-blue-100 text-blue-700",
+  in_transit: "bg-purple-100 text-purple-700",
+  received: "bg-green-100 text-green-700",
+  rejected: "bg-red-100 text-red-700",
+};
 
 export default function BranchTransferRequest() {
+  const [requests, setRequests] = useState<TransferRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadTransfers();
+  }, []);
+
+  const loadTransfers = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .select("*, to_store:hms_ward_stores!hms_ward_stock_transfers_to_store_id_fkey(ward_name), from_store:hms_ward_stores!hms_ward_stock_transfers_from_store_id_fkey(ward_name)")
+        .order("created_at", { ascending: false })
+        .limit(30);
+
+      if (error) throw error;
+
+      setRequests((data || []).map((row: any) => ({
+        ...row,
+        from_store_name: row.from_store?.ward_name || "—",
+        to_store_name: row.to_store?.ward_name || "—",
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load transfers");
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const handleApprove = async (id: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .update({ status: "approved", approved_by: user?.id, approved_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+      toast.success("Transfer approved");
+      loadTransfers();
+    } catch (err: any) {
+      toast.error("Failed to approve");
+    }
+  };
+
+  const handleDispatch = async (id: string) => {
+    try {
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .update({ status: "in_transit" })
+        .eq("id", id);
+      if (error) throw error;
+      toast.success("Transfer dispatched");
+      loadTransfers();
+    } catch (err: any) {
+      toast.error("Failed to dispatch");
+    }
+  };
+
+  const handleReceive = async (id: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .update({ status: "received", received_by: user?.id, received_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+      toast.success("Transfer received");
+      loadTransfers();
+    } catch (err: any) {
+      toast.error("Failed to receive");
+    }
+  };
+
+  const pending = requests.filter(r => r.status === "pending").length;
+  const approved = requests.filter(r => r.status === "approved").length;
+  const inTransit = requests.filter(r => r.status === "in_transit").length;
+  const received = requests.filter(r => r.status === "received").length;
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-[40vh]"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2"><Building2 className="h-6 w-6 text-blue-600" /> Branch-to-Branch Transfer</h1>
-          <p className="text-muted-foreground mt-1">Direct stock request between branches — no central store needed. Balance inventory across locations.</p>
+          <p className="text-muted-foreground mt-1">Manage transfer requests — approve, dispatch, receive. Live from Supabase.</p>
         </div>
-        <Button size="sm" onClick={() => toast.success("New transfer request created")}>+ New Request</Button>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card><CardContent className="p-3 text-center"><Clock className="h-4 w-4 mx-auto text-amber-600" /><p className="text-lg font-bold text-amber-600">{requests.filter(r => r.status === "pending").length}</p><p className="text-[10px] text-muted-foreground">Pending</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><CheckCircle className="h-4 w-4 mx-auto text-blue-600" /><p className="text-lg font-bold text-blue-600">{requests.filter(r => r.status === "approved").length}</p><p className="text-[10px] text-muted-foreground">Approved</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><ArrowRight className="h-4 w-4 mx-auto text-purple-600" /><p className="text-lg font-bold text-purple-600">{requests.filter(r => r.status === "in_transit").length}</p><p className="text-[10px] text-muted-foreground">In Transit</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><CheckCircle className="h-4 w-4 mx-auto text-green-600" /><p className="text-lg font-bold text-green-600">{requests.filter(r => r.status === "received").length}</p><p className="text-[10px] text-muted-foreground">Received</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><Clock className="h-4 w-4 mx-auto text-amber-600" /><p className="text-lg font-bold text-amber-600">{pending}</p><p className="text-[10px] text-muted-foreground">Pending</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><CheckCircle className="h-4 w-4 mx-auto text-blue-600" /><p className="text-lg font-bold text-blue-600">{approved}</p><p className="text-[10px] text-muted-foreground">Approved</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><ArrowRight className="h-4 w-4 mx-auto text-purple-600" /><p className="text-lg font-bold text-purple-600">{inTransit}</p><p className="text-[10px] text-muted-foreground">In Transit</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><CheckCircle className="h-4 w-4 mx-auto text-green-600" /><p className="text-lg font-bold text-green-600">{received}</p><p className="text-[10px] text-muted-foreground">Received</p></CardContent></Card>
       </div>
 
       <Card>
         <CardHeader className="pb-2"><CardTitle className="text-base">Transfer Requests</CardTitle></CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto"><table className="w-full text-sm"><thead className="border-b bg-muted/50"><tr><th className="px-3 py-2 text-left">ID</th><th className="px-3 py-2 text-left">From → To</th><th className="px-3 py-2 text-left">Item</th><th className="px-3 py-2 text-center">Qty</th><th className="px-3 py-2 text-left">Reason</th><th className="px-3 py-2 text-center">Status</th><th className="px-3 py-2 text-center">Action</th></tr></thead><tbody>
-            {requests.map((r, i) => (
-              <tr key={i} className={`border-b ${r.urgency === "urgent" ? "bg-red-50/50" : ""}`}>
-                <td className="px-3 py-2 text-xs font-mono">{r.id}{r.urgency === "urgent" && <Badge variant="destructive" className="text-[8px] ml-1">Urgent</Badge>}</td>
-                <td className="px-3 py-2 text-[10px]">{r.from}<br/><ArrowRight className="h-2.5 w-2.5 inline" /> {r.to}</td>
-                <td className="px-3 py-2 text-xs font-medium">{r.item}</td>
-                <td className="px-3 py-2 text-center text-xs font-bold">{r.qty}</td>
-                <td className="px-3 py-2 text-[10px] text-muted-foreground max-w-[150px]">{r.reason}</td>
-                <td className="px-3 py-2 text-center"><Badge className={`text-[10px] ${statusColors[r.status]}`}>{r.status.replace("_", " ")}</Badge></td>
-                <td className="px-3 py-2 text-center">
-                  {r.status === "pending" && <Button size="sm" className="h-6 text-[10px]" onClick={() => toast.success(`${r.id} approved`)}>Approve</Button>}
-                  {r.status === "approved" && <Button size="sm" className="h-6 text-[10px]" onClick={() => toast.success(`${r.id} dispatched`)}>Dispatch</Button>}
-                </td>
-              </tr>
-            ))}
-          </tbody></table></div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="border-b bg-muted/50">
+                <tr>
+                  <th className="px-3 py-2 text-left">From → To</th>
+                  <th className="px-3 py-2 text-left">Item</th>
+                  <th className="px-3 py-2 text-center">Qty</th>
+                  <th className="px-3 py-2 text-left">Reason</th>
+                  <th className="px-3 py-2 text-center">Status</th>
+                  <th className="px-3 py-2 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.length === 0 ? (
+                  <tr><td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">No transfer requests found</td></tr>
+                ) : (
+                  requests.map((r) => (
+                    <tr key={r.id} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 text-[10px]">{r.from_store_name}<br/><ArrowRight className="h-2.5 w-2.5 inline" /> {r.to_store_name}</td>
+                      <td className="px-3 py-2 text-xs font-medium">{r.product_name}</td>
+                      <td className="px-3 py-2 text-center text-xs font-bold">{r.quantity}</td>
+                      <td className="px-3 py-2 text-[10px] text-muted-foreground max-w-[150px] truncate">{r.transfer_reason || "—"}</td>
+                      <td className="px-3 py-2 text-center">
+                        <Badge className={`text-[10px] ${statusColors[r.status] || ""}`}>{r.status.replace("_", " ")}</Badge>
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        {r.status === "pending" && <Button size="sm" className="h-6 text-[10px]" onClick={() => handleApprove(r.id)}>Approve</Button>}
+                        {r.status === "approved" && <Button size="sm" className="h-6 text-[10px]" onClick={() => handleDispatch(r.id)}>Dispatch</Button>}
+                        {r.status === "in_transit" && <Button size="sm" className="h-6 text-[10px]" onClick={() => handleReceive(r.id)}>Receive</Button>}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-2"><CardTitle className="text-sm">AI Stock Balance — Branch Comparison</CardTitle></CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto"><table className="w-full text-xs"><thead className="border-b bg-muted/50"><tr><th className="px-3 py-1 text-left">Item</th><th className="px-3 py-1 text-center">Koramangala</th><th className="px-3 py-1 text-center">HSR</th><th className="px-3 py-1 text-center">Indiranagar</th><th className="px-3 py-1 text-left">AI Suggestion</th></tr></thead><tbody>
-            {stockComparison.map((s, i) => (
-              <tr key={i} className="border-b"><td className="px-3 py-1.5 font-medium">{s.item}</td><td className="px-3 py-1.5 text-center font-bold">{s.koramangala}</td><td className="px-3 py-1.5 text-center font-bold text-red-600">{s.hsr}</td><td className="px-3 py-1.5 text-center">{s.indiranagar}</td><td className="px-3 py-1.5 text-purple-700">{s.suggestion}</td></tr>
-            ))}
-          </tbody></table></div>
+      <Card className="border-purple-200 bg-purple-50/30">
+        <CardContent className="p-3 flex items-start gap-2">
+          <Brain className="h-4 w-4 text-purple-600 mt-0.5" />
+          <div>
+            <p className="font-semibold text-xs text-purple-800">AI Transfer Intelligence</p>
+            <p className="text-[10px] text-purple-700">
+              {pending > 0 ? `${pending} transfers pending approval. ` : ""}
+              {inTransit > 0 ? `${inTransit} currently in transit. ` : ""}
+              Transfer flow is managed end-to-end: pending → approved → in_transit → received.
+            </p>
+          </div>
         </CardContent>
       </Card>
-
-      <Card className="border-purple-200 bg-purple-50/30"><CardContent className="p-3 flex items-start gap-2"><Brain className="h-4 w-4 text-purple-600 mt-0.5" /><div><p className="font-semibold text-xs text-purple-800">AI Redistribution</p><p className="text-[10px] text-purple-700">HSR branch has 3 items critically low. Koramangala has excess on same items. AI auto-generated BTR-301 (urgent). Estimated savings from redistribution vs new PO: ₹8,500/month (avoids emergency purchase at higher rates). Transfer via own driver: ₹0 shipping cost within city.</p></div></CardContent></Card>
     </div>
   );
 }

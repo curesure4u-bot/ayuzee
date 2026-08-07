@@ -11,36 +11,12 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import {
   Star, MessageCircle, TrendingUp, ThumbsUp, ThumbsDown,
-  Send, AlertTriangle, CheckCircle, Users, BarChart3,
+  Send, AlertTriangle, CheckCircle, Users, BarChart3, Loader2,
 } from "lucide-react";
-
-type Feedback = {
-  id: string; patient: string; doctor: string; date: string;
-  rating: number; npsScore: number; comment: string;
-  sentiment: "positive" | "neutral" | "negative";
-  category: string; status: "new" | "acknowledged" | "resolved";
-  googleReview: boolean;
-};
-
-const mockFeedback: Feedback[] = [
-  { id: "1", patient: "Priya Menon", doctor: "Dr. Arun Sharma", date: "2026-07-15", rating: 5, npsScore: 10, comment: "Excellent treatment. My knee pain reduced significantly after Janu Basti. Very caring staff.", sentiment: "positive", category: "Treatment", status: "acknowledged", googleReview: true },
-  { id: "2", patient: "Rahul Kumar", doctor: "Dr. Meena Patel", date: "2026-07-15", rating: 4, npsScore: 8, comment: "Good Panchakarma experience. Food could be better during Samsarjana.", sentiment: "positive", category: "Panchakarma", status: "new", googleReview: false },
-  { id: "3", patient: "Ananya S.", doctor: "Dr. Arun Sharma", date: "2026-07-14", rating: 5, npsScore: 9, comment: "Doctor explained everything in detail. AI Scribe made the consultation smooth.", sentiment: "positive", category: "Consultation", status: "acknowledged", googleReview: true },
-  { id: "4", patient: "Mohammed F.", doctor: "Dr. Priya Das", date: "2026-07-14", rating: 3, npsScore: 5, comment: "Long waiting time in OPD. Treatment was good but reception was slow.", sentiment: "neutral", category: "Waiting Time", status: "resolved", googleReview: false },
-  { id: "5", patient: "Suresh M.", doctor: "Dr. Arun Sharma", date: "2026-07-13", rating: 2, npsScore: 3, comment: "Medicine was not available in pharmacy. Had to buy from outside.", sentiment: "negative", category: "Pharmacy", status: "resolved", googleReview: false },
-  { id: "6", patient: "Kavitha R.", doctor: "Dr. Meena Patel", date: "2026-07-13", rating: 5, npsScore: 10, comment: "Best Ayurveda hospital! Shirodhara was life-changing for my insomnia.", sentiment: "positive", category: "Panchakarma", status: "acknowledged", googleReview: true },
-  { id: "7", patient: "Lakshmi Nair", doctor: "Dr. Arun Sharma", date: "2026-07-12", rating: 4, npsScore: 8, comment: "Good follow-up system. WhatsApp reminders are very helpful.", sentiment: "positive", category: "Follow-up", status: "new", googleReview: false },
-];
+import { useFeedback } from "@/hooks/useFeedback";
 
 const HmsFeedback = () => {
-  const [feedback] = useState<Feedback[]>(mockFeedback);
-
-  const avgRating = (feedback.reduce((s, f) => s + f.rating, 0) / feedback.length).toFixed(1);
-  const avgNps = Math.round(feedback.reduce((s, f) => s + f.npsScore, 0) / feedback.length);
-  const promoters = feedback.filter(f => f.npsScore >= 9).length;
-  const detractors = feedback.filter(f => f.npsScore <= 6).length;
-  const npsScore = Math.round(((promoters - detractors) / feedback.length) * 100);
-  const googleReviews = feedback.filter(f => f.googleReview).length;
+  const { feedback, loading, error, avgRating, npsScore, promoters, detractors, googleReviews, complaints, updateStatus } = useFeedback();
 
   return (
     <div className="space-y-6">
@@ -57,6 +33,16 @@ const HmsFeedback = () => {
       </div>
 
       {/* Stats */}
+      {loading && (
+        <div className="flex items-center justify-center py-2 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm">Loading feedback...</span>
+        </div>
+      )}
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">⚠ Using demo data. {error}</CardContent>
+        </Card>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <Card className="border-amber-200">
           <CardContent className="p-3 text-center">
@@ -73,7 +59,7 @@ const HmsFeedback = () => {
         </Card>
         <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold">{feedback.length}</p><p className="text-xs text-muted-foreground">Total Responses</p></CardContent></Card>
         <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold text-blue-600">{googleReviews}</p><p className="text-xs text-muted-foreground">Google Reviews</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold text-red-600">{feedback.filter(f => f.sentiment === "negative").length}</p><p className="text-xs text-muted-foreground">Complaints</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold text-red-600">{complaints}</p><p className="text-xs text-muted-foreground">Complaints</p></CardContent></Card>
       </div>
 
       <Tabs defaultValue="all">
@@ -196,7 +182,7 @@ const HmsFeedback = () => {
                     </div>
                     <p className="text-sm text-muted-foreground">{f.comment}</p>
                     <div className="flex gap-2 mt-2">
-                      {f.status !== "resolved" && <Button size="sm" variant="outline" className="text-xs h-6" onClick={() => toast.success("Marked as resolved")}>Mark Resolved</Button>}
+                      {f.status !== "resolved" && <Button size="sm" variant="outline" className="text-xs h-6" onClick={() => updateStatus(f.id, "resolved")}>Mark Resolved</Button>}
                       <Button size="sm" variant="ghost" className="text-xs h-6">Call Patient</Button>
                     </div>
                   </div>

@@ -3,70 +3,50 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Package, Plus, IndianRupee } from "lucide-react";
-
-type PkgTemplate = {
-  id: string;
-  name: string;
-  duration: string;
-  therapies: string[];
-  sessionsPerDay: number;
-  totalSessions: number;
-  price: number;
-  description: string;
-};
-
-const defaultPackages: PkgTemplate[] = [
-  {
-    id: "1", name: "7-day Rejuvenation", duration: "7 days",
-    therapies: ["Abhyanga", "Shirodhara", "Steam Bath"],
-    sessionsPerDay: 2, totalSessions: 14, price: 28000,
-    description: "Basic rejuvenation with full body oil massage and Shirodhara for stress relief.",
-  },
-  {
-    id: "2", name: "14-day Full Panchakarma", duration: "14 days",
-    therapies: ["Snehapana", "Abhyanga", "Swedana", "Vamana", "Virechana", "Vasti", "Nasya"],
-    sessionsPerDay: 3, totalSessions: 42, price: 85000,
-    description: "Complete Panchakarma detoxification program with all 5 procedures. Includes pre & post care.",
-  },
-  {
-    id: "3", name: "21-day Spine Care", duration: "21 days",
-    therapies: ["Kativasti", "Abhyanga", "Pizhichil", "Elakizhi", "Greevavasti"],
-    sessionsPerDay: 2, totalSessions: 42, price: 65000,
-    description: "Comprehensive spine care for disc problems, spondylosis and back pain management.",
-  },
-  {
-    id: "4", name: "7-day Weight Management", duration: "7 days",
-    therapies: ["Udwarthanam", "Steam Bath", "Virechana", "Lekhana Vasti"],
-    sessionsPerDay: 2, totalSessions: 14, price: 22000,
-    description: "Ayurvedic weight management with dry powder massage and detox protocols.",
-  },
-  {
-    id: "5", name: "14-day Arthritis Care", duration: "14 days",
-    therapies: ["Abhyanga", "Elakizhi", "Podikizhi", "Januvasti", "Pizhichil"],
-    sessionsPerDay: 2, totalSessions: 28, price: 55000,
-    description: "Specialized program for joint pain, arthritis and musculoskeletal conditions.",
-  },
-  {
-    id: "6", name: "10-day Skin & Beauty", duration: "10 days",
-    therapies: ["Abhyanga", "Lepanam", "Takradhara", "Virechana", "Mukhalepam"],
-    sessionsPerDay: 2, totalSessions: 20, price: 35000,
-    description: "Ayurvedic beauty care for skin rejuvenation, psoriasis and dermatological conditions.",
-  },
-];
+import { Package, Plus, IndianRupee, Loader2 } from "lucide-react";
+import { usePanchakarmaPackages } from "@/hooks/usePanchakarmaPackages";
 
 const HmsPanchakarmaPackages = () => {
-  const [packages] = useState<PkgTemplate[]>(defaultPackages);
+  const { packages, loading, error, createPackage } = usePanchakarmaPackages();
   const [createOpen, setCreateOpen] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDuration, setNewDuration] = useState("");
   const [newPrice, setNewPrice] = useState("");
   const [newDesc, setNewDesc] = useState("");
+  const [newTherapies, setNewTherapies] = useState("");
+  const [newSessionsPerDay, setNewSessionsPerDay] = useState("2");
+
+  const handleCreate = async () => {
+    if (!newName || !newDuration || !newPrice) {
+      toast.error("Name, duration, and price are required");
+      return;
+    }
+    const durationDays = parseInt(newDuration) || 7;
+    const sessionsPerDay = parseInt(newSessionsPerDay) || 2;
+    const therapies = newTherapies.split(",").map((t) => t.trim()).filter(Boolean);
+
+    const success = await createPackage({
+      name: newName,
+      durationDays,
+      durationLabel: `${durationDays} days`,
+      therapies,
+      sessionsPerDay,
+      totalSessions: durationDays * sessionsPerDay,
+      price: Number(newPrice),
+      description: newDesc,
+    });
+
+    if (success) {
+      toast.success("Package created!");
+      setCreateOpen(false);
+      setNewName(""); setNewDuration(""); setNewPrice(""); setNewDesc(""); setNewTherapies(""); setNewSessionsPerDay("2");
+    } else {
+      toast.error("Failed to create package");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -84,13 +64,25 @@ const HmsPanchakarmaPackages = () => {
         </Button>
       </div>
 
+      {loading && (
+        <div className="flex items-center justify-center py-4 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm">Loading packages...</span>
+        </div>
+      )}
+
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">⚠ Could not load live data (showing demo). {error}</CardContent>
+        </Card>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {packages.map((pkg) => (
           <Card key={pkg.id} className="hover:shadow-md transition">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">{pkg.name}</CardTitle>
-                <Badge variant="outline">{pkg.duration}</Badge>
+                <Badge variant="outline">{pkg.durationLabel}</Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -111,56 +103,36 @@ const HmsPanchakarmaPackages = () => {
                 </div>
               </div>
               <div className="flex items-center justify-between pt-2 border-t">
-                <div className="flex items-center gap-1">
-                  <IndianRupee className="h-4 w-4 text-green-600" />
-                  <span className="text-lg font-bold text-green-700">
-                    {pkg.price.toLocaleString("en-IN")}
-                  </span>
+                <div className="flex items-center gap-1 text-lg font-bold text-green-600">
+                  <IndianRupee className="h-4 w-4" />
+                  {pkg.price.toLocaleString("en-IN")}
                 </div>
-                <Button size="sm" variant="outline">Assign to Patient</Button>
+                <Button size="sm" variant="outline" onClick={() => toast.info(`Enrolling patient in ${pkg.name}`)}>
+                  Enroll Patient
+                </Button>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
+      {/* Create Package Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Create New Package</DialogTitle></DialogHeader>
           <div className="space-y-3">
-            <div>
-              <Label>Package Name</Label>
-              <Input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="e.g., 14-day Detox Program" />
+            <div className="space-y-1"><label className="text-xs font-medium">Package Name *</label><Input className="h-8 text-xs" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="e.g. 7-day Rejuvenation" /></div>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="space-y-1"><label className="text-xs font-medium">Duration (days) *</label><Input className="h-8 text-xs" type="number" value={newDuration} onChange={(e) => setNewDuration(e.target.value)} placeholder="7" /></div>
+              <div className="space-y-1"><label className="text-xs font-medium">Sessions/Day</label><Input className="h-8 text-xs" type="number" value={newSessionsPerDay} onChange={(e) => setNewSessionsPerDay(e.target.value)} /></div>
+              <div className="space-y-1"><label className="text-xs font-medium">Price (₹) *</label><Input className="h-8 text-xs" type="number" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} placeholder="28000" /></div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label>Duration</Label>
-                <Select value={newDuration} onValueChange={setNewDuration}>
-                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="3 days">3 days</SelectItem>
-                    <SelectItem value="5 days">5 days</SelectItem>
-                    <SelectItem value="7 days">7 days</SelectItem>
-                    <SelectItem value="10 days">10 days</SelectItem>
-                    <SelectItem value="14 days">14 days</SelectItem>
-                    <SelectItem value="21 days">21 days</SelectItem>
-                    <SelectItem value="28 days">28 days</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Price (INR)</Label>
-                <Input type="number" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} placeholder="e.g., 45000" />
-              </div>
-            </div>
-            <div>
-              <Label>Description</Label>
-              <Textarea value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Package description and included therapies..." rows={3} />
-            </div>
+            <div className="space-y-1"><label className="text-xs font-medium">Therapies (comma separated)</label><Input className="h-8 text-xs" value={newTherapies} onChange={(e) => setNewTherapies(e.target.value)} placeholder="Abhyanga, Shirodhara, Steam Bath" /></div>
+            <div className="space-y-1"><label className="text-xs font-medium">Description</label><Textarea className="text-xs min-h-[60px]" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Package description..." /></div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button>
-            <Button onClick={() => { toast.success("Package created"); setCreateOpen(false); }}>Create Package</Button>
+            <Button onClick={handleCreate}>Create Package</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

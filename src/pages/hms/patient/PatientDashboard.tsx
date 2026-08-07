@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,9 @@ import { toast } from "sonner";
 import {
   User, Phone, Calendar, MapPin, Heart, FileText, Brain, Sparkles,
   Plus, Search, List, Printer, Edit, Mail, MessageSquare, CheckCircle,
-  Activity, Pill, ClipboardList, ArrowRight, AlertCircle, Shield,
+  Activity, Pill, ClipboardList, ArrowRight, AlertCircle, Shield, Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { assessPatientRisk } from "@/services/patientAiService";
 import PatientContextHeader from "@/components/hms/PatientContextHeader";
 import type { AIPatientInsight } from "@/types/patient-hms";
@@ -74,6 +75,30 @@ const PatientDashboard = () => {
   const [visitFilter, setVisitFilter] = useState("All");
   const [aiInsight, setAiInsight] = useState<AIPatientInsight | null>(null);
   const [loadingAi, setLoadingAi] = useState(false);
+  const [stats, setStats] = useState({ triageCount: 0, noshowCount: 0, advanceTotal: 0, cardCount: 0 });
+
+  useEffect(() => {
+    loadStats();
+  }, []);
+
+  const loadStats = async () => {
+    try {
+      const [{ count: triageCount }, { count: noshowCount }, { data: advances }, { count: cardCount }] = await Promise.all([
+        (supabase as any).from("hms_triage_records").select("*", { count: "exact", head: true }),
+        (supabase as any).from("hms_noshow_records").select("*", { count: "exact", head: true }),
+        (supabase as any).from("hms_patient_advances").select("amount"),
+        (supabase as any).from("hms_patient_cards").select("*", { count: "exact", head: true }),
+      ]);
+      setStats({
+        triageCount: triageCount || 0,
+        noshowCount: noshowCount || 0,
+        advanceTotal: (advances || []).reduce((s: number, a: any) => s + (a.amount || 0), 0),
+        cardCount: cardCount || 0,
+      });
+    } catch (err) {
+      console.error("Stats load error:", err);
+    }
+  };
 
   const handleAiAssess = async () => {
     setLoadingAi(true);

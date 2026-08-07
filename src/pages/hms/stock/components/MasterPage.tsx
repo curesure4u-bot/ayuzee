@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Plus, Search, ToggleLeft, ToggleRight } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface MasterItem {
   id: string;
@@ -16,20 +15,88 @@ interface MasterItem {
 
 interface MasterPageProps {
   title: string;
-  entityName: string; // e.g., "Manufacturer", "Category"
+  entityName: string;
   initialItems?: MasterItem[];
   columns?: { key: string; label: string }[];
+  /**
+   * Optional: column name in hms_ward_stock_items to fetch distinct values from.
+   * e.g., "product_category" for CategoryMaster
+   */
+  stockItemColumn?: string;
+  /** Storage key for localStorage persistence */
+  storageKey?: string;
 }
 
-const MasterPage = ({ title, entityName, initialItems = [], columns }: MasterPageProps) => {
-  const [items, setItems] = useState<MasterItem[]>(initialItems);
+const MasterPage = ({ title, entityName, initialItems = [], stockItemColumn, storageKey }: MasterPageProps) => {
+  const [items, setItems] = useState<MasterItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [newItemName, setNewItemName] = useState("");
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"active" | "inactive">("active");
 
+  const persistKey = storageKey || `hms_master_${entityName.toLowerCase().replace(/\s+/g, "_")}`;
+
+  useEffect(() => {
+    loadItems();
+  }, []);
+
+  const loadItems = async () => {
+    setLoading(true);
+
+    // Try to load from Supabase distinct values if stockItemColumn is specified
+    if (stockItemColumn) {
+      try {
+        const { data, error } = await (supabase as any)
+          .from("hms_ward_stock_items")
+          .select(stockItemColumn)
+          .not(stockItemColumn, "is", null);
+
+        if (!error && data && data.length > 0) {
+          const uniqueValues = [...new Set(data.map((d: any) => d[stockItemColumn]).filter(Boolean))];
+          const supabaseItems: MasterItem[] = uniqueValues.map((val: any, idx: number) => ({
+            id: `sb-${idx + 1}`,
+            code: idx + 1,
+            name: String(val).toUpperCase(),
+            status: "Active" as const,
+          }));
+
+          // Merge with localStorage items (user-added)
+          const stored = localStorage.getItem(persistKey);
+          const localItems: MasterItem[] = stored ? JSON.parse(stored) : [];
+          const merged = [...supabaseItems];
+          localItems.forEach(li => {
+            if (!merged.find(m => m.name === li.name)) {
+              merged.push({ ...li, code: merged.length + 1 });
+            }
+          });
+
+          setItems(merged.length > 0 ? merged : initialItems);
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        console.error("Supabase master load error:", err);
+      }
+    }
+
+    // Fallback: load from localStorage or initialItems
+    const stored = localStorage.getItem(persistKey);
+    if (stored) {
+      setItems(JSON.parse(stored));
+    } else {
+      setItems(initialItems);
+      localStorage.setItem(persistKey, JSON.stringify(initialItems));
+    }
+    setLoading(false);
+  };
+
+  const persistItems = (updatedItems: MasterItem[]) => {
+    setItems(updatedItems);
+    localStorage.setItem(persistKey, JSON.stringify(updatedItems));
+  };
+
   const activeItems = items.filter((i) => i.status === "Active");
   const inactiveItems = items.filter((i) => i.status === "Inactive");
-
   const displayItems = activeTab === "active" ? activeItems : inactiveItems;
   const filtered = displayItems.filter((i) =>
     i.name.toLowerCase().includes(search.toLowerCase())
@@ -46,25 +113,28 @@ const MasterPage = ({ title, entityName, initialItems = [], columns }: MasterPag
       name: newItemName.trim().toUpperCase(),
       status: "Active",
     };
-    setItems([...items, newItem]);
+    persistItems([...items, newItem]);
     setNewItemName("");
     toast.success(`${entityName} added successfully`);
   };
 
   const handleToggleStatus = (id: string) => {
-    setItems(
-      items.map((item) =>
-        item.id === id
-          ? { ...item, status: item.status === "Active" ? "Inactive" : "Active" }
-          : item
-      )
+    const updated = items.map((item) =>
+      item.id === id
+        ? { ...item, status: item.status === "Active" ? ("Inactive" as const) : ("Active" as const) }
+        : item
     );
+    persistItems(updated);
     toast.success("Status updated");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleAdd();
   };
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-[30vh]"><Loader2 className="h-6 w-6 animate-spin text-orange-600" /></div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -134,7 +204,7 @@ const MasterPage = ({ title, entityName, initialItems = [], columns }: MasterPag
                   <th className="px-4 py-3 text-left font-semibold text-orange-600 w-20">Code</th>
                   <th className="px-4 py-3 text-left font-semibold text-orange-600">{entityName}</th>
                   <th className="px-4 py-3 text-center w-16">
-                    <input type="checkbox" className="rounded" />
+                    <input type="checkbox" className="rounded" disabled />
                   </th>
                 </tr>
               </thead>

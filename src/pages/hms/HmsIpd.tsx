@@ -4,28 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BedDouble, Plus, Users, AlertTriangle, Heart, Leaf, Warehouse, Package } from "lucide-react";
-
-const WARDS = [
-  { id: "general-male", name: "General Male", beds: 20, occupied: 12 },
-  { id: "general-female", name: "General Female", beds: 20, occupied: 15 },
-  { id: "private", name: "Private Rooms", beds: 10, occupied: 7 },
-  { id: "icu", name: "ICU", beds: 6, occupied: 4 },
-  { id: "pediatric", name: "Pediatric", beds: 8, occupied: 3 },
-  { id: "maternity", name: "Maternity", beds: 10, occupied: 6 },
-];
-
-const ADMISSIONS = [
-  { id: "1", patient: "Ravi Kumar", ward: "General Male", bed: "GM-04", admitDate: "2026-07-13", status: "active", doctor: "Dr. Sharma" },
-  { id: "2", patient: "Priya Devi", ward: "Maternity", bed: "MT-02", admitDate: "2026-07-12", status: "active", doctor: "Dr. Meena" },
-  { id: "3", patient: "Anand Singh", ward: "ICU", bed: "ICU-03", admitDate: "2026-07-14", status: "critical", doctor: "Dr. Patel" },
-  { id: "4", patient: "Lakshmi R", ward: "Private Rooms", bed: "PVT-05", admitDate: "2026-07-10", status: "discharge_pending", doctor: "Dr. Reddy" },
-];
+import { BedDouble, Plus, Users, Heart, Leaf, Warehouse, Package, Loader2 } from "lucide-react";
+import { useIpd } from "@/hooks/useIpd";
 
 const HmsIpd = () => {
   const [tab, setTab] = useState("wards");
-  const totalBeds = WARDS.reduce((s, w) => s + w.beds, 0);
-  const totalOccupied = WARDS.reduce((s, w) => s + w.occupied, 0);
+  const { wards, admissions, totalBeds, totalOccupied, loading, error } = useIpd();
 
   return (
     <div className="space-y-6">
@@ -39,7 +23,19 @@ const HmsIpd = () => {
         <Button size="sm"><Plus className="mr-1 h-4 w-4" /> New Admission</Button>
       </div>
 
-      {/* Quick Links to Related Modules */}
+      {loading && (
+        <div className="flex items-center justify-center py-4 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm">Loading IPD data...</span>
+        </div>
+      )}
+
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">⚠ Could not load live data (showing demo). {error}</CardContent>
+        </Card>
+      )}
+
+      {/* Quick Links */}
       <div className="flex gap-2 flex-wrap">
         <Button asChild size="sm" variant="outline"><Link to="/hms/nursing"><Heart className="mr-1 h-3 w-3" /> Nursing Station</Link></Button>
         <Button asChild size="sm" variant="outline"><Link to="/hms/diet-kitchen"><Leaf className="mr-1 h-3 w-3" /> Diet & Kitchen</Link></Button>
@@ -50,13 +46,13 @@ const HmsIpd = () => {
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
           <TabsTrigger value="wards">Ward Status</TabsTrigger>
-          <TabsTrigger value="admissions">Active Admissions</TabsTrigger>
+          <TabsTrigger value="admissions">Active Admissions ({admissions.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="wards" className="mt-4">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {WARDS.map((ward) => {
-              const pct = Math.round((ward.occupied / ward.beds) * 100);
+            {wards.map((ward) => {
+              const pct = ward.beds > 0 ? Math.round((ward.occupied / ward.beds) * 100) : 0;
               return (
                 <Card key={ward.id}>
                   <CardContent className="p-4">
@@ -76,6 +72,9 @@ const HmsIpd = () => {
                         style={{ width: `${pct}%` }}
                       />
                     </div>
+                    {ward.chargePerDay > 0 && (
+                      <p className="text-xs text-muted-foreground mt-2">₹{ward.chargePerDay}/day</p>
+                    )}
                   </CardContent>
                 </Card>
               );
@@ -98,7 +97,7 @@ const HmsIpd = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {ADMISSIONS.map((a) => (
+                    {admissions.map((a) => (
                       <tr key={a.id} className="border-b hover:bg-muted/30">
                         <td className="px-4 py-3 font-medium">{a.patient}</td>
                         <td className="px-4 py-3">{a.ward} · {a.bed}</td>
@@ -114,6 +113,9 @@ const HmsIpd = () => {
                         </td>
                       </tr>
                     ))}
+                    {admissions.length === 0 && (
+                      <tr><td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">No active admissions</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   MessageSquare, Mail, Bell, Smartphone, Phone, Search,
   CheckCircle, XCircle, Clock, Send, Filter, Calendar,
-  RefreshCw, Download, User
+  RefreshCw, Download, User, Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type NotificationEntry = {
   id: string;
@@ -56,11 +58,48 @@ const mockNotifications: NotificationEntry[] = [
 ];
 
 const HmsNotificationHistory = () => {
-  const [notifications] = useState<NotificationEntry[]>(mockNotifications);
+  const [notifications, setNotifications] = useState<NotificationEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [channelFilter, setChannelFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
+
+  useEffect(() => { loadNotifications(); }, []);
+
+  const loadNotifications = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_notification_log")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setNotifications(data.map((n: any) => ({
+          id: n.id,
+          patient_name: n.patient_name || "Patient",
+          patient_phone: "",
+          channel: n.channel || "whatsapp",
+          type: n.notification_type || "general",
+          subject: n.subject || "—",
+          content_preview: n.content || "—",
+          status: n.status || "sent",
+          sent_at: n.created_at ? new Date(n.created_at).toLocaleString() : "—",
+          triggered_by: "System",
+        })));
+      } else {
+        setNotifications(mockNotifications);
+      }
+    } catch (err: any) {
+      console.error("Notification load error:", err);
+      setNotifications(mockNotifications);
+    }
+    setLoading(false);
+  };
 
   const filtered = notifications.filter((n) => {
     const matchSearch = n.patient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -1,15 +1,21 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const IssueNew = () => {
+  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [wardStores, setWardStores] = useState<{ id: string; ward_name: string }[]>([]);
+  const [stockItems, setStockItems] = useState<{ id: string; product_name: string; ward_store_id: string }[]>([]);
   const [location, setLocation] = useState("loc1");
-  const [store, setStore] = useState("alshifa");
+  const [store, setStore] = useState("");
   const [issueTo, setIssueTo] = useState("Patient");
   const [recipientName, setRecipientName] = useState("");
   const [service, setService] = useState("");
@@ -22,16 +28,72 @@ const IssueNew = () => {
 
   const grandTotal = items.reduce((sum, i) => sum + parseFloat(i.total || "0"), 0);
 
+  useEffect(() => {
+    loadWardStores();
+    loadStockItems();
+  }, []);
+
+  const loadWardStores = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stores")
+      .select("id, ward_name")
+      .eq("is_active", true);
+    setWardStores(data || []);
+    if (data && data.length > 0) setStore(data[0].id);
+  };
+
+  const loadStockItems = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stock_items")
+      .select("id, product_name, ward_store_id")
+      .gt("quantity_available", 0)
+      .order("product_name", { ascending: true });
+    setStockItems(data || []);
+  };
+
   const handleAddItem = () => {
     if (!currentItem.productName) { toast.error("Enter product name"); return; }
     setItems([...items, { ...currentItem, id: Date.now().toString(), sNo: items.length + 1 }]);
     setCurrentItem({ productName: "", mfr: "", batch: "", expiry: "", qty: "", mrp: "", gstPercent: "", total: "" });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!recipientName && issueTo === "Patient") { toast.error("Enter patient name"); return; }
     if (items.length === 0) { toast.error("Add at least one product"); return; }
-    toast.success("Issue saved successfully");
+
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("You must be logged in"); setSaving(false); return; }
+
+      const insertRows = items.map((item: any) => {
+        const matchedStock = stockItems.find(s =>
+          s.product_name.toLowerCase() === item.productName.toLowerCase()
+        );
+        return {
+          ward_store_id: matchedStock?.ward_store_id || store,
+          ward_stock_item_id: matchedStock?.id || stockItems[0]?.id,
+          quantity_consumed: parseFloat(item.qty) || 1,
+          consumption_type: issueTo === "Patient" ? "patient_use" : "therapy_use",
+          billed_to_patient: issueTo === "Patient",
+          bill_amount: parseFloat(item.total) || parseFloat(item.mrp) || 0,
+          consumed_by: user.id,
+          notes: `Issue to ${issueTo}: ${recipientName || "N/A"}. Product: ${item.productName}. ${issueNotes}`,
+        };
+      });
+
+      const { error } = await (supabase as any)
+        .from("hms_ward_consumption_log")
+        .insert(insertRows);
+
+      if (error) throw error;
+      toast.success("Issue saved to Supabase");
+      navigate("/hms/stock/issue/manage");
+    } catch (err: any) {
+      toast.error("Failed to save issue: " + (err.message || "Unknown error"));
+      console.error(err);
+    }
+    setSaving(false);
   };
 
   return (
@@ -65,8 +127,9 @@ const IssueNew = () => {
               <Select value={store} onValueChange={setStore}>
                 <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="alshifa">ALSHIFA PHARMACY</SelectItem>
-                  <SelectItem value="ip">IP Pharmacy Store</SelectItem>
+                  {wardStores.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>{s.ward_name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -136,12 +199,17 @@ const IssueNew = () => {
                     <td className="px-1 py-1"></td>
                     <td className="px-1 py-1"><Input className="h-7 text-xs" placeholder="Product Name" value={currentItem.productName} onChange={(e) => setCurrentItem({...currentItem, productName: e.target.value})} /></td>
                     <td className="px-1 py-1"><Input className="h-7 text-xs w-20" placeholder="Manufact" value={currentItem.mfr} onChange={(e) => setCurrentItem({...currentItem, mfr: e.target.value})} /></td>
-                    <td className="px-1 py-1"><Select value={currentItem.batch} onValueChange={(v) => setCurrentItem({...currentItem, batch: v})}><SelectTrigger className="h-7 text-xs w-16"><SelectValue /></SelectTrigger><SelectContent></SelectContent></Select></td>
-                    <td className="px-1 py-1"><Input className="h-7 text-xs w-20" placeholder="Expiry Date" readOnly value={currentItem.expiry} /></td>
+                    <td className="px-1 py-1"><Input className="h-7 text-xs w-16" placeholder="Batch" value={currentItem.batch} onChange={(e) => setCurrentItem({...currentItem, batch: e.target.value})} /></td>
+                    <td className="px-1 py-1"><Input className="h-7 text-xs w-20" placeholder="Expiry" value={currentItem.expiry} onChange={(e) => setCurrentItem({...currentItem, expiry: e.target.value})} /></td>
                     <td className="px-1 py-1"><Input className="h-7 text-xs w-12" placeholder="Qty" value={currentItem.qty} onChange={(e) => setCurrentItem({...currentItem, qty: e.target.value})} /></td>
                     <td className="px-1 py-1"><Input className="h-7 text-xs w-14" placeholder="MRP" value={currentItem.mrp} onChange={(e) => setCurrentItem({...currentItem, mrp: e.target.value})} /></td>
-                    <td className="px-1 py-1"><Select value={currentItem.gstPercent} onValueChange={(v) => setCurrentItem({...currentItem, gstPercent: v})}><SelectTrigger className="h-7 text-xs w-12"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="0">0</SelectItem><SelectItem value="5">5</SelectItem><SelectItem value="12">12</SelectItem><SelectItem value="18">18</SelectItem></SelectContent></Select></td>
-                    <td className="px-1 py-1"><Input className="h-7 text-xs w-14" placeholder="Total" readOnly value={currentItem.total} /></td>
+                    <td className="px-1 py-1">
+                      <Select value={currentItem.gstPercent} onValueChange={(v) => setCurrentItem({...currentItem, gstPercent: v})}>
+                        <SelectTrigger className="h-7 text-xs w-12"><SelectValue /></SelectTrigger>
+                        <SelectContent><SelectItem value="0">0</SelectItem><SelectItem value="5">5</SelectItem><SelectItem value="12">12</SelectItem><SelectItem value="18">18</SelectItem></SelectContent>
+                      </Select>
+                    </td>
+                    <td className="px-1 py-1"><Input className="h-7 text-xs w-14" placeholder="Total" value={currentItem.total} onChange={(e) => setCurrentItem({...currentItem, total: e.target.value})} /></td>
                     <td className="px-1 py-1"><Button size="sm" className="h-7 bg-blue-600 text-xs" onClick={handleAddItem}>Add</Button></td>
                   </tr>
                 </tbody>
@@ -162,7 +230,9 @@ const IssueNew = () => {
           </div>
 
           <div className="text-center">
-            <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700 px-8">Save</Button>
+            <Button onClick={handleSave} disabled={saving} className="bg-green-600 hover:bg-green-700 px-8">
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
+            </Button>
           </div>
         </CardContent>
       </Card>

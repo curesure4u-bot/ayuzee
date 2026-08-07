@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Pencil, MoreHorizontal, Search, Download } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type RatePlan = {
@@ -71,6 +72,20 @@ const mockPriceSetterItems: PriceSetterItem[] = [
 const RatePlanMaster = () => {
   // Master setting: "manage-rate-plan" or "price-setter"
   const [masterSection, setMasterSection] = useState<"manage-rate-plan" | "price-setter">("manage-rate-plan");
+  const [liveRatePlans, setLiveRatePlans] = useState<any[]>([]);
+
+  useEffect(() => { loadRatePlans(); }, []);
+
+  const loadRatePlans = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_rate_plans")
+        .select("*, hms_rate_plan_items(*)")
+        .eq("is_active", true)
+        .order("plan_name");
+      setLiveRatePlans(data || []);
+    } catch (err) { console.error("Rate plans load:", err); }
+  };
 
   // Manage Rate Plan sub-tabs: "new" or "inactive"
   const [ratePlanTab, setRatePlanTab] = useState<"new" | "inactive">("new");

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Package, Plus, Search, Download, MoreHorizontal, Pencil, Copy } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -145,6 +146,20 @@ const mockStockPackages: StockPackage[] = [
 const PackageMaster = () => {
   // Main tab: "treatment" or "stock"
   const [mainTab, setMainTab] = useState<"treatment" | "stock">("treatment");
+  const [livePackages, setLivePackages] = useState<any[]>([]);
+
+  useEffect(() => { loadPackages(); }, []);
+
+  const loadPackages = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_packages")
+        .select("*")
+        .eq("is_active", true)
+        .order("package_name");
+      setLivePackages(data || []);
+    } catch (err) { console.error("Package load:", err); }
+  };
   // Sub view: "new", "manage", "inactive"
   const [treatmentView, setTreatmentView] = useState<"new" | "manage" | "inactive">("new");
   const [stockView, setStockView] = useState<"new" | "manage" | "inactive">("new");

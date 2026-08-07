@@ -8,31 +8,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { ClipboardList, Plus, CheckCircle, Clock, AlertTriangle, Search } from "lucide-react";
+import { ClipboardList, Plus, CheckCircle, Clock, AlertTriangle, Search, Loader2 } from "lucide-react";
+import { useIndent } from "@/hooks/useIndent";
 
-type Indent = { id: string; indentNo: string; department: string; raisedBy: string; date: string; items: number; status: "pending" | "approved" | "fulfilled" | "rejected"; urgency: string };
 type AuditEntry = { id: string; item: string; batch: string; systemQty: number; physicalQty: number; variance: number; status: "matched" | "shortage" | "excess"; auditDate: string };
 
-const mockIndents: Indent[] = [
-  { id: "1", indentNo: "IND-2026-0145", department: "Panchakarma", raisedBy: "Suresh T", date: "2026-07-15", items: 5, status: "pending", urgency: "Normal" },
-  { id: "2", indentNo: "IND-2026-0144", department: "Laboratory", raisedBy: "Anita D", date: "2026-07-14", items: 8, status: "approved", urgency: "Urgent" },
-  { id: "3", indentNo: "IND-2026-0143", department: "IPD Ward", raisedBy: "Nurse Priya", date: "2026-07-13", items: 12, status: "fulfilled", urgency: "Normal" },
-  { id: "4", indentNo: "IND-2026-0142", department: "OPD", raisedBy: "Rajesh K", date: "2026-07-12", items: 3, status: "fulfilled", urgency: "Normal" },
-  { id: "5", indentNo: "IND-2026-0141", department: "Pharmacy", raisedBy: "Vikram R", date: "2026-07-11", items: 20, status: "approved", urgency: "Urgent" },
-];
-
-const mockAudit: AuditEntry[] = [
-  { id: "1", item: "Sesame Oil (Therapy)", batch: "B-2026-045", systemQty: 50, physicalQty: 48, variance: -2, status: "shortage", auditDate: "2026-07-10" },
-  { id: "2", item: "Surgical Gloves", batch: "B-2026-GL", systemQty: 500, physicalQty: 500, variance: 0, status: "matched", auditDate: "2026-07-10" },
-  { id: "3", item: "Cotton Rolls", batch: "B-2026-CR", systemQty: 200, physicalQty: 195, variance: -5, status: "shortage", auditDate: "2026-07-10" },
-  { id: "4", item: "Dhanwantharam Tailam", batch: "KAL-789", systemQty: 25, physicalQty: 27, variance: 2, status: "excess", auditDate: "2026-07-10" },
-  { id: "5", item: "Yogaraja Guggulu", batch: "B-2026-102", systemQty: 120, physicalQty: 120, variance: 0, status: "matched", auditDate: "2026-07-10" },
-  { id: "6", item: "Ksheerabala 101", batch: "B-2026-055", systemQty: 18, physicalQty: 16, variance: -2, status: "shortage", auditDate: "2026-07-10" },
-];
-
 const HmsIndent = () => {
-  const [indents] = useState<Indent[]>(mockIndents);
-  const [audit] = useState<AuditEntry[]>(mockAudit);
+  const { indents, loading, error, pendingCount, fulfilledCount, updateStatus } = useIndent();
+  const [audit] = useState<AuditEntry[]>([
+    { id: "1", item: "Sesame Oil (Therapy)", batch: "B-2026-045", systemQty: 50, physicalQty: 48, variance: -2, status: "shortage", auditDate: "2026-07-10" },
+    { id: "2", item: "Surgical Gloves", batch: "B-2026-GL", systemQty: 500, physicalQty: 500, variance: 0, status: "matched", auditDate: "2026-07-10" },
+    { id: "3", item: "Cotton Rolls", batch: "B-2026-CR", systemQty: 200, physicalQty: 195, variance: -5, status: "shortage", auditDate: "2026-07-10" },
+    { id: "4", item: "Dhanwantharam Tailam", batch: "KAL-789", systemQty: 25, physicalQty: 27, variance: 2, status: "excess", auditDate: "2026-07-10" },
+    { id: "5", item: "Yogaraja Guggulu", batch: "B-2026-102", systemQty: 120, physicalQty: 120, variance: 0, status: "matched", auditDate: "2026-07-10" },
+    { id: "6", item: "Ksheerabala 101", batch: "B-2026-055", systemQty: 18, physicalQty: 16, variance: -2, status: "shortage", auditDate: "2026-07-10" },
+  ]);
   const [addOpen, setAddOpen] = useState(false);
 
   return (

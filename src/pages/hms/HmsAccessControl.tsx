@@ -8,7 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Shield, Users, Building2, Settings, CheckCircle2, XCircle, Clock, Search } from "lucide-react";
+import { Shield, Users, Building2, Settings, CheckCircle2, XCircle, Clock, Search, Loader2 } from "lucide-react";
+import { useAccessControl } from "@/hooks/useAccessControl";
 
 type HmsRole = "owner" | "branch_admin" | "branch_doctor" | "franchise_doctor" | "therapist" | "pharmacist" | "lab_tech" | "receptionist" | "camp_doctor" | "nurse";
 type HmsModule = "dashboard" | "opd" | "clinical" | "patient" | "ipd" | "lab" | "stock" | "accounts" | "mis" | "ayush" | "panchakarma" | "spine" | "hr" | "marketing" | "masters" | "reports" | "all";
@@ -69,6 +70,7 @@ const mockStaff: StaffMember[] = [
 ];
 
 const HmsAccessControl = () => {
+  const { loading, error } = useAccessControl();
   const [search, setSearch] = useState("");
   const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null);
   const filtered = mockStaff.filter(s => s.name.toLowerCase().includes(search.toLowerCase()) || s.email.includes(search));

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Package, Warehouse, AlertTriangle, ArrowLeftRight, Plus,
-  Search, TrendingDown, BarChart3, RefreshCw, Droplets
+  Search, TrendingDown, BarChart3, RefreshCw, Droplets, Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type WardStore = {
   id: string;
@@ -68,8 +69,69 @@ const mockConsumption: ConsumptionEntry[] = [
 ];
 
 const HmsWardStore = () => {
-  const [stores] = useState<WardStore[]>(mockStores);
-  const [stockItems] = useState<WardStockItem[]>(mockStockItems);
+  const [stores, setStores] = useState<WardStore[]>(mockStores);
+  const [stockItems, setStockItems] = useState<WardStockItem[]>(mockStockItems);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { loadWardData(); }, []);
+
+  const loadWardData = async () => {
+    setLoading(true);
+    try {
+      const { data: storeData } = await (supabase as any)
+        .from("hms_ward_stores")
+        .select("id, ward_name, store_type, is_active")
+        .eq("is_active", true);
+
+      if (storeData && storeData.length > 0) {
+        // For each store get item counts
+        const enriched: WardStore[] = [];
+        for (const store of storeData) {
+          const { data: items } = await (supabase as any)
+            .from("hms_ward_stock_items")
+            .select("quantity_available, min_stock_level")
+            .eq("ward_store_id", store.id);
+
+          const itemCount = (items || []).length;
+          const lowCount = (items || []).filter((i: any) => i.quantity_available <= i.min_stock_level).length;
+
+          enriched.push({
+            id: store.id,
+            name: store.ward_name,
+            type: store.store_type || "ward",
+            items_count: itemCount,
+            low_stock_count: lowCount,
+            in_charge: "Staff",
+            last_restocked: "Today",
+          });
+        }
+        setStores(enriched);
+      }
+
+      // Load stock items
+      const { data: allItems } = await (supabase as any)
+        .from("hms_ward_stock_items")
+        .select("*, hms_ward_stores(ward_name)")
+        .order("product_name")
+        .limit(30);
+
+      if (allItems && allItems.length > 0) {
+        setStockItems(allItems.map((i: any) => ({
+          id: i.id,
+          name: i.product_name,
+          ward: i.hms_ward_stores?.ward_name || "—",
+          current_qty: i.quantity_available,
+          min_level: i.min_stock_level,
+          unit: i.quantity_unit || "units",
+          last_consumed: i.last_consumed_at ? new Date(i.last_consumed_at).toLocaleDateString() : "—",
+          is_critical: i.is_critical,
+        })));
+      }
+    } catch (err) {
+      console.error("Ward store load error:", err);
+    }
+    setLoading(false);
+  };
   const [consumption] = useState<ConsumptionEntry[]>(mockConsumption);
   const [selectedStore, setSelectedStore] = useState<string>("1");
   const [transferOpen, setTransferOpen] = useState(false);

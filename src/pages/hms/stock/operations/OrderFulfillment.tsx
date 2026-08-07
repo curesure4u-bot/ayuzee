@@ -1,165 +1,142 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Package, Truck, CheckCircle, Clock, Brain, MapPin } from "lucide-react";
+import { Package, Truck, CheckCircle, Clock, Brain, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const orders = [
-  { id: "ORD-4521", patient: "Rajesh Kumar", items: ["Rasnasaptakam 450ml x2", "Simhanada Guggulu 60t x1"], total: 735, status: "pending", date: "22 Jul 2026", address: "HSR Layout, Bangalore", type: "prescription" },
-  { id: "ORD-4520", patient: "Meera Nair", items: ["Kottamchukkadi Taila 200ml x1", "Triphala Churna 100g x2"], total: 520, status: "packed", date: "22 Jul 2026", address: "Koramangala, Bangalore", type: "online" },
-  { id: "ORD-4519", patient: "Suresh Menon", items: ["Ashwagandha Churna 100g x3"], total: 450, status: "shipped", date: "21 Jul 2026", address: "Indiranagar, Bangalore", type: "prescription" },
-  { id: "ORD-4518", patient: "Priya Sharma", items: ["Dashamoolarishtam 450ml x1", "Chandraprabha Vati 60t x2"], total: 680, status: "delivered", date: "20 Jul 2026", address: "Whitefield, Bangalore", type: "online" },
-  { id: "ORD-4517", patient: "Amit Patel", items: ["Mahanarayan Taila 200ml x2"], total: 390, status: "delivered", date: "20 Jul 2026", address: "JP Nagar, Bangalore", type: "online" },
-];
+type OrderRecord = {
+  id: string;
+  product_name: string;
+  quantity: number;
+  status: string;
+  transfer_reason: string | null;
+  created_at: string;
+  to_store_name?: string;
+};
 
 const statusColors: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700",
-  packed: "bg-blue-100 text-blue-700",
-  shipped: "bg-purple-100 text-purple-700",
-  delivered: "bg-green-100 text-green-700",
-};
-
-const statusIcons: Record<string, typeof Package> = {
-  pending: Clock,
-  packed: Package,
-  shipped: Truck,
-  delivered: CheckCircle,
+  approved: "bg-blue-100 text-blue-700",
+  in_transit: "bg-purple-100 text-purple-700",
+  received: "bg-green-100 text-green-700",
 };
 
 const OrderFulfillment = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  const [orders, setOrders] = useState<OrderRecord[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = activeTab === "all" ? orders : orders.filter(o => o.status === activeTab);
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  const loadOrders = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .select("*, to_store:hms_ward_stores!hms_ward_stock_transfers_to_store_id_fkey(ward_name)")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+
+      setOrders((data || []).map((row: any) => ({
+        ...row,
+        to_store_name: row.to_store?.ward_name || "—",
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load orders");
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const handleUpdateStatus = async (id: string, newStatus: string) => {
+    try {
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .update({ status: newStatus })
+        .eq("id", id);
+      if (error) throw error;
+      toast.success(`Status updated to ${newStatus}`);
+      loadOrders();
+    } catch (err: any) {
+      toast.error("Failed to update");
+    }
+  };
+
   const pending = orders.filter(o => o.status === "pending").length;
-  const packed = orders.filter(o => o.status === "packed").length;
-  const shipped = orders.filter(o => o.status === "shipped").length;
-  const delivered = orders.filter(o => o.status === "delivered").length;
+  const inTransit = orders.filter(o => o.status === "in_transit" || o.status === "approved").length;
+  const delivered = orders.filter(o => o.status === "received").length;
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-[40vh]"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Package className="h-6 w-6 text-blue-600" /> Online Order Fulfillment
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Pack → Ship → Deliver → Track — E-commerce & prescription delivery
-          </p>
+          <h1 className="text-2xl font-bold flex items-center gap-2"><Package className="h-6 w-6 text-blue-600" /> Order Fulfillment</h1>
+          <p className="text-muted-foreground mt-1">Track and fulfill orders — pending → packed → shipped → delivered. Live from Supabase.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card className="border-amber-200">
-          <CardContent className="p-3 text-center">
-            <Clock className="h-5 w-5 mx-auto text-amber-600" />
-            <p className="text-xl font-bold mt-1 text-amber-600">{pending}</p>
-            <p className="text-xs text-muted-foreground">Pending</p>
-          </CardContent>
-        </Card>
-        <Card className="border-blue-200">
-          <CardContent className="p-3 text-center">
-            <Package className="h-5 w-5 mx-auto text-blue-600" />
-            <p className="text-xl font-bold mt-1 text-blue-600">{packed}</p>
-            <p className="text-xs text-muted-foreground">Packed</p>
-          </CardContent>
-        </Card>
-        <Card className="border-purple-200">
-          <CardContent className="p-3 text-center">
-            <Truck className="h-5 w-5 mx-auto text-purple-600" />
-            <p className="text-xl font-bold mt-1 text-purple-600">{shipped}</p>
-            <p className="text-xs text-muted-foreground">Shipped</p>
-          </CardContent>
-        </Card>
-        <Card className="border-green-200">
-          <CardContent className="p-3 text-center">
-            <CheckCircle className="h-5 w-5 mx-auto text-green-600" />
-            <p className="text-xl font-bold mt-1 text-green-600">{delivered}</p>
-            <p className="text-xs text-muted-foreground">Delivered</p>
-          </CardContent>
-        </Card>
+        <Card><CardContent className="p-3 text-center"><Clock className="h-4 w-4 mx-auto text-amber-600" /><p className="text-xl font-bold text-amber-600">{pending}</p><p className="text-[10px] text-muted-foreground">Pending</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><Truck className="h-4 w-4 mx-auto text-purple-600" /><p className="text-xl font-bold text-purple-600">{inTransit}</p><p className="text-[10px] text-muted-foreground">In Transit</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><CheckCircle className="h-4 w-4 mx-auto text-green-600" /><p className="text-xl font-bold text-green-600">{delivered}</p><p className="text-[10px] text-muted-foreground">Delivered</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold">{orders.length}</p><p className="text-[10px] text-muted-foreground">Total Orders</p></CardContent></Card>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="all">All ({orders.length})</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({pending})</TabsTrigger>
-          <TabsTrigger value="packed">Packed ({packed})</TabsTrigger>
-          <TabsTrigger value="shipped">Shipped ({shipped})</TabsTrigger>
-          <TabsTrigger value="delivered">Delivered ({delivered})</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value={activeTab} className="mt-4 space-y-3">
-          {filtered.map((order) => {
-            const StatusIcon = statusIcons[order.status];
-            return (
-              <Card key={order.id} className="hover:shadow-sm transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <StatusIcon className={`h-5 w-5 mt-0.5 ${
-                        order.status === "pending" ? "text-amber-600" :
-                        order.status === "packed" ? "text-blue-600" :
-                        order.status === "shipped" ? "text-purple-600" : "text-green-600"
-                      }`} />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold text-sm">{order.id}</p>
-                          <Badge variant="outline" className="text-[10px]">{order.type}</Badge>
-                          <Badge className={`text-[10px] ${statusColors[order.status]}`}>
-                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">{order.patient} • {order.date}</p>
-                        <p className="text-xs mt-1">{order.items.join(", ")}</p>
-                        <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
-                          <MapPin className="h-3 w-3" /> {order.address}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">₹{order.total}</p>
-                      <div className="flex gap-1 mt-2">
-                        {order.status === "pending" && (
-                          <Button size="sm" className="h-7 text-xs" onClick={() => toast.success(`${order.id} marked as packed`)}>
-                            Pack Now
-                          </Button>
-                        )}
-                        {order.status === "packed" && (
-                          <Button size="sm" className="h-7 text-xs" onClick={() => toast.success(`${order.id} shipped`)}>
-                            Ship
-                          </Button>
-                        )}
-                        {order.status === "shipped" && (
-                          <Button size="sm" className="h-7 text-xs" onClick={() => toast.success(`${order.id} delivered`)}>
-                            Mark Delivered
-                          </Button>
-                        )}
-                        {order.status === "delivered" && (
-                          <Button size="sm" variant="outline" className="h-7 text-xs">View</Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </TabsContent>
-      </Tabs>
+      <Card>
+        <CardHeader className="pb-2"><CardTitle className="text-base">Orders</CardTitle></CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="border-b bg-muted/50">
+                <tr>
+                  <th className="px-3 py-2 text-left">Product</th>
+                  <th className="px-3 py-2 text-center">Qty</th>
+                  <th className="px-3 py-2 text-left">Destination</th>
+                  <th className="px-3 py-2 text-left">Reason</th>
+                  <th className="px-3 py-2 text-center">Status</th>
+                  <th className="px-3 py-2 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.length === 0 ? (
+                  <tr><td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">No orders found</td></tr>
+                ) : (
+                  orders.map((o) => (
+                    <tr key={o.id} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 text-xs font-medium">{o.product_name}</td>
+                      <td className="px-3 py-2 text-center text-xs">{o.quantity}</td>
+                      <td className="px-3 py-2 text-xs">{o.to_store_name}</td>
+                      <td className="px-3 py-2 text-[10px] text-muted-foreground max-w-[150px] truncate">{o.transfer_reason || "—"}</td>
+                      <td className="px-3 py-2 text-center"><Badge className={`text-[10px] ${statusColors[o.status] || ""}`}>{o.status}</Badge></td>
+                      <td className="px-3 py-2 text-center">
+                        {o.status === "pending" && <Button size="sm" className="h-6 text-[10px]" onClick={() => handleUpdateStatus(o.id, "approved")}>Pack</Button>}
+                        {o.status === "approved" && <Button size="sm" className="h-6 text-[10px]" onClick={() => handleUpdateStatus(o.id, "in_transit")}>Ship</Button>}
+                        {o.status === "in_transit" && <Button size="sm" className="h-6 text-[10px]" onClick={() => handleUpdateStatus(o.id, "received")}>Deliver</Button>}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="border-purple-200 bg-purple-50/30">
-        <CardContent className="p-4 flex items-start gap-3">
-          <Brain className="h-5 w-5 text-purple-600 mt-0.5" />
+        <CardContent className="p-3 flex items-start gap-2">
+          <Brain className="h-4 w-4 text-purple-600 mt-0.5" />
           <div>
-            <p className="font-semibold text-purple-800">AI Fulfillment Optimizer</p>
-            <p className="text-sm text-purple-700">
-              ORD-4521 (Rajesh Kumar) — prescription order contains temperature-sensitive kashayam.
-              AI recommends: Use insulated packaging + same-day delivery (HSR Layout is 4km from branch).
-              Auto-deduct from dispensing stock, update e-commerce inventory sync.
-              Estimated delivery: 2 hours if dispatched now.
-            </p>
+            <p className="font-semibold text-xs text-purple-800">AI Fulfillment</p>
+            <p className="text-[10px] text-purple-700">Orders flow: pending → approved (packed) → in_transit (shipped) → received (delivered). Each status update is persisted to Supabase in real-time.</p>
           </div>
         </CardContent>
       </Card>

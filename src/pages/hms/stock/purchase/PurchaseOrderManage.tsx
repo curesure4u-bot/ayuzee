@@ -1,30 +1,112 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const mockPOs = [
-  { sNo: 1, store: "ALSHIFA PHARMACY", poNo: 1, orderDate: "20/12/2019", deliveryDate: "20/12/2019", supplier: "AVM HOMOEO AGENCIES\n9994143187", total: 0.00, status: "Ordered", orderedBy: "MANIKANDAN" },
-  { sNo: 2, store: "ALSHIFA PHARMACY", poNo: 2, orderDate: "20/12/2019", deliveryDate: "20/12/2019", supplier: "AVM HOMOEO AGENCIES\n9994143187", total: 0.00, status: "Ordered", orderedBy: "MANIKANDAN" },
-  { sNo: 3, store: "IP Pharmacy Store", poNo: 1, orderDate: "09/12/2019", deliveryDate: "09/12/2019", supplier: "RICH HERBALS\n7538883888", total: 0.00, status: "Ordered", orderedBy: "Al Shifa Ayush Hospital" },
-  { sNo: 4, store: "IP Pharmacy Store", poNo: 2, orderDate: "14/08/2020", deliveryDate: "14/08/2020", supplier: "RAJAH HEALTHY ACRES P LTD\n044-26202188", total: 0.00, status: "Ordered", orderedBy: "ARUNKUMAR" },
-  { sNo: 5, store: "IP Pharmacy Store", poNo: 2, orderDate: "01/05/2021", deliveryDate: "01/05/2021", supplier: "skm siddha and ayrvedha\n0", total: 0.00, status: "Ordered", orderedBy: "SHAKEELA" },
-  { sNo: 6, store: "IP Pharmacy Store", poNo: 2, orderDate: "19/04/2022", deliveryDate: "19/04/2022", supplier: "SIDDHASRAMAM SIVANANANDA\n04282-235127", total: 0.00, status: "Ordered", orderedBy: "ALSHIFA STORE ROOM" },
-  { sNo: 7, store: "IP Pharmacy Store", poNo: 2, orderDate: "11/12/2019", deliveryDate: "11/12/2019", supplier: "skm siddha and ayrvedha\n0", total: 0.00, status: "Ordered", orderedBy: "ARUNKUMAR" },
-  { sNo: 8, store: "IP Pharmacy Store", poNo: 3, orderDate: "11/12/2019", deliveryDate: "11/12/2019", supplier: "THE ARYA VAIDYA PHARMACY\n0422-4280171,99439920", total: 0.00, status: "Ordered", orderedBy: "ARUNKUMAR" },
-];
+type PORecord = {
+  id: string;
+  product_name: string;
+  quantity: number;
+  batch_number: string | null;
+  transfer_reason: string | null;
+  status: string;
+  requested_at: string;
+  created_at: string;
+  to_store_name?: string;
+  from_store_name?: string;
+};
 
 const PurchaseOrderManage = () => {
+  const [orders, setOrders] = useState<PORecord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("loc1");
   const [storeFilter, setStoreFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  const loadOrders = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .select("*, to_store:hms_ward_stores!hms_ward_stock_transfers_to_store_id_fkey(ward_name), from_store:hms_ward_stores!hms_ward_stock_transfers_from_store_id_fkey(ward_name)")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      setOrders((data || []).map((row: any) => ({
+        ...row,
+        to_store_name: row.to_store?.ward_name || "—",
+        from_store_name: row.from_store?.ward_name || "—",
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load purchase orders");
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const handleFilter = async () => {
+    setLoading(true);
+    try {
+      let query = (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .select("*, to_store:hms_ward_stores!hms_ward_stock_transfers_to_store_id_fkey(ward_name), from_store:hms_ward_stores!hms_ward_stock_transfers_from_store_id_fkey(ward_name)")
+        .order("created_at", { ascending: false });
+
+      if (statusFilter !== "all") {
+        query = query.eq("status", statusFilter);
+      }
+      if (startDate) {
+        query = query.gte("created_at", startDate);
+      }
+      if (endDate) {
+        query = query.lte("created_at", endDate + "T23:59:59");
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      setOrders((data || []).map((row: any) => ({
+        ...row,
+        to_store_name: row.to_store?.ward_name || "—",
+        from_store_name: row.from_store?.ward_name || "—",
+      })));
+    } catch (err: any) {
+      toast.error("Failed to filter orders");
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const filtered = orders.filter((o) =>
+    o.product_name.toLowerCase().includes(search.toLowerCase()) ||
+    (o.transfer_reason || "").toLowerCase().includes(search.toLowerCase()) ||
+    (o.to_store_name || "").toLowerCase().includes(search.toLowerCase())
+  );
+
+  const getStatusBadge = (status: string) => {
+    const colors: Record<string, string> = {
+      pending: "bg-yellow-100 text-yellow-700 border-yellow-300",
+      approved: "bg-blue-100 text-blue-700 border-blue-300",
+      in_transit: "bg-purple-100 text-purple-700 border-purple-300",
+      received: "bg-green-100 text-green-700 border-green-300",
+      rejected: "bg-red-100 text-red-700 border-red-300",
+    };
+    return colors[status] || "";
+  };
 
   return (
     <div className="space-y-4">
@@ -63,14 +145,16 @@ const PurchaseOrderManage = () => {
           <SelectTrigger className="w-[140px] h-8 text-xs"><SelectValue placeholder="Show All Status" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Show All Status</SelectItem>
-            <SelectItem value="ordered">Ordered</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="approved">Approved</SelectItem>
+            <SelectItem value="in_transit">In Transit</SelectItem>
             <SelectItem value="received">Received</SelectItem>
-            <SelectItem value="cancelled">Cancelled</SelectItem>
+            <SelectItem value="rejected">Rejected</SelectItem>
           </SelectContent>
         </Select>
         <Input type="date" className="h-8 text-xs w-[130px]" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
         <Input type="date" className="h-8 text-xs w-[130px]" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 h-8">Go</Button>
+        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 h-8" onClick={handleFilter}>Go</Button>
       </div>
 
       {/* Entries & Search */}
@@ -89,39 +173,64 @@ const PurchaseOrderManage = () => {
       {/* Table */}
       <Card>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead className="border-b bg-muted/50">
-                <tr>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">S.No</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Store</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">PO No</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Order Date</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Delivery Date</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Supplier</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Total</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Status</th>
-                  <th className="px-3 py-2 text-left font-semibold text-orange-600">Ordered By</th>
-                  <th className="px-3 py-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {mockPOs.map((po) => (
-                  <tr key={`${po.sNo}-${po.store}`} className="border-b hover:bg-muted/30">
-                    <td className="px-3 py-2">{po.sNo}.</td>
-                    <td className="px-3 py-2">{po.store}</td>
-                    <td className="px-3 py-2">{po.poNo}</td>
-                    <td className="px-3 py-2">{po.orderDate}</td>
-                    <td className="px-3 py-2">{po.deliveryDate}</td>
-                    <td className="px-3 py-2 max-w-[200px]">{po.supplier.split("\n")[0]}<br/><span className="text-muted-foreground">{po.supplier.split("\n")[1]}</span></td>
-                    <td className="px-3 py-2">{po.total.toFixed(2)}</td>
-                    <td className="px-3 py-2"><Badge variant="outline" className="text-xs">{po.status}</Badge></td>
-                    <td className="px-3 py-2">{po.orderedBy}</td>
-                    <td className="px-3 py-2"><Button variant="ghost" size="sm" className="h-6 text-xs">...</Button></td>
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-6 w-6 animate-spin text-orange-600" />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">S.No</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Store (To)</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Product</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Qty</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Batch</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Order Date</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Supplier / Reason</th>
+                    <th className="px-3 py-2 text-left font-semibold text-orange-600">Status</th>
+                    <th className="px-3 py-2"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filtered.length === 0 ? (
+                    <tr>
+                      <td colSpan={9} className="px-4 py-8 text-center text-muted-foreground">
+                        No purchase orders found
+                      </td>
+                    </tr>
+                  ) : (
+                    filtered.map((po, idx) => (
+                      <tr key={po.id} className="border-b hover:bg-muted/30">
+                        <td className="px-3 py-2">{idx + 1}.</td>
+                        <td className="px-3 py-2">{po.to_store_name}</td>
+                        <td className="px-3 py-2 font-medium">{po.product_name}</td>
+                        <td className="px-3 py-2">{po.quantity}</td>
+                        <td className="px-3 py-2 font-mono">{po.batch_number || "—"}</td>
+                        <td className="px-3 py-2">{new Date(po.requested_at || po.created_at).toLocaleDateString()}</td>
+                        <td className="px-3 py-2 max-w-[200px] truncate">{po.transfer_reason || "—"}</td>
+                        <td className="px-3 py-2">
+                          <Badge variant="outline" className={`text-xs ${getStatusBadge(po.status)}`}>
+                            {po.status}
+                          </Badge>
+                        </td>
+                        <td className="px-3 py-2">
+                          <Button variant="ghost" size="sm" className="h-6 text-xs">...</Button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div className="flex items-center justify-between px-4 py-3 border-t text-sm text-muted-foreground">
+            <span>Showing {filtered.length} entries</span>
+            <div className="flex gap-1">
+              <Button variant="outline" size="sm" disabled>Previous</Button>
+              <Button variant="outline" size="sm" disabled>Next</Button>
+            </div>
           </div>
         </CardContent>
       </Card>
