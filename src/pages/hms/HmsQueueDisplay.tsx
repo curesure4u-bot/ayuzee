@@ -4,23 +4,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Monitor, Volume2, RefreshCw, Maximize, Settings } from "lucide-react";
+import { Monitor, Volume2, RefreshCw, Maximize, Settings, Loader2 } from "lucide-react";
+import { useQueueDisplay } from "@/hooks/useQueueDisplay";
 
 type TokenDisplay = { tokenNo: number; patientName: string; department: string; doctor: string; room: string; status: "calling" | "waiting" | "in_progress" };
 
-const mockTokens: TokenDisplay[] = [
-  { tokenNo: 15, patientName: "Ramesh K.", department: "Ayurveda", doctor: "Dr. Arun Sharma", room: "Room 101", status: "calling" },
-  { tokenNo: 16, patientName: "Lakshmi D.", department: "Panchakarma", doctor: "Dr. Meena Patel", room: "Room 102", status: "in_progress" },
-  { tokenNo: 17, patientName: "Sunil M.", department: "Ayurveda", doctor: "Dr. Arun Sharma", room: "Room 101", status: "waiting" },
-  { tokenNo: 18, patientName: "Meera N.", department: "Homeopathy", doctor: "Dr. Priya Das", room: "Room 201", status: "waiting" },
-  { tokenNo: 19, patientName: "Anand S.", department: "Siddha", doctor: "Dr. Tamil Selvan", room: "Room 202", status: "waiting" },
-  { tokenNo: 20, patientName: "Priya K.", department: "Ayurveda", doctor: "Dr. Arun Sharma", room: "Room 101", status: "waiting" },
-  { tokenNo: 21, patientName: "Mohan R.", department: "Yoga", doctor: "Dr. Ananya S", room: "Yoga Hall", status: "waiting" },
-  { tokenNo: 22, patientName: "Kavitha S.", department: "Panchakarma", doctor: "Dr. Meena Patel", room: "Room 102", status: "waiting" },
-];
-
 const HmsQueueDisplay = () => {
-  const [tokens] = useState<TokenDisplay[]>(mockTokens);
+  const { tokens: hookTokens, loading, error, refetch } = useQueueDisplay();
+  const tokens: TokenDisplay[] = hookTokens.map((t, i) => ({
+    tokenNo: parseInt(t.tokenNo.replace(/\D/g, "")) || (i + 15),
+    patientName: t.patient,
+    department: t.department,
+    doctor: t.doctor,
+    room: t.department === "Panchakarma" ? "Room 102" : t.department === "Homeopathy" ? "Room 201" : "Room 101",
+    status: (t.status === "serving" ? "calling" : t.status === "completed" ? "in_progress" : "waiting") as "calling" | "waiting" | "in_progress",
+  }));
   const [currentTime, setCurrentTime] = useState(new Date());
   const [fullscreen, setFullscreen] = useState(false);
 

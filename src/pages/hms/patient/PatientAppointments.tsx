@@ -7,24 +7,34 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar, Brain, Plus } from "lucide-react";
+import { Calendar, Brain, Plus, Loader2 } from "lucide-react";
+import { usePatientAppointments } from "@/hooks/usePatientAppointments";
 
 const patientHeader = { name: "Mr. Nagaraj 14233", id: "AL-8472", age: "65 years 1 months 16 days", gender: "M", mobile: "9443314670" };
 
-const upcomingAppts = [
-  { date: "21/07/2026", time: "15:00 - 15:05", purpose: "Consultation", doctor: "Dr. Mohamad Saleem MD (AYURVEDA)", bookedBy: "AKSHARA" },
-];
-
 const PatientAppointments = () => {
+  const { upcoming, past, loading, error, bookAppointment } = usePatientAppointments("AL-8472");
   const [tab, setTab] = useState("upcoming");
   const [apptDate, setApptDate] = useState("");
   const [apptTime, setApptTime] = useState("");
   const [doctor, setDoctor] = useState("");
   const [purpose, setPurpose] = useState("Consultation");
 
-  const handleBook = () => {
+  const handleBook = async () => {
     if (!apptDate || !doctor) return toast.error("Select date and doctor");
+    await bookAppointment({
+      patientId: "AL-8472",
+      patientName: patientHeader.name,
+      date: apptDate,
+      time: apptTime || "10:00 AM",
+      doctor,
+      department: "Ayurveda",
+      purpose,
+      bookedBy: "HMS Staff",
+      notes: "",
+    });
     toast.success("Appointment booked successfully");
+    setApptDate(""); setApptTime(""); setDoctor("");
   };
 
   return (
@@ -52,7 +62,7 @@ const PatientAppointments = () => {
         <TabsContent value="upcoming" className="mt-4">
           <Card><CardContent className="p-0">
             <div className="overflow-x-auto"><table className="w-full text-sm"><thead className="border-b bg-muted/50"><tr><th className="px-4 py-3 text-left text-orange-600">Appt Date</th><th className="px-4 py-3 text-left text-orange-600">Appt Time</th><th className="px-4 py-3 text-left text-orange-600">Purpose</th><th className="px-4 py-3 text-left text-orange-600">Doctor Name</th><th className="px-4 py-3 text-left text-orange-600">Booked by</th></tr></thead>
-              <tbody>{upcomingAppts.map((a, i) => (<tr key={i} className="border-b"><td className="px-4 py-3">{a.date}</td><td className="px-4 py-3">{a.time}</td><td className="px-4 py-3">{a.purpose}</td><td className="px-4 py-3">{a.doctor}</td><td className="px-4 py-3">{a.bookedBy}</td></tr>))}</tbody>
+              <tbody>{upcoming.map((a) => (<tr key={a.id} className="border-b hover:bg-muted/30"><td className="px-4 py-3">{a.date}</td><td className="px-4 py-3">{a.time}</td><td className="px-4 py-3">{a.purpose}</td><td className="px-4 py-3">{a.doctor}</td><td className="px-4 py-3"><Badge variant="outline" className="text-xs">{a.bookedBy}</Badge></td></tr>))}{upcoming.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">No upcoming appointments</td></tr>}</tbody>
             </table></div>
           </CardContent></Card>
         </TabsContent>

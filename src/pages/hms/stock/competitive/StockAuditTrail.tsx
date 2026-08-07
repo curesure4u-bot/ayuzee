@@ -1,115 +1,140 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Brain, History, Search, Download, User, ArrowUp, ArrowDown, RotateCcw } from "lucide-react";
+import { Brain, History, Search, Download, ArrowUp, ArrowDown, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const auditEntries = [
-  { id: "AT-9021", timestamp: "22 Jul 2026, 10:42 AM", item: "Rasnasaptakam 450ml", action: "Dispensed", qty: -2, balance: 32, user: "Pharmacist A", reason: "Patient Rx#4521 (Rajesh K.)", ref: "DISP-4521" },
-  { id: "AT-9020", timestamp: "22 Jul 2026, 10:38 AM", item: "Simhanada Guggulu 60t", action: "GRN Received", qty: +50, balance: 85, user: "Store Keeper", reason: "PO-2026-890 from X Pharmaceuticals", ref: "GRN-4520" },
-  { id: "AT-9019", timestamp: "22 Jul 2026, 09:55 AM", item: "Kottamchukkadi Taila 200ml", action: "PK Deduction", qty: -1, balance: 28, user: "Therapist B", reason: "Kati Vasti session - Rajesh K.", ref: "PK-1045" },
-  { id: "AT-9018", timestamp: "22 Jul 2026, 09:30 AM", item: "Triphala Churna 100g", action: "Adjustment (+)", qty: +3, balance: 203, user: "Auditor", reason: "Physical verification correction", ref: "PV-Jul-001" },
-  { id: "AT-9017", timestamp: "21 Jul 2026, 05:15 PM", item: "Mahanarayan Taila 200ml", action: "Transfer Out", qty: -5, balance: 12, user: "Store Keeper", reason: "Inter-branch to HSR Layout", ref: "IBT-3019" },
-  { id: "AT-9016", timestamp: "21 Jul 2026, 04:30 PM", item: "Dashamoolarishtam 450ml", action: "Dispensed", qty: -1, balance: 18, user: "Pharmacist B", reason: "Patient Rx#4519 (Suresh M.)", ref: "DISP-4519" },
-  { id: "AT-9015", timestamp: "21 Jul 2026, 02:00 PM", item: "Ashwagandha Churna 100g", action: "Expiry Write-off", qty: -5, balance: 45, user: "Store Keeper", reason: "Batch ASC-0124 expired Jan 2026", ref: "EXP-048" },
-  { id: "AT-9014", timestamp: "21 Jul 2026, 11:00 AM", item: "Chandraprabha Vati 60t", action: "Sale Return", qty: +2, balance: 55, user: "Pharmacist A", reason: "Patient returned - wrong medicine issued", ref: "SR-2026-012" },
-  { id: "AT-9013", timestamp: "20 Jul 2026, 06:00 PM", item: "Bala Taila 200ml", action: "Manufacturing", qty: +30, balance: 38, user: "Production Mgr", reason: "Batch BT-0726 completed QC", ref: "MFG-073" },
-  { id: "AT-9012", timestamp: "20 Jul 2026, 03:30 PM", item: "Kottamchukkadi Taila 200ml", action: "Raw Material Used", qty: -8, balance: 29, user: "Production Mgr", reason: "Used in MFG batch KCT-0726-B", ref: "MFG-072" },
-];
+type AuditEntry = {
+  id: string;
+  timestamp: string;
+  product_name: string;
+  action: string;
+  qty: number;
+  notes: string | null;
+  consumption_type: string;
+};
+
+const actionLabels: Record<string, string> = {
+  patient_use: "Dispensed",
+  therapy_use: "PK/Therapy Use",
+  transfer: "GRN Received",
+  wastage: "Wastage/Write-off",
+  returned: "Return/Adjustment",
+  expired: "Expiry Write-off",
+};
 
 const actionColors: Record<string, string> = {
-  "Dispensed": "text-red-600",
-  "GRN Received": "text-green-600",
-  "PK Deduction": "text-orange-600",
-  "Adjustment (+)": "text-blue-600",
-  "Transfer Out": "text-purple-600",
-  "Expiry Write-off": "text-red-800",
-  "Sale Return": "text-green-700",
-  "Manufacturing": "text-green-600",
-  "Raw Material Used": "text-amber-600",
+  patient_use: "text-red-600",
+  therapy_use: "text-orange-600",
+  transfer: "text-green-600",
+  wastage: "text-red-800",
+  returned: "text-blue-600",
+  expired: "text-red-800",
 };
 
 export default function StockAuditTrail() {
+  const [entries, setEntries] = useState<AuditEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    loadAuditTrail();
+  }, []);
+
+  const loadAuditTrail = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_ward_consumption_log")
+        .select("*, hms_ward_stock_items(product_name)")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      setEntries((data || []).map((row: any) => ({
+        id: row.id,
+        timestamp: row.created_at,
+        product_name: row.hms_ward_stock_items?.product_name || "—",
+        action: actionLabels[row.consumption_type] || row.consumption_type,
+        qty: row.consumption_type === "transfer" || row.consumption_type === "returned" ? row.quantity_consumed : -row.quantity_consumed,
+        notes: row.notes,
+        consumption_type: row.consumption_type,
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load audit trail");
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const filtered = entries.filter(e =>
+    e.product_name.toLowerCase().includes(search.toLowerCase()) ||
+    e.action.toLowerCase().includes(search.toLowerCase()) ||
+    (e.notes || "").toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-[40vh]"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <History className="h-6 w-6 text-indigo-600" /> Stock Audit Trail
-          </h1>
-          <p className="text-muted-foreground mt-1">Every stock movement logged — who, when, why. GMP compliance for AYUSH manufacturing.</p>
+          <h1 className="text-2xl font-bold flex items-center gap-2"><History className="h-6 w-6 text-blue-600" /> Stock Audit Trail</h1>
+          <p className="text-muted-foreground mt-1">Complete history of every stock movement — who, what, when, why. From hms_ward_consumption_log.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => toast.success("Audit trail exported as CSV")}>
-          <Download className="h-3 w-3 mr-1" /> Export
-        </Button>
+        <Button variant="outline" onClick={() => toast.success("Audit trail exported")}><Download className="h-4 w-4 mr-1" /> Export</Button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <Input placeholder="Search by item, user, or reference..." className="max-w-xs h-9 text-xs" />
-        <Select>
-          <SelectTrigger className="w-[140px] h-9 text-xs"><SelectValue placeholder="Action Type" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Actions</SelectItem>
-            <SelectItem value="dispensed">Dispensed</SelectItem>
-            <SelectItem value="grn">GRN Received</SelectItem>
-            <SelectItem value="pk">PK Deduction</SelectItem>
-            <SelectItem value="transfer">Transfer</SelectItem>
-            <SelectItem value="adjustment">Adjustment</SelectItem>
-            <SelectItem value="expiry">Expiry Write-off</SelectItem>
-            <SelectItem value="manufacturing">Manufacturing</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-[130px] h-9 text-xs"><SelectValue placeholder="User" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Users</SelectItem>
-            <SelectItem value="pharma-a">Pharmacist A</SelectItem>
-            <SelectItem value="pharma-b">Pharmacist B</SelectItem>
-            <SelectItem value="store">Store Keeper</SelectItem>
-            <SelectItem value="production">Production Mgr</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex gap-2 max-w-md">
+        <Search className="h-4 w-4 mt-2.5 text-muted-foreground" />
+        <Input placeholder="Search product, action, or notes..." value={search} onChange={e => setSearch(e.target.value)} />
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold">{entries.length}</p><p className="text-xs text-muted-foreground">Total Entries</p></CardContent></Card>
+        <Card className="border-red-200"><CardContent className="p-3 text-center"><ArrowDown className="h-4 w-4 mx-auto text-red-600" /><p className="text-xl font-bold text-red-600">{entries.filter(e => e.qty < 0).length}</p><p className="text-xs text-muted-foreground">Stock Out</p></CardContent></Card>
+        <Card className="border-green-200"><CardContent className="p-3 text-center"><ArrowUp className="h-4 w-4 mx-auto text-green-600" /><p className="text-xl font-bold text-green-600">{entries.filter(e => e.qty > 0).length}</p><p className="text-xs text-muted-foreground">Stock In</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold">{new Set(entries.map(e => e.product_name)).size}</p><p className="text-xs text-muted-foreground">Products Moved</p></CardContent></Card>
       </div>
 
       <Card>
+        <CardHeader className="pb-2"><CardTitle className="text-base">Audit Log</CardTitle></CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="border-b bg-muted/50">
                 <tr>
                   <th className="px-3 py-2 text-left">Timestamp</th>
-                  <th className="px-3 py-2 text-left">Item</th>
+                  <th className="px-3 py-2 text-left">Product</th>
                   <th className="px-3 py-2 text-left">Action</th>
                   <th className="px-3 py-2 text-center">Qty</th>
-                  <th className="px-3 py-2 text-center">Balance</th>
-                  <th className="px-3 py-2 text-left">User</th>
-                  <th className="px-3 py-2 text-left">Reason / Reference</th>
+                  <th className="px-3 py-2 text-left">Notes</th>
                 </tr>
               </thead>
               <tbody>
-                {auditEntries.map((entry) => (
-                  <tr key={entry.id} className="border-b hover:bg-muted/30">
-                    <td className="px-3 py-2 text-[10px] text-muted-foreground whitespace-nowrap">{entry.timestamp}</td>
-                    <td className="px-3 py-2 text-xs font-medium">{entry.item}</td>
-                    <td className="px-3 py-2 text-xs">
-                      <span className={actionColors[entry.action] || ""}>{entry.action}</span>
-                    </td>
-                    <td className="px-3 py-2 text-center text-xs font-bold">
-                      <span className={entry.qty > 0 ? "text-green-600" : "text-red-600"}>
-                        {entry.qty > 0 ? "+" : ""}{entry.qty}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2 text-center text-xs font-bold">{entry.balance}</td>
-                    <td className="px-3 py-2 text-xs flex items-center gap-1">
-                      <User className="h-3 w-3 text-muted-foreground" />{entry.user}
-                    </td>
-                    <td className="px-3 py-2 text-[10px] text-muted-foreground max-w-[200px]">
-                      {entry.reason} <span className="text-blue-600 font-mono">({entry.ref})</span>
-                    </td>
-                  </tr>
-                ))}
+                {filtered.length === 0 ? (
+                  <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">No audit entries found</td></tr>
+                ) : (
+                  filtered.map((entry) => (
+                    <tr key={entry.id} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2 text-[10px] text-muted-foreground">{new Date(entry.timestamp).toLocaleString()}</td>
+                      <td className="px-3 py-2 text-xs font-medium">{entry.product_name}</td>
+                      <td className="px-3 py-2 text-xs"><span className={actionColors[entry.consumption_type] || ""}>{entry.action}</span></td>
+                      <td className="px-3 py-2 text-center text-xs font-bold">
+                        <span className={entry.qty > 0 ? "text-green-600" : "text-red-600"}>
+                          {entry.qty > 0 ? `+${entry.qty}` : entry.qty}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 text-[10px] text-muted-foreground max-w-[200px] truncate">{entry.notes || "—"}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -117,16 +142,11 @@ export default function StockAuditTrail() {
       </Card>
 
       <Card className="border-purple-200 bg-purple-50/30">
-        <CardContent className="p-4 flex items-start gap-3">
-          <Brain className="h-5 w-5 text-purple-600 mt-0.5" />
+        <CardContent className="p-3 flex items-start gap-2">
+          <Brain className="h-4 w-4 text-purple-600 mt-0.5" />
           <div>
-            <p className="font-semibold text-purple-800">AI Audit Intelligence</p>
-            <p className="text-sm text-purple-700">
-              All movements tamper-proof (timestamped, user-linked, non-editable). Sale Return (AT-9014) flagged: wrong medicine
-              dispensed — AI recommends barcode scan enforcement for this pharmacist. Kottamchukkadi Taila has 2 deductions
-              today (dispensing + PK) — correctly tracked across both channels. For GMP audits: Complete raw material → finished
-              product traceability available (MFG-072 → MFG-073 → DISP chain).
-            </p>
+            <p className="font-semibold text-xs text-purple-800">AI Audit Intelligence</p>
+            <p className="text-[10px] text-purple-700">Every stock movement is logged in hms_ward_consumption_log. Immutable trail for compliance. Filter by product or action type to investigate discrepancies.</p>
           </div>
         </CardContent>
       </Card>

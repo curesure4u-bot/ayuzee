@@ -17,6 +17,7 @@ const LensMaster = () => {
       title="Lens"
       entityName="Lens"
       initialItems={mockLens}
+      storageKey="hms_master_lens"
     />
   );
 };

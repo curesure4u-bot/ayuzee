@@ -8,32 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Users, Plus, TrendingUp, IndianRupee, ArrowRight, CheckCircle, Clock } from "lucide-react";
-
-type Referral = {
-  id: string; patient: string; referredBy: string; referrerType: string;
-  referredTo: string; department: string; date: string;
-  status: "pending" | "consulted" | "converted" | "lost";
-  commission: number; notes: string;
-};
-
-const mockReferrals: Referral[] = [
-  { id: "1", patient: "Priya Menon", referredBy: "Dr. Ravi (Apollo Hospital)", referrerType: "External Doctor", referredTo: "Dr. Arun Sharma", department: "Panchakarma", date: "2026-07-15", status: "consulted", commission: 500, notes: "Referred for Janu Basti - OA Knee" },
-  { id: "2", patient: "Rahul Kumar", referredBy: "Patient: Ramesh Kumar", referrerType: "Patient Referral", referredTo: "Dr. Meena Patel", department: "Panchakarma", date: "2026-07-14", status: "converted", commission: 300, notes: "Friend referral. Booked 14-day package." },
-  { id: "3", patient: "Ananya S.", referredBy: "Dr. Priya Das", referrerType: "Internal Doctor", referredTo: "Dr. Arun Sharma", department: "Ayurveda", date: "2026-07-13", status: "consulted", commission: 0, notes: "Homeopathy to Ayurveda referral for Panchakarma" },
-  { id: "4", patient: "Mohammed F.", referredBy: "Google Search", referrerType: "Digital", referredTo: "Dr. Arun Sharma", department: "Ayurveda", date: "2026-07-12", status: "converted", commission: 0, notes: "Organic Google search lead" },
-  { id: "5", patient: "Lakshmi Nair", referredBy: "Partner: Kerala Tourism", referrerType: "Corporate/Partner", referredTo: "Dr. Meena Patel", department: "Panchakarma", date: "2026-07-11", status: "converted", commission: 2000, notes: "Wellness tourism package referral" },
-  { id: "6", patient: "Suresh T.", referredBy: "Dr. Mohan (PHC Attingal)", referrerType: "External Doctor", referredTo: "Dr. Arun Sharma", department: "Ayurveda", date: "2026-07-10", status: "pending", commission: 500, notes: "Referred for chronic back pain. Awaiting appointment." },
-  { id: "7", patient: "David Thomas", referredBy: "Website: ayuzee.com", referrerType: "Digital", referredTo: "Dr. Arun Sharma", department: "Teleconsult", date: "2026-07-09", status: "lost", commission: 0, notes: "International lead. No-show at teleconsult." },
-];
+import { Users, Plus, TrendingUp, IndianRupee, ArrowRight, CheckCircle, Clock, Loader2 } from "lucide-react";
+import { useReferral } from "@/hooks/useReferral";
 
 const HmsReferral = () => {
-  const [referrals] = useState<Referral[]>(mockReferrals);
+  const { referrals, loading, error, converted, totalCommission, conversionRate, addReferral } = useReferral();
   const [addOpen, setAddOpen] = useState(false);
-
-  const converted = referrals.filter(r => r.status === "converted").length;
-  const totalCommission = referrals.filter(r => r.status === "converted" || r.status === "consulted").reduce((s, r) => s + r.commission, 0);
-  const conversionRate = Math.round((converted / referrals.length) * 100);
 
   return (
     <div className="space-y-6">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,9 @@ import { toast } from "sonner";
 import {
   IndianRupee, Search, Printer, Plus, CheckCircle2,
   CreditCard, Smartphone, Banknote, QrCode, Clock,
-  Download, User, Receipt, FileText,
+  Download, User, Receipt, FileText, Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PaymentEntry {
   id: string;
@@ -36,10 +37,45 @@ const mockPayments: PaymentEntry[] = [
 ];
 
 const PaymentCollection = () => {
-  const [payments] = useState<PaymentEntry[]>(mockPayments);
+  const [payments, setPayments] = useState<PaymentEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("collect");
   const [search, setSearch] = useState("");
   const [modeFilter, setModeFilter] = useState("ALL");
+
+  useEffect(() => { loadPayments(); }, []);
+
+  const loadPayments = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_patient_advances")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(30);
+
+      if (error) throw error;
+
+      setPayments((data || []).map((a: any, idx: number) => ({
+        id: a.id,
+        receiptNo: a.receipt_number || `RCT-${idx + 1}`,
+        patientName: "Patient",
+        patientId: a.patient_id?.slice(0, 8) || "—",
+        billNo: a.receipt_number || "—",
+        amount: a.amount || 0,
+        mode: (a.payment_mode === "upi" ? "UPI" : a.payment_mode === "card" ? "Card" : a.payment_mode === "cash" ? "Cash" : a.payment_mode) as any,
+        receivedBy: "Staff",
+        timestamp: a.created_at ? new Date(a.created_at).toLocaleString() : "—",
+        status: a.status === "active" ? "Completed" : a.status === "fully_used" ? "Completed" : "Pending",
+        reference: a.transaction_reference || undefined,
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load payments");
+      console.error(err);
+      setPayments(mockPayments);
+    }
+    setLoading(false);
+  };
 
   const todayTotal = payments.filter(p => p.status === "Completed").reduce((s, p) => s + p.amount, 0);
   const cashTotal = payments.filter(p => p.mode === "Cash" && p.status === "Completed").reduce((s, p) => s + p.amount, 0);

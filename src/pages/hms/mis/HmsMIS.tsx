@@ -127,11 +127,11 @@ const HmsMIS = () => {
           </TabsList>
         </div>
 
-        <TabsContent value="collection"><MisCollection /></TabsContent>
+        <TabsContent value="collection"><MisCollection dateFrom={dateFrom} dateTo={dateTo} location={location} /></TabsContent>
         <TabsContent value="accounts"><MisAccountsReports /></TabsContent>
-        <TabsContent value="stocks"><MisStocks /></TabsContent>
+        <TabsContent value="stocks"><MisStocks location={location} /></TabsContent>
         <TabsContent value="test-orders"><MisTestOrders /></TabsContent>
-        <TabsContent value="operational"><MisOperational /></TabsContent>
+        <TabsContent value="operational"><MisOperational dateFrom={dateFrom} dateTo={dateTo} /></TabsContent>
         <TabsContent value="filters"><MisAdvancedFilters /></TabsContent>
         <TabsContent value="ai-interpret"><MisAIInterpretation /></TabsContent>
         <TabsContent value="org-reporting"><MisOrgReporting /></TabsContent>

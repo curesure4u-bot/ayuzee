@@ -24,6 +24,7 @@ const PharmacologicalNameMaster = () => {
       title="Pharmacological Name"
       entityName="Pharmacological Name"
       initialItems={mockPharmNames}
+      storageKey="hms_master_pharmacological_name"
     />
   );
 };

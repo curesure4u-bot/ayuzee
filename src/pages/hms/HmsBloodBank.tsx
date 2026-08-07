@@ -10,47 +10,16 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { toast } from "sonner";
 import {
   Droplets, Plus, Search, AlertTriangle, Users, Calendar,
-  CheckCircle, Clock, Heart,
+  CheckCircle, Clock, Heart, Loader2,
 } from "lucide-react";
-
-type BloodStock = { group: string; units: number; expiringSoon: number };
-type Donor = { id: string; name: string; group: string; phone: string; lastDonation: string; donations: number; status: "active" | "deferred" };
-type Request = { id: string; patient: string; group: string; units: number; urgency: "routine" | "urgent" | "emergency"; status: "pending" | "cross_matched" | "issued" | "cancelled"; requestedBy: string; date: string };
-
-const mockStock: BloodStock[] = [
-  { group: "A+", units: 12, expiringSoon: 2 },
-  { group: "A-", units: 3, expiringSoon: 0 },
-  { group: "B+", units: 18, expiringSoon: 3 },
-  { group: "B-", units: 2, expiringSoon: 1 },
-  { group: "AB+", units: 5, expiringSoon: 0 },
-  { group: "AB-", units: 1, expiringSoon: 0 },
-  { group: "O+", units: 22, expiringSoon: 4 },
-  { group: "O-", units: 6, expiringSoon: 1 },
-];
-
-const mockDonors: Donor[] = [
-  { id: "1", name: "Arun Kumar", group: "O+", phone: "9876543001", lastDonation: "2026-04-15", donations: 8, status: "active" },
-  { id: "2", name: "Priya Nair", group: "A+", phone: "9876543002", lastDonation: "2026-05-20", donations: 5, status: "active" },
-  { id: "3", name: "Rajesh M", group: "B+", phone: "9876543003", lastDonation: "2026-06-10", donations: 12, status: "active" },
-  { id: "4", name: "Lakshmi S", group: "AB+", phone: "9876543004", lastDonation: "2026-01-05", donations: 3, status: "active" },
-  { id: "5", name: "Mohammed F", group: "O-", phone: "9876543005", lastDonation: "2026-07-01", donations: 6, status: "deferred" },
-];
-
-const mockRequests: Request[] = [
-  { id: "1", patient: "Ramesh Kumar", group: "B+", units: 2, urgency: "routine", status: "cross_matched", requestedBy: "Dr. Nair", date: "2026-07-15" },
-  { id: "2", patient: "Emergency Case #412", group: "O-", units: 3, urgency: "emergency", status: "pending", requestedBy: "Dr. Sharma", date: "2026-07-15" },
-  { id: "3", patient: "Lakshmi Devi", group: "A+", units: 1, urgency: "urgent", status: "issued", requestedBy: "Dr. Meena", date: "2026-07-14" },
-];
+import { useBloodBank } from "@/hooks/useBloodBank";
 
 const HmsBloodBank = () => {
-  const [stock] = useState<BloodStock[]>(mockStock);
-  const [donors] = useState<Donor[]>(mockDonors);
-  const [requests] = useState<Request[]>(mockRequests);
+  const { stock, requests, donors, loading, error, totalUnits, criticalCount, pendingRequests, approveRequest } = useBloodBank();
   const [addDonorOpen, setAddDonorOpen] = useState(false);
   const [requestOpen, setRequestOpen] = useState(false);
 
-  const totalUnits = stock.reduce((s, b) => s + b.units, 0);
-  const expiringUnits = stock.reduce((s, b) => s + b.expiringSoon, 0);
+  const expiringUnits = stock.filter(b => b.status === "low" || b.status === "critical").length;
 
   return (
     <div className="space-y-6">
@@ -70,12 +39,12 @@ const HmsBloodBank = () => {
       {/* Blood Stock Grid */}
       <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
         {stock.map((s) => (
-          <Card key={s.group} className={s.units <= 3 ? "border-red-300 bg-red-50/30" : ""}>
+          <Card key={s.id} className={s.status !== "available" ? "border-red-300 bg-red-50/30" : ""}>
             <CardContent className="p-3 text-center">
               <p className="text-lg font-bold">{s.group}</p>
               <p className="text-2xl font-bold mt-1">{s.units}</p>
-              <p className="text-[10px] text-muted-foreground">units</p>
-              {s.expiringSoon > 0 && <Badge variant="destructive" className="text-[9px] mt-1">{s.expiringSoon} expiring</Badge>}
+              <p className="text-[10px] text-muted-foreground">{s.component}</p>
+              {s.status !== "available" && <Badge variant="destructive" className="text-[9px] mt-1">{s.status}</Badge>}
             </CardContent>
           </Card>
         ))}
@@ -159,8 +128,8 @@ const HmsBloodBank = () => {
                         <td className="px-3 py-2"><Badge className="bg-red-100 text-red-700 border-red-300">{d.group}</Badge></td>
                         <td className="px-3 py-2">{d.phone}</td>
                         <td className="px-3 py-2 text-xs">{d.lastDonation}</td>
-                        <td className="px-3 py-2 font-bold">{d.donations}</td>
-                        <td className="px-3 py-2"><Badge variant={d.status === "active" ? "outline" : "secondary"} className={`text-xs ${d.status === "active" ? "text-green-600" : "text-amber-600"}`}>{d.status}</Badge></td>
+                        <td className="px-3 py-2 font-bold">{d.eligible ? "✓" : "—"}</td>
+                        <td className="px-3 py-2"><Badge variant={d.eligible ? "outline" : "secondary"} className={`text-xs ${d.eligible ? "text-green-600" : "text-amber-600"}`}>{d.eligible ? "Eligible" : "Not yet"}</Badge></td>
                       </tr>
                     ))}
                   </tbody>

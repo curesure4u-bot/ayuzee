@@ -8,29 +8,49 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { ScanLine, Plus, Upload, Eye } from "lucide-react";
-
-type RadiologyOrder = {
-  id: string;
-  patientName: string;
-  investigation: string;
-  orderedBy: string;
-  orderedDate: string;
-  status: "ordered" | "scheduled" | "completed" | "reported";
-  report: string;
-};
-
-const mockOrders: RadiologyOrder[] = [
-  { id: "1", patientName: "Ramesh Kumar", investigation: "X-Ray Knee (AP/Lateral)", orderedBy: "Dr. Sharma", orderedDate: "2026-07-15", status: "completed", report: "Mild joint space narrowing with osteophytes bilateral knee. Features of Grade 2 OA." },
-  { id: "2", patientName: "Lakshmi Devi", investigation: "MRI Lumbar Spine", orderedBy: "Dr. Nair", orderedDate: "2026-07-15", status: "scheduled", report: "" },
-  { id: "3", patientName: "Sunil Menon", investigation: "Ultrasound Abdomen", orderedBy: "Dr. Sharma", orderedDate: "2026-07-14", status: "reported", report: "Mild hepatomegaly. No focal lesion. Mildly dilated CBD." },
-  { id: "4", patientName: "Meera Nair", investigation: "X-Ray Cervical Spine", orderedBy: "Dr. Nair", orderedDate: "2026-07-14", status: "ordered", report: "" },
-];
+import { ScanLine, Plus, Upload, Eye, Loader2 } from "lucide-react";
+import { useRadiology, type RadiologyOrder } from "@/hooks/useRadiology";
 
 const HmsRadiology = () => {
-  const [orders] = useState<RadiologyOrder[]>(mockOrders);
+  const { orders, stats, loading, error, createOrder } = useRadiology();
   const [orderOpen, setOrderOpen] = useState(false);
   const [viewReport, setViewReport] = useState<RadiologyOrder | null>(null);
+
+  // New order form state
+  const [newPatient, setNewPatient] = useState("");
+  const [newInvestigation, setNewInvestigation] = useState("");
+  const [newIndication, setNewIndication] = useState("");
+  const [newPriority, setNewPriority] = useState("");
+
+  const handlePlaceOrder = async () => {
+    if (!newPatient.trim() || !newInvestigation) return toast.error("Patient and investigation required");
+    const investigationLabels: Record<string, string> = {
+      xray_knee: "X-Ray Knee (AP/Lateral)", xray_spine: "X-Ray Spine (AP/Lateral)", xray_chest: "X-Ray Chest PA",
+      mri_spine: "MRI Lumbar Spine", mri_brain: "MRI Brain", mri_knee: "MRI Knee",
+      ct_abdomen: "CT Abdomen", ct_brain: "CT Brain", usg_abdomen: "USG Abdomen",
+      usg_pelvis: "USG Pelvis", dexa: "DEXA Scan (Bone Density)", echo: "2D Echocardiography",
+    };
+    const modalityMap: Record<string, string> = {
+      xray_knee: "X-Ray", xray_spine: "X-Ray", xray_chest: "X-Ray",
+      mri_spine: "MRI", mri_brain: "MRI", mri_knee: "MRI",
+      ct_abdomen: "CT", ct_brain: "CT", usg_abdomen: "USG",
+      usg_pelvis: "USG", dexa: "DEXA", echo: "Echo",
+    };
+    await createOrder({
+      patientName: newPatient,
+      uhid: "",
+      investigation: investigationLabels[newInvestigation] || newInvestigation,
+      modality: modalityMap[newInvestigation] || "Other",
+      orderedBy: "Current Doctor",
+      orderedDate: new Date().toISOString().slice(0, 10),
+      scheduledTime: "",
+      priority: (newPriority as any) || "routine",
+      clinicalIndication: newIndication,
+    });
+    toast.success("Order placed");
+    setOrderOpen(false);
+    setNewPatient(""); setNewInvestigation(""); setNewIndication(""); setNewPriority("");
+  };
 
   return (
     <div className="space-y-6">
@@ -49,11 +69,21 @@ const HmsRadiology = () => {
       </div>
 
       {/* Stats */}
+      {loading && (
+        <div className="flex items-center justify-center py-4 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm">Loading radiology data...</span>
+        </div>
+      )}
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">⚠ Could not load live data (showing demo). {error}</CardContent>
+        </Card>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-amber-600">{orders.filter(o => o.status === "ordered").length}</p><p className="text-xs text-muted-foreground">Pending</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-blue-600">{orders.filter(o => o.status === "scheduled").length}</p><p className="text-xs text-muted-foreground">Scheduled</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-green-600">{orders.filter(o => o.status === "completed").length}</p><p className="text-xs text-muted-foreground">Completed</p></CardContent></Card>
-        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-purple-600">{orders.filter(o => o.status === "reported").length}</p><p className="text-xs text-muted-foreground">Reported</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-amber-600">{stats.ordered}</p><p className="text-xs text-muted-foreground">Pending</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-blue-600">{stats.scheduled}</p><p className="text-xs text-muted-foreground">Scheduled</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-green-600">{stats.completed}</p><p className="text-xs text-muted-foreground">Completed</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-2xl font-bold text-purple-600">{stats.reported}</p><p className="text-xs text-muted-foreground">Reported</p></CardContent></Card>
       </div>
 
       {/* Orders Table */}
@@ -110,10 +140,10 @@ const HmsRadiology = () => {
         <DialogContent>
           <DialogHeader><DialogTitle>New Radiology Order</DialogTitle></DialogHeader>
           <div className="space-y-3">
-            <div><Label>Patient</Label><Input placeholder="Search patient" /></div>
+            <div><Label>Patient</Label><Input placeholder="Search patient" value={newPatient} onChange={(e) => setNewPatient(e.target.value)} /></div>
             <div>
               <Label>Investigation</Label>
-              <Select>
+              <Select value={newInvestigation} onValueChange={setNewInvestigation}>
                 <SelectTrigger><SelectValue placeholder="Select investigation" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="xray_knee">X-Ray Knee (AP/Lateral)</SelectItem>
@@ -131,9 +161,9 @@ const HmsRadiology = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div><Label>Clinical Indication</Label><Textarea placeholder="Reason for investigation..." rows={2} /></div>
+            <div><Label>Clinical Indication</Label><Textarea placeholder="Reason for investigation..." rows={2} value={newIndication} onChange={(e) => setNewIndication(e.target.value)} /></div>
             <div><Label>Priority</Label>
-              <Select>
+              <Select value={newPriority} onValueChange={setNewPriority}>
                 <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="routine">Routine</SelectItem>
@@ -145,7 +175,7 @@ const HmsRadiology = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOrderOpen(false)}>Cancel</Button>
-            <Button onClick={() => { toast.success("Order placed"); setOrderOpen(false); }}>Place Order</Button>
+            <Button onClick={handlePlaceOrder}>Place Order</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

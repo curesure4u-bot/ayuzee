@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import {
   Shield, Wifi, Clock, Eye, EyeOff, Lock, AlertTriangle,
   Key, Monitor, UserX, Plus, Trash2, Save
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type UnmaskLog = {
   id: string;
@@ -49,6 +50,23 @@ const mockLoginAttempts: LoginAttempt[] = [
 const HmsSecurityControls = () => {
   // Config state
   const [ipWhitelistEnabled, setIpWhitelistEnabled] = useState(true);
+  const [securityConfig, setSecurityConfig] = useState<any>(null);
+
+  useEffect(() => { loadSecurityConfig(); }, []);
+
+  const loadSecurityConfig = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_security_config")
+        .select("*")
+        .limit(1)
+        .single();
+      if (data) {
+        setSecurityConfig(data);
+        setIpWhitelistEnabled(data.ip_whitelist_enabled ?? true);
+      }
+    } catch (err) { console.error("Security config load:", err); }
+  };
   const [whitelistedIps, setWhitelistedIps] = useState(["192.168.1.0/24", "10.0.0.1"]);
   const [newIp, setNewIp] = useState("");
   const [autoLogoutEnabled, setAutoLogoutEnabled] = useState(true);

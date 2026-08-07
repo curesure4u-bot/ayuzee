@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import {
   Activity, Heart, Brain, Sparkles, TrendingUp,
-  AlertTriangle, Save, BarChart3, Table,
+  AlertTriangle, Save, BarChart3, Table, Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { assessPatientRisk } from "@/services/patientAiService";
 
 const patientHeader = {
@@ -38,15 +39,14 @@ interface VitalEntry {
   sugar: string;
 }
 
-const mockVitals: VitalEntry[] = [
-  { date: "21/07/2026", type: "OP", height: "165", weight: "72", bmi: "26.4", bp: "130/85", temp: "98.4", pulse: "78", respiratory: "18", spo2RA: "97", spo2O2: "", cbg: "", heartRate: "78", sugar: "142" },
-  { date: "12/07/2026", type: "OP", height: "165", weight: "73", bmi: "26.8", bp: "135/88", temp: "98.6", pulse: "80", respiratory: "19", spo2RA: "96", spo2O2: "", cbg: "", heartRate: "80", sugar: "148" },
-  { date: "31/05/2026", type: "OP", height: "165", weight: "74", bmi: "27.2", bp: "128/82", temp: "98.2", pulse: "76", respiratory: "17", spo2RA: "98", spo2O2: "", cbg: "", heartRate: "76", sugar: "138" },
-];
+const mockVitals: VitalEntry[] = [];
 
 const vitalCharts = ["Height Chart", "Weight", "BMI", "BloodPressure", "Temperature", "Spo2", "Sugar", "Head Circumference"];
 
 const PatientVitals = () => {
+  const [vitalsHistory, setVitalsHistory] = useState<VitalEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [view, setView] = useState<"graphical" | "table">("graphical");
   const [selectedChart, setSelectedChart] = useState("Height Chart");
   const [aiAlert, setAiAlert] = useState<string | null>(null);
@@ -62,30 +62,108 @@ const PatientVitals = () => {
   const [sugar, setSugar] = useState("");
   const [painScore, setPainScore] = useState("");
 
+  useEffect(() => {
+    loadVitalsHistory();
+  }, []);
+
+  const loadVitalsHistory = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_triage_records")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+
+      setVitalsHistory((data || []).map((r: any) => ({
+        date: new Date(r.created_at).toLocaleDateString(),
+        type: "OP",
+        height: r.height?.toString() || "",
+        weight: r.weight?.toString() || "",
+        bmi: r.bmi?.toString() || "",
+        bp: r.blood_pressure_systolic ? `${r.blood_pressure_systolic}/${r.blood_pressure_diastolic}` : "",
+        temp: r.temperature?.toString() || "",
+        pulse: r.pulse_rate?.toString() || "",
+        respiratory: r.respiratory_rate?.toString() || "",
+        spo2RA: r.spo2?.toString() || "",
+        spo2O2: "",
+        cbg: "",
+        heartRate: r.pulse_rate?.toString() || "",
+        sugar: r.blood_sugar_random?.toString() || "",
+      })));
+    } catch (err: any) {
+      console.error("Failed to load vitals:", err);
+    }
+    setLoading(false);
+  };
+
   const handleSaveVitals = async () => {
     if (!height && !weight && !bp) {
       return toast.error("Enter at least one vital measurement");
     }
-    // AI Analysis
-    const bmi = height && weight ? (Number(weight) / ((Number(height) / 100) ** 2)).toFixed(1) : "";
-    const result = await assessPatientRisk(
-      {
-        id: "v-new", patientId: patientHeader.id, date: new Date().toISOString().slice(0, 10),
-        time: "now", type: "OP", height: Number(height), weight: Number(weight),
-        bmi: bmi ? Number(bmi) : undefined, bloodPressure: bp, sugar: sugar ? Number(sugar) : undefined,
-        createdBy: "system", createdAt: new Date().toISOString(),
-      },
-      undefined,
-      65
-    );
 
-    if (result.riskLevel !== "Low") {
-      setAiAlert(result.insights.join(" | "));
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Login required"); setSaving(false); return; }
+
+      const bpParts = bp.split("/");
+      const bmi = height && weight ? (Number(weight) / ((Number(height) / 100) ** 2)).toFixed(1) : null;
+
+      const { error } = await (supabase as any)
+        .from("hms_triage_records")
+        .insert({
+          patient_id: user.id,
+          blood_pressure_systolic: bpParts[0] ? parseInt(bpParts[0]) : null,
+          blood_pressure_diastolic: bpParts[1] ? parseInt(bpParts[1]) : null,
+          pulse_rate: pulse ? parseInt(pulse) : null,
+          temperature: temperature ? parseFloat(temperature) : null,
+          respiratory_rate: respiratory ? parseInt(respiratory) : null,
+          spo2: spo2 ? parseInt(spo2) : null,
+          weight: weight ? parseFloat(weight) : null,
+          height: height ? parseFloat(height) : null,
+          bmi: bmi ? parseFloat(bmi) : null,
+          blood_sugar_random: sugar ? parseFloat(sugar) : null,
+          pain_scale: painScore ? parseInt(painScore) : null,
+          chief_complaint: "Vitals capture",
+          triage_priority: "normal",
+          status: "captured",
+          captured_by: user.id,
+        });
+
+      if (error) throw error;
+
+      // AI Analysis
+      const bmiVal = height && weight ? (Number(weight) / ((Number(height) / 100) ** 2)).toFixed(1) : "";
+      const result = await assessPatientRisk(
+        {
+          id: "v-new", patientId: "current", date: new Date().toISOString().slice(0, 10),
+          time: "now", type: "OP", height: Number(height), weight: Number(weight),
+          bmi: bmiVal ? Number(bmiVal) : undefined, bloodPressure: bp, sugar: sugar ? Number(sugar) : undefined,
+          createdBy: "system", createdAt: new Date().toISOString(),
+        },
+        undefined,
+        65
+      );
+
+      if (result.riskLevel !== "Low") {
+        setAiAlert(result.insights.join(" | "));
+      }
+
+      toast.success("Vitals saved to Supabase", {
+        description: `BMI: ${bmiVal || "N/A"} | AI Risk: ${result.riskLevel}`,
+      });
+
+      // Reset and reload
+      setHeight(""); setWeight(""); setBp(""); setTemperature(""); setPulse(""); setRespiratory(""); setSpo2(""); setSugar(""); setPainScore("");
+      loadVitalsHistory();
+    } catch (err: any) {
+      toast.error("Failed to save vitals: " + (err.message || "Unknown error"));
+      console.error(err);
     }
-
-    toast.success("Vitals recorded successfully", {
-      description: `BMI: ${bmi || "N/A"} | AI Risk: ${result.riskLevel}`,
-    });
+    setSaving(false);
   };
 
   return (
@@ -166,8 +244,8 @@ const PatientVitals = () => {
               <Input value={painScore} onChange={(e) => setPainScore(e.target.value)} placeholder="0-10" className="h-8" />
             </div>
             <div className="flex items-end">
-              <Button onClick={handleSaveVitals} className="bg-orange-600 hover:bg-orange-700 h-8">
-                <Save className="h-3 w-3 mr-1" /> Save
+              <Button onClick={handleSaveVitals} disabled={saving} className="bg-orange-600 hover:bg-orange-700 h-8">
+                {saving ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Save className="h-3 w-3 mr-1" />} Save
               </Button>
             </div>
           </div>
@@ -239,7 +317,7 @@ const PatientVitals = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {mockVitals.map((v, i) => (
+                  {vitalsHistory.map((v, i) => (
                     <tr key={i} className="border-b hover:bg-muted/30">
                       <td className="px-2 py-2">{v.date}</td>
                       <td className="px-2 py-2">{v.type}</td>

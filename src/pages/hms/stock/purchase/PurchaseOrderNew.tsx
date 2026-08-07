@@ -1,21 +1,77 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const PurchaseOrderNew = () => {
+  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [wardStores, setWardStores] = useState<{ id: string; ward_name: string }[]>([]);
   const [location, setLocation] = useState("loc1");
   const [supplier, setSupplier] = useState("");
   const [store, setStore] = useState("");
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [batchNumber, setBatchNumber] = useState("");
 
-  const handleSave = () => {
+  useEffect(() => {
+    loadWardStores();
+  }, []);
+
+  const loadWardStores = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stores")
+      .select("id, ward_name")
+      .eq("is_active", true);
+    setWardStores(data || []);
+  };
+
+  const handleSave = async () => {
     if (!supplier) { toast.error("Supplier is required"); return; }
     if (!store) { toast.error("Store is required"); return; }
-    toast.success("Purchase Order created successfully");
+    if (!productName.trim()) { toast.error("Product name is required"); return; }
+    if (!quantity || parseFloat(quantity) <= 0) { toast.error("Quantity must be greater than 0"); return; }
+
+    setSaving(true);
+    try {
+      // Get the current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("You must be logged in"); setSaving(false); return; }
+
+      // Use the selected store as the to_store, and find a "main" source store
+      const toStoreId = store;
+      // Use the first store as from_store (main supplier store) or same store if only one
+      const fromStoreId = wardStores.length > 1 
+        ? wardStores.find(s => s.id !== toStoreId)?.id || toStoreId
+        : toStoreId;
+
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .insert({
+          from_store_id: fromStoreId,
+          to_store_id: toStoreId,
+          product_name: productName.trim(),
+          quantity: parseFloat(quantity),
+          batch_number: batchNumber || null,
+          transfer_reason: `PO from supplier: ${supplier}`,
+          status: "pending",
+          requested_by: user.id,
+        });
+
+      if (error) throw error;
+      toast.success("Purchase Order created in Supabase");
+      navigate("/hms/stock/purchase/po/manage");
+    } catch (err: any) {
+      toast.error("Failed to create PO: " + (err.message || "Unknown error"));
+      console.error("PO create error:", err);
+    }
+    setSaving(false);
   };
 
   return (
@@ -69,15 +125,30 @@ const PurchaseOrderNew = () => {
             <div>
               <Label className="text-sm font-semibold">Store * :</Label>
               <Select value={store} onValueChange={setStore}>
-                <SelectTrigger><SelectValue placeholder="" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Select Store" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="alshifa">ALSHIFA PHARMACY</SelectItem>
-                  <SelectItem value="ip">IP Pharmacy Store</SelectItem>
+                  {wardStores.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>{s.ward_name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <Label className="text-sm font-semibold">Product Name * :</Label>
+              <Input placeholder="Enter product name" value={productName} onChange={(e) => setProductName(e.target.value)} />
+            </div>
+            <div>
+              <Label className="text-sm font-semibold">Quantity * :</Label>
+              <Input type="number" placeholder="Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+            </div>
+            <div>
+              <Label className="text-sm font-semibold">Batch Number :</Label>
+              <Input placeholder="Batch (optional)" value={batchNumber} onChange={(e) => setBatchNumber(e.target.value)} />
+            </div>
             <div className="text-center pt-4">
-              <Button onClick={handleSave} className="bg-orange-600 hover:bg-orange-700 px-8">Save</Button>
+              <Button onClick={handleSave} disabled={saving} className="bg-orange-600 hover:bg-orange-700 px-8">
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
+              </Button>
             </div>
           </div>
         </CardContent>

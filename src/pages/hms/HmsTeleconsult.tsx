@@ -12,35 +12,40 @@ import { toast } from "sonner";
 import {
   Video, VideoOff, Mic, MicOff, Monitor, Phone, PhoneOff,
   MessageCircle, FileText, Users, Clock, Calendar,
-  Plus, IndianRupee, CheckCircle, Send,
+  Plus, IndianRupee, CheckCircle, Send, Loader2,
 } from "lucide-react";
-
-type Consult = {
-  id: string; patient: string; phone: string; doctor: string;
-  scheduledAt: string; duration: string; type: string;
-  status: "waiting" | "active" | "completed" | "no_show" | "scheduled";
-  payment: string; notes: string;
-};
-
-const mockConsults: Consult[] = [
-  { id: "1", patient: "Priya Menon (Dubai)", phone: "+971-50-1234567", doctor: "Dr. Arun Sharma", scheduledAt: "2026-07-15 11:00", duration: "—", type: "International Follow-up", status: "waiting", payment: "₹800 (Paid)", notes: "" },
-  { id: "2", patient: "Rahul Kumar (Bangalore)", phone: "+91-9876500020", doctor: "Dr. Arun Sharma", scheduledAt: "2026-07-15 11:30", duration: "—", type: "New Consultation", status: "scheduled", payment: "₹500 (Paid)", notes: "" },
-  { id: "3", patient: "Ananya S. (Chennai)", phone: "+91-9876500021", doctor: "Dr. Meena Patel", scheduledAt: "2026-07-15 12:00", duration: "—", type: "Panchakarma Review", status: "scheduled", payment: "₹400 (Paid)", notes: "" },
-  { id: "4", patient: "Mohammed F. (Muscat)", phone: "+968-9876-5432", doctor: "Dr. Arun Sharma", scheduledAt: "2026-07-15 09:30", duration: "18 min", type: "Follow-up", status: "completed", payment: "₹800 (Paid)", notes: "Medicines continued. Advised local Panchakarma center." },
-  { id: "5", patient: "Lakshmi Nair (Mumbai)", phone: "+91-9876500022", doctor: "Dr. Priya Das", scheduledAt: "2026-07-15 10:00", duration: "22 min", type: "New Consultation", status: "completed", payment: "₹500 (Paid)", notes: "Homeopathy case taken. Arsenicum Album 30C prescribed." },
-  { id: "6", patient: "David Thomas (USA)", phone: "+1-408-555-1234", doctor: "Dr. Arun Sharma", scheduledAt: "2026-07-15 08:00", duration: "—", type: "International New", status: "no_show", payment: "₹1200 (Paid)", notes: "Patient did not join. WhatsApp sent." },
-];
+import { useTeleconsult } from "@/hooks/useTeleconsult";
 
 const HmsTeleconsult = () => {
-  const [consults] = useState<Consult[]>(mockConsults);
+  const { sessions, loading, error, waiting, completed, totalToday, scheduleSession } = useTeleconsult();
   const [inCall, setInCall] = useState(false);
   const [videoOn, setVideoOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
   const [scheduleOpen, setScheduleOpen] = useState(false);
 
-  const waiting = consults.filter(c => c.status === "waiting").length;
-  const completed = consults.filter(c => c.status === "completed").length;
-  const totalRevenue = consults.filter(c => c.status !== "no_show").length * 600;
+  // Schedule form state
+  const [newPatient, setNewPatient] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newDoctor, setNewDoctor] = useState("");
+  const [newDateTime, setNewDateTime] = useState("");
+  const [newFee, setNewFee] = useState("500");
+  const [newType, setNewType] = useState("");
+
+  const totalRevenue = sessions.filter(c => c.status !== "no_show").length * 600;
+
+  const handleSchedule = async () => {
+    if (!newPatient.trim() || !newPhone.trim()) return toast.error("Patient name and phone required");
+    await scheduleSession({
+      patient: newPatient, phone: newPhone,
+      doctor: newDoctor || "Dr. Arun Sharma",
+      scheduledAt: newDateTime || new Date().toISOString(),
+      type: newType || "New Consultation",
+      payment: `₹${newFee} (Pending)`,
+    });
+    toast.success("Teleconsult scheduled. Payment link sent via WhatsApp.");
+    setScheduleOpen(false);
+    setNewPatient(""); setNewPhone(""); setNewDoctor(""); setNewDateTime(""); setNewFee("500"); setNewType("");
+  };
 
   return (
     <div className="space-y-6">
@@ -57,8 +62,18 @@ const HmsTeleconsult = () => {
       </div>
 
       {/* Stats */}
+      {loading && (
+        <div className="flex items-center justify-center py-2 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm">Loading sessions...</span>
+        </div>
+      )}
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">⚠ Using demo data. {error}</CardContent>
+        </Card>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <Card><CardContent className="p-3 text-center"><Calendar className="h-5 w-5 mx-auto text-blue-600" /><p className="text-xl font-bold mt-1">{consults.length}</p><p className="text-xs text-muted-foreground">Today's Sessions</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><Calendar className="h-5 w-5 mx-auto text-blue-600" /><p className="text-xl font-bold mt-1">{totalToday}</p><p className="text-xs text-muted-foreground">Today's Sessions</p></CardContent></Card>
         <Card className="border-green-200"><CardContent className="p-3 text-center"><Video className="h-5 w-5 mx-auto text-green-600" /><p className="text-xl font-bold mt-1 text-green-600">{waiting}</p><p className="text-xs text-muted-foreground">Waiting Now</p></CardContent></Card>
         <Card><CardContent className="p-3 text-center"><CheckCircle className="h-5 w-5 mx-auto text-purple-600" /><p className="text-xl font-bold mt-1">{completed}</p><p className="text-xs text-muted-foreground">Completed</p></CardContent></Card>
         <Card><CardContent className="p-3 text-center"><IndianRupee className="h-5 w-5 mx-auto text-green-600" /><p className="text-lg font-bold mt-1">₹{totalRevenue.toLocaleString("en-IN")}</p><p className="text-xs text-muted-foreground">Revenue</p></CardContent></Card>
@@ -153,7 +168,7 @@ const HmsTeleconsult = () => {
                 <th className="px-3 py-2 text-left font-medium">Actions</th>
               </tr></thead>
               <tbody>
-                {consults.map((c) => (
+                {sessions.map((c) => (
                   <tr key={c.id} className="border-b hover:bg-muted/30">
                     <td className="px-3 py-2 font-mono text-xs">{c.scheduledAt.split(" ")[1]}</td>
                     <td className="px-3 py-2"><p className="font-medium text-xs">{c.patient}</p><p className="text-[10px] text-muted-foreground">{c.phone}</p></td>
@@ -177,7 +192,7 @@ const HmsTeleconsult = () => {
           <Card><CardHeader className="pb-2"><CardTitle className="text-base">Completed Sessions</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {consults.filter(c => c.status === "completed").map(c => (
+                {sessions.filter(c => c.status === "completed").map(c => (
                   <div key={c.id} className="p-3 rounded-lg border">
                     <div className="flex items-center justify-between mb-1">
                       <div><p className="font-medium text-sm">{c.patient}</p><p className="text-xs text-muted-foreground">{c.doctor} · {c.scheduledAt} · {c.duration}</p></div>
@@ -196,21 +211,20 @@ const HmsTeleconsult = () => {
         <DialogContent>
           <DialogHeader><DialogTitle>Schedule Teleconsultation</DialogTitle></DialogHeader>
           <div className="space-y-3">
-            <div><Label>Patient Name *</Label><Input placeholder="Patient name" /></div>
+            <div><Label>Patient Name *</Label><Input placeholder="Patient name" value={newPatient} onChange={(e) => setNewPatient(e.target.value)} /></div>
             <div className="grid grid-cols-2 gap-3">
-              <div><Label>Phone / WhatsApp *</Label><Input placeholder="+91-XXXXX" /></div>
-              <div><Label>Doctor</Label><Select><SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger><SelectContent><SelectItem value="d1">Dr. Arun Sharma</SelectItem><SelectItem value="d2">Dr. Meena Patel</SelectItem><SelectItem value="d3">Dr. Priya Das</SelectItem></SelectContent></Select></div>
+              <div><Label>Phone / WhatsApp *</Label><Input placeholder="+91-XXXXX" value={newPhone} onChange={(e) => setNewPhone(e.target.value)} /></div>
+              <div><Label>Doctor</Label><Select value={newDoctor} onValueChange={setNewDoctor}><SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger><SelectContent><SelectItem value="Dr. Arun Sharma">Dr. Arun Sharma</SelectItem><SelectItem value="Dr. Meena Patel">Dr. Meena Patel</SelectItem><SelectItem value="Dr. Priya Das">Dr. Priya Das</SelectItem></SelectContent></Select></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div><Label>Date & Time</Label><Input type="datetime-local" /></div>
-              <div><Label>Consultation Fee (₹)</Label><Input type="number" defaultValue="500" /></div>
+              <div><Label>Date & Time</Label><Input type="datetime-local" value={newDateTime} onChange={(e) => setNewDateTime(e.target.value)} /></div>
+              <div><Label>Consultation Fee (₹)</Label><Input type="number" value={newFee} onChange={(e) => setNewFee(e.target.value)} /></div>
             </div>
-            <div><Label>Type</Label><Select><SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger><SelectContent><SelectItem value="new">New Consultation</SelectItem><SelectItem value="followup">Follow-up</SelectItem><SelectItem value="pk_review">Panchakarma Review</SelectItem><SelectItem value="intl">International</SelectItem></SelectContent></Select></div>
-            <div><Label>Notes</Label><Input placeholder="Brief reason for teleconsult" /></div>
+            <div><Label>Type</Label><Select value={newType} onValueChange={setNewType}><SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger><SelectContent><SelectItem value="New Consultation">New Consultation</SelectItem><SelectItem value="Follow-up">Follow-up</SelectItem><SelectItem value="Panchakarma Review">Panchakarma Review</SelectItem><SelectItem value="International">International</SelectItem></SelectContent></Select></div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setScheduleOpen(false)}>Cancel</Button>
-            <Button onClick={() => { toast.success("Teleconsult scheduled. Payment link sent via WhatsApp."); setScheduleOpen(false); }}>Schedule & Send Link</Button>
+            <Button onClick={handleSchedule}>Schedule & Send Link</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

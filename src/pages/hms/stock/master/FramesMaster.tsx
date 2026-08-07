@@ -17,6 +17,7 @@ const FramesMaster = () => {
       title="Frames"
       entityName="Frame"
       initialItems={mockFrames}
+      storageKey="hms_master_frames"
     />
   );
 };

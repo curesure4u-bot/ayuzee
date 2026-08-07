@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import type { StockProduct, ProductType, ScheduleCode, RiskLevel } from "@/types/stock-hms";
 
 const productTypes: ProductType[] = [
@@ -20,6 +22,23 @@ const scheduleCodes: ScheduleCode[] = ["H", "H1", "G", "X", "Schedule-H", "Sched
 
 const ProductForm = () => {
   const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [wardStores, setWardStores] = useState<{ id: string; ward_name: string }[]>([]);
+  const [selectedStoreId, setSelectedStoreId] = useState("");
+
+  useEffect(() => {
+    loadWardStores();
+  }, []);
+
+  const loadWardStores = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_ward_stores")
+      .select("id, ward_name")
+      .eq("is_active", true);
+    setWardStores(data || []);
+    if (data && data.length > 0) setSelectedStoreId(data[0].id);
+  };
+
   const [form, setForm] = useState({
     productConsultation: "",
     name: "",
@@ -76,7 +95,7 @@ const ProductForm = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.name.trim()) {
       toast.error("Product name is required");
       return;
@@ -97,8 +116,37 @@ const ProductForm = () => {
       toast.error("Margin % is required");
       return;
     }
-    toast.success("Product saved successfully");
-    navigate("/hms/stock/product");
+    if (!selectedStoreId) {
+      toast.error("Please select a store");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const { error } = await (supabase as any)
+        .from("hms_ward_stock_items")
+        .insert({
+          ward_store_id: selectedStoreId,
+          product_name: form.name.trim(),
+          product_category: form.type || form.categoryId || null,
+          batch_number: form.shortCode || null,
+          expiry_date: null,
+          quantity_available: 0,
+          quantity_unit: form.purchaseUnit || "units",
+          min_stock_level: parseFloat(form.reorderLevel) || 5,
+          max_stock_level: 100,
+          cost_per_unit: parseFloat(form.purchasePrice) || 0,
+          is_critical: form.riskLevel === "High",
+        });
+
+      if (error) throw error;
+      toast.success("Product saved to Supabase successfully");
+      navigate("/hms/stock/product");
+    } catch (err: any) {
+      toast.error("Failed to save product: " + (err.message || "Unknown error"));
+      console.error("Product save error:", err);
+    }
+    setSaving(false);
   };
 
   return (
@@ -109,6 +157,19 @@ const ProductForm = () => {
 
       <Card>
         <CardContent className="p-6 space-y-4">
+          {/* Ward Store Selection */}
+          <div>
+            <Label className="text-sm font-medium">Store / Ward *</Label>
+            <Select value={selectedStoreId} onValueChange={setSelectedStoreId}>
+              <SelectTrigger><SelectValue placeholder="Select Store" /></SelectTrigger>
+              <SelectContent>
+                {wardStores.map((s) => (
+                  <SelectItem key={s.id} value={s.id}>{s.ward_name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Product Consultation */}
           <div>
             <Label className="text-sm font-medium">Product Consultation</Label>
@@ -476,8 +537,8 @@ const ProductForm = () => {
 
           {/* Save Button */}
           <div className="pt-4">
-            <Button onClick={handleSave} className="bg-red-600 hover:bg-red-700 w-24">
-              Save
+            <Button onClick={handleSave} disabled={saving} className="bg-red-600 hover:bg-red-700 w-24">
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
             </Button>
           </div>
         </CardContent>

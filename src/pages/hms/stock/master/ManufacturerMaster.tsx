@@ -24,6 +24,7 @@ const ManufacturerMaster = () => {
       title="Manufacturer"
       entityName="Manufacturer"
       initialItems={mockManufacturers}
+      storageKey="hms_master_manufacturer"
     />
   );
 };

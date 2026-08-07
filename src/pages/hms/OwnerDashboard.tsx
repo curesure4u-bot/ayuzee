@@ -1,11 +1,13 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
   IndianRupee, Users, TrendingUp, Building2,
   Wallet, CreditCard, BarChart3, FileText,
-  UserCog, Receipt, Shield, Landmark, Info,
+  UserCog, Receipt, Shield, Landmark, Info, Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const quickLinks = [
   { label: "Financial Reports", to: "/hms/reports", icon: FileText },
@@ -17,13 +19,39 @@ const quickLinks = [
 ];
 
 const OwnerDashboard = () => {
+  const [stats, setStats] = useState({ revenue: 0, advances: 0, stores: 0, stockItems: 0, patients: 0, noshows: 0 });
+
+  useEffect(() => { loadStats(); }, []);
+
+  const loadStats = async () => {
+    try {
+      const [{ data: sales }, { data: advances }, { count: storeCount }, { count: stockCount }, { count: triageCount }, { count: noshowCount }] = await Promise.all([
+        (supabase as any).from("hms_ward_consumption_log").select("bill_amount").eq("billed_to_patient", true),
+        (supabase as any).from("hms_patient_advances").select("amount"),
+        (supabase as any).from("hms_ward_stores").select("*", { count: "exact", head: true }).eq("is_active", true),
+        (supabase as any).from("hms_ward_stock_items").select("*", { count: "exact", head: true }),
+        (supabase as any).from("hms_triage_records").select("*", { count: "exact", head: true }),
+        (supabase as any).from("hms_noshow_records").select("*", { count: "exact", head: true }),
+      ]);
+
+      setStats({
+        revenue: (sales || []).reduce((s: number, r: any) => s + (r.bill_amount || 0), 0),
+        advances: (advances || []).reduce((s: number, a: any) => s + (a.amount || 0), 0),
+        stores: storeCount || 0,
+        stockItems: stockCount || 0,
+        patients: triageCount || 0,
+        noshows: noshowCount || 0,
+      });
+    } catch (err) { console.error("Owner dashboard error:", err); }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="font-display text-3xl font-bold tracking-tight">Owner / Investor Dashboard</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          Business snapshot — {new Date().toLocaleDateString("en-IN", { month: "long", year: "numeric" })}
+          Business snapshot — {new Date().toLocaleDateString("en-IN", { month: "long", year: "numeric" })} | Revenue: ₹{(stats.revenue / 1000).toFixed(0)}K | Advances: ₹{(stats.advances / 1000).toFixed(0)}K | Stores: {stats.stores} | Stock: {stats.stockItems} items | Patients: {stats.patients} | No-shows: {stats.noshows}
         </p>
       </div>
 

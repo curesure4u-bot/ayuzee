@@ -4,9 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Pill, FileSpreadsheet, Printer, Brain, AlertTriangle,
-  TrendingUp, Package, Warehouse, BarChart3
+  TrendingUp, Package, Warehouse, BarChart3, Loader2
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useMisStock, generateAiStockSummary, type MisStockFilters } from "@/hooks/useMisStock";
 
 const stockCategories = [
   { label: "Schedule", items: ["Schedule Register", "Schedule Register H", "Schedule Register H1"], color: "bg-teal-600" },
@@ -45,15 +46,21 @@ const stockCategories = [
   { label: "Unavailable Medicine", items: ["All"], color: "bg-gray-500" },
 ];
 
-const stockValueData = [
-  { store: "ALSHIFA PHARMACY", value: 485000 },
-  { store: "Central Store", value: 320000 },
-  { store: "IP Pharmacy Store", value: 145000 },
-];
+interface MisStocksProps {
+  location?: string;
+}
 
-const MisStocks = () => {
+const MisStocks = ({ location }: MisStocksProps) => {
   const [selectedCategory, setSelectedCategory] = useState("Sale");
   const [selectedReport, setSelectedReport] = useState("Bill Wise");
+  const [selectedStore, setSelectedStore] = useState<string | undefined>(undefined);
+
+  const filters: MisStockFilters = {
+    location: location || "all",
+    store: selectedStore,
+  };
+
+  const { storeValues, reorderItems, expiryItems, summary, loading, error } = useMisStock(filters);
 
   return (
     <div className="space-y-4 mt-4">
@@ -64,26 +71,83 @@ const MisStocks = () => {
             <Brain className="h-4 w-4 text-primary mt-0.5" />
             <div className="text-xs text-muted-foreground">
               <span className="font-medium text-primary">AI Stock Intelligence: </span>
-              5 products below reorder level. 12 items expiring within 30 days (₹18,500 value). 
-              Sale margin avg: 22.5%. Top seller: Chyawanprash 500g (45 units). Slow movers: 8 items no sale in 60 days.
-              Supplier credit outstanding: ₹3.5L across 6 vendors.
+              {loading ? "Analyzing stock data..." : generateAiStockSummary(summary)}
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Loading indicator */}
+      {loading && (
+        <div className="flex items-center justify-center py-4 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Loading stock data...</span>
+        </div>
+      )}
+
+      {/* Error banner */}
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">
+            ⚠ Could not load live data (showing cached/demo). {error}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Store Selection */}
       <Card>
         <CardContent className="p-3">
           <p className="text-xs font-semibold text-muted-foreground mb-2">Choose Store for Report</p>
           <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" className="text-xs h-7">Show All</Button>
-            {stockValueData.map((s) => (
-              <Button key={s.store} size="sm" variant="outline" className="text-xs h-7 text-primary">{s.store}</Button>
+            <Button size="sm" variant={!selectedStore ? "default" : "outline"} className="text-xs h-7"
+              onClick={() => setSelectedStore(undefined)}>
+              Show All
+            </Button>
+            {storeValues.map((s) => (
+              <Button key={s.store} size="sm"
+                variant={selectedStore === s.store ? "default" : "outline"}
+                className="text-xs h-7 text-primary"
+                onClick={() => setSelectedStore(s.store)}>
+                {s.store}
+              </Button>
             ))}
           </div>
         </CardContent>
       </Card>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <Card>
+          <CardContent className="p-3 text-center">
+            <p className="text-sm font-bold text-primary">₹{(summary.totalStockValue / 100000).toFixed(1)}L</p>
+            <p className="text-[10px] text-muted-foreground">Total Stock Value</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3 text-center">
+            <p className="text-sm font-bold">{summary.totalProducts}</p>
+            <p className="text-[10px] text-muted-foreground">Total Items</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3 text-center">
+            <p className="text-sm font-bold text-red-600">{summary.belowReorderCount}</p>
+            <p className="text-[10px] text-muted-foreground">Below Reorder</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3 text-center">
+            <p className="text-sm font-bold text-amber-600">{summary.expiringIn30Days}</p>
+            <p className="text-[10px] text-muted-foreground">Expiring (30d)</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3 text-center">
+            <p className="text-sm font-bold text-orange-600">₹{(summary.expiringValue / 1000).toFixed(1)}K</p>
+            <p className="text-[10px] text-muted-foreground">Expiry Value</p>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Category Buttons - scrollable rows */}
       <Card>
@@ -158,7 +222,7 @@ const MisStocks = () => {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={150}>
-            <BarChart data={stockValueData} layout="vertical">
+            <BarChart data={storeValues} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" tick={{ fontSize: 10 }} tickFormatter={(v) => `₹${(v/100000).toFixed(1)}L`} />
               <YAxis type="category" dataKey="store" tick={{ fontSize: 10 }} width={130} />
@@ -169,45 +233,94 @@ const MisStocks = () => {
         </CardContent>
       </Card>
 
-      {/* Sample Table */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead className="border-b bg-muted/50">
-                <tr>
-                  <th className="px-3 py-2 text-left font-medium text-primary">S.No</th>
-                  <th className="px-3 py-2 text-left font-medium text-primary">Store</th>
-                  <th className="px-3 py-2 text-left font-medium text-primary">Product</th>
-                  <th className="px-3 py-2 text-right font-medium text-primary">Qty</th>
-                  <th className="px-3 py-2 text-right font-medium text-primary">MRP</th>
-                  <th className="px-3 py-2 text-right font-medium text-primary">Sale Value</th>
-                  <th className="px-3 py-2 text-right font-medium text-primary">Margin %</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { store: "ALSHIFA PHARMACY", product: "Chyawanprash 500g", qty: 45, mrp: 750, saleValue: 33750, margin: 18 },
-                  { store: "ALSHIFA PHARMACY", product: "Triphala Churna 100g", qty: 38, mrp: 200, saleValue: 7600, margin: 22 },
-                  { store: "ALSHIFA PHARMACY", product: "Ashwagandha Capsules", qty: 32, mrp: 400, saleValue: 12800, margin: 25 },
-                  { store: "Central Store", product: "Kumkumadi Oil 30ml", qty: 28, mrp: 700, saleValue: 19600, margin: 30 },
-                  { store: "Central Store", product: "Dhanwantharam Oil 200ml", qty: 25, mrp: 350, saleValue: 8750, margin: 20 },
-                ].map((row, i) => (
-                  <tr key={i} className="border-b hover:bg-muted/30">
-                    <td className="px-3 py-2">{i + 1}</td>
-                    <td className="px-3 py-2">{row.store}</td>
-                    <td className="px-3 py-2 font-medium">{row.product}</td>
-                    <td className="px-3 py-2 text-right">{row.qty}</td>
-                    <td className="px-3 py-2 text-right">₹{row.mrp}</td>
-                    <td className="px-3 py-2 text-right font-semibold">₹{row.saleValue.toLocaleString("en-IN")}</td>
-                    <td className="px-3 py-2 text-right"><Badge variant="outline" className="text-[10px]">{row.margin}%</Badge></td>
+      {/* Reorder Alerts Table */}
+      {reorderItems.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-medium flex items-center gap-2">
+              <AlertTriangle className="h-3.5 w-3.5 text-red-500" /> Reorder Alerts
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-2 text-left font-medium text-primary">S.No</th>
+                    <th className="px-3 py-2 text-left font-medium text-primary">Product</th>
+                    <th className="px-3 py-2 text-left font-medium text-primary">Store</th>
+                    <th className="px-3 py-2 text-left font-medium text-primary">Category</th>
+                    <th className="px-3 py-2 text-right font-medium text-primary">Current Qty</th>
+                    <th className="px-3 py-2 text-right font-medium text-primary">Min Level</th>
+                    <th className="px-3 py-2 text-right font-medium text-primary">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+                </thead>
+                <tbody>
+                  {reorderItems.slice(0, 10).map((item, i) => (
+                    <tr key={i} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2">{i + 1}</td>
+                      <td className="px-3 py-2 font-medium">{item.productName}</td>
+                      <td className="px-3 py-2">{item.store}</td>
+                      <td className="px-3 py-2">{item.category}</td>
+                      <td className="px-3 py-2 text-right text-red-600 font-semibold">{item.currentQty}</td>
+                      <td className="px-3 py-2 text-right">{item.minLevel}</td>
+                      <td className="px-3 py-2 text-right">
+                        <Badge variant="destructive" className="text-[10px]">Low</Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Expiry Alerts Table */}
+      {expiryItems.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-medium flex items-center gap-2">
+              <AlertTriangle className="h-3.5 w-3.5 text-amber-500" /> Expiry Alerts (30 Days)
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-2 text-left font-medium text-primary">S.No</th>
+                    <th className="px-3 py-2 text-left font-medium text-primary">Product</th>
+                    <th className="px-3 py-2 text-left font-medium text-primary">Batch</th>
+                    <th className="px-3 py-2 text-left font-medium text-primary">Store</th>
+                    <th className="px-3 py-2 text-right font-medium text-primary">Qty</th>
+                    <th className="px-3 py-2 text-right font-medium text-primary">Value</th>
+                    <th className="px-3 py-2 text-right font-medium text-primary">Days Left</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expiryItems.slice(0, 10).map((item, i) => (
+                    <tr key={i} className="border-b hover:bg-muted/30">
+                      <td className="px-3 py-2">{i + 1}</td>
+                      <td className="px-3 py-2 font-medium">{item.productName}</td>
+                      <td className="px-3 py-2">{item.batch}</td>
+                      <td className="px-3 py-2">{item.store}</td>
+                      <td className="px-3 py-2 text-right">{item.quantity}</td>
+                      <td className="px-3 py-2 text-right">₹{item.value.toLocaleString("en-IN")}</td>
+                      <td className="px-3 py-2 text-right">
+                        <Badge variant={item.daysUntilExpiry <= 7 ? "destructive" : "outline"}
+                          className="text-[10px]">
+                          {item.daysUntilExpiry}d
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   RotateCcw, IndianRupee, Plus, Search, CheckCircle2,
-  Clock, AlertTriangle, Download, User, Wallet,
+  Clock, AlertTriangle, Download, User, Wallet, Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RefundEntry {
   id: string;
@@ -60,7 +61,24 @@ const mockAdvances: AdvanceDeposit[] = [
 
 const RefundAdvance = () => {
   const [refunds] = useState<RefundEntry[]>(mockRefunds);
-  const [advances] = useState<AdvanceDeposit[]>(mockAdvances);
+  const [advances, setAdvances] = useState<AdvanceDeposit[]>(mockAdvances);
+  const [liveAdvances, setLiveAdvances] = useState<any[]>([]);
+
+  useEffect(() => {
+    loadAdvances();
+  }, []);
+
+  const loadAdvances = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_patient_advances")
+        .select("*")
+        .order("created_at", { ascending: false });
+      setLiveAdvances(data || []);
+    } catch (err) {
+      console.error("Advances load error:", err);
+    }
+  };
   const [activeTab, setActiveTab] = useState("refunds");
 
   const totalRefunds = refunds.reduce((s, r) => s + r.refundAmount, 0);

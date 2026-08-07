@@ -12,7 +12,7 @@ import {
   Moon, Dumbbell, Sparkles, FileText, Package, Factory, Warehouse, Wallet,
   GraduationCap, Globe, Smartphone, Brain, Stethoscope, ScanLine, CreditCard,
   QrCode, AlertTriangle, Target, Truck, RotateCcw, Lock, Calculator, Clock,
-  Calendar, RefreshCw, ArrowRight, CheckCircle2, Send, Crown,
+  Calendar, RefreshCw, ArrowRight, CheckCircle2, Send, Crown, Monitor,
 } from "lucide-react";
 
 // 10 Primary Tabs
@@ -92,6 +92,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/self-assessment-queue", label: "Self-Assessment Reviews", icon: ClipboardList },
     { to: "/hms/ashtavidha/mala/dashboard", label: "Mala Pareeksha", icon: Activity },
     { divider: "My Analytics", to: "/hms/doctor-kpi", label: "Doctor Dashboard", icon: BarChart3 },
+    { to: "/hms/doctor/earnings", label: "Revenue & Earnings", icon: Wallet },
     { to: "/hms/doctor-case-discussion", label: "AI Case Discussion", icon: Brain },
     { to: "/hms/doctor-chat", label: "Doctor Chat", icon: Smartphone },
     { to: "/hms/doctor-patient-brief", label: "Patient Brief (AI)", icon: FileText },
@@ -218,6 +219,9 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/lab-diagnostics/barcode", label: "Barcode / Worklist", icon: QrCode },
     { to: "/hms/lab-diagnostics/qc", label: "Quality Control", icon: Activity },
     { to: "/hms/radiology", label: "Radiology", icon: ScanLine },
+    { to: "/hms/radiology/worklist", label: "Radiology Worklist", icon: ClipboardList },
+    { to: "/hms/radiology/reporting", label: "Radiology Reporting", icon: FileText },
+    { to: "/hms/radiology/pacs", label: "PACS Viewer", icon: Monitor },
     { to: "/hms/blood-bank", label: "Blood Bank", icon: Droplets },
     { divider: "AI & Advanced", to: "/hms/lab-diagnostics/ai", label: "AI Lab Intelligence", icon: Brain },
     { to: "/hms/lab-critical-results", label: "Critical Results", icon: AlertTriangle },
@@ -321,6 +325,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/homeopathy", label: "Homeopathy", icon: Heart },
     { to: "/hms/unani", label: "Unani", icon: Moon },
     { to: "/hms/yoga", label: "Yoga & Naturopathy", icon: Dumbbell },
+    { to: "/hms/naturopathy", label: "Naturopathy (Clinical)", icon: Leaf },
     { divider: "Panchakarma", to: "/hms/panchakarma", label: "PK Dashboard", icon: Sparkles },
     { to: "/hms/panchakarma/schedule", label: "Therapy Schedule", icon: CalendarClock },
     { to: "/hms/panchakarma/packages", label: "Packages & Plans", icon: Package },
@@ -483,7 +488,7 @@ const HmsLayout = () => {
     else if (p.includes("/hms/lab") || p.includes("/hms/radiology") || p.includes("/hms/blood-bank")) setActiveTab("lab");
     else if (p.includes("/hms/accounts") || p.includes("/hms/credit-settlement")) setActiveTab("accounts");
     else if (p.includes("/hms/mis") || p.includes("/hms/reports") || p.includes("/hms/governance")) setActiveTab("mis");
-    else if (p.includes("/hms/ayurveda") || p.includes("/hms/siddha") || p.includes("/hms/homeopathy") || p.includes("/hms/unani") || p.includes("/hms/yoga") || p.includes("/hms/panchakarma") || p.includes("/hms/pk-") || p.includes("/hms/icd-") || p.includes("/hms/namaste") || p.includes("/hms/sna-") || p.includes("/hms/classical") || p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments")) setActiveTab("ayush");
+    else if (p.includes("/hms/ayurveda") || p.includes("/hms/siddha") || p.includes("/hms/homeopathy") || p.includes("/hms/unani") || p.includes("/hms/yoga") || p.includes("/hms/naturopathy") || p.includes("/hms/panchakarma") || p.includes("/hms/pk-") || p.includes("/hms/icd-") || p.includes("/hms/namaste") || p.includes("/hms/sna-") || p.includes("/hms/classical") || p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments")) setActiveTab("ayush");
     else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies") || p.includes("/hms/spine-community") || p.includes("/hms/spine-therapy-session") || p.includes("/hms/spine-patient-recovery") || p.includes("/hms/spine-level1")) setActiveTab("spine");
     else setActiveTab("dashboard");
   }, [location.pathname]);

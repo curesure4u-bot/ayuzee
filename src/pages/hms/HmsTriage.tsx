@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +11,9 @@ import { toast } from "sonner";
 import {
   Heart, Thermometer, Activity, Wind, Droplets, Scale,
   AlertTriangle, Clock, CheckCircle, Plus, Search, RefreshCw,
-  Stethoscope, Users
+  Stethoscope, Users, Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type TriageRecord = {
   id: string;
@@ -50,10 +51,46 @@ const statusIcons = {
 };
 
 const HmsTriage = () => {
-  const [records] = useState<TriageRecord[]>(mockTriageData);
+  const [records, setRecords] = useState<TriageRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPriority, setFilterPriority] = useState("all");
+
+  useEffect(() => { loadRecords(); }, []);
+
+  const loadRecords = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_triage_records")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+
+      setRecords((data || []).map((r: any, idx: number) => ({
+        id: r.id,
+        patient_name: r.chief_complaint ? `Patient ${idx + 1}` : `Token ${r.token_number || idx + 1}`,
+        token_number: r.token_number || idx + 1,
+        priority: r.triage_priority || "normal",
+        status: r.status || "captured",
+        chief_complaint: r.chief_complaint || "—",
+        bp: r.blood_pressure_systolic ? `${r.blood_pressure_systolic}/${r.blood_pressure_diastolic}` : "—",
+        pulse: r.pulse_rate || 0,
+        temp: r.temperature || 0,
+        spo2: r.spo2 || 0,
+        captured_at: r.captured_at ? new Date(r.captured_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "—",
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load triage records");
+      console.error(err);
+      setRecords(mockTriageData);
+    }
+    setLoading(false);
+  };
 
   // Form state
   const [formData, setFormData] = useState({
@@ -66,21 +103,60 @@ const HmsTriage = () => {
     priority: "normal", notes: "",
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.patient_name || !formData.bp_systolic) {
       return toast.error("Patient name and BP are required");
     }
-    toast.success(`Triage captured for ${formData.patient_name}`);
-    setAddOpen(false);
-    setFormData({
-      patient_name: "", token_number: "",
-      bp_systolic: "", bp_diastolic: "", pulse: "", temperature: "",
-      respiratory_rate: "", spo2: "", weight: "", height: "",
-      chief_complaint: "", complaint_duration: "", pain_scale: "",
-      known_allergies: "", current_medications: "",
-      prakriti_type: "", nadi_pareeksha: "", jihva_observation: "",
-      priority: "normal", notes: "",
-    });
+
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Login required"); setSaving(false); return; }
+
+      const { error } = await (supabase as any)
+        .from("hms_triage_records")
+        .insert({
+          patient_id: user.id,
+          token_number: formData.token_number ? parseInt(formData.token_number) : null,
+          blood_pressure_systolic: formData.bp_systolic ? parseInt(formData.bp_systolic) : null,
+          blood_pressure_diastolic: formData.bp_diastolic ? parseInt(formData.bp_diastolic) : null,
+          pulse_rate: formData.pulse ? parseInt(formData.pulse) : null,
+          temperature: formData.temperature ? parseFloat(formData.temperature) : null,
+          respiratory_rate: formData.respiratory_rate ? parseInt(formData.respiratory_rate) : null,
+          spo2: formData.spo2 ? parseInt(formData.spo2) : null,
+          weight: formData.weight ? parseFloat(formData.weight) : null,
+          height: formData.height ? parseFloat(formData.height) : null,
+          chief_complaint: formData.chief_complaint || null,
+          complaint_duration: formData.complaint_duration || null,
+          pain_scale: formData.pain_scale ? parseInt(formData.pain_scale) : null,
+          prakriti_type: formData.prakriti_type || null,
+          nadi_pareeksha: formData.nadi_pareeksha || null,
+          jihva_observation: formData.jihva_observation || null,
+          triage_priority: formData.priority,
+          status: "captured",
+          captured_by: user.id,
+          notes: formData.notes || null,
+        });
+
+      if (error) throw error;
+
+      toast.success(`Triage captured for ${formData.patient_name}`);
+      setAddOpen(false);
+      setFormData({
+        patient_name: "", token_number: "",
+        bp_systolic: "", bp_diastolic: "", pulse: "", temperature: "",
+        respiratory_rate: "", spo2: "", weight: "", height: "",
+        chief_complaint: "", complaint_duration: "", pain_scale: "",
+        known_allergies: "", current_medications: "",
+        prakriti_type: "", nadi_pareeksha: "", jihva_observation: "",
+        priority: "normal", notes: "",
+      });
+      loadRecords();
+    } catch (err: any) {
+      toast.error("Failed to save: " + (err.message || "Unknown error"));
+      console.error(err);
+    }
+    setSaving(false);
   };
 
   const filtered = records.filter((r) => {

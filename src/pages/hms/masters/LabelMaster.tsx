@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Sparkles, Tag } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // ─── Types & Constants ───────────────────────────────────────────────────────
 type LabelConfig = { id: string; location: string; hsnCode: string; externalPCode: string; cinNo: string; gstNo: string; tinNo: string; hospitalName: string; address: string; phone: string; email: string; regNo: string; logo: string };
@@ -29,8 +30,22 @@ const mockLabels: LabelConfig[] = [
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const LabelMaster = () => {
+  const [liveLabels, setLiveLabels] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [enabledAi, setEnabledAi] = useState<string[]>(["Auto Label Formatting", "QR Code Integration", "Compliance Check"]);
+
+  useEffect(() => { loadLabels(); }, []);
+
+  const loadLabels = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_labels")
+        .select("*")
+        .eq("is_active", true)
+        .order("label_name");
+      setLiveLabels(data || []);
+    } catch (err) { console.error("Labels load:", err); }
+  };
   const [fLocation, setFLocation] = useState("Default");
   const [fHsn, setFHsn] = useState("");
   const [fExtPCode, setFExtPCode] = useState("");

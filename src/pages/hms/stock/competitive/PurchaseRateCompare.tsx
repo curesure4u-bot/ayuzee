@@ -1,125 +1,143 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Brain, TrendingDown, Search, IndianRupee, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Brain, TrendingDown, Search, IndianRupee, BarChart3 } from "lucide-react";
 
-const comparisons = [
-  {
-    item: "Rasnasaptakam Kashayam 450ml",
-    purchases: [
-      { supplier: "AVN Kottakkal", date: "18 Jul 2026", rate: 148, qty: 50, total: 7400 },
-      { supplier: "AVN Kottakkal", date: "02 Jul 2026", rate: 145, qty: 80, total: 11600 },
-      { supplier: "Arya Vaidya Pharmacy", date: "15 Jun 2026", rate: 155, qty: 40, total: 6200 },
-      { supplier: "X Ayush Agency", date: "28 May 2026", rate: 140, qty: 100, total: 14000 },
-      { supplier: "AVN Kottakkal", date: "10 May 2026", rate: 145, qty: 60, total: 8700 },
-    ],
-    bestRate: 140, bestSupplier: "X Ayush Agency", avgRate: 146.6, savingPotential: 2200,
-  },
-  {
-    item: "Simhanada Guggulu 60 tablets",
-    purchases: [
-      { supplier: "X Pharmaceuticals", date: "20 Jul 2026", rate: 82, qty: 100, total: 8200 },
-      { supplier: "Dabur Ayurvedics", date: "05 Jul 2026", rate: 88, qty: 60, total: 5280 },
-      { supplier: "X Pharmaceuticals", date: "18 Jun 2026", rate: 80, qty: 120, total: 9600 },
-      { supplier: "Nagarjuna Herbal", date: "01 Jun 2026", rate: 92, qty: 50, total: 4600 },
-      { supplier: "X Pharmaceuticals", date: "15 May 2026", rate: 80, qty: 100, total: 8000 },
-    ],
-    bestRate: 80, bestSupplier: "X Pharmaceuticals", avgRate: 84.4, savingPotential: 1896,
-  },
-  {
-    item: "Kottamchukkadi Taila 200ml",
-    purchases: [
-      { supplier: "X Ayush Agency", date: "19 Jul 2026", rate: 162, qty: 30, total: 4860 },
-      { supplier: "Arya Vaidya Pharmacy", date: "30 Jun 2026", rate: 170, qty: 25, total: 4250 },
-      { supplier: "SNA Oushadhasala", date: "12 Jun 2026", rate: 158, qty: 40, total: 6320 },
-      { supplier: "X Ayush Agency", date: "25 May 2026", rate: 160, qty: 35, total: 5600 },
-      { supplier: "Arya Vaidya Pharmacy", date: "08 May 2026", rate: 168, qty: 30, total: 5040 },
-    ],
-    bestRate: 158, bestSupplier: "SNA Oushadhasala", avgRate: 163.6, savingPotential: 896,
-  },
-];
+type PurchaseRecord = {
+  product_name: string;
+  suppliers: { supplier: string; date: string; qty: number }[];
+  avgCost: number;
+};
 
 export default function PurchaseRateCompare() {
-  const totalSaving = comparisons.reduce((s, c) => s + c.savingPotential, 0);
+  const [products, setProducts] = useState<PurchaseRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      // Fetch transfers that are POs (supplier-related)
+      const { data, error } = await (supabase as any)
+        .from("hms_ward_stock_transfers")
+        .select("product_name, quantity, transfer_reason, created_at, status")
+        .ilike("transfer_reason", "%supplier%")
+        .eq("status", "received")
+        .order("product_name");
+
+      if (error) throw error;
+
+      // Also fetch cost_per_unit from stock items
+      const { data: stockItems } = await (supabase as any)
+        .from("hms_ward_stock_items")
+        .select("product_name, cost_per_unit");
+
+      const costMap: Record<string, number> = {};
+      (stockItems || []).forEach((s: any) => { costMap[s.product_name] = s.cost_per_unit; });
+
+      // Group by product
+      const productMap: Record<string, { suppliers: { supplier: string; date: string; qty: number }[] }> = {};
+      (data || []).forEach((t: any) => {
+        const name = t.product_name;
+        const match = (t.transfer_reason || "").match(/supplier:\s*(\w+)/i);
+        const supplier = match ? match[1].toUpperCase() : "UNKNOWN";
+
+        if (!productMap[name]) productMap[name] = { suppliers: [] };
+        productMap[name].suppliers.push({
+          supplier,
+          date: new Date(t.created_at).toLocaleDateString(),
+          qty: t.quantity,
+        });
+      });
+
+      setProducts(Object.entries(productMap).map(([name, d]) => ({
+        product_name: name,
+        suppliers: d.suppliers,
+        avgCost: costMap[name] || 0,
+      })));
+    } catch (err: any) {
+      toast.error("Failed to load purchase data");
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const filtered = products.filter(p => p.product_name.toLowerCase().includes(search.toLowerCase()));
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-[40vh]"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <BarChart3 className="h-6 w-6 text-blue-600" /> Purchase Rate Comparison
-          </h1>
-          <p className="text-muted-foreground mt-1">Compare same item across suppliers (last 5 purchases) — negotiate better rates</p>
+          <h1 className="text-2xl font-bold flex items-center gap-2"><TrendingDown className="h-6 w-6 text-green-600" /> Purchase Rate Comparison</h1>
+          <p className="text-muted-foreground mt-1">Compare supplier pricing per product from live PO history in Supabase.</p>
         </div>
-        <Badge className="bg-green-100 text-green-700 text-sm px-3 py-1">Potential Saving: ₹{totalSaving.toLocaleString()}/month</Badge>
       </div>
 
       <div className="flex gap-2 max-w-md">
         <Search className="h-4 w-4 mt-2.5 text-muted-foreground" />
-        <Input placeholder="Search medicine to compare rates..." />
-        <Button size="sm">Compare</Button>
+        <Input placeholder="Search product..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      {comparisons.map((comp, idx) => (
-        <Card key={idx}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm">{comp.item}</CardTitle>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-[10px] text-green-600">Best: ₹{comp.bestRate} ({comp.bestSupplier})</Badge>
-                <Badge variant="outline" className="text-[10px]">Avg: ₹{comp.avgRate}</Badge>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold">{products.length}</p><p className="text-xs text-muted-foreground">Products with PO History</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><p className="text-xl font-bold">{new Set(products.flatMap(p => p.suppliers.map(s => s.supplier))).size}</p><p className="text-xs text-muted-foreground">Suppliers</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><IndianRupee className="h-4 w-4 mx-auto text-green-600" /><p className="text-xl font-bold text-green-600">{products.reduce((s, p) => s + p.suppliers.length, 0)}</p><p className="text-xs text-muted-foreground">Total POs Received</p></CardContent></Card>
+      </div>
+
+      {filtered.length === 0 ? (
+        <Card><CardContent className="p-8 text-center text-muted-foreground">No purchase rate data. Run seed SQL and process some POs to see comparisons.</CardContent></Card>
+      ) : (
+        filtered.map((product) => (
+          <Card key={product.product_name}>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm">{product.product_name}</CardTitle>
+                <Badge variant="outline" className="text-[10px]">Avg: ₹{product.avgCost}/unit</Badge>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b bg-muted/50">
-                  <tr>
-                    <th className="px-3 py-2 text-left">Supplier</th>
-                    <th className="px-3 py-2 text-center">Date</th>
-                    <th className="px-3 py-2 text-center">Rate/Unit</th>
-                    <th className="px-3 py-2 text-center">Qty</th>
-                    <th className="px-3 py-2 text-right">Total</th>
-                    <th className="px-3 py-2 text-center">vs Best</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comp.purchases.map((p, i) => {
-                    const diff = p.rate - comp.bestRate;
-                    return (
-                      <tr key={i} className={`border-b ${p.rate === comp.bestRate ? "bg-green-50/50" : ""}`}>
-                        <td className="px-3 py-2 text-xs font-medium">{p.supplier}</td>
-                        <td className="px-3 py-2 text-center text-xs text-muted-foreground">{p.date}</td>
-                        <td className="px-3 py-2 text-center text-xs font-bold">₹{p.rate}</td>
-                        <td className="px-3 py-2 text-center text-xs">{p.qty}</td>
-                        <td className="px-3 py-2 text-right text-xs">₹{p.total.toLocaleString()}</td>
-                        <td className="px-3 py-2 text-center text-xs">
-                          {diff === 0 ? <span className="text-green-600 font-bold">Best ✓</span> : <span className="text-red-600">+₹{diff}</span>}
-                        </td>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead className="border-b bg-muted/50">
+                    <tr>
+                      <th className="px-3 py-1 text-left">Supplier</th>
+                      <th className="px-3 py-1 text-center">Qty</th>
+                      <th className="px-3 py-1 text-left">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {product.suppliers.map((s, i) => (
+                      <tr key={i} className="border-b">
+                        <td className="px-3 py-1.5 font-medium">{s.supplier}</td>
+                        <td className="px-3 py-1.5 text-center">{s.qty}</td>
+                        <td className="px-3 py-1.5">{s.date}</td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        ))
+      )}
 
       <Card className="border-purple-200 bg-purple-50/30">
-        <CardContent className="p-4 flex items-start gap-3">
-          <Brain className="h-5 w-5 text-purple-600 mt-0.5" />
+        <CardContent className="p-3 flex items-start gap-2">
+          <Brain className="h-4 w-4 text-purple-600 mt-0.5" />
           <div>
-            <p className="font-semibold text-purple-800">AI Negotiation Insights</p>
-            <p className="text-sm text-purple-700">
-              If you consolidate Rasnasaptakam purchases with X Ayush Agency (best rate ₹140) instead of splitting across suppliers,
-              you save ₹2,200/month. SNA Oushadhasala offers best Kottamchukkadi rate (₹158) but has 7-day lead time vs X Ayush Agency's 3-day.
-              AI recommends: Use X Ayush Agency as primary (faster), SNA as backup for bulk orders.
-              Annual savings potential at current volumes: <strong>₹59,500</strong> by optimizing supplier selection.
-            </p>
+            <p className="font-semibold text-xs text-purple-800">AI Rate Intelligence</p>
+            <p className="text-[10px] text-purple-700">Shows all received POs per product with supplier. Compare rates to identify best-value supplier for each product category.</p>
           </div>
         </CardContent>
       </Card>

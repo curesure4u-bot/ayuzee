@@ -35,6 +35,8 @@ const CategoryMaster = () => {
       title="Category"
       entityName="Category"
       initialItems={mockCategories}
+      stockItemColumn="product_category"
+      storageKey="hms_master_category"
     />
   );
 };

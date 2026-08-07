@@ -335,6 +335,9 @@ export const AppRoutes = () => (
               <Route path="consultations" element={withSuspense(<P.HmsPortalConsultations />)} />
               <Route path="emr" element={withSuspense(<P.HmsPortalEmr />)} />
               <Route path="radiology" element={withSuspense(<P.HmsPortalRadiology />)} />
+              <Route path="radiology/worklist" element={withSuspense(<P.HmsRadiologyWorklist />)} />
+              <Route path="radiology/reporting" element={withSuspense(<P.HmsRadiologyReporting />)} />
+              <Route path="radiology/pacs" element={withSuspense(<P.HmsRadiologyPACS />)} />
               <Route path="billing" element={withSuspense(<P.HmsPortalBilling />)} />
               <Route path="billing/insurance" element={withSuspense(<P.HmsPortalInsurance />)} />
               <Route path="accounts" element={withSuspense(<P.HmsPortalAccounts />)} />
@@ -381,6 +384,7 @@ export const AppRoutes = () => (
               <Route path="homeopathy" element={withSuspense(<P.HmsPortalHomeopathy />)} />
               <Route path="unani" element={withSuspense(<P.HmsPortalUnani />)} />
               <Route path="yoga" element={withSuspense(<P.HmsPortalYoga />)} />
+              <Route path="naturopathy" element={withSuspense(<P.HmsPortalNaturopathy />)} />
               <Route path="panchakarma" element={withSuspense(<P.HmsPortalPanchakarma />)} />
               <Route path="panchakarma/schedule" element={withSuspense(<P.HmsPortalPanchakarmaSchedule />)} />
               <Route path="panchakarma/packages" element={withSuspense(<P.HmsPortalPanchakarmaPackages />)} />
@@ -785,6 +789,7 @@ export const AppRoutes = () => (
               <Route path="doctor/ai-scribe" element={withSuspense(<P.HmsDoctorAIScribe />)} />
               <Route path="doctor/protocols" element={withSuspense(<P.HmsDoctorProtocols />)} />
               <Route path="doctor/revenue" element={withSuspense(<P.HmsDoctorRevenueExt />)} />
+              <Route path="doctor/earnings" element={withSuspense(<P.HmsDoctorEarnings />)} />
               <Route path="doctor/queue-analytics" element={withSuspense(<P.HmsDoctorQueueAnalytics />)} />
               <Route path="doctor/cdss" element={withSuspense(<P.HmsDoctorCDSS />)} />
               <Route path="doctor/templates" element={withSuspense(<P.HmsDoctorQuickTemplates />)} />

@@ -11,19 +11,11 @@ import { toast } from "sonner";
 import {
   Globe, Calendar, Clock, Users, IndianRupee, Copy,
   ExternalLink, CheckCircle, TrendingUp, QrCode,
-  Smartphone, MessageCircle,
+  Smartphone, MessageCircle, Loader2,
 } from "lucide-react";
+import { useOnlineBooking } from "@/hooks/useOnlineBooking";
 
 type BookingSlot = { time: string; available: boolean; booked: number; total: number };
-type OnlineBooking = { id: string; patient: string; phone: string; doctor: string; department: string; date: string; time: string; type: string; payment: string; status: "confirmed" | "pending_payment" | "cancelled" | "completed" };
-
-const mockBookings: OnlineBooking[] = [
-  { id: "1", patient: "Priya Menon", phone: "+91-9876500010", doctor: "Dr. Arun Sharma", department: "Ayurveda", date: "2026-07-16", time: "10:00 AM", type: "New Visit", payment: "Paid ₹500 (UPI)", status: "confirmed" },
-  { id: "2", patient: "Rahul Kumar", phone: "+91-9876500011", doctor: "Dr. Meena Patel", department: "Panchakarma", date: "2026-07-16", time: "11:30 AM", type: "Follow-up", payment: "Paid ₹300 (UPI)", status: "confirmed" },
-  { id: "3", patient: "Ananya S.", phone: "+91-9876500012", doctor: "Dr. Arun Sharma", department: "Ayurveda", date: "2026-07-16", time: "02:00 PM", type: "Teleconsult", payment: "Pending", status: "pending_payment" },
-  { id: "4", patient: "Mohammed F.", phone: "+91-9876500013", doctor: "Dr. Priya Das", department: "Homeopathy", date: "2026-07-17", time: "09:30 AM", type: "New Visit", payment: "Paid ₹400 (Card)", status: "confirmed" },
-  { id: "5", patient: "Lakshmi Nair", phone: "+91-9876500014", doctor: "Dr. Arun Sharma", department: "Ayurveda", date: "2026-07-15", time: "04:00 PM", type: "Follow-up", payment: "Paid ₹300 (UPI)", status: "completed" },
-];
 
 const todaySlots: BookingSlot[] = [
   { time: "09:00 AM", available: false, booked: 3, total: 3 },
@@ -41,12 +33,10 @@ const todaySlots: BookingSlot[] = [
 ];
 
 const HmsOnlineBooking = () => {
-  const [bookings] = useState<OnlineBooking[]>(mockBookings);
+  const { bookings, loading, error, confirmed, pendingPayment, totalToday } = useOnlineBooking();
   const bookingUrl = "https://book.ayuzee.com/main-hospital";
   const embedCode = `<iframe src="${bookingUrl}" width="100%" height="600" frameborder="0"></iframe>`;
 
-  const confirmed = bookings.filter(b => b.status === "confirmed").length;
-  const pendingPayment = bookings.filter(b => b.status === "pending_payment").length;
   const totalRevenue = bookings.filter(b => b.status !== "cancelled").length * 400;
 
   return (
@@ -65,8 +55,18 @@ const HmsOnlineBooking = () => {
       </div>
 
       {/* Stats */}
+      {loading && (
+        <div className="flex items-center justify-center py-2 text-muted-foreground gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm">Loading bookings...</span>
+        </div>
+      )}
+      {error && !loading && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="p-2 text-xs text-amber-700">⚠ Using demo data. {error}</CardContent>
+        </Card>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <Card><CardContent className="p-3 text-center"><Calendar className="h-5 w-5 mx-auto text-blue-600" /><p className="text-xl font-bold mt-1">{bookings.length}</p><p className="text-xs text-muted-foreground">Today's Bookings</p></CardContent></Card>
+        <Card><CardContent className="p-3 text-center"><Calendar className="h-5 w-5 mx-auto text-blue-600" /><p className="text-xl font-bold mt-1">{totalToday}</p><p className="text-xs text-muted-foreground">Today's Bookings</p></CardContent></Card>
         <Card><CardContent className="p-3 text-center"><CheckCircle className="h-5 w-5 mx-auto text-green-600" /><p className="text-xl font-bold mt-1">{confirmed}</p><p className="text-xs text-muted-foreground">Confirmed</p></CardContent></Card>
         <Card className="border-amber-200"><CardContent className="p-3 text-center"><Clock className="h-5 w-5 mx-auto text-amber-600" /><p className="text-xl font-bold mt-1">{pendingPayment}</p><p className="text-xs text-muted-foreground">Pending Payment</p></CardContent></Card>
         <Card><CardContent className="p-3 text-center"><IndianRupee className="h-5 w-5 mx-auto text-green-600" /><p className="text-lg font-bold mt-1">₹{totalRevenue.toLocaleString("en-IN")}</p><p className="text-xs text-muted-foreground">Revenue (Online)</p></CardContent></Card>

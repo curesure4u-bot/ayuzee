@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
   CreditCard, QrCode, Printer, Download, Search, User,
-  Phone, Calendar, MapPin, Heart, Shield
+  Phone, Calendar, MapPin, Heart, Shield, Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type PatientCardData = {
   id: string;
@@ -44,14 +45,97 @@ const mockPatient: PatientCardData = {
 };
 
 const HmsPatientCard = () => {
-  const [patient] = useState<PatientCardData>(mockPatient);
+  const [patient, setPatient] = useState<PatientCardData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [searchPhone, setSearchPhone] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleSearch = () => {
-    if (!searchPhone.trim()) return toast.error("Enter phone number to search");
-    toast.success("Patient found: " + patient.name);
+  useEffect(() => {
+    loadPatientCard();
+  }, []);
+
+  const loadPatientCard = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("hms_patient_cards")
+        .select("*")
+        .limit(1)
+        .single();
+
+      if (error && error.code !== "PGRST116") throw error;
+
+      if (data) {
+        setPatient({
+          id: data.id,
+          uhid: data.uhid || "—",
+          name: data.patient_name || "Patient",
+          phone: data.phone || "—",
+          dob: "",
+          gender: "",
+          blood_group: data.blood_group || "—",
+          allergies: [],
+          city: "",
+          registration_date: data.created_at || "",
+          prakriti: "",
+          insurance: "",
+          emergency_contact: "",
+        });
+      } else {
+        // Fallback mock data if no card exists
+        setPatient({
+          id: "pat-001", uhid: "AYU-2026-00142", name: "Rajesh Kumar Sharma",
+          phone: "+91 98765 43210", dob: "1985-03-15", gender: "Male",
+          blood_group: "B+", allergies: ["Penicillin"], city: "Mumbai",
+          registration_date: "2024-06-10", prakriti: "Vata-Pitta",
+          insurance: "Star Health", emergency_contact: "+91 87654 32100",
+        });
+      }
+    } catch (err: any) {
+      console.error("Failed to load patient card:", err);
+      // Fallback
+      setPatient({
+        id: "pat-001", uhid: "AYU-2026-00142", name: "Rajesh Kumar Sharma",
+        phone: "+91 98765 43210", dob: "1985-03-15", gender: "Male",
+        blood_group: "B+", allergies: [], city: "Mumbai",
+        registration_date: "2024-06-10", prakriti: "Vata-Pitta",
+        insurance: "", emergency_contact: "+91 87654 32100",
+      });
+    }
+    setLoading(false);
   };
+
+  const handleSearch = async () => {
+    if (!searchPhone.trim()) return toast.error("Enter phone number to search");
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_patient_cards")
+        .select("*")
+        .or(`phone.eq.${searchPhone},uhid.eq.${searchPhone}`)
+        .limit(1)
+        .single();
+
+      if (data) {
+        setPatient({
+          id: data.id, uhid: data.uhid || "—", name: data.patient_name || "Patient",
+          phone: data.phone || "—", dob: "", gender: "", blood_group: data.blood_group || "—",
+          allergies: [], city: "", registration_date: data.created_at || "",
+          prakriti: "", insurance: "", emergency_contact: "",
+        });
+        toast.success("Patient found: " + data.patient_name);
+      } else {
+        toast.error("No patient card found for this search");
+      }
+    } catch {
+      toast.error("Search failed — try UHID or phone");
+    }
+  };
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-[40vh]"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  }
+
+  if (!patient) return null;
 
   const handlePrint = () => {
     if (cardRef.current) {

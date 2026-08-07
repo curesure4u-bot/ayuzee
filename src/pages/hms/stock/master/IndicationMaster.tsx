@@ -24,6 +24,7 @@ const IndicationMaster = () => {
       title="Indication"
       entityName="Indication"
       initialItems={mockIndications}
+      storageKey="hms_master_indication"
     />
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Pencil, Sparkles, X, Lightbulb, Search } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type Suggestion = {
@@ -196,6 +197,20 @@ const mockInactiveSuggestions: Suggestion[] = [
 const SuggestionMaster = () => {
   // Tab: "new", "manage", "inactive"
   const [tab, setTab] = useState<"new" | "manage" | "inactive">("new");
+  const [liveSuggestions, setLiveSuggestions] = useState<any[]>([]);
+
+  useEffect(() => { loadSuggestions(); }, []);
+
+  const loadSuggestions = async () => {
+    try {
+      const { data } = await (supabase as any)
+        .from("hms_suggestions")
+        .select("*")
+        .eq("is_active", true)
+        .order("suggestion_text");
+      setLiveSuggestions(data || []);
+    } catch (err) { console.error("Suggestions load:", err); }
+  };
 
   // Form state
   const [formCategory, setFormCategory] = useState("");
