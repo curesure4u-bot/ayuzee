@@ -11,11 +11,15 @@ import {
   Clock,
   Coins,
   Compass,
+  Crown,
   Flame,
+  GraduationCap,
   Heart,
   Lightbulb,
+  Radio,
   RefreshCw,
   Rocket,
+  ShoppingBag,
   Smile,
   Sparkles,
   Target,
@@ -82,13 +86,17 @@ const SPOKE_BG: Record<SpokeKey, string> = {
 
 const quickTools = [
   { to: "/beyond/wheel-of-life", label: "Wheel of Life", icon: Target, color: "bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400", desc: "Assess balance" },
+  { to: "/beyond/academy", label: "Academy", icon: GraduationCap, color: "bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400", desc: "Courses & lessons" },
+  { to: "/beyond/coaching", label: "Coaching", icon: Users, color: "bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400", desc: "Group cohorts" },
+  { to: "/beyond/events", label: "Events", icon: Radio, color: "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400", desc: "Live webinars" },
   { to: "/beyond/time-management", label: "Time Planner", icon: Timer, color: "bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400", desc: "Focus sessions" },
   { to: "/beyond/leadership", label: "Leadership Lab", icon: Compass, color: "bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400", desc: "Scenarios" },
   { to: "/beyond/books", label: "Book Library", icon: BookOpen, color: "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400", desc: "Curated reads" },
   { to: "/beyond/wellness", label: "Wellness Hub", icon: Heart, color: "bg-rose-100 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400", desc: "Breathe & recover" },
   { to: "/beyond/pathways", label: "Guided Pathways", icon: Rocket, color: "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400", desc: "Structured growth" },
   { to: "/beyond/finance", label: "Finance Toolkit", icon: Coins, color: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400", desc: "Track wealth" },
-  { to: "/beyond/writing", label: "Writer's Studio", icon: Brain, color: "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/40 dark:text-cyan-400", desc: "Publish papers" },
+  { to: "/beyond/store", label: "Digital Store", icon: ShoppingBag, color: "bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400", desc: "Templates & PDFs" },
+  { to: "/beyond/membership", label: "Membership", icon: Crown, color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400", desc: "Upgrade plan" },
 ];
 
 function formatTimeAgo(dateStr: string): string {
