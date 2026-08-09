@@ -21,6 +21,11 @@ import { HERO_ADMIN_EMAIL, isHeroAdminEmail } from "@/services/heroAdmin";
 const BEYOND_MODULES = [
   { path: "/beyond", label: "Dashboard" },
   { path: "/beyond/wheel-of-life", label: "Wheel of Life" },
+  { path: "/beyond/academy", label: "Academy (LMS)" },
+  { path: "/beyond/events", label: "Events & Webinars" },
+  { path: "/beyond/coaching", label: "Coaching Cohorts" },
+  { path: "/beyond/store", label: "Digital Store" },
+  { path: "/beyond/membership", label: "Membership Plans" },
   { path: "/beyond/time-management", label: "Time Management" },
   { path: "/beyond/leadership", label: "Leadership Lab" },
   { path: "/beyond/pathways", label: "Guided Pathways" },
@@ -140,12 +145,106 @@ const HeroAdmin = () => {
       </div>
 
       {/* Module Access */}
-      <Tabs defaultValue="beyond">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="coaching">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="coaching"><Crown className="h-3.5 w-3.5 mr-1" /> Coaching Biz</TabsTrigger>
           <TabsTrigger value="beyond"><Rocket className="h-3.5 w-3.5 mr-1" /> Beyond Modules</TabsTrigger>
-          <TabsTrigger value="student"><GraduationCap className="h-3.5 w-3.5 mr-1" /> Student Modules</TabsTrigger>
+          <TabsTrigger value="student"><GraduationCap className="h-3.5 w-3.5 mr-1" /> Student</TabsTrigger>
           <TabsTrigger value="settings"><Settings className="h-3.5 w-3.5 mr-1" /> Settings</TabsTrigger>
         </TabsList>
+
+        {/* Coaching Business Management */}
+        <TabsContent value="coaching" className="space-y-3">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2"><Crown className="h-4 w-4 text-amber-500" /> Coaching Business Manager</CardTitle>
+              <CardDescription className="text-xs">Manage courses, events, products, cohorts, and memberships</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Quick Actions */}
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <Link to="/beyond/academy" className="flex items-center gap-3 rounded-xl border p-4 hover:bg-accent transition-colors">
+                  <GraduationCap className="h-6 w-6 text-purple-500" />
+                  <div>
+                    <p className="text-sm font-medium">Academy</p>
+                    <p className="text-[10px] text-muted-foreground">Courses, lessons, quizzes</p>
+                  </div>
+                </Link>
+                <Link to="/beyond/events" className="flex items-center gap-3 rounded-xl border p-4 hover:bg-accent transition-colors">
+                  <LayoutDashboard className="h-6 w-6 text-red-500" />
+                  <div>
+                    <p className="text-sm font-medium">Events</p>
+                    <p className="text-[10px] text-muted-foreground">Webinars, workshops</p>
+                  </div>
+                </Link>
+                <Link to="/beyond/coaching" className="flex items-center gap-3 rounded-xl border p-4 hover:bg-accent transition-colors">
+                  <Users className="h-6 w-6 text-pink-500" />
+                  <div>
+                    <p className="text-sm font-medium">Cohorts</p>
+                    <p className="text-[10px] text-muted-foreground">Group coaching batches</p>
+                  </div>
+                </Link>
+                <Link to="/beyond/store" className="flex items-center gap-3 rounded-xl border p-4 hover:bg-accent transition-colors">
+                  <BookOpen className="h-6 w-6 text-green-500" />
+                  <div>
+                    <p className="text-sm font-medium">Digital Store</p>
+                    <p className="text-[10px] text-muted-foreground">PDFs, templates, bundles</p>
+                  </div>
+                </Link>
+                <Link to="/beyond/membership" className="flex items-center gap-3 rounded-xl border p-4 hover:bg-accent transition-colors">
+                  <Crown className="h-6 w-6 text-amber-500" />
+                  <div>
+                    <p className="text-sm font-medium">Membership</p>
+                    <p className="text-[10px] text-muted-foreground">Free / Pro / Elite plans</p>
+                  </div>
+                </Link>
+                <Link to="/beyond/community" className="flex items-center gap-3 rounded-xl border p-4 hover:bg-accent transition-colors">
+                  <Users className="h-6 w-6 text-blue-500" />
+                  <div>
+                    <p className="text-sm font-medium">Community</p>
+                    <p className="text-[10px] text-muted-foreground">Moderate posts & replies</p>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Admin Instructions */}
+              <div className="rounded-lg bg-violet-50 dark:bg-violet-950/20 border border-violet-200 dark:border-violet-800/40 p-4 space-y-2">
+                <p className="text-sm font-semibold text-violet-700 dark:text-violet-300">How to Manage Content:</p>
+                <ul className="text-xs text-violet-600 dark:text-violet-400 space-y-1">
+                  <li>• <strong>Add Course:</strong> In Supabase → beyond_academy_courses → Insert row</li>
+                  <li>• <strong>Add Lessons:</strong> In Supabase → beyond_academy_lessons → Insert with course_id</li>
+                  <li>• <strong>Create Event:</strong> In Supabase → beyond_events → Insert row (set is_published=true)</li>
+                  <li>• <strong>Add Product:</strong> In Supabase → beyond_digital_products → Insert row</li>
+                  <li>• <strong>Create Cohort:</strong> In Supabase → beyond_coaching_cohorts → Insert row</li>
+                  <li>• <strong>Upgrade User:</strong> In Supabase → beyond_membership_subscriptions → Set plan_slug to "pro" or "elite"</li>
+                </ul>
+              </div>
+
+              {/* Tier Access Info */}
+              <div className="rounded-lg border p-4 space-y-2">
+                <p className="text-sm font-semibold">Access Control Summary:</p>
+                <div className="grid gap-2 text-xs">
+                  <div className="flex items-center justify-between border-b pb-1">
+                    <span>Free Users</span>
+                    <span className="text-muted-foreground">Core tools only (Wheel, Wellness, Finance, etc.)</span>
+                  </div>
+                  <div className="flex items-center justify-between border-b pb-1">
+                    <span>Pro Members</span>
+                    <span className="text-muted-foreground">+ Academy, Events, Coaching, Store, AI</span>
+                  </div>
+                  <div className="flex items-center justify-between border-b pb-1">
+                    <span>Elite Members</span>
+                    <span className="text-muted-foreground">+ 1-on-1 coaching, priority support</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-amber-600">Hero Admin (You)</span>
+                    <span className="text-amber-600">Full access to everything</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="beyond" className="space-y-3">
           <Card>
@@ -211,6 +310,12 @@ const HeroAdmin = () => {
                 <ul className="text-xs text-amber-600 dark:text-amber-300 mt-1 space-y-0.5">
                   <li>✓ Bypass login for all Beyond.Praxis modules</li>
                   <li>✓ Bypass student role check for Student Hub</li>
+                  <li>✓ See ALL sidebar modules (bypasses tier check)</li>
+                  <li>✓ Create & manage Academy courses/lessons/quizzes</li>
+                  <li>✓ Create & manage Events & Webinars</li>
+                  <li>✓ Create & manage Digital Store products</li>
+                  <li>✓ Create & manage Coaching Cohorts</li>
+                  <li>✓ Upgrade/downgrade user memberships</li>
                   <li>✓ View all user data and activity</li>
                   <li>✓ Moderate community posts and replies</li>
                   <li>✓ Manage challenges, badges, and pathways</li>

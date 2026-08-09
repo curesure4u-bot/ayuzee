@@ -72,6 +72,7 @@ const beyondLinks = [
   { to: "/beyond/membership", label: "Membership", icon: Crown, minTier: 0 },
   // ── Settings ──
   { to: "/beyond/profile", label: "My Profile", icon: Settings, minTier: 0 },
+  { to: "/beyond/hero-admin", label: "Hero Admin", icon: Crown, minTier: -1 },
 ];
 
 const initials = (name?: string) =>
@@ -177,6 +178,7 @@ const BeyondPraxisLayout = () => {
   const isAdmin = isHeroAdminEmail(userEmail);
   const visibleLinks = beyondLinks.filter((item) => {
     if (isAdmin) return true; // Admins see everything
+    if (item.minTier < 0) return false; // Admin-only items hidden from non-admins
     return userTier >= item.minTier;
   });
 
