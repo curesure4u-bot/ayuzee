@@ -294,7 +294,7 @@ const HeroAdmin = () => {
                 <p className="text-sm font-medium">Hero Admin Access</p>
                 <p className="text-xs text-muted-foreground mt-1">Email: {HERO_ADMIN_EMAIL}</p>
                 <p className="text-xs text-muted-foreground">Role: Full platform bypass (Beyond + Student)</p>
-                <p className="text-xs text-muted-foreground">Instagram: <a href="https://www.instagram.com/beyond.praxis/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@beyond.praxis</a></p>
+                <p className="text-xs text-muted-foreground">Instagram: <a href="https://www.instagram.com/ft.jasir_sajidh/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@ft.jasir_sajidh</a></p>
               </div>
               <div className="rounded-lg border p-3">
                 <p className="text-sm font-medium">Quick Actions</p>

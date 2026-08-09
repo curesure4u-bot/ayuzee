@@ -99,8 +99,8 @@ const BeyondLanding = () => {
           </div>
           <span className="font-bold text-lg">Beyond.Praxis</span>
         </div>
-        <a href="https://www.instagram.com/beyond.praxis/" target="_blank" rel="noopener noreferrer" className="text-sm text-violet-300 hover:text-white transition-colors">
-          @beyond.praxis
+        <a href="https://www.instagram.com/ft.jasir_sajidh/" target="_blank" rel="noopener noreferrer" className="text-sm text-violet-300 hover:text-white transition-colors">
+          @ft.jasir_sajidh
         </a>
       </header>
 
@@ -277,8 +277,8 @@ const BeyondLanding = () => {
               @beyond.praxis
             </a>
             <span className="text-violet-700">·</span>
-            <a href="https://www.instagram.com/jasir_sajidh/" target="_blank" rel="noopener noreferrer" className="text-violet-300 hover:text-white transition-colors">
-              @jasir_sajidh
+            <a href="https://www.instagram.com/ft.jasir_sajidh/" target="_blank" rel="noopener noreferrer" className="text-violet-300 hover:text-white transition-colors">
+              @ft.jasir_sajidh
             </a>
             <span className="text-violet-700">·</span>
             <a href="https://ayuzee.com" className="text-violet-300 hover:text-white transition-colors">
