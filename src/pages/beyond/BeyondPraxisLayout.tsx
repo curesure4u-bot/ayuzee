@@ -223,7 +223,7 @@ const BeyondPraxisLayout = () => {
             <Link to="/login">⇄ Switch Portal</Link>
           </Button>
           <Button variant="ghost" size="sm" asChild className="justify-start text-muted-foreground">
-            <a href="https://www.instagram.com/beyond.praxis/" target="_blank" rel="noopener noreferrer">📸 @beyond.praxis</a>
+            <a href="https://www.instagram.com/ft.jasir_sajidh/" target="_blank" rel="noopener noreferrer">📸 @ft.jasir_sajidh</a>
           </Button>
         </div>
 
