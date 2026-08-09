@@ -1060,6 +1060,7 @@ export const AppRoutes = () => (
               <Route path="planner" element={withSuspense(<P.BeyondLifePlanner />)} />
               <Route path="101-challenges" element={withSuspense(<P.Beyond101Challenges />)} />
               <Route path="academy" element={withSuspense(<P.BeyondAcademy />)} />
+              <Route path="events" element={withSuspense(<P.BeyondEvents />)} />
             </Route>
 
            <Route path="/gamification/certificates/:id" element={withSuspense(<P.CertificateView />)} />
