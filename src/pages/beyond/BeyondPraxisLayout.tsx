@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Heart,
   Home,
+  Lock,
   Loader2,
   PenTool,
   PieChart,
@@ -26,7 +27,7 @@ import {
   Zap,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { isHeroAdminEmail } from "@/services/heroAdmin";
+import { isHeroAdminEmail, SUPER_ADMIN_EMAILS } from "@/services/heroAdmin";
 import { NavLink } from "@/components/NavLink";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -34,42 +35,43 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
+// minTier: 0 = free (everyone), 1 = pro, 2 = elite, -1 = admin only
 const beyondLinks = [
-  { to: "/beyond", label: "Dashboard", icon: Home, end: true },
-  { to: "/beyond/wheel-of-life", label: "Wheel of Life", icon: Target },
-  // ── Learn & Grow ──
-  { to: "/beyond/academy", label: "Academy", icon: GraduationCap },
-  { to: "/beyond/pathways", label: "Guided Pathways", icon: Rocket },
-  { to: "/beyond/books", label: "Book Library", icon: BookOpen },
-  { to: "/beyond/micro-learning", label: "Micro-Learning", icon: Zap },
-  { to: "/beyond/ai-companion", label: "AI Companion", icon: Brain },
-  // ── Coaching & Events ──
-  { to: "/beyond/coaching", label: "Coaching Cohorts", icon: Users },
-  { to: "/beyond/events", label: "Events & Webinars", icon: Radio },
-  // ── Tools ──
-  { to: "/beyond/time-management", label: "Time Management", icon: Timer },
-  { to: "/beyond/leadership", label: "Leadership Lab", icon: Compass },
-  { to: "/beyond/wellness", label: "Wellness Hub", icon: Heart },
-  { to: "/beyond/finance", label: "Finance Toolkit", icon: Coins },
-  { to: "/beyond/writing", label: "Writer's Studio", icon: PenTool },
-  { to: "/beyond/side-income", label: "Side Income", icon: Coins },
-  { to: "/beyond/teaching", label: "Teaching Toolkit", icon: BookOpen },
-  { to: "/beyond/legal", label: "Legal Shield", icon: Heart },
-  { to: "/beyond/career", label: "Career Navigator", icon: PieChart },
-  { to: "/beyond/journal", label: "Journal", icon: PenTool },
-  { to: "/beyond/planner", label: "Life Planner", icon: Target },
-  { to: "/beyond/habits", label: "Habit Tracker", icon: Activity },
+  { to: "/beyond", label: "Dashboard", icon: Home, end: true, minTier: 0 },
+  { to: "/beyond/wheel-of-life", label: "Wheel of Life", icon: Target, minTier: 0 },
+  // ── Learn & Grow (Pro+) ──
+  { to: "/beyond/academy", label: "Academy", icon: GraduationCap, minTier: 1 },
+  { to: "/beyond/pathways", label: "Guided Pathways", icon: Rocket, minTier: 0 },
+  { to: "/beyond/books", label: "Book Library", icon: BookOpen, minTier: 0 },
+  { to: "/beyond/micro-learning", label: "Micro-Learning", icon: Zap, minTier: 0 },
+  { to: "/beyond/ai-companion", label: "AI Companion", icon: Brain, minTier: 1 },
+  // ── Coaching & Events (Pro+) ──
+  { to: "/beyond/coaching", label: "Coaching Cohorts", icon: Users, minTier: 1 },
+  { to: "/beyond/events", label: "Events & Webinars", icon: Radio, minTier: 1 },
+  // ── Tools (Free) ──
+  { to: "/beyond/time-management", label: "Time Management", icon: Timer, minTier: 0 },
+  { to: "/beyond/leadership", label: "Leadership Lab", icon: Compass, minTier: 0 },
+  { to: "/beyond/wellness", label: "Wellness Hub", icon: Heart, minTier: 0 },
+  { to: "/beyond/finance", label: "Finance Toolkit", icon: Coins, minTier: 0 },
+  { to: "/beyond/writing", label: "Writer's Studio", icon: PenTool, minTier: 0 },
+  { to: "/beyond/side-income", label: "Side Income", icon: Coins, minTier: 0 },
+  { to: "/beyond/teaching", label: "Teaching Toolkit", icon: BookOpen, minTier: 0 },
+  { to: "/beyond/legal", label: "Legal Shield", icon: Heart, minTier: 0 },
+  { to: "/beyond/career", label: "Career Navigator", icon: PieChart, minTier: 0 },
+  { to: "/beyond/journal", label: "Journal", icon: PenTool, minTier: 0 },
+  { to: "/beyond/planner", label: "Life Planner", icon: Target, minTier: 0 },
+  { to: "/beyond/habits", label: "Habit Tracker", icon: Activity, minTier: 0 },
   // ── Challenges & Social ──
-  { to: "/beyond/challenges", label: "Challenges", icon: Flame },
-  { to: "/beyond/101-challenges", label: "101 Challenges", icon: Flame },
-  { to: "/beyond/community", label: "Community", icon: Users },
-  { to: "/beyond/leaderboard", label: "Leaderboard", icon: Trophy },
-  { to: "/beyond/badges", label: "My Badges", icon: Award },
+  { to: "/beyond/challenges", label: "Challenges", icon: Flame, minTier: 0 },
+  { to: "/beyond/101-challenges", label: "101 Challenges", icon: Flame, minTier: 0 },
+  { to: "/beyond/community", label: "Community", icon: Users, minTier: 0 },
+  { to: "/beyond/leaderboard", label: "Leaderboard", icon: Trophy, minTier: 0 },
+  { to: "/beyond/badges", label: "My Badges", icon: Award, minTier: 0 },
   // ── Store & Membership ──
-  { to: "/beyond/store", label: "Digital Store", icon: ShoppingBag },
-  { to: "/beyond/membership", label: "Membership", icon: Crown },
+  { to: "/beyond/store", label: "Digital Store", icon: ShoppingBag, minTier: 1 },
+  { to: "/beyond/membership", label: "Membership", icon: Crown, minTier: 0 },
   // ── Settings ──
-  { to: "/beyond/profile", label: "My Profile", icon: Settings },
+  { to: "/beyond/profile", label: "My Profile", icon: Settings, minTier: 0 },
 ];
 
 const initials = (name?: string) =>
@@ -84,6 +86,8 @@ const BeyondPraxisLayout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<{ full_name: string; career_stage: string; current_level: number; total_xp: number; level_title: string } | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userTier, setUserTier] = useState<number>(0); // 0=free, 1=pro, 2=elite
 
   useEffect(() => {
     let active = true;
@@ -91,10 +95,13 @@ const BeyondPraxisLayout = () => {
     const loadProfile = async () => {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id;
+      const email = sessionData.session?.user.email || null;
+
+      if (!active) return;
+      setUserEmail(email);
 
       if (!userId) {
         // Hero Admin bypass — allow access even without beyond-specific profile
-        const email = sessionData.session?.user.email;
         if (!isHeroAdminEmail(email)) {
           navigate("/beyond/landing", { replace: true });
           return;
@@ -114,7 +121,18 @@ const BeyondPraxisLayout = () => {
         .eq("user_id", userId)
         .maybeSingle();
 
+      // Load membership tier
+      const { data: subData } = await (supabase as any)
+        .from("beyond_membership_subscriptions")
+        .select("plan_slug")
+        .eq("user_id", userId)
+        .eq("status", "active")
+        .maybeSingle();
+
       if (!active) return;
+
+      const tierMap: Record<string, number> = { free: 0, pro: 1, elite: 2 };
+      setUserTier(subData ? (tierMap[subData.plan_slug] ?? 0) : 0);
 
       setProfile({
         full_name: beyondProfile?.full_name || sessionData.session?.user.email?.split("@")[0] || "Praxis User",
@@ -155,6 +173,13 @@ const BeyondPraxisLayout = () => {
   const xpNeeded = nextThreshold - currentThreshold;
   const progressPct = Math.min(Math.round((xpInLevel / xpNeeded) * 100), 100);
 
+  // Filter sidebar links based on membership tier + admin status
+  const isAdmin = isHeroAdminEmail(userEmail);
+  const visibleLinks = beyondLinks.filter((item) => {
+    if (isAdmin) return true; // Admins see everything
+    return userTier >= item.minTier;
+  });
+
   return (
     <div className="min-h-screen bg-muted/30 lg:grid lg:grid-cols-[280px_1fr]">
       <aside className="sticky top-0 z-20 flex h-auto flex-col border-b border-border bg-card/95 px-4 py-4 shadow-soft backdrop-blur lg:h-screen lg:border-b-0 lg:border-r lg:overflow-y-auto">
@@ -176,7 +201,7 @@ const BeyondPraxisLayout = () => {
         </div>
 
         <nav className="mt-4 grid gap-0.5 sm:grid-cols-2 lg:flex lg:flex-1 lg:flex-col">
-          {beyondLinks.map((item) => (
+          {visibleLinks.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
