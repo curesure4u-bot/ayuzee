@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { isHeroAdminEmail } from "@/services/heroAdmin";
 import { NavLink } from "@/components/NavLink";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -108,6 +109,15 @@ const StudentLayout = () => {
 
       if (!userId) {
         navigate("/student/auth", { replace: true });
+        return;
+      }
+
+      // Hero Admin bypass — skip student role check
+      const userEmail = sessionData.session?.user.email;
+      if (isHeroAdminEmail(userEmail)) {
+        if (!active) return;
+        setProfile({ full_name: "Hero Admin (Jasir)", course: "Admin", year_of_study: null, college_name: "Beyond.Praxis" });
+        setLoading(false);
         return;
       }
 

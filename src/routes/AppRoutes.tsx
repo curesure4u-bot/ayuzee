@@ -1029,7 +1029,36 @@ export const AppRoutes = () => (
            <Route path="/essential-unani-drugs/:slug" element={withSuspense(<P.EssentialUnaniDrugDetail />)} />
            <Route path="/essential-homeopathy-drugs" element={withSuspense(<P.EssentialHomeopathyDrugs />)} />
            <Route path="/essential-homeopathy-drugs/:slug" element={withSuspense(<P.EssentialHomeopathyDrugDetail />)} />
-            <Route path="/gamification/certificates/:id" element={withSuspense(<P.CertificateView />)} />
+             {/* Beyond Praxis — Life OS for Medical Professionals */}
+            <Route path="/beyond" element={withSuspense(<P.BeyondPraxisLayout />)}>
+              <Route index element={withSuspense(<P.BeyondDashboard />)} />
+              <Route path="wheel-of-life" element={withSuspense(<P.BeyondWheelOfLife />)} />
+              <Route path="time-management" element={withSuspense(<P.BeyondTimeManagement />)} />
+              <Route path="books" element={withSuspense(<P.BeyondBookLibrary />)} />
+              <Route path="leadership" element={withSuspense(<P.BeyondLeadershipLab />)} />
+              <Route path="wellness" element={withSuspense(<P.BeyondWellnessHub />)} />
+              <Route path="finance" element={withSuspense(<P.BeyondFinanceToolkit />)} />
+              <Route path="career" element={withSuspense(<P.BeyondCareerNavigator />)} />
+              <Route path="pathways" element={withSuspense(<P.BeyondGuidedPathways />)} />
+              <Route path="journal" element={withSuspense(<P.BeyondReflectionJournal />)} />
+              <Route path="habits" element={withSuspense(<P.BeyondHabitTracker />)} />
+              <Route path="badges" element={withSuspense(<P.BeyondMyBadges />)} />
+              <Route path="leaderboard" element={withSuspense(<P.BeyondLeaderboard />)} />
+              <Route path="profile" element={withSuspense(<P.BeyondProfile />)} />
+              <Route path="hero-admin" element={withSuspense(<P.BeyondHeroAdmin />)} />
+              <Route path="writing" element={withSuspense(<P.BeyondWriterStudio />)} />
+              <Route path="side-income" element={withSuspense(<P.BeyondSideIncome />)} />
+              <Route path="teaching" element={withSuspense(<P.BeyondTeachingToolkit />)} />
+              <Route path="legal" element={withSuspense(<P.BeyondLegalShield />)} />
+              <Route path="ai-companion" element={withSuspense(<P.BeyondAIClinical />)} />
+              <Route path="micro-learning" element={withSuspense(<P.BeyondMicroLearning />)} />
+              <Route path="challenges" element={withSuspense(<P.BeyondChallenges />)} />
+              <Route path="community" element={withSuspense(<P.BeyondCommunity />)} />
+              <Route path="planner" element={withSuspense(<P.BeyondLifePlanner />)} />
+              <Route path="101-challenges" element={withSuspense(<P.Beyond101Challenges />)} />
+            </Route>
+
+           <Route path="/gamification/certificates/:id" element={withSuspense(<P.CertificateView />)} />
             <Route path="/gamification" element={withSuspense(<P.GamificationLayout />)}>
               <Route index element={withSuspense(<P.GamificationDashboard />)} />
               <Route path="points" element={withSuspense(<P.MyPoints />)} />
