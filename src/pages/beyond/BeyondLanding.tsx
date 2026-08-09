@@ -43,23 +43,48 @@ const BeyondLanding = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isForgot, setIsForgot] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleAuth = async () => {
-    if (!email || !password) { toast.error("Enter email and password"); return; }
+    if (!email) { toast.error("Enter your email"); return; }
+
+    if (isForgot) {
+      setLoading(true);
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) { toast.error(error.message); } else { toast.success("Password reset link sent! Check your email."); }
+      setLoading(false);
+      return;
+    }
+
+    if (!password) { toast.error("Enter password"); return; }
     setLoading(true);
 
     if (isSignUp) {
-      const { error } = await supabase.auth.signUp({ email, password });
+      if (!fullName.trim()) { toast.error("Enter your name"); setLoading(false); return; }
+      const { error } = await supabase.auth.signUp({
+        email, password,
+        options: { data: { full_name: fullName.trim() } },
+      });
       if (error) { toast.error(error.message); setLoading(false); return; }
-      toast.success("Account created! Check your email to confirm, then sign in.");
+      toast.success("Account created! Check your email to verify, then sign in.");
       setIsSignUp(false);
     } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) { toast.error(error.message); setLoading(false); return; }
-      toast.success("Welcome to Beyond.Praxis!");
-      navigate("/beyond");
+      // Check if admin → redirect to hero admin
+      const ADMINS = ["jasirsajidh8@gmail.com", "curesure4u@gmail.com"];
+      if (ADMINS.includes(email.toLowerCase())) {
+        toast.success("Welcome Hero Admin!");
+        navigate("/beyond/hero-admin");
+      } else {
+        toast.success("Welcome to Beyond.Praxis!");
+        navigate("/beyond");
+      }
     }
     setLoading(false);
   };
@@ -103,9 +128,24 @@ const BeyondLanding = () => {
         <Card className="max-w-md mx-auto bg-white/5 backdrop-blur border-white/10">
           <CardContent className="p-6 space-y-4">
             <div className="text-center">
-              <h2 className="text-xl font-bold text-white">{isSignUp ? "Create Account" : "Sign In"}</h2>
-              <p className="text-sm text-violet-300 mt-1">Access all 24 tools free during beta</p>
+              <h2 className="text-xl font-bold text-white">
+                {isForgot ? "Reset Password" : isSignUp ? "Create Account" : "Sign In"}
+              </h2>
+              <p className="text-sm text-violet-300 mt-1">
+                {isForgot ? "We'll send you a reset link" : "Access all 24 tools free during beta"}
+              </p>
             </div>
+
+            {isSignUp && !isForgot && (
+              <Input
+                type="text"
+                placeholder="Your Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="bg-white/10 border-white/20 text-white placeholder:text-violet-400"
+              />
+            )}
+
             <Input
               type="email"
               placeholder="you@email.com"
@@ -113,23 +153,39 @@ const BeyondLanding = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="bg-white/10 border-white/20 text-white placeholder:text-violet-400"
             />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleAuth()}
-              className="bg-white/10 border-white/20 text-white placeholder:text-violet-400"
-            />
+
+            {!isForgot && (
+              <Input
+                type="password"
+                placeholder="Password (min 6 characters)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAuth()}
+                className="bg-white/10 border-white/20 text-white placeholder:text-violet-400"
+              />
+            )}
+
             <Button onClick={handleAuth} disabled={loading} className="w-full bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700 text-white font-semibold">
-              {loading ? "..." : isSignUp ? "Create Account" : "Sign In & Enter"}
+              {loading ? "..." : isForgot ? "Send Reset Link" : isSignUp ? "Create Account" : "Sign In & Enter"}
             </Button>
-            <p className="text-center text-xs text-violet-400">
-              {isSignUp ? "Already have an account?" : "New here?"}{" "}
-              <button onClick={() => setIsSignUp(!isSignUp)} className="text-violet-200 underline">
-                {isSignUp ? "Sign In" : "Create Account"}
-              </button>
-            </p>
+
+            <div className="flex items-center justify-between text-xs">
+              {!isForgot && (
+                <button onClick={() => setIsForgot(true)} className="text-violet-400 hover:text-violet-200">
+                  Forgot password?
+                </button>
+              )}
+              {isForgot && (
+                <button onClick={() => setIsForgot(false)} className="text-violet-400 hover:text-violet-200">
+                  Back to Sign In
+                </button>
+              )}
+              {!isForgot && (
+                <button onClick={() => setIsSignUp(!isSignUp)} className="text-violet-200 underline">
+                  {isSignUp ? "Already have an account? Sign In" : "New here? Create Account"}
+                </button>
+              )}
+            </div>
           </CardContent>
         </Card>
       </section>

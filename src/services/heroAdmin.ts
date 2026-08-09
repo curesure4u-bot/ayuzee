@@ -9,23 +9,24 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Hero Admin email — this is the single source of truth
+// Hero Admin emails — both have full platform access
 export const HERO_ADMIN_EMAIL = "jasirsajidh8@gmail.com";
+export const SUPER_ADMIN_EMAILS = ["jasirsajidh8@gmail.com", "curesure4u@gmail.com"];
 
 /**
- * Check if the current logged-in user is the Hero Admin
+ * Check if the current logged-in user is a Hero/Super Admin
  */
 export async function isHeroAdmin(): Promise<boolean> {
   const { data } = await supabase.auth.getSession();
   if (!data.session) return false;
-  return data.session.user.email === HERO_ADMIN_EMAIL;
+  return SUPER_ADMIN_EMAILS.includes(data.session.user.email || "");
 }
 
 /**
- * Synchronous check using cached session (for use in already-loaded layouts)
+ * Synchronous check using cached session
  */
 export function isHeroAdminEmail(email: string | undefined | null): boolean {
-  return email === HERO_ADMIN_EMAIL;
+  return SUPER_ADMIN_EMAILS.includes(email || "");
 }
 
 /**
