@@ -119,6 +119,7 @@ export const BeyondChallenges = lazyPage(() => import("@/pages/beyond/Challenges
 export const BeyondCommunity = lazyPage(() => import("@/pages/beyond/Community"));
 export const BeyondLifePlanner = lazyPage(() => import("@/pages/beyond/LifePlanner"));
 export const Beyond101Challenges = lazyPage(() => import("@/pages/beyond/My101Challenges"));
+export const BeyondAcademy = lazyPage(() => import("@/pages/beyond/Academy"));
 
 export const BillingMaster = lazyPage(() => import("@/pages/admin/masters/BillingMaster"));
 export const BillsPage = lazyPage(() => import("@/pages/vaidya/sections/Bills"));
