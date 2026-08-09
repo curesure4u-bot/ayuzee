@@ -81,12 +81,17 @@ const BeyondLanding = () => {
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 text-center">
+        {/* Jasir's Photo */}
+        <div className="mx-auto mb-6 w-24 h-24 rounded-full overflow-hidden border-2 border-violet-400/50 shadow-lg shadow-violet-500/20">
+          <img src="/jasir-sajidh.jpg" alt="Jasir Sajidh" className="w-full h-full object-cover" />
+        </div>
         <Badge className="bg-violet-600/30 text-violet-200 border-violet-500/30 mb-4">Built for Medical Professionals</Badge>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-          Beyond the White Coat
+          The Life Operating System<br />
+          <span className="text-violet-300">for Doctors</span>
         </h1>
         <p className="mt-4 text-lg sm:text-xl text-violet-200 max-w-2xl mx-auto">
-          The first Life Operating System for doctors. Master your time, wealth, wellness, leadership — not just your clinical skills.
+          Everyone focuses on clinical skills and patient flow. Beyond.Praxis focuses on the <strong className="text-white">person behind the stethoscope</strong> — your time, wealth, wellness, leadership, and legacy.
         </p>
         <p className="mt-2 text-sm text-violet-400">
           By Jasir Sajidh · For medical students and busy doctors
@@ -199,12 +204,33 @@ const BeyondLanding = () => {
       </section>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 border-t border-white/10 text-center">
-        <p className="text-xs text-violet-500">
-          Beyond.Praxis by Jasir Sajidh · Part of{" "}
-          <a href="https://ayuzee.com" className="text-violet-300 hover:underline">Ayuzee</a>
-          {" "}· <a href="https://www.instagram.com/beyond.praxis/" target="_blank" rel="noopener noreferrer" className="text-violet-300 hover:underline">Instagram</a>
-        </p>
+      <footer className="container mx-auto px-4 py-12 border-t border-white/10">
+        <div className="flex flex-col items-center gap-4">
+          {/* Jasir's photo + bio */}
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full overflow-hidden border border-violet-400/50">
+              <img src="/jasir-sajidh.jpg" alt="Jasir Sajidh" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-white">Jasir Sajidh</p>
+              <p className="text-xs text-violet-400">Creator of Beyond.Praxis</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <a href="https://www.instagram.com/beyond.praxis/" target="_blank" rel="noopener noreferrer" className="text-violet-300 hover:text-white transition-colors">
+              @beyond.praxis
+            </a>
+            <span className="text-violet-700">·</span>
+            <a href="https://www.instagram.com/jasir_sajidh/" target="_blank" rel="noopener noreferrer" className="text-violet-300 hover:text-white transition-colors">
+              @jasir_sajidh
+            </a>
+            <span className="text-violet-700">·</span>
+            <a href="https://ayuzee.com" className="text-violet-300 hover:text-white transition-colors">
+              ayuzee.com
+            </a>
+          </div>
+          <p className="text-[10px] text-violet-600 mt-2">Part of Ayuzee Platform</p>
+        </div>
       </footer>
     </div>
   );
