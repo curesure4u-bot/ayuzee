@@ -108,6 +108,7 @@ export const BeyondMyBadges = lazyPage(() => import("@/pages/beyond/MyBadges"));
 export const BeyondLeaderboard = lazyPage(() => import("@/pages/beyond/Leaderboard"));
 export const BeyondProfile = lazyPage(() => import("@/pages/beyond/BeyondProfile"));
 export const BeyondHeroAdmin = lazyPage(() => import("@/pages/beyond/HeroAdmin"));
+export const BeyondLanding = lazyPage(() => import("@/pages/beyond/BeyondLanding"));
 export const BeyondWriterStudio = lazyPage(() => import("@/pages/beyond/WriterStudio"));
 export const BeyondSideIncome = lazyPage(() => import("@/pages/beyond/SideIncomeLaunchpad"));
 export const BeyondTeachingToolkit = lazyPage(() => import("@/pages/beyond/TeachingToolkit"));

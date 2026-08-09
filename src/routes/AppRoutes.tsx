@@ -1029,7 +1029,10 @@ export const AppRoutes = () => (
            <Route path="/essential-unani-drugs/:slug" element={withSuspense(<P.EssentialUnaniDrugDetail />)} />
            <Route path="/essential-homeopathy-drugs" element={withSuspense(<P.EssentialHomeopathyDrugs />)} />
            <Route path="/essential-homeopathy-drugs/:slug" element={withSuspense(<P.EssentialHomeopathyDrugDetail />)} />
-             {/* Beyond Praxis — Life OS for Medical Professionals */}
+             {/* Beyond Praxis — Landing (no auth needed) */}
+            <Route path="/beyond/landing" element={withSuspense(<P.BeyondLanding />)} />
+
+            {/* Beyond Praxis — Life OS for Medical Professionals */}
             <Route path="/beyond" element={withSuspense(<P.BeyondPraxisLayout />)}>
               <Route index element={withSuspense(<P.BeyondDashboard />)} />
               <Route path="wheel-of-life" element={withSuspense(<P.BeyondWheelOfLife />)} />

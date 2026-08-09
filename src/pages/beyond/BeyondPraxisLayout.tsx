@@ -79,7 +79,7 @@ const BeyondPraxisLayout = () => {
         // Hero Admin bypass — allow access even without beyond-specific profile
         const email = sessionData.session?.user.email;
         if (!isHeroAdminEmail(email)) {
-          navigate("/auth", { replace: true });
+          navigate("/beyond/landing", { replace: true });
           return;
         }
       }
