@@ -11,10 +11,11 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Progress } from "@/components/ui/progress";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { toast } from "sonner";
-import { Plus, Search, Pencil, Trash2, CheckSquare, Filter, Download } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, CheckSquare, Filter, Download, Copy } from "lucide-react";
 import type { VariableTask, Priority, Importance, Urgency, TaskTrackerSettings } from "./types";
 import { getDaysLeft, getPriorityColor, getDecisionColor, getDecision } from "./types";
 import { exportTaskListPdf } from "./exportPdf";
+import VoiceInput from "./VoiceInput";
 
 const PRIORITIES: Priority[] = ["Very High", "High", "Medium", "Low", "Very Low", "On Hold"];
 const IMPORTANCES: Importance[] = ["Important", "Not Important"];
@@ -194,6 +195,9 @@ const TaskTrackerVariable = ({ tasks, settings, onAdd, onUpdate, onDelete }: Pro
         </Card>
       </div>
 
+      {/* Voice / Natural Language Input */}
+      <VoiceInput onCreateTask={onAdd} />
+
       {/* Tasks Table */}
       <Card>
         <CardContent className="p-0">
@@ -262,6 +266,9 @@ const TaskTrackerVariable = ({ tasks, settings, onAdd, onUpdate, onDelete }: Pro
                       </td>
                       <td className="px-2 py-2">
                         <div className="flex gap-1">
+                          <Button size="icon" variant="ghost" className="h-6 w-6" title="Duplicate" onClick={() => { onAdd({ ...task, task_name: task.task_name + " (copy)", is_completed: false, progress: 0, completed_at: null }); toast.success("Task duplicated"); }}>
+                            <Copy className="h-3 w-3" />
+                          </Button>
                           <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => openEdit(task)}>
                             <Pencil className="h-3 w-3" />
                           </Button>
