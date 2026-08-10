@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import OnboardingWizard from "@/components/OnboardingWizard";
 import {
   Activity,
   Award,
@@ -250,6 +251,7 @@ const BeyondPraxisLayout = () => {
       <main className="min-w-0 px-4 py-6 sm:px-6 lg:px-8">
         <Outlet />
       </main>
+      <OnboardingWizard portal="beyond" />
     </div>
   );
 };

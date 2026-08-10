@@ -7,6 +7,8 @@ import { ScrollToTop } from "@/components/common/ScrollToTop";
 import { FAQChatbot } from "@/components/site/FAQChatbot";
 import { VoiceAssistant } from "@/components/site/VoiceAssistant";
 import TelegramFloat from "@/components/common/TelegramFloat";
+import GlobalSearch from "@/components/GlobalSearch";
+import AiAssistant from "@/components/AiAssistant";
 
 const AdminAwareNav = () => {
   const location = useLocation();
@@ -28,6 +30,8 @@ const App = () => (
       <FAQChatbot />
       <VoiceAssistant />
       <TelegramFloat />
+      <GlobalSearch />
+      <AiAssistant />
     </BrowserRouter>
   </AppProviders>
 );

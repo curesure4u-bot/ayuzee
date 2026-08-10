@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
+import OnboardingWizard from "@/components/OnboardingWizard";
 import { supabase } from "@/integrations/supabase/client";
 import { useHmsAccess } from "@/hooks/useHmsAccess";
 import { Button } from "@/components/ui/button";
@@ -630,6 +631,7 @@ const HmsLayout = () => {
           <span className="text-[9px]">More</span>
         </button>
       </nav>
+      <OnboardingWizard portal="hms" />
     </div>
   );
 };

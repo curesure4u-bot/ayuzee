@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
+import OnboardingWizard from "@/components/OnboardingWizard";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
@@ -145,6 +146,7 @@ const DoctorLayout = () => {
   }
 
   return (
+    <>
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-muted/30">
         <DoctorSidebar />
@@ -180,6 +182,8 @@ const DoctorLayout = () => {
         </div>
       </div>
     </SidebarProvider>
+    <OnboardingWizard portal="doctor" />
+    </>
   );
 };
 
