@@ -13,6 +13,7 @@ import {
   ClipboardList, Plus, Calendar, Clock, User, Phone,
   CheckCircle, AlertTriangle, Search, Filter,
 } from "lucide-react";
+import CrossModuleActions from "@/components/CrossModuleActions";
 
 type Task = {
   id: string; subject: string; patientOrLead: string; mobile: string;
@@ -63,9 +64,12 @@ const HmsTaskManagement = () => {
           </h1>
           <p className="text-sm text-muted-foreground">Create, assign & track tasks · Filter by department, status, patient</p>
         </div>
-        <Button size="sm" onClick={() => setCreateOpen(true)}>
-          <Plus className="mr-1 h-4 w-4" /> New Task
-        </Button>
+        <div className="flex gap-2">
+          <CrossModuleActions context={{ source: "HMS Task Management" }} actions={["create_task"]} compact />
+          <Button size="sm" onClick={() => setCreateOpen(true)}>
+            <Plus className="mr-1 h-4 w-4" /> New Task
+          </Button>
+        </div>
       </div>
 
       {/* Summary */}

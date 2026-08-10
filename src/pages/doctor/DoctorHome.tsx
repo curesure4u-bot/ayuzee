@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useDoctor } from "@/hooks/useDoctor";
 import { DoctorGrowth } from "@/components/doctor/DoctorGrowth";
 import { AtmriDoctorWidget } from "@/components/doctor/AtmriDoctorWidget";
+import CrossModuleActions from "@/components/CrossModuleActions";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
@@ -114,6 +115,15 @@ const DoctorHome = () => {
     <div className="mx-auto max-w-7xl space-y-10 pb-10">
       {/* 1. Partner Progress */}
       <DoctorGrowth scheduled={stats2.scheduled} consulted={stats2.consulted} completedSteps={stats2.completedSteps} />
+
+      {/* Quick Cross-Module Actions */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs text-muted-foreground font-medium">Quick:</span>
+        <CrossModuleActions
+          context={{ source: "Doctor Home" }}
+          actions={["create_task", "create_appointment_task"]}
+        />
+      </div>
 
       {/* 1b. ATMRI Trust widget */}
       {doctor?.id && doctor?.user_id && (
