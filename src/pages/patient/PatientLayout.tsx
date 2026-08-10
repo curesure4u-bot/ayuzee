@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PatientHeader } from "@/components/patient/PatientHeader";
 import { PatientSidebar } from "@/components/patient/PatientSidebar";
 import { AuthLoadingScreen } from "@/components/common/AuthLoadingScreen";
+import OnboardingWizard from "@/components/OnboardingWizard";
 
 const PatientLayout = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const PatientLayout = () => {
           <div className="min-w-0"><Outlet /></div>
         </div>
       </main>
+      <OnboardingWizard portal="patient" />
     </div>
   );
 };
