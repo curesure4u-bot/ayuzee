@@ -6,6 +6,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, 
 import { CheckCircle, Clock, AlertTriangle, Target, CalendarDays, TrendingUp, Users, ListChecks } from "lucide-react";
 import type { VariableTask, RecurringTask, ScheduleOccurrence } from "./types";
 import { getDaysLeft } from "./types";
+import SmartSuggestions from "./SmartSuggestions";
 
 type Props = {
   tasks: VariableTask[];
@@ -151,6 +152,9 @@ const TaskTrackerDashboard = ({ tasks, recurringTasks, schedule }: Props) => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Smart Suggestions */}
+      <SmartSuggestions tasks={tasks} />
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Left: Calendar + Completion */}
