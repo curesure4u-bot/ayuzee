@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { GanttChart as GanttIcon, Plus, Calendar, Download } from "lucide-react";
+import { BarChart3 as GanttIcon, Plus, Calendar, Download } from "lucide-react";
 import type { VariableTask, TaskTrackerSettings } from "./types";
 import { getDaysLeft, getPriorityColor } from "./types";
 import { exportGanttPdf } from "./exportPdf";

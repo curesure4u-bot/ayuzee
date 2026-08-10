@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { RoleContext } from "./types";
 
@@ -10,7 +9,6 @@ import type { RoleContext } from "./types";
  * 3. Fallback to "general"
  */
 export function useTaskTrackerRole(): { role: RoleContext; isLoading: boolean } {
-  const location = useLocation();
   const [role, setRole] = useState<RoleContext>("general");
   const [isLoading, setIsLoading] = useState(true);
 
