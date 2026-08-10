@@ -156,6 +156,13 @@ const groups = [
       { to: "/vaidya/developer", label: "API Keys", icon: Code2 },
     ],
   },
+  {
+    label: "Productivity",
+    icon: CheckSquare,
+    items: [
+      { to: "/task-tracker", label: "Task Tracker", icon: CheckSquare },
+    ],
+  },
 ];
 
 const hmsGroups = [

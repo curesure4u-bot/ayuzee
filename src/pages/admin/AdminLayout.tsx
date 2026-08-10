@@ -72,6 +72,7 @@ const allGroups = [
     { title: "🚨 Safety Flags", url: "/admin/safety" },
     { title: "🔔 Notifications", url: "/admin/notifications" },
     { title: "⚙️ Settings", url: "/admin/settings" },
+    { title: "📋 Task Tracker", url: "/task-tracker" },
   ]},
 ];
 

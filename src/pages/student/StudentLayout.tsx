@@ -55,6 +55,7 @@ const studentLinks = [
   { to: "/student/case-studies", label: "Case Studies", icon: FileText },
   { to: "/student/coin-store", label: "Coin Store", icon: Coins },
   { to: "/student/study-planner", label: "Study Planner", icon: NotebookPen },
+  { to: "/task-tracker", label: "Task Tracker Pro", icon: NotebookPen },
   { to: "/student/mentorship", label: "Mentorship", icon: Handshake },
   { to: "/student/study-groups", label: "Study Groups", icon: Users },
   { to: "/student/ask-vaidya", label: "Ask a Vaidya", icon: HelpCircle },

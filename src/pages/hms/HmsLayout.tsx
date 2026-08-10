@@ -383,6 +383,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },
     { to: "/hms/spine-ayush?tab=community", label: "Community Hub", icon: Users },
     { to: "/hms/spine-ayush?tab=kpis", label: "Franchise KPIs", icon: BarChart3 },
+    { divider: "Productivity", to: "/task-tracker", label: "Task Tracker", icon: ClipboardList },
   ],
 };
 
@@ -416,6 +417,7 @@ const moreItems = [
     { to: "/hms/doctor-management", label: "Manage Doctors", icon: Stethoscope },
     { to: "/hms/therapist-management", label: "Manage Therapists", icon: Heart },
     { to: "/hms/task-management", label: "Task Management", icon: ClipboardList },
+    { to: "/task-tracker", label: "All-in-One Tasks", icon: ClipboardList },
     { to: "/hms/checklist", label: "Checklists", icon: ClipboardList },
   ]},
   { group: "Marketing & Engagement", items: [

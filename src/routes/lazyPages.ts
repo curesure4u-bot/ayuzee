@@ -1019,3 +1019,7 @@ export const YogaPlanNew = lazyPage(() => import("@/pages/vaidya/yoga/YogaPlanNe
 export const YogaPlansList = lazyPage(() => import("@/pages/vaidya/yoga/YogaPlansList"));
 export const YogaProgressTracker = lazyPage(() => import("@/pages/vaidya/yoga/YogaProgressTracker"));
 export const YogaProtocolsList = lazyPage(() => import("@/pages/vaidya/yoga/YogaProtocolsList"));
+
+
+// All-in-One Task Tracker (Doctors, Patients, Students, HMS/Beyond)
+export const TaskTrackerPage = lazyPage(() => import("@/pages/task-tracker/TaskTrackerPage"));

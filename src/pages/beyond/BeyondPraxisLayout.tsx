@@ -50,6 +50,7 @@ const beyondLinks = [
   { to: "/beyond/events", label: "Events & Webinars", icon: Radio, minTier: 1 },
   // ── Tools (Free) ──
   { to: "/beyond/time-management", label: "Time Management", icon: Timer, minTier: 0 },
+  { to: "/task-tracker", label: "All-in-One Tasks", icon: Target, minTier: 0 },
   { to: "/beyond/leadership", label: "Leadership Lab", icon: Compass, minTier: 0 },
   { to: "/beyond/wellness", label: "Wellness Hub", icon: Heart, minTier: 0 },
   { to: "/beyond/finance", label: "Finance Toolkit", icon: Coins, minTier: 0 },
