@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { BookOpen, Plus, Trash2, Calendar, Smile, Meh, Frown, Heart, Sun } from "lucide-react";
+import { BookOpen, Plus, Trash2, Calendar, Heart, Sun } from "lucide-react";
 
 type JournalEntry = {
   id: string;

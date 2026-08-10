@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
-import { CalendarCheck, CheckCircle, AlertTriangle, TrendingUp, Clock, Trophy, Target, Zap } from "lucide-react";
+import { CalendarDays, CheckCircle, AlertTriangle, TrendingUp, Clock, Trophy, Target, Zap } from "lucide-react";
 import type { VariableTask, ScheduleOccurrence } from "./types";
 
 type Props = {
@@ -100,7 +100,7 @@ const TaskTrackerWeeklyReview = ({ tasks, schedule }: Props) => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold flex items-center gap-2">
-            <CalendarCheck className="h-6 w-6 text-teal-600" /> Weekly Review
+            <CalendarDays className="h-6 w-6 text-teal-600" /> Weekly Review
           </h1>
           <p className="text-sm text-muted-foreground">
             Week of {weekStart} to {weekEnd}
