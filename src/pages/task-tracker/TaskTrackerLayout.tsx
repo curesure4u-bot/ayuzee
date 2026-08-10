@@ -5,6 +5,7 @@ import {
   Home, LayoutGrid, ListChecks, Menu,
   RefreshCw, Target, X, Flame, BookOpen, Trophy, Sparkles,
   Timer, Eye, Bell, BarChart3, HelpCircle,
+  Brain, FileText, Wallet, Calendar, Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -49,8 +50,23 @@ const navSections = [
       { to: "/task-tracker/goals", label: "Goals", icon: Trophy },
       { to: "/task-tracker/habits", label: "Habits Tracker", icon: Flame },
       { to: "/task-tracker/journal", label: "Daily Journal", icon: BookOpen },
+      { to: "/task-tracker/gratitude", label: "Gratitude", icon: Heart },
       { to: "/task-tracker/weekly-review", label: "Weekly Review", icon: CalendarDays },
       { to: "/task-tracker/templates", label: "Task Templates", icon: Sparkles },
+      { to: "/task-tracker/brain-dump", label: "Brain Dump", icon: Brain },
+      { to: "/task-tracker/meeting-minutes", label: "Meeting Minutes", icon: FileText },
+      { to: "/task-tracker/reading-log", label: "Reading Log", icon: BookOpen },
+    ],
+  },
+  {
+    label: "PLANNING",
+    items: [
+      { to: "/task-tracker/yearly-planner", label: "Yearly Planner", icon: Calendar },
+      { to: "/task-tracker/vision-board", label: "Vision Board", icon: Sparkles },
+      { to: "/task-tracker/key-dates", label: "Key Dates", icon: CalendarDays },
+      { to: "/task-tracker/content-calendar", label: "Content Calendar", icon: FileText },
+      { to: "/task-tracker/finance", label: "Finance Tracker", icon: Wallet },
+      { to: "/task-tracker/sop", label: "SOP Checklists", icon: ClipboardList },
     ],
   },
   {
