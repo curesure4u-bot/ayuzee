@@ -67,6 +67,8 @@ const navSections = [
       { to: "/task-tracker/content-calendar", label: "Content Calendar", icon: FileText },
       { to: "/task-tracker/finance", label: "Finance Tracker", icon: Wallet },
       { to: "/task-tracker/sop", label: "SOP Checklists", icon: ClipboardList },
+      { to: "/task-tracker/import", label: "Import Tasks (CSV)", icon: LayoutGrid },
+      { to: "/task-tracker/starter-packs", label: "Starter Packs", icon: Sparkles },
     ],
   },
   {

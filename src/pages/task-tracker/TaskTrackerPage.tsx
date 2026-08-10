@@ -36,6 +36,9 @@ import TaskTrackerKeyDates from "./TaskTrackerKeyDates";
 import TaskTrackerYearlyPlanner from "./TaskTrackerYearlyPlanner";
 import TaskTrackerVisionBoard from "./TaskTrackerVisionBoard";
 import TaskTrackerGratitude from "./TaskTrackerGratitude";
+import TaskTrackerImport from "./TaskTrackerImport";
+import TaskTrackerStarterPacks from "./TaskTrackerStarterPacks";
+import VoiceInput from "./VoiceInput";
 import QuickAddButton from "./QuickAddButton";
 
 /**
@@ -239,6 +242,8 @@ const TaskTrackerPage = () => {
           <Route path="yearly-planner" element={<TaskTrackerYearlyPlanner />} />
           <Route path="vision-board" element={<TaskTrackerVisionBoard />} />
           <Route path="gratitude" element={<TaskTrackerGratitude />} />
+          <Route path="import" element={<TaskTrackerImport onImport={(tasks) => tasks.forEach(t => store.addTask(t))} />} />
+          <Route path="starter-packs" element={<TaskTrackerStarterPacks onApply={(tasks) => tasks.forEach(t => store.addTask(t))} />} />
         </Route>
       </Routes>
 
