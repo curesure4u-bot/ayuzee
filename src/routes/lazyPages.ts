@@ -1023,3 +1023,7 @@ export const YogaProtocolsList = lazyPage(() => import("@/pages/vaidya/yoga/Yoga
 
 // All-in-One Task Tracker (Doctors, Patients, Students, HMS/Beyond)
 export const TaskTrackerPage = lazyPage(() => import("@/pages/task-tracker/TaskTrackerPage"));
+
+
+// Digital Business Register
+export const BusinessRegisterPage = lazyPage(() => import("@/pages/business-register/BusinessRegisterPage"));

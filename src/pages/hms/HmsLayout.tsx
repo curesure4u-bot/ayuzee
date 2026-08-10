@@ -419,6 +419,7 @@ const moreItems = [
     { to: "/hms/therapist-management", label: "Manage Therapists", icon: Heart },
     { to: "/hms/task-management", label: "Task Management", icon: ClipboardList },
     { to: "/task-tracker", label: "All-in-One Tasks", icon: ClipboardList },
+    { to: "/business-register", label: "Business Register", icon: ClipboardList },
     { to: "/hms/checklist", label: "Checklists", icon: ClipboardList },
   ]},
   { group: "Marketing & Engagement", items: [

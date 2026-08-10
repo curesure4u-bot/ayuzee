@@ -49,6 +49,7 @@ const items = [
   { title: "Patient Feedback", url: "/doctor/feedback", icon: MessageSquareHeart },
   { title: "Patient Orders", url: "/doctor/patient-orders", icon: ClipboardList },
   { title: "My Task Tracker", url: "/task-tracker", icon: ListChecks },
+  { title: "Business Register", url: "/business-register", icon: ListChecks },
   { title: "Bulk Purchase", url: "/bulk", icon: Package },
   { title: "Ayush HMS Tool", url: "/vaidya", icon: Stethoscope },
   { title: "HMS ↔ Ayuzee Bridge", url: "/hms/bridge", icon: Stethoscope },
