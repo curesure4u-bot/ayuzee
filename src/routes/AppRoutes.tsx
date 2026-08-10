@@ -1086,6 +1086,9 @@ export const AppRoutes = () => (
               <Route path="unified-leaderboard" element={withSuspense(<P.UnifiedLeaderboard />)} />
               <Route path="shout-outs" element={withSuspense(<P.ShoutOuts />)} />
             </Route>
+           {/* All-in-One Task Tracker (accessible from all portals) */}
+           <Route path="/task-tracker/*" element={withSuspense(<P.TaskTrackerPage />)} />
+
            <Route path="*" element={withSuspense(<P.NotFound />)} />
   </Routes>
 );

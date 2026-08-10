@@ -33,6 +33,7 @@ const groups: Group[] = [
       { to: "/dashboard/medicine-diary", label: "Medicine Diary", icon: ClipboardCheck },
       { to: "/dashboard/guidance", label: "My Guidance", icon: Sparkles },
       { to: "/diagnosis/gut-health", label: "Gut Health Check", icon: Sparkles },
+      { to: "/task-tracker", label: "My Planner", icon: ClipboardCheck },
     ],
   },
   {

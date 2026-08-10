@@ -20,6 +20,7 @@ const navItems = [
   { to: "/therapist/sessions", icon: ListChecks, label: "My Sessions" },
   { to: "/therapist/availability", icon: CalendarClock, label: "Availability" },
   { to: "/therapist/earnings", icon: Wallet, label: "Earnings" },
+  { to: "/task-tracker", icon: ListChecks, label: "Task Tracker" },
   { to: "/jobs?type=therapist", icon: Briefcase, label: "Therapist Jobs" },
   { to: "/therapist/profile", icon: User, label: "Profile" },
   { to: "/therapist/support", icon: LifeBuoy, label: "Support" },
