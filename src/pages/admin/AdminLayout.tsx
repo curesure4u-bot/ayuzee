@@ -73,6 +73,7 @@ const allGroups = [
     { title: "🔔 Notifications", url: "/admin/notifications" },
     { title: "⚙️ Settings", url: "/admin/settings" },
     { title: "📋 Task Tracker", url: "/task-tracker" },
+    { title: "📂 Business Register", url: "/business-register" },
   ]},
 ];
 

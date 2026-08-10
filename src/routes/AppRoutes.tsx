@@ -1089,6 +1089,9 @@ export const AppRoutes = () => (
            {/* All-in-One Task Tracker (accessible from all portals) */}
            <Route path="/task-tracker/*" element={withSuspense(<P.TaskTrackerPage />)} />
 
+           {/* Digital Business Register */}
+           <Route path="/business-register" element={withSuspense(<P.BusinessRegisterPage />)} />
+
            <Route path="*" element={withSuspense(<P.NotFound />)} />
   </Routes>
 );
