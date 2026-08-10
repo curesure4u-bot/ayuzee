@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  BarChart3, CalendarDays, CalendarRange, CheckSquare, ClipboardList,
-  GanttChart, Home, KanbanSquare, LayoutGrid, ListChecks, Menu,
-  RefreshCw, Target, X, Flame, BookOpen, Trophy, Sparkles, CalendarCheck,
-  Timer, Eye, Bell, BarChart3 as Analytics,
+  CalendarDays, CalendarRange, CheckSquare, ClipboardList,
+  Home, LayoutGrid, ListChecks, Menu,
+  RefreshCw, Target, X, Flame, BookOpen, Trophy, Sparkles,
+  Timer, Eye, Bell, BarChart3, HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -16,7 +16,7 @@ const navSections = [
     items: [
       { to: "/task-tracker", label: "Dashboard", icon: Home, end: true },
       { to: "/task-tracker/setup", label: "Setup", icon: LayoutGrid },
-      { to: "/task-tracker/help", label: "How to Use", icon: Home },
+      { to: "/task-tracker/help", label: "How to Use", icon: HelpCircle },
     ],
   },
   {
@@ -39,8 +39,8 @@ const navSections = [
     label: "EXTRA RESOURCES",
     items: [
       { to: "/task-tracker/decision-matrix", label: "Decision Matrix", icon: Target },
-      { to: "/task-tracker/kanban", label: "Kanban Board", icon: KanbanSquare },
-      { to: "/task-tracker/gantt-chart", label: "Gantt Chart", icon: GanttChart },
+      { to: "/task-tracker/kanban", label: "Kanban Board", icon: LayoutGrid },
+      { to: "/task-tracker/gantt-chart", label: "Gantt Chart", icon: BarChart3 },
     ],
   },
   {
@@ -49,7 +49,7 @@ const navSections = [
       { to: "/task-tracker/goals", label: "Goals", icon: Trophy },
       { to: "/task-tracker/habits", label: "Habits Tracker", icon: Flame },
       { to: "/task-tracker/journal", label: "Daily Journal", icon: BookOpen },
-      { to: "/task-tracker/weekly-review", label: "Weekly Review", icon: CalendarCheck },
+      { to: "/task-tracker/weekly-review", label: "Weekly Review", icon: CalendarDays },
       { to: "/task-tracker/templates", label: "Task Templates", icon: Sparkles },
     ],
   },

@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   HelpCircle, LayoutGrid, CalendarDays, CalendarRange, CheckSquare,
-  RefreshCw, ClipboardList, ListChecks, Target, KanbanSquare, GanttChart,
-  Trophy, Flame, BookOpen, Timer, Eye, BarChart3, Bell, Sparkles,
+  RefreshCw, ClipboardList, ListChecks, Target, BarChart3,
+  Trophy, Flame, BookOpen, Timer, Eye, Bell, Sparkles,
 } from "lucide-react";
 
 const sections = [
@@ -117,7 +117,7 @@ const sections = [
         ],
       },
       {
-        icon: KanbanSquare,
+        icon: BarChart3,
         title: "Kanban Board",
         description: "Visual board with columns matching your Kanban categories. Cards show task details, progress bars, and assignee. Move tasks between columns with arrow buttons.",
         steps: [
@@ -128,7 +128,7 @@ const sections = [
         ],
       },
       {
-        icon: GanttChart,
+        icon: BarChart3,
         title: "Gantt Chart",
         description: "Project timeline visualization. Select variable tasks (must have start + due dates) and see them as horizontal bars across a week grid. Color-coded by status.",
         steps: [

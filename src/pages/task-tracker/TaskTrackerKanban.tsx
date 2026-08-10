@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { KanbanSquare, ArrowUpDown, User, Calendar } from "lucide-react";
+import { LayoutGrid, ArrowUpDown, User, Calendar } from "lucide-react";
 import type { VariableTask, TaskTrackerSettings } from "./types";
 import { getPriorityColor } from "./types";
 
@@ -63,7 +63,7 @@ const TaskTrackerKanban = ({ tasks, settings, onUpdate }: Props) => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold flex items-center gap-2">
-            <KanbanSquare className="h-6 w-6 text-teal-600" /> Kanban Board
+            <LayoutGrid className="h-6 w-6 text-teal-600" /> Kanban Board
           </h1>
           <p className="text-sm text-muted-foreground">Visualize tasks by category — drag cards or use arrows to move</p>
         </div>
