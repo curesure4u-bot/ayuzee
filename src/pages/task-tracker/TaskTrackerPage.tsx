@@ -26,6 +26,16 @@ import TaskTrackerFocusMode from "./TaskTrackerFocusMode";
 import TaskTrackerNotifications from "./TaskTrackerNotifications";
 import TaskTrackerStreaks from "./TaskTrackerStreaks";
 import TaskTrackerHelp from "./TaskTrackerHelp";
+import TaskTrackerBrainDump from "./TaskTrackerBrainDump";
+import TaskTrackerMeetingMinutes from "./TaskTrackerMeetingMinutes";
+import TaskTrackerReadingLog from "./TaskTrackerReadingLog";
+import TaskTrackerFinance from "./TaskTrackerFinance";
+import TaskTrackerSOP from "./TaskTrackerSOP";
+import TaskTrackerContentCalendar from "./TaskTrackerContentCalendar";
+import TaskTrackerKeyDates from "./TaskTrackerKeyDates";
+import TaskTrackerYearlyPlanner from "./TaskTrackerYearlyPlanner";
+import TaskTrackerVisionBoard from "./TaskTrackerVisionBoard";
+import TaskTrackerGratitude from "./TaskTrackerGratitude";
 import QuickAddButton from "./QuickAddButton";
 
 /**
@@ -219,6 +229,16 @@ const TaskTrackerPage = () => {
             element={<TaskTrackerStreaks tasks={store.tasks} />}
           />
           <Route path="help" element={<TaskTrackerHelp />} />
+          <Route path="brain-dump" element={<TaskTrackerBrainDump onConvertToTask={(content) => store.addTask({ task_name: content, description: "", status: "To do", priority: "Medium", person_in_charge: "", start_date: new Date().toISOString().split("T")[0], due_date: null, kanban_category: "Backlog", importance: "Not Important", urgency: "Not Urgent", progress: 0, notes: "", is_completed: false, completed_at: null, gantt_color: "", project_name: "", role_context: "general" })} />} />
+          <Route path="meeting-minutes" element={<TaskTrackerMeetingMinutes onCreateTask={(text) => store.addTask({ task_name: text, description: "", status: "To do", priority: "High", person_in_charge: "", start_date: new Date().toISOString().split("T")[0], due_date: null, kanban_category: "To-Do", importance: "Important", urgency: "Urgent", progress: 0, notes: "From meeting minutes", is_completed: false, completed_at: null, gantt_color: "", project_name: "", role_context: "general" })} />} />
+          <Route path="reading-log" element={<TaskTrackerReadingLog />} />
+          <Route path="finance" element={<TaskTrackerFinance />} />
+          <Route path="sop" element={<TaskTrackerSOP />} />
+          <Route path="content-calendar" element={<TaskTrackerContentCalendar />} />
+          <Route path="key-dates" element={<TaskTrackerKeyDates />} />
+          <Route path="yearly-planner" element={<TaskTrackerYearlyPlanner />} />
+          <Route path="vision-board" element={<TaskTrackerVisionBoard />} />
+          <Route path="gratitude" element={<TaskTrackerGratitude />} />
         </Route>
       </Routes>
 
