@@ -53,6 +53,21 @@ const allGroups = [
     { title: "💊 Prescription Orders", url: "/admin/prescriptions" },
     { title: "📢 Broadcast", url: "/admin/broadcast" },
   ]},
+  { label: "🧬 P3: Clinical Intelligence", roles: ["admin"] as AdminRole[], items: [
+    { title: "💊 Drug-Herb Interactions", url: "/drug-herb-checker" },
+    { title: "📖 Classical References", url: "/classical-references" },
+    { title: "🫀 Pulse & Tongue AI", url: "/pulse-tongue-ai" },
+    { title: "🔬 Lab Interpreter", url: "/lab-interpreter" },
+    { title: "🤖 AI Triage Bot", url: "/ai-triage" },
+  ]},
+  { label: "🏛️ P4: ABDM & Govt", roles: ["admin"] as AdminRole[], items: [
+    { title: "🆔 ABHA Health ID", url: "/abdm/abha" },
+    { title: "📄 FHIR R4 Export", url: "/abdm/fhir-export" },
+    { title: "🔒 Consent Manager", url: "/abdm/consent-manager" },
+    { title: "📊 AYUSH Ministry Reports", url: "/abdm/ayush-reporting" },
+    { title: "📁 DigiLocker", url: "/abdm/digilocker" },
+    { title: "📹 e-Sanjeevani Bridge", url: "/abdm/e-sanjeevani" },
+  ]},
   { label: "Content & Store", roles: ["admin","product_admin","content_admin"] as AdminRole[], items: [
     { title: "🌿 Therapies Catalog", url: "/admin/therapies" },
     { title: "📚 Learning & Webinars", url: "/admin/learning" },
@@ -62,6 +77,14 @@ const allGroups = [
     { title: "📝 Blogs & Content", url: "/admin/blogs" },
     { title: "💼 Jobs Board", url: "/admin/jobs" },
     { title: "🤝 Partners & Vendors", url: "/admin/partners" },
+  ]},
+  { label: "🛒 P6: Marketplace", roles: ["admin"] as AdminRole[], items: [
+    { title: "🏪 AYUSH Brands", url: "/marketplace/brands" },
+    { title: "🔄 Subscriptions & Refill", url: "/marketplace/subscriptions" },
+    { title: "🚚 Logistics Tracking", url: "/marketplace/logistics" },
+    { title: "🏭 B2B Wholesale", url: "/marketplace/b2b" },
+    { title: "🔧 AYUSH Devices", url: "/marketplace/devices" },
+    { title: "🌿 Organic Foods", url: "/marketplace/organic-foods" },
   ]},
   { label: "Finance", roles: ["admin","accounts_admin"] as AdminRole[], items: [
     { title: "💰 Commissions & Payouts", url: "/admin/commissions" },
@@ -81,6 +104,21 @@ const allGroups = [
     { title: "💊 Pharmacy Orders", url: "/admin/pharmacy-orders" },
     { title: "🛏️ IP Admissions", url: "/admin/ip-admissions" },
     { title: "🏥 Ward Status", url: "/admin/ward-status" },
+  ]},
+  { label: "🌍 P8: Global Expansion", roles: ["admin"] as AdminRole[], items: [
+    { title: "🌐 Currency & Language", url: "/global/currency-language" },
+    { title: "📹 International Teleconsult", url: "/global/teleconsult" },
+    { title: "📋 Export Compliance", url: "/global/export-compliance" },
+    { title: "💎 Diaspora Wellness", url: "/global/diaspora" },
+    { title: "🏥 Partner Clinics Abroad", url: "/global/partner-clinics" },
+  ]},
+  { label: "🤖 P9: AI Super-Intelligence", roles: ["admin"] as AdminRole[], items: [
+    { title: "🧘 Prakriti Twin", url: "/ai/prakriti-twin" },
+    { title: "📉 Predictive Risk Engine", url: "/ai/predictive-risk" },
+    { title: "⌚ Smart Home Vitals", url: "/ai/smart-vitals" },
+    { title: "👨‍👩‍👧 Family Health Graph", url: "/ai/family-health" },
+    { title: "🥗 Yoga & Diet Coach", url: "/ai/yoga-diet-coach" },
+    { title: "🧬 Genome × Dosha", url: "/ai/genome-dosha" },
   ]},
   { label: "Safety & Config", roles: ["admin","ayush_admin"] as AdminRole[], items: [
     { title: "🚨 Safety Flags", url: "/admin/safety" },
