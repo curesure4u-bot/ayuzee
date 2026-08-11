@@ -53,6 +53,43 @@ const groups: Group[] = [
     ],
   },
   {
+    label: "AI Health",
+    items: [
+      { to: "/ai-triage", label: "Symptom Checker", icon: Sparkles },
+      { to: "/ai/prakriti-twin", label: "Prakriti Twin", icon: Sparkles },
+      { to: "/ai/predictive-risk", label: "Health Risk Analysis", icon: Sparkles },
+      { to: "/ai/smart-vitals", label: "Smart Vitals", icon: Sparkles },
+      { to: "/ai/family-health", label: "Family Health Graph", icon: Sparkles },
+      { to: "/ai/yoga-diet-coach", label: "Yoga & Diet Coach", icon: Sparkles },
+    ],
+  },
+  {
+    label: "ABDM / Health ID",
+    items: [
+      { to: "/abdm/abha", label: "ABHA Health ID", icon: Stethoscope },
+      { to: "/abdm/consent-manager", label: "Consent Manager", icon: ClipboardCheck },
+      { to: "/abdm/digilocker", label: "DigiLocker", icon: FolderOpen },
+    ],
+  },
+  {
+    label: "Marketplace",
+    items: [
+      { to: "/marketplace/brands", label: "AYUSH Brands", icon: ShoppingBag },
+      { to: "/marketplace/subscriptions", label: "Subscriptions", icon: Pill },
+      { to: "/marketplace/logistics", label: "Track Orders", icon: ShoppingBag },
+      { to: "/marketplace/devices", label: "AYUSH Devices", icon: Sparkles },
+      { to: "/marketplace/organic-foods", label: "Organic Foods", icon: Flower2 },
+    ],
+  },
+  {
+    label: "Global",
+    items: [
+      { to: "/global/currency-language", label: "Language & Currency", icon: Sparkles },
+      { to: "/global/teleconsult", label: "International Consult", icon: Sparkles },
+      { to: "/global/diaspora", label: "Diaspora Wellness", icon: Sparkles },
+    ],
+  },
+  {
     items: [
       { to: "/dashboard/saved-medicines", label: "Saved Medicines", icon: Pill },
       { to: "/dashboard/saved-posts", label: "Saved Posts", icon: BookmarkCheck },
