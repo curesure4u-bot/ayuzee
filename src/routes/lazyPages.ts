@@ -49,6 +49,10 @@ export const AdminReviewModeration = lazyPage(() => import("@/pages/admin/AdminR
 export const AdminRevenueSplit = lazyPage(() => import("@/pages/admin/AdminRevenueSplit"));
 export const AdminRoadmap = lazyPage(() => import("@/pages/admin/AdminRoadmap"));
 export const AdminSafety = lazyPage(() => import("@/pages/admin/AdminSafety"));
+export const AdminAuditLog = lazyPage(() => import("@/pages/admin/AdminAuditLog"));
+export const AdminRolePermissions = lazyPage(() => import("@/pages/admin/AdminRolePermissions"));
+export const AdminDoctorSignoffQueue = lazyPage(() => import("@/pages/admin/AdminDoctorSignoffQueue"));
+export const AdminSupportTickets = lazyPage(() => import("@/pages/admin/AdminSupportTickets"));
 export const AdminSessions = lazyPage(() => import("@/pages/admin/AdminSessions"));
 export const AdminSettings = lazyPage(() => import("@/pages/admin/AdminSettings"));
 export const AdminStudents = lazyPage(() => import("@/pages/admin/AdminStudents"));

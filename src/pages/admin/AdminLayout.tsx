@@ -27,6 +27,12 @@ const allGroups = [
     { title: "🏠 Dashboard", url: "/admin", end: true },
     { title: "🗺️ Super App Roadmap", url: "/admin/roadmap" },
   ]},
+  { label: "Governance", roles: ["admin"] as AdminRole[], items: [
+    { title: "🛡️ Audit Log", url: "/admin/audit-log" },
+    { title: "🔐 Roles & Permissions", url: "/admin/role-permissions" },
+    { title: "✅ Doctor Sign-off Queue", url: "/admin/doctor-signoff-queue" },
+    { title: "🎧 Support Tickets", url: "/admin/support-tickets" },
+  ]},
   { label: "User Management", roles: ["admin","doctor_admin","support_admin"] as AdminRole[], items: [
     { title: "🏢 Team Management", url: "/admin/team" },
     { title: "👥 All Users", url: "/admin/users" },
