@@ -173,6 +173,12 @@ export const AppRoutes = () => (
             <Route path="/marketplace/devices" element={withSuspense(<P.MarketplaceDevices />)} />
             <Route path="/marketplace/organic-foods" element={withSuspense(<P.MarketplaceOrganicFoods />)} />
             <Route path="/global/currency-language" element={withSuspense(<P.GlobalMultiCurrency />)} />
+            <Route path="/abdm/abha" element={withSuspense(<P.AbdmAbhaLinking />)} />
+            <Route path="/abdm/fhir-export" element={withSuspense(<P.AbdmFhirExport />)} />
+            <Route path="/abdm/consent-manager" element={withSuspense(<P.AbdmConsentManager />)} />
+            <Route path="/abdm/ayush-reporting" element={withSuspense(<P.AbdmAyushReporting />)} />
+            <Route path="/abdm/digilocker" element={withSuspense(<P.AbdmDigiLocker />)} />
+            <Route path="/abdm/e-sanjeevani" element={withSuspense(<P.AbdmESanjeevani />)} />
             <Route path="/global/teleconsult" element={withSuspense(<P.GlobalTeleconsult />)} />
             <Route path="/global/export-compliance" element={withSuspense(<P.GlobalExportCompliance />)} />
             <Route path="/global/diaspora" element={withSuspense(<P.GlobalDiaspora />)} />

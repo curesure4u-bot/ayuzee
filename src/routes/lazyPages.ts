@@ -164,6 +164,12 @@ export const MarketplaceB2B = lazyPage(() => import("@/pages/marketplace/B2BWhol
 export const MarketplaceDevices = lazyPage(() => import("@/pages/marketplace/AyushDevices"));
 export const MarketplaceOrganicFoods = lazyPage(() => import("@/pages/marketplace/OrganicFoods"));
 export const GlobalMultiCurrency = lazyPage(() => import("@/pages/global/MultiCurrencyLanguage"));
+export const AbdmAbhaLinking = lazyPage(() => import("@/pages/abdm/AbhaLinking"));
+export const AbdmFhirExport = lazyPage(() => import("@/pages/abdm/FhirBundleExport"));
+export const AbdmConsentManager = lazyPage(() => import("@/pages/abdm/NdhmConsentManager"));
+export const AbdmAyushReporting = lazyPage(() => import("@/pages/abdm/AyushMinistryReporting"));
+export const AbdmDigiLocker = lazyPage(() => import("@/pages/abdm/DigiLockerIntegration"));
+export const AbdmESanjeevani = lazyPage(() => import("@/pages/abdm/ESanjeevanibridge"));
 export const GlobalTeleconsult = lazyPage(() => import("@/pages/global/InternationalTeleconsult"));
 export const GlobalExportCompliance = lazyPage(() => import("@/pages/global/ExportCompliance"));
 export const GlobalDiaspora = lazyPage(() => import("@/pages/global/DiasporaWellness"));
