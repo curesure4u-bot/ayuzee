@@ -64,8 +64,12 @@ const beyondLinks = [
   { to: "/beyond/journal", label: "Journal", icon: PenTool, minTier: 0 },
   { to: "/beyond/planner", label: "Life Planner", icon: Target, minTier: 0 },
   { to: "/beyond/habits", label: "Habit Tracker", icon: Activity, minTier: 0 },
+  // ── Dreams & Vision ──
+  { to: "/beyond/bucket-list", label: "101 Bucket List", icon: Award, minTier: 0, section: "Dreams & Vision" },
+  { to: "/beyond/vision-short", label: "Vision (Short)", icon: Target, minTier: 0 },
+  { to: "/beyond/vision-long", label: "Vision (Long)", icon: Rocket, minTier: 0 },
   // ── Challenges & Social ──
-  { to: "/beyond/challenges", label: "Challenges", icon: Flame, minTier: 0 },
+  { to: "/beyond/challenges", label: "Challenges", icon: Flame, minTier: 0, section: "Challenges & Social" },
   { to: "/beyond/101-challenges", label: "101 Challenges", icon: Flame, minTier: 0 },
   { to: "/beyond/community", label: "Community", icon: Users, minTier: 0 },
   { to: "/beyond/leaderboard", label: "Leaderboard", icon: Trophy, minTier: 0 },
@@ -207,16 +211,24 @@ const BeyondPraxisLayout = () => {
 
         <nav className="mt-4 grid gap-0.5 sm:grid-cols-2 lg:flex lg:flex-1 lg:flex-col">
           {visibleLinks.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-smooth hover:bg-accent hover:text-accent-foreground"
-              activeClassName="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
-            >
-              <item.icon className="h-4 w-4 shrink-0" />
-              <span>{item.label}</span>
-            </NavLink>
+            <div key={item.to}>
+              {(item as any).section && (
+                <div className="hidden lg:block mt-4 mb-1 px-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    {(item as any).section}
+                  </p>
+                </div>
+              )}
+              <NavLink
+                to={item.to}
+                end={item.end}
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-smooth hover:bg-accent hover:text-accent-foreground"
+                activeClassName="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+              >
+                <item.icon className="h-4 w-4 shrink-0" />
+                <span>{item.label}</span>
+              </NavLink>
+            </div>
           ))}
         </nav>
 
