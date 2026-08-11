@@ -160,6 +160,12 @@ export const AppRoutes = () => (
             <Route path="/pulse-tongue-ai" element={withSuspense(<P.PulseTongueAI />)} />
             <Route path="/lab-interpreter" element={withSuspense(<P.LabReportOCR />)} />
             <Route path="/ai-triage" element={withSuspense(<P.AITriageBot />)} />
+            <Route path="/marketplace/brands" element={withSuspense(<P.MarketplaceBrands />)} />
+            <Route path="/marketplace/subscriptions" element={withSuspense(<P.MarketplaceSubscription />)} />
+            <Route path="/marketplace/logistics" element={withSuspense(<P.MarketplaceLogistics />)} />
+            <Route path="/marketplace/b2b" element={withSuspense(<P.MarketplaceB2B />)} />
+            <Route path="/marketplace/devices" element={withSuspense(<P.MarketplaceDevices />)} />
+            <Route path="/marketplace/organic-foods" element={withSuspense(<P.MarketplaceOrganicFoods />)} />
             <Route path="/checkout" element={withSuspense(<P.Checkout />)} />
             <Route path="/partner" element={withSuspense(<P.Partner />)} />
             <Route path="/partner/apply" element={withSuspense(<P.PartnerApply />)} />
