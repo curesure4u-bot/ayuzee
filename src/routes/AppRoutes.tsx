@@ -245,6 +245,20 @@ export const AppRoutes = () => (
               <Route path="role-permissions" element={withSuspense(<P.AdminRolePermissions />)} />
               <Route path="doctor-signoff-queue" element={withSuspense(<P.AdminDoctorSignoffQueue />)} />
               <Route path="support-tickets" element={withSuspense(<P.AdminSupportTickets />)} />
+              <Route path="platform-health" element={withSuspense(<P.AdminPlatformHealth />)} />
+              <Route path="strategic-kpis" element={withSuspense(<P.AdminStrategicKPIs />)} />
+              <Route path="revenue-settlement" element={withSuspense(<P.AdminRevenueSplitDashboard />)} />
+              <Route path="broadcast" element={withSuspense(<P.AdminBroadcast />)} />
+              <Route path="organogram" element={withSuspense(<P.AdminOrganogram />)} />
+              <Route path="bulk-actions" element={withSuspense(<P.AdminBulkActions />)} />
+              <Route path="feature-flags" element={withSuspense(<P.AdminFeatureFlags />)} />
+              <Route path="sla-escalation" element={withSuspense(<P.AdminSLAEscalation />)} />
+              <Route path="compliance" element={withSuspense(<P.AdminCompliance />)} />
+              <Route path="partners" element={withSuspense(<P.AdminPartners />)} />
+              <Route path="api-keys" element={withSuspense(<P.AdminAPIKeys />)} />
+              <Route path="backup-export" element={withSuspense(<P.AdminBackupExport />)} />
+              <Route path="changelog" element={withSuspense(<P.AdminChangelog />)} />
+              <Route path="white-label" element={withSuspense(<P.AdminWhiteLabel />)} />
               <Route path="jobs" element={withSuspense(<P.AdminJobs />)} />
               <Route path="atmri-help" element={withSuspense(<P.AdminAtmriHelp />)} />
               <Route path="roadmap" element={withSuspense(<P.AdminRoadmap />)} />

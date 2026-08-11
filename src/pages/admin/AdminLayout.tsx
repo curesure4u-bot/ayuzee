@@ -25,7 +25,9 @@ const ROLE_LABELS: Record<AdminRole, string> = {
 const allGroups = [
   { label: "Overview", roles: ["admin"] as AdminRole[], items: [
     { title: "🏠 Dashboard", url: "/admin", end: true },
+    { title: "📈 Strategic KPIs", url: "/admin/strategic-kpis" },
     { title: "🗺️ Super App Roadmap", url: "/admin/roadmap" },
+    { title: "📋 Changelog", url: "/admin/changelog" },
   ]},
   { label: "Governance & Control", roles: ["admin"] as AdminRole[], items: [
     { title: "🛡️ Audit Log", url: "/admin/audit-log" },
@@ -40,6 +42,8 @@ const allGroups = [
     { title: "🏥 Venues", url: "/admin/venues" },
     { title: "🌿 Panchakarma Ops", url: "/admin/panchakarma" },
     { title: "🎓 Students", url: "/admin/students" },
+    { title: "🏗️ Organogram", url: "/admin/organogram" },
+    { title: "⚡ Bulk Actions", url: "/admin/bulk-actions" },
   ]},
   { label: "Operations", roles: ["admin","orders_admin"] as AdminRole[], items: [
     { title: "📅 Appointments", url: "/admin/appointments" },
@@ -47,6 +51,7 @@ const allGroups = [
     { title: "✅ Doctor Sign-off Queue", url: "/admin/doctor-signoff-queue" },
     { title: "📦 Orders", url: "/admin/orders" },
     { title: "💊 Prescription Orders", url: "/admin/prescriptions" },
+    { title: "📢 Broadcast", url: "/admin/broadcast" },
   ]},
   { label: "Content & Store", roles: ["admin","product_admin","content_admin"] as AdminRole[], items: [
     { title: "🌿 Therapies Catalog", url: "/admin/therapies" },
@@ -56,6 +61,7 @@ const allGroups = [
     { title: "🏭 Manufacturer Approvals", url: "/admin/manufacturers/approvals" },
     { title: "📝 Blogs & Content", url: "/admin/blogs" },
     { title: "💼 Jobs Board", url: "/admin/jobs" },
+    { title: "🤝 Partners & Vendors", url: "/admin/partners" },
   ]},
   { label: "Finance", roles: ["admin","accounts_admin"] as AdminRole[], items: [
     { title: "💰 Commissions & Payouts", url: "/admin/commissions" },
@@ -64,6 +70,7 @@ const allGroups = [
     { title: "💳 Payments & Transactions", url: "/admin/payments" },
     { title: "📊 Reports & Analytics", url: "/admin/reports" },
     { title: "📈 Revenue Split", url: "/admin/revenue-split" },
+    { title: "🏦 Revenue Settlement", url: "/admin/revenue-settlement" },
   ]},
   { label: "❤️ AYUSH Help", roles: ["admin","ayush_admin"] as AdminRole[], items: [
     { title: "🌿 ATMRI Model 3", url: "/admin/atmri-help" },
@@ -77,6 +84,13 @@ const allGroups = [
   ]},
   { label: "Safety & Config", roles: ["admin","ayush_admin"] as AdminRole[], items: [
     { title: "🚨 Safety Flags", url: "/admin/safety" },
+    { title: "🏥 Platform Health", url: "/admin/platform-health" },
+    { title: "🚩 Feature Flags", url: "/admin/feature-flags" },
+    { title: "⏰ SLA & Escalation", url: "/admin/sla-escalation" },
+    { title: "📜 Compliance & Legal", url: "/admin/compliance" },
+    { title: "🔑 API Keys", url: "/admin/api-keys" },
+    { title: "💾 Backup & Export", url: "/admin/backup-export" },
+    { title: "🏷️ White-label", url: "/admin/white-label" },
     { title: "🔔 Notifications", url: "/admin/notifications" },
     { title: "⚙️ Settings", url: "/admin/settings" },
     { title: "📋 Task Tracker", url: "/task-tracker" },
