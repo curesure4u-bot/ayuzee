@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { toast } from "sonner";
-import { useTaskStore } from "./useTaskStore";
+import { useTaskData } from "./useTaskData";
 import { useTaskTrackerRole } from "./useTaskTrackerRole";
 import TaskTrackerLayout from "./TaskTrackerLayout";
 import TaskTrackerDashboard from "./TaskTrackerDashboard";
@@ -43,15 +43,15 @@ import QuickAddButton from "./QuickAddButton";
 
 /**
  * All-in-One Task Tracker Module
- * - Local state (useTaskStore) for immediate functionality
- * - Supabase hooks available for persistence (useTaskTrackerSupabase)
+ * - Uses Supabase for persistence when logged in (data survives refresh!)
+ * - Falls back to local state when not authenticated
  * - Auto-detects role context (doctor/patient/student/hms)
  * - Quick-Add floating button on every page
  * - Overdue task notifications
  */
 const TaskTrackerPage = () => {
-  const store = useTaskStore();
   const { role } = useTaskTrackerRole();
+  const store = useTaskData(role);
 
   // Overdue task notifications on load
   useEffect(() => {
