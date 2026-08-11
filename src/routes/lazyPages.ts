@@ -199,6 +199,9 @@ export const DoctorFeed = lazyPage(() => import("@/pages/doctor/sections/DoctorF
 export const DoctorEarnings = lazyPage(() => import("@/pages/doctor/sections/EarningsSummary"));
 export const DoctorHome = lazyPage(() => import("@/pages/doctor/DoctorHome"));
 export const DrugHerbInteractionChecker = lazyPage(() => import("@/pages/doctor/DrugHerbInteractionChecker"));
+export const ClassicalReferenceEngine = lazyPage(() => import("@/pages/doctor/ClassicalReferenceEngine"));
+export const PulseTongueAI = lazyPage(() => import("@/pages/doctor/PulseTongueAI"));
+export const LabReportOCR = lazyPage(() => import("@/pages/doctor/LabReportOCR"));
 export const DoctorLayout = lazyPage(() => import("@/pages/doctor/DoctorLayout"));
 export const DoctorMedicines = lazyPage(() => import("@/pages/doctor/sections/DoctorMedicines"));
 export const DoctorNotificationPreferences = lazyPage(() => import("@/pages/doctor/sections/NotificationPreferences"));

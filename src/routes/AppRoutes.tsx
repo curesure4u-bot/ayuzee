@@ -156,6 +156,9 @@ export const AppRoutes = () => (
             <Route path="/homeopathy/case/:id" element={withSuspense(<P.HomeopathyCases />)} />
             <Route path="/cart" element={withSuspense(<P.Cart />)} />
             <Route path="/drug-herb-checker" element={withSuspense(<P.DrugHerbInteractionChecker />)} />
+            <Route path="/classical-references" element={withSuspense(<P.ClassicalReferenceEngine />)} />
+            <Route path="/pulse-tongue-ai" element={withSuspense(<P.PulseTongueAI />)} />
+            <Route path="/lab-interpreter" element={withSuspense(<P.LabReportOCR />)} />
             <Route path="/ai-triage" element={withSuspense(<P.AITriageBot />)} />
             <Route path="/checkout" element={withSuspense(<P.Checkout />)} />
             <Route path="/partner" element={withSuspense(<P.Partner />)} />
