@@ -27,10 +27,9 @@ const allGroups = [
     { title: "🏠 Dashboard", url: "/admin", end: true },
     { title: "🗺️ Super App Roadmap", url: "/admin/roadmap" },
   ]},
-  { label: "Governance", roles: ["admin"] as AdminRole[], items: [
+  { label: "Governance & Control", roles: ["admin"] as AdminRole[], items: [
     { title: "🛡️ Audit Log", url: "/admin/audit-log" },
     { title: "🔐 Roles & Permissions", url: "/admin/role-permissions" },
-    { title: "✅ Doctor Sign-off Queue", url: "/admin/doctor-signoff-queue" },
     { title: "🎧 Support Tickets", url: "/admin/support-tickets" },
   ]},
   { label: "User Management", roles: ["admin","doctor_admin","support_admin"] as AdminRole[], items: [
@@ -45,6 +44,7 @@ const allGroups = [
   { label: "Operations", roles: ["admin","orders_admin"] as AdminRole[], items: [
     { title: "📅 Appointments", url: "/admin/appointments" },
     { title: "🫙 Therapy Sessions", url: "/admin/sessions" },
+    { title: "✅ Doctor Sign-off Queue", url: "/admin/doctor-signoff-queue" },
     { title: "📦 Orders", url: "/admin/orders" },
     { title: "💊 Prescription Orders", url: "/admin/prescriptions" },
   ]},
@@ -63,6 +63,7 @@ const allGroups = [
     { title: "💸 Payout Requests", url: "/admin/payouts" },
     { title: "💳 Payments & Transactions", url: "/admin/payments" },
     { title: "📊 Reports & Analytics", url: "/admin/reports" },
+    { title: "📈 Revenue Split", url: "/admin/revenue-split" },
   ]},
   { label: "❤️ AYUSH Help", roles: ["admin","ayush_admin"] as AdminRole[], items: [
     { title: "🌿 ATMRI Model 3", url: "/admin/atmri-help" },
