@@ -241,6 +241,10 @@ export const AppRoutes = () => (
               <Route path="panchakarma" element={withSuspense(<P.AdminPanchakarmaDashboard />)} />
               <Route path="therapy-sessions" element={withSuspense(<P.AdminSessions />)} />
               <Route path="revenue-split" element={withSuspense(<P.AdminRevenueSplit />)} />
+              <Route path="audit-log" element={withSuspense(<P.AdminAuditLog />)} />
+              <Route path="role-permissions" element={withSuspense(<P.AdminRolePermissions />)} />
+              <Route path="doctor-signoff-queue" element={withSuspense(<P.AdminDoctorSignoffQueue />)} />
+              <Route path="support-tickets" element={withSuspense(<P.AdminSupportTickets />)} />
               <Route path="jobs" element={withSuspense(<P.AdminJobs />)} />
               <Route path="atmri-help" element={withSuspense(<P.AdminAtmriHelp />)} />
               <Route path="roadmap" element={withSuspense(<P.AdminRoadmap />)} />
