@@ -16,6 +16,7 @@ import {
   GraduationCap,
   Heart,
   Lightbulb,
+  ListChecks,
   Radio,
   RefreshCw,
   Rocket,
@@ -97,6 +98,9 @@ const quickTools = [
   { to: "/beyond/finance", label: "Finance Toolkit", icon: Coins, color: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400", desc: "Track wealth" },
   { to: "/beyond/store", label: "Digital Store", icon: ShoppingBag, color: "bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400", desc: "Templates & PDFs" },
   { to: "/beyond/membership", label: "Membership", icon: Crown, color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400", desc: "Upgrade plan" },
+  { to: "/beyond/bucket-list", label: "101 Bucket List", icon: ListChecks, color: "bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400", desc: "Life dreams" },
+  { to: "/beyond/vision-short", label: "Vision (Short)", icon: Target, color: "bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-400", desc: "3-6 month goals" },
+  { to: "/beyond/vision-long", label: "Vision (Long)", icon: Rocket, color: "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400", desc: "1-5 year dreams" },
 ];
 
 function formatTimeAgo(dateStr: string): string {

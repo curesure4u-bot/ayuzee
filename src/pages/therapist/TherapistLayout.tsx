@@ -18,12 +18,24 @@ interface TherapistRow {
 const navItems = [
   { to: "/therapist", icon: LayoutDashboard, label: "Dashboard", end: true },
   { to: "/therapist/sessions", icon: ListChecks, label: "My Sessions" },
-  { to: "/therapist/availability", icon: CalendarClock, label: "Availability" },
+  { to: "/therapist/session-notes", icon: ListChecks, label: "AI Notes" },
+  { to: "/therapist/progress", icon: ListChecks, label: "Progress Tracker" },
+  { to: "/therapist/schedule", icon: CalendarClock, label: "Availability" },
+  { to: "/therapist/patients", icon: ListChecks, label: "Patient History" },
+  { to: "/therapist/protocols", icon: ListChecks, label: "Protocol Library" },
+  { to: "/therapist/communication", icon: ListChecks, label: "Messages" },
+  { to: "/therapist/education", icon: ListChecks, label: "Education" },
+  { to: "/therapist/feedback", icon: ListChecks, label: "Reviews" },
   { to: "/therapist/earnings", icon: Wallet, label: "Earnings" },
+  { to: "/therapist/branding", icon: ListChecks, label: "Branding" },
   { to: "/task-tracker", icon: ListChecks, label: "Task Tracker" },
+  { to: "/therapist/performance", icon: ListChecks, label: "Performance" },
+  { to: "/therapist/shifts", icon: ListChecks, label: "My Shifts" },
+  { to: "/therapist/materials", icon: ListChecks, label: "Material Log" },
   { to: "/jobs?type=therapist", icon: Briefcase, label: "Therapist Jobs" },
   { to: "/therapist/profile", icon: User, label: "Profile" },
-  { to: "/therapist/support", icon: LifeBuoy, label: "Support" },
+  { to: "/therapist/help", icon: LifeBuoy, label: "Help & Support" },
+  { to: "/therapist/support", icon: LifeBuoy, label: "Legacy Support" },
 ];
 
 const TherapistLayout = () => {

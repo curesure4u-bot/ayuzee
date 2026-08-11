@@ -173,6 +173,19 @@ export const AppRoutes = () => (
               <Route path="earnings" element={withSuspense(<P.TherapistEarnings />)} />
               <Route path="profile" element={withSuspense(<P.TherapistProfile />)} />
               <Route path="support" element={withSuspense(<P.TherapistSupport />)} />
+              <Route path="session-notes" element={withSuspense(<P.TherapistSessionNotes />)} />
+              <Route path="progress" element={withSuspense(<P.TherapistProgressTracker />)} />
+              <Route path="schedule" element={withSuspense(<P.TherapistAvailabilityPage />)} />
+              <Route path="patients" element={withSuspense(<P.TherapistPatientHistory />)} />
+              <Route path="protocols" element={withSuspense(<P.TherapistProtocolLibrary />)} />
+              <Route path="education" element={withSuspense(<P.TherapistEducation />)} />
+              <Route path="feedback" element={withSuspense(<P.TherapistFeedback />)} />
+              <Route path="communication" element={withSuspense(<P.TherapistCommunication />)} />
+              <Route path="help" element={withSuspense(<P.TherapistSupportPage />)} />
+              <Route path="branding" element={withSuspense(<P.TherapistBranding />)} />
+              <Route path="performance" element={withSuspense(<P.TherapistPerformance />)} />
+              <Route path="shifts" element={withSuspense(<P.TherapistShiftRoster />)} />
+              <Route path="materials" element={withSuspense(<P.TherapistMaterialLog />)} />
             </Route>
             <Route path="/therapy-plans/:planId/book" element={withSuspense(<P.BookTherapySession />)} />
             <Route path="/therapy-booking/:sessionId" element={withSuspense(<P.TherapyBooking />)} />
@@ -1064,6 +1077,9 @@ export const AppRoutes = () => (
               <Route path="store" element={withSuspense(<P.BeyondDigitalStore />)} />
               <Route path="coaching" element={withSuspense(<P.BeyondCoaching />)} />
               <Route path="membership" element={withSuspense(<P.BeyondMembership />)} />
+              <Route path="bucket-list" element={withSuspense(<P.BeyondBucketList />)} />
+              <Route path="vision-short" element={withSuspense(<P.BeyondVisionShort />)} />
+              <Route path="vision-long" element={withSuspense(<P.BeyondVisionLong />)} />
             </Route>
 
            <Route path="/gamification/certificates/:id" element={withSuspense(<P.CertificateView />)} />

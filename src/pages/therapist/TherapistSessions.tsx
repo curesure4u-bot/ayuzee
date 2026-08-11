@@ -8,8 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, MapPin, Pill, Navigation, CheckCircle2, PlayCircle, StopCircle } from "lucide-react";
+import { Loader2, MapPin, Pill, Navigation, CheckCircle2, PlayCircle, StopCircle, ShieldCheck, AlertTriangle } from "lucide-react";
 import type { TherapistContext } from "./TherapistLayout";
 
 interface Session {
@@ -49,6 +51,20 @@ const TherapistSessions = () => {
   const [loading, setLoading] = useState(true);
   const [endingSession, setEndingSession] = useState<Session | null>(null);
   const [endNotes, setEndNotes] = useState("");
+
+  // ── Pre-Procedure Checklist Gate ──
+  const [checklistSession, setChecklistSession] = useState<Session | null>(null);
+  const [checklist, setChecklist] = useState({
+    doctor_instruction_received: false,
+    patient_identity_verified: false,
+    materials_match_prescription: false,
+    room_table_ready: false,
+    patient_consent_acknowledged: false,
+  });
+  const [verifiedByStaff, setVerifiedByStaff] = useState("");
+  const [geoError, setGeoError] = useState("");
+
+  const allChecked = Object.values(checklist).every(Boolean);
 
   const load = async () => {
     setLoading(true);
@@ -95,8 +111,54 @@ const TherapistSessions = () => {
   };
 
   const onStart = async (s: Session) => {
-    await updateStatus(s.id, { status: "in_progress", actual_start_time: new Date().toISOString() });
-    toast({ title: "Session started" });
+    // Open pre-procedure checklist gate — therapist CANNOT start without completing all checks
+    setChecklistSession(s);
+    setChecklist({ doctor_instruction_received: false, patient_identity_verified: false, materials_match_prescription: false, room_table_ready: false, patient_consent_acknowledged: false });
+    setVerifiedByStaff("");
+    setGeoError("");
+  };
+
+  const confirmStartWithChecklist = async () => {
+    if (!checklistSession) return;
+    if (!allChecked) { toast({ title: "Complete all checks", description: "All 5 pre-procedure verifications must be confirmed.", variant: "destructive" }); return; }
+    if (!verifiedByStaff.trim()) { toast({ title: "Staff name required", description: "Enter the venue staff name who verified patient identity.", variant: "destructive" }); return; }
+
+    // Geo-fence check
+    const coords = await getCoords();
+    if (coords && checklistSession.venue) {
+      // Simple distance check (Haversine approximation)
+      const R = 6371000; // meters
+      const dLat = ((coords.lat - (checklistSession.venue as any).lat) * Math.PI) / 180;
+      const dLng = ((coords.lng - (checklistSession.venue as any).lng) * Math.PI) / 180;
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(coords.lat * Math.PI / 180) * Math.cos(((checklistSession.venue as any).lat || coords.lat) * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+      const distance = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+      // Log geo-fence attempt
+      await (supabase as any).from("therapist_geofence_logs").insert({
+        therapist_id: therapist.id, session_id: checklistSession.id,
+        therapist_lat: coords.lat, therapist_lng: coords.lng,
+        venue_lat: (checklistSession.venue as any).lat || null, venue_lng: (checklistSession.venue as any).lng || null,
+        distance_meters: distance, within_range: distance <= 200,
+        action_attempted: "start_session", action_allowed: distance <= 200,
+      }).catch(() => {});
+
+      if (distance > 200 && (checklistSession.venue as any).lat) {
+        setGeoError(`You are ${Math.round(distance)}m from the venue. Must be within 200m to start.`);
+        return;
+      }
+    }
+
+    // Save checklist to DB
+    await (supabase as any).from("therapist_pre_procedure_checklists").insert({
+      therapist_id: therapist.id, session_id: checklistSession.id,
+      ...checklist, verified_by_venue_staff: verifiedByStaff.trim(),
+      completed_at: new Date().toISOString(),
+    }).catch(() => {});
+
+    // Actually start the session
+    await updateStatus(checklistSession.id, { status: "in_progress", actual_start_time: new Date().toISOString() });
+    setChecklistSession(null);
+    toast({ title: "Session started", description: "Pre-procedure checklist completed. Session is now in progress." });
   };
 
   const submitEnd = async () => {
@@ -112,12 +174,21 @@ const TherapistSessions = () => {
       therapist_checkout_lng: c?.lng ?? null,
       therapist_notes: endNotes || null,
     });
+
+    // Create doctor sign-off record (earnings blocked until doctor approves)
+    await (supabase as any).from("therapist_session_signoffs").insert({
+      session_id: endingSession.id,
+      therapist_id: therapist.id,
+      earnings_amount: endingSession.therapist_earnings || 0,
+      status: "pending",
+    }).catch(() => {});
+
     // Trigger settlement (idempotent on the server). Don't block UX on errors.
     supabase.functions.invoke("settle-therapy-session", { body: { session_id: endingSession.id } })
       .catch((err) => console.warn("settle invoke failed", err));
     setEndingSession(null);
     setEndNotes("");
-    toast({ title: "Session completed", description: `Duration: ${duration} min` });
+    toast({ title: "Session completed", description: `Duration: ${duration} min. Awaiting doctor sign-off for earnings release.` });
   };
 
   return (
@@ -153,6 +224,60 @@ const TherapistSessions = () => {
           <DialogFooter>
             <Button variant="outline" onClick={() => setEndingSession(null)}>Cancel</Button>
             <Button onClick={submitEnd}>Complete session</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Pre-Procedure Checklist Gate Dialog */}
+      <Dialog open={!!checklistSession} onOpenChange={(o) => !o && setChecklistSession(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5 text-emerald-600" /> Pre-Procedure Verification
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground bg-amber-50 dark:bg-amber-950/20 p-2 rounded border border-amber-200 dark:border-amber-800">
+              <AlertTriangle className="inline h-3 w-3 mr-1" />
+              You MUST complete all verifications before starting the session. This creates an audit trail.
+            </p>
+            {[
+              { key: "doctor_instruction_received", label: "Doctor's written instruction received" },
+              { key: "patient_identity_verified", label: "Patient identity verified by venue staff / attender" },
+              { key: "materials_match_prescription", label: "Materials & oils match doctor's prescription" },
+              { key: "room_table_ready", label: "Room / table is prepared and clean" },
+              { key: "patient_consent_acknowledged", label: "Patient consent acknowledged" },
+            ].map((item) => (
+              <label key={item.key} className="flex items-center gap-3 p-2.5 border rounded-lg cursor-pointer hover:bg-muted/50 transition">
+                <input
+                  type="checkbox"
+                  checked={(checklist as any)[item.key]}
+                  onChange={(e) => setChecklist(prev => ({ ...prev, [item.key]: e.target.checked }))}
+                  className="h-4 w-4 rounded border-gray-300"
+                />
+                <span className="text-sm">{item.label}</span>
+              </label>
+            ))}
+            <div>
+              <Label className="text-xs">Venue staff name who verified patient *</Label>
+              <Input
+                value={verifiedByStaff}
+                onChange={(e) => setVerifiedByStaff(e.target.value)}
+                placeholder="e.g., Raju (Reception)"
+                className="mt-1"
+              />
+            </div>
+            {geoError && (
+              <p className="text-xs text-red-600 bg-red-50 dark:bg-red-950/20 p-2 rounded">
+                <AlertTriangle className="inline h-3 w-3 mr-1" />{geoError}
+              </p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setChecklistSession(null)}>Cancel</Button>
+            <Button onClick={confirmStartWithChecklist} disabled={!allChecked || !verifiedByStaff.trim()}>
+              <PlayCircle className="h-4 w-4 mr-1" /> Start Session
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
