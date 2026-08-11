@@ -38,6 +38,14 @@ import TaskTrackerVisionBoard from "./TaskTrackerVisionBoard";
 import TaskTrackerGratitude from "./TaskTrackerGratitude";
 import TaskTrackerImport from "./TaskTrackerImport";
 import TaskTrackerStarterPacks from "./TaskTrackerStarterPacks";
+import TaskTrackerQuickNotes from "./TaskTrackerQuickNotes";
+import TaskTrackerContacts from "./TaskTrackerContacts";
+import TaskTrackerReceiptScanner from "./TaskTrackerReceiptScanner";
+import TaskTrackerAppointmentPrep from "./TaskTrackerAppointmentPrep";
+import TaskTrackerCommLog from "./TaskTrackerCommLog";
+import TaskTrackerStandup from "./TaskTrackerStandup";
+import TaskTrackerInventoryAlerts from "./TaskTrackerInventoryAlerts";
+import TaskTrackerBookmarks from "./TaskTrackerBookmarks";
 import VoiceInput from "./VoiceInput";
 import QuickAddButton from "./QuickAddButton";
 
@@ -244,6 +252,14 @@ const TaskTrackerPage = () => {
           <Route path="gratitude" element={<TaskTrackerGratitude />} />
           <Route path="import" element={<TaskTrackerImport onImport={(tasks) => tasks.forEach(t => store.addTask(t))} />} />
           <Route path="starter-packs" element={<TaskTrackerStarterPacks onApply={(tasks) => tasks.forEach(t => store.addTask(t))} />} />
+          <Route path="quick-notes" element={<TaskTrackerQuickNotes />} />
+          <Route path="contacts" element={<TaskTrackerContacts />} />
+          <Route path="receipts" element={<TaskTrackerReceiptScanner />} />
+          <Route path="appointment-prep" element={<TaskTrackerAppointmentPrep />} />
+          <Route path="comm-log" element={<TaskTrackerCommLog />} />
+          <Route path="standup" element={<TaskTrackerStandup />} />
+          <Route path="inventory-alerts" element={<TaskTrackerInventoryAlerts />} />
+          <Route path="bookmarks" element={<TaskTrackerBookmarks />} />
         </Route>
       </Routes>
 

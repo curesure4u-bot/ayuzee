@@ -72,6 +72,19 @@ const navSections = [
     ],
   },
   {
+    label: "TOOLS",
+    items: [
+      { to: "/task-tracker/quick-notes", label: "Quick Notes", icon: ClipboardList },
+      { to: "/task-tracker/contacts", label: "Contact Book", icon: Home },
+      { to: "/task-tracker/receipts", label: "Receipt Scanner", icon: Wallet },
+      { to: "/task-tracker/appointment-prep", label: "Appointment Prep", icon: CheckSquare },
+      { to: "/task-tracker/comm-log", label: "Communication Log", icon: CalendarDays },
+      { to: "/task-tracker/standup", label: "Daily Standup", icon: ClipboardList },
+      { to: "/task-tracker/inventory-alerts", label: "Inventory Alerts", icon: BarChart3 },
+      { to: "/task-tracker/bookmarks", label: "My Bookmarks", icon: Home },
+    ],
+  },
+  {
     label: "PRODUCTIVITY",
     items: [
       { to: "/task-tracker/pomodoro", label: "Pomodoro Timer", icon: Timer },
