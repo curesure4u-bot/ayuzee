@@ -155,6 +155,7 @@ export const BookTherapySession = lazyPage(() => import("@/pages/patient/BookThe
 export const AdminFoodDatabase = lazyPage(() => import("@/pages/admin/AdminFoodDatabase"));
 export const DietChartEditor = lazyPage(() => import("@/pages/vaidya/sections/DietChartEditor"));
 export const PatientDietChart = lazyPage(() => import("@/pages/patient/PatientDietChart"));
+export const AITriageBot = lazyPage(() => import("@/pages/patient/AITriageBot"));
 export const Bulk = lazyPage(() => import("@/pages/Bulk"));
 export const Careers = lazyPage(() => import("@/pages/Careers"));
 export const Cart = lazyPage(() => import("@/pages/Cart"));
@@ -197,6 +198,7 @@ export const DoctorDispensingDashboard = lazyPage(() => import("@/pages/doctor/s
 export const DoctorFeed = lazyPage(() => import("@/pages/doctor/sections/DoctorFeed"));
 export const DoctorEarnings = lazyPage(() => import("@/pages/doctor/sections/EarningsSummary"));
 export const DoctorHome = lazyPage(() => import("@/pages/doctor/DoctorHome"));
+export const DrugHerbInteractionChecker = lazyPage(() => import("@/pages/doctor/DrugHerbInteractionChecker"));
 export const DoctorLayout = lazyPage(() => import("@/pages/doctor/DoctorLayout"));
 export const DoctorMedicines = lazyPage(() => import("@/pages/doctor/sections/DoctorMedicines"));
 export const DoctorNotificationPreferences = lazyPage(() => import("@/pages/doctor/sections/NotificationPreferences"));
