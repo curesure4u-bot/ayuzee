@@ -122,6 +122,12 @@ export const AppRoutes = () => (
             <Route path="/shop/conditions/:slug" element={withSuspense(<P.ConditionProducts />)} />
             <Route path="/shop/panchakarma" element={withSuspense(<P.PanchakarmaShop />)} />
             <Route path="/shop/surgicals" element={withSuspense(<P.AyushSurgicals />)} />
+            <Route path="/shop/brands" element={withSuspense(<P.BrandStorefronts />)} />
+            <Route path="/shop/subscription-refill" element={withSuspense(<P.SubscriptionRefillEngine />)} />
+            <Route path="/shop/cold-chain" element={withSuspense(<P.ColdChainLogistics />)} />
+            <Route path="/shop/b2b-wholesale" element={withSuspense(<P.B2BWholesale />)} />
+            <Route path="/shop/ayush-devices" element={withSuspense(<P.AyushDevices />)} />
+            <Route path="/shop/organic-food" element={withSuspense(<P.OrganicFoodNutraceuticals />)} />
             <Route path="/shop/track" element={withSuspense(<P.TrackOrder />)} />
             <Route path="/shop/prescription" element={withSuspense(<P.PrescriptionUpload />)} />
             <Route path="/shop/prescription-cart" element={withSuspense(<P.PrescriptionCart />)} />
@@ -166,6 +172,17 @@ export const AppRoutes = () => (
             <Route path="/marketplace/b2b" element={withSuspense(<P.MarketplaceB2B />)} />
             <Route path="/marketplace/devices" element={withSuspense(<P.MarketplaceDevices />)} />
             <Route path="/marketplace/organic-foods" element={withSuspense(<P.MarketplaceOrganicFoods />)} />
+            <Route path="/global/currency-language" element={withSuspense(<P.GlobalMultiCurrency />)} />
+            <Route path="/global/teleconsult" element={withSuspense(<P.GlobalTeleconsult />)} />
+            <Route path="/global/export-compliance" element={withSuspense(<P.GlobalExportCompliance />)} />
+            <Route path="/global/diaspora" element={withSuspense(<P.GlobalDiaspora />)} />
+            <Route path="/global/partner-clinics" element={withSuspense(<P.GlobalPartnerClinics />)} />
+            <Route path="/ai/prakriti-twin" element={withSuspense(<P.AIPrakritiTwin />)} />
+            <Route path="/ai/predictive-risk" element={withSuspense(<P.AIPredictiveRisk />)} />
+            <Route path="/ai/smart-vitals" element={withSuspense(<P.AISmartVitals />)} />
+            <Route path="/ai/family-health" element={withSuspense(<P.AIFamilyGraph />)} />
+            <Route path="/ai/yoga-diet-coach" element={withSuspense(<P.AIYogaDiet />)} />
+            <Route path="/ai/genome-dosha" element={withSuspense(<P.AIGenomeDosha />)} />
             <Route path="/checkout" element={withSuspense(<P.Checkout />)} />
             <Route path="/partner" element={withSuspense(<P.Partner />)} />
             <Route path="/partner/apply" element={withSuspense(<P.PartnerApply />)} />
@@ -348,6 +365,11 @@ export const AppRoutes = () => (
             <Route path="/learning/certificates/:id" element={withSuspense(<P.Certificate />)} />
             <Route path="/learning/daily-quiz" element={withSuspense(<P.StudentDailyQuiz />)} />
             <Route path="/learning/my-progress" element={withSuspense(<P.StudentGamification />)} />
+
+            {/* EdTech — P7 */}
+            <Route path="/edtech/pg-prep" element={withSuspense(<P.PGPrep />)} />
+            <Route path="/edtech/case-library" element={withSuspense(<P.CaseLibraryEdTech />)} />
+            <Route path="/edtech/certificates" element={withSuspense(<P.CertificatesEdTech />)} />
             
             {/* HMS Portal (standalone) */}
             <Route path="/hms/auth" element={withSuspense(<P.HmsPortalAuth />)} />
