@@ -156,6 +156,12 @@ export const AdminFoodDatabase = lazyPage(() => import("@/pages/admin/AdminFoodD
 export const DietChartEditor = lazyPage(() => import("@/pages/vaidya/sections/DietChartEditor"));
 export const PatientDietChart = lazyPage(() => import("@/pages/patient/PatientDietChart"));
 export const AITriageBot = lazyPage(() => import("@/pages/patient/AITriageBot"));
+export const MarketplaceBrands = lazyPage(() => import("@/pages/marketplace/BrandStorefronts"));
+export const MarketplaceSubscription = lazyPage(() => import("@/pages/marketplace/SubscriptionRefill"));
+export const MarketplaceLogistics = lazyPage(() => import("@/pages/marketplace/LogisticsTracking"));
+export const MarketplaceB2B = lazyPage(() => import("@/pages/marketplace/B2BWholesale"));
+export const MarketplaceDevices = lazyPage(() => import("@/pages/marketplace/AyushDevices"));
+export const MarketplaceOrganicFoods = lazyPage(() => import("@/pages/marketplace/OrganicFoods"));
 export const Bulk = lazyPage(() => import("@/pages/Bulk"));
 export const Careers = lazyPage(() => import("@/pages/Careers"));
 export const Cart = lazyPage(() => import("@/pages/Cart"));
