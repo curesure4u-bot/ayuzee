@@ -1,0 +1,222 @@
+-- ╔══════════════════════════════════════════════════════════════════╗
+-- ║  Seed: Panchakarma Protocol Library (15 procedures)             ║
+-- ║  Run AFTER create_therapist_enhancements.sql                    ║
+-- ╚══════════════════════════════════════════════════════════════════╝
+
+INSERT INTO therapy_protocol_library (therapy_type, title, description, preparation_steps, procedure_steps, post_procedure_steps, indications, contraindications, precautions, duration_minutes, materials_required, reference_text, difficulty_level) VALUES
+
+-- 1. ABHYANGA
+('abhyanga', 'Abhyanga (Full Body Oil Massage)',
+ 'Therapeutic full-body oil massage using medicated oils. Improves circulation, calms Vata, nourishes tissues.',
+ '["Warm the medicated oil to body temperature","Prepare massage table with clean linen","Assess patient Prakriti and select oil accordingly","Ensure room temperature is warm (24-26°C)","Brief patient about the procedure"]'::jsonb,
+ '["Apply oil to scalp (Shiro Abhyanga) with gentle circular strokes","Massage face and ears with light pressure","Apply oil to neck and shoulders with long strokes","Massage arms from shoulder to fingertips (centrifugal)","Apply oil to chest and abdomen in clockwise circles","Massage back with long upward strokes along spine","Apply oil to legs from hip to toes","Focus on joints with circular movements","Massage feet (Padabhyanga) with firm pressure","Allow oil to soak for 10-15 minutes"]'::jsonb,
+ '["Gently wipe excess oil with warm towel","Advise hot water bath after 30 minutes","Recommend light, warm food post-treatment","Advise rest for 1-2 hours","Avoid cold water, wind exposure, and heavy food"]'::jsonb,
+ ARRAY['Vata disorders','Joint stiffness','Insomnia','Dry skin','Fatigue','Anxiety','Muscle tension'],
+ ARRAY['Fever','Acute inflammation','Skin infections','Indigestion (Ama)','Kapha aggravation','Obesity','Immediately after meals'],
+ ARRAY['Check oil temperature before application','Monitor patient comfort throughout','Avoid excessive pressure on bony prominences','Use appropriate oil per Prakriti'],
+ 60,
+ '[{"name":"Medicated oil (Dhanwantharam/Ksheerabala)","quantity":"200ml"},{"name":"Clean linen sheets","quantity":"2"},{"name":"Warm towels","quantity":"3"},{"name":"Heating device for oil","quantity":"1"}]'::jsonb,
+ 'Charaka Samhita, Sutrasthana Ch.5; Ashtanga Hridaya Sutrasthana Ch.2',
+ 'basic'),
+
+-- 2. SHIRODHARA
+('shirodhara', 'Shirodhara (Oil Stream on Forehead)',
+ 'Continuous pouring of warm medicated oil on the forehead (Ajna/third eye area). Deeply calming for the nervous system.',
+ '["Prepare Dhara vessel with warm oil","Set drip rate to steady thin stream","Position patient supine with head slightly elevated","Protect eyes with cotton pads","Ensure oil temperature is 38-40°C"]'::jsonb,
+ '["Position Dhara pot 4 inches above forehead","Begin pouring oil in steady stream on Ajna region","Move stream slowly across forehead in pendulum motion","Maintain consistent flow rate throughout","Monitor patient response and comfort","Continue for prescribed duration (30-45 min)","Gently massage scalp during final 5 minutes"]'::jsonb,
+ '["Allow patient to rest for 10 minutes","Gently wipe oil from forehead and hair","Advise avoiding head bath for 2-4 hours","Recommend quiet rest, avoid screens","Light sattvic diet recommended"]'::jsonb,
+ ARRAY['Insomnia','Anxiety','Migraine','Hypertension','Hair loss','Memory issues','Stress','Pitta headaches'],
+ ARRAY['Fever','Cold and cough','Brain tumors','Recent head injury','Neck injuries','During menstruation','Low blood pressure'],
+ ARRAY['Monitor consciousness throughout','Keep oil temperature consistent','Watch for dizziness or disorientation','Ensure patient neck is supported'],
+ 45,
+ '[{"name":"Medicated oil (Brahmi/Ksheerabala)","quantity":"2 liters"},{"name":"Dhara vessel with wick","quantity":"1"},{"name":"Cotton eye pads","quantity":"2"},{"name":"Head rest/Droni","quantity":"1"},{"name":"Warm towels","quantity":"2"}]'::jsonb,
+ 'Charaka Samhita; Dharakalpa text; Ashtanga Hridaya',
+ 'intermediate'),
+
+-- 3. BASTI (KASHAYA VASTI)
+('basti', 'Kashaya Basti (Decoction Enema)',
+ 'Therapeutic enema using herbal decoction. Primary treatment for Vata disorders. Called "Ardha Chikitsa" (half of all treatments).',
+ '["Prepare decoction (Kashaya) as per prescription","Warm to body temperature (37-38°C)","Prepare Basti Yantra (enema apparatus)","Patient should be on empty stomach or light meal 3hrs prior","Position patient in left lateral position"]'::jsonb,
+ '["Lubricate rectal tip with medicated oil","Insert tip gently 3-4 inches into rectum","Slowly administer decoction over 5-10 minutes","Monitor patient for discomfort","After administration, ask patient to retain for 15-30 minutes","Gently massage abdomen in clockwise direction","Allow natural evacuation"]'::jsonb,
+ '["Monitor evacuation time and content","Record retention time","Provide warm water to drink","Light khichdi or rice gruel after 1 hour","Advise rest for the day","Avoid heavy food, travel, and exertion"]'::jsonb,
+ ARRAY['Vata disorders','Constipation','Low back pain','Sciatica','Arthritis','Neurological disorders','Infertility'],
+ ARRAY['Diarrhea','Rectal bleeding','Anal fissure','Pregnancy','Severe debility','Children under 7','Ascites'],
+ ARRAY['Check decoction temperature carefully','Ensure sterile equipment','Monitor retention time','Watch for adverse reactions','Record all observations'],
+ 30,
+ '[{"name":"Herbal decoction (Erandamuladi/Dashamula)","quantity":"480ml"},{"name":"Honey","quantity":"60ml"},{"name":"Rock salt","quantity":"5g"},{"name":"Medicated oil","quantity":"60ml"},{"name":"Basti Yantra","quantity":"1"},{"name":"Gloves","quantity":"1 pair"}]'::jsonb,
+ 'Charaka Samhita Siddhisthana Ch.1-12; Ashtanga Hridaya Sutrasthana Ch.19',
+ 'advanced'),
+
+-- 4. NASYA
+('nasya', 'Nasya (Nasal Administration)',
+ 'Administration of medicated oil/powder through the nasal passage. Gateway to the brain (Shringataka Marma).',
+ '["Steam face gently for 5 minutes","Patient lies supine with head slightly tilted back","Warm Nasya oil to body temperature","Prepare cotton, tissues","Explain procedure to patient"]'::jsonb,
+ '["Instill prescribed drops (6-8) in each nostril","Ask patient to inhale gently","Massage nose bridge and sinus areas","Allow 2-3 minutes between nostrils","Ask patient to spit out any oil reaching throat","Repeat if prescribed"]'::jsonb,
+ '["Gentle steam inhalation for 2 minutes","Avoid cold air/water for 2 hours","Light warm food only","Gargle with warm water","Avoid sleeping immediately"]'::jsonb,
+ ARRAY['Sinusitis','Migraine','Hair fall','Facial paralysis','Cervical spondylosis','Frozen shoulder','Nasal polyps','Trigeminal neuralgia'],
+ ARRAY['Cold and coryza (acute)','After meals','After head bath','Pregnancy','Children under 7','After alcohol','During menstruation'],
+ ARRAY['Check for deviated septum','Monitor for excessive sneezing','Ensure head position is correct','Use prescribed dosage only'],
+ 20,
+ '[{"name":"Anu Taila/Shadbindu Taila","quantity":"10ml"},{"name":"Steam apparatus","quantity":"1"},{"name":"Cotton pads","quantity":"4"},{"name":"Tissues","quantity":"several"},{"name":"Warm water for gargle","quantity":"1 cup"}]'::jsonb,
+ 'Charaka Samhita Siddhisthana Ch.9; Sushruta Samhita Chikitsasthana Ch.40',
+ 'intermediate'),
+
+-- 5. VAMANA
+('vamana', 'Vamana (Therapeutic Emesis)',
+ 'Controlled therapeutic vomiting to eliminate excess Kapha. First of Panchakarma Shodhana procedures.',
+ '["3-7 days of Snehapana (internal oleation) as preparation","1 day of Abhyanga + Swedana","Patient fasts from previous night","Prepare emetic medicine (Madanaphala/Vacha)","Keep emergency medicines ready","Patient drinks milk/sugarcane juice to fill stomach"]'::jsonb,
+ '["Administer emetic medicine at prescribed time (early morning)","Wait 15-20 minutes for nausea to develop","Patient sits comfortably, leans forward","Support patient during emesis episodes","Count number of bouts (Vegas)","Observe color change of vomitus (Pitta indicates completion)","Continue until bile-tinged vomitus appears","Record total volume and number of bouts"]'::jsonb,
+ '["Rest completely for the day","Dhoomapana (medicated smoking) after 1 hour","Samsarjana Krama (graded diet) for 3-7 days: Peya → Vilepi → Akrita Yusha → Krita Yusha","No heavy food for 7 days","Avoid suppressible urges","Monitor patient for 24 hours"]'::jsonb,
+ ARRAY['Bronchial asthma','Chronic rhinitis','Skin diseases','Diabetes (Kapha type)','Obesity','Hypothyroidism','PCOD'],
+ ARRAY['Heart disease','Pregnancy','Old age','Children','Emaciation','Hemorrhoids','Upper GI bleeding','Hypertension'],
+ ARRAY['Only by trained Panchakarma specialist','Keep emergency medications ready','Monitor vitals throughout','Ensure proper pre-procedure preparation','Strict Samsarjana Krama adherence'],
+ 90,
+ '[{"name":"Madanaphala Pippali powder","quantity":"5g"},{"name":"Vacha powder","quantity":"2g"},{"name":"Honey","quantity":"30ml"},{"name":"Milk","quantity":"2 liters"},{"name":"Salt water","quantity":"1 liter"},{"name":"Basin/emesis bowl","quantity":"1"},{"name":"Towels","quantity":"4"}]'::jsonb,
+ 'Charaka Samhita Kalpasthana Ch.1; Siddhisthana Ch.1',
+ 'advanced'),
+
+-- 6. VIRECHANA
+('virechana', 'Virechana (Therapeutic Purgation)',
+ 'Controlled purgation therapy to eliminate excess Pitta from the body. Most effective Pitta Shodhana.',
+ '["3-7 days of Snehapana (ghee/oil intake in increasing doses)","Abhyanga and Swedana on the day before","Light dinner previous night","Patient stays empty stomach morning of procedure","Prepare purgative medicine (Trivrit/Aragvadha)"]'::jsonb,
+ '["Administer purgative medicine early morning (6-7 AM)","Wait 1-2 hours for action to begin","Monitor frequency of bowel movements","Observe nature of stools (watery → bilious → mucoid)","Provide warm water as needed","Count total Vegas (bowel movements)","Procedure is complete when clear watery stool appears","Record Pravritti Lakshana (signs of proper purgation)"]'::jsonb,
+ '["Complete bed rest for the day","Samsarjana Krama diet for 3-7 days","Avoid cold food/drinks","No heavy meals for 5-7 days","Warm water only for drinking","Monitor for dehydration","ORS if excessive purging"]'::jsonb,
+ ARRAY['Skin diseases','Jaundice','Chronic fever','Hyperacidity','Liver disorders','Gout','Allergies','Pitta disorders'],
+ ARRAY['Rectal prolapse','Ulcerative colitis','Pregnancy','Old age','Extreme debility','Heart failure','After Vamana (same day)','Dehydration'],
+ ARRAY['Monitor hydration status','Keep ORS ready','Track number of Vegas carefully','Watch for signs of Atiyoga (excessive purgation)','Ensure proper Snehapana preparation'],
+ 120,
+ '[{"name":"Trivrit Lehya/Aragvadha","quantity":"as prescribed"},{"name":"Warm water","quantity":"2 liters"},{"name":"ORS packets","quantity":"2"},{"name":"Clean towels","quantity":"4"},{"name":"Toilet access ensured","quantity":""}]'::jsonb,
+ 'Charaka Samhita Kalpasthana Ch.7; Siddhisthana Ch.2',
+ 'advanced'),
+
+-- 7. SWEDANA (STEAM)
+('swedana', 'Swedana (Steam Therapy)',
+ 'Therapeutic sweating using steam or herbal bolus. Opens channels (Srotas), softens tissues, mobilizes toxins.',
+ '["Apply medicated oil (Abhyanga) first","Prepare steam chamber or Nadi Swedana apparatus","Add herbs (Dashamula, Nirgundi, Eucalyptus) to water","Check steam temperature (not exceeding 40°C at body level)","Cover patient head with wet cloth"]'::jsonb,
+ '["Place patient in steam chamber or direct steam to body","Protect head, eyes, and heart from direct steam","Monitor skin color — mild redness indicates adequate sweating","Continue for 15-20 minutes","Check patient comfort every 5 minutes","Stop when adequate perspiration is observed","Remove from steam immediately if patient feels faint"]'::jsonb,
+ '["Wipe sweat gently with warm towel","Rest for 15 minutes in warm room","Warm water bath after 30 minutes","Light, warm food","Avoid cold air and cold drinks for 2 hours"]'::jsonb,
+ ARRAY['Joint stiffness','Muscle pain','Obesity','Sinusitis','Common cold','Ama conditions','Before Panchakarma procedures'],
+ ARRAY['Pitta constitution (excessive)','Fever','Pregnancy','Bleeding disorders','Skin inflammation','Alcohol intoxication','Anemia','Dehydration'],
+ ARRAY['Never leave patient unattended','Monitor for dizziness','Keep head cool throughout','Check steam temperature regularly','Stop if patient feels unwell'],
+ 25,
+ '[{"name":"Dashamula kwatha/herbs","quantity":"100g"},{"name":"Steam apparatus","quantity":"1"},{"name":"Wet cloth for head","quantity":"1"},{"name":"Warm towels","quantity":"3"},{"name":"Drinking water","quantity":"500ml"}]'::jsonb,
+ 'Charaka Samhita Sutrasthana Ch.14; Ashtanga Hridaya Sutrasthana Ch.17',
+ 'basic'),
+
+-- 8. UDVARTANA
+('udvartana', 'Udvartana (Powder Massage)',
+ 'Dry powder massage in upward strokes. Reduces Kapha and fat tissue (Meda Dhatu). Excellent for obesity.',
+ '["Select herbal powder per condition (Triphala/Kolakulathadi)","Warm the powder slightly","Patient undresses and stands or lies on table","No oil application before this procedure","Brief patient about upward stroke direction"]'::jsonb,
+ '["Apply dry herbal powder all over body","Massage in upward direction (against hair growth)","Use firm pressure with both palms","Focus on areas of fat accumulation","Continue for 30-45 minutes","Increase pressure gradually","Skin should become warm and slightly red"]'::jsonb,
+ '["Gentle warm water bath after 30 minutes","Light food recommended","Avoid cold exposure","No oil application for 2-4 hours after","Drink warm water"]'::jsonb,
+ ARRAY['Obesity','Cellulite','Kapha disorders','Skin laxity','Lymphatic congestion','Diabetes','Hyperlipidemia'],
+ ARRAY['Vata constitution (dry/thin)','Skin wounds','Emaciation','Extreme cold weather','Debility'],
+ ARRAY['Use consistent upward strokes only','Avoid sensitive areas','Check for skin abrasions','Monitor patient warmth'],
+ 45,
+ '[{"name":"Triphala/Kolakulathadi churna","quantity":"300g"},{"name":"Clean linen","quantity":"2"},{"name":"Warm towels","quantity":"2"}]'::jsonb,
+ 'Ashtanga Hridaya Sutrasthana Ch.2; Sushruta Samhita Chikitsasthana',
+ 'basic'),
+
+-- 9. PIZHICHIL
+('pizhichil', 'Pizhichil (Oil Bath Therapy)',
+ 'Continuous pouring of warm medicated oil over the body while massaging. "Kings treatment." Deeply nourishing.',
+ '["Warm 3-4 liters of medicated oil","Prepare 2 therapists (one pours, one massages)","Position patient on Droni (wooden treatment table)","Protect eyes and genitals","Ensure consistent oil temperature throughout"]'::jsonb,
+ '["Both therapists work simultaneously","One pours warm oil continuously from a cloth","Other massages in direction of body hair","Maintain constant oil flow — no dry patches","Continue for 45-60 minutes","Periodically rewarm oil as it cools","Cover entire body systematically","Special attention to joints and spine"]'::jsonb,
+ '["Allow oil to soak for 15 minutes after","Gentle wiping with warm towels","Warm bath after 1 hour","Complete rest for the day","Light, warm, Vata-pacifying diet","Avoid cold air and exertion"]'::jsonb,
+ ARRAY['Paralysis','Muscular dystrophy','Rheumatoid arthritis','Neurological disorders','Anti-aging','Fibromyalgia','Osteoarthritis'],
+ ARRAY['Fever','Indigestion','Obesity','Kapha disorders','Skin infections','Diabetes (uncontrolled)'],
+ ARRAY['Requires 2 trained therapists','Maintain oil temperature throughout','Very expensive procedure (4L oil)','Monitor for Kapha aggravation'],
+ 60,
+ '[{"name":"Medicated oil (Ksheerabala/Dhanwantharam)","quantity":"4 liters"},{"name":"Cloth for pouring","quantity":"2"},{"name":"Droni (treatment table)","quantity":"1"},{"name":"Oil warmer","quantity":"1"},{"name":"Towels","quantity":"4"}]'::jsonb,
+ 'Kerala Ayurveda tradition; Ashtanga Hridaya references',
+ 'advanced'),
+
+-- 10. NJAVARAKIZHI (SHASHTIKA PINDA SWEDA)
+('njavarakizhi', 'Njavarakizhi (Rice Bolus Massage)',
+ 'Massage with boluses of cooked Njavara rice in medicated milk. Deeply nourishing and strengthening.',
+ '["Cook Njavara rice in Bala decoction + milk","Prepare 4 boluses tied in muslin cloth","Keep fresh boluses ready (reheat in milk decoction)","Apply oil to body first (light Abhyanga)","Prepare milk decoction bath to dip boluses"]'::jsonb,
+ '["Dip rice bolus in warm milk decoction","Apply on body with gentle pressing and rubbing","Use circular and long strokes","Replace bolus when it cools (every 5 min)","Cover entire body including limbs","Continue for 45-60 minutes","Maintain consistent warmth of boluses","Two therapists work simultaneously"]'::jsonb,
+ '["Wipe rice residue gently","Warm water bath after 30 min","Rest for 1-2 hours","Nourishing warm food (milk rice)","Avoid cold and wind","Continue for 7-14 days for full course"]'::jsonb,
+ ARRAY['Muscular wasting','Cerebral palsy','Polio residual','Underweight','Neurological weakness','Sports injuries','Anti-aging','Rheumatism'],
+ ARRAY['Fever','Diabetes','Obesity','Skin diseases','High Kapha','Indigestion'],
+ ARRAY['Ensure rice is well-cooked (mushy)','Keep boluses uniformly warm','Monitor for allergic reactions to milk','Ideally 14-day course'],
+ 60,
+ '[{"name":"Njavara rice","quantity":"500g"},{"name":"Bala root decoction","quantity":"2 liters"},{"name":"Cows milk","quantity":"2 liters"},{"name":"Muslin cloth for boluses","quantity":"4"},{"name":"Medicated oil (for initial Abhyanga)","quantity":"100ml"}]'::jsonb,
+ 'Kerala Panchakarma tradition; Ashtanga Hridaya',
+ 'advanced'),
+
+-- 11. ELAKIZHI (PATRA PINDA SWEDA)
+('elakizhi', 'Elakizhi (Leaf Bolus Massage)',
+ 'Massage with boluses of medicated leaves fried in oil. Anti-inflammatory, relieves pain and stiffness.',
+ '["Collect fresh leaves (Nirgundi, Eranda, Arka, Drumstick)","Chop leaves and fry in medicated oil with grated coconut","Prepare 4 boluses in muslin cloth","Apply light Abhyanga first","Heat boluses on pan before application"]'::jsonb,
+ '["Test bolus temperature on therapist forearm first","Apply warm bolus on body with pressing strokes","Use long strokes on limbs, circular on joints","Reheat boluses periodically (every 5 min)","Focus on pain areas and joints","Two therapists work simultaneously","Continue for 45 minutes","Maintain consistent warmth"]'::jsonb,
+ '["Wipe herbal residue gently","Warm bath after 30 minutes","Rest for 1 hour","Warm food only","Avoid cold exposure for 4 hours"]'::jsonb,
+ ARRAY['Arthritis','Joint pain','Frozen shoulder','Spondylosis','Sports injuries','Sciatica','Muscle spasm'],
+ ARRAY['Fever','Skin infections','Acute inflammation with pus','Burns','Varicose veins (severe)'],
+ ARRAY['Check temperature on forearm before applying to patient','Avoid directly over fracture sites','Monitor for skin burns','Fresh leaves preferred over dried'],
+ 45,
+ '[{"name":"Fresh Nirgundi/Eranda leaves","quantity":"500g"},{"name":"Grated coconut","quantity":"200g"},{"name":"Medicated oil","quantity":"200ml"},{"name":"Lemon","quantity":"4"},{"name":"Muslin cloth","quantity":"4"},{"name":"Rock salt","quantity":"50g"}]'::jsonb,
+ 'Kerala Ayurveda tradition; Sahasrayoga',
+ 'intermediate'),
+
+-- 12. PODIKIZHI (CHOORNA PINDA SWEDA)
+('podikizhi', 'Podikizhi (Powder Bolus Massage)',
+ 'Massage with boluses of dry herbal powder heated in oil. Reduces swelling and removes stiffness.',
+ '["Select appropriate churna (Kottamchukkadi/Grihadhoomadi)","Fill muslin pouches with powder","Heat in dry pan or dip in warm oil","Light Abhyanga or dry application depending on condition","Prepare 4 boluses"]'::jsonb,
+ '["Heat powder bolus on pan to uniform warmth","Apply on affected areas with gentle tapping","Use pressing and rubbing strokes","Reheat every 3-4 minutes","Focus on swollen joints and stiff muscles","Continue for 30-45 minutes","Can be done dry (Ruksha) or with oil (Snigdha)"]'::jsonb,
+ '["Wipe powder residue","Bath after 30 minutes","Rest","Warm food","Avoid cold and dampness"]'::jsonb,
+ ARRAY['Rheumatoid arthritis','Edema','Obesity','Kapha-Vata disorders','Osteoarthritis','Cervical spondylosis'],
+ ARRAY['Pitta aggravation','Skin wounds','Burns','Emaciation','Extreme Vata'],
+ ARRAY['Dry Podikizhi for Kapha conditions','Oily Podikizhi for Vata conditions','Monitor skin for irritation'],
+ 40,
+ '[{"name":"Kottamchukkadi churna","quantity":"300g"},{"name":"Muslin cloth","quantity":"4"},{"name":"Medicated oil (optional)","quantity":"100ml"},{"name":"Heating pan","quantity":"1"}]'::jsonb,
+ 'Sahasrayoga; Kerala Ayurveda',
+ 'basic'),
+
+-- 13. TAKRADHARA
+('takradhara', 'Takradhara (Medicated Buttermilk Pour)',
+ 'Continuous pouring of medicated buttermilk on the forehead. Cooling, reduces Pitta, treats psoriasis and insomnia.',
+ '["Prepare medicated buttermilk with Amalaki/Musta","Strain through cloth to remove solids","Warm slightly (room temperature to lukewarm)","Set up Dhara apparatus","Position patient supine, eyes protected"]'::jsonb,
+ '["Pour buttermilk in steady thin stream on forehead","Move in pendulum pattern across forehead","Maintain consistent flow for 30-45 minutes","Collect and recirculate buttermilk","Monitor patient relaxation response","Keep temple areas included in pour pattern"]'::jsonb,
+ '["Wipe forehead gently","Rest for 30 minutes","Light food only","Avoid sun exposure for 4 hours","Wash hair after 2 hours","Continue for 7-14 days as course"]'::jsonb,
+ ARRAY['Psoriasis','Insomnia','Anxiety','Hypertension','Burning sensation','Pitta headaches','Premature graying','Stress'],
+ ARRAY['Severe cold','Kapha conditions','Diabetes','Common cold','Fever','Winter season (extreme cold)'],
+ ARRAY['Ensure buttermilk is fresh (not sour)','Maintain room temperature pour','Ideal for summer/Pitta season','7-day minimum course recommended'],
+ 45,
+ '[{"name":"Medicated buttermilk","quantity":"3 liters"},{"name":"Dhara vessel","quantity":"1"},{"name":"Amalaki/Musta powder","quantity":"50g"},{"name":"Cotton eye pads","quantity":"2"},{"name":"Head rest","quantity":"1"}]'::jsonb,
+ 'Sahasrayoga; Dharakalpa',
+ 'intermediate'),
+
+-- 14. LEPANA (PASTE APPLICATION)
+('lepana', 'Lepana (Medicinal Paste Application)',
+ 'Application of herbal paste on affected areas. Anti-inflammatory, reduces swelling, heals wounds.',
+ '["Prepare fresh paste by grinding herbs with appropriate liquid","Paste should be applied fresh (within 1 hour of preparation)","Clean the affected area","Assess area of application","Paste thickness should be approximately 0.5cm"]'::jsonb,
+ '["Apply paste uniformly on affected area","Spread to 0.5cm thickness evenly","Cover with banana leaf or cotton (optional)","Leave for 30-45 minutes (or until paste dries)","Warm paste = Ushna Lepana (for Vata/Kapha)","Cold paste = Sheeta Lepana (for Pitta/Rakta)"]'::jsonb,
+ '["Remove dried paste with warm water","Gently clean area","Apply light oil if skin is dry","Avoid sun on treated area","Repeat daily for prescribed duration"]'::jsonb,
+ ARRAY['Arthritis swelling','Skin inflammation','Wounds','Fractures (adjunct)','Varicose veins','Headache','Cellulitis'],
+ ARRAY['Deep wounds (open)','Allergic to ingredients','Over infected wounds without drainage'],
+ ARRAY['Always prepare fresh paste','Test for skin sensitivity first','Warm lepana for Vata, cold for Pitta','Remove immediately if burning sensation occurs'],
+ 45,
+ '[{"name":"Herbal paste (Dashanga/Jatyadi)","quantity":"200g"},{"name":"Grinding stone/mixer","quantity":"1"},{"name":"Banana leaf (optional)","quantity":"2"},{"name":"Warm water for cleaning","quantity":"500ml"},{"name":"Cotton bandage","quantity":"1 roll"}]'::jsonb,
+ 'Sushruta Samhita Chikitsasthana; Sharangadhara Samhita',
+ 'basic'),
+
+-- 15. RAKTAMOKSHANA (LEECH THERAPY)
+('raktamokshana', 'Raktamokshana — Jalaukavacharana (Leech Therapy)',
+ 'Blood-letting using medicinal leeches. Removes vitiated blood (Dushta Rakta). Pitta-Rakta Shodhana.',
+ '["Select healthy medicinal leeches (Hirudo medicinalis)","Activate leeches by placing in turmeric water then clean water","Clean application site on patient","Mark the exact area for application","Ensure patient consent and explain procedure"]'::jsonb,
+ '["Place activated leech on cleaned skin area","Leech attaches and begins sucking within 2-5 minutes","If leech doesn''t attach, prick skin slightly","Monitor leech activity (raised hood = actively sucking)","One leech session = 30-60 minutes","Leech detaches naturally when satiated","If needed, apply turmeric powder to detach","Squeeze leech gently to remove ingested blood (do not reuse same day)"]'::jsonb,
+ '["Apply turmeric + honey paste on bite site","Apply tight bandage for 1-2 hours","Monitor for excessive bleeding","Advise avoiding bathing for 24 hours on treated area","Light food recommended","May feel itching at site (normal for 2-3 days)","Follow up in 48 hours"]'::jsonb,
+ ARRAY['Varicose veins','Skin diseases','Gout','Abscess','Arthritis (Raktaja)','Non-healing ulcers','Eczema','Psoriasis'],
+ ARRAY['Anemia','Hemophilia','Pregnancy','General debility','Blood thinners medication','Children under 10','HIV/Hepatitis positive'],
+ ARRAY['Use only medicinal leeches (NOT wild)','One leech per patient (no cross-use)','Monitor for allergic reaction','Keep hemostatic agents ready','Proper disposal of used leeches','Maintain leech farm hygiene'],
+ 60,
+ '[{"name":"Medicinal leeches","quantity":"3-5"},{"name":"Turmeric powder","quantity":"50g"},{"name":"Honey","quantity":"30ml"},{"name":"Clean gauze","quantity":"5"},{"name":"Bandage","quantity":"1 roll"},{"name":"Activation bowl","quantity":"1"},{"name":"Disposal container","quantity":"1"}]'::jsonb,
+ 'Sushruta Samhita Sutrasthana Ch.13-14; Ashtanga Hridaya Sutrasthana Ch.26',
+ 'advanced')
+
+ON CONFLICT DO NOTHING;
+
+-- ════════════════════════════════════════════════════════════
+-- Done! 15 Panchakarma protocols seeded.
+-- ════════════════════════════════════════════════════════════

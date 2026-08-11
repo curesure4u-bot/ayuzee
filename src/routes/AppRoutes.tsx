@@ -155,6 +155,8 @@ export const AppRoutes = () => (
             <Route path="/homeopathy/case/new" element={withSuspense(<P.CaseTakingForm />)} />
             <Route path="/homeopathy/case/:id" element={withSuspense(<P.HomeopathyCases />)} />
             <Route path="/cart" element={withSuspense(<P.Cart />)} />
+            <Route path="/drug-herb-checker" element={withSuspense(<P.DrugHerbInteractionChecker />)} />
+            <Route path="/ai-triage" element={withSuspense(<P.AITriageBot />)} />
             <Route path="/checkout" element={withSuspense(<P.Checkout />)} />
             <Route path="/partner" element={withSuspense(<P.Partner />)} />
             <Route path="/partner/apply" element={withSuspense(<P.PartnerApply />)} />
@@ -169,7 +171,7 @@ export const AppRoutes = () => (
               <Route index element={withSuspense(<P.TherapistDashboard />)} />
               <Route path="sessions" element={withSuspense(<P.TherapistSessions />)} />
               <Route path="panchakarma-session/:id" element={withSuspense(<P.TherapistPanchakarmaSession />)} />
-              <Route path="availability" element={withSuspense(<P.TherapistAvailability />)} />
+              <Route path="availability" element={withSuspense(<P.TherapistAvailabilityPage />)} />
               <Route path="earnings" element={withSuspense(<P.TherapistEarnings />)} />
               <Route path="profile" element={withSuspense(<P.TherapistProfile />)} />
               <Route path="support" element={withSuspense(<P.TherapistSupport />)} />
