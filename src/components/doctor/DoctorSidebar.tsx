@@ -77,6 +77,24 @@ const items = [
   { title: "Support", url: "/doctor/support", icon: Headphones },
 ];
 
+// P3 Clinical Intelligence Tools
+const aiClinicalItems = [
+  { title: "Drug-Herb Interactions", url: "/drug-herb-checker", icon: Pill },
+  { title: "Classical References", url: "/classical-references", icon: Bookmark },
+  { title: "Pulse & Tongue AI", url: "/pulse-tongue-ai", icon: Sparkles },
+  { title: "Lab Interpreter", url: "/lab-interpreter", icon: ClipboardList },
+];
+
+// P4 ABDM & Government
+const abdmItems = [
+  { title: "ABHA Health ID", url: "/abdm/abha", icon: Stethoscope },
+  { title: "FHIR R4 Export", url: "/abdm/fhir-export", icon: ClipboardList },
+  { title: "Consent Manager", url: "/abdm/consent-manager", icon: ListChecks },
+  { title: "AYUSH Ministry Reports", url: "/abdm/ayush-reporting", icon: Building2 },
+  { title: "DigiLocker", url: "/abdm/digilocker", icon: Bookmark },
+  { title: "e-Sanjeevani Bridge", url: "/abdm/e-sanjeevani", icon: Headphones },
+];
+
 export function DoctorSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
@@ -117,6 +135,42 @@ export function DoctorSidebar() {
                       className="hover:bg-muted/50"
                       activeClassName="bg-accent text-accent-foreground font-medium"
                     >
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>AI Clinical Tools</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {aiClinicalItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to={item.url} className="hover:bg-muted/50" activeClassName="bg-accent text-accent-foreground font-medium">
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>ABDM / Govt</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {abdmItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to={item.url} className="hover:bg-muted/50" activeClassName="bg-accent text-accent-foreground font-medium">
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
