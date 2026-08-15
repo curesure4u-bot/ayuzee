@@ -591,6 +591,20 @@ export const HmsSpineCommunityPipeline = lazyPage(() => import("@/pages/hms/spin
 export const HmsSpineAyushNativeModules = lazyPage(() => import("@/pages/hms/spine/SpineAyushNativeModules"));
 export const HmsSpineQuickProtocol = lazyPage(() => import("@/pages/hms/spine/SpineQuickProtocol"));
 export const HmsSpineAITools = lazyPage(() => import("@/pages/hms/spine/SpineAITools"));
+
+// Spine — Dispenza Meditation Tools
+export const HmsSpineDispenzaDashboard = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaDashboard"));
+export const HmsSpineDispenzaBreathwork = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaBreathwork"));
+export const HmsSpineDispenzaBodyBlessing = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaBodyBlessing"));
+export const HmsSpineDispenzaOpenFocus = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaOpenFocus"));
+export const HmsSpineDispenzaWalking = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaWalking"));
+export const HmsSpineDispenzaPineal = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaPineal"));
+export const HmsSpineDispenzaScheduler = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaScheduler"));
+export const HmsSpineDispenzaJournal = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaJournal"));
+export const HmsSpineDispenzaCoherence = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaCoherence"));
+export const HmsSpineDispenzaRehearsal = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaRehearsal"));
+export const HmsSpineDispenzaScore = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaScore"));
+
 export const HmsNadiTarangini = lazyPage(() => import("@/pages/hms/HmsNadiTarangini"));
 export const HmsIridology = lazyPage(() => import("@/pages/hms/HmsIridology"));
 export const HmsDarkfieldMicroscopy = lazyPage(() => import("@/pages/hms/HmsDarkfieldMicroscopy"));
