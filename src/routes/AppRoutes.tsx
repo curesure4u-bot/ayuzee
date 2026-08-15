@@ -723,6 +723,20 @@ export const AppRoutes = () => (
               <Route path="spine-ayush-native" element={withSuspense(<P.HmsSpineAyushNativeModules />)} />
               <Route path="spine-quick-protocol" element={withSuspense(<P.HmsSpineQuickProtocol />)} />
               <Route path="spine-ai-tools" element={withSuspense(<P.HmsSpineAITools />)} />
+
+              {/* Dispenza Meditation Tools */}
+              <Route path="spine-dispenza" element={withSuspense(<P.HmsSpineDispenzaDashboard />)} />
+              <Route path="spine-dispenza-breathwork" element={withSuspense(<P.HmsSpineDispenzaBreathwork />)} />
+              <Route path="spine-dispenza-body-blessing" element={withSuspense(<P.HmsSpineDispenzaBodyBlessing />)} />
+              <Route path="spine-dispenza-open-focus" element={withSuspense(<P.HmsSpineDispenzaOpenFocus />)} />
+              <Route path="spine-dispenza-walking" element={withSuspense(<P.HmsSpineDispenzaWalking />)} />
+              <Route path="spine-dispenza-pineal" element={withSuspense(<P.HmsSpineDispenzaPineal />)} />
+              <Route path="spine-dispenza-scheduler" element={withSuspense(<P.HmsSpineDispenzaScheduler />)} />
+              <Route path="spine-dispenza-journal" element={withSuspense(<P.HmsSpineDispenzaJournal />)} />
+              <Route path="spine-dispenza-coherence" element={withSuspense(<P.HmsSpineDispenzaCoherence />)} />
+              <Route path="spine-dispenza-rehearsal" element={withSuspense(<P.HmsSpineDispenzaRehearsal />)} />
+              <Route path="spine-dispenza-score" element={withSuspense(<P.HmsSpineDispenzaScore />)} />
+
               <Route path="nadi-tarangini" element={withSuspense(<P.HmsNadiTarangini />)} />
               <Route path="iridology" element={withSuspense(<P.HmsIridology />)} />
               <Route path="darkfield-microscopy" element={withSuspense(<P.HmsDarkfieldMicroscopy />)} />

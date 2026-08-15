@@ -14,6 +14,7 @@ import {
   GraduationCap, Globe, Smartphone, Brain, Stethoscope, ScanLine, CreditCard,
   QrCode, AlertTriangle, Target, Truck, RotateCcw, Lock, Calculator, Clock,
   Calendar, RefreshCw, ArrowRight, CheckCircle2, Send, Crown, Monitor,
+  Wind, Maximize, BookHeart, Footprints,
 } from "lucide-react";
 
 // 10 Primary Tabs
@@ -373,6 +374,17 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-quick-protocol", label: "Quick Protocol Builder", icon: Zap },
     { to: "/hms/spine-ai-tools", label: "AI Tools (Intelligence)", icon: Brain },
     { divider: "Integrative Therapies", to: "/hms/spine-therapies", label: "All Therapies (15)", icon: Globe },
+    { divider: "Dispenza Meditation Tools", to: "/hms/spine-dispenza", label: "All 10 Tools (Dashboard)", icon: Brain },
+    { to: "/hms/spine-dispenza-breathwork", label: "Breath Work (Spinal)", icon: Wind },
+    { to: "/hms/spine-dispenza-body-blessing", label: "Body Part Blessing", icon: Heart },
+    { to: "/hms/spine-dispenza-open-focus", label: "Space-Time (Open Focus)", icon: Maximize },
+    { to: "/hms/spine-dispenza-walking", label: "Walking Meditation", icon: Footprints },
+    { to: "/hms/spine-dispenza-pineal", label: "Pineal Gland Activation", icon: Sparkles },
+    { to: "/hms/spine-dispenza-scheduler", label: "Meditation Scheduler", icon: CalendarClock },
+    { to: "/hms/spine-dispenza-journal", label: "Elevated Emotion Journal", icon: BookHeart },
+    { to: "/hms/spine-dispenza-coherence", label: "Coherence Healing (Group)", icon: Users },
+    { to: "/hms/spine-dispenza-rehearsal", label: "Mental Rehearsal (Future Self)", icon: Brain },
+    { to: "/hms/spine-dispenza-score", label: "Brain-Heart Coherence Score", icon: Activity },
     { divider: "Doctor Tools", to: "/hms/spine-level1-session", label: "Level 1 Session (OPD)", icon: Zap },
     { to: "/hms/spine-level2-session", label: "Level 2 Session (Panchakarma)", icon: Sparkles },
     { to: "/hms/spine-therapy-session", label: "Record Therapy Session", icon: Stethoscope },
