@@ -21,13 +21,13 @@ type Appointment = {
 const statuses = ["scheduled", "confirmed", "completed", "cancelled"];
 const todayIso = () => new Date().toISOString().slice(0, 10);
 const inThisWeek = (date: string) => {
-  usePageSEO({ title: "Appointments — Admin", noIndex: true });
   const d = new Date(date); const now = new Date(); const start = new Date(now); start.setDate(now.getDate() - now.getDay()); start.setHours(0,0,0,0);
   const end = new Date(start); end.setDate(start.getDate() + 7); return d >= start && d < end;
 };
 const money = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n || 0);
 
 const AdminAppointments = () => {
+  usePageSEO({ title: "Appointments — Admin", noIndex: true });
   const [rows, setRows] = useState<Appointment[]>([]); const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("all"); const [mode, setMode] = useState("all"); const [from, setFrom] = useState(""); const [to, setTo] = useState(""); const [doctorSearch, setDoctorSearch] = useState("");
   const [cancelFor, setCancelFor] = useState<Appointment | null>(null); const [reason, setReason] = useState("");

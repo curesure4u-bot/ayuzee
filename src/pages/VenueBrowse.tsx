@@ -38,7 +38,6 @@ const therapyOptions = AYUSH_THERAPIES.filter((therapy) => therapy.group === "Pa
 
 const normalizeRooms = (rooms: unknown): Room[] => Array.isArray(rooms) ? rooms as Room[] : [];
 const firstPhoto = (venue: Venue) => {
-  usePageSEO({ title: "Panchakarma Therapy Venues | Ayuzee" });
   if (venue.photo_urls?.[0]) return venue.photo_urls[0];
   if (Array.isArray(venue.photos) && typeof venue.photos[0] === "string") return venue.photos[0];
   return null;
@@ -46,6 +45,7 @@ const firstPhoto = (venue: Venue) => {
 const titleCase = (value?: string | null) => (value ?? "Venue").replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
 const VenueBrowse = () => {
+  usePageSEO({ title: "Panchakarma Therapy Venues | Ayuzee" });
   const navigate = useNavigate();
   const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);

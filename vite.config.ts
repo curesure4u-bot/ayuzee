@@ -32,9 +32,11 @@ export default defineConfig(({ mode }) => ({
           if (id.includes("react-router")) return "vendor-router";
           if (id.includes("recharts") || id.includes("d3-")) return "vendor-charts";
           if (id.includes("framer-motion")) return "vendor-motion";
-          if (id.includes("jspdf") || id.includes("html2canvas")) return "vendor-pdf";
+          if (id.includes("jspdf") || id.includes("html2canvas") || id.includes("pptxgenjs")) return "vendor-pdf";
           if (id.includes("@radix-ui")) return "vendor-radix";
           if (id.includes("react-dom") || id.includes("/react/")) return "vendor-react";
+          if (id.includes("@sentry")) return "vendor-sentry";
+          if (id.includes("react-markdown") || id.includes("remark")) return "vendor-markdown";
         },
       },
     },

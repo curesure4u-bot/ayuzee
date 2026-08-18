@@ -11,6 +11,8 @@ import {
   AlertTriangle, Clock, Target, Zap, Brain, Activity,
   ChevronDown, ChevronUp, Timer,
 } from "lucide-react";
+import { PremiumLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const preparationSteps = [
   { step: 1, instruction: "Find a quiet space. Sit upright on a chair with feet flat on the floor, or cross-legged on a cushion.", duration: 60 },
@@ -44,6 +46,9 @@ export default function SpineDispenzaBreathwork() {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [showScience, setShowScience] = useState(false);
 
+  // Check real premium access from Supabase
+  const { hasPremiumAccess } = useDispenzaAccess();
+
   const steps = currentPhase === "prep" ? preparationSteps : currentPhase === "main" ? mainSteps : postSteps;
 
   const markComplete = (stepIdx: number) => {
@@ -69,6 +74,9 @@ export default function SpineDispenzaBreathwork() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Premium Lock */}
+      {!hasPremiumAccess && <PremiumLockOverlay type="premium" toolName="Breath Work (Spinal Energy)" />}
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>

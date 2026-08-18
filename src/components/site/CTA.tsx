@@ -46,7 +46,7 @@ export const CTA = () => (
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-display text-2xl font-bold text-foreground">AYUSH HMS Portal</h3>
-              <span className="rounded-full bg-violet-100 px-3 py-0.5 text-[10px] font-bold text-violet-700 uppercase tracking-wider">New</span>
+              <span className="rounded-full bg-violet-100 px-3 py-0.5 text-[11px] font-bold text-violet-700 uppercase tracking-wider">New</span>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground max-w-2xl">
               India's most advanced AI-powered Hospital Management System built exclusively for AYUSH. 
@@ -55,7 +55,7 @@ export const CTA = () => (
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {["OPD/IPD", "Panchakarma", "AI Scribe", "ABDM", "Pharmacy", "70+ Modules"].map((tag) => (
-                <span key={tag} className="rounded-full bg-violet-100/80 px-2.5 py-0.5 text-[10px] font-medium text-violet-700">{tag}</span>
+                <span key={tag} className="rounded-full bg-violet-100/80 px-2.5 py-0.5 text-[11px] font-medium text-violet-700">{tag}</span>
               ))}
             </div>
           </div>

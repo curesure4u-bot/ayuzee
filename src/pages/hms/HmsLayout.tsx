@@ -14,7 +14,7 @@ import {
   GraduationCap, Globe, Smartphone, Brain, Stethoscope, ScanLine, CreditCard,
   QrCode, AlertTriangle, Target, Truck, RotateCcw, Lock, Calculator, Clock,
   Calendar, RefreshCw, ArrowRight, CheckCircle2, Send, Crown, Monitor,
-  Wind, Maximize, BookHeart, Footprints,
+  Wind, Maximize, BookHeart, Footprints, Scale, BookOpen,
 } from "lucide-react";
 
 // 10 Primary Tabs
@@ -361,41 +361,55 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
   ],
   spine: [
     { to: "/hms/spine-ayush", label: "Spine Dashboard", icon: Home },
-    { to: "/hms/spine-ayush?tab=assessment", label: "AI Assessment (₹199)", icon: Brain },
+
+    { divider: "Patient Journey", to: "/hms/spine-ayush?tab=assessment", label: "AI Assessment (₹199)", icon: Brain },
     { to: "/hms/spine-ayush?tab=examination", label: "Examination (7 Systems)", icon: Stethoscope },
-    { to: "/hms/spine-ayush?tab=level1", label: "Level 1: First Treatment", icon: Syringe },
-    { to: "/hms/spine-ayush?tab=protocols", label: "Level 2: Panchakarma", icon: Sparkles },
-    { to: "/hms/spine-ayush?tab=packages", label: "Packages & Pricing", icon: Package },
-    { to: "/hms/spine-ayush?tab=followup", label: "Follow-up (Video LMS)", icon: Smartphone },
-    { to: "/hms/spine-ayush?tab=rejuvenation", label: "Rejuvenation", icon: Heart },
     { to: "/hms/spine-ayush?tab=connections", label: "Disease Connection Map", icon: Activity },
-    { divider: "Spine AYUSH Modules", to: "/hms/spine-modules", label: "All Modules (13)", icon: GraduationCap },
-    { to: "/hms/spine-ayush-native", label: "AYUSH Native (M14-M18)", icon: Leaf },
-    { to: "/hms/spine-quick-protocol", label: "Quick Protocol Builder", icon: Zap },
-    { to: "/hms/spine-ai-tools", label: "AI Tools (Intelligence)", icon: Brain },
-    { divider: "Integrative Therapies", to: "/hms/spine-therapies", label: "All Therapies (15)", icon: Globe },
-    { divider: "Dispenza Meditation Tools", to: "/hms/spine-dispenza", label: "All 10 Tools (Dashboard)", icon: Brain },
-    { to: "/hms/spine-dispenza-breathwork", label: "Breath Work (Spinal)", icon: Wind },
-    { to: "/hms/spine-dispenza-body-blessing", label: "Body Part Blessing", icon: Heart },
-    { to: "/hms/spine-dispenza-open-focus", label: "Space-Time (Open Focus)", icon: Maximize },
-    { to: "/hms/spine-dispenza-walking", label: "Walking Meditation", icon: Footprints },
-    { to: "/hms/spine-dispenza-pineal", label: "Pineal Gland Activation", icon: Sparkles },
-    { to: "/hms/spine-dispenza-scheduler", label: "Meditation Scheduler", icon: CalendarClock },
-    { to: "/hms/spine-dispenza-journal", label: "Elevated Emotion Journal", icon: BookHeart },
-    { to: "/hms/spine-dispenza-coherence", label: "Coherence Healing (Group)", icon: Users },
-    { to: "/hms/spine-dispenza-rehearsal", label: "Mental Rehearsal (Future Self)", icon: Brain },
-    { to: "/hms/spine-dispenza-score", label: "Brain-Heart Coherence Score", icon: Activity },
-    { divider: "Doctor Tools", to: "/hms/spine-level1-session", label: "Level 1 Session (OPD)", icon: Zap },
-    { to: "/hms/spine-level2-session", label: "Level 2 Session (Panchakarma)", icon: Sparkles },
+    { to: "/hms/spine-dermatome-mapper", label: "Dermatome Mapper", icon: Brain },
+
+    { divider: "Treatment Planning", to: "/hms/spine-quick-protocol", label: "Quick Protocol Builder", icon: Zap },
+    { to: "/hms/spine-treatment-protocol-builder", label: "Advanced Protocol Builder", icon: ClipboardList },
+    { to: "/hms/spine-therapy-comparison", label: "Therapy Comparison Engine", icon: Scale },
+    { to: "/hms/spine-ayush?tab=packages", label: "Packages & Pricing", icon: Package },
+
+    { divider: "Treatment Delivery", to: "/hms/spine-ayush?tab=level1", label: "Level 1: First Treatment", icon: Syringe },
+    { to: "/hms/spine-ayush?tab=protocols", label: "Level 2: Panchakarma", icon: Sparkles },
+    { to: "/hms/spine-therapies", label: "All Therapies (19)", icon: Globe },
+    { to: "/hms/spine-functional-neurology", label: "T19: Functional Neurology", icon: Brain },
+    { to: "/hms/spine-level1-session", label: "Record Level 1 Session", icon: Zap },
+    { to: "/hms/spine-level2-session", label: "Record Level 2 Session", icon: Sparkles },
     { to: "/hms/spine-therapy-session", label: "Record Therapy Session", icon: Stethoscope },
+
+    { divider: "Tracking & Outcomes", to: "/hms/spine-outcome-tracker", label: "Outcome Tracker", icon: Activity },
     { to: "/hms/spine-patient-recovery", label: "Patient Recovery Score", icon: Target },
-    { divider: "Community Coaching", to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
+    { to: "/hms/spine-discharge-plan", label: "Discharge & Home Plan", icon: FileText },
+
+    { divider: "Mind-Body (Dispenza)", to: "/hms/spine-dispenza", label: "All 10 Tools (Dashboard)", icon: Brain },
+    { to: "/hms/spine-dispenza-breathwork", label: "Breath Work (Spinal)", icon: Wind, badge: "premium" },
+    { to: "/hms/spine-dispenza-body-blessing", label: "Body Part Blessing", icon: Heart, badge: "premium" },
+    { to: "/hms/spine-dispenza-open-focus", label: "Space-Time (Open Focus)", icon: Maximize, badge: "free" },
+    { to: "/hms/spine-dispenza-walking", label: "Walking Meditation", icon: Footprints, badge: "premium" },
+    { to: "/hms/spine-dispenza-pineal", label: "Pineal Gland Activation", icon: Sparkles, badge: "premium" },
+    { to: "/hms/spine-dispenza-scheduler", label: "Meditation Scheduler", icon: CalendarClock, badge: "premium" },
+    { to: "/hms/spine-dispenza-journal", label: "Elevated Emotion Journal", icon: BookHeart, badge: "free" },
+    { to: "/hms/spine-dispenza-coherence", label: "Coherence Healing (Group)", icon: Users, badge: "clinic" },
+    { to: "/hms/spine-dispenza-rehearsal", label: "Mental Rehearsal (Future Self)", icon: Brain, badge: "premium" },
+    { to: "/hms/spine-dispenza-score", label: "Brain-Heart Coherence Score", icon: Activity, badge: "premium" },
+
+    { divider: "Clinical Knowledge", to: "/hms/spine-modules", label: "All Modules (M1-M18)", icon: GraduationCap },
+    { to: "/hms/spine-ayush-native", label: "AYUSH Native (M14-M18)", icon: Leaf },
+    { to: "/hms/spine-clinical-resources", label: "Clinical Resources (Videos/Cases)", icon: BookOpen },
+    { to: "/hms/spine-ai-tools", label: "AI Tools (Intelligence)", icon: Brain },
+    { to: "/hms/spine-ayush?tab=rejuvenation", label: "Rejuvenation", icon: Heart },
+    { to: "/hms/spine-ayush?tab=followup", label: "Follow-up (Video LMS)", icon: Smartphone },
+
+    { divider: "Community & Business", to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
     { to: "/hms/spine-community-pipeline", label: "Engagement Pipeline", icon: Users },
-    { divider: "Operations", to: "/hms/spine-ayush?tab=community", label: "Community & Gamification", icon: Users },
     { to: "/hms/spine-ayush?tab=franchise", label: "Franchise Operations", icon: Building2 },
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },
-    { to: "/hms/spine-ayush?tab=community", label: "Community Hub", icon: Users },
     { to: "/hms/spine-ayush?tab=kpis", label: "Franchise KPIs", icon: BarChart3 },
+    { to: "/hms/spine-cashflow-game", label: "🎲 Spine Cashflow Game", icon: Dumbbell },
+
     { divider: "Productivity", to: "/task-tracker", label: "Task Tracker", icon: ClipboardList },
   ],
 };
@@ -610,7 +624,16 @@ const HmsLayout = () => {
                   >
                     <item.icon className="h-4 w-4 shrink-0" />
                     <span className="truncate">{item.label}</span>
-                    <ChevronRight className="h-3 w-3 ml-auto opacity-30" />
+                    {(item as any).badge === "premium" && (
+                      <span className="ml-auto shrink-0 text-[9px] font-bold px-1 py-0 rounded bg-amber-100 text-amber-700 border border-amber-300">PRO</span>
+                    )}
+                    {(item as any).badge === "free" && (
+                      <span className="ml-auto shrink-0 text-[9px] font-bold px-1 py-0 rounded bg-green-100 text-green-700 border border-green-300">FREE</span>
+                    )}
+                    {(item as any).badge === "clinic" && (
+                      <span className="ml-auto shrink-0 text-[9px] font-bold px-1 py-0 rounded bg-purple-100 text-purple-700 border border-purple-300">CLINIC</span>
+                    )}
+                    {!(item as any).badge && <ChevronRight className="h-3 w-3 ml-auto opacity-30" />}
                   </NavLink>
                 </div>
               ))}

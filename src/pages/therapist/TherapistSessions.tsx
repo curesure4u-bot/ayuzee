@@ -39,13 +39,13 @@ const TABS = [
 ] as const;
 
 const privacyName = (n: string) => {
-  usePageSEO({ title: "My Sessions | Therapist | Ayuzee", noIndex: true });
   const parts = n.trim().split(" ");
   if (parts.length === 1) return parts[0];
   return `${parts[0]} ${parts[parts.length - 1][0]}.`;
 };
 
 const TherapistSessions = () => {
+  usePageSEO({ title: "My Sessions | Therapist | Ayuzee", noIndex: true });
   const { therapist } = useOutletContext<TherapistContext>();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
