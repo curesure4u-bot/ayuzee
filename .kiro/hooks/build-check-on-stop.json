@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Build Check on Session Stop",
+      "trigger": "Stop",
+      "description": "Build check before session ends to ensure no build-breaking changes",
+      "action": {
+        "type": "command",
+        "command": "npx vite build 2>&1 | tail -20",
+        "timeout": 120
+      }
+    }
+  ]
+}

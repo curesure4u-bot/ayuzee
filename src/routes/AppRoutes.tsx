@@ -240,6 +240,7 @@ export const AppRoutes = () => (
               <Route path="users" element={withSuspense(<P.AdminUsersV2 />)} />
               <Route path="users-legacy" element={withSuspense(<P.AdminUsers />)} />
               <Route path="doctors" element={withSuspense(<P.AdminDoctors />)} />
+              <Route path="dispenza-access" element={withSuspense(<P.AdminDispenzaAccess />)} />
               <Route path="students" element={withSuspense(<P.AdminStudents />)} />
               <Route path="appointments" element={withSuspense(<P.AdminAppointments />)} />
               <Route path="sessions" element={withSuspense(<P.AdminSessions />)} />
@@ -723,6 +724,16 @@ export const AppRoutes = () => (
               <Route path="spine-ayush-native" element={withSuspense(<P.HmsSpineAyushNativeModules />)} />
               <Route path="spine-quick-protocol" element={withSuspense(<P.HmsSpineQuickProtocol />)} />
               <Route path="spine-ai-tools" element={withSuspense(<P.HmsSpineAITools />)} />
+              <Route path="spine-cashflow-game" element={withSuspense(<P.HmsSpineCashflowGame />)} />
+
+              {/* Spine Therapy Tools */}
+              <Route path="spine-treatment-protocol-builder" element={withSuspense(<P.HmsSpineTreatmentProtocolBuilder />)} />
+              <Route path="spine-outcome-tracker" element={withSuspense(<P.HmsSpineOutcomeTracker />)} />
+              <Route path="spine-dermatome-mapper" element={withSuspense(<P.HmsSpineDermatomeMapper />)} />
+              <Route path="spine-therapy-comparison" element={withSuspense(<P.HmsSpineTherapyComparison />)} />
+              <Route path="spine-discharge-plan" element={withSuspense(<P.HmsSpineDischargePlan />)} />
+              <Route path="spine-clinical-resources" element={withSuspense(<P.HmsSpineClinicalResources />)} />
+              <Route path="spine-functional-neurology" element={withSuspense(<P.HmsSpineFunctionalNeurology />)} />
 
               {/* Dispenza Meditation Tools */}
               <Route path="spine-dispenza" element={withSuspense(<P.HmsSpineDispenzaDashboard />)} />

@@ -8,10 +8,11 @@ import { Separator } from "@/components/ui/separator";
 import {
   Wind, Heart, Maximize, Footprints, Sparkles, CalendarClock,
   BookHeart, Users, Brain, Activity, Play, ChevronRight,
-  Timer, Target, TrendingUp, Award, Flame, Star,
+  Timer, Target, TrendingUp, Award, Flame, Star, Lock, Crown, Building2,
 } from "lucide-react";
 
 // ─── 10 Dispenza Meditation Tools ───
+// Tier: "free" = accessible to all, "premium" = paid subscription, "clinic" = clinic membership
 const meditationTools = [
   {
     id: 1, slug: "breathwork",
@@ -22,6 +23,7 @@ const meditationTools = [
     duration: "25 min", difficulty: "Intermediate", bestTime: "Morning",
     spineTarget: "Full Spine (Sacrum → Brain)",
     keyBenefit: "Moves CSF along vertebral column — nourishes discs",
+    tier: "premium" as const,
   },
   {
     id: 2, slug: "body-blessing",
@@ -32,6 +34,7 @@ const meditationTools = [
     duration: "30 min", difficulty: "Beginner", bestTime: "AM & PM",
     spineTarget: "Cervical → Thoracic → Lumbar → Sacral",
     keyBenefit: "Increases blood flow to specific spinal segments",
+    tier: "premium" as const,
   },
   {
     id: 3, slug: "open-focus",
@@ -42,6 +45,7 @@ const meditationTools = [
     duration: "20 min", difficulty: "Beginner", bestTime: "Anytime",
     spineTarget: "Cervical, Thoracic, Lumbar",
     keyBenefit: "Reduces pain perception by 40-60% via brainwave shift",
+    tier: "free" as const,
   },
   {
     id: 4, slug: "walking",
@@ -52,6 +56,7 @@ const meditationTools = [
     duration: "20 min", difficulty: "Beginner", bestTime: "Morning",
     spineTarget: "Lumbar, Thoracic, Cervical",
     keyBenefit: "Rewires motor cortex for correct posture during gait",
+    tier: "premium" as const,
   },
   {
     id: 5, slug: "pineal",
@@ -62,6 +67,7 @@ const meditationTools = [
     duration: "35 min", difficulty: "Advanced", bestTime: "Evening",
     spineTarget: "Cervical, Cranio-cervical Junction",
     keyBenefit: "Releases natural anti-inflammatory neurochemicals",
+    tier: "premium" as const,
   },
   {
     id: 6, slug: "scheduler",
@@ -72,6 +78,7 @@ const meditationTools = [
     duration: "5 min setup", difficulty: "Beginner", bestTime: "Both",
     spineTarget: "Full Spine",
     keyBenefit: "80% compliance = measurable spine recovery in 8 weeks",
+    tier: "premium" as const,
   },
   {
     id: 7, slug: "journal",
@@ -82,6 +89,7 @@ const meditationTools = [
     duration: "10 min", difficulty: "Beginner", bestTime: "AM & PM",
     spineTarget: "Full Spine",
     keyBenefit: "23% faster recovery when journaling daily",
+    tier: "free" as const,
   },
   {
     id: 8, slug: "coherence",
@@ -92,6 +100,7 @@ const meditationTools = [
     duration: "45 min", difficulty: "Intermediate", bestTime: "Evening",
     spineTarget: "Full Spine",
     keyBenefit: "Group field amplifies individual healing potential",
+    tier: "clinic" as const,
   },
   {
     id: 9, slug: "rehearsal",
@@ -102,6 +111,7 @@ const meditationTools = [
     duration: "25 min", difficulty: "Intermediate", bestTime: "Morning",
     spineTarget: "Full Spine",
     keyBenefit: "Motor cortex activation identical to physical practice",
+    tier: "premium" as const,
   },
   {
     id: 10, slug: "score",
@@ -112,6 +122,7 @@ const meditationTools = [
     duration: "5 min", difficulty: "Beginner", bestTime: "Anytime",
     spineTarget: "Full Spine",
     keyBenefit: "Data-driven proof linking meditation to spine healing",
+    tier: "premium" as const,
   },
 ];
 
@@ -226,18 +237,43 @@ export default function SpineDispenzaDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {meditationTools.map((tool) => {
             const Icon = tool.icon;
+            const isPremium = tool.tier === "premium";
+            const isClinic = tool.tier === "clinic";
+            const isLocked = isPremium || isClinic;
             return (
               <Card
                 key={tool.id}
-                className={`cursor-pointer hover:shadow-lg transition-all duration-200 ${tool.borderColor} hover:scale-[1.02]`}
+                className={`cursor-pointer hover:shadow-lg transition-all duration-200 ${tool.borderColor} hover:scale-[1.02] ${isLocked ? "relative" : ""}`}
                 onClick={() => navigate(`/hms/spine-dispenza-${tool.slug}`)}
               >
+                {/* Tier Badge - top right */}
+                {isPremium && (
+                  <div className="absolute top-2 right-2">
+                    <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[9px] px-1.5 py-0 shadow-sm">
+                      <Crown className="w-2.5 h-2.5 mr-0.5" /> Premium
+                    </Badge>
+                  </div>
+                )}
+                {isClinic && (
+                  <div className="absolute top-2 right-2">
+                    <Badge className="bg-gradient-to-r from-purple-500 to-purple-700 text-white text-[9px] px-1.5 py-0 shadow-sm">
+                      <Building2 className="w-2.5 h-2.5 mr-0.5" /> Clinic
+                    </Badge>
+                  </div>
+                )}
+                {tool.tier === "free" && (
+                  <div className="absolute top-2 right-2">
+                    <Badge className="bg-green-100 text-green-700 border-green-300 text-[9px] px-1.5 py-0">
+                      ✓ Free
+                    </Badge>
+                  </div>
+                )}
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${tool.bgColor}`}>
+                    <div className={`p-2 rounded-lg ${tool.bgColor} ${isLocked ? "opacity-80" : ""}`}>
                       <Icon className={`w-6 h-6 ${tool.color}`} />
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pr-14">
                       <h3 className="font-semibold text-sm truncate">{tool.title}</h3>
                       <p className="text-xs text-gray-500 mt-0.5">{tool.subtitle}</p>
                     </div>
@@ -267,7 +303,11 @@ export default function SpineDispenzaDashboard() {
                     className="w-full mt-3 text-xs"
                     onClick={(e) => { e.stopPropagation(); navigate(`/hms/spine-dispenza-${tool.slug}`); }}
                   >
-                    <Play className="w-3 h-3 mr-1" /> Start Practice
+                    {isLocked ? (
+                      <><Lock className="w-3 h-3 mr-1" /> {isPremium ? "Unlock Premium" : "Join Clinic"}</>
+                    ) : (
+                      <><Play className="w-3 h-3 mr-1" /> Start Practice</>
+                    )}
                     <ChevronRight className="w-3 h-3 ml-auto" />
                   </Button>
                 </CardContent>

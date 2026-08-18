@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run Related Tests on File Save",
+      "trigger": "PostFileSave",
+      "description": "Runs vitest on every TypeScript file save to catch regressions early",
+      "matcher": "\\.(ts|tsx)$",
+      "action": {
+        "type": "command",
+        "command": "npx vitest run --reporter=verbose --passWithNoTests 2>&1 | tail -20",
+        "timeout": 60
+      }
+    }
+  ]
+}

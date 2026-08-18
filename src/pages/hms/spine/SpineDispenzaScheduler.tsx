@@ -10,6 +10,8 @@ import {
   CalendarClock, ArrowLeft, CheckCircle2, Clock, Sun, Moon,
   Play, Target, TrendingUp, Flame, Award, Bell,
 } from "lucide-react";
+import { PremiumLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const weeklyProtocol = [
   {
@@ -61,8 +63,13 @@ export default function SpineDispenzaScheduler() {
   const [streak] = useState(7);
   const [compliance] = useState(85);
 
+  // Check real premium access from Supabase
+  const { hasPremiumAccess } = useDispenzaAccess();
+
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Premium Lock */}
+      {!hasPremiumAccess && <PremiumLockOverlay type="premium" toolName="Meditation Scheduler" />}
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>

@@ -8,6 +8,8 @@ import {
   Sparkles, ArrowLeft, CheckCircle2, Clock, Brain, AlertTriangle,
   ChevronDown, ChevronUp, Timer, Eye, Moon,
 } from "lucide-react";
+import { PremiumLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const preparationSteps = [
   { step: 1, instruction: "Sit upright in complete darkness or use a sleep mask. The pineal gland responds to absence of light.", duration: 30 },
@@ -39,6 +41,9 @@ export default function SpineDispenzaPineal() {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [showScience, setShowScience] = useState(false);
 
+  // Check real premium access from Supabase
+  const { hasPremiumAccess } = useDispenzaAccess();
+
   const steps = currentPhase === "prep" ? preparationSteps : currentPhase === "main" ? mainSteps : postSteps;
 
   const markComplete = (stepIdx: number) => {
@@ -60,6 +65,9 @@ export default function SpineDispenzaPineal() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Premium Lock */}
+      {!hasPremiumAccess && <PremiumLockOverlay type="premium" toolName="Pineal Gland Activation" />}
+
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>
           <ArrowLeft className="w-4 h-4 mr-1" /> Back

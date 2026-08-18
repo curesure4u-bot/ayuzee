@@ -23,6 +23,7 @@ export const AdminCommissions = lazyPage(() => import("@/pages/admin/AdminCommis
 export const AdminConditionLeads = lazyPage(() => import("@/pages/admin/AdminConditionLeads"));
 export const AdminDashboard = lazyPage(() => import("@/pages/admin/AdminDashboard"));
 export const AdminDoctors = lazyPage(() => import("@/pages/admin/AdminDoctors"));
+export const AdminDispenzaAccess = lazyPage(() => import("@/pages/admin/AdminDispenzaAccess"));
 export const AdminEssentialDrugs = lazyPage(() => import("@/pages/admin/AdminEssentialDrugs"));
 export const AdminEssentialHomeopathyDrugs = lazyPage(() => import("@/pages/admin/AdminEssentialHomeopathyDrugs"));
 export const AdminEssentialSiddhaDrugs = lazyPage(() => import("@/pages/admin/AdminEssentialSiddhaDrugs"));
@@ -591,6 +592,16 @@ export const HmsSpineCommunityPipeline = lazyPage(() => import("@/pages/hms/spin
 export const HmsSpineAyushNativeModules = lazyPage(() => import("@/pages/hms/spine/SpineAyushNativeModules"));
 export const HmsSpineQuickProtocol = lazyPage(() => import("@/pages/hms/spine/SpineQuickProtocol"));
 export const HmsSpineAITools = lazyPage(() => import("@/pages/hms/spine/SpineAITools"));
+export const HmsSpineCashflowGame = lazyPage(() => import("@/pages/hms/spine/SpineCashflowGame"));
+
+// Spine — Therapy Tools
+export const HmsSpineTreatmentProtocolBuilder = lazyPage(() => import("@/pages/hms/spine/SpineTreatmentProtocolBuilder"));
+export const HmsSpineOutcomeTracker = lazyPage(() => import("@/pages/hms/spine/SpineOutcomeTracker"));
+export const HmsSpineDermatomeMapper = lazyPage(() => import("@/pages/hms/spine/SpineDermatomeMapper"));
+export const HmsSpineTherapyComparison = lazyPage(() => import("@/pages/hms/spine/SpineTherapyComparison"));
+export const HmsSpineDischargePlan = lazyPage(() => import("@/pages/hms/spine/SpineDischargePlan"));
+export const HmsSpineClinicalResources = lazyPage(() => import("@/pages/hms/spine/SpineClinicalResources"));
+export const HmsSpineFunctionalNeurology = lazyPage(() => import("@/pages/hms/spine/SpineFunctionalNeurology"));
 
 // Spine — Dispenza Meditation Tools
 export const HmsSpineDispenzaDashboard = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaDashboard"));

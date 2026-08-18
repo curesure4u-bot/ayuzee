@@ -128,7 +128,7 @@ const NotificationCenter = () => {
         <button className="relative p-2 rounded-lg hover:bg-muted transition-colors" title="Notifications">
           <Bell className="h-5 w-5 text-muted-foreground" />
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 text-[9px] font-bold text-white px-1">
+            <span className="absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 text-[11px] font-bold text-white px-1">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}

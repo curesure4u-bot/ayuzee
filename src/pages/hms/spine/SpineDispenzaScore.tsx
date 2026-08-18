@@ -9,6 +9,8 @@ import {
   Activity, ArrowLeft, TrendingUp, Target, Flame, Brain,
   Heart, Timer, Award, ChevronRight, BarChart3, Star,
 } from "lucide-react";
+import { PremiumLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const scoreFactors = [
   { name: "Consistency (Streak)", weight: "25%", current: 70, description: "How many consecutive days you've meditated. 7-day = 70%, 30-day = 100%", icon: Flame, color: "orange" },
@@ -37,6 +39,9 @@ export default function SpineDispenzaScore() {
   const [coherenceScore] = useState(42);
   const [trend] = useState("improving");
 
+  // Check real premium access from Supabase
+  const { hasPremiumAccess } = useDispenzaAccess();
+
   const getScoreColor = (score: number) => {
     if (score <= 25) return { bg: "bg-red-100", text: "text-red-700", border: "border-red-300", label: "Beginning" };
     if (score <= 50) return { bg: "bg-orange-100", text: "text-orange-700", border: "border-orange-300", label: "Building" };
@@ -48,6 +53,9 @@ export default function SpineDispenzaScore() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Premium Lock */}
+      {!hasPremiumAccess && <PremiumLockOverlay type="premium" toolName="Brain-Heart Coherence Score" />}
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>

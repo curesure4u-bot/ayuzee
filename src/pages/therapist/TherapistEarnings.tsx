@@ -33,7 +33,6 @@ interface PayoutRow {
 }
 
 const weekKey = (d: Date) => {
-  usePageSEO({ title: "Earnings | Therapist | Ayuzee", noIndex: true });
   const onejan = new Date(d.getFullYear(), 0, 1);
   const week = Math.ceil(((d.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7);
   return `${d.getFullYear()}-W${week.toString().padStart(2, "0")}`;
@@ -41,6 +40,7 @@ const weekKey = (d: Date) => {
 const monthKey = (d: Date) => `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}`;
 
 const TherapistEarnings = () => {
+  usePageSEO({ title: "Earnings | Therapist | Ayuzee", noIndex: true });
   const { therapist } = useOutletContext<TherapistContext>();
   const [rows, setRows] = useState<Row[]>([]);
   const [walletBalance, setWalletBalance] = useState(0);

@@ -44,6 +44,7 @@ const allGroups = [
     { title: "🎓 Students", url: "/admin/students" },
     { title: "🏗️ Organogram", url: "/admin/organogram" },
     { title: "⚡ Bulk Actions", url: "/admin/bulk-actions" },
+    { title: "🧠 Dispenza Premium Access", url: "/admin/dispenza-access" },
   ]},
   { label: "Operations", roles: ["admin","orders_admin"] as AdminRole[], items: [
     { title: "📅 Appointments", url: "/admin/appointments" },

@@ -81,10 +81,10 @@ const socialLinks = [
 const FooterLinks = ({ title, links }: { title: string; links: string[][] }) => (
   <div>
     <h4 className="mb-3 font-semibold text-primary-foreground">{title}</h4>
-    <ul className="space-y-2">
+    <ul className="space-y-1">
       {links.map(([label, href]) => (
         <li key={label}>
-          <Link to={href} className="text-sm text-footer-muted transition-smooth hover:text-primary-foreground">{label}</Link>
+          <Link to={href} className="text-sm text-footer-muted transition-smooth hover:text-primary-foreground inline-flex items-center py-1.5">{label}</Link>
         </li>
       ))}
     </ul>
@@ -123,7 +123,7 @@ export const Footer = () => {
         </div>
       </section>
 
-      <section className="container grid grid-cols-2 gap-8 py-16 md:grid-cols-6">
+      <section className="container grid grid-cols-2 gap-8 py-16 md:grid-cols-3 lg:grid-cols-6">
         <div className="col-span-2">
           <Link to="/" className="flex items-center gap-2">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-primary-foreground/10"><Leaf className="h-5 w-5 text-primary-foreground" /></span>

@@ -9,6 +9,8 @@ import {
   Users, ArrowLeft, CheckCircle2, Clock, Heart, Brain,
   ChevronDown, ChevronUp, Timer, Radio, Calendar, Plus,
 } from "lucide-react";
+import { ClinicMembershipLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const phases = [
   { phase: 1, title: "Individual Coherence", duration: "5 min", instruction: "Each person does heart-focused breathing. Breathe in gratitude, breathe out love. Build your own coherent field first.", note: "You must be coherent yourself before you can heal others." },
@@ -29,8 +31,13 @@ export default function SpineDispenzaCoherence() {
   const [currentPhase, setCurrentPhase] = useState(0);
   const [showScience, setShowScience] = useState(false);
 
+  // Check real clinic membership access from Supabase
+  const { hasClinicAccess: hasClinicMembership } = useDispenzaAccess();
+
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Clinic Membership Lock */}
+      {!hasClinicMembership && <ClinicMembershipLockOverlay toolName="Coherence Healing (Group)" />}
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>

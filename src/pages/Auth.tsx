@@ -246,7 +246,7 @@ const Auth = () => {
                       <ForgotPasswordDialog
                         defaultEmail={email}
                         trigger={
-                          <button type="button" className="text-xs font-medium text-primary hover:underline">
+                          <button type="button" className="text-sm font-medium text-primary hover:underline py-2">
                             Forgot password?
                           </button>
                         }
@@ -272,10 +272,10 @@ const Auth = () => {
 
               </form>
 
-              <p className="mt-6 text-center text-xs text-muted-foreground">
+              <p className="mt-6 text-center text-sm text-muted-foreground">
                 By continuing you agree to Ayuzee's{" "}
-                <Link to="/" className="text-primary hover:underline">Terms</Link> &{" "}
-                <Link to="/" className="text-primary hover:underline">Privacy Policy</Link>.
+                <Link to="/terms-of-use" className="text-primary hover:underline py-1 inline-block">Terms</Link> &{" "}
+                <Link to="/privacy-policy" className="text-primary hover:underline py-1 inline-block">Privacy Policy</Link>.
               </p>
 
               <p className="mt-4 text-center text-sm text-muted-foreground">
@@ -283,7 +283,7 @@ const Auth = () => {
                 <button
                   type="button"
                   onClick={() => setMode(mode === "login" ? "signup" : "login")}
-                  className="font-semibold text-primary hover:underline"
+                  className="font-semibold text-primary hover:underline py-2"
                 >
                   {mode === "login" ? "Create an account" : "Sign in instead"}
                 </button>

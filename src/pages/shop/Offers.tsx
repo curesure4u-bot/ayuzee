@@ -34,7 +34,6 @@ const WISHLIST_KEY = "ayuzee_offer_wishlist_v1";
 const formatINR = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value || 0);
 const discountPercent = (p: Product) => p.discount_price ? Math.max(0, Math.round(((p.price - p.discount_price) / p.price) * 100)) : 0;
 const timeToMidnight = () => {
-  usePageSEO({ title: "Today's Deals — Ayuzee" });
   const now = new Date();
   const end = new Date(now);
   end.setHours(24, 0, 0, 0);
@@ -46,6 +45,7 @@ const timeToMidnight = () => {
 };
 
 const Offers = () => {
+  usePageSEO({ title: "Today's Deals — Ayuzee" });
   const { addItem } = useCart();
   const [countdown, setCountdown] = useState(timeToMidnight());
   const [products, setProducts] = useState<Product[]>([]);

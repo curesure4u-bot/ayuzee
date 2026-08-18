@@ -143,11 +143,13 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5 {
     font-family: 'Fraunces', Georgia, serif;
@@ -166,4 +168,22 @@
   .shadow-warm { box-shadow: var(--shadow-warm); }
   .transition-smooth { transition: var(--transition-smooth); }
   .text-balance { text-wrap: balance; }
+}
+
+/* Mobile touch-target minimum sizes (Apple HIG: 44px, WCAG: 44x44) */
+@media (max-width: 768px) {
+  button,
+  a,
+  input,
+  select,
+  [role="button"] {
+    min-height: 36px;
+  }
+  /* Ensure footer links and inline text links have adequate tap targets */
+  footer a,
+  nav a {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
 }

@@ -171,7 +171,7 @@ export const FAQChatbot = () => {
               <Send className="h-4 w-4" />
             </Button>
           </form>
-          <p className="border-t border-border bg-muted/30 px-4 py-2 text-[10px] text-muted-foreground">
+          <p className="border-t border-border bg-muted/30 px-4 py-2 text-[11px] text-muted-foreground">
             AI assistant — for medical questions, use the Symptom Checker or book a consultation.
           </p>
         </div>

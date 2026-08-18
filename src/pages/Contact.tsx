@@ -70,8 +70,8 @@ export default function Contact() {
 
         <section className="mt-12 grid gap-8 md:grid-cols-3">
           <div className="space-y-4 md:col-span-1">
-            <div className="rounded-2xl border bg-card p-5"><Mail className="h-5 w-5 text-primary" /><p className="mt-3 text-sm font-medium">Email</p><a className="text-sm text-muted-foreground hover:text-primary" href="mailto:support@ayuzee.com">support@ayuzee.com</a></div>
-            <div className="rounded-2xl border bg-card p-5"><Phone className="h-5 w-5 text-primary" /><p className="mt-3 text-sm font-medium">Phone</p><a className="text-sm text-muted-foreground hover:text-primary" href="tel:+918610302794">+91 86103 02794</a></div>
+            <div className="rounded-2xl border bg-card p-5"><Mail className="h-5 w-5 text-primary" /><p className="mt-3 text-sm font-medium">Email</p><a className="text-sm text-muted-foreground hover:text-primary inline-flex items-center py-2" href="mailto:support@ayuzee.com">support@ayuzee.com</a></div>
+            <div className="rounded-2xl border bg-card p-5"><Phone className="h-5 w-5 text-primary" /><p className="mt-3 text-sm font-medium">Phone</p><a className="text-sm text-muted-foreground hover:text-primary inline-flex items-center py-2" href="tel:+918610302794">+91 86103 02794</a></div>
             <div className="rounded-2xl border bg-card p-5"><MapPin className="h-5 w-5 text-primary" /><p className="mt-3 text-sm font-medium">Office</p><p className="text-sm text-muted-foreground">Chennai, Tamil Nadu, India</p></div>
           </div>
 

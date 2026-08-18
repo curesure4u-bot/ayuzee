@@ -172,6 +172,8 @@ const Events = () => {
   const [newQuestion, setNewQuestion] = useState("");
   const [submittingQ, setSubmittingQ] = useState(false);
 
+  const activeEventCountdown = useCountdown(activeEvent?.starts_at ?? new Date().toISOString());
+
   const sb = supabase as any;
 
   useEffect(() => { loadEvents(); }, []);
@@ -366,7 +368,7 @@ const Events = () => {
     const reg = registrations.find((r) => r.event_id === activeEvent.id);
     const isRegistered = !!reg;
     const hasAttended = reg?.status === "attended";
-    const { timeLeft, isExpired } = useCountdown(activeEvent.starts_at);
+    const { timeLeft, isExpired } = activeEventCountdown;
     const isLive = activeEvent.status === "live" || isExpired;
     const isCompleted = activeEvent.status === "completed";
 

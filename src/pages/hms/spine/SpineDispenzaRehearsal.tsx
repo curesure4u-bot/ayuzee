@@ -8,6 +8,8 @@ import {
   Brain, ArrowLeft, CheckCircle2, Clock, Eye, Sparkles,
   ChevronDown, ChevronUp, Timer, Star, Play, Target,
 } from "lucide-react";
+import { PremiumLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const preparationSteps = [
   { step: 1, instruction: "Sit or lie comfortably. Close eyes. Do 2 minutes of slow breathing to calm the mind.", duration: 120 },
@@ -40,6 +42,9 @@ export default function SpineDispenzaRehearsal() {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [showScience, setShowScience] = useState(false);
 
+  // Check real premium access from Supabase
+  const { hasPremiumAccess } = useDispenzaAccess();
+
   const steps = currentPhase === "prep" ? preparationSteps : currentPhase === "main" ? mainSteps : postSteps;
 
   const markComplete = (stepIdx: number) => {
@@ -61,6 +66,9 @@ export default function SpineDispenzaRehearsal() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Premium Lock */}
+      {!hasPremiumAccess && <PremiumLockOverlay type="premium" toolName="Mental Rehearsal (Future Self)" />}
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>

@@ -9,6 +9,8 @@ import {
   Heart, ArrowLeft, CheckCircle2, Clock, Target, Brain,
   ChevronDown, ChevronUp, Timer, Sparkles, Activity,
 } from "lucide-react";
+import { PremiumLockOverlay } from "@/components/dispenza/PremiumLockOverlay";
+import { useDispenzaAccess } from "@/hooks/useDispenzaAccess";
 
 const preparationSteps = [
   { step: 1, instruction: "Lie down comfortably on your back (Shavasana) or sit upright. Spine should be neutral.", duration: 30 },
@@ -43,6 +45,9 @@ export default function SpineDispenzaBodyBlessing() {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [showScience, setShowScience] = useState(false);
 
+  // Check real premium access from Supabase
+  const { hasPremiumAccess } = useDispenzaAccess();
+
   const steps = currentPhase === "prep" ? preparationSteps : currentPhase === "main" ? mainSteps : postSteps;
 
   const markComplete = (stepIdx: number) => {
@@ -64,6 +69,9 @@ export default function SpineDispenzaBodyBlessing() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Premium Lock */}
+      {!hasPremiumAccess && <PremiumLockOverlay type="premium" toolName="Body Part Blessing" />}
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate("/hms/spine-dispenza")}>

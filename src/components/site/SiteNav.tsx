@@ -321,7 +321,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
       <div className="border-b border-border bg-background">
         <div className="container flex h-16 items-center gap-4">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild><Button variant="ghost" size="icon" className="md:hidden"><Menu className="h-5 w-5" /><span className="sr-only">Menu</span></Button></SheetTrigger>
+            <SheetTrigger asChild><Button variant="ghost" size="icon" className="lg:hidden"><Menu className="h-5 w-5" /><span className="sr-only">Menu</span></Button></SheetTrigger>
             <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
               <div className="space-y-5 p-4"><GlobalSearch className="md:w-full lg:w-full" /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
@@ -355,12 +355,12 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
           </Sheet>
 
           <Link to="/" className="flex shrink-0 items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf shadow-soft"><Leaf className="h-5 w-5 text-primary-foreground" /></span><span className="font-display text-2xl font-semibold tracking-tight">Ayuzee</span></Link>
-          <div className="mx-auto hidden md:block"><GlobalSearch /></div>
-          {mobileSearchOpen && <div className="absolute left-4 right-4 top-[4.5rem] z-[90] md:hidden"><GlobalSearch autoFocus className="md:w-full lg:w-full" /></div>}
+          <div className="mx-auto hidden lg:block"><GlobalSearch /></div>
+          {mobileSearchOpen && <div className="absolute left-4 right-4 top-[4.5rem] z-[90] lg:hidden"><GlobalSearch autoFocus className="md:w-full lg:w-full" /></div>}
           <div className="ml-auto flex items-center gap-2">
             <div className="hidden lg:block"><PincodeWidget variant="mini" /></div>
-            <Button variant="ghost" size="icon" aria-label="Search" className="md:hidden" onClick={() => setMobileSearchOpen((v) => !v)}><Search className="h-5 w-5" /></Button>
-            <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[10px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
+            <Button variant="ghost" size="icon" aria-label="Search" className="lg:hidden" onClick={() => setMobileSearchOpen((v) => !v)}><Search className="h-5 w-5" /></Button>
+            <Button variant="ghost" size="icon" aria-label="Cart" asChild className="relative"><Link to="/cart"><ShoppingCart className="h-5 w-5" />{count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-secondary px-1 text-[11px] font-bold text-secondary-foreground">{count}</span>}</Link></Button>
             <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:inline-flex"><Bell className="h-5 w-5" /></Button>
             {email ? (
               <DropdownMenu>
@@ -415,7 +415,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
         </div>
       </div>
 
-      <div className="relative hidden h-11 border-b border-border bg-background md:block" onMouseLeave={() => setActive(null)}>
+      <div className="relative hidden h-11 border-b border-border bg-background lg:block" onMouseLeave={() => setActive(null)}>
         <nav className="container flex h-full items-center justify-center gap-1">
           {megaMenus.slice(0, 2).map((menu) => <button key={menu.label} onMouseEnter={() => setActive(menu.label)} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">{menu.label}<ChevronDown className="h-3.5 w-3.5" /></button>)}
           <button onMouseEnter={() => setActive("Medicines")} className="inline-flex h-full items-center gap-1 px-4 text-sm font-semibold text-foreground/80 transition-smooth hover:text-primary">Medicines<ChevronDown className="h-3.5 w-3.5" /></button>
