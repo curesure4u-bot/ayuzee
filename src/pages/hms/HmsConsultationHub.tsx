@@ -15,8 +15,9 @@ import {
   Stethoscope, Video, CalendarClock, UserPlus, Users, ClipboardList,
   BedDouble, Brain, Send, Phone, MessageSquare, ArrowRight, FileText,
   CheckCircle2, Clock, AlertTriangle, Sparkles, RefreshCw, Heart,
-  Pill, ExternalLink, Star, Activity,
+  Pill, ExternalLink, Star, Activity, Loader2,
 } from "lucide-react";
+import { useOpdQueue } from "@/hooks/useOpdQueue";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Consultation = {
@@ -117,20 +118,47 @@ const IP_REVIEWS: IpReview[] = [
 
 // ─── Active Consultations Tab ─────────────────────────────────────────────────
 const ActiveConsultationsTab = () => {
+  const { visits, loading, updateVisitStatus } = useOpdQueue();
+
   const statusColor: Record<string, string> = {
-    waiting: "bg-yellow-100 text-yellow-700",
-    "in-consultation": "bg-blue-100 text-blue-700",
+    checked_in: "bg-yellow-100 text-yellow-700",
+    in_consultation: "bg-blue-100 text-blue-700",
     completed: "bg-green-100 text-green-700",
-    "no-show": "bg-red-100 text-red-700",
+    no_show: "bg-red-100 text-red-700",
+    checked_out: "bg-gray-100 text-gray-600",
   };
+
+  const handleStart = async (visitId: string) => {
+    try {
+      await updateVisitStatus(visitId, "in_consultation");
+      toast.success("Consultation started");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to update status");
+    }
+  };
+
+  const handleComplete = async (visitId: string) => {
+    try {
+      await updateVisitStatus(visitId, "completed");
+      toast.success("Consultation completed");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to update status");
+    }
+  };
+
+  if (loading) return <div className="flex items-center justify-center py-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card className="p-3"><p className="text-xs text-muted-foreground">Total Today</p><p className="text-2xl font-bold">{CONSULTATIONS.length}</p></Card>
-        <Card className="p-3"><p className="text-xs text-muted-foreground">Waiting</p><p className="text-2xl font-bold text-yellow-600">{CONSULTATIONS.filter(c => c.status === "waiting").length}</p></Card>
-        <Card className="p-3"><p className="text-xs text-muted-foreground">In Consultation</p><p className="text-2xl font-bold text-blue-600">{CONSULTATIONS.filter(c => c.status === "in-consultation").length}</p></Card>
-        <Card className="p-3"><p className="text-xs text-muted-foreground">Completed</p><p className="text-2xl font-bold text-green-600">{CONSULTATIONS.filter(c => c.status === "completed").length}</p></Card>
+        <Card className="p-3"><p className="text-xs text-muted-foreground">Total Today</p><p className="text-2xl font-bold">{visits.length}</p></Card>
+        <Card className="p-3"><p className="text-xs text-muted-foreground">Waiting</p><p className="text-2xl font-bold text-yellow-600">{visits.filter(v => v.status === "checked_in").length}</p></Card>
+        <Card className="p-3"><p className="text-xs text-muted-foreground">In Consultation</p><p className="text-2xl font-bold text-blue-600">{visits.filter(v => v.status === "in_consultation").length}</p></Card>
+        <Card className="p-3"><p className="text-xs text-muted-foreground">Completed</p><p className="text-2xl font-bold text-green-600">{visits.filter(v => v.status === "completed").length}</p></Card>
       </div>
+      {visits.length === 0 ? (
+        <Card><CardContent className="py-12 text-center text-muted-foreground">No patients checked in today. Register a patient to start the queue.</CardContent></Card>
+      ) : (
       <Card>
         <CardContent className="pt-4">
           <Table>
@@ -147,22 +175,27 @@ const ActiveConsultationsTab = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {CONSULTATIONS.map((c) => (
-                <TableRow key={c.id}>
-                  <TableCell className="font-bold text-sm">{c.tokenNo}</TableCell>
+              {visits.map((v) => (
+                <TableRow key={v.id}>
+                  <TableCell className="font-bold text-sm">{v.session_token}</TableCell>
                   <TableCell>
-                    <div><span className="text-sm font-medium">{c.patientName}</span></div>
-                    <span className="text-[10px] text-muted-foreground">{c.patientId} | {c.age}{c.gender} | {c.phone}</span>
+                    <div><span className="text-sm font-medium">{v.patient_name}</span></div>
+                    <span className="text-[10px] text-muted-foreground">{v.patient_display_id} | {v.patient_age || "—"}{v.patient_gender?.[0] || ""} | {v.patient_phone || ""}</span>
                   </TableCell>
-                  <TableCell><Badge variant="outline" className={`text-[10px] ${c.type === "new" ? "border-green-300 text-green-700" : c.type === "online" ? "border-purple-300 text-purple-700" : "border-blue-300 text-blue-700"}`}>{c.type}</Badge></TableCell>
-                  <TableCell className="text-xs">{c.doctor}</TableCell>
-                  <TableCell className="text-sm">{c.time}</TableCell>
-                  <TableCell className="text-xs max-w-[200px] truncate">{c.chiefComplaint}</TableCell>
-                  <TableCell><Badge className={`text-[9px] ${statusColor[c.status]}`}>{c.status}</Badge></TableCell>
+                  <TableCell><Badge variant="outline" className={`text-[10px] ${v.mode_visit === "Direct" ? "border-green-300 text-green-700" : v.mode_visit === "Teleconsult" ? "border-purple-300 text-purple-700" : "border-blue-300 text-blue-700"}`}>{v.mode_visit}</Badge></TableCell>
+                  <TableCell className="text-xs">{v.doctor_name || "Unassigned"}</TableCell>
+                  <TableCell className="text-sm">{new Date(v.check_in_time).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</TableCell>
+                  <TableCell className="text-xs max-w-[200px] truncate">{v.chief_complaint || "—"}</TableCell>
+                  <TableCell><Badge className={`text-[9px] ${statusColor[v.status] || "bg-gray-100"}`}>{v.status.replace("_", " ")}</Badge></TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      <Button size="sm" className="h-6 text-[10px] bg-green-600 hover:bg-green-700">Start</Button>
-                      {c.type === "online" && <Button size="sm" variant="outline" className="h-6 text-[10px] gap-0.5"><Video className="h-3 w-3" /></Button>}
+                      {v.status === "checked_in" && (
+                        <Button size="sm" className="h-6 text-[10px] bg-green-600 hover:bg-green-700" onClick={() => handleStart(v.id)}>Start</Button>
+                      )}
+                      {v.status === "in_consultation" && (
+                        <Button size="sm" className="h-6 text-[10px] bg-blue-600 hover:bg-blue-700" onClick={() => handleComplete(v.id)}>Complete</Button>
+                      )}
+                      {v.mode_visit === "Teleconsult" && <Button size="sm" variant="outline" className="h-6 text-[10px] gap-0.5"><Video className="h-3 w-3" /></Button>}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -171,6 +204,7 @@ const ActiveConsultationsTab = () => {
           </Table>
         </CardContent>
       </Card>
+      )}
     </div>
   );
 };
