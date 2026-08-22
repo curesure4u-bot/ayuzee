@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS public.hms_doctor_slots (
 );
 
 ALTER TABLE public.hms_doctor_slots ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage doctor slots" ON public.hms_doctor_slots;
 CREATE POLICY "Staff can manage doctor slots" ON public.hms_doctor_slots FOR ALL TO authenticated USING (true);
 
 -- Actual bookings
@@ -67,8 +68,11 @@ CREATE TABLE IF NOT EXISTS public.hms_appointment_bookings (
 );
 
 ALTER TABLE public.hms_appointment_bookings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can view bookings" ON public.hms_appointment_bookings;
 CREATE POLICY "Staff can view bookings" ON public.hms_appointment_bookings FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "Staff can insert bookings" ON public.hms_appointment_bookings;
 CREATE POLICY "Staff can insert bookings" ON public.hms_appointment_bookings FOR INSERT TO authenticated WITH CHECK (true);
+DROP POLICY IF EXISTS "Staff can update bookings" ON public.hms_appointment_bookings;
 CREATE POLICY "Staff can update bookings" ON public.hms_appointment_bookings FOR UPDATE TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_bookings_date ON public.hms_appointment_bookings(appointment_date, doctor_name);
@@ -125,6 +129,7 @@ CREATE TABLE IF NOT EXISTS public.hms_lab_tests (
 );
 
 ALTER TABLE public.hms_lab_tests ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage lab tests" ON public.hms_lab_tests;
 CREATE POLICY "Staff can manage lab tests" ON public.hms_lab_tests FOR ALL TO authenticated USING (true);
 
 -- Lab orders (from doctor)
@@ -157,6 +162,7 @@ CREATE TABLE IF NOT EXISTS public.hms_lab_orders (
 );
 
 ALTER TABLE public.hms_lab_orders ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage lab orders" ON public.hms_lab_orders;
 CREATE POLICY "Staff can manage lab orders" ON public.hms_lab_orders FOR ALL TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_lab_orders_patient ON public.hms_lab_orders(patient_id);
@@ -189,6 +195,7 @@ CREATE TABLE IF NOT EXISTS public.hms_lab_order_items (
 );
 
 ALTER TABLE public.hms_lab_order_items ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage lab items" ON public.hms_lab_order_items;
 CREATE POLICY "Staff can manage lab items" ON public.hms_lab_order_items FOR ALL TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_lab_items_order ON public.hms_lab_order_items(order_id);
@@ -245,6 +252,7 @@ CREATE TABLE IF NOT EXISTS public.hms_stock_products (
 );
 
 ALTER TABLE public.hms_stock_products ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage products" ON public.hms_stock_products;
 CREATE POLICY "Staff can manage products" ON public.hms_stock_products FOR ALL TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_stock_products_name ON public.hms_stock_products(product_name);
@@ -274,6 +282,7 @@ CREATE TABLE IF NOT EXISTS public.hms_purchase_orders (
 );
 
 ALTER TABLE public.hms_purchase_orders ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage POs" ON public.hms_purchase_orders;
 CREATE POLICY "Staff can manage POs" ON public.hms_purchase_orders FOR ALL TO authenticated USING (true);
 
 -- GRN (Goods Receipt Note)
@@ -297,6 +306,7 @@ CREATE TABLE IF NOT EXISTS public.hms_grn (
 );
 
 ALTER TABLE public.hms_grn ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage GRN" ON public.hms_grn;
 CREATE POLICY "Staff can manage GRN" ON public.hms_grn FOR ALL TO authenticated USING (true);
 
 -- GRN Items (batch-level)
@@ -323,6 +333,7 @@ CREATE TABLE IF NOT EXISTS public.hms_grn_items (
 );
 
 ALTER TABLE public.hms_grn_items ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage GRN items" ON public.hms_grn_items;
 CREATE POLICY "Staff can manage GRN items" ON public.hms_grn_items FOR ALL TO authenticated USING (true);
 
 -- Auto-generate PO/GRN numbers
@@ -366,6 +377,7 @@ CREATE TABLE IF NOT EXISTS public.hms_wards (
 );
 
 ALTER TABLE public.hms_wards ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage wards" ON public.hms_wards;
 CREATE POLICY "Staff can manage wards" ON public.hms_wards FOR ALL TO authenticated USING (true);
 
 CREATE TABLE IF NOT EXISTS public.hms_beds (
@@ -380,6 +392,7 @@ CREATE TABLE IF NOT EXISTS public.hms_beds (
 );
 
 ALTER TABLE public.hms_beds ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage beds" ON public.hms_beds;
 CREATE POLICY "Staff can manage beds" ON public.hms_beds FOR ALL TO authenticated USING (true);
 
 -- IP Admissions
@@ -420,6 +433,7 @@ CREATE TABLE IF NOT EXISTS public.hms_ip_admissions (
 );
 
 ALTER TABLE public.hms_ip_admissions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage admissions" ON public.hms_ip_admissions;
 CREATE POLICY "Staff can manage admissions" ON public.hms_ip_admissions FOR ALL TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_ip_admissions_patient ON public.hms_ip_admissions(patient_id);
@@ -457,6 +471,7 @@ CREATE TABLE IF NOT EXISTS public.hms_pk_packages (
 );
 
 ALTER TABLE public.hms_pk_packages ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage PK packages" ON public.hms_pk_packages;
 CREATE POLICY "Staff can manage PK packages" ON public.hms_pk_packages FOR ALL TO authenticated USING (true);
 
 -- Patient PK enrollment (patient assigned to a package)
@@ -492,6 +507,7 @@ CREATE TABLE IF NOT EXISTS public.hms_pk_enrollments (
 );
 
 ALTER TABLE public.hms_pk_enrollments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage PK enrollments" ON public.hms_pk_enrollments;
 CREATE POLICY "Staff can manage PK enrollments" ON public.hms_pk_enrollments FOR ALL TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_pk_enrollments_patient ON public.hms_pk_enrollments(patient_id);
@@ -537,6 +553,7 @@ CREATE TABLE IF NOT EXISTS public.hms_pk_sessions (
 );
 
 ALTER TABLE public.hms_pk_sessions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Staff can manage PK sessions" ON public.hms_pk_sessions;
 CREATE POLICY "Staff can manage PK sessions" ON public.hms_pk_sessions FOR ALL TO authenticated USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_pk_sessions_enrollment ON public.hms_pk_sessions(enrollment_id);
