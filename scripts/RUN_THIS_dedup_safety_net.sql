@@ -16,13 +16,17 @@
 
 -- HMS Appointments: one patient, one doctor, one time slot
 CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hms_appointments
-  ON hms_appointments(doctor_id, patient_id, appointment_date, appointment_time)
+  ON hms_appointments(patient_name, doctor_name, date, time_slot)
   WHERE status NOT IN ('cancelled', 'no_show');
 
 -- Online Bookings: one patient, one doctor, one slot
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hms_online_bookings
-  ON hms_online_bookings(doctor_id, patient_id, booking_date, time_slot)
-  WHERE status NOT IN ('cancelled');
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hms_online_bookings
+    ON hms_online_bookings(patient_id, doctor_id, booking_date, time_slot)
+    WHERE status NOT IN ('cancelled');
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 2. ORDERS & PAYMENTS — Prevent double orders/charges
