@@ -309,6 +309,7 @@ export const GuideTherapist = lazyPage(() => import("@/pages/guides/TherapistGui
 export const GuidePharmacy = lazyPage(() => import("@/pages/guides/PharmacyGuide"));
 export const GuideLab = lazyPage(() => import("@/pages/guides/LabGuide"));
 export const GuidePatient = lazyPage(() => import("@/pages/guides/PatientGuide"));
+export const GuideSpineAyush = lazyPage(() => import("@/pages/guides/SpineAyushGuide"));
 
 // HMS Portal (standalone)
 export const HmsPortalLayout = lazyPage(() => import("@/pages/hms/HmsLayout"));

@@ -39,6 +39,7 @@ export const AppRoutes = () => (
             <Route path="/guides/pharmacy" element={withSuspense(<P.GuidePharmacy />)} />
             <Route path="/guides/lab" element={withSuspense(<P.GuideLab />)} />
             <Route path="/guides/patient" element={withSuspense(<P.GuidePatient />)} />
+            <Route path="/guides/spine-ayush" element={withSuspense(<P.GuideSpineAyush />)} />
             <Route path="/login" element={withSuspense(<P.LoginPicker />)} />
             <Route path="/auth" element={withSuspense(<P.Auth />)} />
             <Route path="/reset-password" element={withSuspense(<P.ResetPassword />)} />

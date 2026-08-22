@@ -12,6 +12,7 @@ import {
   Pill,
   FlaskConical,
   Heart,
+  Activity,
   Printer,
   ArrowLeft,
 } from "lucide-react";
@@ -88,6 +89,15 @@ const guides = [
     path: "/guides/patient",
     roles: ["Patient", "Caregiver"],
     estimatedTime: "10 min",
+  },
+  {
+    title: "Spine AYUSH",
+    description: "Complete spine care playbook: AI Assessment, 7-System Examination, Protocols, Franchise KPIs, and Outcomes.",
+    icon: Activity,
+    color: "bg-blue-500/10 text-blue-700",
+    path: "/guides/spine-ayush",
+    roles: ["Doctor", "Therapist", "Manager"],
+    estimatedTime: "25 min",
   },
 ];
 

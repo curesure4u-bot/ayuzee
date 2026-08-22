@@ -509,6 +509,7 @@ const moreItems = [
     { to: "/guides/pharmacy", label: "Pharmacy Guide", icon: Pill },
     { to: "/guides/lab", label: "Lab Guide", icon: FlaskConical },
     { to: "/guides/patient", label: "Patient Guide", icon: Users },
+    { to: "/guides/spine-ayush", label: "Spine AYUSH Playbook", icon: Activity },
   ]},
 ];
 
