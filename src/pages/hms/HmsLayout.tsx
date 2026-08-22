@@ -513,15 +513,94 @@ const HmsLayout = () => {
   // Auto-detect active tab from URL
   useEffect(() => {
     const p = location.pathname;
-    if (p.includes("/hms/doctor-") || p.includes("/hms/consultation-hub") || p.includes("/hms/opd") || p.includes("/hms/appointments") || p.includes("/hms/teleconsult") || p.includes("/hms/waitlist") || p.includes("/hms/shift-roster")) setActiveTab("doctor");
-    else if (p.includes("/hms/patient") || p.includes("/hms/patients") || p.includes("/hms/treatment-timeline") || p.includes("/hms/integrative-medicine") || p.includes("/hms/billing") || p.includes("/hms/feedback")) setActiveTab("patient");
-    else if (p.includes("/hms/stock") || p.includes("/hms/pharmacy")) setActiveTab("stock");
-    else if (p.includes("/hms/lab") || p.includes("/hms/radiology") || p.includes("/hms/blood-bank")) setActiveTab("lab");
-    else if (p.includes("/hms/accounts") || p.includes("/hms/credit-settlement")) setActiveTab("accounts");
-    else if (p.includes("/hms/mis") || p.includes("/hms/reports") || p.includes("/hms/governance")) setActiveTab("mis");
-    else if (p.includes("/hms/ayurveda") || p.includes("/hms/siddha") || p.includes("/hms/homeopathy") || p.includes("/hms/unani") || p.includes("/hms/yoga") || p.includes("/hms/naturopathy") || p.includes("/hms/panchakarma") || p.includes("/hms/pk-") || p.includes("/hms/icd-") || p.includes("/hms/namaste") || p.includes("/hms/sna-") || p.includes("/hms/classical") || p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments")) setActiveTab("ayush");
-    else if (p.includes("/hms/spine-ayush") || p.includes("/hms/spine-modules") || p.includes("/hms/spine-therapies") || p.includes("/hms/spine-community") || p.includes("/hms/spine-therapy-session") || p.includes("/hms/spine-patient-recovery") || p.includes("/hms/spine-level1")) setActiveTab("spine");
-    else setActiveTab("dashboard");
+
+    // HRMS has its own layout — no tab switching needed
+    if (p.includes("/hms/hrms")) return;
+
+    // Doctor tab: all doctor tools, consultation, appointments, clinical workflow
+    if (
+      p.includes("/hms/doctor-") || p.includes("/hms/doctor/") ||
+      p.includes("/hms/consultation-hub") || p.includes("/hms/consultations") ||
+      p.includes("/hms/opd") || p.includes("/hms/appointments") ||
+      p.includes("/hms/appointment-slot-config") || p.includes("/hms/appointment-calendar") ||
+      p.includes("/hms/online-booking") || p.includes("/hms/teleconsult") ||
+      p.includes("/hms/waitlist") || p.includes("/hms/triage") ||
+      p.includes("/hms/shift-roster") || p.includes("/hms/digital-checkin") ||
+      p.includes("/hms/post-visit-summary") || p.includes("/hms/ai-copilot") ||
+      p.includes("/hms/voice-interface") ||
+      p.includes("/hms/afi-formulary") || p.includes("/hms/classical-prescriptions") ||
+      p.includes("/hms/gut-health-queue") || p.includes("/hms/jihva-queue") ||
+      p.includes("/hms/mutra-bindu-queue") || p.includes("/hms/self-assessment-queue") ||
+      p.includes("/hms/ashtavidha/")
+    ) { setActiveTab("doctor"); }
+
+    // Patient tab: patient records, registration, billing, IP, engagement
+    else if (
+      p.includes("/hms/patient") || p.includes("/hms/patients") ||
+      p.includes("/hms/patient-card") || p.includes("/hms/patient-merge") ||
+      p.includes("/hms/treatment-timeline") || p.includes("/hms/treatment-view") ||
+      p.includes("/hms/integrative-medicine") ||
+      p.includes("/hms/billing") || p.includes("/hms/feedback") ||
+      p.includes("/hms/emr") || p.includes("/hms/e-prescription") ||
+      p.includes("/hms/outcome-scales") || p.includes("/hms/proms") ||
+      p.includes("/hms/iot-vitals") || p.includes("/hms/prakriti") ||
+      p.includes("/hms/posture") || p.includes("/hms/swasthavritta") ||
+      p.includes("/hms/op-ip-transfer") || p.includes("/hms/op-therapy-transfer") ||
+      p.includes("/hms/discharge-workflow") || p.includes("/hms/ipd") ||
+      p.includes("/hms/icd-coding")
+    ) { setActiveTab("patient"); }
+
+    // Stock tab: pharmacy, stock, inventory
+    else if (
+      p.includes("/hms/stock") || p.includes("/hms/pharmacy") ||
+      p.includes("/hms/inventory")
+    ) { setActiveTab("stock"); }
+
+    // Lab tab: lab diagnostics, radiology, blood bank
+    else if (
+      p.includes("/hms/lab") || p.includes("/hms/radiology") ||
+      p.includes("/hms/blood-bank") || p.includes("/hms/nadi-tarangini") ||
+      p.includes("/hms/iridology") || p.includes("/hms/darkfield") ||
+      p.includes("/hms/thermography") || p.includes("/hms/hrv-analysis") ||
+      p.includes("/hms/gut-microbiome") || p.includes("/hms/lab-critical")
+    ) { setActiveTab("lab"); }
+
+    // Accounts tab: accounts, billing finance, credit
+    else if (
+      p.includes("/hms/accounts") || p.includes("/hms/credit-settlement") ||
+      p.includes("/hms/copay-calculator") || p.includes("/hms/pan-validation") ||
+      p.includes("/hms/estimate-approval") || p.includes("/hms/insurance-preauth")
+    ) { setActiveTab("accounts"); }
+
+    // MIS tab: MIS reports, governance, data analytics
+    else if (
+      p.includes("/hms/mis") || p.includes("/hms/reports") ||
+      p.includes("/hms/governance") || p.includes("/hms/data-analytics")
+    ) { setActiveTab("mis"); }
+
+    // AYUSH tab: all AYUSH systems, panchakarma, manufacturing, therapy
+    else if (
+      p.includes("/hms/ayurveda") || p.includes("/hms/siddha") ||
+      p.includes("/hms/homeopathy") || p.includes("/hms/unani") ||
+      p.includes("/hms/yoga") || p.includes("/hms/naturopathy") ||
+      p.includes("/hms/panchakarma") || p.includes("/hms/pk-") ||
+      p.includes("/hms/namaste") || p.includes("/hms/sna-") ||
+      p.includes("/hms/manufacturing") || p.includes("/hms/therapy-appointments") ||
+      p.includes("/hms/therapy-catalog") || p.includes("/hms/therapy-plans") ||
+      p.includes("/hms/hijama") || p.includes("/hms/ayush/") ||
+      p.includes("/hms/repertory") || p.includes("/hms/materia-medica") ||
+      p.includes("/hms/case-taking") ||
+      p.includes("/hms/ayurveda-prescription") || p.includes("/hms/siddha-prescription") ||
+      p.includes("/hms/unani-prescription") || p.includes("/hms/homeopathy-prescription")
+    ) { setActiveTab("ayush"); }
+
+    // Spine tab: all spine modules and dispenza
+    else if (
+      p.includes("/hms/spine-")
+    ) { setActiveTab("spine"); }
+
+    // Default: dashboard (for settings, masters, branch management, etc.)
+    else { setActiveTab("dashboard"); }
   }, [location.pathname]);
 
   useEffect(() => {
