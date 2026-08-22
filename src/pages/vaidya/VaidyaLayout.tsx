@@ -186,12 +186,7 @@ const hmsGroups = [
     label: "HMS Full Portal",
     icon: Building2,
     items: [
-      { to: "/hms", label: "Full HMS Portal →", icon: Building2 },
-      { to: "/hms/emr", label: "EMR & Records →", icon: ClipboardList },
-      { to: "/hms/ayurveda", label: "Ayurveda Module →", icon: Sparkles },
-      { to: "/hms/panchakarma", label: "Panchakarma Mgmt →", icon: Flower2 },
-      { to: "/hms/ai-assist", label: "AI Clinical Support →", icon: Zap },
-      { to: "/hms/reports", label: "Advanced Analytics →", icon: BarChart3 },
+      { to: "/vaidya/hms", label: "HMS Dashboard (if enabled)", icon: Building2 },
     ],
   },
   {

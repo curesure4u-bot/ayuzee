@@ -207,18 +207,14 @@ const HmsDash = () => {
             Access the complete hospital management system with AYUSH clinical modules, AI tools, manufacturing, and research.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <Button asChild variant="outline" size="sm"><Link to="/hms">HMS Dashboard</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/emr">EMR Records</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/ayurveda">Ayurveda</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/siddha">Siddha</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/homeopathy">Homeopathy</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/unani">Unani</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/panchakarma">Panchakarma Mgmt</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/ai-assist">AI Clinical</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/pharmacy">Pharmacy</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/manufacturing">Manufacturing</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/reports">Analytics</Link></Button>
-            <Button asChild variant="outline" size="sm"><Link to="/hms/research">Research</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/panchakarma">Panchakarma</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/yoga">Yoga Therapy</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/inventory">Inventory</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/consultations">Consultations</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/patients">Patients</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/bills">Billing</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/analytics">Analytics</Link></Button>
+            <Button asChild variant="outline" size="sm"><Link to="/vaidya/follow-up">Follow-ups</Link></Button>
           </div>
         </CardContent>
       </Card>
