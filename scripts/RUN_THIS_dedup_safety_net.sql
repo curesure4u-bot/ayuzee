@@ -15,9 +15,13 @@
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- HMS Appointments: one patient, one doctor, one time slot
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hms_appointments
-  ON hms_appointments(patient_name, doctor_name, date, time_slot)
-  WHERE status NOT IN ('cancelled', 'no_show');
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hms_appointments
+    ON hms_appointments(patient_name, doctor_name, date, time_slot)
+    WHERE status NOT IN ('cancelled', 'no_show');
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- Online Bookings: one patient, one doctor, one slot
 DO $$ BEGIN
@@ -50,19 +54,26 @@ END $$;
 -- 3. JOB APPLICATIONS — One application per user per job
 -- ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_job_applications
-  ON job_applications(user_id, job_id)
-  WHERE status != 'withdrawn';
+-- Job applications already has UNIQUE(user_id, job_listing_id) — confirmed
+-- No additional index needed
 
 -- Freelance gig applications
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_freelance_applications
-  ON freelance_gig_applications(applicant_id, gig_id)
-  WHERE status != 'withdrawn';
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_freelance_applications
+    ON freelance_gig_applications(applicant_id, gig_id)
+    WHERE status != 'withdrawn';
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- Internship applications
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_internship_applications
-  ON internship_applications(student_id, listing_id)
-  WHERE status != 'withdrawn';
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_internship_applications
+    ON internship_applications(student_id, listing_id)
+    WHERE status != 'withdrawn';
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 4. THERAPY/SESSION BOOKINGS — Prevent double-booking same slot
@@ -113,32 +124,52 @@ END $$;
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- One active study group membership per user per group
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_study_group_members
-  ON study_group_members(user_id, group_id)
-  WHERE status = 'active';
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_study_group_members
+    ON study_group_members(user_id, group_id)
+    WHERE status = 'active';
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- One chapter membership per user per chapter
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_chapter_members
-  ON chapter_members(user_id, chapter_id)
-  WHERE status = 'active';
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_chapter_members
+    ON chapter_members(user_id, chapter_id)
+    WHERE status = 'active';
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- Competition: one entry per participant per competition
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_competition_participants
-  ON competition_participants(user_id, competition_id);
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_competition_participants
+    ON competition_participants(user_id, competition_id);
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- Mentorship: one active request per student per mentor
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_mentorship
-  ON mentorship_requests(student_id, mentor_id)
-  WHERE status IN ('pending', 'accepted');
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_mentorship
+    ON mentorship_requests(student_id, mentor_id)
+    WHERE status IN ('pending', 'accepted');
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 7. LEAVE REQUESTS — Prevent duplicate leave for same dates
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- One leave request per employee per date range (not cancelled)
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_leave_requests
-  ON hrms_leave_requests(employee_id, from_date, to_date, leave_type_id)
-  WHERE status NOT IN ('cancelled', 'revoked', 'rejected');
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_leave_requests
+    ON hrms_leave_requests(employee_id, from_date, to_date, leave_type_id)
+    WHERE status NOT IN ('cancelled', 'revoked', 'rejected');
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 8. DOCTOR/THERAPIST — Prevent duplicate profiles
@@ -199,26 +230,38 @@ END $$;
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- One candidate per phone per vacancy
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hrms_candidates
-  ON hrms_candidates(vacancy_id, phone)
-  WHERE phone IS NOT NULL AND status NOT IN ('withdrawn');
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hrms_candidates
+    ON hrms_candidates(vacancy_id, phone)
+    WHERE phone IS NOT NULL AND status NOT IN ('withdrawn');
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 12. NOTIFICATIONS — Prevent duplicate notifications
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Prevent same notification sent twice for same source
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hrms_notifications
-  ON hrms_notifications(recipient_user_id, source_module, source_entity_id)
-  WHERE source_entity_id IS NOT NULL;
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_hrms_notifications
+    ON hrms_notifications(recipient_user_id, source_module, source_entity_id)
+    WHERE source_entity_id IS NOT NULL;
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 13. ANNOUNCEMENTS — Prevent exact duplicate announcements
 -- ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_announcements
-  ON hrms_announcements(title, publish_date, organisation_id)
-  WHERE is_published = true;
+DO $$ BEGIN
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup_announcements
+    ON hrms_announcements(title, publish_date, organisation_id)
+    WHERE is_published = true;
+EXCEPTION WHEN undefined_table THEN NULL;
+WHEN undefined_column THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 14. INSURANCE CLAIMS — One claim per admission/visit
