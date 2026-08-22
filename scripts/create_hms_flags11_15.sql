@@ -111,41 +111,26 @@ CREATE POLICY "Staff can manage payroll" ON public.hms_payroll FOR ALL TO authen
 -- ║ FLAG 12: WhatsApp Notification Log                                           ║
 -- ╚═══════════════════════════════════════════════════════════════════════════════╝
 
-CREATE TABLE IF NOT EXISTS public.hms_notification_log (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  -- Recipient
-  recipient_phone TEXT NOT NULL,
-  recipient_name TEXT,
-  patient_id UUID REFERENCES public.hms_op_patients(id) ON DELETE SET NULL,
-  -- Message
-  channel TEXT DEFAULT 'whatsapp' CHECK (channel IN ('whatsapp','sms','email','push','in_app')),
-  template_name TEXT,
-  message_type TEXT DEFAULT 'transactional' CHECK (message_type IN ('transactional','reminder','marketing','alert','report')),
-  subject TEXT,
-  body TEXT,
-  -- Context
-  trigger_event TEXT, -- 'appointment_booked', 'prescription_ready', 'report_ready', 'payment_receipt', 'follow_up_reminder'
-  reference_id UUID, -- link to appointment/prescription/bill etc
-  reference_type TEXT, -- 'appointment', 'prescription', 'bill', 'lab_report'
-  -- Delivery
-  status TEXT DEFAULT 'queued' CHECK (status IN ('queued','sent','delivered','read','failed','bounced')),
-  sent_at TIMESTAMPTZ,
-  delivered_at TIMESTAMPTZ,
-  read_at TIMESTAMPTZ,
-  error_message TEXT,
-  -- WhatsApp specific
-  wa_message_id TEXT,
-  -- Meta
-  branch TEXT DEFAULT 'Main Branch',
-  created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
+-- hms_notification_log already exists from create_hms_mocdoc_features.sql — add missing columns
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS recipient_phone TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS recipient_name TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS message_type TEXT DEFAULT 'transactional'; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS body TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS template_name TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS reference_id UUID; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS reference_type TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS wa_message_id TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS error_message TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS branch TEXT DEFAULT 'Main Branch'; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_notification_log ADD COLUMN IF NOT EXISTS created_by UUID; EXCEPTION WHEN others THEN NULL; END $$;
+
+-- Backfill recipient_phone from patient_phone
+UPDATE public.hms_notification_log SET recipient_phone = patient_phone WHERE recipient_phone IS NULL AND patient_phone IS NOT NULL;
 
 ALTER TABLE public.hms_notification_log ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Staff can manage notifications" ON public.hms_notification_log;
 CREATE POLICY "Staff can manage notifications" ON public.hms_notification_log FOR ALL TO authenticated USING (true);
 
-CREATE INDEX IF NOT EXISTS idx_notif_log_patient ON public.hms_notification_log(patient_id);
 CREATE INDEX IF NOT EXISTS idx_notif_log_phone ON public.hms_notification_log(recipient_phone);
 CREATE INDEX IF NOT EXISTS idx_notif_log_status ON public.hms_notification_log(status, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_notif_log_trigger ON public.hms_notification_log(trigger_event);
