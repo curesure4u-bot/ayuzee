@@ -1,68 +1,121 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export type TokenStatus = "waiting" | "serving" | "completed" | "skipped";
-
-export interface QueueToken {
+export type QueueState = {
   id: string;
-  tokenNo: string;
-  patient: string;
-  doctor: string;
-  department: string;
-  time: string;
-  status: TokenStatus;
-  estimatedWait: string;
-}
+  config_id: string;
+  current_token: number;
+  current_patient_name: string | null;
+  next_token: number | null;
+  total_waiting: number;
+  total_served: number;
+  avg_wait_min: number;
+  last_called_at: string | null;
+  display_date: string;
+};
 
-const MOCK_TOKENS: QueueToken[] = [
-  { id: "1", tokenNo: "A-012", patient: "Ramesh Kumar", doctor: "Dr. Sharma", department: "Ayurveda", time: "10:15 AM", status: "serving", estimatedWait: "Now" },
-  { id: "2", tokenNo: "A-013", patient: "Lakshmi Devi", doctor: "Dr. Sharma", department: "Ayurveda", time: "10:30 AM", status: "waiting", estimatedWait: "~15 min" },
-  { id: "3", tokenNo: "A-014", patient: "Sunil Menon", doctor: "Dr. Sharma", department: "Ayurveda", time: "10:45 AM", status: "waiting", estimatedWait: "~30 min" },
-  { id: "4", tokenNo: "P-005", patient: "Meera Nair", doctor: "Dr. Patel", department: "Panchakarma", time: "10:00 AM", status: "serving", estimatedWait: "Now" },
-  { id: "5", tokenNo: "P-006", patient: "Anand Sharma", doctor: "Dr. Patel", department: "Panchakarma", time: "10:30 AM", status: "waiting", estimatedWait: "~20 min" },
-  { id: "6", tokenNo: "H-003", patient: "Priya Mohan", doctor: "Dr. Das", department: "Homeopathy", time: "10:00 AM", status: "completed", estimatedWait: "—" },
-];
-
-export const useQueueDisplay = () => {
-  const [tokens, setTokens] = useState<QueueToken[]>(MOCK_TOKENS);
+export function useQueueDisplay(branch = "Main Branch") {
+  const [queueStates, setQueueStates] = useState<QueueState[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchTokens = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const today = new Date().toISOString().split("T")[0];
-      const { data, error: fetchErr } = await (supabase as any)
-        .from("hms_queue_tokens")
-        .select("*")
-        .eq("queue_date", today)
-        .order("token_no");
+  const today = new Date().toISOString().slice(0, 10);
 
-      if (fetchErr) { setError(fetchErr.message); setLoading(false); return; }
-      if (data && data.length > 0) {
-        setTokens(data.map((t: any) => ({
-          id: t.id, tokenNo: t.token_no || "", patient: t.patient_name || "",
-          doctor: t.doctor_name || "", department: t.department || "",
-          time: t.scheduled_time || "", status: t.status || "waiting",
-          estimatedWait: t.estimated_wait || "",
-        })));
-      }
-      setLoading(false);
-    } catch (err: any) { setError(err.message); setLoading(false); }
-  }, []);
+  const loadStates = async () => {
+    const { data } = await (supabase as any)
+      .from("hms_queue_display_state")
+      .select("*, hms_queue_config(display_name, doctor_name, department, prefix)")
+      .eq("display_date", today)
+      .eq("branch", branch);
 
-  useEffect(() => { fetchTokens(); }, [fetchTokens]);
-
-  const callNext = async (id: string): Promise<boolean> => {
-    const { error: e } = await (supabase as any).from("hms_queue_tokens").update({ status: "serving" }).eq("id", id);
-    if (e) { setTokens(prev => prev.map(t => t.id === id ? { ...t, status: "serving" as TokenStatus } : t)); return true; }
-    await fetchTokens(); return true;
+    setQueueStates(data || []);
+    setLoading(false);
   };
 
-  const serving = tokens.filter(t => t.status === "serving").length;
-  const waiting = tokens.filter(t => t.status === "waiting").length;
-  const completed = tokens.filter(t => t.status === "completed").length;
+  useEffect(() => {
+    loadStates();
 
-  return { tokens, loading, error, serving, waiting, completed, callNext, refetch: fetchTokens };
-};
+    const channel = supabase
+      .channel("queue-display-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "hms_queue_display_state" }, () => {
+        loadStates();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [branch]);
+
+  const callNextToken = async (configId: string) => {
+    // Get current state
+    const { data: state } = await (supabase as any)
+      .from("hms_queue_display_state")
+      .select("*")
+      .eq("config_id", configId)
+      .eq("display_date", today)
+      .single();
+
+    const nextToken = (state?.current_token || 0) + 1;
+
+    // Find patient for this token from OPD visits
+    const { data: visit } = await (supabase as any)
+      .from("hms_op_visits")
+      .select("patient_display_id")
+      .eq("visit_date", today)
+      .eq("session_token", nextToken)
+      .eq("branch", branch)
+      .single();
+
+    // Get waiting count
+    const { count } = await (supabase as any)
+      .from("hms_op_visits")
+      .select("id", { count: "exact" })
+      .eq("visit_date", today)
+      .eq("status", "checked_in")
+      .eq("branch", branch);
+
+    const updateData = {
+      current_token: nextToken,
+      current_patient_name: visit?.patient_display_id || null,
+      next_token: nextToken + 1,
+      total_waiting: (count || 0) - 1,
+      total_served: (state?.total_served || 0) + 1,
+      last_called_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    if (state) {
+      await (supabase as any)
+        .from("hms_queue_display_state")
+        .update(updateData)
+        .eq("id", state.id);
+    } else {
+      await (supabase as any)
+        .from("hms_queue_display_state")
+        .insert({ ...updateData, config_id: configId, display_date: today, branch });
+    }
+  };
+
+  const initializeQueue = async (configId: string) => {
+    const existing = await (supabase as any)
+      .from("hms_queue_display_state")
+      .select("id")
+      .eq("config_id", configId)
+      .eq("display_date", today)
+      .maybeSingle();
+
+    if (!existing.data) {
+      await (supabase as any)
+        .from("hms_queue_display_state")
+        .insert({
+          config_id: configId,
+          display_date: today,
+          current_token: 0,
+          total_waiting: 0,
+          total_served: 0,
+          avg_wait_min: 10,
+          branch,
+        });
+    }
+  };
+
+  return { queueStates, loading, callNextToken, initializeQueue, loadStates };
+}

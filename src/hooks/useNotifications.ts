@@ -1,109 +1,123 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
 
-export type UnifiedNotification = {
-  id: string;
-  user_id: string;
-  title: string;
-  message: string;
-  type: string;
-  source_module: string;
-  source_id: string | null;
-  source_url: string | null;
-  is_read: boolean;
-  read_at: string | null;
-  is_dismissed: boolean;
-  priority: string;
-  expires_at: string | null;
-  created_at: string;
+export type SendNotificationParams = {
+  recipient_phone: string;
+  recipient_name?: string;
+  patient_id?: string;
+  channel?: "whatsapp" | "sms" | "email" | "push" | "in_app";
+  template_name?: string;
+  message_type?: "transactional" | "reminder" | "marketing" | "alert" | "report";
+  subject?: string;
+  body: string;
+  trigger_event?: string; // appointment_booked, prescription_ready, report_ready, etc.
+  reference_id?: string;
+  reference_type?: string; // appointment, prescription, bill, lab_report
+  branch?: string;
 };
 
-/**
- * Hook to manage unified notifications.
- * Falls back gracefully if the table doesn't exist yet.
- */
 export function useNotifications() {
-  const [userId, setUserId] = useState<string | null>(null);
-  const qc = useQueryClient();
+  const sendNotification = async (params: SendNotificationParams) => {
+    const { data: session } = await supabase.auth.getSession();
+    const uid = session.session?.user?.id;
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUserId(data.session?.user.id ?? null);
-    });
-  }, []);
+    const { data, error } = await (supabase as any)
+      .from("hms_notification_log")
+      .insert({
+        recipient_phone: params.recipient_phone,
+        recipient_name: params.recipient_name || null,
+        patient_id: params.patient_id || null,
+        channel: params.channel || "whatsapp",
+        template_name: params.template_name || null,
+        message_type: params.message_type || "transactional",
+        subject: params.subject || null,
+        body: params.body,
+        trigger_event: params.trigger_event || null,
+        reference_id: params.reference_id || null,
+        reference_type: params.reference_type || null,
+        status: "queued",
+        branch: params.branch || "Main Branch",
+        created_by: uid,
+      })
+      .select("id")
+      .single();
 
-  const query = useQuery({
-    queryKey: ["unified-notifications", userId],
-    queryFn: async (): Promise<UnifiedNotification[]> => {
-      if (!userId) return [];
-      try {
-        const { data, error } = await (supabase as any)
-          .from("unified_notifications")
-          .select("*")
-          .eq("user_id", userId)
-          .eq("is_dismissed", false)
-          .order("created_at", { ascending: false })
-          .limit(30);
-        if (error) throw error;
-        return data || [];
-      } catch {
-        return []; // Table may not exist
-      }
-    },
-    enabled: !!userId,
-    refetchInterval: 60000, // Refresh every 60 seconds
-  });
+    if (error) throw error;
 
-  const markReadMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await (supabase as any)
-        .from("unified_notifications")
-        .update({ is_read: true, read_at: new Date().toISOString() })
-        .eq("id", id);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["unified-notifications"] }),
-  });
+    // Mark as sent (in real integration, this would be after WhatsApp API response)
+    await (supabase as any)
+      .from("hms_notification_log")
+      .update({ status: "sent", sent_at: new Date().toISOString() })
+      .eq("id", data.id);
 
-  const markAllReadMutation = useMutation({
-    mutationFn: async () => {
-      if (!userId) return;
-      await (supabase as any)
-        .from("unified_notifications")
-        .update({ is_read: true, read_at: new Date().toISOString() })
-        .eq("user_id", userId)
-        .eq("is_read", false);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["unified-notifications"] }),
-  });
-
-  const dismissMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await (supabase as any)
-        .from("unified_notifications")
-        .update({ is_dismissed: true })
-        .eq("id", id);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["unified-notifications"] }),
-  });
-
-  const createNotification = useMutation({
-    mutationFn: async (notif: { title: string; message: string; type: string; source_module: string; source_url?: string; priority?: string }) => {
-      if (!userId) return;
-      await (supabase as any)
-        .from("unified_notifications")
-        .insert({ ...notif, user_id: userId, priority: notif.priority || "normal" });
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["unified-notifications"] }),
-  });
-
-  return {
-    notifications: query.data || [],
-    unreadCount: (query.data || []).filter(n => !n.is_read).length,
-    isLoading: query.isLoading,
-    markRead: markReadMutation.mutate,
-    markAllRead: markAllReadMutation.mutate,
-    dismiss: dismissMutation.mutate,
-    createNotification: createNotification.mutate,
+    return { notificationId: data.id };
   };
+
+  const getRecentNotifications = async (patientId?: string, limit = 20) => {
+    let query = (supabase as any)
+      .from("hms_notification_log")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (patientId) query = query.eq("patient_id", patientId);
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data || [];
+  };
+
+  const getDeliveryStats = async (branch = "Main Branch", days = 7) => {
+    const since = new Date();
+    since.setDate(since.getDate() - days);
+
+    const { data, error } = await (supabase as any)
+      .from("hms_notification_log")
+      .select("status, channel")
+      .eq("branch", branch)
+      .gte("created_at", since.toISOString());
+
+    if (error) throw error;
+
+    const stats = { total: 0, sent: 0, delivered: 0, read: 0, failed: 0 };
+    (data || []).forEach((n: any) => {
+      stats.total++;
+      if (n.status === "sent") stats.sent++;
+      if (n.status === "delivered") stats.delivered++;
+      if (n.status === "read") stats.read++;
+      if (n.status === "failed") stats.failed++;
+    });
+    return stats;
+  };
+
+  // Convenience: send appointment confirmation
+  const sendAppointmentConfirmation = async (phone: string, patientName: string, doctorName: string, date: string, time: string, patientId?: string, appointmentId?: string) => {
+    return sendNotification({
+      recipient_phone: phone,
+      recipient_name: patientName,
+      patient_id: patientId,
+      template_name: "appointment_confirmation",
+      message_type: "transactional",
+      trigger_event: "appointment_booked",
+      reference_id: appointmentId,
+      reference_type: "appointment",
+      body: `Dear ${patientName}, your appointment with ${doctorName} is confirmed for ${date} at ${time}. Please arrive 10 min early. — Ayuzee`,
+    });
+  };
+
+  // Convenience: send prescription
+  const sendPrescriptionNotification = async (phone: string, patientName: string, doctorName: string, patientId?: string, prescriptionId?: string) => {
+    return sendNotification({
+      recipient_phone: phone,
+      recipient_name: patientName,
+      patient_id: patientId,
+      template_name: "prescription_ready",
+      message_type: "transactional",
+      trigger_event: "prescription_ready",
+      reference_id: prescriptionId,
+      reference_type: "prescription",
+      body: `Dear ${patientName}, your prescription from ${doctorName} is ready. You can view it in your Ayuzee dashboard or collect medicines from our pharmacy. — Ayuzee`,
+    });
+  };
+
+  return { sendNotification, getRecentNotifications, getDeliveryStats, sendAppointmentConfirmation, sendPrescriptionNotification };
 }

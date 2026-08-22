@@ -1,117 +1,173 @@
-import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export interface InsuranceClaim {
-  id: string;
-  patientName: string;
-  policyNo: string;
-  insurer: string;
-  claimAmount: number;
-  approvedAmount: number;
-  submittedDate: string;
-  status: string;
-  type: "cashless" | "reimbursement";
-}
-
-export interface InsuranceClaimsData {
-  claims: InsuranceClaim[];
-  totalClaimed: number;
-  totalApproved: number;
-  pendingCount: number;
-  loading: boolean;
-  error: string | null;
-}
-
-const MOCK_CLAIMS: InsuranceClaim[] = [
-  { id: "1", patientName: "Ramesh Kumar", policyNo: "HI-2025-78934", insurer: "Star Health", claimAmount: 45000, approvedAmount: 42000, submittedDate: "2026-07-05", status: "approved", type: "cashless" },
-  { id: "2", patientName: "Lakshmi Devi", policyNo: "NI-2026-12345", insurer: "National Insurance", claimAmount: 28000, approvedAmount: 0, submittedDate: "2026-07-12", status: "under_review", type: "cashless" },
-  { id: "3", patientName: "Sunil Menon", policyNo: "AY-2025-56789", insurer: "Ayushman Bharat", claimAmount: 65000, approvedAmount: 65000, submittedDate: "2026-06-28", status: "settled", type: "cashless" },
-  { id: "4", patientName: "Meera Nair", policyNo: "NHI-2026-44556", insurer: "New India Assurance", claimAmount: 35000, approvedAmount: 0, submittedDate: "2026-07-14", status: "submitted", type: "reimbursement" },
-  { id: "5", patientName: "Anand Sharma", policyNo: "IC-2025-99887", insurer: "ICICI Lombard", claimAmount: 52000, approvedAmount: 0, submittedDate: "2026-07-10", status: "rejected", type: "cashless" },
-];
-
-export const useInsuranceClaims = (): InsuranceClaimsData & {
-  createClaim: (claim: Omit<InsuranceClaim, "id" | "approvedAmount">) => Promise<boolean>;
-  updateStatus: (id: string, status: string, approvedAmount?: number) => Promise<boolean>;
-  refetch: () => void;
-} => {
-  const [data, setData] = useState<InsuranceClaimsData>({
-    claims: MOCK_CLAIMS,
-    totalClaimed: 225000,
-    totalApproved: 107000,
-    pendingCount: 2,
-    loading: true,
-    error: null,
-  });
-
-  const fetchClaims = useCallback(async () => {
-    setData((prev) => ({ ...prev, loading: true, error: null }));
-    try {
-      const { data: rows, error } = await (supabase as any)
-        .from("hms_insurance_claims")
-        .select("*")
-        .order("submitted_date", { ascending: false });
-
-      if (error) {
-        setData((prev) => ({ ...prev, loading: false, error: error.message }));
-        return;
-      }
-      if (!rows || rows.length === 0) {
-        setData((prev) => ({ ...prev, loading: false }));
-        return;
-      }
-
-      const claims: InsuranceClaim[] = rows.map((r: any) => ({
-        id: r.id,
-        patientName: r.patient_name,
-        policyNo: r.policy_no,
-        insurer: r.insurer,
-        claimAmount: Number(r.claim_amount),
-        approvedAmount: Number(r.approved_amount) || 0,
-        submittedDate: r.submitted_date || "",
-        status: r.status,
-        type: r.claim_type as "cashless" | "reimbursement",
-      }));
-
-      setData({
-        claims,
-        totalClaimed: claims.reduce((s, c) => s + c.claimAmount, 0),
-        totalApproved: claims.reduce((s, c) => s + c.approvedAmount, 0),
-        pendingCount: claims.filter((c) => ["submitted", "under_review"].includes(c.status)).length,
-        loading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setData((prev) => ({ ...prev, loading: false, error: err.message }));
-    }
-  }, []);
-
-  useEffect(() => { fetchClaims(); }, [fetchClaims]);
-
-  const createClaim = async (claim: Omit<InsuranceClaim, "id" | "approvedAmount">): Promise<boolean> => {
-    const { data: sess } = await supabase.auth.getSession();
-    const { error } = await (supabase as any).from("hms_insurance_claims").insert({
-      patient_name: claim.patientName,
-      policy_no: claim.policyNo,
-      insurer: claim.insurer,
-      claim_type: claim.type,
-      claim_amount: claim.claimAmount,
-      submitted_date: claim.submittedDate || new Date().toISOString().split("T")[0],
-      status: claim.status || "draft",
-      created_by: sess.session?.user?.id,
-    });
-    if (!error) fetchClaims();
-    return !error;
-  };
-
-  const updateStatus = async (id: string, status: string, approvedAmount?: number): Promise<boolean> => {
-    const updates: Record<string, any> = { status, updated_at: new Date().toISOString() };
-    if (approvedAmount !== undefined) updates.approved_amount = approvedAmount;
-    if (status === "approved" || status === "settled") updates.approved_date = new Date().toISOString().split("T")[0];
-    const { error } = await (supabase as any).from("hms_insurance_claims").update(updates).eq("id", id);
-    if (!error) fetchClaims();
-    return !error;
-  };
-
-  return { ...data, createClaim, updateStatus, refetch: fetchClaims };
+export type CreateClaimParams = {
+  patient_id: string;
+  patient_name: string;
+  insurance_id?: string;
+  company_name: string;
+  policy_number?: string;
+  admission_id?: string;
+  visit_id?: string;
+  claim_amount: number;
+  primary_diagnosis?: string;
+  icd_code?: string;
+  treatment_summary?: string;
+  admission_date?: string;
+  discharge_date?: string;
+  branch?: string;
 };
+
+export type PreauthParams = {
+  claimId: string;
+  preauth_amount: number;
+};
+
+export function useInsuranceClaims() {
+  const createClaim = async (params: CreateClaimParams) => {
+    const { data: session } = await supabase.auth.getSession();
+    const uid = session.session?.user?.id;
+    const { data: claimNumber } = await (supabase as any).rpc("generate_claim_number");
+
+    const { data, error } = await (supabase as any)
+      .from("hms_insurance_claims")
+      .insert({
+        claim_number: claimNumber || `CLM-${Date.now()}`,
+        patient_id: params.patient_id,
+        patient_name: params.patient_name,
+        insurance_id: params.insurance_id || null,
+        company_name: params.company_name,
+        policy_number: params.policy_number || null,
+        admission_id: params.admission_id || null,
+        visit_id: params.visit_id || null,
+        claim_amount: params.claim_amount,
+        primary_diagnosis: params.primary_diagnosis || null,
+        icd_code: params.icd_code || null,
+        treatment_summary: params.treatment_summary || null,
+        admission_date: params.admission_date || null,
+        discharge_date: params.discharge_date || null,
+        status: "draft",
+        branch: params.branch || "Main Branch",
+        created_by: uid,
+      })
+      .select("id, claim_number")
+      .single();
+
+    if (error) throw error;
+    return { claimId: data.id, claimNumber: data.claim_number };
+  };
+
+  const requestPreauth = async (params: PreauthParams) => {
+    const { error } = await (supabase as any)
+      .from("hms_insurance_claims")
+      .update({
+        preauth_amount: params.preauth_amount,
+        preauth_status: "pending",
+        preauth_date: new Date().toISOString().slice(0, 10),
+        status: "preauth_pending",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", params.claimId);
+
+    if (error) throw error;
+  };
+
+  const approvePreauth = async (claimId: string, approvedAmount: number, preauthNumber: string) => {
+    const { error } = await (supabase as any)
+      .from("hms_insurance_claims")
+      .update({
+        preauth_status: "approved",
+        preauth_number: preauthNumber,
+        approved_amount: approvedAmount,
+        status: "preauth_approved",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", claimId);
+
+    if (error) throw error;
+  };
+
+  const submitClaim = async (claimId: string) => {
+    const { error } = await (supabase as any)
+      .from("hms_insurance_claims")
+      .update({
+        status: "submitted",
+        submitted_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", claimId);
+
+    if (error) throw error;
+  };
+
+  const updateClaimStatus = async (claimId: string, status: string, details?: { settled_amount?: number; deduction_amount?: number; deduction_reason?: string; query_text?: string }) => {
+    const updateData: Record<string, any> = { status, updated_at: new Date().toISOString() };
+
+    if (status === "settled" || status === "approved") {
+      updateData.settled_amount = details?.settled_amount || null;
+      updateData.deduction_amount = details?.deduction_amount || null;
+      updateData.deduction_reason = details?.deduction_reason || null;
+      if (status === "settled") updateData.settled_at = new Date().toISOString();
+      if (status === "approved") updateData.approved_at = new Date().toISOString();
+    }
+    if (status === "query_raised") {
+      updateData.query_text = details?.query_text || null;
+    }
+
+    const { error } = await (supabase as any)
+      .from("hms_insurance_claims")
+      .update(updateData)
+      .eq("id", claimId);
+
+    if (error) throw error;
+  };
+
+  const getClaims = async (status?: string, branch = "Main Branch") => {
+    let query = (supabase as any)
+      .from("hms_insurance_claims")
+      .select("*")
+      .eq("branch", branch)
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (status) query = query.eq("status", status);
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data || [];
+  };
+
+  const getClaimsSummary = async (branch = "Main Branch") => {
+    const { data, error } = await (supabase as any)
+      .from("hms_insurance_claims")
+      .select("status, claim_amount, approved_amount, settled_amount")
+      .eq("branch", branch);
+
+    if (error) throw error;
+
+    const summary = {
+      total_claims: 0,
+      total_amount: 0,
+      approved_amount: 0,
+      settled_amount: 0,
+      pending: 0,
+      under_review: 0,
+      settled: 0,
+      rejected: 0,
+    };
+
+    (data || []).forEach((c: any) => {
+      summary.total_claims++;
+      summary.total_amount += c.claim_amount || 0;
+      summary.approved_amount += c.approved_amount || 0;
+      summary.settled_amount += c.settled_amount || 0;
+      if (["draft", "preauth_pending", "submitted"].includes(c.status)) summary.pending++;
+      if (c.status === "under_review") summary.under_review++;
+      if (c.status === "settled") summary.settled++;
+      if (c.status === "rejected") summary.rejected++;
+    });
+
+    return summary;
+  };
+
+  return { createClaim, requestPreauth, approvePreauth, submitClaim, updateClaimStatus, getClaims, getClaimsSummary };
+}
