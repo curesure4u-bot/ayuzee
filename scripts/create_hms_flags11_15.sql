@@ -41,7 +41,7 @@ CREATE INDEX IF NOT EXISTS idx_hms_staff_branch ON public.hms_staff(branch, stat
 CREATE TABLE IF NOT EXISTS public.hms_attendance (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   staff_id UUID NOT NULL REFERENCES public.hms_staff(id) ON DELETE CASCADE,
-  employee_id TEXT NOT NULL,
+  employee_id TEXT,
   employee_name TEXT NOT NULL,
   attendance_date DATE NOT NULL DEFAULT CURRENT_DATE,
   -- Check in/out
@@ -62,6 +62,11 @@ CREATE TABLE IF NOT EXISTS public.hms_attendance (
   UNIQUE(staff_id, attendance_date)
 );
 
+-- Add employee_id column if table already exists without it
+DO $$ BEGIN
+  ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS employee_id TEXT;
+EXCEPTION WHEN others THEN NULL; END $$;
+
 ALTER TABLE public.hms_attendance ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Staff can manage attendance" ON public.hms_attendance;
 CREATE POLICY "Staff can manage attendance" ON public.hms_attendance FOR ALL TO authenticated USING (true);
@@ -73,7 +78,7 @@ CREATE INDEX IF NOT EXISTS idx_attendance_staff ON public.hms_attendance(staff_i
 CREATE TABLE IF NOT EXISTS public.hms_payroll (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   staff_id UUID NOT NULL REFERENCES public.hms_staff(id) ON DELETE CASCADE,
-  employee_id TEXT NOT NULL,
+  employee_id TEXT,
   employee_name TEXT NOT NULL,
   -- Period
   pay_month INT NOT NULL,
