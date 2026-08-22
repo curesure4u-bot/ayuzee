@@ -499,6 +499,17 @@ const moreItems = [
     { to: "/hms/about-partner", label: "Partner Network", icon: Users },
     { to: "/hms/patient-app", label: "Patient App (PWA)", icon: Smartphone },
   ]},
+  { group: "Training & Guides", items: [
+    { to: "/guides", label: "📖 Quick Start Guides", icon: GraduationCap },
+    { to: "/guides/reception", label: "Reception Guide", icon: Users },
+    { to: "/guides/doctor", label: "Doctor Guide", icon: Stethoscope },
+    { to: "/guides/hms-admin", label: "HMS Admin Guide", icon: Settings },
+    { to: "/guides/hrms", label: "HRMS Guide", icon: UserCog },
+    { to: "/guides/therapist", label: "Therapist Guide", icon: Heart },
+    { to: "/guides/pharmacy", label: "Pharmacy Guide", icon: Pill },
+    { to: "/guides/lab", label: "Lab Guide", icon: FlaskConical },
+    { to: "/guides/patient", label: "Patient Guide", icon: Users },
+  ]},
 ];
 
 const HmsLayout = () => {
