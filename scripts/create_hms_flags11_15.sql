@@ -253,8 +253,8 @@ CREATE POLICY "Staff can manage insurance companies" ON public.hms_insurance_com
 -- Patient insurance details
 CREATE TABLE IF NOT EXISTS public.hms_patient_insurance (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  patient_id UUID NOT NULL REFERENCES public.hms_op_patients(id) ON DELETE CASCADE,
-  insurance_company_id UUID REFERENCES public.hms_insurance_companies(id) ON DELETE SET NULL,
+  patient_id UUID,
+  insurance_company_id UUID,
   company_name TEXT NOT NULL,
   policy_number TEXT NOT NULL,
   card_number TEXT,
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS public.hms_patient_insurance (
   valid_from DATE,
   valid_to DATE,
   sum_insured DECIMAL(12,2),
-  relation TEXT DEFAULT 'self' CHECK (relation IN ('self','spouse','child','parent','other')),
+  relation TEXT DEFAULT 'self',
   card_photo_url TEXT,
   is_verified BOOLEAN DEFAULT false,
   is_active BOOLEAN DEFAULT true,
@@ -275,62 +275,41 @@ CREATE POLICY "Staff can manage patient insurance" ON public.hms_patient_insuran
 
 CREATE INDEX IF NOT EXISTS idx_patient_insurance_patient ON public.hms_patient_insurance(patient_id);
 
--- Insurance claims
-CREATE TABLE IF NOT EXISTS public.hms_insurance_claims (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  claim_number TEXT NOT NULL UNIQUE,
-  patient_id UUID NOT NULL REFERENCES public.hms_op_patients(id) ON DELETE CASCADE,
-  patient_name TEXT NOT NULL,
-  insurance_id UUID REFERENCES public.hms_patient_insurance(id) ON DELETE SET NULL,
-  company_name TEXT NOT NULL,
-  policy_number TEXT,
-  -- Admission / Visit
-  admission_id UUID REFERENCES public.hms_ip_admissions(id) ON DELETE SET NULL,
-  visit_id UUID REFERENCES public.hms_op_visits(id) ON DELETE SET NULL,
-  -- Pre-auth
-  preauth_number TEXT,
-  preauth_amount DECIMAL(12,2),
-  preauth_status TEXT DEFAULT 'not_required' CHECK (preauth_status IN ('not_required','pending','approved','rejected','enhanced')),
-  preauth_date DATE,
-  -- Claim
-  claim_amount DECIMAL(12,2) NOT NULL DEFAULT 0,
-  approved_amount DECIMAL(12,2),
-  settled_amount DECIMAL(12,2),
-  patient_copay DECIMAL(12,2) DEFAULT 0,
-  deduction_amount DECIMAL(12,2) DEFAULT 0,
-  deduction_reason TEXT,
-  -- Diagnosis & Treatment
-  primary_diagnosis TEXT,
-  icd_code TEXT,
-  treatment_summary TEXT,
-  admission_date DATE,
-  discharge_date DATE,
-  -- Documents
-  documents JSONB DEFAULT '[]', -- [{name, url, type}]
-  -- Status workflow
-  status TEXT DEFAULT 'draft' CHECK (status IN ('draft','preauth_pending','preauth_approved','submitted','under_review','query_raised','approved','rejected','settled','closed')),
-  -- Dates
-  submitted_at TIMESTAMPTZ,
-  approved_at TIMESTAMPTZ,
-  settled_at TIMESTAMPTZ,
-  -- Query
-  query_text TEXT,
-  query_response TEXT,
-  -- Meta
-  branch TEXT DEFAULT 'Main Branch',
-  created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
+-- hms_insurance_claims already exists — add missing columns for enhanced workflow
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS claim_number TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS company_name TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS insurance_id UUID; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS policy_number TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS visit_id UUID; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS preauth_number TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS preauth_amount DECIMAL(12,2); EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS preauth_status TEXT DEFAULT 'not_required'; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS preauth_date DATE; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS settled_amount DECIMAL(12,2); EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS patient_copay DECIMAL(12,2) DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS deduction_amount DECIMAL(12,2) DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS deduction_reason TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS primary_diagnosis TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS icd_code TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS treatment_summary TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS admission_date DATE; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS discharge_date DATE; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS documents JSONB DEFAULT '[]'; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS submitted_at TIMESTAMPTZ; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS approved_at TIMESTAMPTZ; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS settled_at TIMESTAMPTZ; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS query_text TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS query_response TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS branch TEXT DEFAULT 'Main Branch'; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_insurance_claims ADD COLUMN IF NOT EXISTS created_by UUID; EXCEPTION WHEN others THEN NULL; END $$;
 
-ALTER TABLE public.hms_insurance_claims ENABLE ROW LEVEL SECURITY;
+-- Backfill company_name from insurer
+UPDATE public.hms_insurance_claims SET company_name = insurer WHERE company_name IS NULL AND insurer IS NOT NULL;
+
 DROP POLICY IF EXISTS "Staff can manage claims" ON public.hms_insurance_claims;
 CREATE POLICY "Staff can manage claims" ON public.hms_insurance_claims FOR ALL TO authenticated USING (true);
 
-CREATE INDEX IF NOT EXISTS idx_claims_patient ON public.hms_insurance_claims(patient_id);
 CREATE INDEX IF NOT EXISTS idx_claims_status ON public.hms_insurance_claims(status);
-CREATE INDEX IF NOT EXISTS idx_claims_company ON public.hms_insurance_claims(company_name);
-CREATE INDEX IF NOT EXISTS idx_claims_number ON public.hms_insurance_claims(claim_number);
 
 -- Auto-generate claim number
 CREATE OR REPLACE FUNCTION generate_claim_number()
