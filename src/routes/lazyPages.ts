@@ -972,6 +972,7 @@ export const MyPatients = lazyPage(() => import("@/pages/doctor/sections/MyPatie
 export const MyPoints = lazyPage(() => import("@/pages/gamification/MyPoints"));
 export const NetraPariksha = lazyPage(() => import("@/pages/patient/NetraPariksha"));
 export const NotFound = lazyPage(() => import("@/pages/NotFound"));
+export const PortalComingSoon = lazyPage(() => import("@/components/common/PortalComingSoon"));
 export const Offers = lazyPage(() => import("@/pages/shop/Offers"));
 export const OrganicFoodNutraceuticals = lazyPage(() => import("@/pages/shop/OrganicFoodNutraceuticals"));
 export const PackageMaster = lazyPage(() => import("@/pages/admin/masters/PackageMaster"));

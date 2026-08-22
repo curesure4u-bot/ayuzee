@@ -72,6 +72,7 @@ export const AppRoutes = () => (
               <Route path="question-bank" element={withSuspense(<P.StudentQuestionBankManager />)} />
               <Route path="admin-panel" element={withSuspense(<P.StudentAdminPanel />)} />
               <Route path="weekly-challenge" element={withSuspense(<P.StudentWeeklyChallenge />)} />
+              <Route path="*" element={<P.PortalComingSoon portalName="This Student module" backTo="/student" />} />
             </Route>
             <Route path="/dashboard" element={withSuspense(<P.PatientLayout />)}>
               <Route index element={withSuspense(<P.Dashboard />)} />
@@ -92,6 +93,7 @@ export const AppRoutes = () => (
               <Route path="diet-charts/:id" element={withSuspense(<P.PatientDietChart />)} />
               <Route path="panchakarma" element={withSuspense(<P.PatientPanchakarmaJourney />)} />
               <Route path="health-locker" element={withSuspense(<P.PatientHealthLocker />)} />
+              <Route path="*" element={<P.PortalComingSoon portalName="This feature" backTo="/dashboard" />} />
             </Route>
             <Route path="/consultation/:id/pre-form" element={withSuspense(<P.PreConsultationForm />)} />
             <Route path="/consultation/:id/room" element={withSuspense(<P.ConsultationRoom />)} />
@@ -220,6 +222,7 @@ export const AppRoutes = () => (
               <Route path="performance" element={withSuspense(<P.TherapistPerformance />)} />
               <Route path="shifts" element={withSuspense(<P.TherapistShiftRoster />)} />
               <Route path="materials" element={withSuspense(<P.TherapistMaterialLog />)} />
+              <Route path="*" element={<P.PortalComingSoon portalName="This Therapist feature" backTo="/therapist" />} />
             </Route>
             <Route path="/therapy-plans/:planId/book" element={withSuspense(<P.BookTherapySession />)} />
             <Route path="/therapy-booking/:sessionId" element={withSuspense(<P.TherapyBooking />)} />
@@ -231,6 +234,7 @@ export const AppRoutes = () => (
               <Route path="bookings" element={withSuspense(<P.VenueBookings />)} />
               <Route path="revenue" element={withSuspense(<P.VenueRevenue />)} />
               <Route path="profile" element={withSuspense(<P.VenueProfile />)} />
+              <Route path="*" element={<P.PortalComingSoon portalName="This Venue feature" backTo="/venue" />} />
             </Route>
             <Route path="/admin/auth" element={withSuspense(<P.AdminAuth />)} />
             <Route path="/admin" element={withSuspense(<P.AdminLayout />)}>
@@ -334,6 +338,7 @@ export const AppRoutes = () => (
               <Route path="pharmacy-orders" element={<Navigate to="/admin/prescriptions" replace />} />
               <Route path="ip-admissions" element={<Navigate to="/admin/master-management/ip-admission-types" replace />} />
               <Route path="ward-status" element={<Navigate to="/admin/master-management/wards" replace />} />
+              <Route path="*" element={<P.PortalComingSoon portalName="This Admin feature" backTo="/admin" />} />
             </Route>
 
             <Route path="/queue-display/:branchId" element={withSuspense(<P.QueueDisplayScreen />)} />
@@ -1050,6 +1055,7 @@ export const AppRoutes = () => (
                 <Route path="progress" element={withSuspense(<P.YogaProgressTracker />)} />
                 <Route path="notes" element={withSuspense(<P.YogaDashboard />)} />
               </Route>
+              <Route path="*" element={<P.PortalComingSoon portalName="This HMS module" backTo="/hms" />} />
             </Route>
             <Route path="/doctor/auth" element={withSuspense(<P.DoctorAuth />)} />
             <Route path="/doctor" element={withSuspense(<P.DoctorLayout />)}>
@@ -1103,6 +1109,7 @@ export const AppRoutes = () => (
               <Route path="earnings" element={withSuspense(<P.DoctorEarnings />)} />
               <Route path="notifications" element={withSuspense(<P.DoctorNotificationPreferences />)} />
               <Route path="activity" element={withSuspense(<P.DoctorActivityFeed />)} />
+              <Route path="*" element={<P.PortalComingSoon portalName="This Doctor feature" backTo="/doctor" />} />
             </Route>
             <Route path="/atmri-help" element={withSuspense(<P.AtmriHelp />)} />
             <Route path="/atmri-help/cases" element={withSuspense(<P.AtmriCasesList />)} />
