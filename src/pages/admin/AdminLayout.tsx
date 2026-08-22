@@ -105,6 +105,7 @@ const allGroups = [
     { title: "💊 Pharmacy Orders", url: "/admin/pharmacy-orders" },
     { title: "🛏️ IP Admissions", url: "/admin/ip-admissions" },
     { title: "🏥 Ward Status", url: "/admin/ward-status" },
+    { title: "📖 Quick Start Guides", url: "/guides" },
   ]},
   { label: "🌍 P8: Global Expansion", roles: ["admin"] as AdminRole[], items: [
     { title: "🌐 Currency & Language", url: "/global/currency-language" },
