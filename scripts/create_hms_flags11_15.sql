@@ -7,65 +7,54 @@
 -- ║ FLAG 11: HRMS Attendance & Payroll                                           ║
 -- ╚═══════════════════════════════════════════════════════════════════════════════╝
 
-CREATE TABLE IF NOT EXISTS public.hms_staff (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  employee_id TEXT NOT NULL UNIQUE,
-  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-  first_name TEXT NOT NULL,
-  last_name TEXT,
-  department TEXT,
-  designation TEXT,
-  role TEXT DEFAULT 'staff',
-  phone TEXT,
-  email TEXT,
-  joining_date DATE,
-  -- Salary
-  basic_salary DECIMAL(10,2) DEFAULT 0,
-  hra DECIMAL(10,2) DEFAULT 0,
-  other_allowances DECIMAL(10,2) DEFAULT 0,
-  -- Status
-  status TEXT DEFAULT 'active' CHECK (status IN ('active','on_leave','resigned','terminated')),
-  branch TEXT DEFAULT 'Main Branch',
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
+-- hms_staff already exists from create_hms_hr_module.sql — add missing columns
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS employee_id TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS first_name TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS last_name TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS designation TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS joining_date DATE; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS basic_salary DECIMAL(10,2) DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS hra DECIMAL(10,2) DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS other_allowances DECIMAL(10,2) DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_staff ADD COLUMN IF NOT EXISTS branch TEXT DEFAULT 'Main Branch'; EXCEPTION WHEN others THEN NULL; END $$;
+
+-- Backfill employee_id for existing rows
+UPDATE public.hms_staff SET employee_id = 'EMP-' || LPAD(id::TEXT, 4, '0') WHERE employee_id IS NULL;
+-- Backfill first_name from name
+UPDATE public.hms_staff SET first_name = COALESCE(name, 'Staff') WHERE first_name IS NULL;
 
 ALTER TABLE public.hms_staff ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Staff can view employees" ON public.hms_staff;
 CREATE POLICY "Staff can view employees" ON public.hms_staff FOR ALL TO authenticated USING (true);
 
-CREATE INDEX IF NOT EXISTS idx_hms_staff_empid ON public.hms_staff(employee_id);
-CREATE INDEX IF NOT EXISTS idx_hms_staff_branch ON public.hms_staff(branch, status);
-
 -- Daily attendance
 CREATE TABLE IF NOT EXISTS public.hms_attendance (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  staff_id UUID NOT NULL REFERENCES public.hms_staff(id) ON DELETE CASCADE,
+  staff_id UUID,
   employee_id TEXT,
-  employee_name TEXT NOT NULL,
+  employee_name TEXT DEFAULT '',
   attendance_date DATE NOT NULL DEFAULT CURRENT_DATE,
-  -- Check in/out
   check_in TIMESTAMPTZ,
   check_out TIMESTAMPTZ,
   total_hours DECIMAL(4,2),
-  -- Status
-  status TEXT DEFAULT 'present' CHECK (status IN ('present','absent','half_day','late','on_duty','wfh','leave','holiday','week_off')),
+  status TEXT DEFAULT 'present',
   late_by_min INT DEFAULT 0,
   overtime_min INT DEFAULT 0,
-  -- Leave
   leave_type TEXT,
-  -- Meta
   marked_by TEXT DEFAULT 'system',
   notes TEXT,
   branch TEXT DEFAULT 'Main Branch',
-  created_at TIMESTAMPTZ DEFAULT now(),
-  UNIQUE(staff_id, attendance_date)
+  created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Add employee_id column if table already exists without it
-DO $$ BEGIN
-  ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS employee_id TEXT;
-EXCEPTION WHEN others THEN NULL; END $$;
+-- Add missing columns if table already existed
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS employee_id TEXT; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS employee_name TEXT DEFAULT ''; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS total_hours DECIMAL(4,2); EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS late_by_min INT DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS overtime_min INT DEFAULT 0; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS marked_by TEXT DEFAULT 'system'; EXCEPTION WHEN others THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE public.hms_attendance ADD COLUMN IF NOT EXISTS branch TEXT DEFAULT 'Main Branch'; EXCEPTION WHEN others THEN NULL; END $$;
 
 ALTER TABLE public.hms_attendance ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Staff can manage attendance" ON public.hms_attendance;
@@ -77,9 +66,9 @@ CREATE INDEX IF NOT EXISTS idx_attendance_staff ON public.hms_attendance(staff_i
 -- Payroll runs
 CREATE TABLE IF NOT EXISTS public.hms_payroll (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  staff_id UUID NOT NULL REFERENCES public.hms_staff(id) ON DELETE CASCADE,
+  staff_id UUID,
   employee_id TEXT,
-  employee_name TEXT NOT NULL,
+  employee_name TEXT NOT NULL DEFAULT '',
   -- Period
   pay_month INT NOT NULL,
   pay_year INT NOT NULL,
