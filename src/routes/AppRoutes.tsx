@@ -40,6 +40,16 @@ export const AppRoutes = () => (
             <Route path="/guides/lab" element={withSuspense(<P.GuideLab />)} />
             <Route path="/guides/patient" element={withSuspense(<P.GuidePatient />)} />
             <Route path="/guides/spine-ayush" element={withSuspense(<P.GuideSpineAyush />)} />
+            <Route path="/guides/billing" element={withSuspense(<P.GuideBillingAccounts />)} />
+            <Route path="/guides/stock-purchase" element={withSuspense(<P.GuideStockPurchase />)} />
+            <Route path="/guides/ipd-nursing" element={withSuspense(<P.GuideIpdNursing />)} />
+            <Route path="/guides/panchakarma-ops" element={withSuspense(<P.GuidePanchakarmaOps />)} />
+            <Route path="/guides/mis-analytics" element={withSuspense(<P.GuideMisAnalytics />)} />
+            <Route path="/guides/online-booking" element={withSuspense(<P.GuideOnlineBooking />)} />
+            <Route path="/guides/abdm-compliance" element={withSuspense(<P.GuideAbdmCompliance />)} />
+            <Route path="/guides/ai-tools" element={withSuspense(<P.GuideAiTools />)} />
+            <Route path="/guides/radiology" element={withSuspense(<P.GuideRadiology />)} />
+            <Route path="/guides/student-hub" element={withSuspense(<P.GuideStudentHub />)} />
             <Route path="/login" element={withSuspense(<P.LoginPicker />)} />
             <Route path="/auth" element={withSuspense(<P.Auth />)} />
             <Route path="/reset-password" element={withSuspense(<P.ResetPassword />)} />

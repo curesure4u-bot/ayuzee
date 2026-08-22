@@ -310,6 +310,16 @@ export const GuidePharmacy = lazyPage(() => import("@/pages/guides/PharmacyGuide
 export const GuideLab = lazyPage(() => import("@/pages/guides/LabGuide"));
 export const GuidePatient = lazyPage(() => import("@/pages/guides/PatientGuide"));
 export const GuideSpineAyush = lazyPage(() => import("@/pages/guides/SpineAyushGuide"));
+export const GuideBillingAccounts = lazyPage(() => import("@/pages/guides/BillingAccountsGuide"));
+export const GuideStockPurchase = lazyPage(() => import("@/pages/guides/StockPurchaseGuide"));
+export const GuideIpdNursing = lazyPage(() => import("@/pages/guides/IpdNursingGuide"));
+export const GuidePanchakarmaOps = lazyPage(() => import("@/pages/guides/PanchakarmaOpsGuide"));
+export const GuideMisAnalytics = lazyPage(() => import("@/pages/guides/MisAnalyticsGuide"));
+export const GuideOnlineBooking = lazyPage(() => import("@/pages/guides/OnlineBookingGuide"));
+export const GuideAbdmCompliance = lazyPage(() => import("@/pages/guides/AbdmComplianceGuide"));
+export const GuideAiTools = lazyPage(() => import("@/pages/guides/AiToolsGuide"));
+export const GuideRadiology = lazyPage(() => import("@/pages/guides/RadiologyGuide"));
+export const GuideStudentHub = lazyPage(() => import("@/pages/guides/StudentHubGuide"));
 
 // HMS Portal (standalone)
 export const HmsPortalLayout = lazyPage(() => import("@/pages/hms/HmsLayout"));

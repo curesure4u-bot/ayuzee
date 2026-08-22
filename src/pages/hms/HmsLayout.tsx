@@ -510,6 +510,16 @@ const moreItems = [
     { to: "/guides/lab", label: "Lab Guide", icon: FlaskConical },
     { to: "/guides/patient", label: "Patient Guide", icon: Users },
     { to: "/guides/spine-ayush", label: "Spine AYUSH Playbook", icon: Activity },
+    { to: "/guides/billing", label: "Billing & Accounts", icon: Wallet },
+    { to: "/guides/stock-purchase", label: "Stock & Purchase", icon: Warehouse },
+    { to: "/guides/ipd-nursing", label: "IPD & Nursing", icon: BedDouble },
+    { to: "/guides/panchakarma-ops", label: "Panchakarma Ops", icon: Sparkles },
+    { to: "/guides/mis-analytics", label: "MIS & Analytics", icon: BarChart3 },
+    { to: "/guides/online-booking", label: "Online Booking", icon: Globe },
+    { to: "/guides/abdm-compliance", label: "ABDM & Compliance", icon: Globe },
+    { to: "/guides/ai-tools", label: "AI Tools", icon: Brain },
+    { to: "/guides/radiology", label: "Radiology", icon: Stethoscope },
+    { to: "/guides/student-hub", label: "Student Hub", icon: GraduationCap },
   ]},
 ];
 
