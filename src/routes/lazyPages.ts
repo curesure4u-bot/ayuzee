@@ -299,6 +299,17 @@ export const HijamaPage = lazyPage(() => import("@/pages/vaidya/sections/Hijama"
 export const HmsPrakriti = lazyPage(() => import("@/pages/vaidya/sections/HmsPrakriti"));
 export const HmsUltraDashboard = lazyPage(() => import("@/pages/vaidya/hms/HmsUltraDashboard"));
 
+// Quick Start Guides
+export const QuickStartGuides = lazyPage(() => import("@/pages/guides/QuickStartGuides"));
+export const GuideReception = lazyPage(() => import("@/pages/guides/ReceptionGuide"));
+export const GuideDoctor = lazyPage(() => import("@/pages/guides/DoctorGuide"));
+export const GuideHmsAdmin = lazyPage(() => import("@/pages/guides/HmsAdminGuide"));
+export const GuideHrms = lazyPage(() => import("@/pages/guides/HrmsGuide"));
+export const GuideTherapist = lazyPage(() => import("@/pages/guides/TherapistGuide"));
+export const GuidePharmacy = lazyPage(() => import("@/pages/guides/PharmacyGuide"));
+export const GuideLab = lazyPage(() => import("@/pages/guides/LabGuide"));
+export const GuidePatient = lazyPage(() => import("@/pages/guides/PatientGuide"));
+
 // HMS Portal (standalone)
 export const HmsPortalLayout = lazyPage(() => import("@/pages/hms/HmsLayout"));
 export const HmsPortalAuth = lazyPage(() => import("@/pages/hms/HmsAuth"));

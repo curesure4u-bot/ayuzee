@@ -28,6 +28,17 @@ export const AppRoutes = () => (
             <Route path="/medical-disclaimer" element={withSuspense(<P.MedicalDisclaimer />)} />
             <Route path="/careers" element={withSuspense(<P.Careers />)} />
             <Route path="/blog" element={withSuspense(<P.Blog />)} />
+
+            {/* Quick Start Guides */}
+            <Route path="/guides" element={withSuspense(<P.QuickStartGuides />)} />
+            <Route path="/guides/reception" element={withSuspense(<P.GuideReception />)} />
+            <Route path="/guides/doctor" element={withSuspense(<P.GuideDoctor />)} />
+            <Route path="/guides/hms-admin" element={withSuspense(<P.GuideHmsAdmin />)} />
+            <Route path="/guides/hrms" element={withSuspense(<P.GuideHrms />)} />
+            <Route path="/guides/therapist" element={withSuspense(<P.GuideTherapist />)} />
+            <Route path="/guides/pharmacy" element={withSuspense(<P.GuidePharmacy />)} />
+            <Route path="/guides/lab" element={withSuspense(<P.GuideLab />)} />
+            <Route path="/guides/patient" element={withSuspense(<P.GuidePatient />)} />
             <Route path="/login" element={withSuspense(<P.LoginPicker />)} />
             <Route path="/auth" element={withSuspense(<P.Auth />)} />
             <Route path="/reset-password" element={withSuspense(<P.ResetPassword />)} />
