@@ -438,7 +438,8 @@ const moreItems = [
     { to: "/hms/document-parser", label: "Document Parser", icon: FileText },
   ]},
   { group: "HR & Staff", items: [
-    { to: "/hms/hr", label: "HR & Payroll", icon: UserCog },
+    { to: "/hms/hrms", label: "HRMS Module", icon: UserCog },
+    { to: "/hms/hr", label: "HR & Payroll (Legacy)", icon: UserCog },
     { to: "/hms/staff-attendance", label: "Staff Attendance", icon: Users },
     { to: "/hms/work-schedule", label: "Work Schedule", icon: CalendarClock },
     { to: "/hms/doctor-management", label: "Manage Doctors", icon: Stethoscope },
