@@ -392,6 +392,42 @@ export const HmsDoctorPostOp = lazyPage(() => import("@/pages/hms/doctor/PostOpW
 
 export const HmsPortalHr = lazyPage(() => import("@/pages/hms/HmsHr"));
 
+// HRMS Module (Phase 1)
+export const HrmsLayout = lazyPage(() => import("@/pages/hms/hrms/HrmsLayout"));
+export const HrmsDashboard = lazyPage(() => import("@/pages/hms/hrms/HrmsDashboard"));
+export const HrmsEmployees = lazyPage(() => import("@/pages/hms/hrms/HrmsEmployees"));
+export const HrmsEmployeeDetail = lazyPage(() => import("@/pages/hms/hrms/HrmsEmployeeDetail"));
+export const HrmsSettings = lazyPage(() => import("@/pages/hms/hrms/HrmsSettings"));
+
+// HRMS Phase 2 — Workforce
+export const HrmsAttendance = lazyPage(() => import("@/pages/hms/hrms/HrmsAttendance"));
+export const HrmsLeave = lazyPage(() => import("@/pages/hms/hrms/HrmsLeave"));
+export const HrmsDutyRoster = lazyPage(() => import("@/pages/hms/hrms/HrmsDutyRoster"));
+export const HrmsHolidays = lazyPage(() => import("@/pages/hms/hrms/HrmsHolidays"));
+
+// HRMS Phase 3 — Payroll & Compensation
+export const HrmsPayroll = lazyPage(() => import("@/pages/hms/hrms/HrmsPayroll"));
+export const HrmsIncentives = lazyPage(() => import("@/pages/hms/hrms/HrmsIncentives"));
+export const HrmsPayslip = lazyPage(() => import("@/pages/hms/hrms/HrmsPayslip"));
+
+// HRMS Phase 4 — Performance & Training
+export const HrmsPerformance = lazyPage(() => import("@/pages/hms/hrms/HrmsPerformance"));
+export const HrmsTraining = lazyPage(() => import("@/pages/hms/hrms/HrmsTraining"));
+
+// HRMS Phase 5 — HR Lifecycle
+export const HrmsRecruitment = lazyPage(() => import("@/pages/hms/hrms/HrmsRecruitment"));
+export const HrmsOnboarding = lazyPage(() => import("@/pages/hms/hrms/HrmsOnboarding"));
+export const HrmsRequests = lazyPage(() => import("@/pages/hms/hrms/HrmsRequests"));
+export const HrmsLetters = lazyPage(() => import("@/pages/hms/hrms/HrmsLetters"));
+export const HrmsAssets = lazyPage(() => import("@/pages/hms/hrms/HrmsAssets"));
+export const HrmsExit = lazyPage(() => import("@/pages/hms/hrms/HrmsExit"));
+export const HrmsAnnouncements = lazyPage(() => import("@/pages/hms/hrms/HrmsAnnouncements"));
+
+// HRMS Phase 6 — Intelligence & Analytics
+export const HrmsReports = lazyPage(() => import("@/pages/hms/hrms/HrmsReports"));
+export const HrmsAnalytics = lazyPage(() => import("@/pages/hms/hrms/HrmsAnalytics"));
+export const HrmsNotifications = lazyPage(() => import("@/pages/hms/hrms/HrmsNotifications"));
+
 // HMS Accounts & Finance Module
 export const HmsAccRevenueDashboard = lazyPage(() => import("@/pages/hms/accounts/RevenueDashboard"));
 export const HmsAccPaymentCollection = lazyPage(() => import("@/pages/hms/accounts/PaymentCollection"));

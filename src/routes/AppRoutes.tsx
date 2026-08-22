@@ -590,6 +590,42 @@ export const AppRoutes = () => (
               </Route>
 
               <Route path="hr" element={withSuspense(<P.HmsPortalHr />)} />
+
+              {/* HRMS Module (Phase 1) */}
+              <Route path="hrms" element={withSuspense(<P.HrmsLayout />)}>
+                <Route index element={withSuspense(<P.HrmsDashboard />)} />
+                <Route path="employees" element={withSuspense(<P.HrmsEmployees />)} />
+                <Route path="employees/:employeeId" element={withSuspense(<P.HrmsEmployeeDetail />)} />
+                <Route path="settings" element={withSuspense(<P.HrmsSettings />)} />
+                {/* Phase 2 — Workforce */}
+                <Route path="attendance" element={withSuspense(<P.HrmsAttendance />)} />
+                <Route path="duty-roster" element={withSuspense(<P.HrmsDutyRoster />)} />
+                <Route path="leave" element={withSuspense(<P.HrmsLeave />)} />
+                <Route path="holidays" element={withSuspense(<P.HrmsHolidays />)} />
+                {/* Phase 3 — Payroll & Compensation */}
+                <Route path="payroll" element={withSuspense(<P.HrmsPayroll />)} />
+                <Route path="payroll/payslip/:employeeId" element={withSuspense(<P.HrmsPayslip />)} />
+                <Route path="incentives" element={withSuspense(<P.HrmsIncentives />)} />
+                {/* Phase 4 — Performance & Training */}
+                <Route path="performance" element={withSuspense(<P.HrmsPerformance />)} />
+                <Route path="training" element={withSuspense(<P.HrmsTraining />)} />
+                {/* Placeholder routes for future phases */}
+                <Route path="recruitment" element={withSuspense(<P.HrmsRecruitment />)} />
+                <Route path="onboarding" element={withSuspense(<P.HrmsOnboarding />)} />
+                <Route path="documents" element={withSuspense(<P.HrmsDashboard />)} />
+                <Route path="requests" element={withSuspense(<P.HrmsRequests />)} />
+                <Route path="disciplinary" element={withSuspense(<P.HrmsDashboard />)} />
+                <Route path="assets" element={withSuspense(<P.HrmsAssets />)} />
+                <Route path="announcements" element={withSuspense(<P.HrmsAnnouncements />)} />
+                <Route path="letters" element={withSuspense(<P.HrmsLetters />)} />
+                <Route path="exit" element={withSuspense(<P.HrmsExit />)} />
+                {/* Phase 6 — Intelligence & Analytics */}
+                <Route path="reports" element={withSuspense(<P.HrmsReports />)} />
+                <Route path="analytics" element={withSuspense(<P.HrmsAnalytics />)} />
+                <Route path="notifications" element={withSuspense(<P.HrmsNotifications />)} />
+                <Route path="ess" element={withSuspense(<P.HrmsDashboard />)} />
+              </Route>
+
               <Route path="reports" element={withSuspense(<P.HmsPortalReports />)} />
               <Route path="research" element={withSuspense(<P.HmsPortalResearch />)} />
               <Route path="public-health" element={withSuspense(<P.HmsPortalPublicHealth />)} />
