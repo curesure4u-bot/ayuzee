@@ -110,30 +110,23 @@ const HmsAuth = () => {
     const { data: signUpData, error } = await supabase.auth.signUp({ email, password });
     if (error) { setLoading(false); return toast.error(error.message); }
 
+    // Create HMS access request for admin approval
     const uid = signUpData.user?.id;
     if (uid) {
-      // Create doctor record with immediate HMS access
-      await (supabase as any).from("doctors").upsert({
+      await (supabase as any).from("hms_access_requests").insert({
         user_id: uid,
-        full_name: email.split("@")[0],
-        hms_access: true,
-        hms_role: "branch_doctor",
-        is_approved: true,
-        is_verified: false,
-        category: "general",
-        specialization: "General Practitioner",
-        city: "Not specified",
-      }, { onConflict: "user_id" }).catch(() => {});
-
-      // Also add user role
-      await (supabase as any).from("user_roles").upsert({
-        user_id: uid,
-        role: "doctor",
-      }, { onConflict: "user_id,role" }).catch(() => {});
+        doctor_user_id: uid,
+        email: email.trim().toLowerCase(),
+        center_name: "Main Branch",
+        requested_role: "branch_doctor",
+        role: "branch_doctor",
+        requested_branch: "Main Branch",
+        status: "pending",
+      }).catch(() => {});
     }
 
     setLoading(false);
-    toast.success("Account created! You can now sign in.");
+    toast.success("Account created! Access request sent to administrator for approval.");
     setTab("login");
   };
 
