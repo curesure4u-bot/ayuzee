@@ -13,6 +13,7 @@ import {
   Pill, Plus, Search, AlertTriangle, Package, BarChart3,
   ShoppingCart, Barcode, IndianRupee, Calendar, Warehouse,
 } from "lucide-react";
+import { PharmacyPendingQueue } from "@/components/hms/PharmacyPendingQueue";
 
 type Medicine = {
   id: string;
@@ -117,13 +118,18 @@ const HmsPharmacyAdvanced = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="inventory">
-        <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full">
+      <Tabs defaultValue="prescriptions">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-5 w-full">
+          <TabsTrigger value="prescriptions">Pending Rx</TabsTrigger>
           <TabsTrigger value="inventory">Inventory</TabsTrigger>
           <TabsTrigger value="low-stock">Low Stock Alerts</TabsTrigger>
           <TabsTrigger value="expiry">Expiry Alerts</TabsTrigger>
           <TabsTrigger value="dispensing">Dispensing Log</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="prescriptions" className="space-y-4">
+          <PharmacyPendingQueue />
+        </TabsContent>
 
         <TabsContent value="inventory" className="space-y-4">
           {/* Search & Filter */}

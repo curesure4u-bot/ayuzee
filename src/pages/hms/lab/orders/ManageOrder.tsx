@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search } from "lucide-react";
+import { LabOrdersQueue } from "@/components/hms/LabOrdersQueue";
 
 const ManageOrder = () => {
   const [location, setLocation] = useState("loc1");
@@ -27,6 +28,9 @@ const ManageOrder = () => {
       </Tabs>
 
       <div className="text-center"><h2 className="text-xl font-semibold text-orange-600">Manage Order</h2></div>
+
+      {/* Live Orders Queue */}
+      <LabOrdersQueue />
 
       {/* Filters */}
       <div className="flex items-center gap-2 flex-wrap">

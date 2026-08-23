@@ -18,6 +18,8 @@ import {
   Pill, ExternalLink, Star, Activity, Loader2,
 } from "lucide-react";
 import { useOpdQueue } from "@/hooks/useOpdQueue";
+import { useAppointments } from "@/hooks/useAppointments";
+import { useNotifications } from "@/hooks/useNotifications";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Consultation = {
@@ -247,6 +249,52 @@ const OnlineConsultationTab = () => (
 // ─── Book Appointment Tab ─────────────────────────────────────────────────────
 const BookAppointmentTab = () => {
   const [patientType, setPatientType] = useState<"new" | "existing">("existing");
+  const [bookingName, setBookingName] = useState("");
+  const [bookingPhone, setBookingPhone] = useState("");
+  const [bookingDoctor, setBookingDoctor] = useState("");
+  const [bookingDate, setBookingDate] = useState(new Date().toISOString().slice(0, 10));
+  const [bookingTime, setBookingTime] = useState("");
+  const [bookingComplaint, setBookingComplaint] = useState("");
+  const [bookingType, setBookingType] = useState("in_person");
+  const [sendWa, setSendWa] = useState(true);
+  const [bookingSaving, setBookingSaving] = useState(false);
+  const { bookAppointment } = useAppointments();
+  const { sendAppointmentConfirmation } = useNotifications();
+
+  const handleBook = async () => {
+    if (!bookingName.trim()) return toast.error("Patient name is required");
+    if (!bookingDoctor) return toast.error("Select a doctor");
+    if (!bookingDate) return toast.error("Select a date");
+    if (!bookingTime) return toast.error("Select a time slot");
+
+    setBookingSaving(true);
+    try {
+      const result = await bookAppointment({
+        patient_name: bookingName.trim(),
+        patient_phone: bookingPhone || undefined,
+        doctor_name: bookingDoctor,
+        appointment_date: bookingDate,
+        start_time: bookingTime,
+        consultation_type: bookingType as any,
+        chief_complaint: bookingComplaint || undefined,
+        booked_via: "reception",
+      });
+
+      // Send WhatsApp confirmation
+      if (sendWa && bookingPhone) {
+        try {
+          await sendAppointmentConfirmation(bookingPhone, bookingName, bookingDoctor, bookingDate, bookingTime, undefined, result.appointmentId);
+        } catch (e) { /* notification failure is non-blocking */ }
+      }
+
+      toast.success(`Appointment booked for ${bookingName} with ${bookingDoctor} on ${bookingDate} at ${bookingTime}`);
+      setBookingName(""); setBookingPhone(""); setBookingComplaint(""); setBookingTime("");
+    } catch (e: any) {
+      toast.error(e.message || "Booking failed");
+    }
+    setBookingSaving(false);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2 mb-4">
@@ -332,8 +380,9 @@ const BookAppointmentTab = () => {
             <div className="flex items-center gap-2"><Checkbox /><Label className="text-xs">Request advance payment</Label></div>
           </div>
 
-          <Button className="bg-orange-500 hover:bg-orange-600 w-full md:w-auto" onClick={() => toast.success("Appointment booked! Confirmation sent to patient via SMS & WhatsApp.")}>
-            <CalendarClock className="h-4 w-4 mr-1.5" /> Book Appointment
+          <Button className="bg-orange-500 hover:bg-orange-600 w-full md:w-auto" disabled={bookingSaving} onClick={handleBook}>
+            {bookingSaving ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <CalendarClock className="h-4 w-4 mr-1.5" />}
+            {bookingSaving ? "Booking..." : "Book Appointment"}
           </Button>
         </CardContent>
       </Card>
