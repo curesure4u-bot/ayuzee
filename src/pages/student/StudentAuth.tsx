@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { BookOpenCheck, CheckCircle2, GraduationCap, Loader2, Upload } from "lucide-react";
+import { BookOpenCheck, CheckCircle2, GraduationCap, Loader2, ShieldAlert, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
 
 const indianStates = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana",
@@ -61,6 +62,7 @@ const StudentAuth = () => {
   const [signup, setSignup] = useState<SignupState>(initialSignup);
   const [idFile, setIdFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   const progress = useMemo(() => (step / 3) * 100, [step]);
 
@@ -102,10 +104,21 @@ const StudentAuth = () => {
 
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    const allowed = await checkBeforeLogin(signin.email);
+    if (!allowed) {
+      toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+      return;
+    }
+
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword(signin);
-      if (error) throw error;
+      if (error) {
+        await recordAttempt(signin.email, false, null, error.message);
+        throw error;
+      }
+      await recordAttempt(signin.email, true, data.user?.id);
       const userId = data.user?.id;
       // Super admin bypasses student role check
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: userId!, _role: "super_admin" as any });
@@ -218,7 +231,16 @@ const StudentAuth = () => {
                     <div className="flex items-center justify-between"><Label>Password</Label><ForgotPasswordDialog defaultEmail={signin.email} trigger={<button type="button" className="text-xs font-medium text-primary hover:underline">Forgot password?</button>} /></div>
                     <Input type="password" required value={signin.password} onChange={(e) => setSignin({ ...signin, password: e.target.value })} />
                   </div>
-                  <Button type="submit" variant="hero" className="w-full" disabled={loading}>{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Sign In</Button>
+                  <Button type="submit" variant="hero" className="w-full" disabled={loading || isLocked}>{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Sign In</Button>
+                  {isLocked && (
+                    <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                      <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-800">{lockMessage}</p>
+                    </div>
+                  )}
+                  {!isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+                    <p className="text-xs text-amber-600 text-center">{remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout</p>
+                  )}
                 </form>
               </TabsContent>
               <TabsContent value="signup">

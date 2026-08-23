@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
 import {
   Building2, Loader2, ShieldAlert, Eye, EyeOff,
   Brain, Globe, Leaf, Shield, Stethoscope, Activity,
@@ -37,17 +38,29 @@ const HmsAuth = () => {
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return toast.error("Fill in all fields");
+
+    // Rate limit check
+    const allowed = await checkBeforeLogin(email);
+    if (!allowed) {
+      toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+      return;
+    }
+
     setLoading(true);
 
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
     if (authError) {
       setLoading(false);
+      await recordAttempt(email, false, null, authError.message);
       return toast.error(authError.message);
     }
+
+    await recordAttempt(email, true, authData.session?.user?.id);
 
     const userEmail = authData.session?.user?.email?.toLowerCase().trim();
     const uid = authData.session?.user?.id;
@@ -208,10 +221,23 @@ const HmsAuth = () => {
                       </button>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full bg-[#1a3a2a] hover:bg-[#254d38]" disabled={loading}>
+                  <Button type="submit" className="w-full bg-[#1a3a2a] hover:bg-[#254d38]" disabled={loading || isLocked}>
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Sign In
                   </Button>
+
+                  {isLocked && (
+                    <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                      <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-800">{lockMessage}</p>
+                    </div>
+                  )}
+
+                  {!isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+                    <p className="text-xs text-amber-600 text-center">
+                      {remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout
+                    </p>
+                  )}
                 </form>
               </TabsContent>
 

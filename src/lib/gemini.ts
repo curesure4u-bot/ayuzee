@@ -9,10 +9,9 @@
  * - HMS AI assist
  * 
  * Uses Gemini 1.5 Flash (free tier: 15 RPM, 1M tokens/month)
+ * SECURITY: API key is stored server-side only.
+ * All calls route through /.netlify/functions/gemini-proxy
  */
-
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -102,71 +101,57 @@ Role: Help hospital staff with:
 Keep responses brief and actionable.`,
 };
 
-// ─── Core API Call ────────────────────────────────────────────────────────────
+// ─── Core API Call (via server proxy) ────────────────────────────────────────
 
 export async function callGemini(
   userMessage: string,
   systemPrompt?: string,
   history?: GeminiMessage[],
 ): Promise<GeminiResponse> {
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-key-here") {
-    return { text: "", error: "Gemini API key not configured. Please add VITE_GEMINI_API_KEY to environment variables." };
-  }
-
   try {
-    // Build contents array with history
-    const contents: GeminiMessage[] = [];
+    // Build the full prompt with history context
+    let fullPrompt = "";
 
-    // Add system instruction as first user message if provided
     if (systemPrompt) {
-      contents.push({ role: "user", parts: [{ text: `System instruction: ${systemPrompt}\n\nNow respond to the following user message.` }] });
-      contents.push({ role: "model", parts: [{ text: "Understood. I will follow these instructions for our conversation." }] });
+      fullPrompt += `System instruction: ${systemPrompt}\n\n`;
     }
 
-    // Add conversation history
     if (history && history.length > 0) {
-      contents.push(...history);
+      for (const msg of history) {
+        const role = msg.role === "user" ? "User" : "Assistant";
+        fullPrompt += `${role}: ${msg.parts[0]?.text || ""}\n\n`;
+      }
     }
 
-    // Add current user message
-    contents.push({ role: "user", parts: [{ text: userMessage }] });
+    fullPrompt += `User: ${userMessage}`;
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch("/.netlify/functions/gemini-proxy", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents,
-        generationConfig: {
-          temperature: 0.7,
-          topP: 0.95,
-          topK: 40,
-          maxOutputTokens: 2048,
-        },
-        safetySettings: [
-          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
-          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
-          { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
-          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
-        ],
+        prompt: fullPrompt,
+        systemInstruction: systemPrompt,
+        maxTokens: 2048,
+        temperature: 0.7,
       }),
     });
 
     if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      const errMsg = (errData as any)?.error?.message || `API error: ${response.status}`;
-      return { text: "", error: errMsg };
+      if (response.status === 429) {
+        return { text: "", error: "Rate limit exceeded. Please wait a moment and try again." };
+      }
+      return { text: "", error: `Server error: ${response.status}` };
     }
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-    if (!text) {
-      return { text: "", error: "No response generated. The query may have been blocked by safety filters." };
+    if (data.error) {
+      return { text: "", error: data.error };
     }
 
-    return { text };
+    return { text: data.text || "" };
   } catch (err: any) {
-    return { text: "", error: err.message || "Failed to connect to Gemini AI" };
+    return { text: "", error: err.message || "Failed to connect to AI service" };
   }
 }
 
@@ -206,7 +191,7 @@ export async function askGemini(query: string): Promise<GeminiResponse> {
 }
 
 // ─── Helper: Check if Gemini is configured ───────────────────────────────────
-
+// Now always returns true since configuration is server-side
 export function isGeminiConfigured(): boolean {
-  return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== "your-gemini-key-here";
+  return true;
 }

@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Leaf, ShieldCheck, Stethoscope, HeartPulse, Sparkles } from "lucide-react";
+import { Leaf, ShieldCheck, Stethoscope, HeartPulse, Sparkles, ShieldAlert } from "lucide-react";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
 import { getDashboardPathForUser } from "@/hooks/useUserRole";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
 import { z } from "zod";
 
 const emailSchema = z.string().trim().email("Please enter a valid email").max(255, "Email is too long");
@@ -37,6 +38,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   const redirectForUser = async (userId: string) => {
     navigate(await getDashboardPathForUser(userId), { replace: true });
@@ -61,6 +63,16 @@ const Auth = () => {
       toast.error(parsed.error.issues[0]?.message ?? "Please check the form");
       return;
     }
+
+    // Rate limit check for login only
+    if (mode === "login") {
+      const allowed = await checkBeforeLogin(email);
+      if (!allowed) {
+        toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -76,7 +88,11 @@ const Auth = () => {
         toast.success(refCode ? "Account created via referral! Welcome 🌿" : "Account created! Welcome to Ayuzee 🌿");
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          await recordAttempt(email, false, null, error.message);
+          throw error;
+        }
+        await recordAttempt(email, true, data.user?.id);
         toast.success("Welcome back!");
         if (data.user) await redirectForUser(data.user.id);
       }
@@ -266,9 +282,22 @@ const Auth = () => {
                     className="h-11"
                   />
                 </div>
-                <Button type="submit" data-testid="auth-submit" variant="hero" size="lg" className="h-12 w-full text-base" disabled={loading}>
+                <Button type="submit" data-testid="auth-submit" variant="hero" size="lg" className="h-12 w-full text-base" disabled={loading || (mode === "login" && isLocked)}>
                   {loading ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}
                 </Button>
+
+                {mode === "login" && isLocked && (
+                  <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                    <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                    <p className="text-xs text-red-800">{lockMessage}</p>
+                  </div>
+                )}
+
+                {mode === "login" && !isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+                  <p className="text-xs text-amber-600 text-center">
+                    {remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout
+                  </p>
+                )}
 
               </form>
 

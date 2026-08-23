@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
-import { Building2, Hotel, Sparkles, HeartHandshake, Hospital, CheckCircle2, FileCheck, IdCard, Camera, Upload } from "lucide-react";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
+import { Building2, Hotel, Sparkles, HeartHandshake, Hospital, CheckCircle2, FileCheck, IdCard, Camera, Upload, ShieldAlert } from "lucide-react";
 
 type ProviderType = "hospital" | "therapist" | "panchakarma" | "resort";
 type Step = "credentials" | "documents" | "complete";
@@ -62,6 +63,7 @@ const ProviderAuth = () => {
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
   const [idFile, setIdFile] = useState<File | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   const redirectForAccount = async (userId: string) => {
     const { data: therapist } = await supabase
@@ -87,6 +89,15 @@ const ProviderAuth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (mode === "login") {
+      const allowed = await checkBeforeLogin(email);
+      if (!allowed) {
+        toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -123,7 +134,11 @@ const ProviderAuth = () => {
         toast.success("Account created. Please upload your verification documents.");
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          await recordAttempt(email, false, null, error.message);
+          throw error;
+        }
+        await recordAttempt(email, true, data.user?.id);
         toast.success("Welcome back!");
         if (data.user) await redirectForAccount(data.user.id);
       }
@@ -242,9 +257,22 @@ const ProviderAuth = () => {
                     </div>
                     <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                   </div>
-                  <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
+                  <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading || (mode === "login" && isLocked)}>
                     {loading ? "Please wait…" : mode === "login" ? "Sign in" : "Continue"}
                   </Button>
+
+                  {mode === "login" && isLocked && (
+                    <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                      <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-800">{lockMessage}</p>
+                    </div>
+                  )}
+
+                  {mode === "login" && !isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+                    <p className="text-xs text-amber-600 text-center">
+                      {remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout
+                    </p>
+                  )}
                 </form>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">

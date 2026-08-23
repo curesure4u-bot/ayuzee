@@ -14,7 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { AYUSH_THERAPIES } from "@/data/ayushTherapyCatalog";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
-import { Sparkles, Upload, ShieldCheck, Loader2, CheckCircle2 } from "lucide-react";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
+import { Sparkles, Upload, ShieldCheck, ShieldAlert, Loader2, CheckCircle2 } from "lucide-react";
 
 type Mode = "auth" | "onboarding" | "review";
 
@@ -29,6 +30,7 @@ const TherapistAuth = () => {
   // Auth fields
   const [signup, setSignup] = useState({ full_name: "", phone: "", gender: "male", email: "", password: "", city: "", state: "" });
   const [signin, setSignin] = useState({ email: "", password: "" });
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   // Onboarding state
   const [certNumber, setCertNumber] = useState("");
@@ -79,12 +81,23 @@ const TherapistAuth = () => {
 
   const handleSignin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const allowed = await checkBeforeLogin(signin.email);
+    if (!allowed) {
+      toast({ title: "Login blocked", description: lockMessage || "Too many failed attempts. Please wait.", variant: "destructive" });
+      return;
+    }
+
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email: signin.email, password: signin.password });
     setLoading(false);
-    if (error) return toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+    if (error) {
+      await recordAttempt(signin.email, false, null, error.message);
+      return toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+    }
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
+    await recordAttempt(signin.email, true, session.user.id);
     setUserId(session.user.id);
     // Super admin bypasses therapist verification
     const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: session.user.id, _role: "super_admin" as any });
@@ -227,7 +240,16 @@ const TherapistAuth = () => {
                   </div>
                   <Input type="password" required value={signin.password} onChange={(e) => setSignin({ ...signin, password: e.target.value })} />
                 </div>
-                <Button type="submit" disabled={loading} className="w-full">{loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Sign in</Button>
+                <Button type="submit" disabled={loading || isLocked} className="w-full">{loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Sign in</Button>
+                {isLocked && (
+                  <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                    <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                    <p className="text-xs text-red-800">{lockMessage}</p>
+                  </div>
+                )}
+                {!isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+                  <p className="text-xs text-amber-600 text-center">{remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout</p>
+                )}
               </form>
             </TabsContent>
             <TabsContent value="signup">

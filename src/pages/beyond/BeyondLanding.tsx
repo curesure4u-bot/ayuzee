@@ -9,6 +9,7 @@ import {
   Compass,
   Heart,
   Rocket,
+  ShieldAlert,
   Target,
   Timer,
   Trophy,
@@ -20,6 +21,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
 
 const FEATURES = [
   { icon: Target, title: "Wheel of Life", desc: "Assess all 8 life areas with radar chart" },
@@ -47,6 +49,7 @@ const BeyondLanding = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgot, setIsForgot] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage } = useLoginThrottle();
 
   const handleAuth = async () => {
     if (!email) { toast.error("Enter your email"); return; }
@@ -74,8 +77,20 @@ const BeyondLanding = () => {
       toast.success("Account created! Check your email to verify, then sign in.");
       setIsSignUp(false);
     } else {
+      // Rate limit check for login
+      const allowed = await checkBeforeLogin(email);
+      if (!allowed) {
+        toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) { toast.error(error.message); setLoading(false); return; }
+      if (error) {
+        await recordAttempt(email, false, null, error.message);
+        toast.error(error.message); setLoading(false); return;
+      }
+      await recordAttempt(email, true, data.user?.id);
       // Check if admin → redirect to hero admin
       const ADMINS = ["jasirsajidh8@gmail.com", "curesure4u@gmail.com"];
       if (ADMINS.includes(email.toLowerCase())) {

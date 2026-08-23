@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Stethoscope, FileCheck, Upload, IdCard, Camera, CheckCircle2 } from "lucide-react";
+import { Stethoscope, FileCheck, Upload, IdCard, Camera, CheckCircle2, ShieldAlert } from "lucide-react";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
 
 type Step = "credentials" | "documents" | "complete";
 
@@ -63,6 +64,7 @@ const DoctorAuth = () => {
   const [certFile, setCertFile] = useState<File | null>(null);
   const [idFile, setIdFile] = useState<File | null>(null);
   const [selfieFile, setSelfieFile] = useState<File | null>(null);
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   useEffect(() => {
     if (step !== "credentials") return;
@@ -77,6 +79,16 @@ const DoctorAuth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Rate limit check for login
+    if (mode === "login") {
+      const allowed = await checkBeforeLogin(email);
+      if (!allowed) {
+        toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -116,8 +128,12 @@ const DoctorAuth = () => {
         setStep("documents");
         toast.success("Account created. Please upload your verification documents.");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          await recordAttempt(email, false, null, error.message);
+          throw error;
+        }
+        await recordAttempt(email, true, data.user?.id);
         toast.success("Welcome back, Doctor!");
       }
     } catch (err: unknown) {
@@ -225,9 +241,22 @@ const DoctorAuth = () => {
                     </div>
                     <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                   </div>
-                  <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
+                  <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading || (mode === "login" && isLocked)}>
                     {loading ? "Please wait…" : mode === "login" ? "Sign in" : "Continue"}
                   </Button>
+
+                  {mode === "login" && isLocked && (
+                    <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                      <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-800">{lockMessage}</p>
+                    </div>
+                  )}
+
+                  {mode === "login" && !isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+                    <p className="text-xs text-amber-600 text-center">
+                      {remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout
+                    </p>
+                  )}
                 </form>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">

@@ -5,15 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { ShieldCheck, Loader2 } from "lucide-react";
+import { ShieldCheck, ShieldAlert, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { ForgotPasswordDialog } from "@/components/auth/ForgotPasswordDialog";
+import { useLoginThrottle } from "@/hooks/useLoginThrottle";
 
 const AdminAuth = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
   useEffect(() => {
     (async () => {
@@ -31,13 +33,22 @@ const AdminAuth = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const allowed = await checkBeforeLogin(email);
+    if (!allowed) {
+      toast.error(lockMessage || "Too many failed attempts. Please wait before trying again.");
+      return;
+    }
+
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
+      await recordAttempt(email, false, null, error.message);
       toast.error(error.message);
       setLoading(false);
       return;
     }
+    await recordAttempt(email, true, data.user?.id);
     // Verify admin role (user can have multiple roles, e.g. both admin + super_admin)
     const { data: rows } = await supabase
       .from("user_roles")
@@ -107,9 +118,22 @@ const AdminAuth = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full" variant="hero" disabled={loading}>
+            <Button type="submit" className="w-full" variant="hero" disabled={loading || isLocked}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign in"}
             </Button>
+
+            {isLocked && (
+              <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50/50 p-3">
+                <ShieldAlert className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                <p className="text-xs text-red-800">{lockMessage}</p>
+              </div>
+            )}
+
+            {!isLocked && remainingAttempts <= 2 && remainingAttempts > 0 && (
+              <p className="text-xs text-amber-600 text-center">
+                {remainingAttempts} attempt{remainingAttempts > 1 ? "s" : ""} remaining before temporary lockout
+              </p>
+            )}
           </form>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">

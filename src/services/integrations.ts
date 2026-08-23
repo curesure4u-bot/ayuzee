@@ -15,7 +15,7 @@
  *   VITE_WHATSAPP_API_URL=https://api.gupshup.io/wa/api/v1
  *   VITE_WHATSAPP_API_KEY=XXXXXXXXXX
  *   VITE_OPENAI_API_KEY=sk-XXXXXXXXXX
- *   VITE_GEMINI_API_KEY=XXXXXXXXXX
+ *   GEMINI_API_KEY (server-side)=XXXXXXXXXX
  *   VITE_SENTRY_DSN=https://XXXXXXXXXX@sentry.io/XXXXXXXXXX
  *   VITE_JITSI_DOMAIN=meet.jit.si
  */
@@ -307,22 +307,20 @@ export const aiService = {
     return data.choices?.[0]?.message?.content || "No response";
   },
 
-  /** Call Google Gemini (free tier, good for general queries) */
+  /** Call Google Gemini via server proxy (API key stays server-side) */
   async callGemini(prompt: string): Promise<string> {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) return "[Gemini not configured — add VITE_GEMINI_API_KEY to .env]";
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
+    try {
+      const response = await fetch("/.netlify/functions/gemini-proxy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-      }
-    );
-
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await response.json();
+      if (data.error) return `[AI Error: ${data.error}]`;
+      return data.text || "No response";
+    } catch (err: any) {
+      return `[AI Error: ${err.message}]`;
+    }
   },
 
   /** AI Scribe: Convert consultation audio to structured notes */

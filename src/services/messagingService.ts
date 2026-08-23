@@ -6,12 +6,12 @@
  *
  * SETUP:
  *   WhatsApp: VITE_WHATSAPP_API_URL, VITE_WHATSAPP_API_KEY, VITE_WHATSAPP_BUSINESS_NUMBER
- *   Telegram: VITE_TELEGRAM_BOT_TOKEN (get from @BotFather on Telegram)
+ *   Telegram: TELEGRAM_BOT_TOKEN (server-side) (get from @BotFather on Telegram)
  *
  * HOW TO GET TELEGRAM BOT:
  *   1. Open Telegram → search @BotFather
  *   2. Send /newbot → name it "Ayuzee Health Bot"
- *   3. Copy the token → add to .env as VITE_TELEGRAM_BOT_TOKEN
+ *   3. Copy the token → add to .env as TELEGRAM_BOT_TOKEN (server-side)
  *   4. Patients find your bot at t.me/AyuzeeHealthBot and press Start
  *   5. Their Telegram chat_id is saved in your DB → you can send them messages
  */
@@ -250,35 +250,22 @@ const whatsappService = {
 
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TELEGRAM BOT SERVICE
-// Completely FREE — No message limits, no per-message cost
-// Setup: Get token from @BotFather → add to .env
-// Patients: Find bot at t.me/YourBotName → press Start → linked
+// TELEGRAM BOT SERVICE — Routes through server-side Netlify Function
+// Token stays server-side at /.netlify/functions/telegram-send
 // ═══════════════════════════════════════════════════════════════════════════
 
 const telegramService = {
   async sendMessage(payload: MessagePayload): Promise<boolean> {
-    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    if (!botToken) {
-      console.warn("[Telegram] Not configured. Add VITE_TELEGRAM_BOT_TOKEN to .env");
-      return false;
-    }
-
     const chatId = payload.recipientTelegramId;
     if (!chatId) { console.error("[Telegram] No chat_id"); return false; }
 
     const message = telegramService.formatMessage(payload.messageType, payload.templateData);
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const response = await fetch("/.netlify/functions/telegram-send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-          parse_mode: "HTML",
-          disable_web_page_preview: false,
-        }),
+        body: JSON.stringify({ action: "sendMessage", chatId, text: message, parseMode: "HTML" }),
       });
       const result = await response.json();
       return result.ok === true;
@@ -288,60 +275,40 @@ const telegramService = {
     }
   },
 
-  /** Send a document/PDF via Telegram */
   async sendDocument(chatId: string, fileUrl: string, caption: string): Promise<boolean> {
-    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    if (!botToken) return false;
-
     try {
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+      const response = await fetch("/.netlify/functions/telegram-send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          document: fileUrl,
-          caption,
-          parse_mode: "HTML",
-        }),
+        body: JSON.stringify({ action: "sendDocument", chatId, document: fileUrl, caption, parseMode: "HTML" }),
       });
       const result = await response.json();
       return result.ok === true;
     } catch { return false; }
   },
 
-  /** Send a message with inline keyboard buttons */
   async sendWithButtons(chatId: string, text: string, buttons: { text: string; url?: string; callback_data?: string }[][]): Promise<boolean> {
-    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    if (!botToken) return false;
-
     try {
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const response = await fetch("/.netlify/functions/telegram-send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text,
-          parse_mode: "HTML",
-          reply_markup: { inline_keyboard: buttons },
-        }),
+        body: JSON.stringify({ action: "sendMessage", chatId, text, parseMode: "HTML", buttons }),
       });
       const result = await response.json();
       return result.ok === true;
     } catch { return false; }
   },
 
-  /** Set webhook for incoming messages (call once during setup) */
   async setWebhook(webhookUrl: string): Promise<boolean> {
-    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    if (!botToken) return false;
-
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/setWebhook`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: webhookUrl }),
-    });
-    const result = await response.json();
-    return result.ok === true;
+    try {
+      const response = await fetch("/.netlify/functions/telegram-send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "setWebhook", webhookUrl }),
+      });
+      const result = await response.json();
+      return result.ok === true;
+    } catch { return false; }
   },
 
   formatMessage(type: string, data: Record<string, string>): string {
