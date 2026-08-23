@@ -40,6 +40,13 @@ const HmsAuth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { checkBeforeLogin, recordAttempt, isLocked, lockMessage, remainingAttempts } = useLoginThrottle();
 
+  // Signup extra fields
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [branchName, setBranchName] = useState("");
+  const [requestedRole, setRequestedRole] = useState("branch_doctor");
+  const [centerType, setCenterType] = useState("");
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return toast.error("Fill in all fields");
@@ -103,30 +110,50 @@ const HmsAuth = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return toast.error("Fill in all fields");
+    if (!email || !password || !fullName.trim()) return toast.error("Fill in all required fields");
     if (password.length < 6) return toast.error("Password must be at least 6 characters");
     setLoading(true);
 
-    const { data: signUpData, error } = await supabase.auth.signUp({ email, password });
+    const { data: signUpData, error } = await supabase.auth.signUp({
+      email, password,
+      options: { data: { full_name: fullName.trim(), phone: phone.trim() } },
+    });
     if (error) { setLoading(false); return toast.error(error.message); }
 
-    // Create HMS access request for admin approval
     const uid = signUpData.user?.id;
     if (uid) {
+      // Create doctor record (pending approval, no HMS access yet)
+      await (supabase as any).from("doctors").upsert({
+        user_id: uid,
+        full_name: fullName.trim(),
+        phone: phone.trim() || null,
+        hms_access: false,
+        hms_role: requestedRole,
+        hms_branch: branchName.trim() || null,
+        hms_center_type: centerType || null,
+        is_approved: false,
+        is_verified: false,
+        verification_status: "pending",
+        category: "general",
+        specialization: "General Practitioner",
+        city: "Not specified",
+      }, { onConflict: "user_id" }).catch(() => {});
+
+      // Also create access request for admin queue
       await (supabase as any).from("hms_access_requests").insert({
         user_id: uid,
         doctor_user_id: uid,
         email: email.trim().toLowerCase(),
-        center_name: "Main Branch",
-        requested_role: "branch_doctor",
-        role: "branch_doctor",
-        requested_branch: "Main Branch",
+        center_name: branchName.trim() || "Main Branch",
+        requested_role: requestedRole,
+        role: requestedRole,
+        requested_branch: branchName.trim() || "Main Branch",
         status: "pending",
       }).catch(() => {});
     }
 
     setLoading(false);
-    toast.success("Account created! Access request sent to administrator for approval.");
+    toast.success("Account created! Admin will review and grant HMS access shortly.");
     setTab("login");
   };
 
@@ -242,19 +269,40 @@ const HmsAuth = () => {
               </TabsContent>
 
               <TabsContent value="signup">
-                <form onSubmit={handleSignup} className="space-y-4 mt-4">
+                <form onSubmit={handleSignup} className="space-y-3 mt-4">
                   <div>
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-name">Full Name *</Label>
+                    <Input
+                      id="signup-name"
+                      placeholder="Dr. Full Name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-phone">Phone</Label>
+                    <Input
+                      id="signup-phone"
+                      type="tel"
+                      placeholder="10-digit mobile"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-email">Email *</Label>
                     <Input
                       id="signup-email"
                       type="email"
                       placeholder="doctor@hospital.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">Password *</Label>
                     <div className="relative">
                       <Input
                         id="signup-password"
@@ -262,6 +310,8 @@ const HmsAuth = () => {
                         placeholder="Min 6 characters"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={6}
                         className="pr-10"
                       />
                       <button
@@ -274,12 +324,54 @@ const HmsAuth = () => {
                       </button>
                     </div>
                   </div>
+                  <div>
+                    <Label htmlFor="signup-branch">Branch / Center Name</Label>
+                    <Input
+                      id="signup-branch"
+                      placeholder="e.g. Al Shifa Ayurveda, Kozhikode"
+                      value={branchName}
+                      onChange={(e) => setBranchName(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label>Your Role</Label>
+                      <select
+                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                        value={requestedRole}
+                        onChange={(e) => setRequestedRole(e.target.value)}
+                      >
+                        <option value="branch_doctor">Doctor</option>
+                        <option value="receptionist">Receptionist</option>
+                        <option value="pharmacist">Pharmacist</option>
+                        <option value="lab_tech">Lab Tech</option>
+                        <option value="therapist">Therapist</option>
+                        <option value="nurse">Nurse</option>
+                        <option value="branch_admin">Branch Admin</option>
+                        <option value="owner">Owner</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label>Center Type</Label>
+                      <select
+                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                        value={centerType}
+                        onChange={(e) => setCenterType(e.target.value)}
+                      >
+                        <option value="">Select</option>
+                        <option value="main_hospital">Main Hospital</option>
+                        <option value="branch">Branch</option>
+                        <option value="franchisee">Franchisee</option>
+                        <option value="exclusive_center">Exclusive Center</option>
+                      </select>
+                    </div>
+                  </div>
                   <Button type="submit" className="w-full bg-[#1a3a2a] hover:bg-[#254d38]" disabled={loading}>
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Create Account
+                    Request HMS Access
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    After sign up, your account needs admin approval before you can access HMS.
+                    Admin will review your request and grant access within 24 hours.
                   </p>
                 </form>
               </TabsContent>
