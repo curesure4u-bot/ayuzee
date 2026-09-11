@@ -268,7 +268,7 @@ const Doctors = () => {
                 </span>
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-green-800">Doctors Available Now — Consult 24/7</p>
-                  <p className="text-xs text-green-600">Video, In-Clinic, or Text Chat · Free follow-up within 7 days</p>
+                  <p className="text-xs text-green-700">Video, In-Clinic, or Text Chat · Free follow-up within 7 days</p>
                 </div>
                 <span className="rounded-full bg-green-100 px-2.5 py-1 text-[10px] font-bold text-green-700">
                   {loading ? "…" : filtered.filter((d) => d.video_available).length}+ online

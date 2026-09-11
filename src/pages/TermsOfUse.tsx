@@ -137,7 +137,7 @@ const TermsOfUse = () => {
             </div>
             <p className="mt-3 text-muted-foreground">
               If you have any questions about these Terms of Use, please contact us at{" "}
-              <a href="mailto:support@ayuzee.com" className="text-primary hover:underline">support@ayuzee.com</a>.
+              <a href="mailto:support@ayuzee.com" className="text-primary hover:underline font-medium">support@ayuzee.com</a>.
             </p>
           </section>
         </div>

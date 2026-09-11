@@ -84,7 +84,7 @@ export const Therapy = () => (
           <div className="rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">
             500+ Certified Therapists
           </div>
-          <div className="rounded-full border border-info/20 bg-info/10 px-4 py-2 text-sm font-semibold text-info">
+          <div className="rounded-full border border-info/30 bg-info/15 px-4 py-2 text-sm font-semibold text-info">
             200+ Partner Venues
           </div>
           <Button variant="hero" asChild>

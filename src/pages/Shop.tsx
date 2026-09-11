@@ -96,7 +96,7 @@ const Shop = () => {
       <div className="border-b border-border bg-background">
         <div className="container flex items-center gap-4 overflow-x-auto py-3 text-sm">
           <div className="flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 flex-1 max-w-2xl">
-            <select className="bg-transparent text-sm font-medium outline-none">
+            <select className="bg-transparent text-sm font-medium outline-none" aria-label="Select category">
               <option>Medicine</option>
               <option>Services</option>
             </select>

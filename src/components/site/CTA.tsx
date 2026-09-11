@@ -74,7 +74,7 @@ export const CTA = () => (
     <div className="mt-10 rounded-2xl bg-primary p-6 text-center text-primary-foreground shadow-elegant">
       <p className="font-semibold">🇮🇳 Proudly serving pan-India</p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {states.map((state) => <span key={state} className="rounded-full bg-primary-foreground/15 px-3 py-1 text-xs font-medium">{state}</span>)}
+        {states.map((state) => <span key={state} className="rounded-full bg-primary-foreground/25 px-3 py-1 text-xs font-medium">{state}</span>)}
       </div>
     </div>
   </section>

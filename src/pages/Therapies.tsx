@@ -48,7 +48,7 @@ const Therapies = () => {
       <main>
         <section className="border-b border-border bg-accent/30 py-16">
           <div className="container text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary">Therapy & Wellness</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Therapy & Wellness</span>
             <h1 className="mt-2 font-display text-4xl md:text-5xl">Authentic Ayurvedic therapies</h1>
             <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
               Time-tested wellness rituals delivered by certified practitioners. Specialised therapies are available only on doctor recommendation.

@@ -82,9 +82,9 @@ export const Testimonials = () => {
                     {story.condition}
                   </span>
                 )}
-                <div className="mt-5 flex text-secondary" aria-label={`${story.rating} star rating`}>
+                <div className="mt-5 flex text-secondary" role="img" aria-label={`${story.rating} out of 5 stars`}>
                   {Array.from({ length: story.rating }).map((_, index) => (
-                    <Star key={index} className="h-4 w-4 fill-current" />
+                    <Star key={index} className="h-4 w-4 fill-current" aria-hidden="true" />
                   ))}
                 </div>
                 <figcaption className="mt-4 flex items-center gap-3">
