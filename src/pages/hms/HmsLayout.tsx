@@ -14,7 +14,10 @@ import {
   GraduationCap, Globe, Smartphone, Brain, Stethoscope, ScanLine, CreditCard,
   QrCode, AlertTriangle, Target, Truck, RotateCcw, Lock, Calculator, Clock,
   Calendar, RefreshCw, ArrowRight, CheckCircle2, Send, Crown, Monitor,
-  Wind, Maximize, BookHeart, Footprints, Scale, BookOpen,
+  Wind, Maximize, BookHeart, Footprints, Scale, BookOpen, Rocket, LayoutGrid, Bell,
+  ShieldCheck, LayoutDashboard, ClipboardCheck, Repeat, Trophy, Tag,
+  Video, Share2, Plug, UserPlus, Gauge, Flower2, Tent, HeartPulse,
+  Accessibility, HeartHandshake, TrendingUp,
 } from "lucide-react";
 
 // 10 Primary Tabs
@@ -360,7 +363,12 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/ayush/formulations", label: "Formulations", icon: FlaskConical },
   ],
   spine: [
+    { divider: "🔐 Owner Only", to: "/hms/spine-super-admin", label: "Super Admin (Control)", icon: ShieldCheck },
+    { to: "/hms/spine-chief-physician", label: "Chief Physician Suite", icon: Crown },
+
+    { divider: "Daily Operations", to: "/hms/spine-command-center", label: "⭐ Daily Command Center", icon: LayoutDashboard },
     { to: "/hms/spine-ayush", label: "Spine Dashboard", icon: Home },
+    { to: "/hms/spine-checklists", label: "SOP & Safety Checklists", icon: ClipboardCheck },
 
     { divider: "Patient Journey", to: "/hms/spine-ayush?tab=assessment", label: "AI Assessment (₹199)", icon: Brain },
     { to: "/hms/spine-ayush?tab=examination", label: "Examination (7 Systems)", icon: Stethoscope },
@@ -381,6 +389,7 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-therapy-session", label: "Record Therapy Session", icon: Stethoscope },
 
     { divider: "Tracking & Outcomes", to: "/hms/spine-outcome-tracker", label: "Outcome Tracker", icon: Activity },
+    { to: "/hms/spine-patient-journey", label: "Patient Journey (Show Patient)", icon: Heart },
     { to: "/hms/spine-patient-recovery", label: "Patient Recovery Score", icon: Target },
     { to: "/hms/spine-discharge-plan", label: "Discharge & Home Plan", icon: FileText },
 
@@ -403,7 +412,41 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-ayush?tab=rejuvenation", label: "Rejuvenation", icon: Heart },
     { to: "/hms/spine-ayush?tab=followup", label: "Follow-up (Video LMS)", icon: Smartphone },
 
-    { divider: "Community & Business", to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
+    { divider: "Franchise Tools", to: "/hms/spine-franchise-hub", label: "Franchise Hub (Home)", icon: Building2 },
+    { to: "/hms/spine-franchise-setup", label: "1. Setup Wizard", icon: Rocket },
+    { to: "/hms/spine-franchise-layout", label: "2. Layout Planner", icon: LayoutGrid },
+    { to: "/hms/spine-franchise-ops", label: "3. Operations Dashboard", icon: BarChart3 },
+    { to: "/hms/spine-franchise-cost", label: "4. Cost Calculator", icon: Calculator },
+    { to: "/hms/spine-franchise-roster", label: "5. Staff Roster", icon: CalendarClock },
+    { to: "/hms/spine-franchise-portal", label: "6. Patient Portal (Online/Hybrid)", icon: Smartphone },
+
+    { divider: "Growth & Revenue", to: "/hms/spine-subscriptions", label: "Memberships & Subscriptions", icon: Repeat },
+    { to: "/hms/spine-success-stories", label: "Success Stories", icon: Trophy },
+    { to: "/hms/spine-offers", label: "Offers & Promotions", icon: Tag },
+
+    { divider: "Content & Marketing", to: "/hms/spine-video-library", label: "Video Library (YouTube)", icon: Video },
+    { to: "/hms/spine-social-hub", label: "Social Hub", icon: Share2 },
+    { to: "/hms/spine-library", label: "Patient Library", icon: BookOpen },
+    { to: "/hms/spine-integrations", label: "Integrations & APIs", icon: Plug },
+
+    { divider: "Referral & Influencer", to: "/hms/spine-referral-network", label: "Referral Network Hub", icon: Users },
+    { to: "/spine/refer", label: "Public Sign-Up Page ↗", icon: UserPlus },
+
+    { divider: "Longevity & Rejuvenation", to: "/hms/spine-wellness-age", label: "Wellness Age Tracker", icon: Gauge },
+    { to: "/hms/spine-rejuvenation", label: "Rejuvenation (Rasayana)", icon: Flower2 },
+    { to: "/hms/spine-retreats", label: "Retreats & Boot Camps", icon: Tent },
+
+    { divider: "Vitality & Vajikarana (18+)", to: "/hms/spine-vajikarana", label: "Vajikarana & Pelvic Health", icon: HeartPulse },
+    { to: "/hms/spine-pelvic-floor", label: "Pelvic Floor / Kegel Program", icon: Dumbbell },
+    { to: "/hms/spine-vitality-assessment", label: "Confidential Assessment", icon: ClipboardList },
+
+    { divider: "Spinal Injury Rehab & CSR", to: "/hms/spine-rehab-registry", label: "Rehab Registry", icon: Accessibility },
+    { to: "/hms/spine-rehab-followup", label: "Tele-Rehab Follow-Up", icon: Smartphone },
+    { to: "/hms/spine-csr", label: "CSR Fund & Sponsorship", icon: HeartHandshake },
+    { to: "/spine/impact", label: "Public Impact Page ↗", icon: TrendingUp },
+
+    { divider: "Community & Business", to: "/hms/spine-followup-rules", label: "Follow-Up Rules (Automation)", icon: Bell },
+    { to: "/hms/spine-community", label: "Community & Funnel", icon: Crown },
     { to: "/hms/spine-community-pipeline", label: "Engagement Pipeline", icon: Users },
     { to: "/hms/spine-ayush?tab=franchise", label: "Franchise Operations", icon: Building2 },
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },

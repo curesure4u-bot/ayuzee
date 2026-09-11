@@ -7,14 +7,17 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import SpineChecklist from "@/components/spine/SpineChecklist";
+import { getTemplate } from "@/components/spine/spineChecklistTemplates";
 import {
   Activity, CheckCircle2, Clock, Stethoscope, Target,
-  Save, ClipboardList, Zap, Heart,
+  Save, ClipboardList, Zap, Heart, ShieldCheck,
 } from "lucide-react";
 
 export default function SpineLevel1Session() {
   const [selectedTherapy, setSelectedTherapy] = useState<number | null>(null);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [safetyCleared, setSafetyCleared] = useState(false);
   const [formData, setFormData] = useState({
     patientName: "", duration: "15", intensity: "",
     bodyArea: "", spinalLevel: "", painBefore: "", painAfter: "",
@@ -125,6 +128,7 @@ export default function SpineLevel1Session() {
   const handleSaveLevel1 = async () => {
     if (!selectedTherapy) { toast.error("Please select a therapy"); return; }
     if (!formData.patientName) { toast.error("Please enter patient name/ID"); return; }
+    if (!safetyCleared) { toast.error("Complete the Pre-Treatment Safety Screen first (no red flags, all required items)"); return; }
 
     setSaving(true);
     try {
@@ -334,7 +338,29 @@ export default function SpineLevel1Session() {
             </CardContent>
           </Card>
 
-          <Button className="w-full bg-green-600 hover:bg-green-700 h-12" onClick={handleSaveLevel1} disabled={saving}>
+          {/* Pre-Treatment Safety Gate — must clear before saving */}
+          {getTemplate("pre_treatment_safety") && (
+            <SpineChecklist
+              template={getTemplate("pre_treatment_safety")!}
+              variant="gate"
+              hideSave
+              patientName={formData.patientName}
+              onClearChange={setSafetyCleared}
+            />
+          )}
+
+          {!safetyCleared && (
+            <div className="rounded-md border border-amber-300 bg-amber-50 p-2.5 text-xs text-amber-800 flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 shrink-0" />
+              Complete the safety screen above (all required items, no red flags) to enable saving.
+            </div>
+          )}
+
+          <Button
+            className="w-full bg-green-600 hover:bg-green-700 h-12"
+            onClick={handleSaveLevel1}
+            disabled={saving || !safetyCleared}
+          >
             <Save className="h-4 w-4 mr-2" /> {saving ? "Saving..." : "Save Level 1 Session"}
           </Button>
 

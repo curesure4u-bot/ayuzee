@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { RouteFallback } from "@/components/common/PageLoader";
 import VaidyaPanchakarmaGuard from "@/components/vaidya/VaidyaPanchakarmaGuard";
+import SpineOwnerGuard from "@/components/spine/SpineOwnerGuard";
 import * as P from "@/routes/lazyPages";
 
 const withSuspense = (element: React.ReactNode) => (
@@ -374,6 +375,8 @@ export const AppRoutes = () => (
             <Route path="/diagnosis/netra" element={withSuspense(<P.NetraPariksha />)} />
             <Route path="/diagnosis/spine" element={withSuspense(<P.SpineAssessment />)} />
             <Route path="/spine" element={withSuspense(<P.SpineAyushLanding />)} />
+            <Route path="/spine/refer" element={withSuspense(<P.SpineReferralApply />)} />
+            <Route path="/spine/impact" element={withSuspense(<P.SpineCsrImpact />)} />
             <Route path="/ayurveda-advisor" element={withSuspense(<P.AyurvedaAdvisor />)} />
             <Route path="/diagnosis/prakriti" element={withSuspense(<P.PrakritiIntro />)} />
             <Route path="/diagnosis/prakriti/run" element={withSuspense(<P.PrakritiRun />)} />
@@ -797,6 +800,36 @@ export const AppRoutes = () => (
               <Route path="spine-discharge-plan" element={withSuspense(<P.HmsSpineDischargePlan />)} />
               <Route path="spine-clinical-resources" element={withSuspense(<P.HmsSpineClinicalResources />)} />
               <Route path="spine-functional-neurology" element={withSuspense(<P.HmsSpineFunctionalNeurology />)} />
+              <Route path="spine-command-center" element={withSuspense(<P.HmsSpineCommandCenter />)} />
+              <Route path="spine-patient-journey" element={withSuspense(<P.HmsSpinePatientJourney />)} />
+              <Route path="spine-followup-rules" element={withSuspense(<P.HmsSpineFollowUpRules />)} />
+              <Route path="spine-checklists" element={withSuspense(<P.HmsSpineChecklists />)} />
+              <Route path="spine-success-stories" element={withSuspense(<P.HmsSpineSuccessStories />)} />
+              <Route path="spine-offers" element={withSuspense(<P.HmsSpineOffers />)} />
+              <Route path="spine-subscriptions" element={withSuspense(<P.HmsSpineSubscriptions />)} />
+              <Route path="spine-video-library" element={withSuspense(<P.HmsSpineVideoLibrary />)} />
+              <Route path="spine-social-hub" element={withSuspense(<P.HmsSpineSocialHub />)} />
+              <Route path="spine-library" element={withSuspense(<P.HmsSpineLibrary />)} />
+              <Route path="spine-integrations" element={withSuspense(<P.HmsSpineIntegrations />)} />
+              <Route path="spine-referral-network" element={withSuspense(<P.HmsSpineReferralNetwork />)} />
+              <Route path="spine-wellness-age" element={withSuspense(<P.HmsSpineWellnessAge />)} />
+              <Route path="spine-rejuvenation" element={withSuspense(<P.HmsSpineRejuvenation />)} />
+              <Route path="spine-retreats" element={withSuspense(<P.HmsSpineRetreats />)} />
+              <Route path="spine-vajikarana" element={withSuspense(<P.HmsSpineVajikaranaHub />)} />
+              <Route path="spine-pelvic-floor" element={withSuspense(<P.HmsSpinePelvicFloor />)} />
+              <Route path="spine-vitality-assessment" element={withSuspense(<P.HmsSpineVitalityAssessment />)} />
+              <Route path="spine-rehab-registry" element={withSuspense(<P.HmsSpineRehabRegistry />)} />
+              <Route path="spine-rehab-followup" element={withSuspense(<P.HmsSpineRehabFollowup />)} />
+              <Route path="spine-csr" element={withSuspense(<P.HmsSpineCsrManager />)} />
+              <Route path="spine-super-admin" element={withSuspense(<SpineOwnerGuard><P.HmsSpineSuperAdmin /></SpineOwnerGuard>)} />
+              <Route path="spine-chief-physician" element={withSuspense(<SpineOwnerGuard><P.HmsSpineChiefPhysician /></SpineOwnerGuard>)} />
+              <Route path="spine-franchise-hub" element={withSuspense(<P.HmsSpineFranchiseHub />)} />
+              <Route path="spine-franchise-setup" element={withSuspense(<P.HmsSpineFranchiseSetup />)} />
+              <Route path="spine-franchise-layout" element={withSuspense(<P.HmsSpineFranchiseLayout />)} />
+              <Route path="spine-franchise-ops" element={withSuspense(<P.HmsSpineFranchiseOps />)} />
+              <Route path="spine-franchise-cost" element={withSuspense(<P.HmsSpineFranchiseCost />)} />
+              <Route path="spine-franchise-roster" element={withSuspense(<P.HmsSpineFranchiseRoster />)} />
+              <Route path="spine-franchise-portal" element={withSuspense(<P.HmsSpineFranchisePortal />)} />
 
               {/* Dispenza Meditation Tools */}
               <Route path="spine-dispenza" element={withSuspense(<P.HmsSpineDispenzaDashboard />)} />

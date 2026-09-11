@@ -661,6 +661,44 @@ export const HmsSpineDischargePlan = lazyPage(() => import("@/pages/hms/spine/Sp
 export const HmsSpineClinicalResources = lazyPage(() => import("@/pages/hms/spine/SpineClinicalResources"));
 export const HmsSpineFunctionalNeurology = lazyPage(() => import("@/pages/hms/spine/SpineFunctionalNeurology"));
 
+// Spine — Solo Operator Command Center
+export const HmsSpineCommandCenter = lazyPage(() => import("@/pages/hms/spine/SpineCommandCenter"));
+export const HmsSpinePatientJourney = lazyPage(() => import("@/pages/hms/spine/SpinePatientJourney"));
+export const HmsSpineFollowUpRules = lazyPage(() => import("@/pages/hms/spine/SpineFollowUpRules"));
+export const HmsSpineChecklists = lazyPage(() => import("@/pages/hms/spine/SpineChecklists"));
+export const HmsSpineSuccessStories = lazyPage(() => import("@/pages/hms/spine/SpineSuccessStories"));
+export const HmsSpineOffers = lazyPage(() => import("@/pages/hms/spine/SpineOffers"));
+export const HmsSpineSubscriptions = lazyPage(() => import("@/pages/hms/spine/SpineSubscriptions"));
+export const HmsSpineVideoLibrary = lazyPage(() => import("@/pages/hms/spine/SpineVideoLibrary"));
+export const HmsSpineSocialHub = lazyPage(() => import("@/pages/hms/spine/SpineSocialHub"));
+export const HmsSpineLibrary = lazyPage(() => import("@/pages/hms/spine/SpineLibrary"));
+export const HmsSpineIntegrations = lazyPage(() => import("@/pages/hms/spine/SpineIntegrations"));
+export const HmsSpineReferralNetwork = lazyPage(() => import("@/pages/hms/spine/SpineReferralNetwork"));
+export const HmsSpineWellnessAge = lazyPage(() => import("@/pages/hms/spine/SpineWellnessAge"));
+export const HmsSpineRejuvenation = lazyPage(() => import("@/pages/hms/spine/SpineRejuvenation"));
+export const HmsSpineRetreats = lazyPage(() => import("@/pages/hms/spine/SpineRetreats"));
+export const HmsSpineVajikaranaHub = lazyPage(() => import("@/pages/hms/spine/SpineVajikaranaHub"));
+export const HmsSpinePelvicFloor = lazyPage(() => import("@/pages/hms/spine/SpinePelvicFloor"));
+export const HmsSpineVitalityAssessment = lazyPage(() => import("@/pages/hms/spine/SpineVitalityAssessment"));
+export const HmsSpineRehabRegistry = lazyPage(() => import("@/pages/hms/spine/SpineRehabRegistry"));
+export const HmsSpineRehabFollowup = lazyPage(() => import("@/pages/hms/spine/SpineRehabFollowup"));
+export const HmsSpineCsrManager = lazyPage(() => import("@/pages/hms/spine/SpineCsrManager"));
+export const SpineCsrImpact = lazyPage(() => import("@/pages/spine/SpineCsrImpact"));
+export const SpineReferralApply = lazyPage(() => import("@/pages/spine/SpineReferralApply"));
+
+// Spine — Owner-Only (Super Admin + Chief Physician)
+export const HmsSpineSuperAdmin = lazyPage(() => import("@/pages/hms/spine/owner/SpineSuperAdmin"));
+export const HmsSpineChiefPhysician = lazyPage(() => import("@/pages/hms/spine/owner/SpineChiefPhysician"));
+
+// Spine — Franchise Tools
+export const HmsSpineFranchiseHub = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchiseHub"));
+export const HmsSpineFranchiseSetup = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchiseSetup"));
+export const HmsSpineFranchiseLayout = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchiseLayout"));
+export const HmsSpineFranchiseOps = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchiseOps"));
+export const HmsSpineFranchiseCost = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchiseCost"));
+export const HmsSpineFranchiseRoster = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchiseRoster"));
+export const HmsSpineFranchisePortal = lazyPage(() => import("@/pages/hms/spine/franchise/SpineFranchisePortal"));
+
 // Spine — Dispenza Meditation Tools
 export const HmsSpineDispenzaDashboard = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaDashboard"));
 export const HmsSpineDispenzaBreathwork = lazyPage(() => import("@/pages/hms/spine/SpineDispenzaBreathwork"));

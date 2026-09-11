@@ -3,6 +3,21 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  // Safelist for dynamically-composed color classes (e.g. `bg-${color}-100`) used across
+  // the Spine AYUSH modules. Tailwind's JIT cannot see these at build time because the
+  // color name is interpolated at runtime, so without this they render with no color.
+  safelist: [
+    {
+      // Palette families that appear as runtime `color` values in Spine data/config objects.
+      pattern: /^(bg|text|border|ring)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900)$/,
+      variants: ["hover", "focus"],
+    },
+    {
+      // Same palette with opacity modifiers used for subtle backgrounds (e.g. bg-green-50/30).
+      pattern: /^bg-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100)\/(30|50)$/,
+      variants: ["hover"],
+    },
+  ],
   prefix: "",
   theme: {
     container: {
@@ -71,7 +86,6 @@ export default {
         warning: "hsl(var(--warning))",
         mystic: "hsl(var(--mystic))",
         earth: "hsl(var(--earth))",
-        indigo: "hsl(var(--indigo))",
         footer: {
           DEFAULT: "hsl(var(--footer))",
           foreground: "hsl(var(--footer-foreground))",

@@ -1,0 +1,3077 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 3293
+>>
+stream
+0.200025 w
+0 G
+0.09 0.5 0.36 rg
+0. 841.8899999999999864 595.2799999999999727 -200. re
+f
+0.06 0.39 0.24 rg
+0. 653.8899999999999864 595.2799999999999727 -12. re
+f
+BT
+/F2 30 Tf
+34.5 TL
+1. g
+48. 749.8899999999999864 Td
+(Spine AYUSH) Tj
+ET
+BT
+/F2 18 Tf
+20.6999999999999993 TL
+1. g
+48. 719.8899999999999864 Td
+(Implementation Strategy & Architecture) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+1. g
+48. 691.8899999999999864 Td
+(Step-by-step guidance: from initial setup to full-scale operation) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.161 0.231 rg
+48. 591.8899999999999864 Td
+(Ayuzee Hospital Management System) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.392 0.455 0.545 rg
+48. 569.8899999999999864 Td
+(Integrative Spine Care · Ayurveda + Yoga + Modern Rehab) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.392 0.455 0.545 rg
+48. 553.8899999999999864 Td
+(Owner: Chief Ayurvedic Physician / Super Admin) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.392 0.455 0.545 rg
+48. 537.8899999999999864 Td
+(Platform: ayuzee.com) Tj
+ET
+0.95 0.96 0.98 rg
+54. 497.8899999999999864 m
+541.2799999999999727 497.8899999999999864 l
+544.5937084989847108 497.8899999999999864 547.2799999999999727 495.2037084989847244 547.2799999999999727 491.8899999999999864 c
+547.2799999999999727 419.8899999999999864 l
+547.2799999999999727 416.5762915010152483 543.9662915010152346 413.8899999999999864 541.2799999999999727 413.8899999999999864 c
+54. 413.8899999999999864 l
+50.6862915010152406 413.8899999999999864 48. 417.2037084989847244 48. 419.8899999999999864 c
+48. 491.8899999999999864 l
+48. 495.2037084989847244 51.3137084989847594 497.8899999999999864 54. 497.8899999999999864 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 497.8899999999999864 m
+48. 413.8899999999999864 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 480.8899999999999864 Td
+(How to use this document) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 465.8899999999999864 Td
+(This guide is organized in 5 phases. Do NOT try to do everything at once. Complete each phase, run) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 452.8899999999999864 Td
+(it with real patients for a week, then move to the next. Each phase builds on the one before. The) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 439.8899999999999864 Td
+(single biggest risk is building wide instead of deep — resist adding new features until the current) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 426.8899999999999864 Td
+(phase is battle-tested.) Tj
+ET
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.392 0.455 0.545 rg
+48. 399.8899999999999864 Td
+(Prepared as an operating playbook for the practice owner and the platform admin \(Dr Sindhu Roja\). Review clinical content) Tj
+ET
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.392 0.455 0.545 rg
+48. 386.8899999999999864 Td
+(with a qualified physician before any patient acts on it. Software assists the clinician; it never replaces clinical judgment.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+48. 24. Td
+(Ayuzee HMS · Spine AYUSH Implementation Guide · Confidential) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+506.6399999999999864 24. Td
+(Page 1 of 6) Tj
+ET
+0.95 0.96 0.98 RG
+48. 34. m
+547.2799999999999727 34. l
+S
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 9920
+>>
+stream
+0.2 w
+0.09 0.5 0.36 RG
+0.09 0.5 0.36 rg
+48. 793.8899999999999864 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 776.8899999999999864 Td
+(What This Covers) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+48. 759.8899999999999864 Td
+(A practical, phased architecture for running a spine-focused AYUSH practice on Ayuzee HMS. It answers three) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+48. 745.8899999999999864 Td
+(questions in order: \(1\) What do I set up first? \(2\) How do I run daily operations reliably? \(3\) How do I grow and) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+48. 731.8899999999999864 Td
+(scale without breaking?) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+48. 713.8899999999999864 92. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+53. 701.3250000000000455 Td
+(Phase) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+140. 713.8899999999999864 200. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+145. 701.3250000000000455 Td
+(Focus) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+340. 713.8899999999999864 207.2799999999999727 -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+345. 701.3250000000000455 Td
+(Outcome) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 693.6549999999999727 92. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 681.2599999999999909 Td
+(0 — Foundation) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+140. 693.6549999999999727 200. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+145. 681.2599999999999909 Td
+(Roles, branch, master data, safety) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+340. 693.6549999999999727 207.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+345. 681.2599999999999909 Td
+(A safe, configured system) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 673.6499999999999773 92. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 661.2549999999999955 Td
+(1 — Core Clinical) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+140. 673.6499999999999773 200. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+145. 661.2549999999999955 Td
+(The one patient journey, end to end) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+340. 673.6499999999999773 207.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+345. 661.2549999999999955 Td
+(Treat & track a real patient) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 653.6449999999999818 92. -30.009999999999998 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 641.25 Td
+(2 — Retention &) Tj
+T* (Ops) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+140. 653.6449999999999818 200. -30.009999999999998 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+145. 636.2474999999999454 Td
+(Follow-ups, packages, daily command center) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+340. 653.6449999999999818 207.2799999999999727 -30.009999999999998 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+345. 636.2474999999999454 Td
+(No patient forgotten; cash tracked) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 623.6349999999999909 92. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 611.2400000000000091 Td
+(3 — Growth) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+140. 623.6349999999999909 200. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+145. 611.2400000000000091 Td
+(Referrals, content, offers, longevity) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+340. 623.6349999999999909 207.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+345. 611.2400000000000091 Td
+(Predictable new-patient flow) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 603.6299999999999955 92. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 591.2350000000000136 Td
+(4 — Scale & Impact) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+140. 603.6299999999999955 200. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+145. 591.2350000000000136 Td
+(Franchise, rehab, CSR, integrations) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+340. 603.6299999999999955 207.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+345. 591.2350000000000136 Td
+(Multi-center, mission-driven growth) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.78 G
+0. w
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 RG
+0.2 w
+0.95 0.96 0.98 rg
+54. 567.625 m
+541.2799999999999727 567.625 l
+544.5937084989847108 567.625 547.2799999999999727 564.9387084989847381 547.2799999999999727 561.625 c
+547.2799999999999727 515.625 l
+547.2799999999999727 512.3112915010152619 543.9662915010152346 509.625 541.2799999999999727 509.625 c
+54. 509.625 l
+50.6862915010152406 509.625 48. 512.9387084989847381 48. 515.625 c
+48. 561.625 l
+48. 564.9387084989847381 51.3137084989847594 567.625 54. 567.625 c
+h
+f
+0.06 0.39 0.24 RG
+2. w
+48. 567.625 m
+48. 509.625 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.063 0.392 0.235 rg
+62. 550.625 Td
+(The golden rule) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 535.625 Td
+(Feature-complete is not the same as operationally ready. Value comes from connecting what you have to) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 522.625 Td
+(real patients — not from adding more screens.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 495.625 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 478.625 Td
+(Guiding Principles \(read first\)) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 461.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 461.625 Td
+(One patient, one flow: every patient moves through Assess -> Examine -> Protocol -> Treat -> Track.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 447.625 Td
+(Master this loop before anything else.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 431.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 431.625 Td
+(Safety before speed: the pre-treatment safety checklist gates Level-1 sessions. Never bypass it.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 417.625 Td
+(Red-flag referral rules exist to protect the patient and you.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 401.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 401.625 Td
+(Depth over width: a few modules used daily beat many modules used never. Turn features on only) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 387.625 Td
+(when the previous phase is stable.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 371.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 371.625 Td
+(Clinician owns the record: AI/templates draft; the physician reviews and signs. Keep that line bright) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 357.625 Td
+(for liability and trust.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 341.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 341.625 Td
+(Retention is the business: spine recovery needs 8-12 sessions. Drop-off after session 3 is where) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 327.625 Td
+(revenue leaks. Follow-ups are not optional.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 311.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 311.625 Td
+(Measure outcomes honestly: VAS pain, ROM, functional scores before/after. Real data builds real) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 297.625 Td
+(testimonials and real referrals.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 279.625 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 262.625 Td
+(Phase 0 — Foundation & Safety Setup) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 245.625 Td
+(Goal: a correctly configured, secure system before a single real patient is entered. This is the least glamorous) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 231.625 Td
+(phase and the most important.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 201.625 Td
+(0.1 People & Access) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 189.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 189.625 Td
+(Owner \(you\): Super Admin — full implementation power, owner-only Spine pages \(Super Admin,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 175.625 Td
+(Chief Physician\).) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 159.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 159.625 Td
+(Admin \(Dr Sindhu Roja\): admin role — all HMS + Ayuzee modules for building real data; no) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 145.625 Td
+(super-admin/owner tier. \(Already configured.\)) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 129.625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 129.625 Td
+(Add staff later with least-privilege roles: receptionist, therapist, pharmacist, lab_tech, nurse — each) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 115.625 Td
+(sees only their modules.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 85.625 Td
+(0.2 Branch & Clinic Profile) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+48. 24. Td
+(Ayuzee HMS · Spine AYUSH Implementation Guide · Confidential) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+506.6399999999999864 24. Td
+(Page 2 of 6) Tj
+ET
+0.95 0.96 0.98 RG
+48. 34. m
+547.2799999999999727 34. l
+S
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 8 0 R
+>>
+endobj
+8 0 obj
+<<
+/Length 11032
+>>
+stream
+0.2 w
+0.06 0.39 0.24 RG
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 793.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 793.8899999999999864 Td
+(Create the main branch: name, address, city, phone, WhatsApp, AYUSH license no., GSTIN, opening) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 779.8899999999999864 Td
+(hours.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 763.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 763.8899999999999864 Td
+(Set the clinic's systems practiced and specialties \(spine, panchakarma, etc.\).) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 747.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 747.8899999999999864 Td
+(This drives billing headers, geo-SEO pages, and patient-card details later.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 717.8899999999999864 Td
+(0.3 Master Data & Safety Templates) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 705.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 705.8899999999999864 Td
+(Seed / review the SOP & Safety checklists: pre-treatment safety, daily open/close, onboarding, PK) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 691.8899999999999864 Td
+(pre-procedure.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 675.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 675.8899999999999864 Td
+(Review the seeded rehab protocols, therapy checkpoints, and drug-interaction data with a physician) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 661.8899999999999864 Td
+(before use.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 645.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 645.8899999999999864 Td
+(Confirm the pre-treatment safety gate is active on the Level-1 session recorder.) Tj
+ET
+0.95 0.96 0.98 rg
+54. 627.8899999999999864 m
+541.2799999999999727 627.8899999999999864 l
+544.5937084989847108 627.8899999999999864 547.2799999999999727 625.2037084989847244 547.2799999999999727 621.8899999999999864 c
+547.2799999999999727 562.8899999999999864 l
+547.2799999999999727 559.5762915010152483 543.9662915010152346 556.8899999999999864 541.2799999999999727 556.8899999999999864 c
+54. 556.8899999999999864 l
+50.6862915010152406 556.8899999999999864 48. 560.2037084989847244 48. 562.8899999999999864 c
+48. 621.8899999999999864 l
+48. 625.2037084989847244 51.3137084989847594 627.8899999999999864 54. 627.8899999999999864 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 627.8899999999999864 m
+48. 556.8899999999999864 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 610.8899999999999864 Td
+(Phase 0 exit criteria) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 595.8899999999999864 Td
+(Roles assigned, branch created, safety checklists live, protocol content physician-reviewed. Security:) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 582.8899999999999864 Td
+(enable leaked-password protection; lock down any views exposing patient data to anon before real data) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 569.8899999999999864 Td
+(entry.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 542.8899999999999864 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 525.8899999999999864 Td
+(Phase 1 — Core Clinical Journey) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 508.8899999999999864 Td
+(Goal: take ONE real patient from first contact to tracked outcome. If this loop works smoothly, you have a clinic.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 494.8899999999999864 Td
+(Everything else is amplification.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 464.8899999999999864 Td
+(The 5-step flow) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+48. 452.8899999999999864 70. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+53. 440.3249999999999886 Td
+(Step) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+118. 452.8899999999999864 230. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+123. 440.3249999999999886 Td
+(What happens) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+348. 452.8899999999999864 199.2799999999999443 -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+353. 440.3249999999999886 Td
+(Where in Ayuzee) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 432.6549999999999727 70. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 420.2599999999999909 Td
+(1. Assess) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+118. 432.6549999999999727 230. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+123. 420.2599999999999909 Td
+(AI assessment / intake, chief complaint, history) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+348. 432.6549999999999727 199.2799999999999443 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+353. 420.2599999999999909 Td
+(Spine AYUSH -> Assessment) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 412.6499999999999773 70. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 400.2549999999999955 Td
+(2. Examine) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+118. 412.6499999999999773 230. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+123. 400.2549999999999955 Td
+(Posture, ROM, dosha, functional exam) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+348. 412.6499999999999773 199.2799999999999443 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+353. 400.2549999999999955 Td
+(Spine AYUSH -> Examination) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 392.6449999999999818 70. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 380.25 Td
+(3. Protocol) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+118. 392.6449999999999818 230. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+123. 380.25 Td
+(Build phased treatment protocol + care plan) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+348. 392.6449999999999818 199.2799999999999443 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+353. 380.25 Td
+(Treatment Protocol Builder) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 372.6399999999999864 70. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 360.2450000000000045 Td
+(4. Treat) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+118. 372.6399999999999864 230. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+123. 360.2450000000000045 Td
+(Deliver Level-1/2 session; safety checklist first) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+348. 372.6399999999999864 199.2799999999999443 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+353. 360.2450000000000045 Td
+(Level 1 / Level 2 Session) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 352.6349999999999909 70. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 340.2400000000000091 Td
+(5. Track) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+118. 352.6349999999999909 230. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+123. 340.2400000000000091 Td
+(VAS, ROM, functional & recovery scores) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+348. 352.6349999999999909 199.2799999999999443 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+353. 340.2400000000000091 Td
+(Outcome Tracker) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.78 G
+0. w
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 RG
+0.2 w
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 304.6299999999999955 Td
+(1.1 Daily use) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 292.6299999999999955 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 292.6299999999999955 Td
+(Use the Spine Command Center as the home screen — it shows the ONE next action per patient.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 276.6299999999999955 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 276.6299999999999955 Td
+(Register the patient once; reuse across visits. Capture VAS pain at baseline \(this is your outcome) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 262.6299999999999955 Td
+(anchor\).) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 246.6299999999999955 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 246.6299999999999955 Td
+(Record every session honestly, including adverse or minimal responses — that data protects you) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 232.6299999999999955 Td
+(and improves protocols.) Tj
+ET
+0.95 0.96 0.98 rg
+54. 214.6299999999999955 m
+541.2799999999999727 214.6299999999999955 l
+544.5937084989847108 214.6299999999999955 547.2799999999999727 211.9437084989847335 547.2799999999999727 208.6299999999999955 c
+547.2799999999999727 162.6299999999999955 l
+547.2799999999999727 159.3162915010152574 543.9662915010152346 156.6299999999999955 541.2799999999999727 156.6299999999999955 c
+54. 156.6299999999999955 l
+50.6862915010152406 156.6299999999999955 48. 159.9437084989847335 48. 162.6299999999999955 c
+48. 208.6299999999999955 l
+48. 211.9437084989847335 51.3137084989847594 214.6299999999999955 54. 214.6299999999999955 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 214.6299999999999955 m
+48. 156.6299999999999955 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 197.6299999999999955 Td
+(Phase 1 exit criteria) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 182.6299999999999955 Td
+(You have treated at least one real patient through all 5 steps, recorded baseline + post VAS, and can show) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 169.6299999999999955 Td
+(a before/after outcome. Do this for 5-10 patients before Phase 2.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 142.6299999999999955 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 125.6299999999999955 Td
+(Phase 2 — Retention & Daily Operations) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 108.6299999999999955 Td
+(Goal: stop patients falling through the cracks and start tracking money. This is where a clinic becomes a) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 94.6299999999999955 Td
+(sustainable practice.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+48. 24. Td
+(Ayuzee HMS · Spine AYUSH Implementation Guide · Confidential) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+506.6399999999999864 24. Td
+(Page 3 of 6) Tj
+ET
+0.95 0.96 0.98 RG
+48. 34. m
+547.2799999999999727 34. l
+S
+endstream
+endobj
+9 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 10 0 R
+>>
+endobj
+10 0 obj
+<<
+/Length 8276
+>>
+stream
+0.2 w
+0.09 0.5 0.36 RG
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 781.8899999999999864 Td
+(2.1 Follow-up engine) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 769.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 769.8899999999999864 Td
+(Set your follow-up rules once \(Day-1 check-in, missed-appointment, mid-treatment, package-ending,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 755.8899999999999864 Td
+(30-day maintenance, referral request\).) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 739.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 739.8899999999999864 Td
+(Use the 'Due Now' list daily. Until WhatsApp Business API is connected, use click-to-WhatsApp links) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 725.8899999999999864 Td
+(to send in one tap.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 709.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 709.8899999999999864 Td
+(Result: +course completion, -drop-offs, more referrals.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 679.8899999999999864 Td
+(2.2 Packages, memberships & cash) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 667.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 667.8899999999999864 Td
+(Create subscription/membership plans and time-limited offers.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 651.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 651.8899999999999864 Td
+(Track package usage per patient; flag when 3 sessions remain \(upsell moment\).) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 635.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 635.8899999999999864 Td
+(Connect Razorpay payment links so packages/memberships can actually be collected \(Integrations) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 621.8899999999999864 Td
+(page has the guide\).) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 591.8899999999999864 Td
+(2.3 The daily command center) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 579.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 579.8899999999999864 Td
+(Morning: review today's queue and follow-ups due.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 563.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 563.8899999999999864 Td
+(Per patient: one next action, one tap.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 547.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 547.8899999999999864 Td
+(End of day: close the loop — pending follow-ups sent, tomorrow planned.) Tj
+ET
+0.95 0.96 0.98 rg
+54. 529.8899999999999864 m
+541.2799999999999727 529.8899999999999864 l
+544.5937084989847108 529.8899999999999864 547.2799999999999727 527.2037084989847244 547.2799999999999727 523.8899999999999864 c
+547.2799999999999727 477.8899999999999864 l
+547.2799999999999727 474.5762915010152483 543.9662915010152346 471.8899999999999864 541.2799999999999727 471.8899999999999864 c
+54. 471.8899999999999864 l
+50.6862915010152406 471.8899999999999864 48. 475.2037084989847244 48. 477.8899999999999864 c
+48. 523.8899999999999864 l
+48. 527.2037084989847244 51.3137084989847594 529.8899999999999864 54. 529.8899999999999864 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 529.8899999999999864 m
+48. 471.8899999999999864 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 512.8899999999999864 Td
+(Phase 2 exit criteria) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 497.8899999999999864 Td
+(Follow-ups going out daily \(even if manual one-tap\), at least one paid package/membership recorded, and) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 484.8899999999999864 Td
+(a daily open/close routine in place.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 457.8899999999999864 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 440.8899999999999864 Td
+(Phase 3 — Growth & Demand Generation) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 423.8899999999999864 Td
+(Goal: a predictable flow of new patients that does not depend on you personally chasing leads.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 393.8899999999999864 Td
+(3.1 Referral & influencer network) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 381.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 381.8899999999999864 Td
+(Onboard patient advocates, ethical medico referrers, and influencers via the Referral Network Hub.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 365.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 365.8899999999999864 Td
+(Share the public sign-up page \(/spine/refer\). Enable ?ref= link auto-attribution so credit is never lost.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 349.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 349.8899999999999864 Td
+(Keep medico referrals ethical \(recognition / reciprocal\), not cash-per-head — aligns with India) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 335.8899999999999864 Td
+(medical ethics.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 305.8899999999999864 Td
+(3.2 Content & trust) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 293.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 293.8899999999999864 Td
+(Publish success stories \(with consent\) — before/after VAS is powerful social proof.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 277.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 277.8899999999999864 Td
+(Use the Video Library \(YouTube embeds\), Social Hub, and Patient Library to educate and retain.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 261.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 261.8899999999999864 Td
+(Run offers/promotions for seasonal or condition-specific campaigns.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 231.8899999999999864 Td
+(3.3 Longevity & retention products) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 219.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 219.8899999999999864 Td
+(Wellness Age tracker and Rejuvenation \(Rasayana\) programs turn one-time patients into long-term) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 205.8899999999999864 Td
+(members.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 189.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 189.8899999999999864 Td
+(Retreats / boot camps create high-value annual touchpoints.) Tj
+ET
+0.95 0.96 0.98 rg
+54. 171.8899999999999864 m
+541.2799999999999727 171.8899999999999864 l
+544.5937084989847108 171.8899999999999864 547.2799999999999727 169.2037084989847244 547.2799999999999727 165.8899999999999864 c
+547.2799999999999727 119.8899999999999864 l
+547.2799999999999727 116.5762915010152483 543.9662915010152346 113.8899999999999864 541.2799999999999727 113.8899999999999864 c
+54. 113.8899999999999864 l
+50.6862915010152406 113.8899999999999864 48. 117.2037084989847244 48. 119.8899999999999864 c
+48. 165.8899999999999864 l
+48. 169.2037084989847244 51.3137084989847594 171.8899999999999864 54. 171.8899999999999864 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 171.8899999999999864 m
+48. 113.8899999999999864 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 154.8899999999999864 Td
+(Phase 3 exit criteria) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 139.8899999999999864 Td
+(At least one active referrer bringing attributed leads, 3+ published success stories, and one running offer or) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 126.8899999999999864 Td
+(campaign.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+48. 24. Td
+(Ayuzee HMS · Spine AYUSH Implementation Guide · Confidential) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+506.6399999999999864 24. Td
+(Page 4 of 6) Tj
+ET
+0.95 0.96 0.98 RG
+48. 34. m
+547.2799999999999727 34. l
+S
+endstream
+endobj
+11 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 12 0 R
+>>
+endobj
+12 0 obj
+<<
+/Length 10722
+>>
+stream
+0.2 w
+0.09 0.5 0.36 RG
+0.09 0.5 0.36 rg
+48. 793.8899999999999864 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 776.8899999999999864 Td
+(Phase 4 — Scale, Rehab & Social Impact) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.392 0.455 0.545 rg
+48. 759.8899999999999864 Td
+(Goal: expand beyond a single clinic and add mission-driven depth — carefully, only once Phases 1-3 are solid.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 729.8899999999999864 Td
+(4.1 Multi-center / franchise) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 717.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 717.8899999999999864 Td
+(Use the Franchise Hub: setup wizard, layout planner, operations dashboard, cost calculator, staff) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 703.8899999999999864 Td
+(roster, patient portal.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 687.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 687.8899999999999864 Td
+(Each center gets least-privilege staff roles and its own branch data.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 657.8899999999999864 Td
+(4.2 Spinal Injury Rehab \(sub-acute / chronic adjunct\)) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 645.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 645.8899999999999864 Td
+(Enroll post-op / SCI / trauma / degenerative patients in the Rehab Registry with phased protocols.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 629.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 629.8899999999999864 Td
+(Tele-rehab follow-ups monitor the 7 complication red-flags \(dysreflexia, pressure sore, UTI, new) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 615.8899999999999864 Td
+(deficit, DVT, respiratory, wound infection\) and flag referral needs.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 599.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 599.8899999999999864 Td
+(Guardrail: this is supportive/adjunct care, NOT acute emergency management.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 569.8899999999999864 Td
+(4.3 CSR & public impact) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 557.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 557.8899999999999864 Td
+(Track donor grants and patient sponsorships in the CSR Fund Manager.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 541.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 541.8899999999999864 Td
+(The public /spine/impact page shows anonymized aggregate impact for corporate donors — no) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 527.8899999999999864 Td
+(patient PII.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 511.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 511.8899999999999864 Td
+(Compliance note: software tracks allocation/impact; fund receipt, 80G, CSR-1 and audit are handled) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 497.8899999999999864 Td
+(by your CA/finance.) Tj
+ET
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 467.8899999999999864 Td
+(4.4 Integrations) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 455.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 455.8899999999999864 Td
+(WhatsApp Business API for fully-automatic messaging.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 439.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 439.8899999999999864 Td
+(Razorpay for online payments.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 423.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 423.8899999999999864 Td
+(ABDM/ABHA for national health-record interoperability when ready.) Tj
+ET
+0.95 0.96 0.98 rg
+54. 405.8899999999999864 m
+541.2799999999999727 405.8899999999999864 l
+544.5937084989847108 405.8899999999999864 547.2799999999999727 403.2037084989847244 547.2799999999999727 399.8899999999999864 c
+547.2799999999999727 353.8899999999999864 l
+547.2799999999999727 350.5762915010152483 543.9662915010152346 347.8899999999999864 541.2799999999999727 347.8899999999999864 c
+54. 347.8899999999999864 l
+50.6862915010152406 347.8899999999999864 48. 351.2037084989847244 48. 353.8899999999999864 c
+48. 399.8899999999999864 l
+48. 403.2037084989847244 51.3137084989847594 405.8899999999999864 54. 405.8899999999999864 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 405.8899999999999864 m
+48. 347.8899999999999864 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 388.8899999999999864 Td
+(Phase 4 exit criteria) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 373.8899999999999864 Td
+(A second center or rehab/CSR program running on real data, with integrations connected where external) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 360.8899999999999864 Td
+(accounts exist.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 333.8899999999999864 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 316.8899999999999864 Td
+(Technical Architecture \(reference\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+48. 299.8899999999999864 Td
+(For the admin/technical operator. The platform is a React + Vite + TypeScript front end on Netlify \(ayuzee.com\),) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+48. 285.8899999999999864 Td
+(backed by Supabase \(Postgres + Auth + RLS\).) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+48. 267.8899999999999864 90. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+53. 255.3249999999999318 Td
+(Layer) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+138. 267.8899999999999864 150. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+143. 255.3249999999999318 Td
+(Technology) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+288. 267.8899999999999864 259.2799999999999727 -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+293. 255.3249999999999318 Td
+(Notes) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 247.6549999999999727 90. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 235.2599999999999909 Td
+(Frontend) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+138. 247.6549999999999727 150. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+143. 235.2599999999999909 Td
+(React + Vite + TypeScript) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+288. 247.6549999999999727 259.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+293. 235.2599999999999909 Td
+(Deployed to Netlify \(ayuzee.com\)) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 227.6499999999999773 90. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 215.2549999999999955 Td
+(Backend) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+138. 227.6499999999999773 150. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+143. 215.2549999999999955 Td
+(Supabase Postgres) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+288. 227.6499999999999773 259.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+293. 215.2549999999999955 Td
+(Row-Level Security on all tables) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 207.6449999999999818 90. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 195.25 Td
+(Auth) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+138. 207.6449999999999818 150. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+143. 195.25 Td
+(Supabase Auth) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+288. 207.6449999999999818 259.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+293. 195.25 Td
+(Roles in user_roles; HMS access via doctors row) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 187.6399999999999864 90. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 175.2450000000000045 Td
+(Access model) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+138. 187.6399999999999864 150. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+143. 175.2450000000000045 Td
+(admin / super_admin + hms_role) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+288. 187.6399999999999864 259.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+293. 175.2450000000000045 Td
+(admin = all modules; super_admin = owner-only) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 167.6349999999999909 90. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+53. 155.2400000000000091 Td
+(Data safety) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+138. 167.6349999999999909 150. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+143. 155.2400000000000091 Td
+(RLS owner + admin policies) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+288. 167.6349999999999909 259.2799999999999727 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+293. 155.2400000000000091 Td
+(Public data only via SECURITY DEFINER aggregate RPCs) Tj
+ET
+0.09 0.5 0.36 RG
+0.2 w
+0.78 G
+0. w
+0.09 0.5 0.36 RG
+0.2 w
+0.09 0.5 0.36 RG
+0.2 w
+BT
+/F2 12.5 Tf
+14.3749999999999982 TL
+0.063 0.392 0.235 rg
+48. 119.6299999999999955 Td
+(Access tiers) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 107.6299999999999955 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 107.6299999999999955 Td
+(super_admin \(owner\): implementation power + owner-only Spine pages. Reserved for the chief) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 93.6299999999999955 Td
+(physician.) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 77.6299999999999955 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 77.6299999999999955 Td
+(admin: all HMS + Ayuzee modules for daily operations and data building \(Dr Sindhu Roja\).) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+48. 24. Td
+(Ayuzee HMS · Spine AYUSH Implementation Guide · Confidential) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+506.6399999999999864 24. Td
+(Page 5 of 6) Tj
+ET
+0.95 0.96 0.98 RG
+48. 34. m
+547.2799999999999727 34. l
+S
+endstream
+endobj
+13 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 14 0 R
+>>
+endobj
+14 0 obj
+<<
+/Length 8177
+>>
+stream
+0.2 w
+0.09 0.5 0.36 RG
+BT
+/F2 10 Tf
+11.5 TL
+0.086 0.502 0.361 rg
+52. 793.8899999999999864 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.161 0.231 rg
+66. 793.8899999999999864 Td
+(Staff roles: least-privilege, module-scoped \(receptionist, therapist, pharmacist, lab_tech, nurse\).) Tj
+ET
+0.95 0.96 0.98 rg
+54. 775.8899999999999864 m
+541.2799999999999727 775.8899999999999864 l
+544.5937084989847108 775.8899999999999864 547.2799999999999727 773.2037084989847244 547.2799999999999727 769.8899999999999864 c
+547.2799999999999727 723.8899999999999864 l
+547.2799999999999727 720.5762915010152483 543.9662915010152346 717.8899999999999864 541.2799999999999727 717.8899999999999864 c
+54. 717.8899999999999864 l
+50.6862915010152406 717.8899999999999864 48. 721.2037084989847244 48. 723.8899999999999864 c
+48. 769.8899999999999864 l
+48. 773.2037084989847244 51.3137084989847594 775.8899999999999864 54. 775.8899999999999864 c
+h
+f
+0.06 0.39 0.24 RG
+2. w
+48. 775.8899999999999864 m
+48. 717.8899999999999864 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.063 0.392 0.235 rg
+62. 758.8899999999999864 Td
+(Data privacy principle) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 743.8899999999999864 Td
+(Patient and donor records are owner/admin-scoped by RLS. Anything shown publicly \(e.g. impact page\)) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 730.8899999999999864 Td
+(must come through an aggregate, PII-free RPC — never a direct table read.) Tj
+ET
+0.09 0.5 0.36 rg
+48. 703.8899999999999864 4. -22. re
+f
+BT
+/F2 17 Tf
+19.5499999999999972 TL
+0.118 0.161 0.231 rg
+60. 686.8899999999999864 Td
+(Key Risks & Priorities) Tj
+ET
+0.06 0.39 0.24 RG
+0.2 w
+0.06 0.39 0.24 RG
+0.2 w
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+48. 669.8899999999999864 54. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+53. 657.3250000000000455 Td
+(Priority) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+102. 669.8899999999999864 210. -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+107. 657.3250000000000455 Td
+(Action) Tj
+ET
+0.09 0.5 0.36 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.09 0.5 0.36 rg
+312. 669.8899999999999864 235.2800000000000011 -20.2349999999999994 re
+B
+BT
+/F2 8.9 Tf
+10.2349999999999994 TL
+1. g
+317. 657.3250000000000455 Td
+(Why it matters) Tj
+ET
+0.06 0.39 0.24 RG
+0.2 w
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 649.6549999999999727 54. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+72.6075000000000017 637.2599999999999909 Td
+(1) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+102. 649.6549999999999727 210. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+107. 637.2599999999999909 Td
+(Connect click-to-WhatsApp / WhatsApp API) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+312. 649.6549999999999727 235.2800000000000011 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+317. 637.2599999999999909 Td
+(Retention engine is inert without real messaging) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 629.6499999999999773 54. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+72.6075000000000017 617.2549999999999955 Td
+(2) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+102. 629.6499999999999773 210. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+107. 617.2549999999999955 Td
+(Enable ?ref= lead auto-attribution) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+312. 629.6499999999999773 235.2800000000000011 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+317. 617.2549999999999955 Td
+(Referral credit is currently lost at intake) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 609.6449999999999818 54. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+72.6075000000000017 597.25 Td
+(3) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+102. 609.6449999999999818 210. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+107. 597.25 Td
+(Connect Razorpay payment links) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+312. 609.6449999999999818 235.2800000000000011 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+317. 597.25 Td
+(Packages/memberships can't be collected yet) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 589.6399999999999864 54. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+72.6075000000000017 577.2450000000000045 Td
+(4) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+102. 589.6399999999999864 210. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+107. 577.2450000000000045 Td
+(Fix views exposing auth.users to anon) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+312. 589.6399999999999864 235.2800000000000011 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+317. 577.2450000000000045 Td
+(Patient-data exposure risk before real data) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+48. 569.6349999999999909 54. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+72.6075000000000017 557.2400000000000091 Td
+(5) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+102. 569.6349999999999909 210. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+107. 557.2400000000000091 Td
+(Enable leaked-password protection) Tj
+ET
+0.97 0.98 0.99 rg
+0.89 0.91 0.94 RG
+0.4 w
+0.97 0.98 0.99 rg
+312. 569.6349999999999909 235.2800000000000011 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+317. 557.2400000000000091 Td
+(Account security for admins with data access) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+48. 549.6299999999999955 54. -20.004999999999999 re
+B
+BT
+/F2 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+72.6075000000000017 537.2350000000000136 Td
+(6) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+102. 549.6299999999999955 210. -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+107. 537.2350000000000136 Td
+(Pilot 1 week with real patients) Tj
+ET
+1. g
+0.89 0.91 0.94 RG
+0.4 w
+1. g
+312. 549.6299999999999955 235.2800000000000011 -20.004999999999999 re
+B
+BT
+/F1 8.7 Tf
+10.004999999999999 TL
+0.118 0.161 0.231 rg
+317. 537.2350000000000136 Td
+(Reveals friction no feature-building can) Tj
+ET
+0.06 0.39 0.24 RG
+0.2 w
+0.78 G
+0. w
+0.06 0.39 0.24 RG
+0.2 w
+0.06 0.39 0.24 RG
+0.2 w
+0.95 0.96 0.98 rg
+54. 513.625 m
+541.2799999999999727 513.625 l
+544.5937084989847108 513.625 547.2799999999999727 510.9387084989847381 547.2799999999999727 507.625 c
+547.2799999999999727 422.625 l
+547.2799999999999727 419.3112915010152619 543.9662915010152346 416.625 541.2799999999999727 416.625 c
+54. 416.625 l
+50.6862915010152406 416.625 48. 419.9387084989847381 48. 422.625 c
+48. 507.625 l
+48. 510.9387084989847381 51.3137084989847594 513.625 54. 513.625 c
+h
+f
+0.09 0.5 0.36 RG
+2. w
+48. 513.625 m
+48. 416.625 l
+S
+0.2 w
+BT
+/F2 10.5 Tf
+12.0749999999999993 TL
+0.086 0.502 0.361 rg
+62. 496.625 Td
+(Final expert advice) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 481.625 Td
+(Freeze new features. Connect the last mile \(messaging,) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 468.625 Td
+(payments, attribution\). Harden security before real patient) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 455.625 Td
+(data. Then pilot with real patients for a week. That is what) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 442.625 Td
+(turns an impressive build into a working, defensible) Tj
+ET
+BT
+/F1 9.5 Tf
+10.9249999999999989 TL
+0.118 0.161 0.231 rg
+62. 429.625 Td
+(clinical business.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+48. 24. Td
+(Ayuzee HMS · Spine AYUSH Implementation Guide · Confidential) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 0.455 0.545 rg
+506.6399999999999864 24. Td
+(Page 6 of 6) Tj
+ET
+0.95 0.96 0.98 RG
+48. 34. m
+547.2799999999999727 34. l
+S
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R ]
+/Count 6
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+21 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+22 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+23 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+24 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+25 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+26 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+27 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+28 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 15 0 R
+/F2 16 0 R
+/F3 17 0 R
+/F4 18 0 R
+/F5 19 0 R
+/F6 20 0 R
+/F7 21 0 R
+/F8 22 0 R
+/F9 23 0 R
+/F10 24 0 R
+/F11 25 0 R
+/F12 26 0 R
+/F13 27 0 R
+/F14 28 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+29 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20260829160327+05'30')
+>>
+endobj
+30 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 31
+0000000000 65535 f 
+0000052579 00000 n 
+0000054433 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000003497 00000 n 
+0000003634 00000 n 
+0000013606 00000 n 
+0000013743 00000 n 
+0000024828 00000 n 
+0000024966 00000 n 
+0000033295 00000 n 
+0000033434 00000 n 
+0000044210 00000 n 
+0000044349 00000 n 
+0000052668 00000 n 
+0000052794 00000 n 
+0000052925 00000 n 
+0000053059 00000 n 
+0000053197 00000 n 
+0000053321 00000 n 
+0000053450 00000 n 
+0000053582 00000 n 
+0000053718 00000 n 
+0000053846 00000 n 
+0000053973 00000 n 
+0000054102 00000 n 
+0000054235 00000 n 
+0000054337 00000 n 
+0000054686 00000 n 
+0000054772 00000 n 
+trailer
+<<
+/Size 31
+/Root 30 0 R
+/Info 29 0 R
+/ID [ <A190CC835C58E439F10131B3E57C6017> <A190CC835C58E439F10131B3E57C6017> ]
+>>
+startxref
+54876
+%%EOF
