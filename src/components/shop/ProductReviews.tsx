@@ -150,7 +150,7 @@ const ProductReviews = ({ productId, productName }: Props) => {
             <div className="font-display text-5xl">{summary.avg.toFixed(1)}</div>
             <div className="mt-2 flex justify-center">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className={`h-5 w-5 ${i < Math.round(summary.avg) ? "fill-secondary text-secondary" : "text-muted-foreground"}`} />
+                <Star key={i} className={`h-5 w-5 ${i < Math.round(summary.avg) ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`} />
               ))}
             </div>
             <p className="mt-2 text-sm text-muted-foreground">Based on {summary.total} review{summary.total === 1 ? "" : "s"}</p>
@@ -198,7 +198,7 @@ const ProductReviews = ({ productId, productName }: Props) => {
                       onClick={() => setRating(star)}
                       aria-label={`Rate ${star} stars`}
                     >
-                      <Star className={`h-7 w-7 transition ${(hoverRating || rating) >= star ? "fill-secondary text-secondary" : "text-muted-foreground"}`} />
+                      <Star className={`h-7 w-7 transition ${(hoverRating || rating) >= star ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`} />
                     </button>
                   ))}
                 </div>
@@ -234,7 +234,7 @@ const ProductReviews = ({ productId, productName }: Props) => {
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="flex">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-secondary text-secondary" : "text-muted-foreground"}`} />
+                        <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`} />
                       ))}
                     </div>
                     <span className="font-semibold">{r.reviewer_name || "Verified Customer"}</span>

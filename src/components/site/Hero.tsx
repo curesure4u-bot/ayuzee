@@ -53,7 +53,7 @@ const doctors = [
 
 const testimonials = [
   { tag: "Patient", tone: "bg-primary/10 text-primary", quote: "Booked an Ayurveda doctor and got medicines delivered the next day.", name: "Meera K." },
-  { tag: "Therapy", tone: "bg-secondary/10 text-secondary", quote: "The Panchakarma therapist was verified, punctual, and professional.", name: "Arvind S." },
+  { tag: "Therapy", tone: "bg-primary/10 text-primary", quote: "The Panchakarma therapist was verified, punctual, and professional.", name: "Arvind S." },
   { tag: "Medicine", tone: "bg-accent text-accent-foreground", quote: "Authentic classical medicines with clear delivery updates.", name: "Nisha R." },
   { tag: "Student", tone: "bg-muted text-foreground", quote: "Courses and certificates helped me plan my Ayurveda career.", name: "Karthik M." },
   { tag: "Prakriti", tone: "bg-primary/10 text-primary", quote: "The Prakriti quiz made recommendations feel personal.", name: "Sonal P." },
@@ -125,7 +125,7 @@ export const Hero = () => {
             <span className="rounded-full border border-primary/20 bg-accent px-4 py-1.5 text-xs font-semibold text-primary">
               🌿 India's #1 AYUSH Aggregator
             </span>
-            <span className="rounded-full border border-secondary/20 bg-secondary/10 px-4 py-1.5 text-xs font-semibold text-secondary">
+            <span className="rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary">
               ⭐ 4.9/5 from 12,000+ patients
             </span>
           </div>
@@ -191,14 +191,14 @@ export const Hero = () => {
                 Check
               </button>
               {pinMessage && (
-                <span className={pinMessage.startsWith("Delivery") ? "text-primary" : "text-secondary"}>
+                <span className={pinMessage.startsWith("Delivery") ? "text-primary" : "text-muted-foreground"}>
                   {pinMessage.startsWith("Delivery") ? "✅" : "⚠️"} {pinMessage}
                 </span>
               )}
               {!pinMessage && deliveryStatus === "valid" && deliveryAvailable !== false && (
                 <span className="text-primary">✅ Valid pincode{city ? ` · ${city}` : ""}</span>
               )}
-              {!pinMessage && deliveryStatus === "invalid" && <span className="text-secondary">⚠️ Enter 6 digits</span>}
+              {!pinMessage && deliveryStatus === "invalid" && <span className="text-muted-foreground">⚠️ Enter 6 digits</span>}
             </div>
           </div>
 
@@ -231,7 +231,7 @@ export const Hero = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Star className="h-4 w-4 fill-secondary text-secondary" />
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
                 <span className="font-semibold text-foreground">{doctor.rating}</span>
                 <span>{doctor.reviews}</span>
               </div>
