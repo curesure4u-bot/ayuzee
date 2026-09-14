@@ -281,12 +281,12 @@ const PatientRegistration = () => {
           branch: "Main Branch",
         });
 
-        toast.success(`✅ Registered & Checked In! ID: ${newPat.patient_id} | Token: ${token}`, {
-          description: `${firstName} ${lastName || ""} | Referral: ${referralCode}`,
+        toast.success(`✅ Registered & Checked In! UHID: ${newPat.uhid || newPat.patient_id} | Token: ${token}`, {
+          description: `${firstName} ${lastName || ""} | ID: ${newPat.patient_id}`,
         });
       } else {
-        toast.success(`Patient registered! ID: ${newPat.patient_id}`, {
-          description: `Referral Code: ${referralCode}`,
+        toast.success(`Patient registered! UHID: ${newPat.uhid || newPat.patient_id}`, {
+          description: `ID: ${newPat.patient_id}`,
         });
       }
 

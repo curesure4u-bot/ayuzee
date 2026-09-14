@@ -24,6 +24,7 @@ interface OPVisit {
   id: string;
   op_number: number;
   patient_display_id: string;
+  patient_uhid: string;
   patient_name: string;
   patient_age: string;
   patient_gender: string;
@@ -71,8 +72,8 @@ const ManageOP = () => {
     try {
       const { data } = await (supabase as any)
         .from("hms_op_patients")
-        .select("id, patient_id, first_name, last_name, mobile, gender, age_years, total_visits, last_visit_date")
-        .or(`mobile.ilike.%${q}%,first_name.ilike.%${q}%,last_name.ilike.%${q}%,patient_id.ilike.%${q}%`)
+        .select("id, patient_id, uhid, first_name, last_name, mobile, gender, age_years, total_visits, last_visit_date")
+        .or(`mobile.ilike.%${q}%,first_name.ilike.%${q}%,last_name.ilike.%${q}%,patient_id.ilike.%${q}%,uhid.ilike.%${q}%`)
         .order("last_visit_date", { ascending: false, nullsFirst: false })
         .limit(10);
       setSearchResults(data || []);
@@ -118,7 +119,7 @@ const ManageOP = () => {
           id, op_number, patient_display_id, doctor_name, referred_by,
           mode_visit, purpose, check_in_time, session_token,
           bill_amount, bill_status, status, patient_id,
-          hms_op_patients!inner(first_name, last_name, gender, age_years, mobile)
+          hms_op_patients!inner(first_name, last_name, gender, age_years, mobile, uhid)
         `)
         .order("check_in_time", { ascending: false });
 
@@ -133,6 +134,7 @@ const ManageOP = () => {
         id: v.id,
         op_number: v.op_number,
         patient_display_id: v.patient_display_id,
+        patient_uhid: v.hms_op_patients?.uhid || v.patient_display_id || "—",
         patient_name: `${v.hms_op_patients?.first_name || ""} ${v.hms_op_patients?.last_name || ""}`.trim(),
         patient_age: v.hms_op_patients?.age_years ? `${v.hms_op_patients.age_years} years` : "—",
         patient_gender: v.hms_op_patients?.gender?.charAt(0) || "—",
@@ -293,7 +295,7 @@ const ManageOP = () => {
     // Search
     if (!search) return true;
     const q = search.toLowerCase();
-    return v.patient_name.toLowerCase().includes(q) || v.patient_display_id.toLowerCase().includes(q) || v.patient_phone.includes(q);
+    return v.patient_name.toLowerCase().includes(q) || v.patient_display_id.toLowerCase().includes(q) || v.patient_uhid.toLowerCase().includes(q) || v.patient_phone.includes(q);
   });
 
   return (
@@ -372,7 +374,7 @@ const ManageOP = () => {
               <table className="w-full text-sm">
                 <thead className="border-b bg-muted/50">
                   <tr>
-                    {["#", "Token", "ID", "Name", "Age", "Gender", "Phone", "Doctor", "Mode", "Purpose", "Check-In", "Bill", "Status", ""].map((h) => (
+                    {["#", "Token", "ID", "UHID", "Name", "Age", "Gender", "Phone", "Doctor", "Mode", "Purpose", "Check-In", "Bill", "Status", ""].map((h) => (
                       <th key={h} className="px-2 py-3 text-left font-semibold text-xs whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -383,6 +385,7 @@ const ManageOP = () => {
                       <td className="px-2 py-2.5 text-xs">{idx + 1}</td>
                       <td className="px-2 py-2.5"><Badge className="bg-green-600 text-white">{entry.session_token}</Badge></td>
                       <td className="px-2 py-2.5 font-mono text-xs">{entry.patient_display_id}</td>
+                      <td className="px-2 py-2.5 font-mono text-xs text-blue-600">{entry.patient_uhid}</td>
                       <td className="px-2 py-2.5 font-medium">{entry.patient_name}</td>
                       <td className="px-2 py-2.5 text-xs">{entry.patient_age}</td>
                       <td className="px-2 py-2.5">{entry.patient_gender}</td>
@@ -462,7 +465,11 @@ const ManageOP = () => {
                     >
                       <div>
                         <p className="font-medium text-sm">{p.first_name} {p.last_name || ""}</p>
-                        <p className="text-xs text-muted-foreground">{p.patient_id} · {p.mobile} · {p.gender} · {p.age_years ? `${p.age_years}y` : "—"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {p.uhid && <span className="text-blue-600 font-mono mr-1">UHID: {p.uhid}</span>}
+                          {!p.uhid && <span>{p.patient_id}</span>}
+                          <span className="mx-1">·</span>{p.mobile} · {p.gender} · {p.age_years ? `${p.age_years}y` : "—"}
+                        </p>
                       </div>
                       <div className="text-right shrink-0">
                         <Badge variant="outline" className="text-[10px]">{p.total_visits || 0} visits</Badge>
