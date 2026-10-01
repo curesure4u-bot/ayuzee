@@ -323,7 +323,21 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild><Button variant="ghost" size="icon" className="lg:hidden"><Menu className="h-5 w-5" /><span className="sr-only">Menu</span></Button></SheetTrigger>
             <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto p-0">
-              <SheetHeader className="border-b border-border p-4 text-left"><SheetTitle className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>Ayuzee</SheetTitle></SheetHeader>
+              <SheetHeader className="border-b border-border p-4 text-left">
+                <SheetTitle className="flex items-center gap-2">
+                  <img
+                    src="/ayuzee-logo.png"
+                    alt="Ayuzee"
+                    className="h-9 w-9 rounded-full object-cover shadow-soft"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                    }}
+                  />
+                  <span className="hidden grid h-9 w-9 place-items-center rounded-full gradient-leaf"><Leaf className="h-5 w-5 text-primary-foreground" /></span>
+                  Ayuzee
+                </SheetTitle>
+              </SheetHeader>
               <div className="space-y-5 p-4"><GlobalSearch className="md:w-full lg:w-full" /><div className="flex items-center gap-2"><Button variant="outline" size="icon" asChild><Link to="/cart"><ShoppingCart className="h-4 w-4" /></Link></Button><Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button></div>
                 <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-green-50 p-4">
                   <p className="font-display text-lg font-semibold text-amber-900">❤️ Ayush Help</p>
@@ -354,7 +368,19 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
             </SheetContent>
           </Sheet>
 
-          <Link to="/" className="flex shrink-0 items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-full gradient-leaf shadow-soft"><Leaf className="h-5 w-5 text-primary-foreground" /></span><span className="font-display text-2xl font-semibold tracking-tight">Ayuzee</span></Link>
+          <Link to="/" className="flex shrink-0 items-center gap-2">
+            <img
+              src="/ayuzee-logo.png"
+              alt="Ayuzee — AYUSH Evolved"
+              className="h-10 w-10 rounded-full object-cover shadow-soft"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+                (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+              }}
+            />
+            <span className="hidden grid h-9 w-9 place-items-center rounded-full gradient-leaf shadow-soft"><Leaf className="h-5 w-5 text-primary-foreground" /></span>
+            <span className="font-display text-2xl font-semibold tracking-tight">Ayuzee</span>
+          </Link>
           <div className="mx-auto hidden lg:block"><GlobalSearch /></div>
           {mobileSearchOpen && <div className="absolute left-4 right-4 top-[4.5rem] z-[90] lg:hidden"><GlobalSearch autoFocus className="md:w-full lg:w-full" /></div>}
           <div className="ml-auto flex items-center gap-2">
