@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AYUZEE - VC Pitch Deck</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0f; min-height: 100vh; padding: 15px; }
+    
+    .slide {
+      width: 100%;
+      max-width: 1400px;
+      min-height: 787px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-section { display: flex; align-items: center; gap: 20px; }
+    .logo-icon { 
+      width: 70px; height: 70px; 
+      background: linear-gradient(135deg, #00d9ff, #00ff88);
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+    }
+    .logo-text h1 {
+      color: white; font-size: 42px; font-weight: 900; letter-spacing: -2px;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .logo-text span { color: rgba(255,255,255,0.6); font-size: 14px; letter-spacing: 2px; }
+    
+    .tag {
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      color: white; padding: 10px 25px; border-radius: 30px;
+      font-weight: 700; font-size: 14px;
+    }
+    
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 40px 50px;
+      color: white;
+    }
+    
+    .hero-text { font-size: 26px; line-height: 1.5; max-width: 70%; }
+    .hero-text strong { color: #00d9ff; }
+    
+    .metrics-bar {
+      display: flex; gap: 30px; padding: 25px 50px;
+      background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+    }
+    .metric { text-align: center; flex: 1; }
+    .metric-value { font-size: 36px; font-weight: 900; color: #1a1a2e; }
+    .metric-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+    .metric.highlight .metric-value { color: #00d9ff; }
+    
+    .content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+    .col { padding: 25px; border-right: 1px solid #f1f5f9; }
+    .col:last-child { border-right: none; }
+    
+    .col-title {
+      font-size: 13px; font-weight: 800; color: #1a1a2e;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #00d9ff;
+    }
+    
+    .feature-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 14px; font-size: 13px; color: #334155;
+    }
+    .feature-icon {
+      width: 24px; height: 24px; background: #e0f7fa;
+      color: #00bcd4; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; flex-shrink: 0;
+    }
+    
+    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .stat-card {
+      background: #f8fafc; border-radius: 10px; padding: 16px;
+      text-align: center;
+    }
+    .stat-card .value { font-size: 28px; font-weight: 800; color: #1a1a2e; }
+    .stat-card .label { font-size: 10px; color: #64748b; margin-top: 4px; }
+    .stat-card.highlight { background: linear-gradient(135deg, #00d9ff20, #00ff8820); }
+    .stat-card.highlight .value { color: #009688; }
+    
+    .partner-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .partner-card {
+      background: #f8fafc; border-radius: 10px; padding: 14px; text-align: center;
+      border: 2px solid transparent;
+    }
+    .partner-card.own { border-color: #00d9ff; background: #e0f7fa; }
+    .partner-card.fran { border-color: #9c27b0; background: #f3e5f5; }
+    .partner-card.link { border-color: #ff9800; background: #fff3e0; }
+    .partner-card .icon { font-size: 24px; }
+    .partner-card .name { font-size: 11px; font-weight: 700; color: #1a1a2e; margin-top: 6px; }
+    .partner-card .count { font-size: 22px; font-weight: 900; color: #1a1a2e; }
+    
+    .revenue-model {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border-radius: 12px; padding: 20px; color: white;
+    }
+    .revenue-model h4 { font-size: 14px; margin-bottom: 15px; opacity: 0.9; }
+    .rev-split { display: flex; justify-content: space-around; }
+    .rev-item { text-align: center; }
+    .rev-item .pct { font-size: 32px; font-weight: 900; }
+    .rev-item .who { font-size: 11px; opacity: 0.7; margin-top: 4px; }
+    
+    .footer {
+      background: #1a1a2e; padding: 15px 50px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .tech-stack { display: flex; gap: 8px; }
+    .tech-stack span {
+      background: #2d2d4a; color: #00d9ff;
+      padding: 5px 12px; border-radius: 15px;
+      font-size: 11px; font-weight: 600;
+    }
+    .contact { color: rgba(255,255,255,0.5); font-size: 12px; }
+    
+    .problem-tag {
+      display: inline-block; background: #ff6b6b20; color: #e94560;
+      padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="logo-section">
+        <div class="logo-icon">🌿</div>
+        <div class="logo-text">
+          <h1>AYUZEE</h1>
+          <span>AI-POWERED AYUSH HEALTHCARE PLATFORM</span>
+        </div>
+      </div>
+      <div class="tag">🏥 HEALTHTECH AGGREGATOR</div>
+    </div>
+    
+    <div class="hero">
+      <div class="hero-text">
+        <strong>India's first unified AYUSH healthcare aggregator</strong> connecting hospitals, therapists, and patients through AI-powered clinical decision support, unified health IDs, and seamless multi-party revenue sharing — targeting the $50B AYUSH market.
+      </div>
+    </div>
+    
+    <div class="metrics-bar">
+      <div class="metric highlight">
+        <div class="metric-value">$50B</div>
+        <div class="metric-label">AYUSH Market Size</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">15+</div>
+        <div class="metric-label">Partner Hospitals</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">50+</div>
+        <div class="metric-label">Verified Therapists</div>
+      </div>
+      <div class="metric highlight">
+        <div class="metric-value">29x</div>
+        <div class="metric-label">Max ROI on Referrals</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">₹50L+</div>
+        <div class="metric-label">Monthly Revenue</div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="col">
+        <div class="col-title">🚨 Market Problem</div>
+        <div class="feature-item"><span class="feature-icon">⚡</span>Fragmented AYUSH ecosystem</div>
+        <div class="feature-item"><span class="feature-icon">⚡</span>No unified patient ID</div>
+        <div class="feature-item"><span class="feature-icon">⚡</span>Manual clinical workflows</div>
+        <div class="feature-item"><span class="feature-icon">⚡</span>No therapist verification</div>
+        <div class="feature-item"><span class="feature-icon">⚡</span>Complex revenue splits</div>
+        <div class="feature-item"><span class="feature-icon">⚡</span>Limited insurance/TPA integration</div>
+        
+        <div class="col-title" style="margin-top:25px;">💡 Our Solution</div>
+        <div class="feature-item"><span class="feature-icon">✓</span>AI-powered diagnosis assistant</div>
+        <div class="feature-item"><span class="feature-icon">✓</span>Unified UHID across all patients</div>
+        <div class="feature-item"><span class="feature-icon">✓</span>Automated HMS + pharmacy + lab</div>
+        <div class="feature-item"><span class="feature-icon">✓</span>Verified therapist network</div>
+        <div class="feature-item"><span class="feature-icon">✓</span>Real-time revenue split</div>
+        <div class="feature-item"><span class="feature-icon">✓</span>ABHA & insurance claims ready</div>
+      </div>
+      
+      <div class="col">
+        <div class="col-title">✨ Platform Features</div>
+        <div class="feature-item"><span class="feature-icon">🆔</span>Unified Patient ID (UHID)</div>
+        <div class="feature-item"><span class="feature-icon">🤖</span>AI Clinical Decision Support</div>
+        <div class="feature-item"><span class="feature-icon">📋</span>HMS: Registration → Billing</div>
+        <div class="feature-item"><span class="feature-icon">💊</span>Pharmacy + Inventory</div>
+        <div class="feature-item"><span class="feature-icon">🔬</span>Lab Integration (TAT)</div>
+        <div class="feature-item"><span class="feature-icon">📺</span>Real-time Queue Display</div>
+        <div class="feature-item"><span class="feature-icon">📱</span>WhatsApp Notifications</div>
+        <div class="feature-item"><span class="feature-icon">🎥</span>Telemedicine Ready</div>
+        <div class="feature-item"><span class="feature-icon">🏢</span>Multi-branch Management</div>
+        <div class="feature-item"><span class="feature-icon">📊</span>Financial Analytics</div>
+        
+        <div class="col-title" style="margin-top:25px;">🏛️ Government Ready</div>
+        <div class="feature-item"><span class="feature-icon">🇮🇳</span>ABHA Health ID Integration</div>
+        <div class="feature-item"><span class="feature-icon">📄</span>FHIR R4 Export</div>
+        <div class="feature-item"><span class="feature-icon">🔒</span>Consent Manager (ABDM)</div>
+        <div class="feature-item"><span class="feature-icon">📁</span>DigiLocker Integration</div>
+        <div class="feature-item"><span class="feature-icon">🏛️</span>AYUSH Ministry Reports</div>
+      </div>
+      
+      <div class="col">
+        <div class="col-title">🤝 Network Partners</div>
+        <div class="partner-grid">
+          <div class="partner-card own">
+            <div class="icon">🏥</div>
+            <div class="name">OWN</div>
+            <div class="count">3</div>
+          </div>
+          <div class="partner-card fran">
+            <div class="icon">🔗</div>
+            <div class="name">FRANCHISE</div>
+            <div class="count">2</div>
+          </div>
+          <div class="partner-card link">
+            <div class="icon">🤲</div>
+            <div class="name">LINKED</div>
+            <div class="count">10+</div>
+          </div>
+        </div>
+        
+        <div class="col-title" style="margin-top:25px;">👥 Therapist Ecosystem</div>
+        <div class="feature-item"><span class="feature-icon">📝</span>Registration & Verification</div>
+        <div class="feature-item"><span class="feature-icon">📅</span>Session Scheduling</div>
+        <div class="feature-item"><span class="feature-icon">✍️</span>Doctor Sign-off Workflow</div>
+        <div class="feature-item"><span class="feature-icon">🛡️</span>Safety Flagging System</div>
+        <div class="feature-item"><span class="feature-icon">💰</span>Auto Payout System</div>
+        
+        <div class="col-title" style="margin-top:25px;">💳 Revenue Streams</div>
+        <div class="feature-item"><span class="feature-icon">💵</span>15% Platform Commission</div>
+        <div class="feature-item"><span class="feature-icon">🛒</span>Pharmacy Sales</div>
+        <div class="feature-item"><span class="feature-icon">🔬</span>Lab Services</div>
+        <div class="feature-item"><span class="feature-icon">🏥</span>Enterprise HMS Licenses</div>
+      </div>
+      
+      <div class="col" style="background:#f8fafc;">
+        <div class="col-title">📊 Business Metrics</div>
+        <div class="stat-grid">
+          <div class="stat-card highlight">
+            <div class="value">₹50L</div>
+            <div class="label">Monthly Revenue</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">85%</div>
+            <div class="label">Doctor Retention</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">120%</div>
+            <div class="label">YoY Growth</div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="value">23x</div>
+            <div class="label">Referral ROI</div>
+          </div>
+        </div>
+        
+        <div class="col-title" style="margin-top:25px;">💰 Revenue Model</div>
+        <div class="revenue-model">
+          <h4>Platform Revenue Split</h4>
+          <div class="rev-split">
+            <div class="rev-item">
+              <div class="pct">15%</div>
+              <div class="who">Platform</div>
+            </div>
+            <div class="rev-item">
+              <div class="pct">70%</div>
+              <div class="who">Therapist</div>
+            </div>
+            <div class="rev-item">
+              <div class="pct">15%</div>
+              <div class="who">Venue</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-title" style="margin-top:25px;">🎯 Traction</div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="value">5</div>
+            <div class="label">Cities</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">3</div>
+            <div class="label">States</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">100+</div>
+            <div class="label">Daily Patients</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">500+</div>
+            <div class="label">Sessions/Month</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div class="tech-stack">
+        <span>React</span><span>TypeScript</span><span>Supabase</span><span>Playwright</span><span>Netlify</span><span>PostgreSQL</span>
+      </div>
+      <div class="contact">📧 contact@ayuzee.com | 🌐 www.ayuzee.com</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AYUZEE - Healthcare Aggregator Platform</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #0f766e 0%, #1e3a5f 100%); min-height: 100vh; padding: 20px; }
+    
+    .slide {
+      width: 100%;
+      max-width: 1200px;
+      min-height: 675px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .header {
+      background: linear-gradient(90deg, #0d9488 0%, #0891b2 100%);
+      padding: 25px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+    
+    .logo h1 {
+      color: white;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    
+    .logo span {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+    }
+    
+    .tagline {
+      background: rgba(255,255,255,0.15);
+      padding: 8px 20px;
+      border-radius: 25px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 35px 40px;
+    }
+    
+    .section {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0d9488;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section-title span { font-size: 18px; }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .stat-box {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .stat-box.highlight {
+      background: linear-gradient(135deg, #0d9488, #0891b2);
+      border: none;
+      color: white;
+    }
+    
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0d9488;
+    }
+    
+    .stat-box.highlight .stat-number { color: white; }
+    
+    .stat-label {
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    
+    .stat-box.highlight .stat-label { color: rgba(255,255,255,0.8); }
+    
+    .feature-list {
+      list-style: none;
+    }
+    
+    .feature-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #334155;
+    }
+    
+    .feature-list li:last-child { border: none; }
+    
+    .check {
+      width: 22px;
+      height: 22px;
+      background: #d1fae5;
+      color: #059669;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .partner-types {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .partner-type {
+      flex: 1;
+      background: white;
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .partner-type.own { border-color: #0d9488; background: #f0fdfa; }
+    .partner-type.franchisee { border-color: #8b5cf6; background: #f5f3ff; }
+    .partner-type.linked { border-color: #f59e0b; background: #fffbeb; }
+    
+    .partner-type .icon { font-size: 24px; margin-bottom: 5px; }
+    .partner-type .label { font-size: 11px; font-weight: 700; color: #475569; }
+    .partner-type .count { font-size: 20px; font-weight: 800; color: #1e293b; }
+    
+    .model-box {
+      background: linear-gradient(135deg, #1e3a5f, #0f766e);
+      border-radius: 16px;
+      padding: 24px;
+      color: white;
+      text-align: center;
+    }
+    
+    .model-box h3 { font-size: 16px; margin-bottom: 15px; opacity: 0.9; }
+    
+    .revenue-items {
+      display: flex;
+      justify-content: space-around;
+    }
+    
+    .revenue-item {
+      text-align: center;
+    }
+    
+    .revenue-item .value { font-size: 24px; font-weight: 800; }
+    .revenue-item .label { font-size: 10px; opacity: 0.8; margin-top: 4px; }
+    
+    .footer {
+      background: #1e293b;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .tech { color: white; font-size: 13px; }
+    .tech span { background: #334155; padding: 4px 12px; border-radius: 15px; margin: 0 3px; }
+    
+    .contact { color: rgba(255,255,255,0.6); font-size: 12px; }
+    
+    @media print {
+      body { background: white; padding: 0; }
+      .slide { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <div>
+          <h1>AYUZEE</h1>
+          <span>AI-Powered AYUSH Healthcare Platform</span>
+        </div>
+      </div>
+      <div class="tagline">🏥 Aggregator Platform</div>
+    </div>
+    
+    <div class="content">
+      <div class="left">
+        <div class="section">
+          <div class="section-title"><span>📊</span> Network Scale</div>
+          <div class="stats-grid">
+            <div class="stat-box highlight">
+              <div class="stat-number">15+</div>
+              <div class="stat-label">Partner Hospitals</div>
+            </div>
+            <div class="stat-box highlight">
+              <div class="stat-number">50+</div>
+              <div class="stat-label">Verified Therapists</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">5</div>
+              <div class="stat-label">Branches</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">29x</div>
+              <div class="stat-label">Max ROI on Referrals</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section" style="margin-top: 20px;">
+          <div class="section-title"><span>🤝</span> Partner Types</div>
+          <div class="partner-types">
+            <div class="partner-type own">
+              <div class="icon">🏥</div>
+              <div class="label">OWN</div>
+              <div class="count">3</div>
+            </div>
+            <div class="partner-type franchisee">
+              <div class="icon">🔗</div>
+              <div class="label">FRANCHISEE</div>
+              <div class="count">2</div>
+            </div>
+            <div class="partner-type linked">
+              <div class="icon">🤲</div>
+              <div class="label">LINKED</div>
+              <div class="count">10+</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="model-box" style="margin-top: 20px;">
+          <h3>💰 Revenue Model</h3>
+          <div class="revenue-items">
+            <div class="revenue-item">
+              <div class="value">15%</div>
+              <div class="label">Platform<br>Commission</div>
+            </div>
+            <div class="revenue-item">
+              <div class="value">70%</div>
+              <div class="label">Therapist<br>Share</div>
+            </div>
+            <div class="revenue-item">
+              <div class="value">15%</div>
+              <div class="label">Venue<br>Partner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="right">
+        <div class="section">
+          <div class="section-title"><span>✨</span> Key Features</div>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Unified Patient ID (UHID) System</li>
+            <li><span class="check">✓</span> AI-Assisted Clinical Decision Support</li>
+            <li><span class="check">✓</span> HMS + Pharmacy + Lab Integration</li>
+            <li><span class="check">✓</span> Real-time Queue Display</li>
+            <li><span class="check">✓</span> WhatsApp Notifications</li>
+            <li><span class="check">✓</span> Telemedicine Ready</li>
+            <li><span class="check">✓</span> Multi-branch Dashboard</li>
+            <li><span class="check">✓</span> Therapist Safety & Verification</li>
+          </ul>
+        </div>
+        
+        <div class="section" style="margin-top: 20px;">
+          <div class="section-title"><span>🎯</span> Therapist Ecosystem</div>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Registration & Background Verification</li>
+            <li><span class="check">✓</span> Session Scheduling & Tracking</li>
+            <li><span class="check">✓</span> Doctor Sign-off Workflow</li>
+            <li><span class="check">✓</span> Performance & Safety Monitoring</li>
+            <li><span class="check">✓</span> Automatic Payout System</li>
+          </ul>
+        </div>
+        
+        <div class="section" style="margin-top: 20px; background: linear-gradient(135deg, #f0fdfa, #ecfeff);">
+          <div class="section-title"><span>🛠️</span> Tech Stack</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+            <span style="background: #0d9488; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;">React</span>
+            <span style="background: #0d9488; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;">TypeScript</span>
+            <span style="background: #0d9488; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;">Supabase</span>
+            <span style="background: #0d9488; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;">Playwright</span>
+            <span style="background: #0d9488; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;">Netlify</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div class="tech">
+        <span>React</span><span>TypeScript</span><span>Supabase</span><span>Playwright</span><span>Netlify</span>
+      </div>
+      <div class="contact">📧 contact@ayuzee.com | 🌐 www.ayuzee.com</div>
+    </div>
+  </div>
+</body>
+</html>
