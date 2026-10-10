@@ -349,6 +349,201 @@ const SpineAyushGuide = () => {
         </ul>
       </StepCard>
 
+      {/* Section 11: Spine Submenu — Full Reference */}
+      <h2>11. Spine Submenu — Full Navigation Reference</h2>
+      <p className="text-sm text-muted-foreground mb-4">
+        Every item visible in the Spine sidebar, organized exactly as it appears. Use this as your daily reference map.
+      </p>
+
+      {/* Owner Only */}
+      <StepCard number={1} title="🔐 Owner Only">
+        <ul>
+          <li><strong>Super Admin (Control)</strong> — Master control panel for the entire Spine AYUSH system. Only accessible to the owner (curesure4u@gmail.com). Manage global settings, all branches, override permissions, and see the full data picture across the franchise network.</li>
+          <li><strong>Chief Physician Suite</strong> — Exclusive workspace for the chief physician. Review complex cases, set clinical protocols, approve treatment exceptions, and access cross-branch clinical analytics. Owner-guarded — not visible to other roles.</li>
+        </ul>
+      </StepCard>
+
+      {/* Daily Operations */}
+      <StepCard number={2} title="Daily Operations">
+        <ul>
+          <li><strong>⭐ Daily Command Center</strong> — The go-to morning screen. Shows today's patient queue, pending assessments, sessions due, revenue targets, and staff status in one consolidated view. Start every shift here.</li>
+          <li><strong>Spine Dashboard</strong> — The main Spine AYUSH module home. Displays total spine patients, revenue, success rate, active branches, satisfaction score, top conditions, and the AI insights panel. Acts as the tab landing page when you click the Spine tab.</li>
+          <li><strong>SOP & Safety Checklists</strong> — Pre-treatment safety checklists and SOPs for each therapy. Ensures every therapist follows the standard protocol. Covers Basti preparation, oil temperature checks, consent verification, and post-treatment cleanup.</li>
+        </ul>
+      </StepCard>
+
+      {/* Patient Journey */}
+      <StepCard number={3} title="Patient Journey">
+        <ul>
+          <li><strong>AI Assessment (₹199)</strong> — Entry-point assessment for new spine patients. Patient uploads posture photos (Front / Side / Back). AI generates a Spine Score (0–100), identifies problem areas, and recommends a treatment package. Conversion target: 62% from assessment to package booking.</li>
+          <li><strong>Examination (7 Systems)</strong> — Comprehensive clinical examination across 7 systems: Ayurvedic (Dosha, Agni, Nadi), Gut-Spine Connection (Ama Index, Mala Pareeksha), Modern Orthopedic (SLR, Schober's, ROM, Reflexes), TCM/Acupuncture (Shu Points, Huatuojiaji), Siddha Varma (12 Todu Varmam points), Chakra Assessment (7 Chakras), and Unani Hijama (cupping zones). AI generates a treatment decision based on all findings.</li>
+          <li><strong>Disease Connection Map</strong> — Visual map linking spinal levels to connected organs via dermatomes. C1-C3 → Migraine/Vertigo; C4-C7 → Thyroid/Frozen Shoulder; T5-T9 → Acidity/Liver/Diabetes; L1-L3 → PCOD/Constipation; L4-S1 → Sciatica/Knee Pain. Use this as the upsell pathway to show patients spine treatment can address their connected systemic conditions.</li>
+          <li><strong>Dermatome Mapper</strong> — Interactive spinal dermatome diagram. Click on a vertebral level to see which muscles, skin zones, and organs it innervates. Helps explain patient symptoms visually during consultation. Useful for confirming examination findings and patient education.</li>
+        </ul>
+      </StepCard>
+
+      <TipBox title="Upsell Script (Disease Connection Map)">
+        <p>"Your L1-L3 compression may be connected to your digestive and hormonal issues. A comprehensive spine + digestive protocol can address both simultaneously."</p>
+      </TipBox>
+
+      {/* Treatment Planning */}
+      <StepCard number={4} title="Treatment Planning">
+        <ul>
+          <li><strong>Quick Protocol Builder</strong> — Fast protocol selection for busy OPD. Choose condition + severity, and the system instantly suggests the best protocol. Considers Dosha type, Agni status, and Ama level. Output: a ready-to-execute treatment plan in under 60 seconds.</li>
+          <li><strong>Advanced Protocol Builder</strong> — Full protocol design tool for complex or multi-condition cases. Customize therapy duration, sequencing, herb selection, Panchakarma stages, and add patient-specific modifications. Saves as reusable templates for recurring conditions.</li>
+          <li><strong>Therapy Comparison Engine</strong> — Side-by-side comparison of up to 3 therapies for a given condition. Shows: duration, success rate, materials needed, contraindications, cost, and effort level. Helps doctor pick the best therapy for the patient's profile and budget.</li>
+          <li><strong>Packages & Pricing</strong> — Standardized franchise package catalog. Includes: Assessment Only (₹199), Quick Relief 3-Day (₹4,500), Standard 7-Day (₹8,500), Intensive 14-Day (₹16,000), Comprehensive 21-Day (₹22,000), Monthly Maintenance (₹3,500/month), Corporate Wellness (₹1,500/employee/month). Select and assign a package to the patient after assessment.</li>
+        </ul>
+      </StepCard>
+
+      {/* Treatment Delivery */}
+      <StepCard number={5} title="Treatment Delivery">
+        <ul>
+          <li><strong>Level 1: First Treatment</strong> — Same-day OPD relief therapy. Goal: patient feels 30–40% improvement before leaving. Options include Viddha Karma, Agnikarma, Marma Therapy, Hijama/Cupping, Trigger Point, Varma Therapy, and Mudra Therapy. After Level 1 relief, convert to a package: "This was emergency relief — for permanent cure, you need a 7-day protocol."</li>
+          <li><strong>Level 2: Panchakarma</strong> — Multi-day Panchakarma treatment following the planned protocol. Stages: Poorvakarma (preparation — oleation, fomentation) → Pradhana Karma (main therapy — Basti, Nasya, etc.) → Paschath Karma (post-treatment regimen). All 10 standard protocols are listed here with their respective day-by-day schedules.</li>
+          <li><strong>All Therapies (19)</strong> — Complete catalog of all 19 integrated therapy systems used in Spine AYUSH. Each has: Protocol steps, Duration, Materials list, Contraindications, Expected outcomes, and success data. Browse to educate patients or to select an adjunct therapy.</li>
+          <li><strong>T19: Functional Neurology</strong> — The 19th and most advanced therapy. Targets the neurological component of spine conditions. Includes: sensory-motor integration exercises, proprioception retraining, vestibular rehabilitation, and neural mobilization. Used for complex disc herniation, radiculopathy, and post-surgical cases.</li>
+          <li><strong>Record Level 1 Session</strong> — Quick documentation for a single-visit Level 1 treatment. Captures: therapy performed, VAS pain score before and after, materials used, therapist notes, and patient response. Takes under 2 minutes to complete.</li>
+          <li><strong>Record Level 2 Session</strong> — Multi-day protocol session documentation. Records each day of the Panchakarma course: therapy administered, oil/herb quantities used, patient feedback, VAS/ROM scores, therapist observations, and any adverse reactions.</li>
+          <li><strong>Record Therapy Session</strong> — General-purpose therapy documentation for any session outside Level 1/2 protocols. Use for maintenance sessions, yoga therapy, follow-up treatment, and adjunct therapies.</li>
+        </ul>
+      </StepCard>
+
+      <TipBox title="Spine Score Guarantee™">
+        <p>If the patient's Spine Score doesn't improve by 50%+ within the treatment duration, extend treatment FREE until it does. 92% of patients hit this target. Auto-tracked by AI using VAS/ODI scores.</p>
+      </TipBox>
+
+      {/* Tracking & Outcomes */}
+      <StepCard number={6} title="Tracking & Outcomes">
+        <ul>
+          <li><strong>Outcome Tracker</strong> — Central dashboard for tracking all patient outcomes. Measures: VAS Pain Score (0–10), ODI — Oswestry Disability Index (for lumbar), NDI — Neck Disability Index (for cervical), ROM (Range of Motion) in degrees, and overall Spine Score. Progress graphs show improvement over time. Feeds into franchise KPIs and branch success rate metrics.</li>
+          <li><strong>Patient Journey (Show Patient)</strong> — Patient-facing journey view. Show this screen to the patient at every visit to visualize their progress from Day 1 to today. Builds trust, motivates compliance, and reduces drop-offs. Includes before/after scores, photos, and milestone achievements.</li>
+          <li><strong>Patient Recovery Score</strong> — AI-calculated composite score combining 4 factors: Pain reduction (VAS), Functional improvement (ODI/NDI), ROM recovery percentage, and Treatment compliance rate. Expressed as a 0–100 score with color indicators (Red/Yellow/Green).</li>
+          <li><strong>Discharge & Home Plan</strong> — Generate a structured take-home plan at the end of treatment. Includes: Daily exercises (with images), Pathya/Apathya diet guidelines, Lifestyle modifications, Medicine schedule and dosage, Follow-up date, and Warning signs to watch for. Auto-sent to patient via WhatsApp as a formatted PDF.</li>
+        </ul>
+      </StepCard>
+
+      {/* Mind-Body Dispenza */}
+      <StepCard number={7} title="Mind-Body (Dispenza Tools)">
+        <ul>
+          <li><strong>All 10 Tools (Dashboard)</strong> — Overview of all Dispenza-based mind-body healing tools. Assign specific tools to patients as part of their treatment plan. Track usage frequency and patient compliance. Shows which tools are Free, Premium, or Clinic-use only.</li>
+          <li><strong>Breath Work (Spinal) [PRO]</strong> — Guided spinal breathing sequence based on Joe Dispenza's breathing protocol. Activates the spine's energy centers, reduces cortisol, and enhances the healing environment for Panchakarma. Duration: 20–45 min sessions. Research shows 3x faster tissue repair in patients who practice regularly.</li>
+          <li><strong>Body Part Blessing [PRO]</strong> — Guided meditation directing healing awareness to specific spinal segments and discs. Patient visualizes and "blesses" each vertebral level. Backed by neuroplasticity research showing focused attention accelerates local tissue repair.</li>
+          <li><strong>Space-Time (Open Focus) [FREE]</strong> — Open focus attention training. Shifts brain from narrow-objective focus (pain amplifying) to diffuse-inclusive awareness (pain reducing). Immediately accessible to all patients. Takes 15–20 minutes. Can be done at home daily without any cost.</li>
+          <li><strong>Walking Meditation [PRO]</strong> — Mindful slow-walking protocol with spinal awareness cues. Combines sensory integration with movement re-education. Ideal for post-Panchakarma rehabilitation and for patients with postural syndrome or sway back.</li>
+          <li><strong>Pineal Gland Activation [PRO]</strong> — Advanced meditation targeting the reticular activating system and pineal gland. Promotes deep alpha/theta brain states that accelerate spinal cord and nerve healing. Used specifically for disc herniation and nerve compression cases.</li>
+          <li><strong>Meditation Scheduler [PRO]</strong> — Automated scheduler that assigns specific meditations to each day of the patient's treatment plan. Sends WhatsApp reminders with links. Tracks completion and adjusts the sequence based on the patient's compliance rate.</li>
+          <li><strong>Elevated Emotion Journal [FREE]</strong> — Daily journaling tool for patients to record elevated emotions (gratitude, joy, love, inspiration). Dispenza's research shows sustained elevated emotion creates a biochemical healing environment. Free for all patients. Integrated with the community platform.</li>
+          <li><strong>Coherence Healing (Group) [CLINIC]</strong> — Group coherence meditation sessions conducted at the clinic. 6–12 patients meditate together, amplifying the collective healing field. Weekly schedule. Shown to improve outcomes by 3x compared to individual treatment alone. Requires clinic setup and therapist facilitation.</li>
+          <li><strong>Mental Rehearsal (Future Self) [PRO]</strong> — Future-self visualization exercise where patients mentally rehearse living pain-free with full mobility. Combines vivid sensory imagination with elevated emotion. Used at the start of each treatment phase to prime the nervous system for recovery.</li>
+          <li><strong>Brain-Heart Coherence Score [PRO]</strong> — Tracks the patient's brain-heart coherence level over time using a simple self-reported questionnaire. Higher coherence = faster healing. Score influences treatment recommendations and medication scheduling. Premium analytics dashboard included.</li>
+        </ul>
+      </StepCard>
+
+      {/* Clinical Knowledge */}
+      <StepCard number={8} title="Clinical Knowledge">
+        <ul>
+          <li><strong>All Modules (M1–M18)</strong> — Complete library of 18 learning modules covering posture theory, assessment, corrective models, syndrome identification, and AYUSH native protocols. 175+ topics, ~9 hours of content. Doctors and therapists use these for clinical decision-making; patients access assigned modules through the app.</li>
+          <li><strong>AYUSH Native (M14–M18)</strong> — The 5 AYUSH-specific modules covering system-by-system native protocols: M14 (Ayurveda spine protocols), M15 (Siddha Varma spine), M16 (Unani Hijama spine), M17 (Acupuncture spine points), M18 (Yoga therapy for spine syndromes). Each includes Dosha-specific modifications.</li>
+          <li><strong>Clinical Resources (Videos/Cases)</strong> — Repository of video demonstrations for all 19 therapies, real patient case studies with before/after outcomes, technique guides for Basti, Agnikarma, and Marma, and research references. Use to train new therapists or prepare for complex cases.</li>
+          <li><strong>AI Tools (Intelligence)</strong> — Suite of AI-powered clinical decision tools: AI Protocol Suggester (input symptoms → get protocol recommendation), AI Herb Selector (based on Dosha + condition), AI Outcome Predictor (estimates recovery timeline), and AI Upsell Identifier (detects connected organ conditions for cross-sell).</li>
+          <li><strong>Rejuvenation</strong> — Rasayana and rejuvenation protocol section. Post-treatment Rasayana plans using classical formulations (Ashwagandha, Shatavari, Bala, etc.) to consolidate treatment gains and prevent recurrence. Includes diet plans and lifestyle guidelines for long-term spinal health maintenance.</li>
+          <li><strong>Follow-up (Video LMS)</strong> — Post-treatment follow-up system delivering structured WhatsApp video content. Day 1: Oil application demo → Day 3: Morning exercises → Day 5: Self-Kizhi → Day 7: Therapist video call → Day 14: Progress check form → Day 21: Advanced Yoga → Day 30: Monthly visit reminder. System tracks watch completion and AI adjusts schedule based on compliance.</li>
+        </ul>
+      </StepCard>
+
+      {/* Franchise Tools */}
+      <StepCard number={9} title="Franchise Tools">
+        <ul>
+          <li><strong>Franchise Hub (Home)</strong> — Central dashboard for franchise management. Overview of all 6 steps of franchise setup, current franchise locations, performance comparison, and expansion planning tools.</li>
+          <li><strong>1. Setup Wizard</strong> — Step-by-step guided setup for a new Spine AYUSH franchise location. Covers: Entity registration, Branch profile, Service menu, Staff assignment, Stock initialization, and System configuration. Estimated completion: 2–3 hours for a new branch.</li>
+          <li><strong>2. Layout Planner</strong> — Interactive floor plan tool for designing the physical clinic layout. Drag-and-drop room placement for Basti room, Examination room, Reception, Pharmacy, and Waiting area. Generates a standardized layout report for construction/renovation teams.</li>
+          <li><strong>3. Operations Dashboard</strong> — Real-time operational KPIs across all franchise locations. Monitors daily patient count, revenue, therapy throughput, therapist utilization, and stock levels for each branch. Franchise owner's day-to-day control panel.</li>
+          <li><strong>4. Cost Calculator</strong> — ROI and profitability calculator for franchise investment. Input: Location, Staff count, Rent, Equipment cost → Output: Break-even point, projected monthly revenue, EBITDA, and payback period. Use this during new franchise negotiations.</li>
+          <li><strong>5. Staff Roster</strong> — Centralized staff scheduling for all franchise locations. Assign doctors, therapists, and reception staff to shifts. Handles leave management, duty swaps, and overtime calculation. Integrated with payroll module.</li>
+          <li><strong>6. Patient Portal (Online/Hybrid)</strong> — Patient-facing online portal for the franchise. Enables self-booking, assessment uploads, follow-up video access, home exercise tracking, and community participation. White-labeled for each franchise location.</li>
+        </ul>
+      </StepCard>
+
+      {/* Growth & Revenue */}
+      <StepCard number={10} title="Growth & Revenue">
+        <ul>
+          <li><strong>Memberships & Subscriptions</strong> — Manage recurring subscription plans for patients. Options: Monthly Maintenance (₹3,500/month), Annual Wellness (₹36,000/year), Corporate Block (bulk slots for companies). Handles auto-renewal, payment collection, and subscription pause/cancel. Reduces revenue unpredictability.</li>
+          <li><strong>Success Stories</strong> — Repository for documenting, managing, and publishing patient transformation stories. Structured format: Condition → Before metrics → Treatment taken → After metrics → Patient quote → Photo (with consent). Auto-publishable to social media and the public website.</li>
+          <li><strong>Offers & Promotions</strong> — Create and manage time-limited promotional offers. Types: Seasonal discounts, Family packages, Corporate tie-ups, Referral bonuses, and Festival offers. Each offer has: validity dates, usage limits, applicable packages, and tracking analytics.</li>
+        </ul>
+      </StepCard>
+
+      {/* Content & Marketing */}
+      <StepCard number={11} title="Content & Marketing">
+        <ul>
+          <li><strong>Video Library (YouTube)</strong> — Curated library of all published Spine AYUSH YouTube videos. Categorized by: Condition (Back Pain, Sciatica, Cervical), Therapy type, Patient stories, and Exercise tutorials. Doctors can assign specific videos to patients directly from this screen.</li>
+          <li><strong>Social Hub</strong> — Unified social media management for all Spine AYUSH channels (Instagram, Facebook, YouTube). Schedule posts, track engagement metrics, manage DMs, and access content templates. Connects to @spineayush Instagram and YouTube accounts.</li>
+          <li><strong>Patient Library</strong> — Patient-accessible content library with educational articles, exercise PDFs, diet guides, and infographics. Organized by condition and language. Patients receive auto-assigned content based on their diagnosis. Reduces "what do I do at home?" questions.</li>
+          <li><strong>Integrations & APIs</strong> — Technical integration panel. Manage connections to: WhatsApp Business API, Google Analytics, Payment gateways (Razorpay/Stripe), CRM (HubSpot), and external marketing tools. For IT administrators and franchise tech teams.</li>
+        </ul>
+      </StepCard>
+
+      {/* Referral & Influencer */}
+      <StepCard number={12} title="Referral & Influencer">
+        <ul>
+          <li><strong>Referral Network Hub</strong> — Manage the entire referral program. Track referral sources (Doctor referrals, Patient referrals, Physiotherapy partnerships, Orthopedic surgeon referrals). Calculate referral commissions, send thank-you payouts, and analyze the top referral performers.</li>
+          <li><strong>Public Sign-Up Page ↗</strong> — External-facing page at <code>/spine/refer</code> for new referral partners to register. Opens in a new tab. Share this link with orthopedic surgeons, physiotherapists, and wellness coaches who want to refer patients to Spine AYUSH in exchange for a commission.</li>
+        </ul>
+      </StepCard>
+
+      {/* Longevity & Rejuvenation */}
+      <StepCard number={13} title="Longevity & Rejuvenation">
+        <ul>
+          <li><strong>Wellness Age Tracker</strong> — Calculates and tracks the patient's "Spinal Wellness Age" — a biological age metric based on posture, ROM, pain levels, and disc health. Motivates patients to "age younger" through consistent spine care. Updated after each assessment or treatment cycle.</li>
+          <li><strong>Rejuvenation (Rasayana)</strong> — Full Rasayana program management. Design personalized rejuvenation protocols using classical Ayurvedic Rasayana formulations. Tracks the 3–6 month Rasayana course: herb schedule, diet compliance, energy levels, and bio-markers.</li>
+          <li><strong>Retreats & Boot Camps</strong> — Plan and manage intensive residential spine retreat programs. Typically 7–21 day residential experiences combining Panchakarma, Yoga, meditation, and lifestyle transformation. Handles registration, accommodation booking, therapy scheduling, and dietary planning for retreat participants.</li>
+        </ul>
+      </StepCard>
+
+      {/* Vitality & Vajikarana */}
+      <StepCard number={14} title="Vitality & Vajikarana (18+)">
+        <ul>
+          <li><strong>Vajikarana & Pelvic Health</strong> — Specialized module for male sexual health, vitality, and reproductive wellness using Vajikarana Chikitsa (Ayurvedic virilization therapy). Addresses: ED, low libido, pelvic pain, and prostate-related spine-pelvic connections. Confidential clinical workflow.</li>
+          <li><strong>Pelvic Floor / Kegel Program</strong> — Structured pelvic floor rehabilitation program for both male and female patients. Addresses: urinary incontinence, pelvic organ prolapse, post-partum pelvic floor weakness, and lumbosacral instability secondary to weak pelvic floor. Includes video-guided Kegel exercise protocols.</li>
+          <li><strong>Confidential Assessment</strong> — Private intake form and assessment for vitality/Vajikarana cases. Captured in a separate, access-controlled workflow. Only the treating doctor and the patient can view this data. Ensures patient confidentiality for sensitive conditions.</li>
+        </ul>
+      </StepCard>
+
+      {/* Spinal Injury Rehab & CSR */}
+      <StepCard number={15} title="Spinal Injury Rehab & CSR">
+        <ul>
+          <li><strong>Rehab Registry</strong> — Registry of patients with severe spinal injuries (SCI — Spinal Cord Injury, post-surgical, paralysis). Tracks rehabilitation milestones, functional recovery scores, assistive device needs, and long-term care plans. Used for both clinical management and grant/CSR reporting.</li>
+          <li><strong>Tele-Rehab Follow-Up</strong> — Remote rehabilitation support for SCI patients who cannot travel to the clinic. Video consultations, home exercise guidance, caregiver training, and remote monitoring. Expands Spine AYUSH's reach beyond physical clinic boundaries.</li>
+          <li><strong>CSR Fund & Sponsorship</strong> — Manage the Corporate Social Responsibility fund for free or subsidized treatment of SCI patients from low-income backgrounds. Tracks: Donor contributions, Beneficiary cases, Treatment provided, Outcomes, and CSR reporting dashboards for corporate donors.</li>
+          <li><strong>Public Impact Page ↗</strong> — External-facing page at <code>/spine/impact</code> showing the social impact of the Spine AYUSH program — patients helped, surgeries avoided, SCI cases rehabilitated, and community clinics conducted. Opens in a new tab. Share with donors, NGOs, and government health departments.</li>
+        </ul>
+      </StepCard>
+
+      {/* Community & Business */}
+      <StepCard number={16} title="Community & Business">
+        <ul>
+          <li><strong>Follow-Up Rules (Automation)</strong> — Configure automated follow-up triggers and rules. Define: when to send WhatsApp reminders, what content to send at each day/week interval, which patients get escalated to the doctor, and how to re-engage dropped-off patients. Runs without manual intervention once configured.</li>
+          <li><strong>Community & Funnel</strong> — Patient community management platform. Groups by condition (Sciatica Warriors, Back Pain Recovery, Cervical Pain Group). Includes: gamification (points, badges, leaderboards for exercise compliance), weekly group calls, milestone celebrations, and the engagement pipeline: Lead → Assessment → Package → Active → Maintenance → Referral.</li>
+          <li><strong>Engagement Pipeline</strong> — Detailed CRM pipeline showing every patient's current stage in the Spine AYUSH journey. Stages: Cold Lead → Assessment Done → Package Sold → Active Treatment → Completed → Maintenance → Referral Given → Churned. Identify bottlenecks and intervene with targeted communication.</li>
+          <li><strong>Franchise Operations</strong> — Tab link to the Spine AYUSH franchise operations dashboard. Track per-branch performance: Patients, Revenue, Packages sold, Satisfaction scores, and Success Rate. Ensure protocol consistency across all locations.</li>
+          <li><strong>Funnel & Marketing</strong> — Lead funnel analytics and marketing channel performance. Track: Cost per lead by source (Google, WhatsApp, Referral, Walk-in, Corporate), assessment-to-package conversion rate, and patient LTV. The ₹199 Assessment is the primary lead magnet — low-barrier entry for maximum top-of-funnel volume.</li>
+          <li><strong>Franchise KPIs</strong> — Standardized KPI scorecard across all franchise locations. Key metrics and targets: Assessment → Package Conversion (60%+), Treatment Success Rate (80%+), Patient Satisfaction (4.5+/5), Monthly Revenue per Branch (location-specific targets), Referral Rate (15%+), Follow-up Compliance (70%+).</li>
+          <li><strong>🎲 Spine Cashflow Game</strong> — Gamified business simulation for franchise staff. Staff earn points by hitting daily targets: patients registered, packages sold, sessions completed, and follow-ups sent. Leaderboard visible to all staff and management. Drives healthy competition and consistent performance. Uses a "Cashflow game" metaphor where staff level up by building the business.</li>
+        </ul>
+      </StepCard>
+
+      {/* Productivity */}
+      <StepCard number={17} title="Productivity">
+        <ul>
+          <li><strong>Task Tracker</strong> — All-in-one task management tool accessible from the Spine sidebar. Assign tasks to staff members, set due dates, add priority levels, and track completion. Covers clinical tasks (patient follow-up calls, protocol preparation), administrative tasks (billing, reports), and franchise tasks (training, inspections). Integrated with the business register for full operational accountability.</li>
+        </ul>
+      </StepCard>
+
+      <TipBox title="Revenue Strategy">
+        <p>The Spine Score Guarantee™ + ₹199 entry assessment + connected disease upsell (spine → related organ conditions) increases patient LTV by 3x. The community + follow-up automation ensures 70%+ retention into maintenance plans — the real long-term revenue driver.</p>
+      </TipBox>
+
       <KeyboardShortcuts
         shortcuts={[
           { keys: "Ctrl + A", action: "New assessment" },
