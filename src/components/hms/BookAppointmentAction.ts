@@ -1,9 +1,14 @@
 /**
- * Utility to wire the ConsultationHub appointment booking to real DB.
- * Import and call this instead of toast.success() in the booking button.
+ * Booking utility with explicitly supplied services. Obtain hook services in
+ * a component or custom hook, then pass them here; this function calls no hooks.
  */
-import { useAppointments } from "@/hooks/useAppointments";
-import { useNotifications } from "@/hooks/useNotifications";
+import type { useAppointments } from "@/hooks/useAppointments";
+import type { useNotifications } from "@/hooks/useNotifications";
+
+type BookingServices = {
+  bookAppointment: ReturnType<typeof useAppointments>["bookAppointment"];
+  sendAppointmentConfirmation: ReturnType<typeof useNotifications>["sendAppointmentConfirmation"];
+};
 
 export async function bookAppointmentWithNotification(params: {
   patient_name: string;
@@ -16,9 +21,8 @@ export async function bookAppointmentWithNotification(params: {
   booked_via?: "reception" | "online" | "phone" | "whatsapp" | "app";
   sendWhatsapp?: boolean;
   sendSms?: boolean;
-}) {
-  const { bookAppointment } = useAppointments();
-  const { sendAppointmentConfirmation } = useNotifications();
+}, services: BookingServices) {
+  const { bookAppointment, sendAppointmentConfirmation } = services;
 
   // Book the appointment
   const result = await bookAppointment({
@@ -44,8 +48,8 @@ export async function bookAppointmentWithNotification(params: {
         undefined,
         result.appointmentId
       );
-    } catch (e) {
-      console.warn("Notification failed (appointment still booked):", e);
+    } catch {
+      console.warn("Appointment was saved, but its notification could not be sent.");
     }
   }
 

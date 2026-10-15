@@ -1,0 +1,34 @@
+{
+  "production": {
+    "deployedBranch": null,
+    "deployedCommit": null,
+    "netlifySiteId": null,
+    "supabaseProjectRef": null,
+    "compute": null,
+    "region": null,
+    "quotas": {
+      "realtimeConnections": null,
+      "databaseConnections": null,
+      "storageBytes": null,
+      "authEmailPerHour": null
+    },
+    "functionInventoryVerified": false,
+    "providerConfigurationVerified": false,
+    "verifiedAt": null,
+    "evidenceReference": null
+  },
+  "staging": {
+    "netlifySiteId": null,
+    "supabaseProjectRef": null,
+    "syntheticDataOnly": false,
+    "sandboxIntegrationsOnly": false,
+    "separateSecrets": false,
+    "verifiedAt": null,
+    "evidenceReference": null
+  },
+  "hostingBudget": {
+    "currency": "INR",
+    "monthlyCap": null,
+    "purchaseAuthorized": false
+  }
+}
