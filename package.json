@@ -31,7 +31,8 @@
     "typecheck:config": "tsc -p tsconfig.node.json --noEmit",
     "test:phase0": "node --test scripts/release-baseline.test.mjs scripts/phase0-code.test.mjs",
     "check:functions": "node --test scripts/phase0-functions.test.mjs",
-    "lint:phase0": "eslint src/lib/previewPolicy.ts src/components/common/FeaturePreview.tsx src/components/hms/BookAppointmentAction.ts src/App.tsx"
+    "lint:phase0": "eslint src/lib/previewPolicy.ts src/lib/razorpay.ts src/components/common/FeaturePreview.tsx src/components/common/PreviewForm.tsx src/components/common/PublicPreviewHome.tsx src/components/common/PublicPreviewNav.tsx src/components/hms/BookAppointmentAction.ts src/App.tsx src/pages/Index.tsx src/pages/Contact.tsx src/components/site/Footer.tsx src/components/site/SiteNav.tsx src/components/common/PreviewSafety.test.tsx",
+    "typecheck:preview": "tsc -p tsconfig.preview.json --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

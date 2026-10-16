@@ -44,9 +44,10 @@ test('application-project invocation exposes errors that an empty root project h
 test('unreleased routes fail closed, including case and encoded-slash variants', async () => {
   const { previewForPath } = await loadTs('src/lib/previewPolicy.ts');
   for (const path of ['/hms', '/HMS/patients', '/hms%2fpatients', '/blog/..%2fhms', '/guides/../../wallet', '/shop/checkout', '/auth', '/wallet', '/doctor', '/consultation/123/room', '/new-unreviewed-module', '/%invalid']) assert.ok(previewForPath(path), path);
-  for (const path of ['/', '/about-us/', '/privacy-policy', '/blog/readable-article', '/guides/doctor']) assert.equal(previewForPath(path), null, path);
+  for (const path of ['/', '/about-us/', '/privacy-policy', '/blog', '/learning/blogs', '/learning/blogs/readable-article', '/guides/doctor']) assert.equal(previewForPath(path), null, path);
   assert.ok(previewForPath('/blog-admin'));
   assert.ok(previewForPath('/guides-admin'));
+  assert.ok(previewForPath('/learning/blogs/article/admin'));
 });
 
 test('booking services persist before notification and apply existing defaults', async () => {

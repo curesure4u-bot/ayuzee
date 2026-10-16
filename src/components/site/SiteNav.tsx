@@ -235,7 +235,7 @@ const MedicinesMegaMenu = ({ conditions, close }: { conditions: ConditionMenuLin
   </div>
 );
 
-export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
+const SiteNavContent = () => {
   const { count } = useCart();
   const navigate = useNavigate();
   const { role } = useUserRole();
@@ -259,7 +259,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
       }
       const [{ data: prof }, { data: roleRows }] = await Promise.all([
         supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle(),
-        (supabase as any).from("user_roles").select("role").eq("user_id", userId),
+        supabase.from("user_roles").select("role").eq("user_id", userId),
       ]);
       setDisplayName(prof?.full_name || null);
       setAllRoles((roleRows || []).map((r: { role: string }) => r.role));
@@ -294,8 +294,6 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
         if (data?.length) setConditions(data.map((c) => ({ icon: c.icon || "🌿", name: c.name, slug: c.slug, system_category: c.system_category })));
       });
   }, []);
-
-  if (!appLevel) return null;
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -466,3 +464,7 @@ export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => {
     </header>
   );
 };
+
+export const SiteNav = ({ appLevel = false }: { appLevel?: boolean }) => (
+  appLevel ? <SiteNavContent /> : null
+);

@@ -11,7 +11,7 @@ export function previewForPath(pathname: string): string | null {
   } catch {
     return "This area";
   }
-  if (informationalRoutes.some(route => route === path) || path === "/blog" || path.startsWith("/blog/") || path === "/guides" || path.startsWith("/guides/")) return null;
+  if (informationalRoutes.some(route => route === path) || path === "/blog" || /^\/learning\/blogs(?:\/[^/]+)?$/.test(path) || path === "/guides" || path.startsWith("/guides/")) return null;
   const root = path.split("/")[1];
   if (["auth", "login", "reset-password", "onboarding"].includes(root)) return "Account access";
   if (["shop", "checkout", "cart", "wallet", "payments", "orders", "membership", "gamification"].includes(root)) return "Shopping and payments";

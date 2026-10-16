@@ -65,6 +65,9 @@ is still required before release; this work is not a whole-site redesign.
 
 ## Validation
 
+Rechecked on **16 October 2026** after Sai installed project dependencies.
+All 89 direct dependency versions inspected match `package-lock.json`.
+
 | Check | Local result |
 | --- | --- |
 | Baseline and Phase 0 code tests | 15 passed |
@@ -73,23 +76,36 @@ is still required before release; this work is not a whole-site redesign.
 | Compiler negative-control fixture | Exposes an application error hidden by an empty referenced root |
 | Source patch | Applies cleanly to the pinned source snapshot; byte comparison performed |
 | All application TS/TSX syntax | 1,530 source files parsed; no syntax diagnostics |
-| Full application typecheck | Not verified: dependency installation blocked by npm registry DNS failures |
-| Targeted ESLint | Not run: ESLint unavailable locally |
-| Production build | Not run locally; separate CI job added |
+| Full application typecheck | Incomplete: interrupted after approximately five minutes without a compiler verdict or diagnostics |
+| Configuration typecheck | Passed |
+| Targeted ESLint | Passed |
+| Full ESLint | 3,144 errors; 147 warnings |
+| Existing Vitest suite | 18 passed across four files; four tests remain placeholders |
+| Production build | Passed; large-chunk warning remains |
 | Netlify bundle and browser journeys | Not run |
 | Schema replay and direct database authorization | Deferred with Supabase/staging setup |
-| Current dependency advisories | CI check added; no fresh registry audit performed locally |
+| Current dependency advisories | Fresh audit completed: 51 affected package entries (2 critical, 20 high, 28 moderate, 1 low); no upgrades applied |
 
-Local parser/test execution used an already-installed TypeScript **5.9.3**
-copied into ignored `node_modules`. This version matches the lockfile, but it
-does not substitute for installing the complete dependency graph. Dependency
-versions and the lockfile are unchanged. `npm ci` was attempted in this complete
-checkout and failed: the npm registry could not be resolved (`ENOTFOUND`), and
-npm also reported an internal exit-handler error. No dependencies are vendored
-in the change. CI will install with `npm ci` when the branch is pushed.
+The earlier 15 October review borrowed host TypeScript because installation
+failed with registry DNS and npm exit-handler errors. That installation blocker
+is superseded: dependencies are now available in the project's ignored
+`node_modules`, including locked TypeScript **5.9.3**. The fresh advisory check
+also successfully contacted the npm registry during the 16 October run.
+Dependency versions and the lockfile are unchanged; no dependencies are vendored
+in Git. CI will install with `npm ci` when the branch is pushed.
 No remote workflow, deployment or push was performed during preparation.
 
-When registry access is available, run in the canonical checkout:
+The full lint count is two higher than the historical audit. Comparing changed
+TS files against the parent with the same linter explains this: two hook errors
+and one parser error were removed, while the repaired Razorpay syntax exposed
+five pre-existing `any` violations. These are newly visible diagnostics, not
+newly introduced `any` usages. The targeted Phase 0 lint command passes.
+
+The audit's critical package entries are Vitest/Tinypool in the test toolchain.
+Package counts alone do not establish production exploitability. Triage relevant
+advisories before selecting upgrades; do not run an automatic force-fix.
+
+For subsequent validation in the canonical checkout:
 
 ```sh
 npm ci
@@ -102,10 +118,11 @@ npm run build
 npm run audit:deps
 ```
 
-Run the commands individually so every failure is visible. Record full type and
-lint diagnostics before creating an incremental debt baseline. The October 13
-audit's 3,142 lint errors and 147 warnings are historical evidence, not a new
-count for this patch. Do not claim the portal passes those checks yet.
+Run commands individually so every failure is visible. Investigate the slow
+application typecheck before claiming a result or recording its diagnostic
+baseline. Full lint and dependency advisory checks currently fail. The visible
+npm cache remains `/Users/sai/.npm`; the requested shared Codex cache was not
+present during inspection. This does not prevent use of installed dependencies.
 
 ## Remaining boundaries
 
@@ -146,3 +163,43 @@ Preserve unrelated local work. No dependency version or lockfile changes are
 included. Rollback consists of reverting the code patch; no data restoration
 is needed. Reverting also restores the original unready endpoint behavior,
 so it is not a reason to enable those integrations in production.
+
+
+## 16 October preview follow-up and source publication
+
+The modularity assessment is recorded in
+`docs/architecture/modularity-assessment.md`. Broad restructuring is not required;
+account-domain boundaries will accompany their owning Phase 1 repairs.
+
+The default home now renders an informational preview with the existing visual
+palette. The original launch home remains a named export, but its sample doctor
+cards, testimonials and fabricated delivery checker are not mounted by default.
+Public navigation no longer subscribes to account state. Hidden legacy navigation
+returns without mounting its account/data hooks. Contact/newsletter/waitlist
+forms have visible preview notices, disabled fieldsets and submit prevention;
+they no longer import or invoke database submission helpers. Existing private
+APIs and policies are still unchanged: this is not complete backend containment.
+The `/blog` redirect can reach the reviewed public blog index/detail routes.
+
+Five additional rendered component tests pass (23 Vitest tests total; four
+older placeholders remain). The 17 focused Node tests still pass. Changed-file
+lint and a separate preview UI semantic typecheck pass. The preview check is
+explicitly narrower than the full application and does not replace its CI job.
+Full lint now reports 3,138 errors and 147 warnings. The Razorpay helper's five
+existing `any` annotations and the navigation cast were replaced with typed
+interfaces/queries rather than suppressing diagnostics.
+
+Production compilation passes with synthetic public values for isolated QA.
+Headless Chrome launch failed before browser inspection, so rendered mobile and
+visual acceptance is still unverified. Full application typechecking also remains
+incomplete. A bounded compiler trace identifies excessive type instantiation in
+existing Supabase query expressions; file moves would not resolve that defect.
+CI retains the full check with a timeout rather than reporting a false success.
+
+Sai authorized a reviewed Phase 0 source push and then Phase 1 work on 16 October.
+Use `[skip netlify]` on the latest source commit to skip Netlify Git-triggered
+branch/production deployment while administration remains deferred. This is a
+source checkpoint, not completion of Phase 0's functional release exit condition.
+The GitHub integration write probe returned HTTP 403 and an ordinary Git remote
+query timed out; no push has been confirmed. Do not mark publication successful
+without verifying the remote branch head. Do not publish Phase 1 automatically.

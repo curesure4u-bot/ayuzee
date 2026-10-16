@@ -25,6 +25,25 @@ export interface RazorpayResult {
   error?: string;
 }
 
+interface CheckoutResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+interface CheckoutFailure {
+  error?: { description?: string };
+}
+
+interface CheckoutInstance {
+  on(event: "payment.failed", callback: (response: CheckoutFailure) => void): void;
+  open(): void;
+}
+
+type CheckoutConstructor = new (options: Record<string, unknown>) => CheckoutInstance;
+
+const checkoutWindow = () => window as unknown as { Razorpay?: CheckoutConstructor };
+
 // Razorpay key from environment
 const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder";
 
@@ -33,7 +52,7 @@ const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placehold
  */
 function loadRazorpayScript(): Promise<boolean> {
   return new Promise((resolve) => {
-    if ((window as any).Razorpay) {
+    if (checkoutWindow().Razorpay) {
       resolve(true);
       return;
     }
@@ -72,7 +91,7 @@ export async function initiateRazorpayPayment(params: RazorpayPaymentParams): Pr
         order_id: params.orderId || "",
       },
       theme: { color: "#f97316" }, // Ayuzee orange
-      handler: (response: any) => {
+      handler: (response: CheckoutResponse) => {
         resolve({
           success: true,
           paymentId: response.razorpay_payment_id,
@@ -88,16 +107,18 @@ export async function initiateRazorpayPayment(params: RazorpayPaymentParams): Pr
     };
 
     try {
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on("payment.failed", (response: any) => {
+      const Checkout = checkoutWindow().Razorpay;
+      if (!Checkout) throw new Error("Payment gateway unavailable");
+      const rzp = new Checkout(options);
+      rzp.on("payment.failed", (response: CheckoutFailure) => {
         resolve({
           success: false,
           error: response.error?.description || "Payment failed",
         });
       });
       rzp.open();
-    } catch (e: any) {
-      resolve({ success: false, error: e.message || "Payment gateway error" });
+    } catch (error: unknown) {
+      resolve({ success: false, error: error instanceof Error ? error.message : "Payment gateway error" });
     }
   });
 }

@@ -17,6 +17,7 @@ concurrency:
 jobs:
   preview-safety:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,10 +28,13 @@ jobs:
       - run: npm run test:phase0
       - run: npm run check:functions
       - run: npm run lint:phase0
+      - run: npm run typecheck:preview
+      - run: npm test
 
   application-typecheck:
     name: Full application typecheck (existing debt remains visible)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
