@@ -1,0 +1,197 @@
+{
+  "reportVersion": 1,
+  "scope": "source inventory; no live configuration or application correctness verified",
+  "netlify": {
+    "buildCommand": "npm run build",
+    "publishDirectory": "dist",
+    "declaredFunctionsDirectory": "netlify/functions",
+    "handlers": [
+      {
+        "path": "netlify/functions/gemini-proxy.js",
+        "commonJsInEsmPackage": false,
+        "requiredVariableNames": []
+      },
+      {
+        "path": "netlify/functions/telegram-send.js",
+        "commonJsInEsmPackage": false,
+        "requiredVariableNames": []
+      },
+      {
+        "path": "netlify/functions/telegram-webhook.js",
+        "commonJsInEsmPackage": false,
+        "requiredVariableNames": []
+      },
+      {
+        "path": "netlify/functions/whatsapp-send.js",
+        "commonJsInEsmPackage": false,
+        "requiredVariableNames": []
+      },
+      {
+        "path": "netlify/functions/whatsapp-task-webhook.js",
+        "commonJsInEsmPackage": false,
+        "requiredVariableNames": []
+      }
+    ],
+    "deployedBranch": "unverified",
+    "deployedFunctions": "unverified"
+  },
+  "supabase": {
+    "sourceProjectRef": "saphetdusyfrcduzsouk",
+    "sourceFunctions": [
+      "abdm-link",
+      "ai-cds",
+      "ai-gateway",
+      "ai-guidance-generate",
+      "ai-hijama-plan",
+      "ai-panchakarma-plan",
+      "ai-parasurgical-assistant",
+      "ai-pre-consult-summary",
+      "ai-scribe",
+      "astg-clinical-assistant",
+      "atmri-doctor-sign",
+      "auth-email-hook",
+      "backlink-refresh",
+      "check-badges",
+      "classical-reference-search",
+      "create-delhivery-shipment",
+      "credit-referral",
+      "delhivery-track",
+      "dev-api-keys",
+      "dev-api",
+      "diet-chart-suggest",
+      "drug-interaction-check",
+      "extract-afi-formulation",
+      "extract-api-formulation",
+      "homeo-constitutional-summary",
+      "homeo-materia-ai",
+      "homeo-mind-analyze",
+      "homeo-remedy-differentiate",
+      "homeo-rubric-finder",
+      "homeo-seed-1000",
+      "homeo-seed-mm200",
+      "homeo-seed",
+      "homeo-sehgal-analyze",
+      "homeopathy-ai-analysis",
+      "jihva-pariksha-interpret",
+      "job-alert-digest",
+      "job-fraud-detect",
+      "mutra-bindu-interpret",
+      "netra-pariksha-interpret",
+      "panchakarma-check-conflicts",
+      "panchakarma-seed",
+      "panchakarma-session-reminder",
+      "process-email-queue",
+      "process-payout",
+      "razorpay-create-order",
+      "razorpay-refund",
+      "razorpay-verify-payment",
+      "seed-astg-data",
+      "send-eod-report",
+      "send-whatsapp",
+      "settle-therapy-session",
+      "spine-interpret",
+      "swasthavritta-interpret",
+      "swasthavritta-notify-vaidya",
+      "telegram-webhook",
+      "vaidya-daily-insight",
+      "voice-command"
+    ],
+    "jwtOverrides": [
+      {
+        "function": "auth-email-hook",
+        "verifyJwt": false
+      },
+      {
+        "function": "dev-api",
+        "verifyJwt": false
+      },
+      {
+        "function": "process-email-queue",
+        "verifyJwt": true
+      },
+      {
+        "function": "homeo-materia-ai",
+        "verifyJwt": false
+      },
+      {
+        "function": "homeo-seed",
+        "verifyJwt": false
+      },
+      {
+        "function": "homeo-seed-1000",
+        "verifyJwt": false
+      },
+      {
+        "function": "homeo-rubric-finder",
+        "verifyJwt": false
+      },
+      {
+        "function": "homeo-seed-mm200",
+        "verifyJwt": false
+      }
+    ],
+    "migrations": {
+      "count": 199,
+      "duplicateVersions": [
+        {
+          "version": "20260715",
+          "files": [
+            "supabase/migrations/20260715_fix_has_role.sql",
+            "supabase/migrations/20260715_fix_rls.sql",
+            "supabase/migrations/20260715_gamification_tables.sql",
+            "supabase/migrations/20260715_user_setup.sql"
+          ]
+        }
+      ]
+    },
+    "manualSqlScriptCount": 114,
+    "liveProject": "unverified",
+    "computeRegionQuotasAndDeployedFunctions": "unverified"
+  },
+  "checks": {
+    "declaredTypecheck": "npm run typecheck:app && npm run typecheck:config",
+    "emptyRootTypecheckDetected": false,
+    "automatedSourceChecks": true,
+    "executedApplicationChecks": []
+  },
+  "environmentExamples": {
+    "publicVariableNames": [
+      "VITE_CLOUDINARY_CLOUD_NAME",
+      "VITE_CLOUDINARY_UPLOAD_PRESET",
+      "VITE_GA_MEASUREMENT_ID",
+      "VITE_SENTRY_DSN",
+      "VITE_SUPABASE_PROJECT_ID",
+      "VITE_SUPABASE_PUBLISHABLE_KEY",
+      "VITE_SUPABASE_URL"
+    ],
+    "privateSecretNamesWithPublicPrefix": []
+  },
+  "issues": [
+    {
+      "id": "E04",
+      "detail": "Migration versions collide; do not replay the history until reconciled."
+    },
+    {
+      "id": "O04",
+      "detail": "The existing E2E workflow does not automatically gate changes."
+    }
+  ],
+  "releaseReadiness": "not established; completion of this inventory is not a release approval",
+  "source": {
+    "branch": "Sai-Branch",
+    "head": "4dc548a741ae0cee3418e66ca8ec80db14dfc137",
+    "workingTreeModified": true,
+    "repository": "curesure4u-bot/ayuzee",
+    "baseCommit": "4dc548a741ae0cee3418e66ca8ec80db14dfc137",
+    "collectionMethod": "Complete local Git checkout: indexed paths and prepared working-tree source",
+    "collectedAt": "2026-10-15"
+  },
+  "environmentRecord": {
+    "status": "deferred by user",
+    "problems": [
+      "Hosting and isolated staging setup deferred.",
+      "Schema replay and live policies unverified.",
+      "No hosting budget or upgrades authorized."
+    ]
+  }
+}

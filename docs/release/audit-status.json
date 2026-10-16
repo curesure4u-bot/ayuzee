@@ -1,0 +1,641 @@
+{
+  "repository": "curesure4u-bot/ayuzee",
+  "branch": "Sai-Branch",
+  "baseCommit": "4dc548a741ae0cee3418e66ca8ec80db14dfc137",
+  "reviewDate": "2026-10-15",
+  "scope": "Prepared local patch; not committed or deployed. Audit status remains open until its owning scope is verified.",
+  "findings": [
+    {
+      "id": "S01",
+      "severity": "Critical",
+      "title": "Users can grant themselves administrator roles",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S02",
+      "severity": "Critical",
+      "title": "Profile policies expose and permit modification of other users’ data",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S03",
+      "severity": "Critical",
+      "title": "Wallet owners can directly edit their balance",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S04",
+      "severity": "High",
+      "title": "Reward tables have unrestricted “service role” policies",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S05",
+      "severity": "Critical",
+      "title": "Hospital data isolation is missing from supplied policies and incomplete in fix scripts",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S06",
+      "severity": "High",
+      "title": "Clinical interpretation functions bypass patient assignment checks",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S07",
+      "severity": "High",
+      "title": "Messaging proxies accept untrusted callers, including bot webhook changes",
+      "status": "open",
+      "preparedChange": "Five optional messaging/AI Netlify endpoints deny every request in prepared source. Supabase messaging endpoints and existing deployments are unchanged.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S08",
+      "severity": "High",
+      "title": "Incoming messaging webhooks do not verify provider authenticity",
+      "status": "open",
+      "preparedChange": "Prepared Netlify webhook entrypoints are non-operational. Provider authenticity work and Supabase webhook verification remain pending.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S09",
+      "severity": "High",
+      "title": "Several privileged functions lack application-level caller authorization",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S10",
+      "severity": "High",
+      "title": "Database HTML and printable records are rendered without sanitization",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S11",
+      "severity": "High",
+      "title": "Posture-photo setup makes medical images publicly accessible",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S12",
+      "severity": "High",
+      "title": "HMS access is a broad frontend gate, not module-level enforcement",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S13",
+      "severity": "High",
+      "title": "Doctor self-update protection omits newer permission fields",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S14",
+      "severity": "Medium",
+      "title": "Session changes do not invalidate all role and query caches",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S15",
+      "severity": "High",
+      "title": "Repository contains reusable test credentials and production-oriented test instructions",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S16",
+      "severity": "Medium",
+      "title": "Legacy browser integrations still expect private API keys",
+      "status": "open",
+      "preparedChange": "Unsafe browser-prefixed Telegram token removed from the environment example. Legacy browser service helpers remain dormant and unrepaired.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S17",
+      "severity": "Medium",
+      "title": "AI endpoints have weak cost, payload and feature controls",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S18",
+      "severity": "Medium",
+      "title": "Audit logs are client-authored and best-effort",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "S19",
+      "severity": "Medium",
+      "title": "Custom login throttling is bypassable and lacks committed server implementations",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P01",
+      "severity": "Critical",
+      "title": "Prices and free-payment states are chosen by the browser",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P02",
+      "severity": "Critical",
+      "title": "Valid payment signatures can be replayed against a different internal purchase",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P03",
+      "severity": "High",
+      "title": "Successful shop payment writes an order status rejected by the supplied schema",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P04",
+      "severity": "High",
+      "title": "Payment completion depends on a browser callback with no committed reconciliation handler",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P05",
+      "severity": "High",
+      "title": "Refunds can be marked complete without returning money",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P06",
+      "severity": "High",
+      "title": "Payout processing is not atomic or protected against concurrent processing",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P07",
+      "severity": "High",
+      "title": "Billing creates paid invoices regardless of actual payment mode",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P08",
+      "severity": "High",
+      "title": "Goods receipts can lose stock updates and prematurely close purchase orders",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P09",
+      "severity": "High",
+      "title": "Pharmacy sales do not implement the promised invoice and stock operation",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P10",
+      "severity": "Medium",
+      "title": "Coupons and checkout retries are not a coherent persisted transaction",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "P11",
+      "severity": "High",
+      "title": "Therapy settlement can record settled after partial or failed credits",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C01",
+      "severity": "Critical",
+      "title": "Empty patient histories are replaced by fabricated allergies and conditions",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C02",
+      "severity": "High",
+      "title": "Document parsing invents medical values instead of reading the uploaded document",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C03",
+      "severity": "High",
+      "title": "Some AI risk, vital and posture results are fixed demonstrations presented as personal findings",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C04",
+      "severity": "High",
+      "title": "Spine therapy records are attached to the logged-in clinician as the patient",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C05",
+      "severity": "High",
+      "title": "Admission and bed occupancy are separate, unchecked writes",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C06",
+      "severity": "High",
+      "title": "Prescription creation and dispensing can leave contradictory records",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C07",
+      "severity": "High",
+      "title": "Consultation code confuses doctor profile IDs with authentication IDs",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C08",
+      "severity": "High",
+      "title": "Teleconsultation links point to an incompatible record identifier",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C09",
+      "severity": "Medium",
+      "title": "Lab orders have zero pricing and lose legitimate numeric zero results",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C10",
+      "severity": "High",
+      "title": "Medical signing is not bound to an assigned case or an atomic signed record",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "C11",
+      "severity": "High",
+      "title": "Offline clinical operations can be dropped, duplicated or synchronized under another session",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F01",
+      "severity": "High",
+      "title": "Consent management reports grants/revocations without implementing them",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F02",
+      "severity": "High",
+      "title": "ABHA/ABDM linking is a stub even when credentials are configured",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F03",
+      "severity": "High",
+      "title": "Health Locker shows fabricated records and claims actions that do not occur",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F04",
+      "severity": "Medium",
+      "title": "Duplicate-patient merge does not merge or dismiss any records",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F05",
+      "severity": "High",
+      "title": "Security Controls settings do not save or enforce the advertised protections",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F06",
+      "severity": "High",
+      "title": "Some booking hooks report success when persistence fails",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F07",
+      "severity": "Medium",
+      "title": "International booking and device connection features are local demonstrations",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F08",
+      "severity": "Medium",
+      "title": "Developer MCP and voice agent features simulate execution",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F09",
+      "severity": "High",
+      "title": "Paid membership activates directly and expired memberships still pass gates",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F10",
+      "severity": "High",
+      "title": "Paid digital products expose their file location before purchase",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F11",
+      "severity": "High",
+      "title": "Coin redemption trusts cached balances and client-supplied redemption amounts",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F12",
+      "severity": "High",
+      "title": "Doctor-only feed visibility is not enforced in database reads",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F13",
+      "severity": "Medium",
+      "title": "Feed poll UI has no voting workflow and conflicts with schema",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F14",
+      "severity": "Medium",
+      "title": "Quiz answers and scoring are client-controlled",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F15",
+      "severity": "Medium",
+      "title": "Quiz daily selection and streak progression do not implement their stated rules",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "F16",
+      "severity": "Medium",
+      "title": "User-type onboarding routes distinct roles into doctor registration",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E01",
+      "severity": "High",
+      "title": "Advertised typecheck command does not check application files",
+      "status": "open",
+      "preparedChange": "Application and config projects are targeted explicitly; a real compiler fixture proves the former empty-root false green. Full repository type debt remains unverified.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E02",
+      "severity": "Medium",
+      "title": "Unused payment helper has a syntax error hidden from the production build",
+      "status": "open",
+      "preparedChange": "Nested documentation comment repaired; changed file passes parser verification.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E03",
+      "severity": "High",
+      "title": "Database setup is split between migrations and hundreds of manual-script dependencies",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E04",
+      "severity": "High",
+      "title": "Migration history contains duplicate version prefixes and unsafe setup scripts",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E05",
+      "severity": "High",
+      "title": "Client calls backend functions that are absent from the repository",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E06",
+      "severity": "Medium",
+      "title": "Type safety is bypassed on a large scale and lint cannot act as a release gate",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E07",
+      "severity": "High",
+      "title": "Entity switching crashes because its provider is never mounted",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E08",
+      "severity": "High",
+      "title": "Branch context is unmounted and cannot define a reliable tenant boundary",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E09",
+      "severity": "Medium",
+      "title": "An unused booking helper calls React hooks from an ordinary async function",
+      "status": "open",
+      "preparedChange": "Dormant booking utility accepts injected services and no longer calls hooks; persistence/notification failure paths are tested.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E10",
+      "severity": "High",
+      "title": "Role definitions and patient/appointment models are fragmented",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E11",
+      "severity": "Medium",
+      "title": "Task tracking has competing stores, silent fallback and missing role scoping",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E12",
+      "severity": "Medium",
+      "title": "Appointment preparation listens to a field not defined by the booking schema",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "E13",
+      "severity": "High",
+      "title": "Public provider views inherit restrictions that can empty the directory",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O01",
+      "severity": "High",
+      "title": "Configured browser headers block integrations used by the code",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O02",
+      "severity": "High",
+      "title": "Netlify handlers mix CommonJS with an ES-module package",
+      "status": "open",
+      "preparedChange": "Five deployed Netlify entrypoints are now dependency-free ESM preview responders; native imports pass. Hosted bundling is deferred.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O03",
+      "severity": "High",
+      "title": "Delivery and notification integrations claim success without their external action",
+      "status": "open",
+      "preparedChange": "Exposed WhatsApp fake-success behavior is replaced by a 503 preview response. Courier/Supabase implementations are unchanged.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O04",
+      "severity": "Medium",
+      "title": "Current tests and CI cannot establish portal correctness",
+      "status": "open",
+      "preparedChange": "Automatic source-check workflow prepared. It has not run on GitHub; database and browser journey checks remain pending.",
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O05",
+      "severity": "High",
+      "title": "Locked dependencies have current vulnerability advisories",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O06",
+      "severity": "Medium",
+      "title": "Bundle structure and global UI create avoidable loading overhead",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O07",
+      "severity": "Medium",
+      "title": "SEO prerendering is disconnected from the default deploy and crawler rules conflict",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O08",
+      "severity": "Medium",
+      "title": "Admin layout and several interactive controls need accessibility/mobile work",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    },
+    {
+      "id": "O09",
+      "severity": "Medium",
+      "title": "Historical reports and setup documents are not reliable evidence of current readiness",
+      "status": "open",
+      "preparedChange": null,
+      "liveVerification": "deferred"
+    }
+  ]
+}

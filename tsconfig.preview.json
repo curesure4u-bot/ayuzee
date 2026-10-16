@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [
+    "src/vite-env.d.ts",
+    "src/components/common/FeaturePreview.tsx",
+    "src/components/common/PreviewForm.tsx",
+    "src/components/common/PublicPreviewHome.tsx",
+    "src/components/common/PublicPreviewNav.tsx",
+    "src/components/common/PreviewSafety.test.tsx",
+    "src/pages/Contact.tsx",
+    "src/components/site/Footer.tsx",
+    "src/components/site/SiteNav.tsx",
+    "src/lib/previewPolicy.ts",
+    "src/lib/razorpay.ts"
+  ]
+}
