@@ -2,15 +2,15 @@
   "repository": "curesure4u-bot/ayuzee",
   "branch": "Sai-Branch",
   "baseCommit": "4dc548a741ae0cee3418e66ca8ec80db14dfc137",
-  "reviewDate": "2026-10-15",
-  "scope": "Prepared local patch; not committed or deployed. Audit status remains open until its owning scope is verified.",
+  "reviewDate": "2026-10-16",
+  "scope": "Phase 0 source checkpoint pushed at 0c40486; Phase 1 role-boundary candidate tested locally only. Findings remain open pending owning scope and live verification.",
   "findings": [
     {
       "id": "S01",
       "severity": "Critical",
       "title": "Users can grant themselves administrator roles",
       "status": "open",
-      "preparedChange": null,
+      "preparedChange": "Non-applied SQL candidate replaces role policies, limits reads to owner and rejects untrusted role mutations including tested legacy definer RPCs. Fourteen local PostgreSQL scenarios passed; no hosted schema or roles changed.",
       "liveVerification": "deferred"
     },
     {

@@ -2,7 +2,7 @@
   "localReviewDate": "2026-10-16",
   "timezone": "Asia/Kolkata",
   "baseCommit": "4dc548a741ae0cee3418e66ca8ec80db14dfc137",
-  "workspace": "complete Git checkout on Sai-Branch; local preparation only; push requires explicit instruction",
+  "workspace": "Canonical Git checkout on Sai-Branch; Phase 0 source pushed, Phase 1 preparation remains local",
   "tools": {
     "node": "22.19.0",
     "repositoryDeclaredTypeScript": "^5.8.3",
@@ -81,8 +81,53 @@
     "previewTypecheck": "passed: tsconfig.preview.json covers preview UI entrypoints and their imports; does not replace the full application check"
   },
   "phase0ExitCondition": "not passed",
-  "phase1Started": false,
+  "phase1Started": true,
   "canonicalLocalCheckout": "/Users/sai/Documents/Codex/2026-10-14/alright-im-fine-with-the-plan/work/ayuzee",
-  "publication": "Phase 0 source push authorized conditionally on 16 October; GitHub integration write probe returned 403; ordinary Git remote check timed out; no push confirmed",
-  "readiness": "bounded preview source follow-up tested and reviewed; whole-application type/lint debt, dependency advisories and deferred staging/backend verification remain open; not a functional release"
+  "publication": {
+    "phase0": "pushed and independently verified",
+    "remoteHead": "0c404862561b7333c1e0d677e19fb2667ab921e2",
+    "branch": "Sai-Branch",
+    "netlifySkipMarker": "[skip netlify]",
+    "liveDeploymentVerified": false,
+    "phase1": "local only; not pushed"
+  },
+  "readiness": "bounded preview source follow-up tested and reviewed; whole-application type/lint debt, dependency advisories and deferred staging/backend verification remain open; not a functional release",
+  "phase1": {
+    "scope": "Phase 1 task 1, first bounded subtask: S01 role assignment",
+    "databaseCandidate": "supabase/review-candidates/phase1-account-role-boundary.sql",
+    "appliedToHostedDatabase": false,
+    "checks": {
+      "postgresScenariosPassed": 14,
+      "failed": 0,
+      "engine": "@electric-sql/pglite 0.5.10 (development only)",
+      "regressionTests": {
+        "phase0NodeTests": 15,
+        "endpointTests": 2,
+        "vitestTests": 23,
+        "failed": 0
+      },
+      "lockfileReview": "Only @electric-sql/pglite 0.5.10 added; all pre-existing locked package entries unchanged",
+      "workflowSyntax": "passed host Ruby YAML parse; fixture job present and full application check retained",
+      "dependencyAudit": {
+        "affectedPackageEntries": 51,
+        "critical": 2,
+        "high": 20,
+        "moderate": 28,
+        "low": 1,
+        "newEngineAdvisory": false,
+        "exitCode": 1,
+        "passed": false
+      }
+    },
+    "remaining": "Private profiles, protected doctor fields, privileged handler authorization, signup/verification, session/cache handling, recovery, onboarding and abuse/accessibility checks remain pending. Staging and direct HTTP/API verification remain deferred."
+  },
+  "phase0RemoteChecks": {
+    "commit": "0c404862561b7333c1e0d677e19fb2667ab921e2",
+    "runUrl": "https://github.com/curesure4u-bot/ayuzee/actions/runs/38847630240",
+    "preview-safety": "success",
+    "production-build": "success",
+    "config-typecheck": "success",
+    "dependency-advisories": "failure",
+    "application-typecheck": "cancelled at ten-minute timeout; no passing verdict"
+  }
 }

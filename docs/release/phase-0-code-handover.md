@@ -1,11 +1,20 @@
 # Phase 0 code updates — hosting deferred
 
+**Current status, 16 October:** Phase 0 source commits were pushed to `Sai-Branch`
+and independently verified at `0c404862561b7333c1e0d677e19fb2667ab921e2`.
+The latest commit includes `[skip netlify]`. This is a source checkpoint;
+Phase 0's functional release exit condition is still open. Sai authorized
+Phase 1 preparation; its first role-boundary candidate is local only, described
+in [phase-1-account-permissions.md](./phase-1-account-permissions.md).
+Earlier dated observations below are retained as history, not current blockers.
+
 Prepared against `curesure4u-bot/ayuzee`, `Sai-Branch`, commit
 `4dc548a741ae0cee3418e66ca8ec80db14dfc137`. Date: 15 October 2026.
 
 Sai requested deferring Netlify/Supabase setup while progressing the remaining
 Phase 0 code work. No live settings, credentials, SQL, accounts or provider
-configuration were changed. Phase 1 has not started.
+configuration were changed during that preparation. Phase 1 subsequently began
+with Sai's permission on 16 October; no hosted database changes were made.
 
 ## Working directory and approval
 
@@ -21,8 +30,9 @@ repository in `work/archive`; they are not part of this change.
 
 Future chats need this folder selected/accessible to read the same files.
 The repository and parent workspace `AGENTS.md` files record this agreement.
-Prepare local work only: **do not push, merge, publish or deploy until Sai
-explicitly commands it.** Permission for Phase 1 is separately required.
+Sai authorized the Phase 0 source push and Phase 1 preparation on 16 October.
+**Do not push Phase 1, merge, publish or deploy without a further command.**
+Permission is required before starting Phase 2 or later phases.
 
 ## Prepared changes
 
@@ -200,6 +210,14 @@ Sai authorized a reviewed Phase 0 source push and then Phase 1 work on 16 Octobe
 Use `[skip netlify]` on the latest source commit to skip Netlify Git-triggered
 branch/production deployment while administration remains deferred. This is a
 source checkpoint, not completion of Phase 0's functional release exit condition.
-The GitHub integration write probe returned HTTP 403 and an ordinary Git remote
-query timed out; no push has been confirmed. Do not mark publication successful
-without verifying the remote branch head. Do not publish Phase 1 automatically.
+The GitHub integration write probe returned HTTP 403 and an initial Git remote
+query timed out. Ordinary Git subsequently pushed both Phase 0 commits
+successfully; the GitHub branch API independently confirmed the full SHA above.
+Do not publish Phase 1 automatically.
+
+The pushed source's GitHub Actions run
+[38847630240](https://github.com/curesure4u-bot/ayuzee/actions/runs/38847630240)
+completed with preview-safety, production-build and config-typecheck passing.
+Dependency-advisories failed, and the full application typecheck was cancelled
+at its ten-minute limit. The workflow is not green; these release issues remain
+visible. No Netlify dashboard deployment state has been independently inspected.

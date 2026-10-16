@@ -10,6 +10,9 @@
 - Sai authorized completing the Phase 0 source update and beginning Phase 1
   on 16 October 2026, after analysing modularity. Read the release handover,
   validation record, architecture assessment and audit before implementation.
+  Read `docs/release/phase-1-account-permissions.md` for current Phase 1 progress:
+  the S01 SQL candidate is fixture-tested but unapplied; subsequent account
+  permission repairs remain pending. Do not treat a candidate as a live fix.
   Obtain explicit permission before starting Phase 2 or later phases.
 - Netlify/Supabase administration, hosted staging, secrets, deployments and
   database changes are deferred while Sai consults the administrator. Local

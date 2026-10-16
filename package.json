@@ -32,7 +32,8 @@
     "test:phase0": "node --test scripts/release-baseline.test.mjs scripts/phase0-code.test.mjs",
     "check:functions": "node --test scripts/phase0-functions.test.mjs",
     "lint:phase0": "eslint src/lib/previewPolicy.ts src/lib/razorpay.ts src/components/common/FeaturePreview.tsx src/components/common/PreviewForm.tsx src/components/common/PublicPreviewHome.tsx src/components/common/PublicPreviewNav.tsx src/components/hms/BookAppointmentAction.ts src/App.tsx src/pages/Index.tsx src/pages/Contact.tsx src/components/site/Footer.tsx src/components/site/SiteNav.tsx src/components/common/PreviewSafety.test.tsx",
-    "typecheck:preview": "tsc -p tsconfig.preview.json --noEmit"
+    "typecheck:preview": "tsc -p tsconfig.preview.json --noEmit",
+    "test:account-role-boundary": "node --test scripts/account-role-boundary.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -100,6 +101,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@electric-sql/pglite": "0.5.10",
     "@eslint/js": "^9.32.0",
     "@playwright/test": "^1.61.0",
     "@tailwindcss/typography": "^0.5.19",
