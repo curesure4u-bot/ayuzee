@@ -777,6 +777,7 @@ export const AppRoutes = () => (
               <Route path="doctor-timeline" element={withSuspense(<P.HmsDoctorTimeline />)} />
               <Route path="doctor-leave" element={withSuspense(<P.HmsDoctorLeave />)} />
               <Route path="spine-ayush" element={withSuspense(<P.HmsSpineAyush />)} />
+              <Route path="spine-ayush-v2" element={withSuspense(<P.HmsSpineAyushV2 />)} />
               <Route path="spine-modules" element={withSuspense(<P.HmsSpineAyushModules />)} />
               <Route path="spine-modules/:moduleId" element={withSuspense(<P.HmsSpineAyushModuleDetail />)} />
               <Route path="spine-therapies" element={withSuspense(<P.HmsSpineIntegrativeTherapies />)} />

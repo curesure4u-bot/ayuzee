@@ -367,7 +367,8 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-chief-physician", label: "Chief Physician Suite", icon: Crown },
 
     { divider: "Daily Operations", to: "/hms/spine-command-center", label: "⭐ Daily Command Center", icon: LayoutDashboard },
-    { to: "/hms/spine-ayush", label: "Spine Dashboard", icon: Home },
+    { to: "/hms/spine-ayush", label: "Spine Dashboard (V1)", icon: Home },
+    { to: "/hms/spine-ayush-v2", label: "Spine Dashboard V2 ✨ NEW", icon: Home },
     { to: "/hms/spine-checklists", label: "SOP & Safety Checklists", icon: ClipboardCheck },
 
     { divider: "Patient Journey", to: "/hms/spine-ayush?tab=assessment", label: "AI Assessment (₹199)", icon: Brain },
