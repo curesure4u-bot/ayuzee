@@ -778,6 +778,16 @@ export const AppRoutes = () => (
               <Route path="doctor-leave" element={withSuspense(<P.HmsDoctorLeave />)} />
               <Route path="spine-ayush" element={withSuspense(<P.HmsSpineAyush />)} />
               <Route path="spine-ayush-v2" element={withSuspense(<P.HmsSpineAyushV2 />)} />
+              
+              {/* V2 Routes */}
+              <Route path="spine-ayush-v2/dashboard" element={withSuspense(<P.V2Dashboard />)} />
+              <Route path="spine-ayush-v2/assessment" element={withSuspense(<P.V2Assessment />)} />
+              <Route path="spine-ayush-v2/examination" element={withSuspense(<P.V2Examination />)} />
+              <Route path="spine-ayush-v2/patients" element={withSuspense(<P.V2Patients />)} />
+              <Route path="spine-ayush-v2/protocols" element={withSuspense(<P.V2Protocols />)} />
+              <Route path="spine-ayush-v2/packages" element={withSuspense(<P.V2Packages />)} />
+              <Route path="spine-ayush-v2/outcomes" element={withSuspense(<P.V2Outcomes />)} />
+              <Route path="spine-ayush-v2/franchise" element={withSuspense(<P.V2Franchise />)} />
               <Route path="spine-modules" element={withSuspense(<P.HmsSpineAyushModules />)} />
               <Route path="spine-modules/:moduleId" element={withSuspense(<P.HmsSpineAyushModuleDetail />)} />
               <Route path="spine-therapies" element={withSuspense(<P.HmsSpineIntegrativeTherapies />)} />

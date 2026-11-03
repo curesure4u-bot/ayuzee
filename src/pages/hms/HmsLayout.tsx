@@ -31,6 +31,7 @@ const primaryTabs = [
   { id: "mis", label: "MIS", icon: BarChart3 },
   { id: "ayush", label: "AYUSH", icon: Leaf },
   { id: "spine", label: "Spine", icon: Activity },
+  { id: "spinev2", label: "Spine V2", icon: Sparkles },
   { id: "more", label: "More", icon: Menu },
 ];
 
@@ -453,7 +454,22 @@ const tabSubItems: Record<string, { divider?: string; to: string; label: string;
     { to: "/hms/spine-ayush?tab=marketing", label: "Funnel & Marketing", icon: Globe },
     { to: "/hms/spine-ayush?tab=kpis", label: "Franchise KPIs", icon: BarChart3 },
     { to: "/hms/spine-cashflow-game", label: "🎲 Spine Cashflow Game", icon: Dumbbell },
+  ],
 
+  // Spine V2 Tab
+  spinev2: [
+    { divider: "Spine V2 Dashboard", to: "/hms/spine-ayush-v2/dashboard", label: "V2 Dashboard", icon: Home },
+    { to: "/hms/spine-ayush-v2/assessment", label: "AI Assessment", icon: Brain },
+    { to: "/hms/spine-ayush-v2/examination", label: "7-System Examination", icon: Stethoscope },
+    { to: "/hms/spine-ayush-v2/patients", label: "Patient Management", icon: Users },
+    { to: "/hms/spine-ayush-v2/protocols", label: "Treatment Protocols", icon: Target },
+    { to: "/hms/spine-ayush-v2/packages", label: "Packages & Pricing", icon: Package },
+    { to: "/hms/spine-ayush-v2/outcomes", label: "Outcomes & Tracking", icon: Activity },
+    { to: "/hms/spine-ayush-v2/franchise", label: "Franchise KPIs", icon: Building2 },
+  ],
+
+  // Legacy Productivity
+  Productivity: [
     { divider: "Productivity", to: "/task-tracker", label: "Task Tracker", icon: ClipboardList },
   ],
 };
@@ -664,6 +680,7 @@ const HmsLayout = () => {
     else if (
       p.includes("/hms/spine-")
     ) { setActiveTab("spine"); }
+    else if (p.includes("/hms/spine-ayush-v2")) { setActiveTab("spinev2"); }
 
     // Default: dashboard (for settings, masters, branch management, etc.)
     else { setActiveTab("dashboard"); }
@@ -713,7 +730,7 @@ const HmsLayout = () => {
           {primaryTabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => { if (tab.id === "more") setMoreOpen(!moreOpen); else { setActiveTab(tab.id); setMoreOpen(false); if (tab.id === "spine") navigate("/hms/spine-ayush"); }}}
+              onClick={() => { if (tab.id === "more") setMoreOpen(!moreOpen); else { setActiveTab(tab.id); setMoreOpen(false); if (tab.id === "spine") navigate("/hms/spine-ayush"); if (tab.id === "spinev2") navigate("/hms/spine-ayush-v2/dashboard"); }}}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition ${activeTab === tab.id ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:bg-muted"}`}
             >
               <tab.icon className="h-3.5 w-3.5" />
@@ -798,7 +815,7 @@ const HmsLayout = () => {
         {primaryTabs.slice(0, 5).map((tab) => (
           <button
             key={tab.id}
-            onClick={() => { setActiveTab(tab.id); setMoreOpen(false); if (tab.id === "spine") navigate("/hms/spine-ayush"); }}
+            onClick={() => { setActiveTab(tab.id); setMoreOpen(false); if (tab.id === "spine") navigate("/hms/spine-ayush"); if (tab.id === "spinev2") navigate("/hms/spine-ayush-v2/dashboard"); }}
             className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded transition ${activeTab === tab.id ? "text-primary" : "text-muted-foreground"}`}
           >
             <tab.icon className="h-4 w-4" />

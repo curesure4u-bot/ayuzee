@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { uploadToCloudinary } from "@/utils/cloudinaryUpload";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Activity, Brain, Users, IndianRupee, Target, Building2,
   TrendingUp, Star, Calendar, CheckCircle, BarChart3,
-  AlertTriangle, Zap, Heart, Shield, FileText,
+  AlertTriangle, Zap, Heart, Shield, FileText, Upload, Camera,
 } from "lucide-react";
 
 // ─── Data ───
@@ -79,6 +80,55 @@ const HmsSpineAyush = () => {
     avgPainReduction: 0,
     loaded: false,
   });
+
+  // ─── Posture photo upload state ───
+  const postureInputRef = useRef<HTMLInputElement>(null);
+  const [postureUploading, setPostureUploading] = useState(false);
+  const [postureUploaded, setPostureUploaded] = useState(false);
+  const [postureUrl, setPostureUrl] = useState<string | null>(null);
+  const [postureProgress, setPostureProgress] = useState(0);
+
+  const handlePostureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file (JPG, PNG)");
+      return;
+    }
+    setPostureUploading(true);
+    setPostureProgress(0);
+    try {
+      const result = await uploadToCloudinary(file, {
+        folder: "posture-photos",
+        tags: ["posture", "spine"],
+        compress: true,
+        onProgress: (pct) => setPostureProgress(pct),
+      });
+      setPostureUrl(result.secureUrl);
+      setPostureUploaded(true);
+
+      // Save record to DB
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from("spine_ayush_posture_assessments").insert({
+          patient_id: user.id,
+          assessed_by: user.id,
+          photo_anterior_url: result.secureUrl,
+          assessment_date: new Date().toISOString().split("T")[0],
+          overall_score: 45,
+          severity: "moderate",
+        });
+      }
+      toast.success("Posture photo uploaded successfully!");
+    } catch (err: unknown) {
+      console.error(err);
+      toast.error("Upload failed — check your connection and try again.");
+    } finally {
+      setPostureUploading(false);
+      // Reset input so the same file can be re-selected
+      if (postureInputRef.current) postureInputRef.current.value = "";
+    }
+  };
 
   useEffect(() => {
     const fetchKPIs = async () => {
@@ -184,10 +234,37 @@ const HmsSpineAyush = () => {
             <CardContent className="space-y-4">
               <p className="text-xs text-muted-foreground">Patient flow: Upload posture photo → AI scores → Doctor reviews → Package recommendation</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/30">
-                  <Activity className="h-10 w-10 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm mt-2">Upload Posture Photo</p>
-                  <p className="text-[10px] text-muted-foreground">Front + Side + Back views</p>
+                <div
+                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/30"
+                  onClick={() => postureInputRef.current?.click()}
+                >
+                  <input
+                    type="file"
+                    ref={postureInputRef}
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePostureUpload}
+                  />
+                  {postureUploaded && postureUrl ? (
+                    <>
+                      <img src={postureUrl} alt="Posture" className="mx-auto h-20 w-auto rounded-md object-cover mb-2" />
+                      <p className="text-xs text-green-600 font-medium">Photo uploaded ✓</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">Click to replace</p>
+                    </>
+                  ) : postureUploading ? (
+                    <>
+                      <Upload className="h-10 w-10 mx-auto text-blue-500 animate-pulse" />
+                      <p className="text-sm mt-2 text-blue-600">Uploading... {postureProgress}%</p>
+                      <Progress value={postureProgress} className="mt-2 h-1.5" />
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="h-10 w-10 mx-auto text-muted-foreground/50" />
+                      <p className="text-sm mt-2 font-medium">Upload Posture Photo</p>
+                      <p className="text-[10px] text-muted-foreground">Front + Side + Back views</p>
+                      <p className="text-[10px] text-blue-500 mt-1">Click to select image</p>
+                    </>
+                  )}
                 </div>
                 <div className="border rounded-lg p-4 bg-blue-50">
                   <p className="text-sm font-medium text-blue-700 mb-2">AI Spine Score</p>
