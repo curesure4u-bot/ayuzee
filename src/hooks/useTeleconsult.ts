@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 
-type TeleconsultView = { id: string; patient: string; phone: string; doctor: string; scheduledAt: string; type: string; payment: string; status: string };
+type TeleconsultView = { id: string; patient: string; phone: string; doctor: string; scheduledAt: string; type: string; payment: string; status: string; duration?: number; notes?: string };
 
 export type CreateTeleconsultParams = {
   patient_name: string;

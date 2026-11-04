@@ -309,7 +309,7 @@ const TherapistSessionNotes = () => {
       sender_type: "therapist",
       sender_id: therapist.id,
       recipient_type: "doctor",
-      recipient_id: payload.doctor_id || "system",
+      recipient_id: selectedSession.doctor_id || "system",
       session_id: selectedSession.id,
       subject: `Session Note: ${maskPatientName(selectedSession.patient_name)} — ${THERAPY_TYPES.find(t => t.value === form.therapy_type)?.label}`,
       message: summary,

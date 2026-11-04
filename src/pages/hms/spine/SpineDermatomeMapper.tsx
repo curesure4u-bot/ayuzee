@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Brain, Search, Zap, Heart, Activity, Target, Eye,
   ArrowRight, ChevronDown, ChevronUp, Stethoscope,
-  Leaf, Shield, Users, BookOpen, Lightbulb,
+  Leaf, Shield, Users, BookOpen, Lightbulb, Grip,
 } from "lucide-react";
 
 // ─── Comprehensive Dermatome Data ───

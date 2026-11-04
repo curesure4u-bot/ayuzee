@@ -38,7 +38,7 @@ export default function SupplierPayment() {
         if (t.status === "pending" || t.status === "approved") map[name].pending++;
       });
 
-      setSuppliers(Object.entries(map).map(([supplier, d]) => ({
+      setSuppliers(Object.entries(map).map<SupplierPaymentInfo>(([supplier, d]) => ({
         supplier,
         totalOrders: d.total,
         totalQty: d.qty,

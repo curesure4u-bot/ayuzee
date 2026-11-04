@@ -197,7 +197,7 @@ const PatientHealthLocker = () => {
                       <div className="flex items-center gap-2">
                         <p className="font-medium text-sm truncate">{doc.file_name}</p>
                         {doc.is_starred && <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500 shrink-0" />}
-                        {doc.is_offline_cached && <Wifi className="h-3 w-3 text-green-500 shrink-0" title="Available offline" />}
+                        {doc.is_offline_cached && <span title="Available offline"><Wifi className="h-3 w-3 text-green-500 shrink-0" /></span>}
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {doc.source_clinic} · {doc.document_date} · {doc.file_size}

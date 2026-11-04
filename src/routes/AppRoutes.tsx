@@ -551,12 +551,12 @@ export const AppRoutes = () => (
                 <Route path="invoice/pharmacy" element={withSuspense(<P.HmsStockPharmacyInvoice />)} />
                 <Route path="credit/supplier" element={withSuspense(<P.HmsStockCreditSupplier />)} />
                 <Route path="credit/patient" element={withSuspense(<P.HmsStockCreditPatient />)} />
-                <Route path="cancel/sale-bill" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/return-bill" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/purchase-order" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/grn" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/goods-return" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/issue" element={withSuspense(<P.HmsStockCancelOperations />)} />
+                <Route path="cancel/sale-bill" element={withSuspense(<P.HmsStockCancelOperations cancelType="Sale Bill" />)} />
+                <Route path="cancel/return-bill" element={withSuspense(<P.HmsStockCancelOperations cancelType="Return Bill" />)} />
+                <Route path="cancel/purchase-order" element={withSuspense(<P.HmsStockCancelOperations cancelType="Purchase Order" />)} />
+                <Route path="cancel/grn" element={withSuspense(<P.HmsStockCancelOperations cancelType="Goods Received Note" />)} />
+                <Route path="cancel/goods-return" element={withSuspense(<P.HmsStockCancelOperations cancelType="Goods Returned Note" />)} />
+                <Route path="cancel/issue" element={withSuspense(<P.HmsStockCancelOperations cancelType="Issue" />)} />
                 <Route path="ai/reorder" element={withSuspense(<P.HmsStockAISmartReorder />)} />
                 <Route path="ai/expiry" element={withSuspense(<P.HmsStockAIExpiry />)} />
                 <Route path="ai/qr-tools" element={withSuspense(<P.HmsStockQRTools />)} />

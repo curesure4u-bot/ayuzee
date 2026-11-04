@@ -61,7 +61,7 @@ const StudentJobs = () => {
       uid ? (supabase as any).from("job_applications").select("*, job_listings(*)").eq("user_id", uid).order("created_at", { ascending: false }) : Promise.resolve({ data: [] }),
     ]);
 
-    setJobs((jobRes.data ?? []) as Job[]);
+    setJobs((jobRes.data ?? []) as unknown as Job[]);
     setApplications(appRes.data ?? []);
     setForm((current) => ({ ...current, applicant_name: profileRes.data?.full_name ?? "", applicant_phone: profileRes.data?.phone ?? "", applicant_email: sessionData.session?.user.email ?? "" }));
     setLoading(false);

@@ -35,7 +35,7 @@ const emptyForm = {
   person_in_charge: "", start_date: "", due_date: "", kanban_category: "Backlog",
   importance: "Not Important" as Importance, urgency: "Not Urgent" as Urgency,
   progress: 0, notes: "", is_completed: false, completed_at: null,
-  gantt_color: "", project_name: "", role_context: "general" as const,
+  gantt_color: "", project_name: "", role_context: "general" as VariableTask["role_context"],
 };
 
 const TaskTrackerVariable = ({ tasks, settings, onAdd, onUpdate, onDelete }: Props) => {
