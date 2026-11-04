@@ -36,7 +36,7 @@ const Cart = () => {
       const { data: sess } = await supabase.auth.getSession();
       if (!sess.session) return;
       const uid = sess.session.user.id;
-      const { data } = await supabase.from("gamification_points").select("balance").eq("user_id", uid).maybeSingle();
+      const { data } = await (supabase as any).from("gamification_points").select("balance").eq("user_id", uid).maybeSingle();
       if (data) setRewardPoints((data as any).balance ?? 0);
     })();
   }, []);

@@ -105,7 +105,7 @@ export default function SpineChecklist({
         checked: checked.has(i),
       }));
       const completedItems = template.items.filter((_, i) => checked.has(i)).length;
-      const { error } = await (supabase.from("spine_checklists") as any).insert({
+      const { error } = await (supabase as any).from("spine_checklists").insert({
         owner_id: user?.id || null,
         checklist_type: template.type,
         checklist_title: template.title,

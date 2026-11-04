@@ -70,7 +70,7 @@ const Bulk = () => {
         setTiers(map);
       }
       // Load volume discount slabs
-      const { data: slabData } = await supabase.from("volume_discount_slabs").select("*").eq("is_active", true).order("sort_order");
+      const { data: slabData } = await (supabase as any).from("volume_discount_slabs").select("*").eq("is_active", true).order("sort_order");
       setSlabs((slabData ?? []) as VolumeSlab[]);
       setLoading(false);
     };
