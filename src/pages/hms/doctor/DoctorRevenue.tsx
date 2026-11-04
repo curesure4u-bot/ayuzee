@@ -2,9 +2,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { IndianRupee, TrendingUp, Calendar, CreditCard, PieChart, Loader2 } from "lucide-react";
 import { useDoctorRevenue } from "@/hooks/useDoctorRevenue";
+import { useEffect, useState } from "react";
+import type { DoctorRevenueData } from "@/hooks/useDoctorRevenue";
 
 const DoctorRevenue = () => {
-  const { kpis, breakdown, dailyEarnings, payoutHistory, loading, error } = useDoctorRevenue();
+  const { getAllDoctorsRevenue } = useDoctorRevenue();
+  const [revenues, setRevenues] = useState<DoctorRevenueData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    void getAllDoctorsRevenue(today.slice(0, 8) + "01", today)
+      .then(setRevenues)
+      .catch((err: unknown) => setError(err instanceof Error ? err.message : "Could not load revenue"))
+      .finally(() => setLoading(false));
+  }, []);
+  const money = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+  const total = revenues.reduce((s, r) => s + r.totalRevenue, 0);
+  const kpis = [
+    { label: "Revenue", formatted: money(total), trend: "" },
+    { label: "Commission", formatted: money(revenues.reduce((s, r) => s + r.commission, 0)), trend: "" },
+    { label: "Consultations", formatted: String(revenues.reduce((s, r) => s + r.consultationCount, 0)), trend: "" },
+  ];
+  const breakdown = revenues.map((r) => ({ category: r.doctorName, formatted: money(r.totalRevenue), percentage: total ? Math.round(r.totalRevenue / total * 100) : 0, color: "bg-primary" }));
+  const dailyEarnings: { day: string; amount: number }[] = [];
+  const payoutHistory: { id: string; date: string; formatted: string; method: string; status: string }[] = [];
 
   const kpiIcons = [IndianRupee, TrendingUp, Calendar];
 

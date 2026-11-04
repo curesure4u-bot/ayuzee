@@ -1,4 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+
+type TeleconsultView = { id: string; patient: string; phone: string; doctor: string; scheduledAt: string; type: string; payment: string; status: string };
 
 export type CreateTeleconsultParams = {
   patient_name: string;
@@ -10,6 +13,23 @@ export type CreateTeleconsultParams = {
 };
 
 export function useTeleconsult() {
+  const [sessions, setSessions] = useState<TeleconsultView[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const refresh = async () => {
+    try {
+      const rows = await getTodaySessions();
+      setSessions(rows.map((r: any) => ({ id: r.id, patient: r.patient_name, phone: r.patient_phone || "", doctor: r.doctor_name, scheduledAt: r.scheduled_time || r.created_at, type: r.type || "", payment: r.payment || "", status: r.status })));
+      setError(null);
+    } catch (err) { setError(err instanceof Error ? err.message : "Could not load sessions"); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { void refresh(); }, []);
+  const scheduleSession = async (form: Omit<TeleconsultView, "id" | "status">) => {
+    const result = await createSession({ patient_name: form.patient, patient_phone: form.phone, doctor_name: form.doctor, scheduled_time: form.scheduledAt });
+    await refresh();
+    return result;
+  };
   const createSession = async (params: CreateTeleconsultParams) => {
     const roomId = `tc-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
 
@@ -99,5 +119,5 @@ export function useTeleconsult() {
     return data || [];
   };
 
-  return { createSession, doctorJoin, patientJoin, endSession, rateSession, getTodaySessions };
+  return { sessions, loading, error, waiting: sessions.filter((s) => s.status === "scheduled").length, completed: sessions.filter((s) => s.status === "completed").length, totalToday: sessions.length, scheduleSession, createSession, doctorJoin, patientJoin, endSession, rateSession, getTodaySessions };
 }
