@@ -3737,6 +3737,7 @@ export type Database = {
           hms_access_granted_at: string | null
           hms_access_granted_by: string | null
           hms_branch: string | null
+          hms_branch_id: string | null
           hms_center_type: string | null
           id: string
           in_clinic_available: boolean
@@ -3778,6 +3779,7 @@ export type Database = {
           hms_access_granted_at?: string | null
           hms_access_granted_by?: string | null
           hms_branch?: string | null
+          hms_branch_id?: string | null
           hms_center_type?: string | null
           id?: string
           in_clinic_available?: boolean
@@ -3819,6 +3821,7 @@ export type Database = {
           hms_access_granted_at?: string | null
           hms_access_granted_by?: string | null
           hms_branch?: string | null
+          hms_branch_id?: string | null
           hms_center_type?: string | null
           id?: string
           in_clinic_available?: boolean
@@ -3839,7 +3842,15 @@ export type Database = {
           verification_status?: string
           video_available?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "doctors_hms_branch_id_fkey"
+            columns: ["hms_branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       email_send_log: {
         Row: {
@@ -5531,6 +5542,8 @@ export type Database = {
           manager_name: string | null
           notes: string | null
           opened_on: string | null
+          owner_doctor_id: string | null
+          owner_type: string
           phone: string | null
           pincode: string | null
           state: string | null
@@ -5548,6 +5561,8 @@ export type Database = {
           manager_name?: string | null
           notes?: string | null
           opened_on?: string | null
+          owner_doctor_id?: string | null
+          owner_type?: string
           phone?: string | null
           pincode?: string | null
           state?: string | null
@@ -5565,6 +5580,8 @@ export type Database = {
           manager_name?: string | null
           notes?: string | null
           opened_on?: string | null
+          owner_doctor_id?: string | null
+          owner_type?: string
           phone?: string | null
           pincode?: string | null
           state?: string | null
@@ -6488,6 +6505,54 @@ export type Database = {
           settlement_type?: string
         }
         Relationships: []
+      }
+      hms_staff: {
+        Row: {
+          branch_id: string
+          department_id: string | null
+          id: string
+          invited_by: string | null
+          joined_at: string
+          role: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          branch_id: string
+          department_id?: string | null
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          role: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string
+          department_id?: string | null
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          role?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hms_staff_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hms_staff_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "hms_departments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hms_stores: {
         Row: {
@@ -13687,6 +13752,7 @@ export type Database = {
       }
       therapy_plans: {
         Row: {
+          branch_id: string | null
           confirmed_at: string | null
           created_at: string
           doctor_user_id: string
@@ -13707,6 +13773,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          branch_id?: string | null
           confirmed_at?: string | null
           created_at?: string
           doctor_user_id: string
@@ -13727,6 +13794,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          branch_id?: string | null
           confirmed_at?: string | null
           created_at?: string
           doctor_user_id?: string
@@ -13747,6 +13815,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "therapy_plans_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "therapy_plans_partner_id_fkey"
             columns: ["partner_id"]
@@ -14299,7 +14374,9 @@ export type Database = {
           bill_no: string | null
           bill_series_id: string | null
           bill_type: string
+          branch_id: string | null
           cgst_amount: number
+          claim_reference: string | null
           clinic_address: string | null
           clinic_name: string | null
           created_at: string
@@ -14307,12 +14384,14 @@ export type Database = {
           currency_code: string | null
           discount: number
           discount_category_id: string | null
+          discount_percent: number
           doctor_user_id: string
           gst_amount: number
           gst_rate: number
           gstin: string | null
           id: string
           igst_amount: number
+          insurance_partner_id: string | null
           is_interstate: boolean
           notes: string | null
           patient_gstin: string | null
@@ -14322,9 +14401,13 @@ export type Database = {
           payment_mode: string | null
           payment_reference: string | null
           rate_plan_id: string | null
+          settled_amount: number | null
+          settled_at: string | null
+          settlement_status: string
           sgst_amount: number
           status: string
           subtotal: number
+          tax_amount: number
           total: number
           updated_at: string
           whatsapp_sent_at: string | null
@@ -14334,7 +14417,9 @@ export type Database = {
           bill_no?: string | null
           bill_series_id?: string | null
           bill_type?: string
+          branch_id?: string | null
           cgst_amount?: number
+          claim_reference?: string | null
           clinic_address?: string | null
           clinic_name?: string | null
           created_at?: string
@@ -14342,12 +14427,14 @@ export type Database = {
           currency_code?: string | null
           discount?: number
           discount_category_id?: string | null
+          discount_percent?: number
           doctor_user_id: string
           gst_amount?: number
           gst_rate?: number
           gstin?: string | null
           id?: string
           igst_amount?: number
+          insurance_partner_id?: string | null
           is_interstate?: boolean
           notes?: string | null
           patient_gstin?: string | null
@@ -14357,9 +14444,13 @@ export type Database = {
           payment_mode?: string | null
           payment_reference?: string | null
           rate_plan_id?: string | null
+          settled_amount?: number | null
+          settled_at?: string | null
+          settlement_status?: string
           sgst_amount?: number
           status?: string
           subtotal?: number
+          tax_amount?: number
           total?: number
           updated_at?: string
           whatsapp_sent_at?: string | null
@@ -14369,7 +14460,9 @@ export type Database = {
           bill_no?: string | null
           bill_series_id?: string | null
           bill_type?: string
+          branch_id?: string | null
           cgst_amount?: number
+          claim_reference?: string | null
           clinic_address?: string | null
           clinic_name?: string | null
           created_at?: string
@@ -14377,12 +14470,14 @@ export type Database = {
           currency_code?: string | null
           discount?: number
           discount_category_id?: string | null
+          discount_percent?: number
           doctor_user_id?: string
           gst_amount?: number
           gst_rate?: number
           gstin?: string | null
           id?: string
           igst_amount?: number
+          insurance_partner_id?: string | null
           is_interstate?: boolean
           notes?: string | null
           patient_gstin?: string | null
@@ -14392,9 +14487,13 @@ export type Database = {
           payment_mode?: string | null
           payment_reference?: string | null
           rate_plan_id?: string | null
+          settled_amount?: number | null
+          settled_at?: string | null
+          settlement_status?: string
           sgst_amount?: number
           status?: string
           subtotal?: number
+          tax_amount?: number
           total?: number
           updated_at?: string
           whatsapp_sent_at?: string | null
@@ -14408,10 +14507,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "vaidya_bills_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "vaidya_bills_discount_category_id_fkey"
             columns: ["discount_category_id"]
             isOneToOne: false
             referencedRelation: "hms_discount_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaidya_bills_insurance_partner_id_fkey"
+            columns: ["insurance_partner_id"]
+            isOneToOne: false
+            referencedRelation: "hms_insurance_partners"
             referencedColumns: ["id"]
           },
           {
@@ -14432,6 +14545,7 @@ export type Database = {
           appointment_id: string | null
           assessment: string | null
           audio_url: string | null
+          branch_id: string | null
           cds_suggestions: Json | null
           chief_complaint: string | null
           created_at: string
@@ -14460,6 +14574,7 @@ export type Database = {
           appointment_id?: string | null
           assessment?: string | null
           audio_url?: string | null
+          branch_id?: string | null
           cds_suggestions?: Json | null
           chief_complaint?: string | null
           created_at?: string
@@ -14488,6 +14603,7 @@ export type Database = {
           appointment_id?: string | null
           assessment?: string | null
           audio_url?: string | null
+          branch_id?: string | null
           cds_suggestions?: Json | null
           chief_complaint?: string | null
           created_at?: string
@@ -14508,7 +14624,15 @@ export type Database = {
           visit_date?: string
           vitals?: Json | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_consultations_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaidya_hijama_assessments: {
         Row: {
@@ -14776,6 +14900,7 @@ export type Database = {
       vaidya_inventory: {
         Row: {
           batch_no: string | null
+          branch_id: string | null
           brand: string | null
           created_at: string
           doctor_user_id: string
@@ -14792,6 +14917,7 @@ export type Database = {
         }
         Insert: {
           batch_no?: string | null
+          branch_id?: string | null
           brand?: string | null
           created_at?: string
           doctor_user_id: string
@@ -14808,6 +14934,7 @@ export type Database = {
         }
         Update: {
           batch_no?: string | null
+          branch_id?: string | null
           brand?: string | null
           created_at?: string
           doctor_user_id?: string
@@ -14824,6 +14951,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "vaidya_inventory_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "vaidya_inventory_store_id_fkey"
             columns: ["store_id"]
             isOneToOne: false
@@ -14834,6 +14968,7 @@ export type Database = {
       }
       vaidya_leads: {
         Row: {
+          branch_id: string | null
           call_type: string | null
           created_at: string
           doctor_user_id: string
@@ -14846,6 +14981,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          branch_id?: string | null
           call_type?: string | null
           created_at?: string
           doctor_user_id: string
@@ -14858,6 +14994,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          branch_id?: string | null
           call_type?: string | null
           created_at?: string
           doctor_user_id?: string
@@ -14869,7 +15006,15 @@ export type Database = {
           source?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_leads_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaidya_panchakarma_days: {
         Row: {
@@ -14994,6 +15139,7 @@ export type Database = {
         Row: {
           address: string | null
           age: number | null
+          branch_id: string | null
           created_at: string
           doctor_user_id: string
           full_name: string
@@ -15011,6 +15157,7 @@ export type Database = {
         Insert: {
           address?: string | null
           age?: number | null
+          branch_id?: string | null
           created_at?: string
           doctor_user_id: string
           full_name: string
@@ -15028,6 +15175,7 @@ export type Database = {
         Update: {
           address?: string | null
           age?: number | null
+          branch_id?: string | null
           created_at?: string
           doctor_user_id?: string
           full_name?: string
@@ -15043,6 +15191,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "vaidya_patients_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "vaidya_patients_membership_plan_id_fkey"
             columns: ["membership_plan_id"]
@@ -15191,6 +15346,7 @@ export type Database = {
         Row: {
           age: number | null
           appointment_id: string | null
+          branch_id: string | null
           called_at: string | null
           completed_at: string | null
           created_at: string
@@ -15215,6 +15371,7 @@ export type Database = {
         Insert: {
           age?: number | null
           appointment_id?: string | null
+          branch_id?: string | null
           called_at?: string | null
           completed_at?: string | null
           created_at?: string
@@ -15239,6 +15396,7 @@ export type Database = {
         Update: {
           age?: number | null
           appointment_id?: string | null
+          branch_id?: string | null
           called_at?: string | null
           completed_at?: string | null
           created_at?: string
@@ -15260,7 +15418,15 @@ export type Database = {
           vaidya_patient_id?: string | null
           visit_type?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vaidya_queue_tokens_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "hms_branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaidya_reminders: {
         Row: {
@@ -16153,2097 +16319,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      college_chapters: {
-        Row: {
-          id: string
-          college_name: string
-          description: string | null
-          state: string | null
-          course: string | null
-          created_by: string
-          member_count: number
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          college_name: string
-          description?: string | null
-          state?: string | null
-          course?: string | null
-          created_by: string
-          member_count?: number
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          college_name?: string
-          description?: string | null
-          state?: string | null
-          course?: string | null
-          created_by?: string
-          member_count?: number
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      chapter_members: {
-        Row: {
-          id: string
-          chapter_id: string
-          user_id: string
-          joined_at: string | null
-        }
-        Insert: {
-          id?: string
-          chapter_id: string
-          user_id: string
-          joined_at?: string | null
-        }
-        Update: {
-          id?: string
-          chapter_id?: string
-          user_id?: string
-          joined_at?: string | null
-        }
-        Relationships: []
-      }
-      chapter_posts: {
-        Row: {
-          id: string
-          chapter_id: string
-          user_id: string
-          title: string
-          content: string
-          reply_count: number
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          chapter_id: string
-          user_id: string
-          title: string
-          content: string
-          reply_count?: number
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          chapter_id?: string
-          user_id?: string
-          title?: string
-          content?: string
-          reply_count?: number
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      chapter_replies: {
-        Row: {
-          id: string
-          post_id: string
-          user_id: string
-          content: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          post_id: string
-          user_id: string
-          content: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          post_id?: string
-          user_id?: string
-          content?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      quiz_competitions: {
-        Row: {
-          id: string
-          title: string
-          description: string | null
-          subject: string
-          difficulty: string
-          status: string
-          questions: Json
-          time_limit_seconds: number
-          max_participants: number | null
-          starts_at: string
-          ends_at: string
-          created_by: string
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          title: string
-          description?: string | null
-          subject?: string
-          difficulty?: string
-          status?: string
-          questions?: Json
-          time_limit_seconds?: number
-          max_participants?: number | null
-          starts_at: string
-          ends_at: string
-          created_by: string
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          title?: string
-          description?: string | null
-          subject?: string
-          difficulty?: string
-          status?: string
-          questions?: Json
-          time_limit_seconds?: number
-          max_participants?: number | null
-          starts_at?: string
-          ends_at?: string
-          created_by?: string
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      competition_participants: {
-        Row: {
-          id: string
-          competition_id: string
-          user_id: string
-          college_name: string | null
-          joined_at: string | null
-        }
-        Insert: {
-          id?: string
-          competition_id: string
-          user_id: string
-          college_name?: string | null
-          joined_at?: string | null
-        }
-        Update: {
-          id?: string
-          competition_id?: string
-          user_id?: string
-          college_name?: string | null
-          joined_at?: string | null
-        }
-        Relationships: []
-      }
-      competition_scores: {
-        Row: {
-          id: string
-          competition_id: string
-          user_id: string
-          college_name: string | null
-          score: number
-          correct_answers: number
-          total_questions: number
-          time_taken_seconds: number
-          submitted_at: string | null
-        }
-        Insert: {
-          id?: string
-          competition_id: string
-          user_id: string
-          college_name?: string | null
-          score?: number
-          correct_answers?: number
-          total_questions?: number
-          time_taken_seconds?: number
-          submitted_at?: string | null
-        }
-        Update: {
-          id?: string
-          competition_id?: string
-          user_id?: string
-          college_name?: string | null
-          score?: number
-          correct_answers?: number
-          total_questions?: number
-          time_taken_seconds?: number
-          submitted_at?: string | null
-        }
-        Relationships: []
-      }
-      case_studies: {
-        Row: {
-          id: string
-          title: string
-          subject: string
-          system: string
-          difficulty: string
-          tags: string[] | null
-          summary: string
-          patient_history: string
-          examination: string
-          diagnosis: string
-          treatment: string
-          outcome: string
-          discussion: string | null
-          references: string | null
-          author_name: string | null
-          author_college: string | null
-          is_published: boolean | null
-          view_count: number | null
-          bookmark_count: number | null
-          created_by: string | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          title: string
-          subject?: string
-          system?: string
-          difficulty?: string
-          tags?: string[] | null
-          summary: string
-          patient_history: string
-          examination: string
-          diagnosis: string
-          treatment: string
-          outcome: string
-          discussion?: string | null
-          references?: string | null
-          author_name?: string | null
-          author_college?: string | null
-          is_published?: boolean | null
-          view_count?: number | null
-          bookmark_count?: number | null
-          created_by?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          title?: string
-          subject?: string
-          system?: string
-          difficulty?: string
-          tags?: string[] | null
-          summary?: string
-          patient_history?: string
-          examination?: string
-          diagnosis?: string
-          treatment?: string
-          outcome?: string
-          discussion?: string | null
-          references?: string | null
-          author_name?: string | null
-          author_college?: string | null
-          is_published?: boolean | null
-          view_count?: number | null
-          bookmark_count?: number | null
-          created_by?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      case_study_bookmarks: {
-        Row: {
-          id: string
-          case_study_id: string
-          user_id: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          case_study_id: string
-          user_id: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          case_study_id?: string
-          user_id?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      coin_store_items: {
-        Row: {
-          id: string
-          title: string
-          description: string | null
-          category: string
-          coin_price: number
-          stock: number | null
-          image_url: string | null
-          is_active: boolean | null
-          redemption_count: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          title: string
-          description?: string | null
-          category?: string
-          coin_price: number
-          stock?: number | null
-          image_url?: string | null
-          is_active?: boolean | null
-          redemption_count?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          title?: string
-          description?: string | null
-          category?: string
-          coin_price?: number
-          stock?: number | null
-          image_url?: string | null
-          is_active?: boolean | null
-          redemption_count?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      coin_redemptions: {
-        Row: {
-          id: string
-          user_id: string
-          item_id: string
-          item_title: string
-          coins_spent: number
-          status: string
-          redeemed_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          item_id: string
-          item_title: string
-          coins_spent: number
-          status?: string
-          redeemed_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          item_id?: string
-          item_title?: string
-          coins_spent?: number
-          status?: string
-          redeemed_at?: string | null
-        }
-        Relationships: []
-      }
-      student_notes: {
-        Row: {
-          id: string
-          user_id: string
-          title: string
-          content: string
-          subject: string
-          tags: string[] | null
-          is_pinned: boolean | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          title: string
-          content?: string
-          subject?: string
-          tags?: string[] | null
-          is_pinned?: boolean | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          title?: string
-          content?: string
-          subject?: string
-          tags?: string[] | null
-          is_pinned?: boolean | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      student_study_sessions: {
-        Row: {
-          id: string
-          user_id: string
-          subject: string
-          duration_minutes: number
-          notes: string | null
-          studied_at: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          subject?: string
-          duration_minutes: number
-          notes?: string | null
-          studied_at?: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          subject?: string
-          duration_minutes?: number
-          notes?: string | null
-          studied_at?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      student_mentors: {
-        Row: {
-          id: string
-          user_id: string
-          full_name: string
-          college_name: string | null
-          specialization: string
-          year_of_study: number | null
-          bio: string | null
-          subjects: string[] | null
-          is_available: boolean | null
-          max_mentees: number | null
-          current_mentees: number | null
-          rating: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          full_name: string
-          college_name?: string | null
-          specialization?: string
-          year_of_study?: number | null
-          bio?: string | null
-          subjects?: string[] | null
-          is_available?: boolean | null
-          max_mentees?: number | null
-          current_mentees?: number | null
-          rating?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          full_name?: string
-          college_name?: string | null
-          specialization?: string
-          year_of_study?: number | null
-          bio?: string | null
-          subjects?: string[] | null
-          is_available?: boolean | null
-          max_mentees?: number | null
-          current_mentees?: number | null
-          rating?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      mentorship_requests: {
-        Row: {
-          id: string
-          mentor_id: string
-          mentee_user_id: string
-          mentee_name: string
-          message: string
-          status: string
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          mentor_id: string
-          mentee_user_id: string
-          mentee_name: string
-          message: string
-          status?: string
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          mentor_id?: string
-          mentee_user_id?: string
-          mentee_name?: string
-          message?: string
-          status?: string
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      mentorship_messages: {
-        Row: {
-          id: string
-          request_id: string
-          sender_id: string
-          content: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          request_id: string
-          sender_id: string
-          content: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          request_id?: string
-          sender_id?: string
-          content?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      study_groups: {
-        Row: {
-          id: string
-          name: string
-          subject: string
-          description: string | null
-          created_by: string
-          member_count: number
-          is_public: boolean | null
-          max_members: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          name: string
-          subject?: string
-          description?: string | null
-          created_by: string
-          member_count?: number
-          is_public?: boolean | null
-          max_members?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          name?: string
-          subject?: string
-          description?: string | null
-          created_by?: string
-          member_count?: number
-          is_public?: boolean | null
-          max_members?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      study_group_members: {
-        Row: {
-          id: string
-          group_id: string
-          user_id: string
-          role: string
-          joined_at: string | null
-        }
-        Insert: {
-          id?: string
-          group_id: string
-          user_id: string
-          role?: string
-          joined_at?: string | null
-        }
-        Update: {
-          id?: string
-          group_id?: string
-          user_id?: string
-          role?: string
-          joined_at?: string | null
-        }
-        Relationships: []
-      }
-      study_group_posts: {
-        Row: {
-          id: string
-          group_id: string
-          user_id: string
-          content: string
-          post_type: string
-          resource_url: string | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          group_id: string
-          user_id: string
-          content: string
-          post_type?: string
-          resource_url?: string | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          group_id?: string
-          user_id?: string
-          content?: string
-          post_type?: string
-          resource_url?: string | null
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      vaidya_questions: {
-        Row: {
-          id: string
-          user_id: string
-          title: string
-          body: string
-          subject: string
-          tags: string[] | null
-          is_resolved: boolean | null
-          answer_count: number | null
-          upvotes: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          title: string
-          body: string
-          subject?: string
-          tags?: string[] | null
-          is_resolved?: boolean | null
-          answer_count?: number | null
-          upvotes?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          title?: string
-          body?: string
-          subject?: string
-          tags?: string[] | null
-          is_resolved?: boolean | null
-          answer_count?: number | null
-          upvotes?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      vaidya_answers: {
-        Row: {
-          id: string
-          question_id: string
-          user_id: string
-          content: string
-          is_accepted: boolean | null
-          upvotes: number | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          question_id: string
-          user_id: string
-          content: string
-          is_accepted?: boolean | null
-          upvotes?: number | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          question_id?: string
-          user_id?: string
-          content?: string
-          is_accepted?: boolean | null
-          upvotes?: number | null
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      vaidya_question_upvotes: {
-        Row: {
-          id: string
-          question_id: string
-          user_id: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          question_id: string
-          user_id: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          question_id?: string
-          user_id?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      internship_journal_entries: {
-        Row: {
-          id: string
-          user_id: string
-          posting_date: string
-          department: string
-          hospital_name: string | null
-          supervisor_name: string | null
-          cases_seen: number | null
-          procedures_performed: string[] | null
-          diagnosis_observed: string[] | null
-          learnings: string
-          challenges: string | null
-          supervisor_feedback: string | null
-          hours_spent: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          posting_date?: string
-          department: string
-          hospital_name?: string | null
-          supervisor_name?: string | null
-          cases_seen?: number | null
-          procedures_performed?: string[] | null
-          diagnosis_observed?: string[] | null
-          learnings: string
-          challenges?: string | null
-          supervisor_feedback?: string | null
-          hours_spent?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          posting_date?: string
-          department?: string
-          hospital_name?: string | null
-          supervisor_name?: string | null
-          cases_seen?: number | null
-          procedures_performed?: string[] | null
-          diagnosis_observed?: string[] | null
-          learnings?: string
-          challenges?: string | null
-          supervisor_feedback?: string | null
-          hours_spent?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      internship_listings: {
-        Row: {
-          id: string
-          title: string
-          hospital_name: string
-          location: string
-          department: string
-          description: string
-          requirements: string | null
-          duration_weeks: number | null
-          stipend: string | null
-          spots_available: number | null
-          application_deadline: string | null
-          is_active: boolean | null
-          application_count: number | null
-          posted_by: string | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          title: string
-          hospital_name: string
-          location: string
-          department?: string
-          description: string
-          requirements?: string | null
-          duration_weeks?: number | null
-          stipend?: string | null
-          spots_available?: number | null
-          application_deadline?: string | null
-          is_active?: boolean | null
-          application_count?: number | null
-          posted_by?: string | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          title?: string
-          hospital_name?: string
-          location?: string
-          department?: string
-          description?: string
-          requirements?: string | null
-          duration_weeks?: number | null
-          stipend?: string | null
-          spots_available?: number | null
-          application_deadline?: string | null
-          is_active?: boolean | null
-          application_count?: number | null
-          posted_by?: string | null
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      internship_applications: {
-        Row: {
-          id: string
-          listing_id: string
-          user_id: string
-          cover_note: string
-          status: string
-          applied_at: string | null
-        }
-        Insert: {
-          id?: string
-          listing_id: string
-          user_id: string
-          cover_note: string
-          status?: string
-          applied_at?: string | null
-        }
-        Update: {
-          id?: string
-          listing_id?: string
-          user_id?: string
-          cover_note?: string
-          status?: string
-          applied_at?: string | null
-        }
-        Relationships: []
-      }
-      research_projects: {
-        Row: {
-          id: string
-          user_id: string
-          title: string
-          description: string
-          research_area: string
-          looking_for: string
-          skills_needed: string[] | null
-          status: string
-          collaborator_count: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          title: string
-          description: string
-          research_area?: string
-          looking_for: string
-          skills_needed?: string[] | null
-          status?: string
-          collaborator_count?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          title?: string
-          description?: string
-          research_area?: string
-          looking_for?: string
-          skills_needed?: string[] | null
-          status?: string
-          collaborator_count?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      research_collaboration_requests: {
-        Row: {
-          id: string
-          project_id: string
-          user_id: string
-          message: string
-          status: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          project_id: string
-          user_id: string
-          message: string
-          status?: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          project_id?: string
-          user_id?: string
-          message?: string
-          status?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      startup_ideas: {
-        Row: {
-          id: string
-          user_id: string
-          title: string
-          tagline: string
-          description: string
-          category: string
-          stage: string
-          looking_for: string[] | null
-          upvotes: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          title: string
-          tagline: string
-          description: string
-          category?: string
-          stage?: string
-          looking_for?: string[] | null
-          upvotes?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          title?: string
-          tagline?: string
-          description?: string
-          category?: string
-          stage?: string
-          looking_for?: string[] | null
-          upvotes?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      startup_idea_upvotes: {
-        Row: {
-          id: string
-          idea_id: string
-          user_id: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          idea_id: string
-          user_id: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          idea_id?: string
-          user_id?: string
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      freelance_gigs: {
-        Row: {
-          id: string
-          title: string
-          description: string
-          category: string
-          budget: string | null
-          duration: string | null
-          skills_required: string[] | null
-          is_remote: boolean | null
-          location: string | null
-          posted_by: string | null
-          poster_name: string | null
-          is_active: boolean | null
-          application_count: number | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          title: string
-          description: string
-          category?: string
-          budget?: string | null
-          duration?: string | null
-          skills_required?: string[] | null
-          is_remote?: boolean | null
-          location?: string | null
-          posted_by?: string | null
-          poster_name?: string | null
-          is_active?: boolean | null
-          application_count?: number | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          title?: string
-          description?: string
-          category?: string
-          budget?: string | null
-          duration?: string | null
-          skills_required?: string[] | null
-          is_remote?: boolean | null
-          location?: string | null
-          posted_by?: string | null
-          poster_name?: string | null
-          is_active?: boolean | null
-          application_count?: number | null
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      freelance_gig_applications: {
-        Row: {
-          id: string
-          gig_id: string
-          user_id: string
-          pitch: string
-          portfolio_url: string | null
-          status: string
-          applied_at: string | null
-        }
-        Insert: {
-          id?: string
-          gig_id: string
-          user_id: string
-          pitch: string
-          portfolio_url?: string | null
-          status?: string
-          applied_at?: string | null
-        }
-        Update: {
-          id?: string
-          gig_id?: string
-          user_id?: string
-          pitch?: string
-          portfolio_url?: string | null
-          status?: string
-          applied_at?: string | null
-        }
-        Relationships: []
-      }
-      job_alerts: {
-        Row: {
-          id: string
-          user_id: string
-          name: string
-          filters: Json
-          frequency: string
-          is_active: boolean | null
-          last_sent_at: string | null
-          matched_count: number | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          name: string
-          filters?: Json
-          frequency?: string
-          is_active?: boolean | null
-          last_sent_at?: string | null
-          matched_count?: number | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          name?: string
-          filters?: Json
-          frequency?: string
-          is_active?: boolean | null
-          last_sent_at?: string | null
-          matched_count?: number | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      job_saved_searches: {
-        Row: {
-          id: string
-          user_id: string
-          name: string
-          filters: Json
-          result_count: number | null
-          last_viewed_at: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          name: string
-          filters?: Json
-          result_count?: number | null
-          last_viewed_at?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          name?: string
-          filters?: Json
-          result_count?: number | null
-          last_viewed_at?: string | null
-          created_at?: string
-        }
-        Relationships: []
-      }
-      employer_verifications: {
-        Row: {
-          id: string
-          user_id: string
-          organization_name: string
-          organization_type: string
-          registration_number: string | null
-          registration_authority: string | null
-          registration_certificate_url: string | null
-          trade_license_url: string | null
-          additional_document_url: string | null
-          verification_status: string
-          verification_level: number | null
-          verified_by: string | null
-          verified_at: string | null
-          rejection_reason: string | null
-          contact_person: string | null
-          contact_phone: string | null
-          contact_email: string | null
-          website_url: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          organization_name: string
-          organization_type: string
-          registration_number?: string | null
-          registration_authority?: string | null
-          registration_certificate_url?: string | null
-          trade_license_url?: string | null
-          additional_document_url?: string | null
-          verification_status?: string
-          verification_level?: number | null
-          verified_by?: string | null
-          verified_at?: string | null
-          rejection_reason?: string | null
-          contact_person?: string | null
-          contact_phone?: string | null
-          contact_email?: string | null
-          website_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          organization_name?: string
-          organization_type?: string
-          registration_number?: string | null
-          registration_authority?: string | null
-          registration_certificate_url?: string | null
-          trade_license_url?: string | null
-          additional_document_url?: string | null
-          verification_status?: string
-          verification_level?: number | null
-          verified_by?: string | null
-          verified_at?: string | null
-          rejection_reason?: string | null
-          contact_person?: string | null
-          contact_phone?: string | null
-          contact_email?: string | null
-          website_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      job_aggregation_log: {
-        Row: {
-          id: string
-          source: string
-          external_id: string | null
-          external_url: string
-          job_listing_id: string | null
-          sync_status: string
-          raw_data: Json | null
-          error_message: string | null
-          last_synced_at: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          source: string
-          external_id?: string | null
-          external_url: string
-          job_listing_id?: string | null
-          sync_status?: string
-          raw_data?: Json | null
-          error_message?: string | null
-          last_synced_at?: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          source?: string
-          external_id?: string | null
-          external_url?: string
-          job_listing_id?: string | null
-          sync_status?: string
-          raw_data?: Json | null
-          error_message?: string | null
-          last_synced_at?: string
-          created_at?: string
-        }
-        Relationships: []
-      }
-      job_ai_recommendations: {
-        Row: {
-          id: string
-          user_id: string
-          job_listing_id: string
-          match_score: number
-          match_reasons: string[] | null
-          is_dismissed: boolean | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          job_listing_id: string
-          match_score?: number
-          match_reasons?: string[] | null
-          is_dismissed?: boolean | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          job_listing_id?: string
-          match_score?: number
-          match_reasons?: string[] | null
-          is_dismissed?: boolean | null
-          created_at?: string
-        }
-        Relationships: []
-      }
-      ayush_departments: {
-        Row: {
-          id: string
-          name: string
-          system: string
-          description: string | null
-          sort_order: number | null
-          is_active: boolean | null
-        }
-        Insert: {
-          id?: string
-          name: string
-          system: string
-          description?: string | null
-          sort_order?: number | null
-          is_active?: boolean | null
-        }
-        Update: {
-          id?: string
-          name?: string
-          system?: string
-          description?: string | null
-          sort_order?: number | null
-          is_active?: boolean | null
-        }
-        Relationships: []
-      }
-      job_seeker_profiles: {
-        Row: {
-          id: string
-          user_id: string
-          full_name: string
-          headline: string | null
-          phone: string | null
-          email: string | null
-          avatar_url: string | null
-          date_of_birth: string | null
-          gender: string | null
-          degree: string
-          college: string | null
-          university: string | null
-          graduation_year: number | null
-          additional_qualifications: string[] | null
-          department: string | null
-          skills: string[] | null
-          experience_years: number | null
-          current_designation: string | null
-          current_organization: string | null
-          registration_number: string | null
-          registration_council: string | null
-          preferred_job_type: string | null
-          preferred_states: string[] | null
-          preferred_cities: string[] | null
-          expected_salary_min: number | null
-          expected_salary_max: number | null
-          willing_to_relocate: boolean | null
-          notice_period: string | null
-          resume_url: string | null
-          resume_filename: string | null
-          resume_updated_at: string | null
-          is_actively_looking: boolean | null
-          visibility: string | null
-          profile_completeness: number | null
-          last_active_at: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          full_name: string
-          headline?: string | null
-          phone?: string | null
-          email?: string | null
-          avatar_url?: string | null
-          date_of_birth?: string | null
-          gender?: string | null
-          degree: string
-          college?: string | null
-          university?: string | null
-          graduation_year?: number | null
-          additional_qualifications?: string[] | null
-          department?: string | null
-          skills?: string[] | null
-          experience_years?: number | null
-          current_designation?: string | null
-          current_organization?: string | null
-          registration_number?: string | null
-          registration_council?: string | null
-          preferred_job_type?: string | null
-          preferred_states?: string[] | null
-          preferred_cities?: string[] | null
-          expected_salary_min?: number | null
-          expected_salary_max?: number | null
-          willing_to_relocate?: boolean | null
-          notice_period?: string | null
-          resume_url?: string | null
-          resume_filename?: string | null
-          resume_updated_at?: string | null
-          is_actively_looking?: boolean | null
-          visibility?: string | null
-          profile_completeness?: number | null
-          last_active_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          full_name?: string
-          headline?: string | null
-          phone?: string | null
-          email?: string | null
-          avatar_url?: string | null
-          date_of_birth?: string | null
-          gender?: string | null
-          degree?: string
-          college?: string | null
-          university?: string | null
-          graduation_year?: number | null
-          additional_qualifications?: string[] | null
-          department?: string | null
-          skills?: string[] | null
-          experience_years?: number | null
-          current_designation?: string | null
-          current_organization?: string | null
-          registration_number?: string | null
-          registration_council?: string | null
-          preferred_job_type?: string | null
-          preferred_states?: string[] | null
-          preferred_cities?: string[] | null
-          expected_salary_min?: number | null
-          expected_salary_max?: number | null
-          willing_to_relocate?: boolean | null
-          notice_period?: string | null
-          resume_url?: string | null
-          resume_filename?: string | null
-          resume_updated_at?: string | null
-          is_actively_looking?: boolean | null
-          visibility?: string | null
-          profile_completeness?: number | null
-          last_active_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      job_profile_views: {
-        Row: {
-          id: string
-          seeker_user_id: string
-          viewer_user_id: string
-          viewer_organization: string | null
-          view_date: string
-          viewed_at: string
-        }
-        Insert: {
-          id?: string
-          seeker_user_id: string
-          viewer_user_id: string
-          viewer_organization?: string | null
-          view_date?: string
-          viewed_at?: string
-        }
-        Update: {
-          id?: string
-          seeker_user_id?: string
-          viewer_user_id?: string
-          viewer_organization?: string | null
-          view_date?: string
-          viewed_at?: string
-        }
-        Relationships: []
-      }
-      spine_ayush_modules: {
-        Row: {
-          id: string
-          module_number: number
-          title: string
-          subtitle: string | null
-          description: string | null
-          topic_count: number
-          duration_minutes: number | null
-          difficulty_level: string | null
-          category: string
-          ayush_system: string | null
-          icon_name: string | null
-          color_class: string | null
-          for_role: string[] | null
-          is_premium: boolean | null
-          prerequisites: number[] | null
-          tags: string[] | null
-          cover_image_url: string | null
-          video_intro_url: string | null
-          is_active: boolean | null
-          sort_order: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          module_number: number
-          title: string
-          subtitle?: string | null
-          description?: string | null
-          topic_count?: number
-          duration_minutes?: number | null
-          difficulty_level?: string | null
-          category: string
-          ayush_system?: string | null
-          icon_name?: string | null
-          color_class?: string | null
-          for_role?: string[] | null
-          is_premium?: boolean | null
-          prerequisites?: number[] | null
-          tags?: string[] | null
-          cover_image_url?: string | null
-          video_intro_url?: string | null
-          is_active?: boolean | null
-          sort_order?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          module_number?: number
-          title?: string
-          subtitle?: string | null
-          description?: string | null
-          topic_count?: number
-          duration_minutes?: number | null
-          difficulty_level?: string | null
-          category?: string
-          ayush_system?: string | null
-          icon_name?: string | null
-          color_class?: string | null
-          for_role?: string[] | null
-          is_premium?: boolean | null
-          prerequisites?: number[] | null
-          tags?: string[] | null
-          cover_image_url?: string | null
-          video_intro_url?: string | null
-          is_active?: boolean | null
-          sort_order?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      spine_ayush_module_topics: {
-        Row: {
-          id: string
-          module_id: string
-          topic_number: number
-          title: string
-          description: string | null
-          content_type: string | null
-          content_body: string | null
-          ayush_context: string | null
-          doctor_notes: string | null
-          patient_instructions: string | null
-          exercise_steps: Json | null
-          contraindications: string[] | null
-          precautions: string[] | null
-          duration_minutes: number | null
-          video_url: string | null
-          image_url: string | null
-          references: string[] | null
-          is_active: boolean | null
-          sort_order: number | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          module_id: string
-          topic_number: number
-          title: string
-          description?: string | null
-          content_type?: string | null
-          content_body?: string | null
-          ayush_context?: string | null
-          doctor_notes?: string | null
-          patient_instructions?: string | null
-          exercise_steps?: Json | null
-          contraindications?: string[] | null
-          precautions?: string[] | null
-          duration_minutes?: number | null
-          video_url?: string | null
-          image_url?: string | null
-          references?: string[] | null
-          is_active?: boolean | null
-          sort_order?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          module_id?: string
-          topic_number?: number
-          title?: string
-          description?: string | null
-          content_type?: string | null
-          content_body?: string | null
-          ayush_context?: string | null
-          doctor_notes?: string | null
-          patient_instructions?: string | null
-          exercise_steps?: Json | null
-          contraindications?: string[] | null
-          precautions?: string[] | null
-          duration_minutes?: number | null
-          video_url?: string | null
-          image_url?: string | null
-          references?: string[] | null
-          is_active?: boolean | null
-          sort_order?: number | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      spine_ayush_user_progress: {
-        Row: {
-          id: string
-          user_id: string
-          module_id: string
-          topic_id: string | null
-          status: string
-          progress_pct: number | null
-          score: number | null
-          time_spent_seconds: number | null
-          completed_at: string | null
-          notes: string | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          module_id: string
-          topic_id?: string | null
-          status?: string
-          progress_pct?: number | null
-          score?: number | null
-          time_spent_seconds?: number | null
-          completed_at?: string | null
-          notes?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          module_id?: string
-          topic_id?: string | null
-          status?: string
-          progress_pct?: number | null
-          score?: number | null
-          time_spent_seconds?: number | null
-          completed_at?: string | null
-          notes?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      spine_ayush_exercise_prescriptions: {
-        Row: {
-          id: string
-          patient_id: string
-          doctor_id: string
-          module_id: string | null
-          topic_ids: string[] | null
-          diagnosis: string
-          spinal_level: string | null
-          dosha_involvement: string | null
-          exercise_plan: Json | null
-          frequency: string | null
-          duration_weeks: number | null
-          precautions: string | null
-          ayush_adjuncts: Json | null
-          status: string | null
-          start_date: string | null
-          end_date: string | null
-          review_date: string | null
-          notes: string | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          patient_id: string
-          doctor_id: string
-          module_id?: string | null
-          topic_ids?: string[] | null
-          diagnosis: string
-          spinal_level?: string | null
-          dosha_involvement?: string | null
-          exercise_plan?: Json | null
-          frequency?: string | null
-          duration_weeks?: number | null
-          precautions?: string | null
-          ayush_adjuncts?: Json | null
-          status?: string | null
-          start_date?: string | null
-          end_date?: string | null
-          review_date?: string | null
-          notes?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          patient_id?: string
-          doctor_id?: string
-          module_id?: string | null
-          topic_ids?: string[] | null
-          diagnosis?: string
-          spinal_level?: string | null
-          dosha_involvement?: string | null
-          exercise_plan?: Json | null
-          frequency?: string | null
-          duration_weeks?: number | null
-          precautions?: string | null
-          ayush_adjuncts?: Json | null
-          status?: string | null
-          start_date?: string | null
-          end_date?: string | null
-          review_date?: string | null
-          notes?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      spine_ayush_posture_assessments: {
-        Row: {
-          id: string
-          patient_id: string
-          assessed_by: string | null
-          assessment_date: string | null
-          posterior_head_position: string | null
-          posterior_shoulder_asymmetry: string | null
-          posterior_scapular_position: string | null
-          posterior_thoracic_spine: string | null
-          posterior_lumbar_spine: string | null
-          posterior_pelvis: string | null
-          posterior_knee: string | null
-          posterior_foot: string | null
-          posterior_notes: string | null
-          anterior_head_position: string | null
-          anterior_shoulder_level: string | null
-          anterior_carrying_angle: string | null
-          anterior_pelvis: string | null
-          anterior_knee: string | null
-          anterior_foot: string | null
-          anterior_notes: string | null
-          lateral_head_position: string | null
-          lateral_cervical: string | null
-          lateral_thoracic: string | null
-          lateral_lumbar: string | null
-          lateral_pelvis_tilt: string | null
-          lateral_knee: string | null
-          lateral_notes: string | null
-          single_leg_stability: string | null
-          scapular_dyskinesia: string | null
-          thoracic_rotation: string | null
-          dorsiflexion_test: string | null
-          syndrome_identified: string | null
-          vata_score: number | null
-          pitta_score: number | null
-          kapha_score: number | null
-          predominant_dosha: string | null
-          photo_posterior_url: string | null
-          photo_anterior_url: string | null
-          photo_lateral_url: string | null
-          overall_score: number | null
-          severity: string | null
-          recommended_modules: number[] | null
-          treatment_plan: string | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          patient_id: string
-          assessed_by?: string | null
-          assessment_date?: string | null
-          posterior_head_position?: string | null
-          posterior_shoulder_asymmetry?: string | null
-          posterior_scapular_position?: string | null
-          posterior_thoracic_spine?: string | null
-          posterior_lumbar_spine?: string | null
-          posterior_pelvis?: string | null
-          posterior_knee?: string | null
-          posterior_foot?: string | null
-          posterior_notes?: string | null
-          anterior_head_position?: string | null
-          anterior_shoulder_level?: string | null
-          anterior_carrying_angle?: string | null
-          anterior_pelvis?: string | null
-          anterior_knee?: string | null
-          anterior_foot?: string | null
-          anterior_notes?: string | null
-          lateral_head_position?: string | null
-          lateral_cervical?: string | null
-          lateral_thoracic?: string | null
-          lateral_lumbar?: string | null
-          lateral_pelvis_tilt?: string | null
-          lateral_knee?: string | null
-          lateral_notes?: string | null
-          single_leg_stability?: string | null
-          scapular_dyskinesia?: string | null
-          thoracic_rotation?: string | null
-          dorsiflexion_test?: string | null
-          syndrome_identified?: string | null
-          vata_score?: number | null
-          pitta_score?: number | null
-          kapha_score?: number | null
-          predominant_dosha?: string | null
-          photo_posterior_url?: string | null
-          photo_anterior_url?: string | null
-          photo_lateral_url?: string | null
-          overall_score?: number | null
-          severity?: string | null
-          recommended_modules?: number[] | null
-          treatment_plan?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          patient_id?: string
-          assessed_by?: string | null
-          assessment_date?: string | null
-          posterior_head_position?: string | null
-          posterior_shoulder_asymmetry?: string | null
-          posterior_scapular_position?: string | null
-          posterior_thoracic_spine?: string | null
-          posterior_lumbar_spine?: string | null
-          posterior_pelvis?: string | null
-          posterior_knee?: string | null
-          posterior_foot?: string | null
-          posterior_notes?: string | null
-          anterior_head_position?: string | null
-          anterior_shoulder_level?: string | null
-          anterior_carrying_angle?: string | null
-          anterior_pelvis?: string | null
-          anterior_knee?: string | null
-          anterior_foot?: string | null
-          anterior_notes?: string | null
-          lateral_head_position?: string | null
-          lateral_cervical?: string | null
-          lateral_thoracic?: string | null
-          lateral_lumbar?: string | null
-          lateral_pelvis_tilt?: string | null
-          lateral_knee?: string | null
-          lateral_notes?: string | null
-          single_leg_stability?: string | null
-          scapular_dyskinesia?: string | null
-          thoracic_rotation?: string | null
-          dorsiflexion_test?: string | null
-          syndrome_identified?: string | null
-          vata_score?: number | null
-          pitta_score?: number | null
-          kapha_score?: number | null
-          predominant_dosha?: string | null
-          photo_posterior_url?: string | null
-          photo_anterior_url?: string | null
-          photo_lateral_url?: string | null
-          overall_score?: number | null
-          severity?: string | null
-          recommended_modules?: number[] | null
-          treatment_plan?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      spine_patient_pipeline: {
-        Row: {
-          id: string
-          patient_id: string
-          stage: number
-          stage_name: string
-          entered_stage_at: string | null
-          sessions_completed: number | null
-          modules_completed: number | null
-          total_vas_improvement: number | null
-          referrals_made: number | null
-          tier: string | null
-          is_active: boolean | null
-          notes: string | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          patient_id: string
-          stage?: number
-          stage_name?: string
-          entered_stage_at?: string | null
-          sessions_completed?: number | null
-          modules_completed?: number | null
-          total_vas_improvement?: number | null
-          referrals_made?: number | null
-          tier?: string | null
-          is_active?: boolean | null
-          notes?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          patient_id?: string
-          stage?: number
-          stage_name?: string
-          entered_stage_at?: string | null
-          sessions_completed?: number | null
-          modules_completed?: number | null
-          total_vas_improvement?: number | null
-          referrals_made?: number | null
-          tier?: string | null
-          is_active?: boolean | null
-          notes?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      ayuzee_hms_bridge: {
-        Row: {
-          id: string
-          bridge_type: string
-          ayuzee_id: string
-          hms_id: string | null
-          hms_entity_type: string | null
-          sync_status: string
-          sync_direction: string | null
-          last_synced_at: string | null
-          error_message: string | null
-          metadata: Json | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          bridge_type: string
-          ayuzee_id: string
-          hms_id?: string | null
-          hms_entity_type?: string | null
-          sync_status?: string
-          sync_direction?: string | null
-          last_synced_at?: string | null
-          error_message?: string | null
-          metadata?: Json | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          bridge_type?: string
-          ayuzee_id?: string
-          hms_id?: string | null
-          hms_entity_type?: string | null
-          sync_status?: string
-          sync_direction?: string | null
-          last_synced_at?: string | null
-          error_message?: string | null
-          metadata?: Json | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      ayuzee_hms_sync_log: {
-        Row: {
-          id: string
-          bridge_id: string | null
-          operation: string
-          source_system: string
-          target_system: string
-          entity_type: string
-          entity_id: string | null
-          payload: Json | null
-          status: string
-          error_message: string | null
-          performed_by: string | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          bridge_id?: string | null
-          operation: string
-          source_system: string
-          target_system: string
-          entity_type: string
-          entity_id?: string | null
-          payload?: Json | null
-          status?: string
-          error_message?: string | null
-          performed_by?: string | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          bridge_id?: string | null
-          operation?: string
-          source_system?: string
-          target_system?: string
-          entity_type?: string
-          entity_id?: string | null
-          payload?: Json | null
-          status?: string
-          error_message?: string | null
-          performed_by?: string | null
-          created_at?: string | null
-        }
-        Relationships: []
-      }
-      ayuzee_hms_bridge_config: {
-        Row: {
-          id: string
-          clinic_id: string | null
-          clinic_name: string | null
-          owner_id: string
-          sync_appointments: boolean | null
-          sync_prescriptions: boolean | null
-          sync_stock: boolean | null
-          sync_lab_reports: boolean | null
-          sync_patient_profiles: boolean | null
-          sync_reviews: boolean | null
-          sync_treatment_outcomes: boolean | null
-          auto_queue_online_bookings: boolean | null
-          auto_push_prescription_to_shop: boolean | null
-          auto_trigger_review_after_visit: boolean | null
-          stock_visibility_public: boolean | null
-          is_active: boolean | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          clinic_id?: string | null
-          clinic_name?: string | null
-          owner_id: string
-          sync_appointments?: boolean | null
-          sync_prescriptions?: boolean | null
-          sync_stock?: boolean | null
-          sync_lab_reports?: boolean | null
-          sync_patient_profiles?: boolean | null
-          sync_reviews?: boolean | null
-          sync_treatment_outcomes?: boolean | null
-          auto_queue_online_bookings?: boolean | null
-          auto_push_prescription_to_shop?: boolean | null
-          auto_trigger_review_after_visit?: boolean | null
-          stock_visibility_public?: boolean | null
-          is_active?: boolean | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          clinic_id?: string | null
-          clinic_name?: string | null
-          owner_id?: string
-          sync_appointments?: boolean | null
-          sync_prescriptions?: boolean | null
-          sync_stock?: boolean | null
-          sync_lab_reports?: boolean | null
-          sync_patient_profiles?: boolean | null
-          sync_reviews?: boolean | null
-          sync_treatment_outcomes?: boolean | null
-          auto_queue_online_bookings?: boolean | null
-          auto_push_prescription_to_shop?: boolean | null
-          auto_trigger_review_after_visit?: boolean | null
-          stock_visibility_public?: boolean | null
-          is_active?: boolean | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
       }
     }
     Views: {
@@ -19263,6 +17338,8 @@ export type Database = {
       }
       is_admin_or_super: { Args: { _user_id: string }; Returns: boolean }
       is_approved_vaidya: { Args: { _user_id: string }; Returns: boolean }
+      is_branch_manager: { Args: { _branch_id: string }; Returns: boolean }
+      is_branch_staff: { Args: { _branch_id: string }; Returns: boolean }
       is_content_editor: { Args: { _user_id: string }; Returns: boolean }
       log_panchakarma_course_attempt: {
         Args: {
@@ -19291,6 +17368,14 @@ export type Database = {
           source_queue: string
         }
         Returns: number
+      }
+      next_hms_bill_number: {
+        Args: { _branch_id: string; _prefix?: string }
+        Returns: {
+          bill_no: string
+          current_number: number
+          series_id: string
+        }[]
       }
       pk_user_is_session_vaidya: {
         Args: { _session_id: string }
@@ -19397,12 +17482,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -19426,11 +17511,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -19451,11 +17536,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -19476,11 +17561,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -19493,11 +17578,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

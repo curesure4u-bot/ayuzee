@@ -41,10 +41,9 @@ export default function RoleBasedGuard({
         const { data: rows } = await supabase
           .from("user_roles")
           .select("role")
-          .eq("user_id", user.id)
-          .in("role", allowedRoles);
+          .eq("user_id", user.id);
 
-        if (active) setState(rows && rows.length > 0 ? "allowed" : "denied");
+        if (active) setState(rows?.some(({ role }) => allowedRoles.includes(role as AllowedRole)) ? "allowed" : "denied");
       } catch {
         if (active) setState("denied");
       }

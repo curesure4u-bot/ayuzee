@@ -4,7 +4,7 @@
  * Usage:
  *   const { initiatePayment } = useRazorpay();
  *   const result = await initiatePayment({ amount: 850, patientName: "Ramesh", purpose: "Consultation" });
- *   if (result.success) { /* payment confirmed, save to billing */ }
+ *   if (result.success) { saveToBilling(result); }
  */
 
 export interface RazorpayPaymentParams {

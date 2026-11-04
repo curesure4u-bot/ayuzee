@@ -32,7 +32,7 @@ const emptyForm = {
   task_name: "", frequency: "Every Week" as Frequency, description: "",
   priority: "Medium" as Priority, person_in_charge: "",
   importance: "Not Important" as Importance, urgency: "Not Urgent" as Urgency,
-  first_date: "", end_date: "", is_active: true, role_context: "general" as const,
+  first_date: "", end_date: "", is_active: true, role_context: "general" as RecurringTask["role_context"],
 };
 
 const TaskTrackerRecurring = ({ recurringTasks, settings, onAdd, onUpdate, onDelete }: Props) => {

@@ -249,7 +249,7 @@ const PatientRegistration = () => {
           state: state || null,
           pincode: null,
           country: country,
-          blood_group: bloodGroup !== "Select" ? bloodGroup : null,
+          blood_group: bloodGroup || null,
           prakriti: prakritiType || null,
           source: source || "walk-in",
           referral_code: referralCode,

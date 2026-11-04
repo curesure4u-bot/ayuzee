@@ -174,7 +174,7 @@ export default function SpineDispenzaBreathwork() {
                   <p className={`text-sm ${idx === currentStep ? "font-semibold text-gray-900" : "text-gray-700"}`}>
                     {s.instruction}
                   </p>
-                  {"note" in s && s.note && (
+                  {"note" in s && typeof s.note === "string" && s.note && (
                     <p className="text-xs text-blue-600 mt-1 italic">💡 {s.note}</p>
                   )}
                   <div className="flex items-center gap-3 mt-2">

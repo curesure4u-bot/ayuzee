@@ -36,7 +36,7 @@ const primaryTabs = [
 ];
 
 // Sidebar sub-items per tab
-const tabSubItems: Record<string, { divider?: string; to: string; label: string; icon: any }[]> = {
+const tabSubItems: Record<string, { divider?: string; to: string; label: string; icon: any; badge?: string }[]> = {
   dashboard: [
     { divider: "Overview", to: "/hms", label: "Dashboard", icon: Home },
     { to: "/hms/owner-dashboard", label: "Owner Dashboard", icon: Building2 },

@@ -1,4 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+
+type ClaimForm = { patientName: string; policyNo: string; insurer: string; claimAmount: number; submittedDate: string; status: string; type: string };
+type ClaimView = { id: string; patientName: string; policyNo: string; insurer: string; claimAmount: number; approvedAmount: number; status: string; type: string };
 
 export type CreateClaimParams = {
   patient_id: string;
@@ -23,7 +27,24 @@ export type PreauthParams = {
 };
 
 export function useInsuranceClaims() {
-  const createClaim = async (params: CreateClaimParams) => {
+  const [claims, setClaims] = useState<ClaimView[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const refresh = async () => {
+    setLoading(true);
+    try {
+      const rows = await getClaims();
+      setClaims(rows.map((r: any) => ({ id: r.id, patientName: r.patient_name, policyNo: r.policy_number || "", insurer: r.company_name, claimAmount: r.claim_amount || 0, approvedAmount: r.approved_amount || 0, status: r.status, type: r.type || "cashless" })));
+      setError(null);
+    } catch (err) { setError(err instanceof Error ? err.message : "Could not load claims"); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { void refresh(); }, []);
+
+  const createClaim = async (input: CreateClaimParams | ClaimForm) => {
+    const params: CreateClaimParams = "patientName" in input
+      ? { patient_id: "", patient_name: input.patientName, policy_number: input.policyNo, company_name: input.insurer, claim_amount: input.claimAmount }
+      : input;
     const { data: session } = await supabase.auth.getSession();
     const uid = session.session?.user?.id;
     const { data: claimNumber } = await (supabase as any).rpc("generate_claim_number");
@@ -32,7 +53,7 @@ export function useInsuranceClaims() {
       .from("hms_insurance_claims")
       .insert({
         claim_number: claimNumber || `CLM-${Date.now()}`,
-        patient_id: params.patient_id,
+        patient_id: params.patient_id || null,
         patient_name: params.patient_name,
         insurance_id: params.insurance_id || null,
         company_name: params.company_name,
@@ -53,6 +74,7 @@ export function useInsuranceClaims() {
       .single();
 
     if (error) throw error;
+    await refresh();
     return { claimId: data.id, claimNumber: data.claim_number };
   };
 
@@ -169,5 +191,5 @@ export function useInsuranceClaims() {
     return summary;
   };
 
-  return { createClaim, requestPreauth, approvePreauth, submitClaim, updateClaimStatus, getClaims, getClaimsSummary };
+  return { claims, loading, error, totalClaimed: claims.reduce((s, c) => s + c.claimAmount, 0), totalApproved: claims.reduce((s, c) => s + c.approvedAmount, 0), pendingCount: claims.filter((c) => ["draft", "preauth_pending", "submitted"].includes(c.status)).length, createClaim, requestPreauth, approvePreauth, submitClaim, updateClaimStatus, getClaims, getClaimsSummary };
 }

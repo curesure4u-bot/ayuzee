@@ -1,4 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+
+type SessionView = { id: string; patientName: string; therapy: string; therapist: string; room: string; timeSlot: string; status: string; oilUsed: string; oilQty: string; notes: string };
+type PackageView = { id: string; patientName: string; packageName: string; totalSessions: number; completedSessions: number; startDate: string; endDate: string; status: string };
 
 export type EnrollPkParams = {
   patient_id: string;
@@ -39,6 +43,34 @@ export type RecordSessionParams = {
 };
 
 export function usePanchakarma() {
+  const [sessions, setSessions] = useState<SessionView[]>([]);
+  const [packages, setPackages] = useState<PackageView[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const refresh = async () => {
+    setLoading(true);
+    try {
+      const [rows, enrollments] = await Promise.all([getTodaySessions(), getActiveEnrollments()]);
+      setSessions(rows.map((r: any) => ({ id: r.id, patientName: r.hms_pk_enrollments?.patient_name || "", therapy: r.therapy_name || "", therapist: r.therapist_name || "", room: r.room || "", timeSlot: r.start_time || "", status: r.status, oilUsed: r.oil_used || "", oilQty: String(r.oil_quantity_ml ?? ""), notes: r.observations || "" })));
+      setPackages(enrollments.map((r: any) => ({ id: r.id, patientName: r.patient_name, packageName: r.package_name, totalSessions: r.total_sessions, completedSessions: r.completed_sessions || 0, startDate: r.start_date, endDate: r.end_date, status: r.status })));
+      setError(null);
+    } catch (err) { setError(err instanceof Error ? err.message : "Could not load sessions"); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { void refresh(); }, []);
+
+  const updateSessionStatus = async (id: string, status: string) => {
+    const { error: updateError } = await (supabase as any).from("hms_pk_sessions").update({ status }).eq("id", id);
+    if (updateError) { setError(updateError.message); return false; }
+    await refresh();
+    return true;
+  };
+  const addSession = async (form: Omit<SessionView, "id">) => {
+    const { error: insertError } = await (supabase as any).from("hms_pk_sessions").insert({ therapy_name: form.therapy, therapist_name: form.therapist, room: form.room, session_date: new Date().toISOString().slice(0, 10), start_time: form.timeSlot || null, oil_used: form.oilUsed || null, oil_quantity_ml: Number(form.oilQty) || null, observations: form.notes || null, status: form.status, branch: "Main Branch" });
+    if (insertError) { setError(insertError.message); return false; }
+    await refresh();
+    return true;
+  };
   const enrollPatient = async (params: EnrollPkParams) => {
     const endDate = new Date(params.start_date);
     endDate.setDate(endDate.getDate() + params.total_sessions - 1);
@@ -181,5 +213,5 @@ export function usePanchakarma() {
     return data || [];
   };
 
-  return { enrollPatient, recordSession, getActiveEnrollments, getSessionsForEnrollment, getTodaySessions, getPackages };
+  return { sessions, packages, loading, error, completedCount: sessions.filter((s) => s.status === "completed").length, inProgressCount: sessions.filter((s) => s.status === "in_progress").length, scheduledCount: sessions.filter((s) => s.status === "scheduled").length, updateSessionStatus, addSession, enrollPatient, recordSession, getActiveEnrollments, getSessionsForEnrollment, getTodaySessions, getPackages };
 }

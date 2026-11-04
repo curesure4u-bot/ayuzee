@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import {
   IndianRupee, Plus, Search, Edit2, Copy, Trash2,
   CheckCircle2, Users, Building2, Shield, Tag,
-  Percent, Clock, Star, Download,
+  Percent, Clock, Star, Download, ArrowRight,
 } from "lucide-react";
 
 interface RatePlan {

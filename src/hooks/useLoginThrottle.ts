@@ -61,7 +61,7 @@ export function useLoginThrottle() {
 
     // Layer 2: Server-side DB check
     try {
-      const { data, error } = await supabase.rpc("check_login_rate_limit", {
+      const { data, error } = await (supabase as any).rpc("check_login_rate_limit", {
         p_email: email.trim().toLowerCase(),
         p_ip_address: null, // IP detected server-side if needed
       });
@@ -164,7 +164,7 @@ export function useLoginThrottle() {
 
     // Record to server (fire-and-forget, don't block UX)
     try {
-      await supabase.rpc("record_login_attempt", {
+      await (supabase as any).rpc("record_login_attempt", {
         p_email: email.trim().toLowerCase(),
         p_user_id: userId || null,
         p_ip_address: null, // Server function handles this

@@ -57,8 +57,9 @@ export function useOpdQueue(branch = "Main Branch") {
       .select("id, first_name, last_name, mobile, age_years, gender")
       .in("id", patientIds);
 
-    const patMap = new Map(
-      (patients || []).map((p: any) => [p.id, p])
+    type PatientDetails = { id: string; first_name: string; last_name: string | null; mobile: string | null; age_years: number | null; gender: string | null };
+    const patMap = new Map<string, PatientDetails>(
+      ((patients || []) as PatientDetails[]).map((p) => [p.id, p])
     );
 
     const enriched: OpdVisit[] = visitsData.map((v: any) => {

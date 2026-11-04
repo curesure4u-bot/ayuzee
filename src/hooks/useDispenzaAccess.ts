@@ -46,7 +46,7 @@ export const useDispenzaAccess = (): DispenzaAccess => {
         }
 
         // Check dispenza_premium_access table
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("dispenza_premium_access")
           .select("access_type, is_active, expires_at")
           .eq("email", email)

@@ -117,10 +117,10 @@ const DoctorDetail = () => {
     // Load trust metrics from new tables
     (async () => {
       const [verRes, artRes, outcomeRes, cmeRes] = await Promise.all([
-        supabase.from("doctor_verifications").select("status, badge_level").eq("doctor_id", id).eq("status", "verified").limit(1).maybeSingle(),
-        supabase.from("doctor_articles").select("id", { count: "exact", head: true }).eq("author_id", id).eq("status", "published"),
-        supabase.from("treatment_outcomes").select("outcome_status").eq("doctor_id", id).eq("is_published", true),
-        supabase.from("cme_credits").select("credits_earned").eq("doctor_id", id).eq("status", "active"),
+        (supabase as any).from("doctor_verifications").select("status, badge_level").eq("doctor_id", id).eq("status", "verified").limit(1).maybeSingle(),
+        (supabase as any).from("doctor_articles").select("id", { count: "exact", head: true }).eq("author_id", id).eq("status", "published"),
+        (supabase as any).from("treatment_outcomes").select("outcome_status").eq("doctor_id", id).eq("is_published", true),
+        (supabase as any).from("cme_credits").select("credits_earned").eq("doctor_id", id).eq("status", "active"),
       ]);
 
       const outcomes = (outcomeRes.data ?? []) as { outcome_status: string }[];
@@ -144,16 +144,16 @@ const DoctorDetail = () => {
       const uid = sess.session?.user.id ?? null;
       setCurrentUserId(uid);
 
-      const { count } = await supabase.from("doctor_follows").select("id", { count: "exact", head: true }).eq("following_id", id);
+      const { count } = await (supabase as any).from("doctor_follows").select("id", { count: "exact", head: true }).eq("following_id", id);
       setFollowCount(count ?? 0);
 
       if (uid) {
-        const { data: followRow } = await supabase.from("doctor_follows").select("id").eq("follower_id", uid).eq("following_id", id).maybeSingle();
+        const { data: followRow } = await (supabase as any).from("doctor_follows").select("id").eq("follower_id", uid).eq("following_id", id).maybeSingle();
         setIsFollowing(!!followRow);
       }
 
       // Load online status
-      const { data: statusRow } = await supabase.from("doctor_online_status").select("is_online, last_active_at, status_text").eq("doctor_id", id).maybeSingle();
+      const { data: statusRow } = await (supabase as any).from("doctor_online_status").select("is_online, last_active_at, status_text").eq("doctor_id", id).maybeSingle();
       if (statusRow) setOnlineStatus(statusRow as any);
     })();
   }, [id]);
@@ -186,12 +186,12 @@ const DoctorDetail = () => {
     }
     if (currentUserId === id) return;
     if (isFollowing) {
-      await supabase.from("doctor_follows").delete().eq("follower_id", currentUserId).eq("following_id", id);
+      await (supabase as any).from("doctor_follows").delete().eq("follower_id", currentUserId).eq("following_id", id);
       setIsFollowing(false);
       setFollowCount((c) => Math.max(0, c - 1));
       toast.success("Unfollowed");
     } else {
-      await supabase.from("doctor_follows").insert({ follower_id: currentUserId, following_id: id });
+      await (supabase as any).from("doctor_follows").insert({ follower_id: currentUserId, following_id: id });
       setIsFollowing(true);
       setFollowCount((c) => c + 1);
       toast.success("Following! You'll see their posts in your feed.");
