@@ -148,7 +148,7 @@ const Feed = () => {
       .eq("is_published", true)
       .order("created_at", { ascending: false })
       .limit(100);
-    setPosts((postsData as Post[]) ?? []);
+    setPosts((postsData as unknown as Post[]) ?? []);
 
     // Load doctor specializations for feed author display
     if (postsData && postsData.length > 0) {
