@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { WelcomeUserTypeDialog } from "@/components/auth/WelcomeUserTypeDialog";
 import { setSEO } from "@/lib/seo";
+import { PublicPreviewHome } from "@/components/common/PublicPreviewHome";
 
 const AYUSH_SYSTEMS = [
   { name: "Ayurveda", icon: "🌿", desc: "Ancient healing through herbs, diet & Panchakarma", link: "/doctors?q=Ayurveda", color: "from-emerald-50 to-green-100 border-emerald-200 hover:border-emerald-400" },
@@ -122,4 +123,6 @@ const Index = () => {
   );
 };
 
-export default Index;
+// Retain the launch layout until its individual workflows have been verified.
+export { Index as LaunchHome };
+export default PublicPreviewHome;
