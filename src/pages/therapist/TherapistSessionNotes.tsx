@@ -90,6 +90,7 @@ interface SessionNote {
 
 interface CompletedSession {
   id: string;
+  doctor_id?: string | null;
   patient_name: string;
   therapy_name: string;
   therapy_code: string;
