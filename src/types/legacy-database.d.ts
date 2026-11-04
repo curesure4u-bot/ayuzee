@@ -10,7 +10,7 @@ type LegacyTable =
   | "doctor_online_status" | "doctor_payouts" | "doctor_verifications"
   | "feed_posts" | "gamification_points" | "medicine_subscriptions"
   | "orders" | "patient_reviews" | "product_requests" | "spine_ayush_posture_assessments"
-  | "spine_ayush_user_progress" | "spine_checklists" | "spine_csr_allocations"
+  | "spine_ayush_modules" | "spine_clinical_resources" | "spine_ayush_user_progress" | "spine_checklists" | "spine_csr_allocations"
   | "spine_csr_donors" | "spine_franchise_data" | "spine_injury_patients"
   | "spine_leads" | "spine_library_resources" | "spine_offers"
   | "spine_patient_subscriptions" | "spine_referral_applications"

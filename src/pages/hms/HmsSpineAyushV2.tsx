@@ -1303,4 +1303,4 @@ const HmsSpineAyushV2 = () => {
   );
 };
 
-export default HmsSpineAyush;
+export default HmsSpineAyushV2;

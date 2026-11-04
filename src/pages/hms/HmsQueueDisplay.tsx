@@ -10,7 +10,9 @@ import { useQueueDisplay } from "@/hooks/useQueueDisplay";
 type TokenDisplay = { tokenNo: number; patientName: string; department: string; doctor: string; room: string; status: "calling" | "waiting" | "in_progress" };
 
 const HmsQueueDisplay = () => {
-  const { tokens: hookTokens, loading, error, refetch } = useQueueDisplay();
+  const { queueStates, loading, loadStates: refetch } = useQueueDisplay();
+  const error: string | null = null;
+  const hookTokens = queueStates.map((s) => ({ tokenNo: String(s.current_token), patient: s.current_patient_name || "", department: "", doctor: "", status: s.current_token > 0 ? "serving" : "waiting" }));
   const tokens: TokenDisplay[] = hookTokens.map((t, i) => ({
     tokenNo: parseInt(t.tokenNo.replace(/\D/g, "")) || (i + 15),
     patientName: t.patient,

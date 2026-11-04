@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Shield, Wifi, Clock, Eye, EyeOff, Lock, AlertTriangle,
-  Key, Monitor, UserX, Plus, Trash2, Save
+  Key, Monitor, UserX, Plus, Trash2, Save, CheckCircle
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 

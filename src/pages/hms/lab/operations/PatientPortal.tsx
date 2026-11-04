@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import {
   Globe, Link2, MessageSquare, Phone, Mail, QrCode,
   Eye, Download, Shield, Clock, CheckCircle2, Users,
-  Settings, Copy, ExternalLink, Lock, Smartphone,
+  Settings, Copy, ExternalLink, Lock, Smartphone, Search,
 } from "lucide-react";
 
 interface PatientAccess {
