@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export type BloodGroup = "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
-export type RequestStatus = "pending" | "approved" | "issued" | "rejected";
+export type RequestStatus = "pending" | "approved" | "issued" | "rejected" | "cross_matched";
 
 export interface BloodStock {
   id: string;

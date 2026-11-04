@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { Shield, Users, Building2, Settings, CheckCircle2, XCircle, Clock, Search, Loader2 } from "lucide-react";
 import { useAccessControl } from "@/hooks/useAccessControl";
 
-type HmsRole = "owner" | "branch_admin" | "branch_doctor" | "franchise_doctor" | "therapist" | "pharmacist" | "lab_tech" | "receptionist" | "camp_doctor" | "nurse";
+type HmsRole = "owner" | "branch_admin" | "branch_doctor" | "franchise_doctor" | "therapist" | "pharmacist" | "lab_tech" | "receptionist" | "camp_doctor" | "nurse" | "venue_partner" | "service_provider";
 type HmsModule = "dashboard" | "opd" | "clinical" | "patient" | "ipd" | "lab" | "stock" | "accounts" | "mis" | "ayush" | "panchakarma" | "spine" | "hr" | "marketing" | "masters" | "reports" | "all";
 
 interface StaffMember {

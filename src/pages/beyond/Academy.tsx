@@ -61,6 +61,7 @@ interface Enrollment {
 
 interface Lesson {
   id: string;
+  assignment_text?: string | null;
   course_id: string;
   title: string;
   description: string | null;
@@ -105,6 +106,7 @@ interface QuizQuestion {
 
 interface Certificate {
   id: string;
+  course_id?: string;
   certificate_number: string;
   holder_name: string;
   course_title: string;
