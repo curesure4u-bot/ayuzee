@@ -1,7 +1,7 @@
 import ts from 'typescript';
-import {readFileSync,writeFileSync} from 'node:fs';
+import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {resolve} from 'node:path';
+import {resolve,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const name=node=>node&&(ts.isIdentifier(node)||ts.isStringLiteral(node))?node.text:undefined;
@@ -47,9 +47,26 @@ export function inspectSource(text,path,schema){
   ts.forEachChild(node,visit);
  };visit(file);return {issues,dynamic};
 }
+// Developer machines usually have ripgrep. Minimal CI runners may not. Keep the
+// same source boundary without making an optional system binary a release gate.
+export function listSourceFiles(directory,run=execFileSync){
+ let files;
+ try{files=run('rg',['--files','.'],{cwd:directory,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean).map(p=>p.replace(/^\.\//,''));}
+ catch(error){
+  if(error.code!=='ENOENT')throw error;
+  files=[];
+  const walk=(path,prefix='')=>{for(const entry of readdirSync(path,{withFileTypes:true})){
+   if(entry.name.startsWith('.')||entry.name==='node_modules')continue;
+   const name=prefix+entry.name;
+   if(entry.isDirectory())walk(join(path,entry.name),name+'/');
+   else if(entry.isFile())files.push(name);
+  }};walk(directory);
+ }
+ return files.filter(p=>/\.tsx?$/.test(p)&&p.split('/').at(-1)!=='types.ts').sort();
+}
 export function collectSchemaContracts(){
  const schema=schemaNames(readFileSync(resolve(root,'src/integrations/supabase/types.ts'),'utf8'));
- const files=execFileSync('rg',['--files','src'],{cwd:root,encoding:'utf8'}).trim().split('\n').filter(p=>/\.tsx?$/.test(p)&&!p.endsWith('/types.ts'));
+ const files=listSourceFiles(resolve(root,'src')).map(file=>'src/'+file);
  const issues=[],dynamic=[];
  for(const file of files){const result=inspectSource(readFileSync(resolve(root,file),'utf8'),file,schema);issues.push(...result.issues);dynamic.push(...result.dynamic);}
  issues.sort((a,b)=>a.file.localeCompare(b.file)||a.line-b.line);
