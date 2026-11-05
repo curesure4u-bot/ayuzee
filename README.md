@@ -1,11 +1,8 @@
 # Ayuzee — AYUSH Healthcare Super-App
 
-Ayuzee is a comprehensive AYUSH (Ayurveda, Yoga, Unani, Siddha, Homeopathy) healthcare super-app built as a React SPA. It covers telemedicine, e-commerce, hospital management, multi-system prescriptions, AI-assisted diagnostics, patient journeys, learning, and community features — all backed by Supabase.
+Ayuzee is a React/Supabase project for AYUSH care, community, commerce and hospital workflows. This branch contains locally verified foundations and explicit previews of unfinished features. The feature table below describes the intended scope, not a claim of production availability.
 
-Current branch progress: [phase ledger](docs/release/phase-progress.md),
-[Phase 3 local closeout](docs/domains/commerce-closeout.md) and
-[commit handoff](docs/release/commit-readiness.md). Commerce is locally verified;
-functional previews and hosted acceptance gates remain in place.
+Current status: [phase ledger](docs/release/phase-progress.md), [CI repair evidence](docs/release/ci-repair-2026-11-05.md), [feature keep/remove decisions](docs/review/FEATURES_FOR_DECISION.md) and [resume checkpoint](docs/release/RESUME.md). Original implementations of 310 preview screens remain in `retained-previews/`. Do not reconnect them before backend, permissions and phase acceptance checks pass.
 
 ---
 
@@ -68,22 +65,22 @@ functional previews and hosted acceptance gates remain in place.
 | Layer | Technology |
 |---|---|
 | **Framework** | React 18.3 |
-| **Language** | TypeScript 5.8 |
-| **Build Tool** | Vite 5.4 (SWC compiler) |
+| **Language** | TypeScript 7 native compiler + TypeScript 6 tooling API |
+| **Build Tool** | Vite 8.3.6 (React SWC plugin) |
 | **Routing** | React Router DOM 7.9 |
 | **State / Data Fetching** | TanStack React Query 5.83 |
 | **UI Components** | shadcn/ui (Radix UI primitives) |
 | **Styling** | Tailwind CSS 3.4, tailwindcss-animate, @tailwindcss/typography |
 | **Animations** | Framer Motion 12 |
 | **Charts** | Recharts 2.15 |
-| **Forms** | React Hook Form 7.61 + Zod 3.25 |
+| **Forms** | React Hook Form + Zod 4.6.7 |
 | **Backend / Auth / DB** | Supabase (PostgreSQL, Auth, Storage, Edge Functions) |
 | **Payments** | Razorpay (via Supabase Edge Functions) |
 | **PDF Generation** | jsPDF 4.2, jspdf-autotable, html2canvas |
 | **Date Handling** | date-fns 3.6 |
 | **Markdown** | react-markdown + remark-gfm |
 | **QR Codes** | qrcode 1.5 |
-| **Unit Testing** | Vitest 3.2, @testing-library/react |
+| **Unit Testing** | Vitest 5.1.0, @testing-library/react |
 | **E2E Testing** | Playwright 1.61 |
 | **Linting** | ESLint 9.32, eslint-plugin-react-hooks, eslint-plugin-react-refresh |
 | **Package Manager** | npm (bun.lock present for Bun compatibility) |
@@ -171,7 +168,7 @@ ayuzee-main/
 
 ## Prerequisites
 
-- **Node.js** 20 or later
+- **Node.js** 22.19.0 or later
 - **npm** 10+ (or Bun as an alternative)
 - A **Supabase** project (see [Environment Variables](#environment-variables))
 
@@ -625,7 +622,7 @@ Reports and traces are written to `playwright-report/` and `test-results/`. On f
 
 GitHub Actions runs the full E2E suite on every push and pull request to `main` (`.github/workflows/e2e.yml`):
 
-1. **Checkout** code (Node 20, npm cache)
+1. **Checkout** code (Node 22, npm cache)
 2. **Install** dependencies (`npm ci`) and Playwright browsers (Chromium only)
 3. **Prepare** Vite environment — reads Supabase credentials from GitHub secrets/variables, falls back to committed `.env`
 4. **Build** production app (`npm run build`)

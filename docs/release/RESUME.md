@@ -1,64 +1,59 @@
-# Latest checkpoint — Phase 3 local closeout, 5 November 2026
+# Latest checkpoint — CI repair and explicit previews, 5 November 2026
 
-Latest instruction: Sai authorized pushing all prepared updates to Sai-Branch and
-then beginning Phase 4 locally. This supersedes the preparation-only and waiting
-statements in the historical checkpoint below. No main merge, deployment, paid
-resource or real financial/provider operation is authorized.
+Sai’s priority is fixing the two red GitHub checks before continuing Phase 4.
+The user approved retaining undeployed features as explicit previews, with a list
+of intended uses to decide Keep/Remove/Later. Preserve those decisions; do not
+permanently delete features or invent missing live schema objects.
 
-**Phase 3: 8/8 local, 0/8 hosted; exit remains open.** Sai authorized 3.7 and
-3.8 plus source cleanup and preparation for a checkpoint commit on `Sai-Branch`.
-Read `docs/domains/commerce-closeout.md`, `commerce-fulfilment.md`,
-`docs/release/commit-readiness.md` and the machine-readable progress ledger.
-No Phase 4 work starts without the next instruction.
+## Prepared source result
 
-Local commerce now includes catalog/review, authoritative cart/quotes, owned
-orders/stock holds, test-only payment verification/recovery, measured staff
-packing/one courier claim/owned tracking, safe pre-booking cancellation and
-bound partial/full refund reconciliation. Browser intents persist before refund
-requests; uncertain outcomes reconcile the same reference without another POST.
-A cancelled preparation is shown as cancelled, not still ready to dispatch.
-All operational screens use explicit assigned roles and scoped account sessions.
+Read [repair evidence](ci-repair-2026-11-05.md), its JSON, the
+[decision list](../review/FEATURES_FOR_DECISION.md) and
+[phase ledger](phase-progress.json). 351 original modules match Git checkpoint
+39e1d4d byte-for-byte in retained-previews; 310 active screen entrypoints are inert.
+Seven unreleased transports return a local unavailable error with no network.
+All active src remains typechecked; generated live schema provenance is unchanged.
+Public home/information pages and previews boot without hosted configuration.
 
-Accepted final source suite: **461 unit/contract/UI/route tests in 32 files**;
-40 standalone SQL cases plus seven-handler containment; nine new native local
-refund cases and five bounded capacity scenarios. Strict commerce/payment/
-fulfilment/refund types, lint and production build pass. Existing chunk warning
-remains. Schema preflight still fails: 992 unresolved literal calls to 243 absent
-public objects and 64 dynamic calls across 1622 source files. Full application
-TSC and the prior 56 dependency findings remain unresolved. Do not bypass them.
+Full active-app/config/scoped types, scoped lint, source/hosting/function checks,
+486 unit tests/35 files and build pass locally. A clean npm install followed by
+the existing high-severity audit gate reports zero total vulnerabilities. Native
+local payment/delivery/refund/wallet checks are 10/10, 10/10, 9/9 and 6/6. All five
+commerce/finance policies are disabled after synthetic cleanup. Known chunk size
+warnings and 53 contextual dynamic source references remain visible.
 
-Capacity: 500 approved/50 unpublished fixtures, 240 filtered anonymous requests
-at concurrency 8 (p95 10ms); 24 reservations at concurrency 8 (p95 12ms);
-20 last-item contenders -> one hold; 16 repeated keys -> one order; 40 foreign
-lookups -> all denied. This is a short workstation regression checkpoint, not a
-hosted traffic or user-count promise. All providers are fictional, with zero API
-requests, payments, refunds, courier operations or paid resources.
+## Git and next action
 
-Desktop/390px browser review has no horizontal overflow. Refund operations axe:
-27 passes; customer: 25; delivery customer: 26, staff: 23. Zero violations or
-incomplete results. Temporary preview/tab closed and viewport reset.
-Native tests use the existing local admin role; orders_admin is isolated-fixture
-covered, not verified in the older local enum or hosted. Automatic approval
-review rejected hosted role metadata lookup under the local-only restriction;
-it was not retried/bypassed. No hosted commerce changes were made.
+067367b (Phase 0–3 checkpoint) and 39e1d4d (ripgrep portability fix) were previously
+pushed to Sai-Branch. Remote main was verified unchanged at
+`ea29dec5eb4b6d3546161aec0c711a56eaddaeb9`. The repaired source checkpoint is ready
+for normal fast-forward commit/push to Sai-Branch with [skip netlify]; verify the
+actual eight-job GitHub result and record any failure before resuming Phase 4.
+Do not merge, force-push, modify main, publish, upgrade plans or spend money.
 
-The four install manifests under local_verification pin checkout/payments/
-fulfilment/refunds. Never replay candidate DDL or reset staging. All four policies
-are disabled and synthetic account/order/product/refund records are cleaned.
-The existing seven-container loopback stack is retained. The three applied
-hosted access/onboarding migrations stay immutable.
+Phase 0 local 9/9 hosted 0/5; Phase 1 local 11/13 hosted 2/9; Phase 2 local 5/8
+hosted 0/8; Phase 3 local 8/8 hosted 0/8. All phase exits remain open.
 
-Cleanup: 14 obsolete reports, credential/provisioning artifacts, debug screenshots
-and duplicate disabled implementation copies were hash-verified and archived to
-`/Users/sai/Codex/Ayuzee-Project-Handover/archive/phase3-cleanup-2026-11-05/`.
-All current source/tests/evidence and unrelated uncommitted edits are preserved.
-No optional integration was removed. Build output is removed after verification.
-Commit/push preparation is documented; index remains untouched and no commit,
-push, merge or deployment occurred. Before an eventual push verify Lovable/
-Netlify branch publishing controls; Sai-Branch alone does not prove no deploy.
+## Phase 4 foundation retained
 
-Earlier phases still: Phase 0 local 7/9 hosted 0/5; Phase 1 local 11/13 hosted
-2/9; Phase 2 local 5/8 hosted 0/8. No phase exit is accepted. Hosted provider
-transport/credentials, triggers/grants preflight, scheduling/monitoring, retention,
-rollback, actual acceptance/load tests and publishing controls remain open.
-Logs/recovery material: `/Users/sai/Codex/Ayuzee-Project-Handover/work/phase3-closeout-2026-11-05/`.
+[Wallet ledger](../domains/wallet-ledger.md) is local and incomplete (Phase 4 0/6).
+20 isolated cases and six native cases pass. Private same-unit double-entry,
+exact idempotency, own-session reads and fixture-only events are implemented;
+wallet UI, legacy reconciliation and real trusted event adapters remain open.
+Do not replay candidate DDL: local_verification.wallet_install pins SHA256
+`d6ae76d38896b29a89fe54d1e489fdf33c9b872c071c21b0b65601eade19ebea`.
+Checkout/payment/fulfilment/refund installs are also fingerprinted.
+
+## Operational boundaries
+
+Reuse the existing seven-container loopback staging stack. Never reset staging,
+print keys or replay installed SQL. The three applied hosted migrations remain
+immutable. Hosted role metadata and bulk export were previously rejected by
+automatic review and were not retried. No new hosted database changes occurred.
+Hosting controls, deployed source, email delivery and broader API/storage/release
+acceptance still need authorized access. Local success does not close those gates.
+
+All recovery material and raw logs are in the canonical handover under
+`/Users/sai/Codex/Ayuzee-Project-Handover/work/ci-repair-2026-11-05/`.
+Temporary preview servers/tabs are closed and viewport overrides restored.
+Build output is disposable; do not commit dist, keys or handover archives.

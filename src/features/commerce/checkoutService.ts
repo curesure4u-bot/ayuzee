@@ -2,7 +2,7 @@ import type{SupabaseClient}from'@supabase/supabase-js';
 import{createCheckoutSource}from'./checkoutGateway';
 import{cartSchema}from'./checkoutModel';
 import{checkoutCart}from'./checkoutCart';
-import{supabase}from'@/integrations/supabase/client';
+import{previewSupabase as supabase}from'@/integrations/preview/client';
 import type{Json}from'@/integrations/supabase/types';
 // Candidate-only contract: no invented additions to the generated live schema.
 type CheckoutDatabase={public:{Tables:Record<never,never>;Views:Record<never,never>;Functions:{commerce_checkout:{Args:{p_action:string;p_payload:Json};Returns:Json}};Enums:Record<never,never>;CompositeTypes:Record<never,never>}};

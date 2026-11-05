@@ -1,0 +1,1 @@
+{"extends":"./tsconfig.app.json","compilerOptions":{"strict":true,"types":["node","vitest/globals"]},"include":["src/features/wallet/**/*","tests/database/wallet.native.test.ts"]}

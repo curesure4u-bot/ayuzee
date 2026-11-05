@@ -1,0 +1,4 @@
+import{z}from'zod';
+import{walletStatus,walletUnit,type WalletSource}from'./model';
+// Deliberately no credit/debit/top-up method on the browser contract.
+export function createWalletSource(transport:(payload:Record<string,unknown>,signal?:AbortSignal)=>Promise<{data:unknown;error:unknown}>,workspace:string):WalletSource{return{async status(unit,page,signal){walletUnit.parse(unit);z.number().int().min(1).max(1000).parse(page);if(signal?.aborted)throw new DOMException('Cancelled','AbortError');const r=await transport({workspace,unit,page},signal);if(signal?.aborted)throw new DOMException('Cancelled','AbortError');if(r.error)throw Error('The recorded wallet could not be checked. Sign in again or retry.');const value=walletStatus.parse(r.data);if(value.unit!==unit)throw Error('Wallet unit mismatch');return value;}};}

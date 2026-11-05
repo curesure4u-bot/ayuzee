@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { toast } from "sonner";
 import { Plus, Search, Pencil, Trash2, CheckSquare, Filter, Download, Copy } from "lucide-react";
-import type { VariableTask, Priority, Importance, Urgency, TaskTrackerSettings } from "./types";
+import type { VariableTask, Priority, Importance, Urgency, TaskTrackerSettings, RoleContext } from "./types";
 import { getDaysLeft, getPriorityColor, getDecisionColor, getDecision } from "./types";
 import { exportTaskListPdf } from "./exportPdf";
 import VoiceInput from "./VoiceInput";
@@ -35,7 +35,7 @@ const emptyForm = {
   person_in_charge: "", start_date: "", due_date: "", kanban_category: "Backlog",
   importance: "Not Important" as Importance, urgency: "Not Urgent" as Urgency,
   progress: 0, notes: "", is_completed: false, completed_at: null,
-  gantt_color: "", project_name: "", role_context: "general" as const,
+  gantt_color: "", project_name: "", role_context: "general" as RoleContext,
 };
 
 const TaskTrackerVariable = ({ tasks, settings, onAdd, onUpdate, onDelete }: Props) => {

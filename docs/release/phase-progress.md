@@ -4,18 +4,19 @@ Updated 2026-11-05 · branch `Sai-Branch`.
 
 Counts are equally counted checklist criteria, not effort estimates or a claim of production readiness. Local source/fixture verification and hosted acceptance are counted separately. A phase closes only when every criterion and its exit condition is verified.
 
-**A phase remains open until its exit checks pass.** Supabase access and the scoped live view repair are verified: 23 advisor ERROR findings are now zero; 19 local PostgreSQL tests, 70 local integration checks (69 HTTP plus FK cleanup) and read-only live permission assertions passed. Existing records/admin assignments were preserved. Additive onboarding backend is now applied and seven local Auth/email/PKCE scenarios pass; hosted delivery remains pending. Staging is local as Sai requested. Publishing controls and SMTP acceptance, broader APIs/storage and complete community workflows still prevent phase closure. Phase 2 community source workflows and a local-only database candidate are now implemented and tested; no community migration or frontend deployment has been applied live. Public Netlify hosting is now confirmed by live response headers; its deployed branch and publishing controls remain unverified. Phase 3.1–3.8 now meet all eight local commerce criteria, including fictional-provider fulfilment/refunds and bounded capacity. Hosted commerce acceptance remains 0/8. No commerce candidate was applied hosted and no real provider action or paid resource was used.
+**A phase remains open until its exit checks pass.** Supabase access and the scoped live view repair are verified: 23 advisor ERROR findings are now zero; 19 local PostgreSQL tests, 70 local integration checks (69 HTTP plus FK cleanup) and read-only live permission assertions passed. Existing records/admin assignments were preserved. Additive onboarding backend is now applied and seven local Auth/email/PKCE scenarios pass; hosted delivery remains pending. Staging is local as Sai requested. Publishing controls and SMTP acceptance, broader APIs/storage and complete community workflows still prevent phase closure. Phase 2 community source workflows and a local-only database candidate are now implemented and tested; no community migration or frontend deployment has been applied live. Public Netlify hosting is now confirmed by live response headers; its deployed branch and publishing controls remain unverified. Phase 3.1–3.8 now meet all eight local commerce criteria, including fictional-provider fulfilment/refunds and bounded capacity. Hosted commerce acceptance remains 0/8. No commerce candidate was applied hosted and no real provider action or paid resource was used. Latest source repair: full active-app compilation and clean dependency audit pass; 351 historical modules are retained as 310 explicit previews for Sai’s business review. Hosted acceptance is unchanged.
 
 | Phase | Local checklist complete | Hosted checklist complete | Exit accepted |
 | --- | --- | --- | --- |
-| 0 — Safe release process | 7/9 | 0/5 | No |
+| 0 — Safe release process | 9/9 | 0/5 | No |
 | 1 — Login, accounts and permissions | 11/13 | 2/9 | No |
 | 2 — Core community portal | 5/8 | 0/8 | No |
 | 3 — Ecommerce | 8/8 | 0/8 | No |
+| 4 — Wallets, rewards, memberships and learning | 0/6 | 0/6 | No |
 
 Local counts describe the explicit list below; they are not percentages of the whole codebase or forecasts of engineering time.
 
-Latest increment: [Phase 3 local closeout, 8/8](../domains/commerce-closeout.md), including [delivery](../domains/commerce-fulfilment.md) and [payment verification/recovery](../domains/commerce-payments.md), extending [checkout](../domains/commerce-checkout.md) and the [catalog](../domains/commerce-catalog.md), following the [community portal](../domains/community-portal.md) and [scoped live access repair](scoped-access-2026-11-04.md). Phase 3 source work was explicitly authorized while earlier hosted acceptance remains open. Source: [machine-readable ledger](phase-progress.json). Original plan: retain the Phase 0–8 sequence; do not replace it with a new roadmap. Local staging replaces hosted staging at Sai’s explicit request; this is a changed constraint, not evidence of hosted validation.
+Latest increment: [CI repair and explicit feature previews](ci-repair-2026-11-05.md), including the [keep/remove decision list](../review/FEATURES_FOR_DECISION.md). Phase 0 local criteria are 9/9; hosted exit remains open. [Phase 4.1 wallet ledger foundation in progress](../domains/wallet-ledger.md), following the pushed [Phase 3 local closeout, 8/8](../domains/commerce-closeout.md), including [delivery](../domains/commerce-fulfilment.md) and [payment verification/recovery](../domains/commerce-payments.md), extending [checkout](../domains/commerce-checkout.md) and the [catalog](../domains/commerce-catalog.md), following the [community portal](../domains/community-portal.md) and [scoped live access repair](scoped-access-2026-11-04.md). Phase 3 source work was explicitly authorized while earlier hosted acceptance remains open. Source: [machine-readable ledger](phase-progress.json). Original plan: retain the Phase 0–8 sequence; do not replace it with a new roadmap. Local staging replaces hosted staging at Sai’s explicit request; this is a changed constraint, not evidence of hosted validation.
 
 ## Phase 0 — Safe release process
 
@@ -32,7 +33,7 @@ Latest increment: [Phase 3 local closeout, 8/8](../domains/commerce-closeout.md)
 ### P0.3 — Truthful checks
 
 - [x] **local** · Application/config checks are explicit; scoped checks do not replace the full application job. [Evidence](../../.github/workflows/phase0-checks.yml)
-- [ ] **local** · Finish full application typecheck diagnosis and obtain its actual diagnostic baseline; prior bounded runs did not complete. [Evidence](../../docs/architecture/modularity-assessment.md)
+- [x] **local** · Full active application typecheck passes. Unreleased implementations are retained as user-approved explicit previews with integrity checks; live schema provenance is unchanged. [Evidence](../../docs/release/ci-repair-2026-11-05.json)
 
 ### P0.4 — Database source of truth
 
@@ -47,7 +48,7 @@ Latest increment: [Phase 3 local closeout, 8/8](../domains/commerce-closeout.md)
 ### P0.6 — Deployment checks and monitoring
 
 - [x] **local** · Source build gate stops at failed checks; role policy checks and ledger consistency are included. [Evidence](../../scripts/netlify-build.mjs)
-- [ ] **local** · DOMPurify patched and pinned to 3.4.17; three sanitizer tests pass. Latest install audit: 56 affected packages (37 moderate, 17 high, two critical); remaining toolchain and Zod upgrades need reviewed follow-up. [Evidence](../../docs/release/dependency-triage-2026-11-04.md)
+- [x] **local** · Reviewed toolchain and validation upgrades, scoped transitive overrides and a clean lockfile install pass. Existing npm audit --audit-level=high reports zero total vulnerabilities. [Evidence](../../docs/release/ci-repair-2026-11-05.json)
 - [ ] **hosted** · Verify Netlify/Lovable publishing controls, actual CI gating and protected release flow. Netlify serving the public domain is now confirmed; dashboard settings and deployed commit remain unavailable.
 - [ ] **hosted** · Verify actual error delivery, privacy configuration and operational ownership.
 
@@ -177,9 +178,40 @@ Latest increment: [Phase 3 local closeout, 8/8](../domains/commerce-closeout.md)
 - [x] **local** · Bounded native local workload passes five scenarios: 550 catalog products, 240 anonymous filtered requests at concurrency 8, 24 independent reservations, 20 final-item contenders, 16 same-key retries and 40 ownership denials. Measured latency is workstation-only, not a production SLA. [Evidence](../../docs/release/commerce-capacity-result.json)
 - [ ] **hosted** · Agree and verify the deployed capacity claim within existing free limits and explicit load-test authorization.
 
+## Phase 4 — Wallets, rewards, memberships and learning
+
+### P4.1 — Wallet ledger and balances
+
+- [ ] **local** · Traceable private ledger foundation passes 20 isolated and six native local checks. Shared-session wallet UI, legacy writer reconciliation/containment and final source integration remain pending. [Evidence](../../docs/domains/wallet-ledger.md)
+- [ ] **hosted** · Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.
+
+### P4.2 — Rewards and redemptions
+
+- [ ] **local** · Derive eligibility, amounts, stock and entitlements on the server; verify duplicate-credit and concurrent-spend denial.
+- [ ] **hosted** · Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.
+
+### P4.3 — Payout processing and recovery
+
+- [ ] **local** · Prepare durable claims, provider-bound outcomes and uncertain/partial-failure recovery with fictional adapters; no real payout.
+- [ ] **hosted** · Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.
+
+### P4.4 — Memberships and digital purchases
+
+- [ ] **local** · Bind activation to verified purchase, enforce expiry and authorize digital downloads; no browser-authored activation.
+- [ ] **hosted** · Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.
+
+### P4.5 — Quiz scoring and progression
+
+- [ ] **local** · Keep answer validation and reward issuance server-side; test daily selection and consecutive-day streaks.
+- [ ] **hosted** · Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.
+
+### P4.6 — Course and content workflows
+
+- [ ] **local** · Verify persistence, role/ownership access and safe rendering for the released learning workflows.
+- [ ] **hosted** · Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.
+
 ## Later phases
 
-- **Phase 4 — Wallets, memberships and learning:** Pending; financial and entitlement operations remain previews.
 - **Phase 5 — Bookings and consultations:** Pending; no booking action enabled by workspace cards.
 - **Phase 6 — Hospital operations:** Pending; Phase 1 defines scoped role vocabulary, while actual operational adapters and hospital workflow acceptance belong here.
 - **Phase 7 — Tools and integrations:** Pending; each tool requires its own capability and direct API tests.

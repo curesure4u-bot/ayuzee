@@ -1,9 +1,9 @@
-import { supabase } from '@/integrations/supabase/client';
+import { previewSupabase as supabase } from '@/integrations/preview/client';
 import { createDirectorySource, directoryFields, directoryOrder, DIRECTORY_PAGE_SIZE, directorySearchPattern } from './directoryGateway';
 import type { DirectoryReadClient } from './directoryContract';
 
-// Reuse the existing client/auth transport with a narrowly declared candidate
-// view contract; do not add invented objects to generated live schema types.
+// Use the no-network preview transport until hosted acceptance, retaining the
+// checked candidate contract. No invented objects are added to live schema types.
 const directoryClient = supabase as unknown as DirectoryReadClient;
 
 export const doctorDirectory = createDirectorySource(async (filters, signal) => {

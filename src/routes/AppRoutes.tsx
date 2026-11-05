@@ -1,10 +1,12 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { RouteFallback } from "@/components/common/PageLoader";
-import VaidyaPanchakarmaGuard from "@/components/vaidya/VaidyaPanchakarmaGuard";
-import SpineOwnerGuard from "@/components/spine/SpineOwnerGuard";
 import * as P from "@/routes/lazyPages";
 const Workspace = lazy(() => import('@/features/access/Workspace'));
+// Route guards may initialize account services; public pages and inert previews
+// must load without importing a configured live client.
+const VaidyaPanchakarmaGuard = lazy(() => import('@/components/vaidya/VaidyaPanchakarmaGuard'));
+const SpineOwnerGuard = lazy(() => import('@/components/spine/SpineOwnerGuard'));
 
 const withSuspense = (element: React.ReactNode) => (
   <Suspense fallback={<RouteFallback />}>{element}</Suspense>
@@ -560,12 +562,12 @@ export const AppRoutes = () => (
                 <Route path="invoice/pharmacy" element={withSuspense(<P.HmsStockPharmacyInvoice />)} />
                 <Route path="credit/supplier" element={withSuspense(<P.HmsStockCreditSupplier />)} />
                 <Route path="credit/patient" element={withSuspense(<P.HmsStockCreditPatient />)} />
-                <Route path="cancel/sale-bill" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/return-bill" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/purchase-order" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/grn" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/goods-return" element={withSuspense(<P.HmsStockCancelOperations />)} />
-                <Route path="cancel/issue" element={withSuspense(<P.HmsStockCancelOperations />)} />
+                <Route path="cancel/sale-bill" element={withSuspense(<P.HmsStockCancelOperations cancelType="Sale Bill" />)} />
+                <Route path="cancel/return-bill" element={withSuspense(<P.HmsStockCancelOperations cancelType="Return Bill" />)} />
+                <Route path="cancel/purchase-order" element={withSuspense(<P.HmsStockCancelOperations cancelType="Purchase Order" />)} />
+                <Route path="cancel/grn" element={withSuspense(<P.HmsStockCancelOperations cancelType="Goods Received Note" />)} />
+                <Route path="cancel/goods-return" element={withSuspense(<P.HmsStockCancelOperations cancelType="Goods Returned Note" />)} />
+                <Route path="cancel/issue" element={withSuspense(<P.HmsStockCancelOperations cancelType="Issue" />)} />
                 <Route path="ai/reorder" element={withSuspense(<P.HmsStockAISmartReorder />)} />
                 <Route path="ai/expiry" element={withSuspense(<P.HmsStockAIExpiry />)} />
                 <Route path="ai/qr-tools" element={withSuspense(<P.HmsStockQRTools />)} />
@@ -1086,7 +1088,7 @@ export const AppRoutes = () => (
               <Route path="swasthavritta/:assessmentId/review" element={withSuspense(<P.SwasthavrittaReview />)} />
               <Route path="diet-charts/new" element={withSuspense(<P.DietChartEditor />)} />
               <Route path="diet-charts/:id" element={withSuspense(<P.DietChartEditor />)} />
-              <Route element={<VaidyaPanchakarmaGuard />}>
+              <Route element={withSuspense(<VaidyaPanchakarmaGuard />)}>
                 <Route path="panchakarma" element={withSuspense(<P.Panchakarma />)} />
                 <Route path="panchakarma/schedule" element={withSuspense(<P.PanchakarmaSchedule />)} />
                 <Route path="panchakarma/bookings" element={withSuspense(<P.PanchakarmaBookings />)} />

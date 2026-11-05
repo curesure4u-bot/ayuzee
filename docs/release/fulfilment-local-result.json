@@ -25,7 +25,5 @@
   "provider": "Fictional in-process courier",
   "hostedChanges": false,
   "paidResources": false,
-  "candidateFingerprint": "f5c4b094ac2156cb60628e3120d9750fc790689bc928e938dc9a0a4ef1148531",
-  "nativeOperationsRole": "admin",
-  "delegatedRoles": "orders_admin is covered in isolated fixtures; the existing local enum lacks that role. Hosted role metadata lookup was blocked under the local-only restriction."
+  "candidateFingerprint": "f5c4b094ac2156cb60628e3120d9750fc790689bc928e938dc9a0a4ef1148531"
 }

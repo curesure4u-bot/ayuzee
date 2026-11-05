@@ -16,9 +16,9 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { CommissionRule } from "@/types/commission";
 
 const tierSchema = z.object({
-  min: z.coerce.number().min(0),
-  max: z.union([z.coerce.number().min(0), z.literal("")]).optional(),
-  percent: z.coerce.number().min(0).max(100),
+  min: z.coerce.number<string|number>().min(0),
+  max: z.union([z.coerce.number<string|number>().min(0), z.literal("")]).optional(),
+  percent: z.coerce.number<string|number>().min(0).max(100),
 });
 
 const schema = z
@@ -26,20 +26,20 @@ const schema = z
     name: z.string().trim().min(2, "Name is required").max(100),
     description: z.string().max(500).optional().or(z.literal("")),
     rule_type: z.enum(["fixed", "percentage", "tiered"]),
-    priority: z.coerce.number().int().min(0).max(1000),
+    priority: z.coerce.number<string|number>().int().min(0).max(1000),
     valid_from: z.string().min(1, "Required"),
     valid_until: z.string().optional().or(z.literal("")),
     applicable_type: z.enum(["all", "category", "manufacturer", "product"]),
     applicable_values: z.string().optional().or(z.literal("")),
-    fixed_doctor: z.coerce.number().min(0).default(0),
-    fixed_platform: z.coerce.number().min(0).default(0),
-    fixed_logistics: z.coerce.number().min(0).default(0),
-    pct_doctor: z.coerce.number().min(0).max(100).default(0),
-    pct_platform: z.coerce.number().min(0).max(100).default(0),
-    pct_manufacturer: z.coerce.number().min(0).max(100).default(0),
+    fixed_doctor: z.coerce.number<string|number>().min(0).default(0),
+    fixed_platform: z.coerce.number<string|number>().min(0).default(0),
+    fixed_logistics: z.coerce.number<string|number>().min(0).default(0),
+    pct_doctor: z.coerce.number<string|number>().min(0).max(100).default(0),
+    pct_platform: z.coerce.number<string|number>().min(0).max(100).default(0),
+    pct_manufacturer: z.coerce.number<string|number>().min(0).max(100).default(0),
     tiers: z.array(tierSchema).default([]),
-    min_order_value: z.coerce.number().min(0).optional().or(z.nan()),
-    max_commission_cap: z.coerce.number().min(0).optional().or(z.nan()),
+    min_order_value: z.coerce.number<string|number>().min(0).optional().or(z.nan()),
+    max_commission_cap: z.coerce.number<string|number>().min(0).optional().or(z.nan()),
     first_purchase_only: z.boolean().default(false),
     doctor_experience: z.enum(["any", "beginner", "intermediate", "expert"]).default("any"),
   })
@@ -100,7 +100,7 @@ export const CommissionRuleForm = ({ open, onOpenChange, initial, onSubmit }: Pr
     };
   }, [initial]);
 
-  const form = useForm<FormValues>({
+  const form = useForm<z.input<typeof schema>,unknown,z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   });

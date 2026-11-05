@@ -17,6 +17,6 @@ export async function checkoutFixture(db){
  await db.exec('DROP TRIGGER fixture_signup ON auth.users; DROP FUNCTION public.fixture_signup()');
  await db.exec(await read('supabase/migrations/20261104040057_account_onboarding_contract.sql'));
  await db.exec(await commerceTablesSQL());await db.exec(await read('supabase/review-candidates/phase3-catalog.sql'));
- await db.exec("ALTER TABLE auth.users ADD COLUMN email_confirmed_at timestamptz DEFAULT now();CREATE TABLE auth.sessions(id uuid PRIMARY KEY,user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,not_after timestamptz);INSERT INTO auth.sessions(id,user_id) SELECT ('10000000-0000-0000-0000-'||right(id::text,12))::uuid,id FROM auth.users");
+ await db.exec("ALTER TABLE auth.users ADD COLUMN email_confirmed_at timestamptz DEFAULT now();CREATE TABLE auth.sessions(id uuid PRIMARY KEY,user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,not_after timestamptz);INSERT INTO auth.sessions(id,user_id) SELECT ('10000000-0000-4000-8000-'||right(id::text,12))::uuid,id FROM auth.users");
  await db.exec(await read('supabase/review-candidates/phase3-checkout.sql'));
 }

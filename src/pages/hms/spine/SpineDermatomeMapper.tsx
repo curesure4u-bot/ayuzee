@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
-  Brain, Search, Zap, Heart, Activity, Target, Eye,
+  Grip, Brain, Search, Zap, Heart, Activity, Target, Eye,
   ArrowRight, ChevronDown, ChevronUp, Stethoscope,
   Leaf, Shield, Users, BookOpen, Lightbulb,
 } from "lucide-react";

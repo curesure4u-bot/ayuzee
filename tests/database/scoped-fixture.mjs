@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 const read = p => readFile(new URL('../../'+p, import.meta.url), 'utf8');
-export const id = n => `00000000-0000-0000-0000-${String(n).padStart(12,'0')}`;
+export const id = n => `00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 export async function scopedFixture({ nativeAuth=false }={}) {
   const metadata=JSON.parse(await read('local-staging/supabase/metadata/rbac-targets.json'));
   const registry=JSON.parse(await read('local-staging/supabase/metadata/patient-registry-columns.json'));

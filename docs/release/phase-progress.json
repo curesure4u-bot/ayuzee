@@ -1,7 +1,7 @@
 {
   "updated": "2026-11-05",
   "branch": "Sai-Branch",
-  "hostedAccess": "Supabase access and the scoped live view repair are verified: 23 advisor ERROR findings are now zero; 19 local PostgreSQL tests, 70 local integration checks (69 HTTP plus FK cleanup) and read-only live permission assertions passed. Existing records/admin assignments were preserved. Additive onboarding backend is now applied and seven local Auth/email/PKCE scenarios pass; hosted delivery remains pending. Staging is local as Sai requested. Publishing controls and SMTP acceptance, broader APIs/storage and complete community workflows still prevent phase closure. Phase 2 community source workflows and a local-only database candidate are now implemented and tested; no community migration or frontend deployment has been applied live. Public Netlify hosting is now confirmed by live response headers; its deployed branch and publishing controls remain unverified. Phase 3.1\u20133.8 now meet all eight local commerce criteria, including fictional-provider fulfilment/refunds and bounded capacity. Hosted commerce acceptance remains 0/8. No commerce candidate was applied hosted and no real provider action or paid resource was used.",
+  "hostedAccess": "Supabase access and the scoped live view repair are verified: 23 advisor ERROR findings are now zero; 19 local PostgreSQL tests, 70 local integration checks (69 HTTP plus FK cleanup) and read-only live permission assertions passed. Existing records/admin assignments were preserved. Additive onboarding backend is now applied and seven local Auth/email/PKCE scenarios pass; hosted delivery remains pending. Staging is local as Sai requested. Publishing controls and SMTP acceptance, broader APIs/storage and complete community workflows still prevent phase closure. Phase 2 community source workflows and a local-only database candidate are now implemented and tested; no community migration or frontend deployment has been applied live. Public Netlify hosting is now confirmed by live response headers; its deployed branch and publishing controls remain unverified. Phase 3.1\u20133.8 now meet all eight local commerce criteria, including fictional-provider fulfilment/refunds and bounded capacity. Hosted commerce acceptance remains 0/8. No commerce candidate was applied hosted and no real provider action or paid resource was used. Latest source repair: full active-app compilation and clean dependency audit pass; 351 historical modules are retained as 310 explicit previews for Sai\u2019s business review. Hosted acceptance is unchanged.",
   "countingRule": "Counts are equally counted checklist criteria, not effort estimates or a claim of production readiness. Local source/fixture verification and hosted acceptance are counted separately. A phase closes only when every criterion and its exit condition is verified.",
   "phases": [
     {
@@ -63,9 +63,9 @@
             {
               "id": "typecheck-baseline",
               "kind": "local",
-              "done": false,
-              "detail": "Finish full application typecheck diagnosis and obtain its actual diagnostic baseline; prior bounded runs did not complete.",
-              "evidence": "docs/architecture/modularity-assessment.md"
+              "done": true,
+              "detail": "Full active application typecheck passes. Unreleased implementations are retained as user-approved explicit previews with integrity checks; live schema provenance is unchanged.",
+              "evidence": "docs/release/ci-repair-2026-11-05.json"
             }
           ]
         },
@@ -123,9 +123,9 @@
             {
               "id": "dependency-triage",
               "kind": "local",
-              "done": false,
-              "detail": "DOMPurify patched and pinned to 3.4.17; three sanitizer tests pass. Latest install audit: 56 affected packages (37 moderate, 17 high, two critical); remaining toolchain and Zod upgrades need reviewed follow-up.",
-              "evidence": "docs/release/dependency-triage-2026-11-04.md"
+              "done": true,
+              "detail": "Reviewed toolchain and validation upgrades, scoped transitive overrides and a clean lockfile install pass. Existing npm audit --audit-level=high reports zero total vulnerabilities.",
+              "evidence": "docs/release/ci-repair-2026-11-05.json"
             },
             {
               "id": "hosting-gate",
@@ -675,14 +675,136 @@
           ]
         }
       ]
+    },
+    {
+      "id": 4,
+      "name": "Wallets, rewards, memberships and learning",
+      "exitVerified": false,
+      "tasks": [
+        {
+          "id": "P4.1",
+          "name": "Wallet ledger and balances",
+          "checks": [
+            {
+              "id": "wallet-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Traceable private ledger foundation passes 20 isolated and six native local checks. Shared-session wallet UI, legacy writer reconciliation/containment and final source integration remain pending.",
+              "evidence": "docs/domains/wallet-ledger.md"
+            },
+            {
+              "id": "wallet-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P4.2",
+          "name": "Rewards and redemptions",
+          "checks": [
+            {
+              "id": "rewards-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Derive eligibility, amounts, stock and entitlements on the server; verify duplicate-credit and concurrent-spend denial.",
+              "evidence": null
+            },
+            {
+              "id": "rewards-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P4.3",
+          "name": "Payout processing and recovery",
+          "checks": [
+            {
+              "id": "payouts-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Prepare durable claims, provider-bound outcomes and uncertain/partial-failure recovery with fictional adapters; no real payout.",
+              "evidence": null
+            },
+            {
+              "id": "payouts-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P4.4",
+          "name": "Memberships and digital purchases",
+          "checks": [
+            {
+              "id": "entitlements-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Bind activation to verified purchase, enforce expiry and authorize digital downloads; no browser-authored activation.",
+              "evidence": null
+            },
+            {
+              "id": "entitlements-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P4.5",
+          "name": "Quiz scoring and progression",
+          "checks": [
+            {
+              "id": "quiz-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Keep answer validation and reward issuance server-side; test daily selection and consecutive-day streaks.",
+              "evidence": null
+            },
+            {
+              "id": "quiz-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P4.6",
+          "name": "Course and content workflows",
+          "checks": [
+            {
+              "id": "learning-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Verify persistence, role/ownership access and safe rendering for the released learning workflows.",
+              "evidence": null
+            },
+            {
+              "id": "learning-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile the effective live schema and verified provider/entitlement boundaries, then obtain separately authorized hosted acceptance without paid resources or real financial operations.",
+              "evidence": null
+            }
+          ]
+        }
+      ]
     }
   ],
   "laterPhases": [
-    {
-      "id": 4,
-      "name": "Wallets, memberships and learning",
-      "status": "Pending; financial and entitlement operations remain previews."
-    },
     {
       "id": 5,
       "name": "Bookings and consultations",
@@ -704,5 +826,5 @@
       "status": "Pending; whole-system role and capacity acceptance is not inferred from local tests."
     }
   ],
-  "executionStatus": "Phase 3 authorized local scope is complete: 8/8 local, 0/8 hosted; exit not accepted. Full unit/contract suite 461 tests, 40 standalone SQL cases, seven-handler containment, nine new native refund and five bounded capacity scenarios pass. No provider API request, real charge/refund/courier operation, paid resource, hosted commerce migration, publishing, commit or push occurred. Source cleanup is archived and commit preparation targets Sai-Branch only. Earlier phase debt/hosted gates and optional feature decisions remain open."
+  "executionStatus": "Phase 3 local scope (8/8, hosted 0/8) was committed/pushed as 067367b on Sai-Branch; main unchanged. Follow-up CI portability fix 39e1d4d is also pushed. GitHub verified six passing jobs; two fail for the missing-ripgrep setup assumption (now fixed) and dependency audit (51 reported). Real full-app schema/type debt stays open. Phase 4 began locally: private disabled wallet ledger/read-only contract passes 20 isolated and six native tests. P4.1 remains open until wallet UI and legacy integration are verified; all six Phase 4 local/hosted checks remain open. No real provider action, paid resource or hosted change."
 }

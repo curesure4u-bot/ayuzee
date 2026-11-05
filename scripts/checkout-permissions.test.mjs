@@ -2,7 +2,7 @@ import{test}from'node:test';import assert from'node:assert/strict';import{PGlite
 const address={full_name:'Synthetic Buyer',phone:'9999999999',address_line1:'12 Example Road',address_line2:'',city:'Chennai',state:'Tamil Nadu',pincode:'600001'};
 test('server checkout candidate validates pricing and reservation lifecycle',async t=>{
  const db=new PGlite();
- async function request(n,fn,role='authenticated'){await db.exec(`SET SESSION AUTHORIZATION authenticator;SET ROLE ${role}`);try{await db.query("SELECT set_config('request.jwt.claim.sub',$1,false),set_config('request.jwt.claim.role',$2,false)",[n?id(n):'',role]);await db.query("SELECT set_config('request.jwt.claims',$1,false)",[JSON.stringify({sub:n?id(n):'',role,session_id:n?'10000000-0000-0000-0000-'+String(n).padStart(12,'0'):null})]);return await fn();}finally{await db.exec("SET SESSION AUTHORIZATION postgres;RESET ROLE;SELECT set_config('request.jwt.claim.sub','',false),set_config('request.jwt.claim.role','',false),set_config('request.jwt.claims','',false)");}}
+ async function request(n,fn,role='authenticated'){await db.exec(`SET SESSION AUTHORIZATION authenticator;SET ROLE ${role}`);try{await db.query("SELECT set_config('request.jwt.claim.sub',$1,false),set_config('request.jwt.claim.role',$2,false)",[n?id(n):'',role]);await db.query("SELECT set_config('request.jwt.claims',$1,false)",[JSON.stringify({sub:n?id(n):'',role,session_id:n?'10000000-0000-4000-8000-'+String(n).padStart(12,'0'):null})]);return await fn();}finally{await db.exec("SET SESSION AUTHORIZATION postgres;RESET ROLE;SELECT set_config('request.jwt.claim.sub','',false),set_config('request.jwt.claim.role','',false),set_config('request.jwt.claims','',false)");}}
  const api=(n,action,payload={})=>request(n,async()=>{const r=await db.query('SELECT public.commerce_checkout($1,$2) data',[action,{workspace:'patient',...payload}]);return r.rows[0].data;});
  const quote=(n,patch={})=>api(n,'quote',{items:[{product_id:id(801),quantity:2}],postal_code:'600001',...patch});
  const reserve=(n,q,key,patch={})=>api(n,'reserve',{quote_id:q.id,request_key:id(key),address,...patch});
@@ -64,7 +64,7 @@ test('server checkout candidate validates pricing and reservation lifecycle',asy
   await t.test('Auth deletion cleans the account’s order/quote/hold dependency graph',async()=>{
    await db.exec('SET SESSION AUTHORIZATION supabase_auth_admin');
    try{await db.query('INSERT INTO auth.users(id,email) VALUES($1,$2)',[id(50),'checkout-delete@example.invalid']);}finally{await db.exec('SET SESSION AUTHORIZATION postgres;RESET ROLE');}
-   await db.query('INSERT INTO auth.sessions(id,user_id) VALUES($1,$2)',['10000000-0000-0000-0000-000000000050',id(50)]);
+   await db.query('INSERT INTO auth.sessions(id,user_id) VALUES($1,$2)',['10000000-0000-4000-8000-000000000050',id(50)]);
    const q=(await quote(50)).quote;await reserve(50,q,950);
    await db.exec('SET SESSION AUTHORIZATION supabase_auth_admin');
    try{await db.query('DELETE FROM auth.users WHERE id=$1',[id(50)]);}finally{await db.exec('SET SESSION AUTHORIZATION postgres;RESET ROLE');}

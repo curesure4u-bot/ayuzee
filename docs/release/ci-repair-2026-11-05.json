@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-05",
+  "branch": "Sai-Branch",
+  "scope": "Source CI repair and user-approved explicit previews; no hosted rollout",
+  "previousRemoteCommit": "39e1d4d9bd38909474dab939fb8876750c5779ff",
+  "typecheck": {
+    "application": true,
+    "config": true,
+    "allActiveSourceIncluded": true,
+    "generatedLiveSchemaUnchanged": true
+  },
+  "dependencies": {
+    "cleanInstall": "npm ci --ignore-scripts",
+    "auditCommand": "npm audit --audit-level=high",
+    "auditExitCode": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "nodeRequirement": ">=22.19.0",
+    "vite": "8.3.6",
+    "vitest": "5.1.0",
+    "zod": "4.6.7",
+    "compiler": "TypeScript 7.0.2 native; TypeScript 6 API alias for AST tools"
+  },
+  "previews": {
+    "screens": 310,
+    "retainedModules": 351,
+    "originalsMatchPriorGitCheckpoint": 351,
+    "noPermanentFeatureRemoval": true,
+    "readAndRpcNetworkCallsInAdapterTest": 0,
+    "decisionReport": "docs/review/FEATURES_FOR_DECISION.md",
+    "manifest": "docs/review/preview-feature-inventory.json"
+  },
+  "tests": {
+    "unit": 486,
+    "unitFiles": 35,
+    "nativeLocal": {
+      "payments": 10,
+      "fulfilment": 10,
+      "refunds": 9,
+      "wallet": 6
+    },
+    "allFiveLocalPoliciesDisabledAfterCleanup": true
+  },
+  "browser": {
+    "desktopWidth": 1280,
+    "desktopScrollWidth": 1280,
+    "mobileWidth": 390,
+    "mobileScrollWidth": 390,
+    "featurePreviewForms": 0,
+    "verifiedRoutes": [
+      "/bulk",
+      "/",
+      "/about-us",
+      "/hms"
+    ],
+    "startupWithoutHostingEnvironment": true,
+    "startupRegressionTests": 2,
+    "screenshots": [
+      "docs/release/feature-preview-desktop-2026-11-05.png",
+      "docs/release/feature-preview-mobile-2026-11-05.png"
+    ]
+  },
+  "limitations": [
+    "Hosted release gates remain open",
+    "Phase 4.1 wallet foundation is incomplete",
+    "53 dynamic source references require contextual review",
+    "Large bundle chunk warning remains",
+    "Full ESLint/E2E/hosted load acceptance is not claimed"
+  ],
+  "paidResources": false,
+  "hostedDatabaseChanges": false,
+  "frontendPublishedByAgent": false
+}

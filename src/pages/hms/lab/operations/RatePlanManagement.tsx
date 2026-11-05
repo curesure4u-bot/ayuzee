@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
-  IndianRupee, Plus, Search, Edit2, Copy, Trash2,
+  ArrowRight, IndianRupee, Plus, Search, Edit2, Copy, Trash2,
   CheckCircle2, Users, Building2, Shield, Tag,
   Percent, Clock, Star, Download,
 } from "lucide-react";

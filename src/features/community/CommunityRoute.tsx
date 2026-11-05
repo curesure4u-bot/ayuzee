@@ -1,7 +1,7 @@
 import { usePageSEO } from '@/hooks/usePageSEO';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Json } from '@/integrations/supabase/types';
-import { supabase } from '@/integrations/supabase/client';
+import { previewSupabase as supabase } from '@/integrations/preview/client';
 import { useAccountSession } from '@/features/accounts/accountService';
 import { WorkspaceGuard } from '@/features/access/Workspace';
 import { isAccountRole } from '@/features/access/roles';

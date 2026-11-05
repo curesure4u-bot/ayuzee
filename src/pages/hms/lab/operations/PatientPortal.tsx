@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
-  Globe, Link2, MessageSquare, Phone, Mail, QrCode,
+  Search, Globe, Link2, MessageSquare, Phone, Mail, QrCode,
   Eye, Download, Shield, Clock, CheckCircle2, Users,
   Settings, Copy, ExternalLink, Lock, Smartphone,
 } from "lucide-react";

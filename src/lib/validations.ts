@@ -154,7 +154,7 @@ export const createGrnSchema = z.object({
 export function validate<T>(schema: z.ZodSchema<T>, input: unknown): T {
   const result = schema.safeParse(input);
   if (!result.success) {
-    const firstError = result.error.errors[0];
+    const firstError = result.error.issues[0];
     throw new Error(firstError?.message || "Validation failed");
   }
   return result.data;

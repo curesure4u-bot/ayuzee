@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, RefreshCw, Pause, Play } from "lucide-react";
-import type { RecurringTask, Priority, Importance, Urgency, Frequency, TaskTrackerSettings } from "./types";
+import type { RecurringTask, Priority, Importance, Urgency, Frequency, TaskTrackerSettings, RoleContext } from "./types";
 import { getPriorityColor } from "./types";
 
 const PRIORITIES: Priority[] = ["Very High", "High", "Medium", "Low", "Very Low", "On Hold"];
@@ -32,7 +32,7 @@ const emptyForm = {
   task_name: "", frequency: "Every Week" as Frequency, description: "",
   priority: "Medium" as Priority, person_in_charge: "",
   importance: "Not Important" as Importance, urgency: "Not Urgent" as Urgency,
-  first_date: "", end_date: "", is_active: true, role_context: "general" as const,
+  first_date: "", end_date: "", is_active: true, role_context: "general" as RoleContext,
 };
 
 const TaskTrackerRecurring = ({ recurringTasks, settings, onAdd, onUpdate, onDelete }: Props) => {

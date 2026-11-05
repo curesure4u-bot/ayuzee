@@ -1,5 +1,7 @@
 # GitHub checks — 5 November 2026
 
+Historical initial failures are recorded below. See [the source repair](ci-repair-2026-11-05.md) for the latest local verification; subsequent remote results must be checked on the new commit.
+
 The source checkpoint `067367bc15bf91bf8d0af7788106082538257cbf` was pushed
 successfully to Sai-Branch. Main stayed at
 `ea29dec5eb4b6d3546161aec0c711a56eaddaeb9`.

@@ -15,6 +15,7 @@ type DrugItem = {
 };
 
 type Interaction = {
+  id?: string;
   item1: string;
   item2: string;
   severity: "high" | "moderate" | "low";

@@ -1,5 +1,5 @@
 import type{SupabaseClient}from'@supabase/supabase-js';
-import{supabase}from'@/integrations/supabase/client';
+import{previewSupabase as supabase}from'@/integrations/preview/client';
 import type{Json}from'@/integrations/supabase/types';
 import{createResolutionSource}from'./resolutionGateway';
 type Candidate={public:{Tables:Record<never,never>;Views:Record<never,never>;Functions:{commerce_resolution:{Args:{p_action:string;p_payload:Json};Returns:Json}};Enums:Record<never,never>;CompositeTypes:Record<never,never>}};

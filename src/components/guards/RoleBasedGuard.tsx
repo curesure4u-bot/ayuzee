@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Lock, ShieldAlert, Loader2, ArrowLeft } from "lucide-react";
 
+import { grantedAccountRoles } from "@/features/access/roles";
+
 type AllowedRole = "super_admin" | "admin" | "doctor" | "therapist" | "patient" | "receptionist" | "pharmacist" | "lab_tech" | "nurse";
 
 interface RoleGuardProps {
@@ -42,7 +44,7 @@ export default function RoleBasedGuard({
           .from("user_roles")
           .select("role")
           .eq("user_id", user.id)
-          .in("role", allowedRoles);
+          .in("role", grantedAccountRoles(allowedRoles));
 
         if (active) setState(rows && rows.length > 0 ? "allowed" : "denied");
       } catch {

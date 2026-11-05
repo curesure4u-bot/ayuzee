@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Apple, Leaf, Play } from "lucide-react";
 import { PreviewForm } from "@/components/common/PreviewForm";
-import { WorkspaceNavigationLinks } from '@/features/access/PortalNav';
+import { lazy, Suspense } from 'react';
+const WorkspaceNavigationLinks = lazy(() => import('@/features/access/PortalNav').then(module => ({ default: module.WorkspaceNavigationLinks })));
 
 const exploreLinks = [["Find a doctor", "/doctors"], ["Help & guides", "/guides"]];
 const companyLinks = [["About Ayuzee", "/about-us"], ["Careers", "/jobs"], ["Partner With Us", "/partner"], ["Press & Media", "/press"], ["Contact Us", "/contact"]];
@@ -95,7 +96,7 @@ export const Footer = ({ appLevel = false }: { appLevel?: boolean }) => {
           </div>
         </div>
         <div><h2 className="mb-3 font-semibold text-primary-foreground">Your workspace</h2>
-          <nav aria-label="Footer workspace" className="flex flex-col items-start">{appLevel ? <WorkspaceNavigationLinks className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground"/> : <Link to="/account" className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted">Your account</Link>}</nav>
+          <nav aria-label="Footer workspace" className="flex flex-col items-start">{appLevel ? <Suspense fallback={<p role="status">Loading workspace…</p>}><WorkspaceNavigationLinks className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground"/></Suspense> : <Link to="/account" className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted">Your account</Link>}</nav>
         </div>
         <FooterLinks title="Explore Ayuzee" links={exploreLinks} />
         <FooterLinks title="Company" links={companyLinks} />

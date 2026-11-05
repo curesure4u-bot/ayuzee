@@ -1,5 +1,5 @@
 import type {SupabaseClient} from '@supabase/supabase-js';
-import {supabase} from '@/integrations/supabase/client';
+import {previewSupabase as supabase} from '@/integrations/preview/client';
 import type {Json} from '@/integrations/supabase/types';
 import {createCommerceSource} from './gateway';
 // Proposed API contract is intentionally separate from generated hosted types.

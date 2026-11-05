@@ -4,9 +4,12 @@ import { directoryParams, readDirectoryFilters, directorySearchPattern } from '.
 import { doctorDirectory } from './directoryService';
 
 const transport = vi.hoisted(() => ({ fetch: vi.fn() }));
-vi.mock('@/integrations/supabase/client', async () => {
+// Inspect the candidate query through a synthetic transport. The production
+// preview adapter itself is tested separately to reject calls without a network.
+vi.mock('@/integrations/preview/client', async () => {
   const { createClient } = await import('@supabase/supabase-js');
-  return { supabase: createClient('https://directory.example.invalid', 'synthetic-public-key', {
+  return { previewSupabase: createClient('https://directory.example.invalid', 'synthetic-public-key', {
+    accessToken: async () => null,
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
     global: { fetch: transport.fetch },
   }) };
@@ -67,7 +70,7 @@ describe('directory filters and public data contract', () => {
   });
 });
 
-describe('actual Supabase query transport', () => {
+describe('candidate Supabase query with synthetic transport', () => {
   it('uses bounded public fields, server filters and stable pagination', async () => {
     transport.fetch.mockResolvedValue(new Response(JSON.stringify([row()]), { status: 200, headers: { 'content-type': 'application/json', 'content-range': '12-12/13' } }));
     await doctorDirectory.list(filters('q=Example&city=Chennai&category=Ayurveda&mode=video&maxFee=500&sort=fee_low&page=2'), signal());

@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-05",
+  "target": "Existing loopback-only Auth/PostgREST/PostgreSQL",
+  "passed": 6,
+  "scenarios": [
+    "Disabled financial mutations and uninitialized status",
+    "Ten concurrent duplicate credits produce one balanced journal",
+    "Five concurrent 300-paise debits against 1000 paise permit exactly three",
+    "Coins and currency balances are independent",
+    "Real bearer ownership and worker permission fences",
+    "Signed-out token cannot read financial history"
+  ],
+  "candidateFingerprint": "d6ae76d38896b29a89fe54d1e489fdf33c9b872c071c21b0b65601eade19ebea",
+  "syntheticAccountsCleaned": 2,
+  "policyDisabled": true,
+  "providerApiRequests": 0,
+  "hostedChanges": false,
+  "paidResources": false
+}

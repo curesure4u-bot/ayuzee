@@ -1,10 +1,12 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { preservedPreviewForPath } from "@/features/previews/resolve";
 import { previewForPath } from "@/lib/previewPolicy";
 
 export function FeaturePreviewBoundary({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
-  const title = previewForPath(pathname);
+  const feature = preservedPreviewForPath(pathname);
+  const title = feature?.title ?? previewForPath(pathname);
   const heading = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export function FeaturePreviewBoundary({ children }: { children: ReactNode }) {
       <section aria-labelledby="feature-preview-title" className="mx-auto max-w-2xl rounded-3xl border border-orange-200 bg-white p-7 shadow-sm sm:p-12">
         <span className="inline-flex rounded-full bg-orange-100 px-4 py-2 text-base font-semibold text-orange-900">Preview</span>
         <h1 ref={heading} tabIndex={-1} id="feature-preview-title" className="mt-6 text-3xl font-semibold leading-tight text-slate-900 focus:outline-none sm:text-4xl">{title}</h1>
-        <p className="mt-5 text-lg leading-relaxed text-slate-700">We’re preparing this area for you. Its services and actions are not available yet.</p>
+        <p className="mt-5 text-lg leading-relaxed text-slate-700">{feature?.purpose ?? "We’re preparing this area for you. Its services and actions are not available yet."}</p>
         <p className="mt-3 text-lg leading-relaxed text-slate-700">You can return home to explore Ayuzee and read the available information.</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link to="/" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-700 px-6 py-3 text-lg font-semibold text-white hover:bg-orange-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-700">Back to home</Link>
