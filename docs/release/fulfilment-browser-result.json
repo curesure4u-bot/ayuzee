@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-05",
+  "target": "Fictional local browser review at 127.0.0.1:4184",
+  "hostedChanges": false,
+  "providerApiRequests": 0,
+  "viewportReset": true,
+  "temporaryTabClosed": true,
+  "screens": [
+    {
+      "role": "buyer",
+      "width": 390,
+      "contentWidth": 390,
+      "axePasses": 26,
+      "violations": 0,
+      "incomplete": 0
+    },
+    {
+      "role": "staff detail",
+      "width": 390,
+      "contentWidth": 390,
+      "axePasses": 23,
+      "violations": 0,
+      "incomplete": 0
+    }
+  ],
+  "workflow": [
+    "Packing/measurement/request reviewed in prior desktop session",
+    "Booking did not change processing order to shipped",
+    "Bound in-transit observation shown as shipped to the owning buyer",
+    "Staff-only fictional address visible on selected operation detail"
+  ],
+  "screenshots": [
+    "fulfilment-desktop-2026-11-04.png",
+    "fulfilment-mobile-2026-11-05.png"
+  ]
+}

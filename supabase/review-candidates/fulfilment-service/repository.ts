@@ -1,0 +1,2 @@
+import {CourierError,type FulfilmentWorker} from './service';
+export function fulfilmentWorker(rpc:(name:'commerce_fulfilment_worker',args:{p_action:string;p_payload:Record<string,unknown>})=>PromiseLike<{data:unknown;error:unknown}>):FulfilmentWorker{return{async call(action,payload){const r=await rpc('commerce_fulfilment_worker',{p_action:action,p_payload:payload});if(r.error)throw new CourierError('DATABASE_UNAVAILABLE');return r.data;}};}

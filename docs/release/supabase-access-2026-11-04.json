@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-04",
+  "status": "connection_verified",
+  "organization": { "id": "agdxrlptdagaktpnkopw", "name": "curesure4u-bot's Org" },
+  "project": { "id": "gsjkrmrumlxakcecpfiz", "name": "Ayuzee", "status": "ACTIVE_HEALTHY", "region": "ap-northeast-1", "postgresVersion": "17.6.1.141" },
+  "readChecks": [
+    { "operation": "list_organizations", "result": "passed", "targetVisible": true },
+    { "operation": "list_projects", "result": "passed", "targetVisible": true },
+    { "operation": "get_project", "result": "passed" },
+    { "operation": "list_tables", "schemas": ["public"], "verbose": false, "result": "passed", "tableCount": 429 }
+  ],
+  "conclusion": "The previous connector visibility/tool-availability blocker is resolved. Organization, project and public-schema metadata access works through the Supabase plugin.",
+  "remainingVerification": "Effective policies, migrations, scoped role assignments, hosted Auth workflows, staging separation and release readiness remain unverified. This connection check does not establish that application security defects are fixed.",
+  "patientRecordsRead": false,
+  "hostedChangesPerformed": false
+}

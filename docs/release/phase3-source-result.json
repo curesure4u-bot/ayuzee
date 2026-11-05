@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-05",
+  "branch": "Sai-Branch",
+  "localCriteria": "8/8",
+  "hostedCriteria": "0/8",
+  "phaseExitVerified": false,
+  "unit": {
+    "files": 32,
+    "tests": 461,
+    "passed": true,
+    "workers": 4
+  },
+  "standalonePostgresTests": 40,
+  "previewContainment": {
+    "assertions": 1,
+    "handlers": 7,
+    "passed": true
+  },
+  "nativeRefundScenarios": 9,
+  "boundedCapacityScenarios": 5,
+  "strictTypechecksPassed": [
+    "commerce",
+    "payments",
+    "fulfilment",
+    "refunds"
+  ],
+  "lintPassed": true,
+  "productionBundlePassed": true,
+  "buildWarning": "Existing chunk over 500kB warning",
+  "fullApplicationSchemaGate": {
+    "passed": false,
+    "literalCallsUnresolved": 992,
+    "missingPublicObjects": 243,
+    "dynamicCallsToReview": 64,
+    "sourceFiles": 1622
+  },
+  "fullApplicationTypecheckPassed": false,
+  "dependencyDebt": "Earlier audit: 56 affected packages (37 moderate,17 high,two critical); not closed",
+  "hostedRoleLookup": "Automatic approval review rejected the metadata lookup under the local-only restriction; not retried",
+  "hostedChanges": false,
+  "providerApiRequests": 0,
+  "paidResources": false,
+  "committed": false,
+  "pushed": false,
+  "mainChanged": false
+}

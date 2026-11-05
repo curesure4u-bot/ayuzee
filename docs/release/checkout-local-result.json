@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-04",
+  "target": "Loopback-only existing Supabase Auth/PostgREST/PostgreSQL stack",
+  "scenarios": [
+    {
+      "name": "Production defaults block missing price/delivery rules",
+      "passed": true
+    },
+    {
+      "name": "Real Auth identity receives authoritative integer-paise quote",
+      "passed": true
+    },
+    {
+      "name": "Lost-response retry creates one order and one hold",
+      "passed": true
+    },
+    {
+      "name": "Direct REST paid-state forgery and cross-customer reads are denied",
+      "passed": true
+    },
+    {
+      "name": "Unknown result is recoverable by the same request key after quotes expire",
+      "passed": true
+    },
+    {
+      "name": "Recovery and reservation history expose only the real owner",
+      "passed": true
+    },
+    {
+      "name": "Price changes require a new customer review",
+      "passed": true
+    },
+    {
+      "name": "Two genuinely waiting requests compete safely for the last item",
+      "passed": true
+    },
+    {
+      "name": "A coupon expiring while stock is locked cannot be used",
+      "passed": true
+    },
+    {
+      "name": "A workspace revoked during a stock-lock wait cannot create an order",
+      "passed": true
+    },
+    {
+      "name": "Unpaid release and expiry return stock without fake refunds",
+      "passed": true
+    },
+    {
+      "name": "Signed-out JWT is rejected by the database session check",
+      "passed": true
+    }
+  ],
+  "passed": 12,
+  "concurrency": {
+    "genuinelyWaitingRequests": 2,
+    "lastItemSuccessfulReservations": 1
+  },
+  "syntheticAccountsCleaned": 3,
+  "syntheticProductsCleaned": 6,
+  "checkoutPolicyDisabledAfterTests": true,
+  "hostedChanges": false,
+  "providerCalls": false,
+  "paidResources": false,
+  "fixtureFingerprint": "3c48514ad42cdb7e94443fc7043376fcccc306868bf108ba117b5f9919645fa2"
+}

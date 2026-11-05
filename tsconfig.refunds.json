@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "strict": true,
+    "types": [
+      "node",
+      "vitest/globals"
+    ]
+  },
+  "include": [
+    "src/vite-env.d.ts",
+    "supabase/review-candidates/refund-service/**/*.ts",
+    "src/features/commerce/refunds*.ts",
+    "tests/database/refunds*.ts",
+    "tests/database/commerceNativeFixture.ts",
+    "tests/database/commerce.capacity.test.ts"
+  ]
+}

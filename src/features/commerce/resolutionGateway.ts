@@ -1,0 +1,6 @@
+import{z}from'zod';
+import{refundInput,resolutionSchema,ResolutionError,type ResolutionAction,type ResolutionSource}from'./resolutionModel';
+export function createResolutionSource(transport:(action:ResolutionAction,payload:Record<string,unknown>,signal?:AbortSignal)=>Promise<{data:unknown;error:unknown}>,workspace:string):ResolutionSource{
+ async function call(action:ResolutionAction,id:string,payload:Record<string,unknown>={},signal?:AbortSignal){z.string().uuid().parse(id);if(signal?.aborted)throw new DOMException('Cancelled','AbortError');let r;try{r=await transport(action,{...payload,order_id:id,workspace},signal);}catch{throw new ResolutionError('unknown');}if(signal?.aborted)throw new DOMException('Cancelled','AbortError');if(r.error)throw new ResolutionError(typeof r.error==='object'&&'code'in r.error?String(r.error.code):'unknown');const result=resolutionSchema.parse(r.data);if(result.order_id!==id)throw new ResolutionError('protocol');return result;}
+ return{status:(id,signal)=>call('status',id,{},signal),cancel:(id,reason)=>call('cancel',id,{reason:z.string().trim().min(10).max(500).parse(reason)}),request:(id,input)=>call('request',id,refundInput.parse(input)),reauthorize:(id,refundId)=>call('reauthorize',id,{id:z.string().uuid().parse(refundId)})};
+}

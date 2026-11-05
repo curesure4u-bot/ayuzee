@@ -1,5 +1,7 @@
 # Phase 1: account permissions preparation
 
+**Current local status — 3 November 2026:** account/session/recovery preparation and the new all-role workspace foundation are tracked in [phase progress](phase-progress.md) and [the RBAC increment](../domains/access-foundation-2026-11-03.md). The dated entries below are historical checkpoints. Phase 1 is not complete: hosted verification, full legacy-route integration, authoritative scoped adapters and direct data/API/storage acceptance remain open.
+
 Date: 16 October 2026. Working branch: `Sai-Branch`.
 Base source checkpoint: `0c404862561b7333c1e0d677e19fb2667ab921e2`.
 Canonical checkout remains the path recorded in the Phase 0 handover.
@@ -8,6 +10,20 @@ Status: **first permissions subtask prepared and locally tested; no Phase 1
 push, hosted SQL application, functional account release or Phase 2 work.**
 
 ## Modularity decision
+
+**2 November requirement addition — RBAC-01 (required, planned).** Sai requested
+role-specific portals and enforced access for every role in the system. Expand
+the account-permission and role-onboarding/navigation tasks into the shared
+[RBAC specification](../domains/role-based-access-control.md). Patients,
+doctors, students, professionals, specialized administrators and hospital staff
+must see only appropriate features in their authorized workspace. Enforce the
+same rules for direct routes, actions, APIs and data access; labels or hidden
+menus do not satisfy this requirement. Resolve all role sources, multi-role
+switching, scope and revocation. This is a Phase 1 authenticated-release gate,
+with each later module required to supply its own capability/policy tests.
+It is not implemented by this planning addition. Dated progress below records
+the original 16 October checkpoint; newer local work is described in the
+2 November modernization progress record.
 
 The [assessment](../architecture/modularity-assessment.md) was completed before
 implementation. Broad restructuring is unnecessary. Retain existing feature
@@ -77,8 +93,13 @@ The uploaded `/Ayuzee/PLAN.md` defines these small updates, in order:
 3. **Login/sessions:** shared session owner, no duplicate role subscriptions or
    stale account responses, private cache clearing on sign-out/account switch.
 4. **Recovery:** invalid/expired links, successful reset and re-entry.
-5. **Role onboarding/navigation:** correct existing account routes and
-   professional requests without automatic privilege grants.
+5. **Role onboarding/navigation and full RBAC (RBAC-01):** role-specific
+   destinations, dashboards, menus and feature visibility for every reconciled
+   system role, using shared capability decisions. Include explicit authorized
+   multi-role workspace switching, direct-route/action denial, matching
+   backend/data enforcement and revocation/cache tests. Professional requests
+   and a selected login form cannot automatically grant privileges. See the
+   [full requirement and acceptance matrix obligations](../domains/role-based-access-control.md).
 6. **Abuse/accessibility:** enforced Supabase controls, truthful error/loading
    states, keyboard access and the requested readable interface for users 40+.
 

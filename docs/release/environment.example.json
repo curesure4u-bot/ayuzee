@@ -2,7 +2,6 @@
   "production": {
     "deployedBranch": null,
     "deployedCommit": null,
-    "netlifySiteId": null,
     "supabaseProjectRef": null,
     "compute": null,
     "region": null,
@@ -15,11 +14,16 @@
     "functionInventoryVerified": false,
     "providerConfigurationVerified": false,
     "verifiedAt": null,
-    "evidenceReference": null
+    "evidenceReference": null,
+    "hosting": {
+      "provider": null,
+      "projectId": null
+    }
   },
   "staging": {
-    "netlifySiteId": null,
-    "supabaseProjectRef": null,
+    "mode": "local",
+    "projectId": null,
+    "apiOrigin": null,
     "syntheticDataOnly": false,
     "sandboxIntegrationsOnly": false,
     "separateSecrets": false,
@@ -27,8 +31,8 @@
     "evidenceReference": null
   },
   "hostingBudget": {
-    "currency": "INR",
-    "monthlyCap": null,
-    "purchaseAuthorized": false
-  }
+    "paidActionsAllowed": false,
+    "additionalSpendCap": 0
+  },
+  "version": 2
 }

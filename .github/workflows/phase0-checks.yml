@@ -15,8 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  account-role-boundary:
-    name: Account role SQL candidate (isolated PostgreSQL fixture)
+  community-and-commerce:
+    name: Community and commerce source contracts
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -26,7 +26,47 @@ jobs:
           node-version: "20"
           cache: npm
       - run: npm ci
-      - run: npm run test:account-role-boundary
+      - run: npm run test:community
+      - run: npm run typecheck:community
+      - run: npm run test:commerce
+      - run: npm run typecheck:commerce
+      - run: npm run typecheck:payments
+      - run: npm run typecheck:fulfilment
+      - run: npm run typecheck:refunds
+      - run: npm run lint:commerce
+
+  doctor-directory:
+    name: Doctor directory contracts and interface
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npm run test:directory
+      - run: npm run typecheck:directory
+      - run: npm run lint:directory
+
+  account-role-boundary:
+    name: Account source and isolated PostgreSQL candidates
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npm run test:phase1
+      - run: npm run typecheck:accounts
+      - run: npm run lint:phase1
+      - run: npm run typecheck:access
+      - run: npm run lint:access
+      - run: npm run progress:check
 
   preview-safety:
     runs-on: ubuntu-latest
@@ -39,6 +79,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:phase0
+      - run: npm run test:hosting
       - run: npm run check:functions
       - run: npm run lint:phase0
       - run: npm run typecheck:preview
@@ -55,6 +96,7 @@ jobs:
           node-version: "20"
           cache: npm
       - run: npm ci
+      - run: npm run schema:check
       - run: npm run typecheck:app
 
   config-typecheck:

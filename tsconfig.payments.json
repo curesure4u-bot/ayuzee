@@ -1,0 +1,5 @@
+{
+ "extends":"./tsconfig.app.json",
+ "compilerOptions":{"strict":true,"types":["node","vitest/globals"]},
+ "include":["supabase/review-candidates/payment-service/**/*.ts","src/features/commerce/payments*.test.ts","tests/database/payments*.ts"]
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-05",
+  "target": "Existing loopback-only Auth/PostgREST/PostgreSQL",
+  "passed": 9,
+  "scenarios": [
+    "Eight concurrent paid cancellations restore stock once",
+    "Concurrent partial refund amounts stay within the captured balance",
+    "Six repeated request keys persist one refund",
+    "Concurrent workers submit one refund and settle once",
+    "Partial delivered-order refunds do not restock or claim full repayment",
+    "Unknown provider outcome reconciles the original refund",
+    "Native ownership, role and worker ACL fences",
+    "Revocation after a genuine lock wait denies mutation",
+    "Live session checks and same-request reauthorization"
+  ],
+  "candidateFingerprint": "2ddc75fbf76b264c7bccf582f7f38f29f9a62ab16d7c8f3a99f47a500fca56a0",
+  "nativeOperationsRole": "admin",
+  "delegatedRoles": "Covered by isolated fixtures; local enum lacks orders_admin",
+  "providerApiRequests": 0,
+  "hostedChanges": false,
+  "paidResources": false,
+  "policiesDisabled": [
+    "checkout",
+    "payments",
+    "fulfilment",
+    "refunds"
+  ],
+  "syntheticAccountsCleaned": 3,
+  "syntheticProductsCleaned": 9
+}

@@ -80,11 +80,32 @@ export function assessEnvironment(manifest, baseline) {
   const prod = manifest.production ?? {};
   const staging = manifest.staging ?? {};
   const budget = manifest.hostingBudget ?? {};
+  const modern = manifest.version === 2;
   const requiredText = (object, key, label) => {
     if (typeof object[key] !== 'string' || !object[key].trim() || /^(unknown|unverified|todo|replace|pending|your-)/i.test(object[key])) problems.push(`${label}.${key} needs an actual value.`);
   };
-  for (const key of ['deployedBranch', 'deployedCommit', 'netlifySiteId', 'supabaseProjectRef', 'compute', 'region', 'verifiedAt', 'evidenceReference']) requiredText(prod, key, 'production');
-  for (const key of ['netlifySiteId', 'supabaseProjectRef', 'verifiedAt', 'evidenceReference']) requiredText(staging, key, 'staging');
+  for (const key of ['deployedBranch', 'deployedCommit', 'supabaseProjectRef', 'compute', 'region', 'verifiedAt', 'evidenceReference']) requiredText(prod, key, 'production');
+  if (modern) {
+    if (!['lovable','netlify','other'].includes(prod.hosting?.provider)) problems.push('production.hosting.provider needs the actual publishing provider.');
+    requiredText(prod.hosting ?? {},'projectId','production.hosting');
+    if (staging.mode === 'local') {
+      requiredText(staging,'projectId','staging');
+      try {
+        const api = new URL(staging.apiOrigin);
+        if (api.protocol !== 'http:' || !['127.0.0.1','localhost','[::1]'].includes(api.hostname)
+          || !api.port || api.username || api.password || api.search || api.hash || api.pathname !== '/') throw Error();
+      } catch { problems.push('staging.apiOrigin must be an explicit loopback-only HTTP API origin.'); }
+      if (staging.supabaseProjectRef || staging.netlifySiteId) problems.push('Local staging cannot include hosted project/site references.');
+    } else if (staging.mode === 'hosted') {
+      requiredText(staging,'supabaseProjectRef','staging');
+      requiredText(staging.hosting ?? {},'projectId','staging.hosting');
+      if (prod.hosting?.provider === staging.hosting?.provider && prod.hosting?.projectId === staging.hosting?.projectId) problems.push('Staging and production cannot share a publishing project.');
+    } else problems.push('staging.mode must explicitly identify local or hosted staging.');
+    for (const key of ['verifiedAt','evidenceReference']) requiredText(staging,key,'staging');
+  } else {
+    requiredText(prod,'netlifySiteId','production');
+    for (const key of ['netlifySiteId','supabaseProjectRef','verifiedAt','evidenceReference']) requiredText(staging,key,'staging');
+  }
   for (const [label, object] of [['production', prod], ['staging', staging]]) {
     if (typeof object.verifiedAt === 'string' && !Number.isFinite(Date.parse(object.verifiedAt))) problems.push(`${label}.verifiedAt must be an ISO date.`);
     if (typeof object.supabaseProjectRef === 'string' && !/^[a-z0-9]{20}$/.test(object.supabaseProjectRef)) problems.push(`${label}.supabaseProjectRef must be a hosted project reference.`);
@@ -96,8 +117,12 @@ export function assessEnvironment(manifest, baseline) {
   if (prod.supabaseProjectRef && prod.supabaseProjectRef === staging.supabaseProjectRef) problems.push('Staging and production cannot share a Supabase project.');
   if (staging.supabaseProjectRef && staging.supabaseProjectRef === baseline.supabase.sourceProjectRef) problems.push('Staging matches the source-linked Supabase project; establish its ownership before using it.');
   if (prod.netlifySiteId && prod.netlifySiteId === staging.netlifySiteId) problems.push('Use a separate staging Netlify site to avoid inherited production configuration.');
-  if (!/^[A-Z]{3}$/.test(budget.currency ?? '') || !Number.isFinite(budget.monthlyCap) || budget.monthlyCap < 0) problems.push('hostingBudget needs a currency and a proposed numeric monthly cap.');
-  if (budget.purchaseAuthorized !== false) problems.push('This baseline records a proposal only; purchaseAuthorized must remain false.');
+  if (modern) {
+    if (budget.paidActionsAllowed !== false || budget.additionalSpendCap !== 0) problems.push('This project forbids paid actions; additionalSpendCap must be zero and paidActionsAllowed false.');
+  } else {
+    if (!/^[A-Z]{3}$/.test(budget.currency ?? '') || !Number.isFinite(budget.monthlyCap) || budget.monthlyCap < 0) problems.push('hostingBudget needs a currency and a proposed numeric monthly cap.');
+    if (budget.purchaseAuthorized !== false) problems.push('This baseline records a proposal only; purchaseAuthorized must remain false.');
+  }
   return problems;
 }
 

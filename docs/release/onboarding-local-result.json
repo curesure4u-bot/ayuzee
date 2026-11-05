@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-04T03:51:15.195Z",
+  "target": "Existing loopback-only Supabase/Auth/Mailpit stack",
+  "scenarios": [
+    "Signup requires confirmation; forged role metadata grants no session",
+    "Delivered local confirmation email completes PKCE login",
+    "Onboarding persists a role request without granting professional access",
+    "Direct APIs enforce own-profile reads and deny self-promotion/clinical access",
+    "Refresh works; logout clears local session and revokes refresh",
+    "Delivered local recovery email resets password and enables re-entry",
+    "Used recovery link is rejected"
+  ],
+  "passed": 7,
+  "realHostedEmailDeliveryVerified": false,
+  "liveDataUsed": false,
+  "paidResourcesUsed": false
+}

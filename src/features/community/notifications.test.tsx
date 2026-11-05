@@ -1,0 +1,16 @@
+import { beforeEach,afterEach,expect,it,vi } from 'vitest';
+import { render,screen,cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
+import {MemoryRouter} from 'react-router-dom';
+import {sessionFor} from '@/test/accountFixtures';
+import type {AccountSnapshot} from '@/features/accounts/sessionStore';
+import NotificationCenter from '@/components/NotificationCenter';
+const mock=vi.hoisted(()=>({state:{} as AccountSnapshot}));
+vi.mock('@/features/accounts/accountService',()=>({useAccountSession:()=>mock.state}));
+beforeEach(()=>{mock.state={session:sessionFor('a'),account:{roles:['patient'],fullName:'Synthetic Account',requestedRole:'patient',completedAt:'2026-11-04'},loading:false,error:null,revision:1};});
+afterEach(cleanup);
+const show=(path='/')=>render(<MemoryRouter initialEntries={[path]}><NotificationCenter/></MemoryRouter>);
+it('notification entry contains no sample alerts or fabricated unread badge',()=>{show();expect(screen.getByRole('link',{name:'Your community notifications'})).toHaveAttribute('href','/feed?workspace=patient&panel=notifications');expect(screen.queryByText(/Patient Ramesh|Order Delivered|Task Overdue|9\+/)).not.toBeInTheDocument();});
+it('multiple roles require a deliberate workspace selection',()=>{mock.state.account!.roles=['patient','doctor'];show();expect(screen.getByRole('link',{name:'Choose a workspace for notifications'})).toHaveAttribute('href','/account');});
+it('a requested role must actually be granted',()=>{show('/feed?workspace=admin');expect(screen.getByRole('link')).toHaveAttribute('href','/feed?workspace=patient&panel=notifications');});
+it('unverified access exposes no notification entry',()=>{mock.state.error='Permission loading failed';show();expect(screen.queryByRole('link')).not.toBeInTheDocument();});

@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-04",
+  "branch": "Sai-Branch",
+  "phaseCriteria": [
+    "P3.2 pricing-source",
+    "P3.3 orders-source"
+  ],
+  "unitTests": {
+    "passed": 277,
+    "files": 24,
+    "commerceTests": 64
+  },
+  "postgresTests": {
+    "checkoutScenarios": 22,
+    "catalogScenarios": 16,
+    "nodeTestsIncludingParents": 40
+  },
+  "nativeLocalScenarios": 12,
+  "genuineConcurrentStockLockWaiters": 2,
+  "lastItemSuccessfulReservations": 1,
+  "strictCommerceTypes": "passed",
+  "focusedCommerceLint": "passed without warnings",
+  "productionBuild": {
+    "passed": true,
+    "seconds": 16.51,
+    "warning": "Existing chunks exceed 500 kB"
+  },
+  "browserEvidence": "docs/release/checkout-browser-result.json",
+  "nativeEvidence": "docs/release/checkout-local-result.json",
+  "wholeApplicationSchemaGate": "Earlier inherited schema/type debt remains open; scoped checks do not replace it",
+  "phase3": {
+    "local": "3/8",
+    "hosted": "0/8",
+    "exitVerified": false
+  },
+  "hostedCommerceChanges": false,
+  "frontendPublished": false,
+  "paymentOrProviderActions": false,
+  "paidResources": false,
+  "featureScopeDeletions": false,
+  "nativeCandidateFingerprint": "3c48514ad42cdb7e94443fc7043376fcccc306868bf108ba117b5f9919645fa2",
+  "next": "Phase 3.4 isolated payment fixtures, then recovery/reconciliation, fulfilment/refunds and representative capacity; business rules and hosted release remain separate"
+}

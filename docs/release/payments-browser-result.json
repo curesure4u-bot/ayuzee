@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-04",
+  "target": "127.0.0.1:4184/payment-review; fictional statuses only",
+  "statesReviewed": [
+    "pending verification",
+    "verified capture",
+    "captured funds requiring review"
+  ],
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "scrollWidth": 390,
+    "axe": {
+      "passes": 21,
+      "violations": [],
+      "incomplete": []
+    }
+  },
+  "screenshots": [
+    "docs/release/payment-status-desktop-2026-11-04.png",
+    "docs/release/payment-status-mobile-2026-11-04.png"
+  ],
+  "viewportRestored": true,
+  "temporaryTabAndPreviewClosed": true,
+  "paymentActions": false,
+  "providerApiRequests": 0,
+  "hostedChanges": false
+}

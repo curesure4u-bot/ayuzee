@@ -1,5 +1,11 @@
 # Phase 0 code updates — hosting deferred
 
+**Canonical checkout update, 3 November 2026:** the existing checkout is now at
+`/Users/sai/Codex/2026-10-14/alright-im-fine-with-the-plan/work/ayuzee`.
+Older `/Users/sai/Documents/Codex/` paths below are historical. Continue in the
+current checkout; no replacement clone is needed. Maintained progress is in
+`docs/release/phase-progress.md`.
+
 **Current status, 16 October:** Phase 0 source commits were pushed to `Sai-Branch`
 and independently verified at `0c404862561b7333c1e0d677e19fb2667ab921e2`.
 The latest commit includes `[skip netlify]`. This is a source checkpoint;

@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-24",
+  "branch": "Sai-Branch",
+  "localHead": "0ce7c38",
+  "localChangesPreserved": true,
+  "requestedOwnerOrganization": "curesure4u-bot's Org",
+  "supabase": {
+    "connectedOrganization": "Sai-2211's Org",
+    "connectedOrganizationId": "cnwixmdcspzybiuculbx",
+    "listedProjects": 0,
+    "sourceReference": "saphetdusyfrcduzsouk",
+    "suppliedReference": "gsjkrmrumlxakcecpfiz",
+    "metadataAccessToBoth": "denied",
+    "liveSchemaInspected": false,
+    "hostedSqlApplied": false
+  },
+  "netlify": {
+    "url": "https://6a9e0323be30ee3c78effdfa--moonlit-centaur-b93ace.netlify.app/",
+    "headStatus": 200,
+    "responseServer": "Netlify",
+    "headResponseDateUtc": "2026-10-24T17:37:27Z",
+    "cspPresent": true,
+    "javascriptAssetsInspected": 9,
+    "mainAsset": "/assets/index-QqvNv9Ak.js",
+    "mainAssetSupabaseUrl": "https://gsjkrmrumlxakcecpfiz.supabase.co",
+    "dashboardAccessVerified": false,
+    "deployedCommitVerified": false,
+    "deploymentPerformed": false
+  },
+  "localChecks": {
+    "hostingTestsPassed": 5,
+    "phase0TestsPassed": 15,
+    "endpointTestsPassed": 2,
+    "phase1NodeTestsPassedIncludingParentTests": 31,
+    "accountVitestTestsPassed": 43,
+    "catalogSqlStatementsExecutedInPGlite": 10,
+    "missingConfigurationBuildExitCode": 1,
+    "completeReleaseGatePassed": false
+  },
+  "remainingDatabaseHistory": {
+    "migrationFiles": 199,
+    "manualSqlFiles": 114,
+    "duplicateVersion": "20260715",
+    "filesSharingVersion": 4,
+    "liveHistoryReconciled": false
+  }
+}

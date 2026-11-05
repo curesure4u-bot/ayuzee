@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "strict": true,
+    "types": [
+      "node",
+      "vitest/globals"
+    ]
+  },
+  "include": [
+    "src/vite-env.d.ts",
+    "supabase/review-candidates/fulfilment-service/**/*.ts",
+    "src/features/commerce/fulfilment*.ts",
+    "tests/database/fulfilment*.ts"
+  ]
+}

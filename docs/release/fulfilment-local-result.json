@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-04",
+  "target": "Existing loopback-only Auth/PostgREST/PostgreSQL",
+  "scenarios": [
+    "Disabled courier configuration cannot fake dispatch",
+    "Concurrent processing starts persist one record",
+    "Ownership, staff and worker permission fences",
+    "Concurrent courier claims create once; booking is not dispatch",
+    "Concurrent tracking event deduplication and private projection",
+    "Failed tracking retains the prior authoritative update",
+    "Lost response recovers by original reference, without duplicate create",
+    "Final delivery states cannot regress",
+    "Fresh staff grant rechecked after a genuine database lock wait",
+    "Revoked session stops dispatch; safe same-reference reauthorization works"
+  ],
+  "passed": 10,
+  "syntheticAccountsCleaned": 3,
+  "syntheticProductsCleaned": 10,
+  "policiesDisabled": [
+    "fulfilment",
+    "payments",
+    "checkout"
+  ],
+  "providerApiRequests": 0,
+  "provider": "Fictional in-process courier",
+  "hostedChanges": false,
+  "paidResources": false,
+  "candidateFingerprint": "f5c4b094ac2156cb60628e3120d9750fc790689bc928e938dc9a0a4ef1148531",
+  "nativeOperationsRole": "admin",
+  "delegatedRoles": "orders_admin is covered in isolated fixtures; the existing local enum lacks that role. Hosted role metadata lookup was blocked under the local-only restriction."
+}

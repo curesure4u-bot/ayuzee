@@ -1,9 +1,10 @@
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { RouteFallback } from "@/components/common/PageLoader";
 import VaidyaPanchakarmaGuard from "@/components/vaidya/VaidyaPanchakarmaGuard";
 import SpineOwnerGuard from "@/components/spine/SpineOwnerGuard";
 import * as P from "@/routes/lazyPages";
+const Workspace = lazy(() => import('@/features/access/Workspace'));
 
 const withSuspense = (element: React.ReactNode) => (
   <Suspense fallback={<RouteFallback />}>{element}</Suspense>
@@ -53,6 +54,9 @@ export const AppRoutes = () => (
             <Route path="/guides/student-hub" element={withSuspense(<P.GuideStudentHub />)} />
             <Route path="/login" element={withSuspense(<P.LoginPicker />)} />
             <Route path="/auth" element={withSuspense(<P.Auth />)} />
+            <Route path="/auth/callback" element={withSuspense(<P.EmailCallback />)} />
+            <Route path="/account" element={withSuspense(<P.AccountHome />)} />
+            <Route path="/workspace/*" element={withSuspense(<Workspace />)} />
             <Route path="/reset-password" element={withSuspense(<P.ResetPassword />)} />
             <Route path="/provider/auth" element={withSuspense(<P.ProviderAuth />)} />
             <Route path="/provider" element={withSuspense(<P.ProviderHome />)} />
@@ -143,6 +147,7 @@ export const AppRoutes = () => (
             <Route path="/jobs/my-applications" element={withSuspense(<P.JobMyApplications />)} />
             <Route path="/jobs/:id" element={withSuspense(<P.JobDetail />)} />
             <Route path="/shop" element={withSuspense(<P.Shop />)} />
+            <Route path="/shop/manage" element={withSuspense(<P.CommerceProductManagement />)} />
             <Route path="/shop/conditions" element={withSuspense(<P.ShopByCondition />)} />
             <Route path="/shop/conditions/:slug" element={withSuspense(<P.ConditionProducts />)} />
             <Route path="/shop/panchakarma" element={withSuspense(<P.PanchakarmaShop />)} />
@@ -153,6 +158,9 @@ export const AppRoutes = () => (
             <Route path="/shop/b2b-wholesale" element={withSuspense(<P.B2BWholesale />)} />
             <Route path="/shop/ayush-devices" element={withSuspense(<P.AyushDevices />)} />
             <Route path="/shop/organic-food" element={withSuspense(<P.OrganicFoodNutraceuticals />)} />
+            <Route path="/shop/resolution" element={withSuspense(<P.CommerceResolution />)} />
+            <Route path="/shop/refunds" element={withSuspense(<P.CommerceRefundOperations />)} />
+            <Route path="/shop/fulfilment" element={withSuspense(<P.CommerceFulfilment />)} />
             <Route path="/shop/track" element={withSuspense(<P.TrackOrder />)} />
             <Route path="/shop/prescription" element={withSuspense(<P.PrescriptionUpload />)} />
             <Route path="/shop/prescription-cart" element={withSuspense(<P.PrescriptionCart />)} />
@@ -215,6 +223,7 @@ export const AppRoutes = () => (
             <Route path="/ai/yoga-diet-coach" element={withSuspense(<P.AIYogaDiet />)} />
             <Route path="/ai/genome-dosha" element={withSuspense(<P.AIGenomeDosha />)} />
             <Route path="/checkout" element={withSuspense(<P.Checkout />)} />
+            <Route path="/checkout/orders" element={withSuspense(<P.CommerceReservations />)} />
             <Route path="/partner" element={withSuspense(<P.Partner />)} />
             <Route path="/partner/apply" element={withSuspense(<P.PartnerApply />)} />
             <Route path="/bulk" element={withSuspense(<P.Bulk />)} />

@@ -1,0 +1,32 @@
+.account-shell { min-height: 100svh; padding: 24px 16px; color: hsl(var(--foreground)); font-size: 18px; line-height: 1.6; }
+.account-container { width: 100%; max-width: 560px; margin: 0 auto; }
+.account-brand { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 48px; font-size: 26px; font-weight: 700; margin-bottom: 16px; }
+.account-brand span { font-size: 16px; font-weight: 500; text-decoration: underline; }
+.account-card { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 24px; padding: clamp(24px, 5vw, 32px); box-shadow: 0 12px 40px #173d1910; overflow-wrap: anywhere; }
+.account-eyebrow { color: hsl(var(--primary)); font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.account-card h1 { font-size: clamp(28px, 5vw, 36px); font-family: var(--font-display, inherit); line-height: 1.25; font-weight: 600; }
+.account-card h1:focus { outline: none; }
+.account-description { margin: 16px 0 24px; }
+.account-form { display: grid; gap: 16px; }
+.account-stack { display: grid; gap: 12px; }
+.account-form fieldset { min-width: 0; display: grid; gap: 16px; }
+.account-field { display: grid; gap: 8px; font-weight: 600; }
+.account-field input, .account-field select { width: 100%; min-height: 52px; padding: 10px 14px; border: 1px solid #7b867e; border-radius: 10px; background: hsl(var(--background)); font-size: 18px; font-weight: 400; }
+.account-form input:disabled { opacity: .7; }
+.account-check { display: flex; align-items: center; min-height: 48px; gap: 12px; font-size: 16px; cursor: pointer; }
+.account-check input { width: 22px; height: 22px; accent-color: hsl(var(--primary)); }
+.account-button { display: flex; align-items: center; justify-content: center; min-height: 52px; width: 100%; padding: 12px 18px; border: 1px solid hsl(var(--primary)); border-radius: 12px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-size: 18px; font-weight: 600; text-align: center; }
+.account-button.secondary { background: transparent; color: hsl(var(--foreground)); border-color: #7b867e; }
+.account-button:disabled { cursor: wait; opacity: .65; }
+.account-button:hover:enabled { filter: brightness(.96); }
+.account-shell :is(a,button,input,select):focus-visible { outline: 3px solid hsl(var(--primary)); outline-offset: 4px; }
+.account-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+.account-switch button { min-height: 48px; border-radius: 10px; border: 1px solid hsl(var(--border)); padding: 8px; }
+.account-switch button[aria-pressed="true"] { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: hsl(var(--primary)); font-weight: 600; }
+.account-feedback { border: 1px solid hsl(var(--border)); background: hsl(var(--muted)); padding: 16px; border-radius: 12px; overflow-wrap: anywhere; }
+.account-feedback[role="alert"] { border-color: #b44826; border-left-width: 4px; }
+.account-text-link { min-height: 48px; display: inline-flex; align-items: center; text-decoration: underline; text-underline-offset: 3px; }
+.account-help { margin-top: 24px; text-align: center; font-size: 16px; }
+.account-help a { display: inline-flex; min-height: 48px; align-items: center; text-decoration: underline; }
+.account-note { font-size: 16px; }
+@media (prefers-reduced-motion: reduce) { .account-shell *, .account-shell *::before, .account-shell *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

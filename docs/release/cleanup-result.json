@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-05",
+  "archive": "/Users/sai/Codex/Ayuzee-Project-Handover/archive/phase3-cleanup-2026-11-05",
+  "files": [
+    {
+      "path": "AYUZEE_TEST_REPORT.md",
+      "sha256": "1ff5ef22e7d0a17ebd63e08bb65f43d9e194fc78c017ace4695c00f6b8df8e72",
+      "bytes": 8923,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "AYUZEE_TEST_RESULTS.md",
+      "sha256": "5e9eac77488b5b4e5bf841bb5018de0f61356e80fcfd3eff6734081aa659ec25",
+      "bytes": 4683,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "E2E_TEST_REPORT.md",
+      "sha256": "bdf1b09b1a8c187b2aa6bac5b4897cf38568e8f4bc92d25a3124b48d96abfcb4",
+      "bytes": 18114,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "OPTIMIZATION_REPORT.md",
+      "sha256": "e954e2c4bd025c7969986f1973d98aecd97d95b76ba6719c88a13d628455168a",
+      "bytes": 10307,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "TEST_REPORT_CONSOLIDATED.md",
+      "sha256": "6941cdef5049b451656adcb733b3b9c4ffd34372b619b83ada27145056b4db96",
+      "bytes": 11683,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "TEST_CREDENTIALS.md",
+      "sha256": "f640089d8fb697130c33d723f2d3c927d866fc2776b1e0319ffb25021585c357",
+      "bytes": 5377,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "debug-after-login.png",
+      "sha256": "7746c2a276d47caf9c51d623a985284c442b476327e1ff3e94d49ecf843e2d0a",
+      "bytes": 353458,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "debug-login-page.png",
+      "sha256": "50547a21987d10068b58d2ba4c5b9b59dbef55545a797fb906b30309e912068e",
+      "bytes": 350186,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "nurse-login-form.png",
+      "sha256": "2dd56aa2bb27fc61a0bacc16544786b70ea2b32165ad221ed10c34f021cbe237",
+      "bytes": 351056,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "nurse-login-failed.png",
+      "sha256": "ee5a46ae3839879fca3158fbb09780a7920f9e7fb1feb614553fde9430fc6a10",
+      "bytes": 348644,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "create-test-accounts.mjs",
+      "sha256": "f03569dd066da5302e47cbfc05ef5d78f16f5a7b9229e74e46826f837756d86a",
+      "bytes": 1865,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "supabase/disabled-implementations/create-delhivery-shipment.original.ts",
+      "sha256": "ae0f5ffa121027ca3b8a4654a68bf515cca81b59645ed0e5119c6691bbcfb397",
+      "bytes": 4743,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "supabase/disabled-implementations/delhivery-track.original.ts",
+      "sha256": "21d0df52da2c9f2f6ad42f547e2e7dfe613c30d703fdb469d7b0f57e8b9d8161",
+      "bytes": 4597,
+      "action": "Archived outside checkout and removed from branch working tree"
+    },
+    {
+      "path": "supabase/disabled-implementations/razorpay-refund.original.ts",
+      "sha256": "3c45279ce9d372e19f788a43279061b247f43e19d5fc6acd65ef0097958bb286",
+      "bytes": 2720,
+      "action": "Archived outside checkout and removed from branch working tree"
+    }
+  ],
+  "preserved": "Application features, current tests, migrations, source candidates, canonical audit/plan/phase evidence and all unrelated uncommitted changes",
+  "consolidated": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "d0b6694c4a39bec53704c40bf6c38c829a5c2e052ab113930d1ade3d37d61493",
+      "action": "Consolidated current instructions/checkpoint; previous contents archived"
+    },
+    {
+      "path": "docs/release/RESUME.md",
+      "sha256": "9f2bf9977713a72e74ba3d72ae2f579cfe714763440b9440c5f8253a6be6ff94",
+      "action": "Consolidated current instructions/checkpoint; previous contents archived"
+    }
+  ]
+}

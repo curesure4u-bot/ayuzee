@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-04",
+  "project": "gsjkrmrumlxakcecpfiz",
+  "source": "Read-only authenticated Supabase dashboard inspection",
+  "customSmtpEnabled": false,
+  "emailConfirmationRequired": false,
+  "newUserSignupsAllowed": true,
+  "anonymousSignInsAllowed": false,
+  "siteUrl": "https://ayuzee.com",
+  "redirectAllowlist": ["https://ayuzee.com/**"],
+  "pages": ["auth/smtp", "auth/url-configuration", "auth/providers"],
+  "settingsChanged": false,
+  "productionEmailSent": false,
+  "paidResourcesUsed": false,
+  "acceptance": "Pending existing company SMTP sender and coordinated email-confirmation/delivery verification. Local Mailpit acceptance does not prove production email delivery."
+}

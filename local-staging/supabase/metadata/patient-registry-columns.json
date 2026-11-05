@@ -1,0 +1,240 @@
+[
+  {
+    "name": "id",
+    "type": "uuid",
+    "table": "hms_op_patients",
+    "default": "gen_random_uuid()",
+    "not_null": true
+  },
+  {
+    "name": "patient_id",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": true
+  },
+  {
+    "name": "auth_user_id",
+    "type": "uuid",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "title",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": "'Mr.'::text",
+    "not_null": false
+  },
+  {
+    "name": "first_name",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": true
+  },
+  {
+    "name": "last_name",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "gender",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "date_of_birth",
+    "type": "date",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "age_years",
+    "type": "integer",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "age_months",
+    "type": "integer",
+    "table": "hms_op_patients",
+    "default": "0",
+    "not_null": false
+  },
+  {
+    "name": "blood_group",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "mobile",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": true
+  },
+  {
+    "name": "mobile_verified",
+    "type": "boolean",
+    "table": "hms_op_patients",
+    "default": "false",
+    "not_null": false
+  },
+  {
+    "name": "email",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "address",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "city",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "state",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "pincode",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "country",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": "'India'::text",
+    "not_null": false
+  },
+  {
+    "name": "prakriti",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "allergies",
+    "type": "text[]",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "chronic_conditions",
+    "type": "text[]",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "current_medications",
+    "type": "text[]",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "branch",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": "'Main Branch'::text",
+    "not_null": false
+  },
+  {
+    "name": "registered_by",
+    "type": "uuid",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "primary_doctor_id",
+    "type": "uuid",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "source",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": "'walk-in'::text",
+    "not_null": false
+  },
+  {
+    "name": "referral_code",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "is_active",
+    "type": "boolean",
+    "table": "hms_op_patients",
+    "default": "true",
+    "not_null": false
+  },
+  {
+    "name": "total_visits",
+    "type": "integer",
+    "table": "hms_op_patients",
+    "default": "0",
+    "not_null": false
+  },
+  {
+    "name": "last_visit_date",
+    "type": "date",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  },
+  {
+    "name": "created_at",
+    "type": "timestamp with time zone",
+    "table": "hms_op_patients",
+    "default": "now()",
+    "not_null": false
+  },
+  {
+    "name": "updated_at",
+    "type": "timestamp with time zone",
+    "table": "hms_op_patients",
+    "default": "now()",
+    "not_null": false
+  },
+  {
+    "name": "uhid",
+    "type": "text",
+    "table": "hms_op_patients",
+    "default": null,
+    "not_null": false
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "verifiedOn": "2026-11-04",
+  "source": "Supabase MCP generate_typescript_types",
+  "projectId": "gsjkrmrumlxakcecpfiz",
+  "organizationId": "agdxrlptdagaktpnkopw",
+  "publicTables": 430,
+  "publicViews": 21,
+  "sha256": "2b5c368d660f91356762296b64588301f51a9e93c7a9ef3bb15b69fc71429a80",
+  "candidateMigrationsApplied": true,
+  "afterMigrations": [
+    "20261103193440_phase0_2_scoped_access",
+    "20261103195813_auth_lifecycle_permissions",
+    "account_onboarding_contract"
+  ],
+  "unappliedCandidates": [
+    "phase1-profile-onboarding.sql",
+    "phase1-doctor-permissions.sql"
+  ],
+  "generatedResponseSha256": "484df90e690acdd9f97ed475c3bed8f67df1be763b9bd6be6662f9945859f6cd",
+  "normalization": "5 November 2026: removed one trailing blank line only for diff hygiene; generated schema declarations are unchanged."
+}

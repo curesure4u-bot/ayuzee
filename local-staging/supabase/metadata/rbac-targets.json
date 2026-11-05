@@ -1,0 +1,4015 @@
+{
+  "views": [
+    {
+      "name": "gamification_leaderboard",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "uuid"
+        },
+        {
+          "name": "role",
+          "type": "text"
+        },
+        {
+          "name": "total_points",
+          "type": "integer"
+        },
+        {
+          "name": "total_coins",
+          "type": "integer"
+        },
+        {
+          "name": "current_rank",
+          "type": "text"
+        },
+        {
+          "name": "badge_count",
+          "type": "bigint"
+        },
+        {
+          "name": "login_streak",
+          "type": "integer"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone"
+        }
+      ],
+      "fingerprint": "6b50559068e2cc760e542f1a2555fae0"
+    },
+    {
+      "name": "unified_patient_view",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "uuid"
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "phone",
+          "type": "text"
+        },
+        {
+          "name": "date_of_birth",
+          "type": "date"
+        },
+        {
+          "name": "gender",
+          "type": "text"
+        },
+        {
+          "name": "city",
+          "type": "text"
+        },
+        {
+          "name": "has_hms_record",
+          "type": "boolean"
+        },
+        {
+          "name": "bridge_records_count",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "b3960d60516dc54a900fe3c7e730bafa"
+    },
+    {
+      "name": "competition_college_leaderboard",
+      "columns": [
+        {
+          "name": "competition_id",
+          "type": "uuid"
+        },
+        {
+          "name": "college_name",
+          "type": "text"
+        },
+        {
+          "name": "participants",
+          "type": "bigint"
+        },
+        {
+          "name": "total_score",
+          "type": "bigint"
+        },
+        {
+          "name": "avg_score",
+          "type": "integer"
+        },
+        {
+          "name": "top_score",
+          "type": "integer"
+        },
+        {
+          "name": "total_correct",
+          "type": "bigint"
+        },
+        {
+          "name": "total_attempted",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "0c73fe0b7b99efe793a23f276ce100e5"
+    },
+    {
+      "name": "mis_today_collection_by_user",
+      "columns": [
+        {
+          "name": "collected_by_name",
+          "type": "text"
+        },
+        {
+          "name": "payment_mode",
+          "type": "text"
+        },
+        {
+          "name": "total_amount",
+          "type": "numeric"
+        },
+        {
+          "name": "total_bills",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "2edc82c3fa5a1df1e7e278f4179a09a4"
+    },
+    {
+      "name": "mis_today_collection_by_dept",
+      "columns": [
+        {
+          "name": "department",
+          "type": "text"
+        },
+        {
+          "name": "total_amount",
+          "type": "numeric"
+        },
+        {
+          "name": "total_bills",
+          "type": "bigint"
+        },
+        {
+          "name": "pct",
+          "type": "numeric"
+        }
+      ],
+      "fingerprint": "44dba3e56d0b7246ce93a2bab045d0b1"
+    },
+    {
+      "name": "mis_today_hourly_collection",
+      "columns": [
+        {
+          "name": "hour",
+          "type": "numeric"
+        },
+        {
+          "name": "total_amount",
+          "type": "numeric"
+        }
+      ],
+      "fingerprint": "5c2c6cc879ae714ed47140417bc54a00"
+    },
+    {
+      "name": "hrms_v_workforce_summary",
+      "columns": [
+        {
+          "name": "total_active",
+          "type": "bigint"
+        },
+        {
+          "name": "active_employees",
+          "type": "bigint"
+        },
+        {
+          "name": "on_probation",
+          "type": "bigint"
+        },
+        {
+          "name": "on_notice",
+          "type": "bigint"
+        },
+        {
+          "name": "exited_total",
+          "type": "bigint"
+        },
+        {
+          "name": "new_joiners_30d",
+          "type": "bigint"
+        },
+        {
+          "name": "new_joiners_90d",
+          "type": "bigint"
+        },
+        {
+          "name": "male_count",
+          "type": "bigint"
+        },
+        {
+          "name": "female_count",
+          "type": "bigint"
+        },
+        {
+          "name": "other_gender_count",
+          "type": "bigint"
+        },
+        {
+          "name": "permanent_count",
+          "type": "bigint"
+        },
+        {
+          "name": "contract_count",
+          "type": "bigint"
+        },
+        {
+          "name": "consultant_count",
+          "type": "bigint"
+        },
+        {
+          "name": "other_type_count",
+          "type": "bigint"
+        },
+        {
+          "name": "total_monthly_payroll",
+          "type": "numeric"
+        },
+        {
+          "name": "avg_salary",
+          "type": "numeric"
+        },
+        {
+          "name": "avg_tenure_days",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "2636322924ab3eaebfe61f4b39d7b55d"
+    },
+    {
+      "name": "hrms_v_department_workforce",
+      "columns": [
+        {
+          "name": "department",
+          "type": "text"
+        },
+        {
+          "name": "total_employees",
+          "type": "bigint"
+        },
+        {
+          "name": "active",
+          "type": "bigint"
+        },
+        {
+          "name": "present_today",
+          "type": "bigint"
+        },
+        {
+          "name": "absent_today",
+          "type": "bigint"
+        },
+        {
+          "name": "on_leave_today",
+          "type": "bigint"
+        },
+        {
+          "name": "department_payroll",
+          "type": "numeric"
+        },
+        {
+          "name": "avg_salary",
+          "type": "numeric"
+        },
+        {
+          "name": "male",
+          "type": "bigint"
+        },
+        {
+          "name": "female",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "fe59a295b8292318b90c88ce3d729701"
+    },
+    {
+      "name": "hrms_v_branch_workforce",
+      "columns": [
+        {
+          "name": "branch_id",
+          "type": "uuid"
+        },
+        {
+          "name": "branch_name",
+          "type": "text"
+        },
+        {
+          "name": "branch_code",
+          "type": "text"
+        },
+        {
+          "name": "branch_type",
+          "type": "text"
+        },
+        {
+          "name": "total_staff",
+          "type": "bigint"
+        },
+        {
+          "name": "present_today",
+          "type": "bigint"
+        },
+        {
+          "name": "absent_today",
+          "type": "bigint"
+        },
+        {
+          "name": "branch_payroll",
+          "type": "numeric"
+        }
+      ],
+      "fingerprint": "8802c466ea66a863df5fc2761f1ada3e"
+    },
+    {
+      "name": "hrms_v_attrition_monthly",
+      "columns": [
+        {
+          "name": "year",
+          "type": "integer"
+        },
+        {
+          "name": "month",
+          "type": "integer"
+        },
+        {
+          "name": "period_label",
+          "type": "text"
+        },
+        {
+          "name": "resignations",
+          "type": "bigint"
+        },
+        {
+          "name": "better_opportunity",
+          "type": "bigint"
+        },
+        {
+          "name": "personal",
+          "type": "bigint"
+        },
+        {
+          "name": "relocation",
+          "type": "bigint"
+        },
+        {
+          "name": "health",
+          "type": "bigint"
+        },
+        {
+          "name": "dissatisfaction",
+          "type": "bigint"
+        },
+        {
+          "name": "other",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "624515b6b552f1f5aaefb8055d34ad22"
+    },
+    {
+      "name": "hrms_v_doctor_activity",
+      "columns": [
+        {
+          "name": "employee_id",
+          "type": "uuid"
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "employee_code",
+          "type": "text"
+        },
+        {
+          "name": "department",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "type": "text"
+        },
+        {
+          "name": "productivity_score",
+          "type": "integer"
+        },
+        {
+          "name": "today_attendance",
+          "type": "text"
+        },
+        {
+          "name": "salary",
+          "type": "numeric"
+        },
+        {
+          "name": "consultations_today",
+          "type": "integer"
+        },
+        {
+          "name": "consultations_month",
+          "type": "integer"
+        },
+        {
+          "name": "revenue_month",
+          "type": "integer"
+        },
+        {
+          "name": "follow_up_rate",
+          "type": "integer"
+        },
+        {
+          "name": "avg_patient_rating",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "69e4d9291e27bb6f4c91bd139fa94f51"
+    },
+    {
+      "name": "hrms_v_therapist_activity",
+      "columns": [
+        {
+          "name": "employee_id",
+          "type": "uuid"
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "employee_code",
+          "type": "text"
+        },
+        {
+          "name": "department",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "type": "text"
+        },
+        {
+          "name": "productivity_score",
+          "type": "integer"
+        },
+        {
+          "name": "today_attendance",
+          "type": "text"
+        },
+        {
+          "name": "procedures_today",
+          "type": "integer"
+        },
+        {
+          "name": "procedures_month",
+          "type": "integer"
+        },
+        {
+          "name": "avg_therapy_rating",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "1ece34093e536412819df303bf1e9156"
+    },
+    {
+      "name": "hrms_v_expiring_documents",
+      "columns": [
+        {
+          "name": "document_id",
+          "type": "uuid"
+        },
+        {
+          "name": "employee_id",
+          "type": "uuid"
+        },
+        {
+          "name": "employee_name",
+          "type": "text"
+        },
+        {
+          "name": "employee_code",
+          "type": "text"
+        },
+        {
+          "name": "document_type",
+          "type": "text"
+        },
+        {
+          "name": "document_name",
+          "type": "text"
+        },
+        {
+          "name": "expiry_date",
+          "type": "date"
+        },
+        {
+          "name": "days_until_expiry",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "b57d826ba6cf31c16cf6c80055db4dc8"
+    },
+    {
+      "name": "hrms_v_expiring_registrations",
+      "columns": [
+        {
+          "name": "qualification_id",
+          "type": "uuid"
+        },
+        {
+          "name": "employee_id",
+          "type": "uuid"
+        },
+        {
+          "name": "employee_name",
+          "type": "text"
+        },
+        {
+          "name": "employee_code",
+          "type": "text"
+        },
+        {
+          "name": "qualification",
+          "type": "text"
+        },
+        {
+          "name": "registration_number",
+          "type": "text"
+        },
+        {
+          "name": "registration_authority",
+          "type": "text"
+        },
+        {
+          "name": "registration_expiry",
+          "type": "date"
+        },
+        {
+          "name": "days_until_expiry",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "9e67b4ec2010f6265e0757b6c7b5f83a"
+    },
+    {
+      "name": "hrms_v_probation_ending",
+      "columns": [
+        {
+          "name": "employee_id",
+          "type": "uuid"
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "employee_code",
+          "type": "text"
+        },
+        {
+          "name": "department",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "type": "text"
+        },
+        {
+          "name": "join_date",
+          "type": "date"
+        },
+        {
+          "name": "probation_end_date",
+          "type": "date"
+        },
+        {
+          "name": "days_until_end",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "c2542976cf7c4069f633416fec31d402"
+    },
+    {
+      "name": "hrms_v_expiring_training_certs",
+      "columns": [
+        {
+          "name": "training_record_id",
+          "type": "uuid"
+        },
+        {
+          "name": "employee_id",
+          "type": "uuid"
+        },
+        {
+          "name": "employee_name",
+          "type": "text"
+        },
+        {
+          "name": "employee_code",
+          "type": "text"
+        },
+        {
+          "name": "training_name",
+          "type": "text"
+        },
+        {
+          "name": "certificate_expiry",
+          "type": "date"
+        },
+        {
+          "name": "days_until_expiry",
+          "type": "integer"
+        }
+      ],
+      "fingerprint": "5d574f5a45cf52e07079e4f3f846f574"
+    },
+    {
+      "name": "unified_patient_directory",
+      "columns": [
+        {
+          "name": "profile_id",
+          "type": "uuid"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid"
+        },
+        {
+          "name": "ayuzee_patient_id",
+          "type": "text"
+        },
+        {
+          "name": "hms_op_number",
+          "type": "text"
+        },
+        {
+          "name": "full_name",
+          "type": "text"
+        },
+        {
+          "name": "phone",
+          "type": "text"
+        },
+        {
+          "name": "email",
+          "type": "text"
+        },
+        {
+          "name": "gender",
+          "type": "text"
+        },
+        {
+          "name": "date_of_birth",
+          "type": "date"
+        },
+        {
+          "name": "city",
+          "type": "text"
+        },
+        {
+          "name": "state",
+          "type": "text"
+        },
+        {
+          "name": "blood_group",
+          "type": "text"
+        },
+        {
+          "name": "hms_patient_linked",
+          "type": "boolean"
+        },
+        {
+          "name": "hms_branch_id",
+          "type": "uuid"
+        },
+        {
+          "name": "linked_branch",
+          "type": "text"
+        },
+        {
+          "name": "abha_id",
+          "type": "text"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone"
+        },
+        {
+          "name": "sync_status",
+          "type": "text"
+        }
+      ],
+      "fingerprint": "7e990bdfdbc1a2f86976131fc31570f2"
+    },
+    {
+      "name": "mis_daily_revenue",
+      "columns": [
+        {
+          "name": "bill_date",
+          "type": "date"
+        },
+        {
+          "name": "branch",
+          "type": "text"
+        },
+        {
+          "name": "total_bills",
+          "type": "bigint"
+        },
+        {
+          "name": "total_revenue",
+          "type": "numeric"
+        },
+        {
+          "name": "collected",
+          "type": "numeric"
+        },
+        {
+          "name": "outstanding",
+          "type": "numeric"
+        },
+        {
+          "name": "paid_count",
+          "type": "bigint"
+        },
+        {
+          "name": "pending_count",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "d111039e51f43708719d7d96fa345306"
+    },
+    {
+      "name": "mis_department_revenue",
+      "columns": [
+        {
+          "name": "bill_date",
+          "type": "date"
+        },
+        {
+          "name": "department",
+          "type": "text"
+        },
+        {
+          "name": "branch",
+          "type": "text"
+        },
+        {
+          "name": "bill_count",
+          "type": "bigint"
+        },
+        {
+          "name": "revenue",
+          "type": "numeric"
+        }
+      ],
+      "fingerprint": "7c5632151409be22412ebc23eadc4461"
+    },
+    {
+      "name": "mis_doctor_revenue",
+      "columns": [
+        {
+          "name": "doctor_name",
+          "type": "text"
+        },
+        {
+          "name": "branch",
+          "type": "text"
+        },
+        {
+          "name": "month",
+          "type": "date"
+        },
+        {
+          "name": "bill_count",
+          "type": "bigint"
+        },
+        {
+          "name": "revenue",
+          "type": "numeric"
+        }
+      ],
+      "fingerprint": "aaaac3b3a2264f2111508b2585334c21"
+    },
+    {
+      "name": "mis_opd_summary",
+      "columns": [
+        {
+          "name": "visit_date",
+          "type": "date"
+        },
+        {
+          "name": "branch",
+          "type": "text"
+        },
+        {
+          "name": "total_visits",
+          "type": "bigint"
+        },
+        {
+          "name": "walkins",
+          "type": "bigint"
+        },
+        {
+          "name": "followups",
+          "type": "bigint"
+        },
+        {
+          "name": "teleconsults",
+          "type": "bigint"
+        },
+        {
+          "name": "completed",
+          "type": "bigint"
+        },
+        {
+          "name": "no_shows",
+          "type": "bigint"
+        }
+      ],
+      "fingerprint": "c4fbbc7ea632e4552ab5744d13d17d9a"
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "ayuzee_hms_bridge",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "bridge_type",
+      "type": "text",
+      "table": "ayuzee_hms_bridge",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "ayuzee_id",
+      "type": "uuid",
+      "table": "ayuzee_hms_bridge",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "hms_id",
+      "type": "uuid",
+      "table": "ayuzee_hms_bridge",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_entity_type",
+      "type": "text",
+      "table": "ayuzee_hms_bridge",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "sync_status",
+      "type": "text",
+      "table": "ayuzee_hms_bridge",
+      "default": "'pending'::text",
+      "not_null": true
+    },
+    {
+      "name": "sync_direction",
+      "type": "text",
+      "table": "ayuzee_hms_bridge",
+      "default": "'ayuzee_to_hms'::text",
+      "not_null": false
+    },
+    {
+      "name": "last_synced_at",
+      "type": "timestamp with time zone",
+      "table": "ayuzee_hms_bridge",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "error_message",
+      "type": "text",
+      "table": "ayuzee_hms_bridge",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "table": "ayuzee_hms_bridge",
+      "default": "'{}'::jsonb",
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "ayuzee_hms_bridge",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "ayuzee_hms_bridge",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "competition_scores",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "competition_id",
+      "type": "uuid",
+      "table": "competition_scores",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "competition_scores",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "college_name",
+      "type": "text",
+      "table": "competition_scores",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "score",
+      "type": "integer",
+      "table": "competition_scores",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "correct_answers",
+      "type": "integer",
+      "table": "competition_scores",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "total_questions",
+      "type": "integer",
+      "table": "competition_scores",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "time_taken_seconds",
+      "type": "integer",
+      "table": "competition_scores",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "submitted_at",
+      "type": "timestamp with time zone",
+      "table": "competition_scores",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "doctors",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "full_name",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "specialization",
+      "type": "text",
+      "table": "doctors",
+      "default": "'Ayurveda'::text",
+      "not_null": true
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "table": "doctors",
+      "default": "'Ayurveda'::text",
+      "not_null": true
+    },
+    {
+      "name": "city",
+      "type": "text",
+      "table": "doctors",
+      "default": "'India'::text",
+      "not_null": true
+    },
+    {
+      "name": "clinic_name",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "experience_years",
+      "type": "integer",
+      "table": "doctors",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "consultation_fee",
+      "type": "integer",
+      "table": "doctors",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "languages",
+      "type": "text[]",
+      "table": "doctors",
+      "default": "'{}'::text[]",
+      "not_null": true
+    },
+    {
+      "name": "bio",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "rating",
+      "type": "numeric(2,1)",
+      "table": "doctors",
+      "default": "4.8",
+      "not_null": true
+    },
+    {
+      "name": "total_reviews",
+      "type": "integer",
+      "table": "doctors",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "video_available",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "true",
+      "not_null": true
+    },
+    {
+      "name": "in_clinic_available",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "true",
+      "not_null": true
+    },
+    {
+      "name": "avatar_url",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "is_approved",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "false",
+      "not_null": true
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "false",
+      "not_null": true
+    },
+    {
+      "name": "hms_access",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "false",
+      "not_null": true
+    },
+    {
+      "name": "hms_role",
+      "type": "text",
+      "table": "doctors",
+      "default": "'branch_doctor'::text",
+      "not_null": false
+    },
+    {
+      "name": "hms_branch",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_branches",
+      "type": "text[]",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_center_type",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_modules",
+      "type": "text[]",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_access_granted_at",
+      "type": "timestamp with time zone",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_access_granted_by",
+      "type": "uuid",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_access_expiry",
+      "type": "timestamp with time zone",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "vaidya_access",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "doctors",
+      "default": "now()",
+      "not_null": true
+    },
+    {
+      "name": "is_suspended",
+      "type": "boolean",
+      "table": "doctors",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "verification_status",
+      "type": "text",
+      "table": "doctors",
+      "default": "'pending'::text",
+      "not_null": false
+    },
+    {
+      "name": "rejection_reason",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "suspended_at",
+      "type": "timestamp with time zone",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "suspended_reason",
+      "type": "text",
+      "table": "doctors",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hms_bills",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "bill_number",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "visit_id",
+      "type": "uuid",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "patient_id",
+      "type": "uuid",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "patient_display_id",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "patient_name",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "bill_date",
+      "type": "date",
+      "table": "hms_bills",
+      "default": "CURRENT_DATE",
+      "not_null": true
+    },
+    {
+      "name": "bill_type",
+      "type": "text",
+      "table": "hms_bills",
+      "default": "'consultation'::text",
+      "not_null": false
+    },
+    {
+      "name": "subtotal",
+      "type": "numeric(12,2)",
+      "table": "hms_bills",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "discount_amount",
+      "type": "numeric(12,2)",
+      "table": "hms_bills",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "discount_reason",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "tax_amount",
+      "type": "numeric(12,2)",
+      "table": "hms_bills",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "total_amount",
+      "type": "numeric(12,2)",
+      "table": "hms_bills",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "paid_amount",
+      "type": "numeric(12,2)",
+      "table": "hms_bills",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "balance_amount",
+      "type": "numeric(12,2)",
+      "table": "hms_bills",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "payment_status",
+      "type": "text",
+      "table": "hms_bills",
+      "default": "'pending'::text",
+      "not_null": false
+    },
+    {
+      "name": "payment_mode",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "payment_reference",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "doctor_name",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "department",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "rate_plan",
+      "type": "text",
+      "table": "hms_bills",
+      "default": "'general'::text",
+      "not_null": false
+    },
+    {
+      "name": "is_cancelled",
+      "type": "boolean",
+      "table": "hms_bills",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "cancelled_at",
+      "type": "timestamp with time zone",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "cancel_reason",
+      "type": "text",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "branch",
+      "type": "text",
+      "table": "hms_bills",
+      "default": "'Main Branch'::text",
+      "not_null": false
+    },
+    {
+      "name": "created_by",
+      "type": "uuid",
+      "table": "hms_bills",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hms_bills",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hms_bills",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hms_branches",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "branch_name",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "branch_code",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "address",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "city",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "state",
+      "type": "text",
+      "table": "hms_branches",
+      "default": "'Tamil Nadu'::text",
+      "not_null": false
+    },
+    {
+      "name": "pincode",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "branch_type",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "manager_name",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "bed_count",
+      "type": "integer",
+      "table": "hms_branches",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "table": "hms_branches",
+      "default": "true",
+      "not_null": false
+    },
+    {
+      "name": "opened_on",
+      "type": "date",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hms_branches",
+      "default": "now()",
+      "not_null": true
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "gstin",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "ayush_license_no",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "opening_hours",
+      "type": "text",
+      "table": "hms_branches",
+      "default": "'9:00 AM - 6:00 PM'::text",
+      "not_null": false
+    },
+    {
+      "name": "specialties",
+      "type": "text[]",
+      "table": "hms_branches",
+      "default": "'{}'::text[]",
+      "not_null": false
+    },
+    {
+      "name": "op_prefix",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "google_maps_url",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "latitude",
+      "type": "numeric(10,7)",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "longitude",
+      "type": "numeric(10,7)",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "whatsapp_no",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_plan",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_payment_type",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_revenue_share_pct",
+      "type": "numeric(5,2)",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_agreement_start",
+      "type": "date",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_agreement_end",
+      "type": "date",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_owner_name",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_owner_phone",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "franchise_owner_email",
+      "type": "text",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "daily_op_capacity",
+      "type": "integer",
+      "table": "hms_branches",
+      "default": "50",
+      "not_null": false
+    },
+    {
+      "name": "panchakarma_rooms",
+      "type": "integer",
+      "table": "hms_branches",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "has_pharmacy",
+      "type": "boolean",
+      "table": "hms_branches",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "has_lab",
+      "type": "boolean",
+      "table": "hms_branches",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "has_ipd",
+      "type": "boolean",
+      "table": "hms_branches",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "organisation_id",
+      "type": "uuid",
+      "table": "hms_branches",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hms_op_visits",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "op_number",
+      "type": "integer",
+      "table": "hms_op_visits",
+      "default": "nextval('hms_op_visits_op_number_seq'::regclass)",
+      "not_null": true
+    },
+    {
+      "name": "patient_id",
+      "type": "uuid",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "patient_display_id",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "visit_date",
+      "type": "date",
+      "table": "hms_op_visits",
+      "default": "CURRENT_DATE",
+      "not_null": true
+    },
+    {
+      "name": "check_in_time",
+      "type": "timestamp with time zone",
+      "table": "hms_op_visits",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "check_out_time",
+      "type": "timestamp with time zone",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "doctor_id",
+      "type": "uuid",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "doctor_name",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "assigned_by",
+      "type": "uuid",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "session_token",
+      "type": "integer",
+      "table": "hms_op_visits",
+      "default": "1",
+      "not_null": false
+    },
+    {
+      "name": "queue_position",
+      "type": "integer",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "mode_visit",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": "'Direct'::text",
+      "not_null": false
+    },
+    {
+      "name": "purpose",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": "'Consultation'::text",
+      "not_null": false
+    },
+    {
+      "name": "referred_by",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "consultation_fee",
+      "type": "numeric(10,2)",
+      "table": "hms_op_visits",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "bill_amount",
+      "type": "numeric(10,2)",
+      "table": "hms_op_visits",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "bill_status",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": "'pending'::text",
+      "not_null": false
+    },
+    {
+      "name": "payment_mode",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": "'cash'::text",
+      "not_null": false
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": "'checked_in'::text",
+      "not_null": false
+    },
+    {
+      "name": "chief_complaint",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "vitals_captured",
+      "type": "boolean",
+      "table": "hms_op_visits",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "prescription_given",
+      "type": "boolean",
+      "table": "hms_op_visits",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "branch",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": "'Main Branch'::text",
+      "not_null": false
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "table": "hms_op_visits",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hms_op_visits",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hms_op_visits",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "department",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'General'::text",
+      "not_null": true
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "salary",
+      "type": "numeric(10,2)",
+      "table": "hms_staff",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "join_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'active'::text",
+      "not_null": false
+    },
+    {
+      "name": "today_attendance",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'present'::text",
+      "not_null": false
+    },
+    {
+      "name": "productivity_score",
+      "type": "integer",
+      "table": "hms_staff",
+      "default": "80",
+      "not_null": false
+    },
+    {
+      "name": "location",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'all'::text",
+      "not_null": false
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "table": "hms_staff",
+      "default": "true",
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hms_staff",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hms_staff",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "employee_code",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "gender",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_contact",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_phone",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "address",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "city",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "state",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "pincode",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "branch_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "department_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "designation",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "reporting_manager_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "employment_type",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'permanent'::text",
+      "not_null": false
+    },
+    {
+      "name": "probation_end_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "confirmation_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "shift_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "weekly_off",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'Sunday'::text",
+      "not_null": false
+    },
+    {
+      "name": "employee_status",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'active'::text",
+      "not_null": false
+    },
+    {
+      "name": "organisation_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_contact_name",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_contact_phone",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_contact_relation",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "address_line1",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "address_line2",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "blood_group",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "marital_status",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "aadhaar_masked",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "pan",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "bank_name",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "bank_account_no",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "bank_ifsc",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "designation_id",
+      "type": "uuid",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "notice_period_days",
+      "type": "integer",
+      "table": "hms_staff",
+      "default": "30",
+      "not_null": false
+    },
+    {
+      "name": "photo_url",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "resignation_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "last_working_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "relieving_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "employee_id",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "first_name",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "last_name",
+      "type": "text",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "joining_date",
+      "type": "date",
+      "table": "hms_staff",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "basic_salary",
+      "type": "numeric(10,2)",
+      "table": "hms_staff",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "hra",
+      "type": "numeric(10,2)",
+      "table": "hms_staff",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "other_allowances",
+      "type": "numeric(10,2)",
+      "table": "hms_staff",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "branch",
+      "type": "text",
+      "table": "hms_staff",
+      "default": "'Main Branch'::text",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hrms_employee_documents",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "employee_id",
+      "type": "uuid",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "document_type",
+      "type": "text",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "document_name",
+      "type": "text",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "file_path",
+      "type": "text",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "file_size",
+      "type": "integer",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "mime_type",
+      "type": "text",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "uploaded_by",
+      "type": "uuid",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "table": "hrms_employee_documents",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "verified_by",
+      "type": "uuid",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "verified_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "expiry_date",
+      "type": "date",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "table": "hrms_employee_documents",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_documents",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_documents",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hrms_employee_qualifications",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "employee_id",
+      "type": "uuid",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "qualification",
+      "type": "text",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "institution",
+      "type": "text",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "university",
+      "type": "text",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "year_of_passing",
+      "type": "integer",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "registration_number",
+      "type": "text",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "registration_authority",
+      "type": "text",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "registration_expiry",
+      "type": "date",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "certificate_url",
+      "type": "text",
+      "table": "hrms_employee_qualifications",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "is_primary",
+      "type": "boolean",
+      "table": "hrms_employee_qualifications",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_qualifications",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_qualifications",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hrms_employee_training",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "employee_id",
+      "type": "uuid",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "training_id",
+      "type": "uuid",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "table": "hrms_employee_training",
+      "default": "'assigned'::text",
+      "not_null": true
+    },
+    {
+      "name": "attended",
+      "type": "boolean",
+      "table": "hrms_employee_training",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "attendance_date",
+      "type": "date",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "assessment_score",
+      "type": "numeric(5,2)",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "passed",
+      "type": "boolean",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "certificate_issued",
+      "type": "boolean",
+      "table": "hrms_employee_training",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "certificate_number",
+      "type": "text",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "certificate_url",
+      "type": "text",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "certificate_expiry",
+      "type": "date",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "feedback_rating",
+      "type": "integer",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "feedback_comments",
+      "type": "text",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "assigned_by",
+      "type": "uuid",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "assigned_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_training",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "completed_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "organisation_id",
+      "type": "uuid",
+      "table": "hrms_employee_training",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_training",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_employee_training",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hrms_resignations",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "employee_id",
+      "type": "uuid",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "resignation_date",
+      "type": "date",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "notice_period_days",
+      "type": "integer",
+      "table": "hrms_resignations",
+      "default": "30",
+      "not_null": false
+    },
+    {
+      "name": "last_working_date",
+      "type": "date",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "reason",
+      "type": "text",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "reason_category",
+      "type": "text",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "table": "hrms_resignations",
+      "default": "'submitted'::text",
+      "not_null": true
+    },
+    {
+      "name": "accepted_by",
+      "type": "uuid",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "accepted_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "exit_interview_done",
+      "type": "boolean",
+      "table": "hrms_resignations",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "exit_interview_date",
+      "type": "date",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "exit_feedback",
+      "type": "text",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "organisation_id",
+      "type": "uuid",
+      "table": "hrms_resignations",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_resignations",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_resignations",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "hrms_trainings",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "uuid",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "code",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": "'general'::text",
+      "not_null": true
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "trainer_name",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "trainer_type",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "duration_hours",
+      "type": "numeric(5,1)",
+      "table": "hrms_trainings",
+      "default": "1",
+      "not_null": false
+    },
+    {
+      "name": "max_participants",
+      "type": "integer",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "scheduled_date",
+      "type": "date",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "scheduled_time",
+      "type": "time without time zone",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "venue",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "is_online",
+      "type": "boolean",
+      "table": "hrms_trainings",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "online_link",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "applicable_roles",
+      "type": "text[]",
+      "table": "hrms_trainings",
+      "default": "'{}'::text[]",
+      "not_null": false
+    },
+    {
+      "name": "applicable_departments",
+      "type": "text[]",
+      "table": "hrms_trainings",
+      "default": "'{}'::text[]",
+      "not_null": false
+    },
+    {
+      "name": "is_mandatory",
+      "type": "boolean",
+      "table": "hrms_trainings",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "is_recurring",
+      "type": "boolean",
+      "table": "hrms_trainings",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "recurrence_months",
+      "type": "integer",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "has_assessment",
+      "type": "boolean",
+      "table": "hrms_trainings",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "passing_score",
+      "type": "numeric(5,2)",
+      "table": "hrms_trainings",
+      "default": "70",
+      "not_null": false
+    },
+    {
+      "name": "has_certificate",
+      "type": "boolean",
+      "table": "hrms_trainings",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "certificate_validity_months",
+      "type": "integer",
+      "table": "hrms_trainings",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "table": "hrms_trainings",
+      "default": "'scheduled'::text",
+      "not_null": false
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "table": "hrms_trainings",
+      "default": "true",
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_trainings",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "hrms_trainings",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "mis_daily_collection",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "collection_date",
+      "type": "date",
+      "table": "mis_daily_collection",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "location",
+      "type": "text",
+      "table": "mis_daily_collection",
+      "default": "'all'::text",
+      "not_null": true
+    },
+    {
+      "name": "collected_by",
+      "type": "uuid",
+      "table": "mis_daily_collection",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "collected_by_name",
+      "type": "text",
+      "table": "mis_daily_collection",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "department",
+      "type": "text",
+      "table": "mis_daily_collection",
+      "default": "'OPD'::text",
+      "not_null": true
+    },
+    {
+      "name": "payment_mode",
+      "type": "text",
+      "table": "mis_daily_collection",
+      "default": "'cash'::text",
+      "not_null": true
+    },
+    {
+      "name": "amount",
+      "type": "numeric(12,2)",
+      "table": "mis_daily_collection",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "bill_count",
+      "type": "integer",
+      "table": "mis_daily_collection",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "discount_total",
+      "type": "numeric(10,2)",
+      "table": "mis_daily_collection",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "tax_total",
+      "type": "numeric(10,2)",
+      "table": "mis_daily_collection",
+      "default": "0",
+      "not_null": false
+    },
+    {
+      "name": "net_amount",
+      "type": "numeric(12,2)",
+      "table": "mis_daily_collection",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "table": "mis_daily_collection",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "mis_daily_collection",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "mis_daily_collection",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "profiles",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "profiles",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "full_name",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "gender",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "avatar_url",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "city",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "state",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "pincode",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "preferred_languages",
+      "type": "text[]",
+      "table": "profiles",
+      "default": "'{}'::text[]",
+      "not_null": false
+    },
+    {
+      "name": "referral_code",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "referred_by",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "table": "profiles",
+      "default": "true",
+      "not_null": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "profiles",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "profiles",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "ayuzee_patient_id",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "abha_id",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_patient_linked",
+      "type": "boolean",
+      "table": "profiles",
+      "default": "false",
+      "not_null": false
+    },
+    {
+      "name": "hms_op_number",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "hms_branch_id",
+      "type": "uuid",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "blood_group",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_contact_name",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "emergency_contact_phone",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "patient_uhid",
+      "type": "text",
+      "table": "profiles",
+      "default": null,
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "user_badges",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "user_badges",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "badge_id",
+      "type": "text",
+      "table": "user_badges",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "table": "user_badges",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "points_awarded",
+      "type": "integer",
+      "table": "user_badges",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "coins_awarded",
+      "type": "integer",
+      "table": "user_badges",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "earned_at",
+      "type": "timestamp with time zone",
+      "table": "user_badges",
+      "default": "now()",
+      "not_null": true
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "user_coins",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "user_coins",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "table": "user_coins",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "total_coins",
+      "type": "integer",
+      "table": "user_coins",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "total_points",
+      "type": "integer",
+      "table": "user_coins",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "current_rank",
+      "type": "text",
+      "table": "user_coins",
+      "default": "'Beginner'::text",
+      "not_null": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "user_coins",
+      "default": "now()",
+      "not_null": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "user_coins",
+      "default": "now()",
+      "not_null": true
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "user_roles",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "user_roles",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "role",
+      "type": "app_role",
+      "table": "user_roles",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "user_roles",
+      "default": "now()",
+      "not_null": false
+    },
+    {
+      "name": "id",
+      "type": "uuid",
+      "table": "user_streaks",
+      "default": "gen_random_uuid()",
+      "not_null": true
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "table": "user_streaks",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "table": "user_streaks",
+      "default": null,
+      "not_null": true
+    },
+    {
+      "name": "streak_type",
+      "type": "text",
+      "table": "user_streaks",
+      "default": "'daily_login'::text",
+      "not_null": true
+    },
+    {
+      "name": "current_streak",
+      "type": "integer",
+      "table": "user_streaks",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "longest_streak",
+      "type": "integer",
+      "table": "user_streaks",
+      "default": "0",
+      "not_null": true
+    },
+    {
+      "name": "last_activity_date",
+      "type": "date",
+      "table": "user_streaks",
+      "default": "CURRENT_DATE",
+      "not_null": true
+    },
+    {
+      "name": "streak_start_date",
+      "type": "date",
+      "table": "user_streaks",
+      "default": "CURRENT_DATE",
+      "not_null": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "user_streaks",
+      "default": "now()",
+      "not_null": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "user_streaks",
+      "default": "now()",
+      "not_null": true
+    }
+  ],
+  "constraints": [
+    {
+      "name": "ayuzee_hms_bridge_bridge_type_check",
+      "type": "c",
+      "table": "ayuzee_hms_bridge",
+      "definition": "CHECK ((bridge_type = ANY (ARRAY['appointment'::text, 'patient'::text, 'doctor'::text, 'prescription_order'::text, 'stock_product'::text, 'lab_report'::text, 'review_feedback'::text, 'treatment_outcome'::text])))"
+    },
+    {
+      "name": "ayuzee_hms_bridge_pkey",
+      "type": "p",
+      "table": "ayuzee_hms_bridge",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ayuzee_hms_bridge_sync_direction_check",
+      "type": "c",
+      "table": "ayuzee_hms_bridge",
+      "definition": "CHECK ((sync_direction = ANY (ARRAY['ayuzee_to_hms'::text, 'hms_to_ayuzee'::text, 'bidirectional'::text])))"
+    },
+    {
+      "name": "ayuzee_hms_bridge_sync_status_check",
+      "type": "c",
+      "table": "ayuzee_hms_bridge",
+      "definition": "CHECK ((sync_status = ANY (ARRAY['pending'::text, 'synced'::text, 'failed'::text, 'conflict'::text])))"
+    },
+    {
+      "name": "competition_scores_competition_id_fkey",
+      "type": "f",
+      "table": "competition_scores",
+      "definition": "FOREIGN KEY (competition_id) REFERENCES quiz_competitions(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "competition_scores_competition_id_user_id_key",
+      "type": "u",
+      "table": "competition_scores",
+      "definition": "UNIQUE (competition_id, user_id)"
+    },
+    {
+      "name": "competition_scores_pkey",
+      "type": "p",
+      "table": "competition_scores",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "competition_scores_user_id_fkey",
+      "type": "f",
+      "table": "competition_scores",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "doctors_hms_access_granted_by_fkey",
+      "type": "f",
+      "table": "doctors",
+      "definition": "FOREIGN KEY (hms_access_granted_by) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "doctors_pkey",
+      "type": "p",
+      "table": "doctors",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "doctors_user_id_fkey",
+      "type": "f",
+      "table": "doctors",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "doctors_user_id_key",
+      "type": "u",
+      "table": "doctors",
+      "definition": "UNIQUE (user_id)"
+    },
+    {
+      "name": "hms_bills_bill_number_key",
+      "type": "u",
+      "table": "hms_bills",
+      "definition": "UNIQUE (bill_number)"
+    },
+    {
+      "name": "hms_bills_bill_type_check",
+      "type": "c",
+      "table": "hms_bills",
+      "definition": "CHECK ((bill_type = ANY (ARRAY['consultation'::text, 'pharmacy'::text, 'lab'::text, 'procedure'::text, 'package'::text, 'ip'::text, 'miscellaneous'::text])))"
+    },
+    {
+      "name": "hms_bills_created_by_fkey",
+      "type": "f",
+      "table": "hms_bills",
+      "definition": "FOREIGN KEY (created_by) REFERENCES auth.users(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hms_bills_patient_id_fkey",
+      "type": "f",
+      "table": "hms_bills",
+      "definition": "FOREIGN KEY (patient_id) REFERENCES hms_op_patients(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hms_bills_payment_mode_check",
+      "type": "c",
+      "table": "hms_bills",
+      "definition": "CHECK ((payment_mode = ANY (ARRAY['cash'::text, 'card'::text, 'upi'::text, 'online'::text, 'cheque'::text, 'insurance'::text, 'wallet'::text, 'credit'::text, 'split'::text])))"
+    },
+    {
+      "name": "hms_bills_payment_status_check",
+      "type": "c",
+      "table": "hms_bills",
+      "definition": "CHECK ((payment_status = ANY (ARRAY['pending'::text, 'paid'::text, 'partial'::text, 'waived'::text, 'refunded'::text, 'insurance'::text])))"
+    },
+    {
+      "name": "hms_bills_pkey",
+      "type": "p",
+      "table": "hms_bills",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hms_bills_visit_id_fkey",
+      "type": "f",
+      "table": "hms_bills",
+      "definition": "FOREIGN KEY (visit_id) REFERENCES hms_op_visits(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hms_branches_branch_code_key",
+      "type": "u",
+      "table": "hms_branches",
+      "definition": "UNIQUE (branch_code)"
+    },
+    {
+      "name": "hms_branches_branch_type_check",
+      "type": "c",
+      "table": "hms_branches",
+      "definition": "CHECK ((branch_type = ANY (ARRAY['main_hospital'::text, 'branch'::text, 'franchisee'::text, 'exclusive_center'::text])))"
+    },
+    {
+      "name": "hms_branches_pkey",
+      "type": "p",
+      "table": "hms_branches",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hms_op_visits_assigned_by_fkey",
+      "type": "f",
+      "table": "hms_op_visits",
+      "definition": "FOREIGN KEY (assigned_by) REFERENCES auth.users(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hms_op_visits_bill_status_check",
+      "type": "c",
+      "table": "hms_op_visits",
+      "definition": "CHECK ((bill_status = ANY (ARRAY['pending'::text, 'paid'::text, 'partial'::text, 'waived'::text, 'insurance'::text])))"
+    },
+    {
+      "name": "hms_op_visits_doctor_id_fkey",
+      "type": "f",
+      "table": "hms_op_visits",
+      "definition": "FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hms_op_visits_mode_visit_check",
+      "type": "c",
+      "table": "hms_op_visits",
+      "definition": "CHECK ((mode_visit = ANY (ARRAY['Direct'::text, 'Referral'::text, 'Follow-up'::text, 'Emergency'::text, 'Teleconsult'::text, 'Camp'::text])))"
+    },
+    {
+      "name": "hms_op_visits_patient_id_fkey",
+      "type": "f",
+      "table": "hms_op_visits",
+      "definition": "FOREIGN KEY (patient_id) REFERENCES hms_op_patients(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hms_op_visits_payment_mode_check",
+      "type": "c",
+      "table": "hms_op_visits",
+      "definition": "CHECK ((payment_mode = ANY (ARRAY['cash'::text, 'card'::text, 'upi'::text, 'insurance'::text, 'wallet'::text, 'credit'::text])))"
+    },
+    {
+      "name": "hms_op_visits_pkey",
+      "type": "p",
+      "table": "hms_op_visits",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hms_op_visits_purpose_check",
+      "type": "c",
+      "table": "hms_op_visits",
+      "definition": "CHECK ((purpose = ANY (ARRAY['Consultation'::text, 'Procedure'::text, 'Lab'::text, 'Pharmacy'::text, 'Follow-up'::text, 'Emergency'::text, 'Certificate'::text, 'Vaccination'::text])))"
+    },
+    {
+      "name": "hms_op_visits_status_check",
+      "type": "c",
+      "table": "hms_op_visits",
+      "definition": "CHECK ((status = ANY (ARRAY['checked_in'::text, 'in_consultation'::text, 'completed'::text, 'checked_out'::text, 'no_show'::text, 'cancelled'::text])))"
+    },
+    {
+      "name": "hms_staff_branch_id_fkey",
+      "type": "f",
+      "table": "hms_staff",
+      "definition": "FOREIGN KEY (branch_id) REFERENCES hms_branches(id)"
+    },
+    {
+      "name": "hms_staff_designation_id_fkey",
+      "type": "f",
+      "table": "hms_staff",
+      "definition": "FOREIGN KEY (designation_id) REFERENCES hrms_designations(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hms_staff_employee_code_key",
+      "type": "u",
+      "table": "hms_staff",
+      "definition": "UNIQUE (employee_code)"
+    },
+    {
+      "name": "hms_staff_pkey",
+      "type": "p",
+      "table": "hms_staff",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hms_staff_status_check",
+      "type": "c",
+      "table": "hms_staff",
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'inactive'::text, 'probation'::text, 'notice_period'::text])))"
+    },
+    {
+      "name": "hms_staff_today_attendance_check",
+      "type": "c",
+      "table": "hms_staff",
+      "definition": "CHECK ((today_attendance = ANY (ARRAY['present'::text, 'absent'::text, 'leave'::text, 'half_day'::text, 'holiday'::text])))"
+    },
+    {
+      "name": "hms_staff_user_id_fkey",
+      "type": "f",
+      "table": "hms_staff",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hrms_employee_documents_document_type_check",
+      "type": "c",
+      "table": "hrms_employee_documents",
+      "definition": "CHECK ((document_type = ANY (ARRAY['aadhaar'::text, 'pan'::text, 'passport'::text, 'bank_passbook'::text, 'qualification_certificate'::text, 'registration_certificate'::text, 'experience_certificate'::text, 'appointment_order'::text, 'contract'::text, 'signed_policy'::text, 'id_card_photo'::text, 'offer_letter'::text, 'relieving_letter'::text, 'address_proof'::text, 'photo'::text, 'other'::text])))"
+    },
+    {
+      "name": "hrms_employee_documents_employee_id_fkey",
+      "type": "f",
+      "table": "hrms_employee_documents",
+      "definition": "FOREIGN KEY (employee_id) REFERENCES hms_staff(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hrms_employee_documents_pkey",
+      "type": "p",
+      "table": "hrms_employee_documents",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hrms_employee_documents_uploaded_by_fkey",
+      "type": "f",
+      "table": "hrms_employee_documents",
+      "definition": "FOREIGN KEY (uploaded_by) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "hrms_employee_documents_verified_by_fkey",
+      "type": "f",
+      "table": "hrms_employee_documents",
+      "definition": "FOREIGN KEY (verified_by) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "hrms_employee_qualifications_employee_id_fkey",
+      "type": "f",
+      "table": "hrms_employee_qualifications",
+      "definition": "FOREIGN KEY (employee_id) REFERENCES hms_staff(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hrms_employee_qualifications_pkey",
+      "type": "p",
+      "table": "hrms_employee_qualifications",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hrms_employee_training_assigned_by_fkey",
+      "type": "f",
+      "table": "hrms_employee_training",
+      "definition": "FOREIGN KEY (assigned_by) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "hrms_employee_training_employee_id_fkey",
+      "type": "f",
+      "table": "hrms_employee_training",
+      "definition": "FOREIGN KEY (employee_id) REFERENCES hms_staff(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hrms_employee_training_employee_id_training_id_attendance_d_key",
+      "type": "u",
+      "table": "hrms_employee_training",
+      "definition": "UNIQUE (employee_id, training_id, attendance_date)"
+    },
+    {
+      "name": "hrms_employee_training_feedback_rating_check",
+      "type": "c",
+      "table": "hrms_employee_training",
+      "definition": "CHECK (((feedback_rating >= 1) AND (feedback_rating <= 5)))"
+    },
+    {
+      "name": "hrms_employee_training_organisation_id_fkey",
+      "type": "f",
+      "table": "hrms_employee_training",
+      "definition": "FOREIGN KEY (organisation_id) REFERENCES hrms_organisations(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hrms_employee_training_pkey",
+      "type": "p",
+      "table": "hrms_employee_training",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hrms_employee_training_status_check",
+      "type": "c",
+      "table": "hrms_employee_training",
+      "definition": "CHECK ((status = ANY (ARRAY['assigned'::text, 'in_progress'::text, 'completed'::text, 'failed'::text, 'exempted'::text, 'expired'::text])))"
+    },
+    {
+      "name": "hrms_employee_training_training_id_fkey",
+      "type": "f",
+      "table": "hrms_employee_training",
+      "definition": "FOREIGN KEY (training_id) REFERENCES hrms_trainings(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hrms_resignations_accepted_by_fkey",
+      "type": "f",
+      "table": "hrms_resignations",
+      "definition": "FOREIGN KEY (accepted_by) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "hrms_resignations_employee_id_fkey",
+      "type": "f",
+      "table": "hrms_resignations",
+      "definition": "FOREIGN KEY (employee_id) REFERENCES hms_staff(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "hrms_resignations_organisation_id_fkey",
+      "type": "f",
+      "table": "hrms_resignations",
+      "definition": "FOREIGN KEY (organisation_id) REFERENCES hrms_organisations(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hrms_resignations_pkey",
+      "type": "p",
+      "table": "hrms_resignations",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hrms_resignations_reason_category_check",
+      "type": "c",
+      "table": "hrms_resignations",
+      "definition": "CHECK ((reason_category = ANY (ARRAY['personal'::text, 'better_opportunity'::text, 'relocation'::text, 'health'::text, 'higher_studies'::text, 'family'::text, 'retirement'::text, 'dissatisfaction'::text, 'other'::text])))"
+    },
+    {
+      "name": "hrms_resignations_status_check",
+      "type": "c",
+      "table": "hrms_resignations",
+      "definition": "CHECK ((status = ANY (ARRAY['submitted'::text, 'manager_review'::text, 'hr_review'::text, 'accepted'::text, 'withdrawn'::text, 'rejected'::text])))"
+    },
+    {
+      "name": "hrms_trainings_category_check",
+      "type": "c",
+      "table": "hrms_trainings",
+      "definition": "CHECK ((category = ANY (ARRAY['mandatory'::text, 'clinical'::text, 'safety'::text, 'compliance'::text, 'soft_skills'::text, 'technical'::text, 'leadership'::text, 'induction'::text, 'general'::text])))"
+    },
+    {
+      "name": "hrms_trainings_organisation_id_fkey",
+      "type": "f",
+      "table": "hrms_trainings",
+      "definition": "FOREIGN KEY (organisation_id) REFERENCES hrms_organisations(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "hrms_trainings_pkey",
+      "type": "p",
+      "table": "hrms_trainings",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "hrms_trainings_status_check",
+      "type": "c",
+      "table": "hrms_trainings",
+      "definition": "CHECK ((status = ANY (ARRAY['draft'::text, 'scheduled'::text, 'in_progress'::text, 'completed'::text, 'cancelled'::text])))"
+    },
+    {
+      "name": "hrms_trainings_trainer_type_check",
+      "type": "c",
+      "table": "hrms_trainings",
+      "definition": "CHECK ((trainer_type = ANY (ARRAY['internal'::text, 'external'::text, 'online'::text, NULL::text])))"
+    },
+    {
+      "name": "mis_daily_collection_collected_by_fkey",
+      "type": "f",
+      "table": "mis_daily_collection",
+      "definition": "FOREIGN KEY (collected_by) REFERENCES auth.users(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "mis_daily_collection_payment_mode_check",
+      "type": "c",
+      "table": "mis_daily_collection",
+      "definition": "CHECK ((payment_mode = ANY (ARRAY['cash'::text, 'card'::text, 'cheque'::text, 'dd'::text, 'neft'::text, 'credit'::text, 'gpay'::text, 'upi'::text, 'wallet'::text, 'insurance'::text, 'other'::text])))"
+    },
+    {
+      "name": "mis_daily_collection_pkey",
+      "type": "p",
+      "table": "mis_daily_collection",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "profiles_ayuzee_patient_id_key",
+      "type": "u",
+      "table": "profiles",
+      "definition": "UNIQUE (ayuzee_patient_id)"
+    },
+    {
+      "name": "profiles_hms_branch_id_fkey",
+      "type": "f",
+      "table": "profiles",
+      "definition": "FOREIGN KEY (hms_branch_id) REFERENCES hms_branches(id) ON DELETE SET NULL"
+    },
+    {
+      "name": "profiles_patient_uhid_key",
+      "type": "u",
+      "table": "profiles",
+      "definition": "UNIQUE (patient_uhid)"
+    },
+    {
+      "name": "profiles_pkey",
+      "type": "p",
+      "table": "profiles",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "profiles_user_id_fkey",
+      "type": "f",
+      "table": "profiles",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "profiles_user_id_key",
+      "type": "u",
+      "table": "profiles",
+      "definition": "UNIQUE (user_id)"
+    },
+    {
+      "name": "user_badges_pkey",
+      "type": "p",
+      "table": "user_badges",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "user_badges_user_id_badge_id_key",
+      "type": "u",
+      "table": "user_badges",
+      "definition": "UNIQUE (user_id, badge_id)"
+    },
+    {
+      "name": "user_badges_user_id_fkey",
+      "type": "f",
+      "table": "user_badges",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "user_coins_pkey",
+      "type": "p",
+      "table": "user_coins",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "user_coins_role_check",
+      "type": "c",
+      "table": "user_coins",
+      "definition": "CHECK ((role = ANY (ARRAY['doctor'::text, 'patient'::text, 'student'::text, 'therapist'::text, 'service_provider'::text, 'pharma'::text, 'hms_staff'::text])))"
+    },
+    {
+      "name": "user_coins_user_id_fkey",
+      "type": "f",
+      "table": "user_coins",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "user_coins_user_id_role_key",
+      "type": "u",
+      "table": "user_coins",
+      "definition": "UNIQUE (user_id, role)"
+    },
+    {
+      "name": "user_roles_pkey",
+      "type": "p",
+      "table": "user_roles",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "user_roles_user_id_fkey",
+      "type": "f",
+      "table": "user_roles",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "user_roles_user_id_role_key",
+      "type": "u",
+      "table": "user_roles",
+      "definition": "UNIQUE (user_id, role)"
+    },
+    {
+      "name": "user_streaks_pkey",
+      "type": "p",
+      "table": "user_streaks",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "user_streaks_user_id_fkey",
+      "type": "f",
+      "table": "user_streaks",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "user_streaks_user_id_role_streak_type_key",
+      "type": "u",
+      "table": "user_streaks",
+      "definition": "UNIQUE (user_id, role, streak_type)"
+    }
+  ],
+  "authority_counts": {
+    "roles": {
+      "admin": 4,
+      "doctor": 10,
+      "patient": 2,
+      "student": 2,
+      "provider": 2,
+      "therapist": 2,
+      "blog_admin": 1,
+      "ayush_admin": 1,
+      "super_admin": 2,
+      "venue_owner": 2,
+      "doctor_admin": 1,
+      "manufacturer": 2,
+      "orders_admin": 1,
+      "content_admin": 1,
+      "product_admin": 1,
+      "support_admin": 1,
+      "accounts_admin": 1
+    },
+    "staff_total": 10,
+    "staff_with_org": 10,
+    "staff_with_branch": 10,
+    "duplicate_branch_names": 0
+  }
+}

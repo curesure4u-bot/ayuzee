@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "strict": true },
+  "include": [
+    "src/vite-env.d.ts", "src/features/professionals/**/*",
+    "src/pages/Doctors.tsx", "tests/browser/directory/**/*"
+  ]
+}

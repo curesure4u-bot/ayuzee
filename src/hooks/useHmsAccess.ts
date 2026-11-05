@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
+import { useAccountSession } from "@/features/accounts/accountService";
 import { supabase } from "@/integrations/supabase/client";
 
 export type HmsRole = 
@@ -32,100 +34,46 @@ export interface HmsPermissions {
   loading: boolean;
 }
 
+const roles = ["owner", "branch_admin", "branch_doctor", "franchise_doctor", "therapist", "pharmacist", "lab_tech", "receptionist", "camp_doctor", "nurse", "venue_partner", "service_provider"] as const;
+const modules = ["dashboard", "opd", "clinical", "patient", "ipd", "lab", "stock", "accounts", "mis", "ayush", "panchakarma", "spine", "hr", "marketing", "masters", "reports", "all"] as const;
+const permissionSchema = z.object({
+  hms_access: z.boolean(), is_approved: z.boolean(), is_suspended: z.boolean(),
+  hms_role: z.enum(roles).nullable(), hms_branch: z.string().nullable(),
+  hms_center_type: z.string().nullable(), hms_branches: z.array(z.string()).nullable(),
+  hms_modules: z.union([z.array(z.string()), z.string()]).nullable(),
+  vaidya_access: z.boolean(), hms_access_expiry: z.string().nullable(),
+});
 export const useHmsAccess = (): HmsPermissions => {
-  const [state, setState] = useState<HmsPermissions>({
-    hasAccess: false,
-    role: null,
-    branch: null,
-    branches: [],
-    modules: [],
-    centerType: null,
-    vaidyaAccess: false,
-    accessExpiry: null,
-    loading: true,
+  const account = useAccountSession();
+  const uid = account.session?.user.id;
+  const query = useQuery({
+    queryKey: ["account", "hms-permissions", uid, account.revision],
+    enabled: Boolean(uid && account.account && !account.loading && !account.error),
+    queryFn: async () => {
+      if (!uid) return null;
+      const { data, error } = await supabase.from("doctors")
+        .select("hms_access,is_approved,is_suspended,hms_role,hms_branch,hms_center_type,hms_branches,hms_modules,vaidya_access,hms_access_expiry")
+        .eq("user_id", uid).maybeSingle();
+      if (error) throw error;
+      return data ? permissionSchema.parse(data) : null;
+    },
   });
-
-  useEffect(() => {
-    let active = true;
-    const check = async () => {
-      const { data: sess } = await supabase.auth.getSession();
-      const uid = sess.session?.user?.id;
-      if (!uid) {
-        if (active) setState(s => ({ ...s, hasAccess: false, loading: false }));
-        return;
-      }
-
-      // Query doctor record with permission fields
-      const { data } = await (supabase as any)
-        .from("doctors")
-        .select("hms_access, hms_branch, hms_center_type, hms_role, hms_branches, hms_modules, vaidya_access, hms_access_expiry")
-        .eq("user_id", uid)
-        .maybeSingle();
-
-      if (!active) return;
-
-      // Check expiry for temporary access (camp doctors)
-      let accessValid = Boolean(data?.hms_access);
-      if (data?.hms_access_expiry) {
-        const expiry = new Date(data.hms_access_expiry);
-        if (expiry < new Date()) accessValid = false; // expired
-      }
-
-      // Parse modules (stored as string[] or comma-separated or null)
-      let modules: HmsModule[] = [];
-      if (data?.hms_modules) {
-        if (Array.isArray(data.hms_modules)) {
-          modules = data.hms_modules;
-        } else if (typeof data.hms_modules === "string") {
-          modules = data.hms_modules.split(",").map((m: string) => m.trim()) as HmsModule[];
-        }
-      }
-
-      // Parse branches (stored as string[] or single branch)
-      let branches: string[] = [];
-      if (data?.hms_branches && Array.isArray(data.hms_branches)) {
-        branches = data.hms_branches;
-      } else if (data?.hms_branch) {
-        branches = [data.hms_branch];
-      }
-
-      // Role-based default modules (if hms_modules not explicitly set)
-      const role = (data?.hms_role as HmsRole) || "branch_doctor";
-      if (modules.length === 0 && accessValid) {
-        switch (role) {
-          case "owner": modules = ["all"]; break;
-          case "branch_admin": modules = ["all"]; break;
-          case "branch_doctor": modules = ["dashboard", "opd", "clinical", "patient", "lab", "ayush", "panchakarma", "spine"]; break;
-          case "franchise_doctor": modules = ["dashboard", "opd", "clinical", "patient", "ayush", "spine"]; break;
-          case "therapist": modules = ["opd", "panchakarma", "ayush", "spine"]; break;
-          case "pharmacist": modules = ["stock"]; break;
-          case "lab_tech": modules = ["lab"]; break;
-          case "receptionist": modules = ["dashboard", "opd", "patient"]; break;
-          case "camp_doctor": modules = ["opd", "clinical", "patient"]; break;
-          case "nurse": modules = ["opd", "ipd", "patient"]; break;
-          case "venue_partner": modules = ["opd", "panchakarma", "reports"]; break;
-          case "service_provider": modules = ["lab", "stock"]; break;
-          default: modules = ["dashboard", "opd", "clinical", "patient"];
-        }
-      }
-
-      setState({
-        hasAccess: accessValid,
-        role,
-        branch: data?.hms_branch ?? null,
-        branches,
-        modules,
-        centerType: data?.hms_center_type ?? null,
-        vaidyaAccess: Boolean(data?.vaidya_access),
-        accessExpiry: data?.hms_access_expiry ?? null,
-        loading: false,
-      });
-    };
-    check();
-    return () => { active = false; };
-  }, []);
-
-  return state;
+  const data = !account.loading && !account.error && uid ? query.data : null;
+  const expiry = data?.hms_access_expiry ? Date.parse(data.hms_access_expiry) : null;
+  const approved = Boolean(data?.is_approved && !data?.is_suspended);
+  const valid = approved && (expiry === null || (Number.isFinite(expiry) && expiry > Date.now()));
+  const hasAccess = Boolean(valid && data?.hms_access && data?.hms_role);
+  const rawModules = Array.isArray(data?.hms_modules) ? data.hms_modules : (data?.hms_modules ?? "").split(",");
+  return {
+    hasAccess, role: hasAccess && data ? data.hms_role : null,
+    branch: hasAccess && data ? data.hms_branch : null,
+    branches: hasAccess && data ? (data.hms_branches ?? (data.hms_branch ? [data.hms_branch] : [])) : [],
+    modules: hasAccess ? rawModules.map(value => value.trim()).filter((value): value is HmsModule => modules.some(module => module === value)) : [],
+    centerType: hasAccess && data ? data.hms_center_type : null,
+    vaidyaAccess: Boolean(valid && data?.vaidya_access),
+    accessExpiry: data?.hms_access_expiry ?? null,
+    loading: account.loading || Boolean(uid && query.isLoading),
+  };
 };
 
 // Helper: Check if user can access a specific module

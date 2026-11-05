@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-04",
+  "target": "Existing loopback-only Auth/PostgREST/PostgreSQL stack",
+  "scenarios": [
+    "Real Auth-owned attempt and disabled defaults",
+    "Concurrent initiation claims create once",
+    "Concurrent capture commits stock/payment once",
+    "HTTP real Auth verification and private-field projection",
+    "Ownership, direct-write and worker-role fences",
+    "Concurrent inbox deduplication and browser-independent settlement",
+    "Uncertain provider order recovered without duplicate create",
+    "Late capture is visible for review, not fulfilled",
+    "Deleted account retains minimal financial identity; late capture enters review",
+    "Revoked real Auth session blocks initiation"
+  ],
+  "passed": 10,
+  "syntheticAccountsCleaned": 2,
+  "syntheticProductsCleaned": 10,
+  "paymentPolicyDisabled": true,
+  "checkoutPolicyDisabled": true,
+  "providerNetworkRequests": 0,
+  "provider": "In-process fictional Razorpay adapter",
+  "hostedChanges": false,
+  "paidResources": false,
+  "paymentCandidateFingerprint": "ebb513f771f0afec0a5c2c2b87c22f748e24c60d15c03ee75bbdb866e74e3512"
+}

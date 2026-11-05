@@ -2,6 +2,11 @@
 
 Ayuzee is a comprehensive AYUSH (Ayurveda, Yoga, Unani, Siddha, Homeopathy) healthcare super-app built as a React SPA. It covers telemedicine, e-commerce, hospital management, multi-system prescriptions, AI-assisted diagnostics, patient journeys, learning, and community features — all backed by Supabase.
 
+Current branch progress: [phase ledger](docs/release/phase-progress.md),
+[Phase 3 local closeout](docs/domains/commerce-closeout.md) and
+[commit handoff](docs/release/commit-readiness.md). Commerce is locally verified;
+functional previews and hosted acceptance gates remain in place.
+
 ---
 
 ## Table of Contents

@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-04",
+  "project": "gsjkrmrumlxakcecpfiz",
+  "migration": "phase0_2_scoped_access",
+  "localFile": "supabase/migrations/20261103193309_phase0_2_scoped_access.sql",
+  "applied": true,
+  "advisorsBefore": [
+    {
+      "name": "auth_users_exposed",
+      "level": "ERROR",
+      "count": 2,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0002_auth_users_exposed"
+    },
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 13,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "security_definer_view",
+      "level": "ERROR",
+      "count": 21,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0010_security_definer_view"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "level": "WARN",
+      "count": 70,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable"
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "count": 57,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 57,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "advisorsAfter": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 12,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "level": "WARN",
+      "count": 70,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable"
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "count": 56,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 58,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "countsBefore": {
+    "roles": 36,
+    "profiles": 15,
+    "doctors": 12,
+    "staff": 10,
+    "administratorAssignments": 6
+  },
+  "countsAfter": {
+    "roles": 36,
+    "profiles": 15,
+    "doctors": 12,
+    "staff": 10,
+    "administratorAssignments": 6
+  },
+  "liveAssertions": {
+    "unknownAccountDenied": true,
+    "editableRoleMetadataIgnored": true,
+    "existingAdminReportsVerified": true,
+    "privateViewAnonymousAccessDenied": true,
+    "rawAuthAccessDenied": true,
+    "publicProjectionsAvailable": true,
+    "verifiedAgainAfterLifecycleUpgrade": true
+  },
+  "localPostgresChecks": 19,
+  "localHttpChecks": 69,
+  "paidResourcesUsed": false,
+  "phasesComplete": false,
+  "followupMigration": "20261103195813_auth_lifecycle_permissions",
+  "followupLocalFile": "supabase/migrations/20261103195736_auth_lifecycle_permissions.sql",
+  "localRelationalCleanupChecks": 1,
+  "finalGuardFingerprint": "81c8f04fcb9dee3a00bb29e194df446d"
+}

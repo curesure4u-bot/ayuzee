@@ -1,62 +1,31 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "sonner";
-
-interface Props {
-  trigger: React.ReactNode;
-  defaultEmail?: string;
+import { useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { accountActions } from '@/features/accounts/accountService';
+import { accountError } from '@/features/accounts/model';
+import '@/features/accounts/accounts.css';
+export function ForgotPasswordDialog({ trigger, defaultEmail = '' }: { trigger: ReactNode; defaultEmail?: string }) {
+  const id = useId();
+  const [open, setOpen] = useState(false), [email, setEmail] = useState(defaultEmail), [busy, setBusy] = useState(false);
+  const [error, setError] = useState(''), [sent, setSent] = useState(false);
+  const pending = useRef(false);
+  async function submit(event: FormEvent) {
+    event.preventDefault(); if (pending.current) return;
+    pending.current = true; setBusy(true); setError('');
+    try { await accountActions.requestReset(email); setSent(true); }
+    catch (failure) { setError(accountError(failure)); }
+    finally { pending.current = false; setBusy(false); }
+  }
+  return <Dialog open={open} onOpenChange={value => { setOpen(value); if (value && !pending.current) { setEmail(defaultEmail); setError(''); setSent(false); } }}>
+    <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <DialogContent className="motion-reduce:animate-none">
+      <DialogHeader><DialogTitle className="text-2xl">Reset your password</DialogTitle><DialogDescription className="text-base">Request a secure email link to choose a new password.</DialogDescription></DialogHeader>
+      {sent ? <p role="status" className="account-feedback">If an account exists for this address, a reset link will be sent. Check your inbox and spam folder.</p> : <form className="account-form" onSubmit={submit} aria-busy={busy}>
+        <fieldset disabled={busy}><legend className="sr-only">Password reset email</legend>
+          <label className="account-field" htmlFor={id}>Email address<input id={id} type="email" autoComplete="email" autoCapitalize="none" required maxLength={255} value={email} onChange={event => setEmail(event.target.value)} /></label>
+          <button className="account-button" type="submit">{busy ? 'Requesting link…' : 'Send reset link'}</button>
+        </fieldset>
+      </form>}
+      {error && <p role="alert" className="account-feedback">{error}</p>}
+    </DialogContent>
+  </Dialog>;
 }
-
-export const ForgotPasswordDialog = ({ trigger, defaultEmail = "" }: Props) => {
-  const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState(defaultEmail);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return toast.error("Enter your email address");
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-      if (error) throw error;
-      toast.success("Reset link sent! Check your email inbox.");
-      setOpen(false);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not send reset email");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (v && defaultEmail) setEmail(defaultEmail); }}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Reset your password</DialogTitle>
-          <DialogDescription>
-            Enter the email associated with your account and we'll send you a secure link to set a new password.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4" data-testid="forgot-password-form">
-          <div>
-            <Label htmlFor="reset-email">Email</Label>
-            <Input id="reset-email" name="reset-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-          </div>
-          <DialogFooter>
-            <Button type="submit" data-testid="forgot-password-submit" variant="hero" className="w-full" disabled={loading}>
-              {loading ? "Sending…" : "Send reset link"}
-            </Button>
-          </DialogFooter>
-        </form>
-
-      </DialogContent>
-    </Dialog>
-  );
-};

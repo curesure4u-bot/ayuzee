@@ -1,0 +1,2 @@
+import type{RefundWorker}from'./service';
+export function refundWorker(rpc:(name:'commerce_refund_worker',args:{p_action:string;p_payload:Record<string,unknown>})=>PromiseLike<{data:unknown;error:unknown}>):RefundWorker{return{async call(action,payload){const r=await rpc('commerce_refund_worker',{p_action:action,p_payload:payload});if(r.error)throw Error('Refund database operation could not be confirmed');return r.data;}};}

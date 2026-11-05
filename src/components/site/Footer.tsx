@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { Apple, Leaf, Play } from "lucide-react";
 import { PreviewForm } from "@/components/common/PreviewForm";
+import { WorkspaceNavigationLinks } from '@/features/access/PortalNav';
 
-const patientLinks = [["Find AYUSH Doctor", "/doctors"], ["Book Panchakarma", "/therapist/browse"], ["Buy Medicines", "/shop"], ["Upload Prescription", "/shop/prescription"], ["Track Order", "/shop/track"], ["Prakriti Quiz", "/diagnosis/prakriti"]];
-const doctorLinks = [["Join as Doctor", "/doctor/auth"], ["Doctor Dashboard", "/doctor"], ["Bulk Purchase", "/bulk"], ["Vaidya HMS Tool", "/vaidya"], ["Learning Hub", "/learning/courses"], ["Payouts & Earnings", "/doctor/payouts"]];
-const therapistLinks = [["Join as Therapist", "/therapist/auth"], ["Therapist Dashboard", "/therapist"], ["Register Your Venue", "/venue/auth"], ["Venue Dashboard", "/venue"], ["Browse Therapists", "/therapist/browse"], ["Browse Venues", "/venue/browse"]];
-const learnLinks = [["Courses & CME", "/learning/courses"], ["Webinars", "/learning/webinars"], ["Health Blogs", "/learning/blogs"], ["Doctor Feed", "/feed"], ["Student Portal", "/student"], ["Jobs Board", "/jobs"]];
+const exploreLinks = [["Find a doctor", "/doctors"], ["Help & guides", "/guides"]];
 const companyLinks = [["About Ayuzee", "/about-us"], ["Careers", "/jobs"], ["Partner With Us", "/partner"], ["Press & Media", "/press"], ["Contact Us", "/contact"]];
 const legalLinks = [["Privacy Policy", "/privacy-policy"], ["Terms of Use", "/terms-of-use"], ["Refund Policy", "/refund-policy"], ["Medical Disclaimer", "/medical-disclaimer"]];
 
@@ -53,18 +51,18 @@ const socialLinks = [
 
 const FooterLinks = ({ title, links }: { title: string; links: string[][] }) => (
   <div>
-    <h4 className="mb-3 font-semibold text-primary-foreground">{title}</h4>
+    <h2 className="mb-3 font-semibold text-primary-foreground">{title}</h2>
     <ul className="space-y-1">
       {links.map(([label, href]) => (
         <li key={label}>
-          <Link to={href} className="text-sm text-footer-muted transition-smooth hover:text-primary-foreground inline-flex items-center py-1.5">{label}</Link>
+          <Link to={href} className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground">{label}</Link>
         </li>
       ))}
     </ul>
   </div>
 );
 
-export const Footer = () => {
+export const Footer = ({ appLevel = false }: { appLevel?: boolean }) => {
   return (
     <footer className="bg-footer text-footer-foreground">
       <section className="bg-primary py-10 text-primary-foreground">
@@ -90,16 +88,16 @@ export const Footer = () => {
           </div>
           <div className="mt-4 flex gap-3">
             {socialLinks.map(({ label, href, Icon }) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-full bg-footer-pill text-footer-foreground transition-smooth hover:bg-primary hover:text-primary-foreground">
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} className="grid h-12 w-12 place-items-center rounded-full bg-footer-pill text-footer-foreground transition-smooth hover:bg-primary hover:text-primary-foreground">
                 <Icon className="h-4 w-4" />
               </a>
             ))}
           </div>
         </div>
-        <FooterLinks title="For Patients" links={patientLinks} />
-        <FooterLinks title="For Doctors" links={doctorLinks} />
-        <FooterLinks title="Therapists & Venues" links={therapistLinks} />
-        <FooterLinks title="Learn & Grow" links={learnLinks} />
+        <div><h2 className="mb-3 font-semibold text-primary-foreground">Your workspace</h2>
+          <nav aria-label="Footer workspace" className="flex flex-col items-start">{appLevel ? <WorkspaceNavigationLinks className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground"/> : <Link to="/account" className="inline-flex min-h-12 items-center rounded-lg py-2 text-base text-footer-muted">Your account</Link>}</nav>
+        </div>
+        <FooterLinks title="Explore Ayuzee" links={exploreLinks} />
         <FooterLinks title="Company" links={companyLinks} />
         <FooterLinks title="Legal" links={legalLinks} />
       </section>

@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-05",
+  "target": "Fictional local browser review at 127.0.0.1:4184",
+  "hostedChanges": false,
+  "providerApiRequests": 0,
+  "viewportReset": true,
+  "temporaryTabClosed": true,
+  "screens": [
+    {
+      "role": "staff",
+      "width": 1280,
+      "axePasses": 27,
+      "violations": 0,
+      "incomplete": 0
+    },
+    {
+      "role": "staff",
+      "width": 390,
+      "contentWidth": 390,
+      "axePasses": 27,
+      "violations": 0,
+      "incomplete": 0
+    },
+    {
+      "role": "buyer",
+      "width": 390,
+      "contentWidth": 390,
+      "axePasses": 25,
+      "violations": 0,
+      "incomplete": 0
+    }
+  ],
+  "workflow": [
+    "Pre-booking cancellation retains captured money",
+    "Partial request reserves 10000 of 24900 paise",
+    "Explicit fictional update shows pending without success",
+    "Explicit fictional update shows processed 10000 paise",
+    "Buyer view has no refund approval form"
+  ],
+  "screenshots": [
+    "refunds-desktop-2026-11-05.png",
+    "refunds-mobile-2026-11-05.png"
+  ]
+}

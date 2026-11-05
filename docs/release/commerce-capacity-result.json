@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-05",
+  "target": "Existing loopback-only local Supabase; Auth + PostgREST + PostgreSQL",
+  "fixture": {
+    "approvedProducts": 500,
+    "unpublishedProducts": 50
+  },
+  "budgets": {
+    "catalogP95Ms": 1000,
+    "checkoutP95Ms": 2000,
+    "maxConcurrency": 20
+  },
+  "results": {
+    "catalog": {
+      "requests": 240,
+      "concurrency": 8,
+      "elapsedMs": 219,
+      "p50Ms": 5,
+      "p95Ms": 10,
+      "maxMs": 65,
+      "requestsPerSecond": 1094.8,
+      "unexpectedErrors": 0,
+      "unpublishedLeaks": 0,
+      "maxPageSize": 12
+    },
+    "independentCheckout": {
+      "requests": 24,
+      "concurrency": 8,
+      "elapsedMs": 22,
+      "p50Ms": 5,
+      "p95Ms": 12,
+      "maxMs": 13,
+      "requestsPerSecond": 1101.9,
+      "distinctOrders": 24,
+      "unexpectedErrors": 0
+    },
+    "lastItem": {
+      "requests": 20,
+      "concurrency": 20,
+      "elapsedMs": 29,
+      "p50Ms": 23,
+      "p95Ms": 29,
+      "maxMs": 29,
+      "requestsPerSecond": 687.6,
+      "successfulHolds": 1,
+      "expectedStockConflicts": 19,
+      "negativeStock": false
+    },
+    "idempotentRetry": {
+      "requests": 16,
+      "concurrency": 16,
+      "elapsedMs": 11,
+      "p50Ms": 8,
+      "p95Ms": 11,
+      "maxMs": 11,
+      "requestsPerSecond": 1484.9,
+      "distinctOrders": 1,
+      "unexpectedErrors": 0
+    },
+    "ownership": {
+      "requests": 40,
+      "concurrency": 8,
+      "elapsedMs": 31,
+      "p50Ms": 3,
+      "p95Ms": 22,
+      "maxMs": 24,
+      "requestsPerSecond": 1297.6,
+      "denied": 40,
+      "dataLeaks": 0
+    }
+  },
+  "providerApiRequests": 0,
+  "hostedLoad": false,
+  "paidResources": false,
+  "policiesDisabled": [
+    "checkout",
+    "payments",
+    "fulfilment"
+  ],
+  "syntheticAccountsCleaned": 3,
+  "syntheticProductsCleaned": 577,
+  "limitations": "Short synthetic workload on a developer workstation; no production traffic/SLA, sustained soak, cold-start or hosted-tier extrapolation."
+}

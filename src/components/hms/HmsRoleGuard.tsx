@@ -1,5 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { type ReactNode } from "react";
+import { useAccountSession } from "@/features/accounts/accountService";
 import { Shield, Loader2 } from "lucide-react";
 
 /**
@@ -20,64 +20,16 @@ interface HmsRoleGuardProps {
   fallback?: ReactNode;
 }
 
-// Cache user roles for session lifetime
-let cachedRoles: HmsRole[] | null = null;
-let cacheUserId: string | null = null;
-
+const knownRoles: HmsRole[] = ["admin", "doctor", "receptionist", "pharmacist", "lab_tech", "therapist", "nurse", "accountant", "hr", "manager"];
 export const useHmsRole = () => {
-  const [roles, setRoles] = useState<HmsRole[]>(cachedRoles || []);
-  const [loading, setLoading] = useState(!cachedRoles);
-
-  useEffect(() => {
-    const fetchRoles = async () => {
-      const { data: session } = await supabase.auth.getSession();
-      const uid = session.session?.user?.id;
-      if (!uid) { setLoading(false); return; }
-
-      // Return cached if same user
-      if (cacheUserId === uid && cachedRoles) {
-        setRoles(cachedRoles);
-        setLoading(false);
-        return;
-      }
-
-      // Fetch from user_roles table
-      const { data: roleRows } = await (supabase as any)
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", uid);
-
-      const userRoles: HmsRole[] = (roleRows || []).map((r: any) => r.role as HmsRole);
-
-      // Also check hms_staff for role
-      const { data: staffRow } = await (supabase as any)
-        .from("hms_staff")
-        .select("role, department")
-        .eq("user_id", uid)
-        .maybeSingle();
-
-      if (staffRow?.role && !userRoles.includes(staffRow.role as HmsRole)) {
-        userRoles.push(staffRow.role as HmsRole);
-      }
-
-      // Admin/super_admin has access to everything
-      if (userRoles.some((r) => r === "admin" || (r as string) === "super_admin")) {
-        userRoles.push("admin" as HmsRole);
-      }
-
-      cachedRoles = userRoles;
-      cacheUserId = uid;
-      setRoles(userRoles);
-      setLoading(false);
-    };
-
-    fetchRoles();
-  }, []);
-
+  const account = useAccountSession();
+  const uid = account.session?.user.id;
+  const assigned = account.account?.roles ?? [];
+  const roles = account.loading || account.error || !uid ? [] : knownRoles.filter(role =>
+    assigned.includes(role) || (role === "admin" && assigned.includes("super_admin")));
   const hasRole = (role: HmsRole) => roles.includes(role) || roles.includes("admin");
-  const hasAnyRole = (checkRoles: HmsRole[]) => checkRoles.some((r) => hasRole(r));
-
-  return { roles, loading, hasRole, hasAnyRole };
+  const hasAnyRole = (checkRoles: HmsRole[]) => checkRoles.some(hasRole);
+  return { roles, loading: account.loading, hasRole, hasAnyRole };
 };
 
 export const HmsRoleGuard = ({ allowedRoles, children, fallback }: HmsRoleGuardProps) => {
@@ -85,8 +37,9 @@ export const HmsRoleGuard = ({ allowedRoles, children, fallback }: HmsRoleGuardP
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      <div role="status" className="flex items-center justify-center gap-3 py-12 text-lg">
+        <Loader2 aria-hidden="true" className="h-5 w-5 animate-spin motion-reduce:animate-none text-muted-foreground" />
+        <span>Checking your permissions…</span>
       </div>
     );
   }

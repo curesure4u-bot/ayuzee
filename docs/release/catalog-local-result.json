@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-04",
+  "branch": "Sai-Branch",
+  "phase": "3.1 \u2014 catalog and product approval",
+  "authorization": "Proceed with Phase 3 while Phase 0 needs publishing access",
+  "hosting": {
+    "provider": "Netlify",
+    "verifiedFromLiveHeaders": true,
+    "publishingWorkflowAndBranchVerified": false
+  },
+  "liveCommerceChangesApplied": false,
+  "frontendDeploymentPerformed": false,
+  "paymentOrProviderCallsPerformed": false,
+  "unitTests": {
+    "passed": 231,
+    "files": 22,
+    "commerceTests": 18
+  },
+  "postgresScenarios": {
+    "passed": 16,
+    "nodeTestsIncludingParent": 17,
+    "fixture": "Inspected products/orders metadata and the exact three prior access migrations"
+  },
+  "strictCommerceTypecheck": "passed",
+  "focusedLint": "passed, no warnings",
+  "productionBuild": {
+    "passed": true,
+    "seconds": 27.42,
+    "warning": "Existing chunks exceed 500 kB"
+  },
+  "wholeAppSchemaTypeGate": "Still blocked by previously documented debt; not replaced by scoped checks",
+  "browser": {
+    "mobile": {
+      "viewportWidth": 390,
+      "contentWidth": 390,
+      "axePasses": 26,
+      "violations": [],
+      "incomplete": []
+    },
+    "desktop": {
+      "viewportWidth": 1440,
+      "contentWidth": 1440
+    },
+    "reviewerWorkspaceAndManufacturerFormReviewed": true
+  },
+  "phase3": {
+    "local": "1/8",
+    "hosted": "0/8",
+    "exitVerified": false
+  },
+  "next": "Authoritative cart pricing; keep checkout/payments contained",
+  "candidate": "supabase/review-candidates/phase3-catalog.sql",
+  "pendingLiveSecurityFixes": [
+    "Products can currently be managed by any authenticated user under inspected legacy policy",
+    "Orders currently have a permissive authenticated SELECT policy and owner-authored total/payment state writes"
+  ],
+  "liveCountsAtInspection": {
+    "products": 0,
+    "orders": 0
+  }
+}

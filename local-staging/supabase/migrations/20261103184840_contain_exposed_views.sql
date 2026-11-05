@@ -1,0 +1,2 @@
+-- Historical local-only no-op created during setup. No containment SQL was applied.
+-- The scoped repair and its Auth lifecycle upgrade are tested separately.

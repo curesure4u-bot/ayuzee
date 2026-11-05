@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-04",
+  "branch": "Sai-Branch",
+  "scope": "Local community source and synthetic PostgreSQL candidate only",
+  "liveChangesApplied": false,
+  "paidResourcesUsed": false,
+  "unitTests": {
+    "passed": 213,
+    "files": 20
+  },
+  "communityTests": {
+    "passed": 25,
+    "files": 3
+  },
+  "postgresScenarios": {
+    "passed": 18,
+    "suitePassed": true
+  },
+  "strictCommunityTypecheck": "passed",
+  "productionBuild": {
+    "passed": true,
+    "seconds": 19.52,
+    "warnings": [
+      "Existing chunks exceed 500 kB"
+    ]
+  },
+  "wholeApplicationTypecheck": "Still blocked by previously documented schema/type issues; not replaced by scoped check",
+  "browser": {
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "contentWidth": 390,
+      "axe": {
+        "passes": 26,
+        "violations": [],
+        "incomplete": []
+      }
+    },
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "contentWidth": 1440,
+      "threeColumnsReviewed": true
+    },
+    "doctorAudienceChecked": true,
+    "screenshots": [
+      "docs/release/community-mobile-2026-11-04.jpg",
+      "docs/release/community-desktop-2026-11-04.jpg"
+    ]
+  },
+  "phase2": {
+    "local": "5/8",
+    "hosted": "0/8",
+    "exitVerified": false
+  },
+  "pending": [
+    "Native local REST/Auth integration and hosted schema/ACL reconciliation for candidate",
+    "Profile editing and credential review",
+    "Approved public doctor directory release",
+    "Remaining metadata, accessibility journeys and loading measurements",
+    "Representative capacity checkpoint",
+    "Hosted frontend deployment and audience/recipient acceptance"
+  ]
+}

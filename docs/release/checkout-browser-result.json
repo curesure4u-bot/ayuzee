@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-04",
+  "target": "127.0.0.1:4184; fictional local review adapter, not hosted API",
+  "journeys": [
+    "Catalog product \u2192 cart \u2192 delivery/coupon quote",
+    "Reserve an unpaid order",
+    "Reload restores same reservation reference",
+    "Release unpaid reservation \u2192 history \u2192 detail",
+    "Start another order removes old order_id and returns to empty cart"
+  ],
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "documentScrollWidth": 390,
+    "axe": {
+      "passes": 29,
+      "violations": [],
+      "incomplete": []
+    }
+  },
+  "desktop": {
+    "reviewed": true,
+    "screenshot": "docs/release/checkout-desktop-2026-11-04.png"
+  },
+  "mobileScreenshot": "docs/release/checkout-mobile-2026-11-04.png",
+  "financialProviderCalls": false,
+  "hostedChanges": false,
+  "viewportRestored": true,
+  "temporaryPreviewStoppedAfterReview": true
+}

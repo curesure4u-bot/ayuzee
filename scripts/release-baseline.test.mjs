@@ -104,6 +104,20 @@ test('invalid evidence identity and timestamps are rejected without exposing the
   assert.ok(assessEnvironment(input, collect()).length >= 3);
   assert.deepEqual(assessEnvironment(null, collect()), ['Environment record must be an object.']);
 });
+test('provider-neutral records support verified local staging without inventing Netlify/cloud projects',()=>{
+ const input=manifest();input.version=2;input.production.hosting={provider:'lovable',projectId:'synthetic-existing-project'};
+ delete input.production.netlifySiteId;
+ input.staging={mode:'local',projectId:'synthetic-local',apiOrigin:'http://127.0.0.1:54621',syntheticDataOnly:true,sandboxIntegrationsOnly:true,separateSecrets:true,verifiedAt:'2026-11-04T00:00:00Z',evidenceReference:'synthetic-local-acceptance'};
+ input.hostingBudget={paidActionsAllowed:false,additionalSpendCap:0};
+ assert.deepEqual(assessEnvironment(input,collect()),[]);
+ for(const origin of ['https://production.supabase.co','http://example.invalid:54621','http://127.0.0.1:54621/path','http://private:secret@127.0.0.1:54621']){
+  input.staging.apiOrigin=origin;const errors=assessEnvironment(input,collect());assert.ok(errors.some(e=>e.includes('loopback-only')));assert.ok(errors.every(e=>!e.includes('secret')));
+ }
+ input.staging.apiOrigin='http://127.0.0.1:54621';input.hostingBudget.additionalSpendCap=1;
+ assert.ok(assessEnvironment(input,collect()).some(e=>e.includes('forbids paid actions')));
+ input.hostingBudget.additionalSpendCap=0;input.production.hosting.projectId=null;
+ assert.ok(assessEnvironment(input,collect()).some(e=>e.includes('hosting.projectId')));
+});
 
 test('library import from stdin does not execute the CLI or assume stdin is a file', () => {
   const url = new URL('./release-baseline.mjs', import.meta.url).href;

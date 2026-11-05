@@ -1,0 +1,408 @@
+{
+  "columns": [
+    {
+      "udt": "uuid",
+      "name": "id",
+      "type": "uuid",
+      "table": "orders",
+      "default": "gen_random_uuid()",
+      "nullable": "NO"
+    },
+    {
+      "udt": "uuid",
+      "name": "user_id",
+      "type": "uuid",
+      "table": "orders",
+      "default": null,
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "full_name",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "email",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "phone",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "jsonb",
+      "name": "address",
+      "type": "jsonb",
+      "table": "orders",
+      "default": "'{}'::jsonb",
+      "nullable": "YES"
+    },
+    {
+      "udt": "jsonb",
+      "name": "items",
+      "type": "jsonb",
+      "table": "orders",
+      "default": "'[]'::jsonb",
+      "nullable": "YES"
+    },
+    {
+      "udt": "numeric",
+      "name": "total",
+      "type": "numeric",
+      "table": "orders",
+      "default": "0",
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "order_status",
+      "type": "text",
+      "table": "orders",
+      "default": "'pending'::text",
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "payment_status",
+      "type": "text",
+      "table": "orders",
+      "default": "'unpaid'::text",
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "payment_method",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "razorpay_order_id",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "razorpay_payment_id",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "tracking_id",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "courier",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "notes",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "timestamptz",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "orders",
+      "default": "now()",
+      "nullable": "NO"
+    },
+    {
+      "udt": "timestamptz",
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "orders",
+      "default": "now()",
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "idempotency_key",
+      "type": "text",
+      "table": "orders",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "uuid",
+      "name": "id",
+      "type": "uuid",
+      "table": "products",
+      "default": "gen_random_uuid()",
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "name",
+      "type": "text",
+      "table": "products",
+      "default": null,
+      "nullable": "NO"
+    },
+    {
+      "udt": "text",
+      "name": "slug",
+      "type": "text",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "description",
+      "type": "text",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "category",
+      "type": "text",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "numeric",
+      "name": "price",
+      "type": "numeric",
+      "table": "products",
+      "default": "0",
+      "nullable": "NO"
+    },
+    {
+      "udt": "numeric",
+      "name": "mrp",
+      "type": "numeric",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "int4",
+      "name": "stock",
+      "type": "integer",
+      "table": "products",
+      "default": "0",
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "image_url",
+      "type": "text",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "_text",
+      "name": "images",
+      "type": "ARRAY",
+      "table": "products",
+      "default": "'{}'::text[]",
+      "nullable": "YES"
+    },
+    {
+      "udt": "uuid",
+      "name": "seller_id",
+      "type": "uuid",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "uuid",
+      "name": "manufacturer_id",
+      "type": "uuid",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "bool",
+      "name": "is_active",
+      "type": "boolean",
+      "table": "products",
+      "default": "true",
+      "nullable": "YES"
+    },
+    {
+      "udt": "bool",
+      "name": "is_prescription_required",
+      "type": "boolean",
+      "table": "products",
+      "default": "false",
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "approval_status",
+      "type": "text",
+      "table": "products",
+      "default": "'pending'::text",
+      "nullable": "YES"
+    },
+    {
+      "udt": "text",
+      "name": "ayush_system",
+      "type": "text",
+      "table": "products",
+      "default": null,
+      "nullable": "YES"
+    },
+    {
+      "udt": "timestamptz",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "products",
+      "default": "now()",
+      "nullable": "YES"
+    }
+  ],
+  "objects": [
+    {
+      "rls": true,
+      "kind": "r",
+      "name": "orders"
+    },
+    {
+      "rls": true,
+      "kind": "r",
+      "name": "products"
+    }
+  ],
+  "policies": [
+    {
+      "name": "Admin view all orders",
+      "check": null,
+      "roles": [
+        "authenticated"
+      ],
+      "table": "orders",
+      "using": "true",
+      "command": "SELECT"
+    },
+    {
+      "name": "Users create orders",
+      "check": "(auth.uid() = user_id)",
+      "roles": [
+        "authenticated"
+      ],
+      "table": "orders",
+      "using": null,
+      "command": "INSERT"
+    },
+    {
+      "name": "Users update orders",
+      "check": null,
+      "roles": [
+        "authenticated"
+      ],
+      "table": "orders",
+      "using": "(auth.uid() = user_id)",
+      "command": "UPDATE"
+    },
+    {
+      "name": "Users view own orders",
+      "check": null,
+      "roles": [
+        "authenticated"
+      ],
+      "table": "orders",
+      "using": "(auth.uid() = user_id)",
+      "command": "SELECT"
+    },
+    {
+      "name": "Products viewable by all",
+      "check": null,
+      "roles": [
+        "public"
+      ],
+      "table": "products",
+      "using": "true",
+      "command": "SELECT"
+    },
+    {
+      "name": "Sellers manage own products",
+      "check": null,
+      "roles": [
+        "authenticated"
+      ],
+      "table": "products",
+      "using": "((auth.uid() = seller_id) OR (auth.uid() IS NOT NULL))",
+      "command": "ALL"
+    }
+  ],
+  "constraints": [
+    {
+      "name": "orders_idempotency_key_key",
+      "table": "orders",
+      "definition": "UNIQUE (idempotency_key)"
+    },
+    {
+      "name": "orders_order_status_check",
+      "table": "orders",
+      "definition": "CHECK ((order_status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'processing'::text, 'shipped'::text, 'delivered'::text, 'cancelled'::text, 'returned'::text])))"
+    },
+    {
+      "name": "orders_payment_status_check",
+      "table": "orders",
+      "definition": "CHECK ((payment_status = ANY (ARRAY['unpaid'::text, 'paid'::text, 'refunded'::text, 'failed'::text])))"
+    },
+    {
+      "name": "orders_pkey",
+      "table": "orders",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "orders_user_id_fkey",
+      "table": "orders",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "products_approval_status_check",
+      "table": "products",
+      "definition": "CHECK ((approval_status = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text])))"
+    },
+    {
+      "name": "products_pkey",
+      "table": "products",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "products_seller_id_fkey",
+      "table": "products",
+      "definition": "FOREIGN KEY (seller_id) REFERENCES auth.users(id) ON DELETE SET NULL"
+    }
+  ]
+}

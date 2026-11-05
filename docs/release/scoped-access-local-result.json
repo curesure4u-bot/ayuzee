@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-03T19:57:30.347Z",
+  "target": "loopback-only local Supabase PostgreSQL/Auth/PostgREST",
+  "checks": 70,
+  "liveDataUsed": false,
+  "paidResourcesUsed": false,
+  "limitations": [
+    "Synthetic target schema; not a replay of all 429 live tables",
+    "Tokens signed using this disposable local stack only; hosted email delivery is a separate check"
+  ],
+  "httpChecks": 69,
+  "relationalCleanupChecks": 1
+}

@@ -193,6 +193,7 @@ export const CertificateView = lazyPage(() => import("@/pages/gamification/Certi
 export const CertificatesEdTech = lazyPage(() => import("@/pages/edtech/Certificates"));
 export const Challenges = lazyPage(() => import("@/pages/gamification/Challenges"));
 export const Checkout = lazyPage(() => import("@/pages/Checkout"));
+export const CommerceReservations = lazyPage(() => import("@/pages/shop/Reservations"));
 export const ClassicalFormulary = lazyPage(() => import("@/pages/doctor/ClassicalFormulary"));
 export const Clinics = lazyPage(() => import("@/pages/Clinics"));
 export const Colleges = lazyPage(() => import("@/pages/Colleges"));
@@ -1220,3 +1221,13 @@ export const TaskTrackerPage = lazyPage(() => import("@/pages/task-tracker/TaskT
 
 // Digital Business Register
 export const BusinessRegisterPage = lazyPage(() => import("@/pages/business-register/BusinessRegisterPage"));
+
+export const AccountHome = lazyPage(() => import("@/features/accounts/AccountHome"));
+export const EmailCallback = lazyPage(() => import("@/features/accounts/EmailCallback"));
+
+export const CommerceProductManagement = lazyPage(() => import("@/pages/shop/ProductManagement"));
+
+export const CommerceFulfilment = lazyPage(() => import("@/pages/shop/Fulfilment"));
+
+export const CommerceResolution = lazyPage(() => import("@/pages/shop/Resolution"));
+export const CommerceRefundOperations = lazyPage(() => import("@/pages/shop/RefundOperations"));

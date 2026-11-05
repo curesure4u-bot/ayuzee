@@ -41,6 +41,21 @@ DECLARE
   request_role text := auth.role();
   delegated_role text := pg_catalog.current_setting('role', true);
 BEGIN
+  -- The reviewed Auth signup trigger may assign only the baseline patient role.
+  -- Professional/admin values in editable signup metadata never reach this path.
+  IF TG_OP = 'INSERT' AND request_role IS NULL
+    AND session_user = 'supabase_auth_admin'
+    AND current_user IN ('postgres', 'supabase_admin', 'supabase_auth_admin')
+    AND delegated_role NOT IN ('anon', 'authenticated')
+    AND NEW.role::text = 'patient' THEN
+    RETURN NEW;
+  END IF;
+  -- Auth account deletion can cascade to role rows; it may remove, never grant.
+  IF TG_OP = 'DELETE' AND request_role IS NULL
+    AND session_user = 'supabase_auth_admin'
+    AND delegated_role NOT IN ('anon', 'authenticated') THEN
+    RETURN OLD;
+  END IF;
   IF request_role IN ('anon', 'authenticated')
     OR delegated_role IN ('anon', 'authenticated') THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'Account roles require trusted server administration';

@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-05",
+  "scope": "Local source only",
+  "sourceCases": 74,
+  "nativeScenarios": 10,
+  "strictTypesPassed": true,
+  "lintPassed": true,
+  "finalSuiteTests": 461,
+  "finalSuiteFiles": 32,
+  "productionBundlePassed": true,
+  "hostedChanges": false,
+  "providerApiRequests": 0,
+  "delegatedHostedRoleVerification": "Pending: lookup was blocked by automatic approval review under local-only scope"
+}

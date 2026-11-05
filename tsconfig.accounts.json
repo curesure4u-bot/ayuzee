@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "strict": true },
+  "include": [
+    "src/vite-env.d.ts", "src/features/accounts/**/*",
+    "src/hooks/useUserRole.ts", "src/hooks/useHmsAccess.ts", "src/hooks/useLoginThrottle.ts",
+    "src/components/hms/HmsRoleGuard.tsx", "src/components/auth/ForgotPasswordDialog.tsx",
+    "src/components/auth/WelcomeUserTypeDialog.tsx", "src/pages/LoginPicker.tsx",
+    "src/pages/Auth.tsx", "src/pages/ResetPassword.tsx",
+    "src/pages/doctor/DoctorAuth.tsx", "src/pages/student/StudentAuth.tsx",
+    "src/pages/provider/ProviderAuth.tsx", "src/pages/therapist/TherapistAuth.tsx",
+    "src/pages/venue/VenueAuth.tsx", "src/pages/admin/AdminAuth.tsx", "src/pages/hms/HmsAuth.tsx",
+    "tests/browser/accounts/**/*"
+  ]
+}

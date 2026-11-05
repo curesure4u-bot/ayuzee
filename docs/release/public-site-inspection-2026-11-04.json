@@ -1,0 +1,18 @@
+{
+  "publicSite": "https://ayuzee.com/",
+  "scriptAssets": [
+    "https://www.googletagmanager.com/gtag/js?id=G-ECGZ4YJYV9",
+    "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX",
+    "https://ayuzee.com/assets/index-QqvNv9Ak.js"
+  ],
+  "supabaseOriginsFound": [
+    "https://gsjkrmrumlxakcecpfiz.supabase.co"
+  ],
+  "hostingProviderVerified": true,
+  "note": "Public HTML/assets only. No keys, cookies or account data retained.",
+  "hostingProvider": "Netlify",
+  "verification": "Live HTTP/1.1 HEAD request returned 200 OK, Server: Netlify and Cache-Status: \"Netlify Edge\"",
+  "verificationDate": "2026-11-04",
+  "publishingWorkflowVerified": false,
+  "deployedBranchVerified": false
+}

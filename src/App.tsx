@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import { PublicPreviewNav } from "@/components/common/PublicPreviewNav";
+import AccountRouteNavigation from "@/features/accounts/AccountRouteNavigation";
 import { RouteSEO } from "@/components/common/RouteSEO";
 import { AppProviders } from "@/providers/AppProviders";
 import { AppRoutes } from "@/routes/AppRoutes";
@@ -12,7 +12,7 @@ const App = () => (
       <ScrollToTop />
       <RouteSEO />
       <FeaturePreviewBoundary>
-        <PublicPreviewNav />
+        <AccountRouteNavigation />
         <AppRoutes />
       </FeaturePreviewBoundary>
     </BrowserRouter>

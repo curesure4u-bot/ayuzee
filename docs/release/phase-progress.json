@@ -1,0 +1,708 @@
+{
+  "updated": "2026-11-05",
+  "branch": "Sai-Branch",
+  "hostedAccess": "Supabase access and the scoped live view repair are verified: 23 advisor ERROR findings are now zero; 19 local PostgreSQL tests, 70 local integration checks (69 HTTP plus FK cleanup) and read-only live permission assertions passed. Existing records/admin assignments were preserved. Additive onboarding backend is now applied and seven local Auth/email/PKCE scenarios pass; hosted delivery remains pending. Staging is local as Sai requested. Publishing controls and SMTP acceptance, broader APIs/storage and complete community workflows still prevent phase closure. Phase 2 community source workflows and a local-only database candidate are now implemented and tested; no community migration or frontend deployment has been applied live. Public Netlify hosting is now confirmed by live response headers; its deployed branch and publishing controls remain unverified. Phase 3.1\u20133.8 now meet all eight local commerce criteria, including fictional-provider fulfilment/refunds and bounded capacity. Hosted commerce acceptance remains 0/8. No commerce candidate was applied hosted and no real provider action or paid resource was used.",
+  "countingRule": "Counts are equally counted checklist criteria, not effort estimates or a claim of production readiness. Local source/fixture verification and hosted acceptance are counted separately. A phase closes only when every criterion and its exit condition is verified.",
+  "phases": [
+    {
+      "id": 0,
+      "name": "Safe release process",
+      "exitVerified": false,
+      "tasks": [
+        {
+          "id": "P0.1",
+          "name": "Environment",
+          "checks": [
+            {
+              "id": "declared-config",
+              "kind": "local",
+              "done": true,
+              "detail": "Declared source/deployment configuration inventoried; environment validation rejects unsafe browser keys.",
+              "evidence": "scripts/netlify-build.test.mjs"
+            },
+            {
+              "id": "hosted-environment",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Netlify serving ayuzee.com is verified from live HTTP headers on 4 November. Deployed branch/commit and Lovable-to-Netlify publishing workflow still need dashboard verification; Supabase project is verified.",
+              "evidence": "docs/release/public-site-inspection-2026-11-04.json"
+            }
+          ]
+        },
+        {
+          "id": "P0.2",
+          "name": "Isolated staging",
+          "checks": [
+            {
+              "id": "synthetic-fixtures",
+              "kind": "local",
+              "done": true,
+              "detail": "Separate local account, directory and role-workspace fixtures use synthetic identities/data.",
+              "evidence": "tests/browser/access/main.tsx"
+            },
+            {
+              "id": "local-supabase-stack",
+              "kind": "local",
+              "done": true,
+              "detail": "Free isolated loopback-only Supabase stack is running; synthetic scoped-access schema and 70 integration checks (69 HTTP plus relational cleanup) pass. This is targeted staging, not a complete 429-table replay.",
+              "evidence": "docs/release/scoped-access-local-result.json"
+            }
+          ]
+        },
+        {
+          "id": "P0.3",
+          "name": "Truthful checks",
+          "checks": [
+            {
+              "id": "check-entrypoints",
+              "kind": "local",
+              "done": true,
+              "detail": "Application/config checks are explicit; scoped checks do not replace the full application job.",
+              "evidence": ".github/workflows/phase0-checks.yml"
+            },
+            {
+              "id": "typecheck-baseline",
+              "kind": "local",
+              "done": false,
+              "detail": "Finish full application typecheck diagnosis and obtain its actual diagnostic baseline; prior bounded runs did not complete.",
+              "evidence": "docs/architecture/modularity-assessment.md"
+            }
+          ]
+        },
+        {
+          "id": "P0.4",
+          "name": "Database source of truth",
+          "checks": [
+            {
+              "id": "source-inventory",
+              "kind": "local",
+              "done": true,
+              "detail": "Migration/manual-SQL conflicts are recorded and a catalog inspection query is prepared.",
+              "evidence": "supabase/inspection/phase0-2-catalog.sql"
+            },
+            {
+              "id": "schema-replay",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Compare effective schema and migration history; prove reproducible isolated replay.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P0.5",
+          "name": "Preview containment",
+          "checks": [
+            {
+              "id": "preview-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Functional routes stay behind the preview boundary; designated privileged handlers deny execution in source tests.",
+              "evidence": "scripts/phase0-functions.test.mjs"
+            },
+            {
+              "id": "direct-api-containment",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify actual hosted APIs/functions/policies cannot mutate unready financial or clinical state.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P0.6",
+          "name": "Deployment checks and monitoring",
+          "checks": [
+            {
+              "id": "source-release-gate",
+              "kind": "local",
+              "done": true,
+              "detail": "Source build gate stops at failed checks; role policy checks and ledger consistency are included.",
+              "evidence": "scripts/netlify-build.mjs"
+            },
+            {
+              "id": "dependency-triage",
+              "kind": "local",
+              "done": false,
+              "detail": "DOMPurify patched and pinned to 3.4.17; three sanitizer tests pass. Latest install audit: 56 affected packages (37 moderate, 17 high, two critical); remaining toolchain and Zod upgrades need reviewed follow-up.",
+              "evidence": "docs/release/dependency-triage-2026-11-04.md"
+            },
+            {
+              "id": "hosting-gate",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify Netlify/Lovable publishing controls, actual CI gating and protected release flow. Netlify serving the public domain is now confirmed; dashboard settings and deployed commit remain unavailable.",
+              "evidence": null
+            },
+            {
+              "id": "error-monitoring",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify actual error delivery, privacy configuration and operational ownership.",
+              "evidence": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Login, accounts and permissions",
+      "exitVerified": false,
+      "tasks": [
+        {
+          "id": "P1.1",
+          "name": "Secure account permissions",
+          "checks": [
+            {
+              "id": "permission-candidates",
+              "kind": "local",
+              "done": true,
+              "detail": "Original account/role candidates have isolated PostgreSQL tests. The role boundary is now included in the applied scoped repair; onboarding/public-profile candidates remain separate.",
+              "evidence": "scripts/account-permissions.test.mjs"
+            },
+            {
+              "id": "effective-policy-verification",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile actual schema/RPCs and verify direct account/profile/doctor API denial in staging.",
+              "evidence": null
+            },
+            {
+              "id": "live-view-authority-boundary",
+              "kind": "hosted",
+              "done": true,
+              "detail": "Applied scoped repair to 21 views, 17 supporting-table policy fences, six authority guards and role writes; live advisor ERRORs 23\u21920 and read-only acceptance passed. Other APIs/storage remain open.",
+              "evidence": "docs/release/scoped-access-2026-11-04.md"
+            },
+            {
+              "id": "onboarding-rpc-live",
+              "kind": "hosted",
+              "done": true,
+              "detail": "Applied additive onboarding RPC/table and patient-only Auth bootstrap; read-only live ACL/unknown-identity assertions pass. Existing 36 role rows and 15 profiles remain; no existing account auto-completed.",
+              "evidence": "docs/release/onboarding-integration-2026-11-04.md"
+            }
+          ]
+        },
+        {
+          "id": "P1.2",
+          "name": "Signup and verification",
+          "checks": [
+            {
+              "id": "signup-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Signup, email return and resumable onboarding are tested locally; requested role never grants access.",
+              "evidence": "src/features/accounts/AccountUI.test.tsx"
+            },
+            {
+              "id": "email-delivery",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Live dashboard verified custom SMTP and email confirmation are disabled. Site URL/redirect origin match ayuzee.com. Existing company SMTP sender plus coordinated real confirmation/recovery delivery are required; local Mailpit passes do not close this check.",
+              "evidence": "docs/release/auth-dashboard-2026-11-04.json"
+            },
+            {
+              "id": "local-auth-email-lifecycle",
+              "kind": "local",
+              "done": true,
+              "detail": "Seven real local Auth/Mailpit/PKCE/API scenarios pass: signup confirmation, persisted onboarding, own data/role denial, refresh/logout, password recovery and used-link rejection. Hosted SMTP/delivery remains unverified.",
+              "evidence": "docs/release/onboarding-local-result.json"
+            }
+          ]
+        },
+        {
+          "id": "P1.3",
+          "name": "Login and sessions",
+          "checks": [
+            {
+              "id": "shared-session",
+              "kind": "local",
+              "done": true,
+              "detail": "Single account observer rejects stale identity/role results and clears private query state.",
+              "evidence": "src/features/accounts/sessionStore.test.ts"
+            },
+            {
+              "id": "hosted-session",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify real login, refresh, logout and role removal with actual Auth/database policies.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P1.4",
+          "name": "Password recovery",
+          "checks": [
+            {
+              "id": "recovery-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Expired/invalid links, recovery transport, identity changes and sign-out failure paths have local tests.",
+              "evidence": "src/features/accounts/actions.test.ts"
+            },
+            {
+              "id": "hosted-recovery",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Prove real delivered recovery email through reset and successful re-entry.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P1.5",
+          "name": "All-role RBAC and workspaces",
+          "checks": [
+            {
+              "id": "account-role-policy",
+              "kind": "local",
+              "done": true,
+              "detail": "All 17 source account/admin roles have explicit portal/read mappings; unknown roles fail closed.",
+              "evidence": "src/features/access/policy.test.ts"
+            },
+            {
+              "id": "workspace-navigation",
+              "kind": "local",
+              "done": true,
+              "detail": "Role-specific navigation/cards, account destinations and explicit multi-role switching are implemented and tested.",
+              "evidence": "src/features/access/Workspace.test.tsx"
+            },
+            {
+              "id": "workspace-route-denial",
+              "kind": "local",
+              "done": true,
+              "detail": "New workspace direct routes reject cross-role/unknown access before protected children mount and clear scoped queries on context changes.",
+              "evidence": "src/features/access/Workspace.test.tsx"
+            },
+            {
+              "id": "hospital-scope-contract",
+              "kind": "local",
+              "done": true,
+              "detail": "All 12 source hospital role contracts require actor/org/branch/module/status/expiry; clinical contracts also require assignment. No membership API is connected.",
+              "evidence": "src/features/access/policy.test.ts"
+            },
+            {
+              "id": "legacy-route-coverage",
+              "kind": "local",
+              "done": false,
+              "detail": "Inventory and connect all legacy menus/routes/search/notifications/action entrypoints to reviewed capability policies; current preview containment remains.",
+              "evidence": null
+            },
+            {
+              "id": "operation-adapters",
+              "kind": "local",
+              "done": false,
+              "detail": "Implement authoritative scoped membership adapters and reviewed write/approve/export/sign/dispense/settle contracts. Current portals display read previews only.",
+              "evidence": null
+            },
+            {
+              "id": "effective-role-reconciliation",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile deployed roles, custom templates, assignments, professional approval/suspension and membership scope. MCP project/schema access is now verified; the policy/membership audit remains to be completed.",
+              "evidence": "docs/release/supabase-access-2026-11-04.json"
+            },
+            {
+              "id": "server-data-storage-denial",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Prove backend/database/storage isolation and freshness/revocation independently of UI for every released role/scope/operation.",
+              "evidence": null
+            },
+            {
+              "id": "shared-header-footer",
+              "kind": "local",
+              "done": true,
+              "detail": "Shared app navigation and opt-in app footer use the role/workspace policy across all 17 roles. Multiple grants require workspace selection; account/error/loading states hide private tools; public previews still make no account calls.",
+              "evidence": "src/features/access/PortalNav.test.tsx"
+            }
+          ]
+        },
+        {
+          "id": "P1.6",
+          "name": "Abuse controls and accessibility",
+          "checks": [
+            {
+              "id": "accessible-local-ui",
+              "kind": "local",
+              "done": true,
+              "detail": "Account/portal render tests cover readable states, focus and keyboard controls; desktop/mobile workspace browser review recorded in local handover.",
+              "evidence": "docs/domains/access-foundation-2026-11-03.md"
+            },
+            {
+              "id": "hosted-abuse-controls",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Read-only dashboard: new signups allowed, anonymous sign-ins off, email confirmation off. Verify enforced throttling and complete production Auth journeys after SMTP is arranged.",
+              "evidence": "docs/release/auth-dashboard-2026-11-04.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Core community portal",
+      "exitVerified": false,
+      "tasks": [
+        {
+          "id": "P2.1",
+          "name": "Profiles and professional verification",
+          "checks": [
+            {
+              "id": "profile-source",
+              "kind": "local",
+              "done": false,
+              "detail": "Finish profile editing, credential-review UI and explicit public-field projection.",
+              "evidence": null
+            },
+            {
+              "id": "profile-api",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify professional approval/suspension, public opt-in and private-field isolation end to end.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.2",
+          "name": "Doctor discovery",
+          "checks": [
+            {
+              "id": "directory-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Bounded URL-driven directory search/filter/sort/pagination, runtime projection validation and accessible state tests are implemented; candidate view is absent live and the route remains a preview.",
+              "evidence": "src/features/professionals/directory.test.ts"
+            },
+            {
+              "id": "directory-acceptance",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Create and verify the approved-only, opt-in public directory contract and real search/pagination/empty/error journeys.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.3",
+          "name": "Posts and audience controls",
+          "checks": [
+            {
+              "id": "post-workflow",
+              "kind": "local",
+              "done": true,
+              "detail": "Modular post composer and owned edit/delete flows, workspace-specific audiences, bounded URL search/type/sort/pagination, validation and failed-draft retention are locally tested. The shared candidate API is PostgreSQL-tested; hosted migration and route release remain pending.",
+              "evidence": "src/features/community/community.test.tsx"
+            },
+            {
+              "id": "post-isolation",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Prove ownership, doctor-only and public audience rules through direct APIs.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.4",
+          "name": "Comments and likes",
+          "checks": [
+            {
+              "id": "interaction-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Comment creation/own deletion and idempotent likes refresh persisted state; UI failure handling and PostgreSQL ownership, parent-audience fences, counters and transaction rollback pass locally.",
+              "evidence": "scripts/community-permissions.test.mjs"
+            },
+            {
+              "id": "interaction-api",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Prove duplicate-action prevention and unauthorized comment/like mutation denial.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.5",
+          "name": "Polls and moderation",
+          "checks": [
+            {
+              "id": "moderation-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Poll votes persist one choice per account with expiry/choice validation. Reports deduplicate and authorized hide/dismiss decisions require a reason and persist an immutable moderation record in the local PostgreSQL candidate.",
+              "evidence": "scripts/community-permissions.test.mjs"
+            },
+            {
+              "id": "moderation-api",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify one vote per account, report ownership and moderator permissions.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.6",
+          "name": "Notifications",
+          "checks": [
+            {
+              "id": "notification-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Removed fabricated global alerts. Community notifications use recipient-scoped records, durable read/dismiss actions and UUID-derived internal links; local tests prove immutable payloads, trusted delivery ACLs and transaction rollback. No hosted delivery is claimed.",
+              "evidence": "src/features/community/notifications.test.tsx"
+            },
+            {
+              "id": "notification-api",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify recipient isolation, delivery persistence and authenticated provider boundaries without paid integrations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.7",
+          "name": "Mobile, accessibility and search visibility",
+          "checks": [
+            {
+              "id": "community-ui",
+              "kind": "local",
+              "done": false,
+              "detail": "Responsive feed/editor and desktop/mobile role views reviewed; the 390px patient feed passes 26 axe checks with zero violations/incomplete checks and no horizontal overflow. Complete remaining metadata/crawler and loading measurements before closing this criterion.",
+              "evidence": "docs/domains/community-portal.md"
+            },
+            {
+              "id": "community-release",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify the actual released community pages and metadata after an explicitly authorized deployment.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P2.8",
+          "name": "Community capacity checkpoint",
+          "checks": [
+            {
+              "id": "workload-contract",
+              "kind": "local",
+              "done": false,
+              "detail": "Define a representative synthetic 1,000-user community workload and pass free local acceptance; do not infer live capacity from it.",
+              "evidence": null
+            },
+            {
+              "id": "capacity-acceptance",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Agree and verify the deployed capacity claim within existing free limits and explicit load-test authorization.",
+              "evidence": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Ecommerce",
+      "exitVerified": false,
+      "tasks": [
+        {
+          "id": "P3.1",
+          "name": "Catalog and product management",
+          "checks": [
+            {
+              "id": "catalog-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Approved-only public projection, URL search/category/system/stock filters, sort/pagination and detail states; canonical manufacturer submissions and reviewer approval/rejection/withdrawal, owned editing and feedback are locally tested.",
+              "evidence": "docs/domains/commerce-catalog.md"
+            },
+            {
+              "id": "catalog-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Reconcile all deployed grants and alternate RPC consumers, run native local REST/Auth tests, then separately deploy and verify catalog ownership/publication with real roles.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.2",
+          "name": "Cart and authoritative pricing",
+          "checks": [
+            {
+              "id": "pricing-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Server-only integer-paise pricing, strict ID/quantity cart, configurable tax-inclusive delivery/coupon rules and expiring quotes; responsive UI validates totals, invalidates changed input and fails closed when rules/storage are missing. Local PostgreSQL/native/browser verification passes; production business rules remain unapproved.",
+              "evidence": "docs/domains/commerce-checkout.md"
+            },
+            {
+              "id": "pricing-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify real pricing rules and tampered browser requests against the released API; no paid resources or real charge is authorized.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.3",
+          "name": "Order creation and stock reservation",
+          "checks": [
+            {
+              "id": "orders-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Owned pending unpaid orders, persisted request-key recovery/history, exact retries, atomic stock/coupon holds, logical expiry, trusted cleanup and unpaid release pass local tests. Real concurrent REST requests for the last item yield exactly one reservation; coupon expiry and role revocation during lock waits are denied.",
+              "evidence": "docs/release/checkout-local-result.json"
+            },
+            {
+              "id": "orders-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify native/hosted transaction retries and competing requests for the last item; read/write fences alone do not implement checkout.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.4",
+          "name": "Payment verification",
+          "checks": [
+            {
+              "id": "payments-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Test-only payment attempt binds real customer/order, stored provider order ID, receipt, INR amount and verified capture; exact retries, cross-purchase replay denial and atomic stock commit pass isolated and native local tests. No live provider call or hosted release is claimed.",
+              "evidence": "docs/domains/commerce-payments.md"
+            },
+            {
+              "id": "payments-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify the existing provider test-mode integration and trusted boundary without making real charges.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.5",
+          "name": "Payment recovery and reconciliation",
+          "checks": [
+            {
+              "id": "recovery-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Signed raw-body event inbox, duplicate/body-conflict handling, leased retries/dead letters, closed-browser reconciliation and lost-create recovery without duplicate POST are locally verified. Minimal payment identity survives Auth deletion; late/additional captures enter review without false fulfilment. Owned read-only status UI passes local checks.",
+              "evidence": "docs/release/payments-local-result.json"
+            },
+            {
+              "id": "recovery-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify delayed/repeated provider test events, failed payments and reconciliation; do not invoke paid provider operations.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.6",
+          "name": "Fulfilment and delivery",
+          "checks": [
+            {
+              "id": "delivery-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Private persisted packing/booking/tracking, explicit order operations roles, one claim, uncertain-create recovery, event deduplication and owned delivery UI pass 74 source cases and 10 native local scenarios. Legacy courier source entrypoints fail closed; no live provider call or deployment.",
+              "evidence": "docs/domains/commerce-fulfilment.md"
+            },
+            {
+              "id": "delivery-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify authorized courier test-mode outcomes, failure and retry, within existing no-cost access.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.7",
+          "name": "Cancellation and refunds",
+          "checks": [
+            {
+              "id": "refund-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Owned pre-booking cancellation, stock restoration once, bound integer-paise partial/full refunds, durable retry keys and original-reference recovery pass 81 source cases and nine native Auth/REST scenarios, including actual concurrent balance/permission races. No real refund or provider request.",
+              "evidence": "docs/domains/commerce-closeout.md"
+            },
+            {
+              "id": "refund-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Verify provider test-mode refund reconciliation; no real refund or financial transaction is authorized.",
+              "evidence": null
+            }
+          ]
+        },
+        {
+          "id": "P3.8",
+          "name": "Commerce capacity checkpoint",
+          "checks": [
+            {
+              "id": "capacity-source",
+              "kind": "local",
+              "done": true,
+              "detail": "Bounded native local workload passes five scenarios: 550 catalog products, 240 anonymous filtered requests at concurrency 8, 24 independent reservations, 20 final-item contenders, 16 same-key retries and 40 ownership denials. Measured latency is workstation-only, not a production SLA.",
+              "evidence": "docs/release/commerce-capacity-result.json"
+            },
+            {
+              "id": "capacity-hosted",
+              "kind": "hosted",
+              "done": false,
+              "detail": "Agree and verify the deployed capacity claim within existing free limits and explicit load-test authorization.",
+              "evidence": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "laterPhases": [
+    {
+      "id": 4,
+      "name": "Wallets, memberships and learning",
+      "status": "Pending; financial and entitlement operations remain previews."
+    },
+    {
+      "id": 5,
+      "name": "Bookings and consultations",
+      "status": "Pending; no booking action enabled by workspace cards."
+    },
+    {
+      "id": 6,
+      "name": "Hospital operations",
+      "status": "Pending; Phase 1 defines scoped role vocabulary, while actual operational adapters and hospital workflow acceptance belong here."
+    },
+    {
+      "id": 7,
+      "name": "Tools and integrations",
+      "status": "Pending; each tool requires its own capability and direct API tests."
+    },
+    {
+      "id": 8,
+      "name": "Combined acceptance and capacity",
+      "status": "Pending; whole-system role and capacity acceptance is not inferred from local tests."
+    }
+  ],
+  "executionStatus": "Phase 3 authorized local scope is complete: 8/8 local, 0/8 hosted; exit not accepted. Full unit/contract suite 461 tests, 40 standalone SQL cases, seven-handler containment, nine new native refund and five bounded capacity scenarios pass. No provider API request, real charge/refund/courier operation, paid resource, hosted commerce migration, publishing, commit or push occurred. Source cleanup is archived and commit preparation targets Sai-Branch only. Earlier phase debt/hosted gates and optional feature decisions remain open."
+}

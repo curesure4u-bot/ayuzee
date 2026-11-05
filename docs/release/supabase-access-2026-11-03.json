@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-03",
+  "rechecked": "2026-11-04: list_organizations still returns Unknown tool after rediscovering the advertised tools.",
+  "targetOrganization": "curesure4u-bot's Org",
+  "targetOrganizationId": "agdxrlptdagaktpnkopw",
+  "roleUpdate": "Sai reports promotion from Developer to Administrator. Current promotion not independently confirmed through the plugin.",
+  "previousEvidence": "Supplied authorization screenshot explicitly rejected approval by Developer and required an organization owner or administrator.",
+  "pluginMetadata": { "installed": true, "status": "ENABLED" },
+  "latestReadChecks": [
+    { "operation": "list_organizations", "result": "error", "code": -32001, "message": "Unknown tool: supabase.list_organizations" },
+    { "operation": "list_projects", "result": "error", "code": -32001, "message": "Unknown tool: supabase.list_projects" }
+  ],
+  "interpretation": "The current chat cannot invoke the plugin's advertised tools. This does not establish whether the new role or OAuth grant allows Ayuzee project access.",
+  "nextVerification": "Complete authorization for the owning organization if pending; refresh the connection/chat tool availability, then list organizations/projects again.",
+  "hostedChangesPerformed": false
+}
