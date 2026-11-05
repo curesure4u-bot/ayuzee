@@ -1,6 +1,7 @@
 # Latest checkpoint — CI repair and explicit previews, 5 November 2026
 
-Sai’s priority is fixing the two red GitHub checks before continuing Phase 4.
+The two red GitHub source checks are resolved. Source commit `128fbe2` is pushed
+to Sai-Branch and GitHub run [41991696181](https://github.com/curesure4u-bot/ayuzee/actions/runs/41991696181) completed with eight successful jobs. Phase 4 can resume from its saved local wallet foundation.
 The user approved retaining undeployed features as explicit previews, with a list
 of intended uses to decide Keep/Remove/Later. Preserve those decisions; do not
 permanently delete features or invent missing live schema objects.
@@ -26,9 +27,10 @@ warnings and 53 contextual dynamic source references remain visible.
 
 067367b (Phase 0–3 checkpoint) and 39e1d4d (ripgrep portability fix) were previously
 pushed to Sai-Branch. Remote main was verified unchanged at
-`ea29dec5eb4b6d3546161aec0c711a56eaddaeb9`. The repaired source checkpoint is ready
-for normal fast-forward commit/push to Sai-Branch with [skip netlify]; verify the
-actual eight-job GitHub result and record any failure before resuming Phase 4.
+`ea29dec5eb4b6d3546161aec0c711a56eaddaeb9`. Repair commit `128fbe27acf2b1a6b70695909d3aad58e6095eb6` is also pushed and
+all eight source jobs succeeded. A follow-up documentation checkpoint records
+that result; no source implementation changed after the verified repair. Use
+normal fast-forward commits on Sai-Branch with [skip netlify].
 Do not merge, force-push, modify main, publish, upgrade plans or spend money.
 
 Phase 0 local 9/9 hosted 0/5; Phase 1 local 11/13 hosted 2/9; Phase 2 local 5/8

@@ -1,6 +1,6 @@
 # GitHub checks — 5 November 2026
 
-Historical initial failures are recorded below. See [the source repair](ci-repair-2026-11-05.md) for the latest local verification; subsequent remote results must be checked on the new commit.
+**Resolved:** [run 41991696181](https://github.com/curesure4u-bot/ayuzee/actions/runs/41991696181) completed with **8/8 successful jobs** for repair commit `128fbe2` on Sai-Branch. Both the full application typecheck and dependency audit now pass. See [the source repair and preview inventory](ci-repair-2026-11-05.md). Initial failures below are retained as historical evidence.
 
 The source checkpoint `067367bc15bf91bf8d0af7788106082538257cbf` was pushed
 successfully to Sai-Branch. Main stayed at

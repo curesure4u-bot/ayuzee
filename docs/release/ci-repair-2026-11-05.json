@@ -75,5 +75,13 @@
   ],
   "paidResources": false,
   "hostedDatabaseChanges": false,
-  "frontendPublishedByAgent": false
+  "frontendPublishedByAgent": false,
+  "github": {
+    "verifiedSourceCommit": "128fbe27acf2b1a6b70695909d3aad58e6095eb6",
+    "workflowRun": 41991696181,
+    "url": "https://github.com/curesure4u-bot/ayuzee/actions/runs/41991696181",
+    "successfulJobs": 8,
+    "failedJobs": 0,
+    "mainUnchangedAt": "ea29dec5eb4b6d3546161aec0c711a56eaddaeb9"
+  }
 }

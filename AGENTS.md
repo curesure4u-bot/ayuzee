@@ -2,18 +2,20 @@
 
 ## Current authorization and checkpoint
 
-- CI repair is the latest priority before further Phase 4 work. Sai approved
+- CI repair is complete: source commit 128fbe2 is pushed to Sai-Branch and
+  GitHub run 41991696181 verified eight successful jobs. Resume Phase 4 from
+  its saved local wallet foundation. Sai approved
   retaining unfinished features as explicit previews and requested an intended-use
   inventory for keep/remove decisions. Read `docs/review/FEATURES_FOR_DECISION.md`
   and `docs/release/ci-repair-2026-11-05.md`. 351 original modules match the prior
   Git checkpoint byte-for-byte; never import them into active source or invent
   live schema types. No permanent feature removal is approved. The full app
-  compiler, audit (zero findings) and 486 unit tests pass locally. Verify the
-  actual GitHub run after pushing; source CI does not imply hosted acceptance.
+  compiler, audit (zero findings) and 486 unit tests pass locally and in the
+  source workflow. Source CI does not imply hosted acceptance.
 
-- Latest checkpoint: source commits 067367b and CI portability fix 39e1d4d
-  are pushed and verified on Sai-Branch; main is unchanged. Phase 4.1 ledger
-  foundation is local and uncommitted. Read `docs/domains/wallet-ledger.md`.
+- Latest checkpoint: 067367b, 39e1d4d and CI repair 128fbe2 are pushed
+  and verified on Sai-Branch; main is unchanged. Phase 4.1 ledger foundation
+  is saved in 128fbe2 and remains local-only and incomplete. Read `docs/domains/wallet-ledger.md`.
   Its 20 isolated and six native checks pass, but P4.1 remains open pending
   wallet UI/legacy integration. Finance policy is disabled after cleanup;
   local_verification.wallet_install pins its source. Do not replay installed SQL.
